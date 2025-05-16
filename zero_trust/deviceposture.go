@@ -153,7 +153,7 @@ type CarbonblackInputParam = string
 type ClientCertificateInput struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID string `json:"certificate_id,required"`
-	// Common Name that is protected by the certificate
+	// Common Name that is protected by the certificate.
 	Cn   string                     `json:"cn,required"`
 	JSON clientCertificateInputJSON `json:"-"`
 }
@@ -180,7 +180,7 @@ func (r ClientCertificateInput) implementsDeviceInput() {}
 type ClientCertificateInputParam struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
-	// Common Name that is protected by the certificate
+	// Common Name that is protected by the certificate.
 	Cn param.Field[string] `json:"cn,required"`
 }
 
@@ -195,19 +195,19 @@ type CrowdstrikeInput struct {
 	ConnectionID string `json:"connection_id,required"`
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen string `json:"last_seen"`
-	// operator
+	// Operator.
 	Operator CrowdstrikeInputOperator `json:"operator"`
-	// Os Version
+	// Os Version.
 	OS string `json:"os"`
-	// overall
+	// Overall.
 	Overall string `json:"overall"`
-	// SensorConfig
+	// SensorConfig.
 	SensorConfig string `json:"sensor_config"`
 	// For more details on state, please refer to the Crowdstrike documentation.
 	State CrowdstrikeInputState `json:"state"`
-	// Version
+	// Version.
 	Version string `json:"version"`
-	// Version Operator
+	// Version Operator.
 	VersionOperator CrowdstrikeInputVersionOperator `json:"versionOperator"`
 	JSON            crowdstrikeInputJSON            `json:"-"`
 }
@@ -238,7 +238,7 @@ func (r crowdstrikeInputJSON) RawJSON() string {
 
 func (r CrowdstrikeInput) implementsDeviceInput() {}
 
-// operator
+// Operator.
 type CrowdstrikeInputOperator string
 
 const (
@@ -274,7 +274,7 @@ func (r CrowdstrikeInputState) IsKnown() bool {
 	return false
 }
 
-// Version Operator
+// Version Operator.
 type CrowdstrikeInputVersionOperator string
 
 const (
@@ -298,19 +298,19 @@ type CrowdstrikeInputParam struct {
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen param.Field[string] `json:"last_seen"`
-	// operator
+	// Operator.
 	Operator param.Field[CrowdstrikeInputOperator] `json:"operator"`
-	// Os Version
+	// Os Version.
 	OS param.Field[string] `json:"os"`
-	// overall
+	// Overall.
 	Overall param.Field[string] `json:"overall"`
-	// SensorConfig
+	// SensorConfig.
 	SensorConfig param.Field[string] `json:"sensor_config"`
 	// For more details on state, please refer to the Crowdstrike documentation.
 	State param.Field[CrowdstrikeInputState] `json:"state"`
-	// Version
+	// Version.
 	Version param.Field[string] `json:"version"`
-	// Version Operator
+	// Version Operator.
 	VersionOperator param.Field[CrowdstrikeInputVersionOperator] `json:"versionOperator"`
 }
 
@@ -333,21 +333,21 @@ type DeviceInput struct {
 	CheckPrivateKey bool `json:"check_private_key"`
 	// This field can have the runtime type of [[]CarbonblackInput].
 	CheckDisks interface{} `json:"checkDisks"`
-	// Common Name that is protected by the certificate
+	// Common Name that is protected by the certificate.
 	Cn string `json:"cn"`
-	// Compliance Status
+	// Compliance Status.
 	ComplianceStatus DeviceInputComplianceStatus `json:"compliance_status"`
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id"`
-	// Count Operator
+	// Count Operator.
 	CountOperator DeviceInputCountOperator `json:"countOperator"`
-	// Domain
+	// Domain.
 	Domain string `json:"domain"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen string `json:"eid_last_seen"`
-	// Enabled
+	// Enabled.
 	Enabled bool `json:"enabled"`
-	// Whether or not file exists
+	// Whether or not file exists.
 	Exists bool `json:"exists"`
 	// This field can have the runtime type of
 	// [[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage].
@@ -365,22 +365,22 @@ type DeviceInput struct {
 	Locations interface{} `json:"locations"`
 	// Network status of device.
 	NetworkStatus DeviceInputNetworkStatus `json:"network_status"`
-	// Operating system
+	// Operating system.
 	OperatingSystem DeviceInputOperatingSystem `json:"operating_system"`
 	// Agent operational state.
 	OperationalState DeviceInputOperationalState `json:"operational_state"`
-	// operator
+	// Operator.
 	Operator DeviceInputOperator `json:"operator"`
-	// Os Version
+	// Os Version.
 	OS string `json:"os"`
-	// Operating System Distribution Name (linux only)
+	// Operating System Distribution Name (linux only).
 	OSDistroName string `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
+	// Version of OS Distribution (linux only).
 	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra string `json:"os_version_extra"`
-	// overall
+	// Overall.
 	Overall string `json:"overall"`
 	// File path.
 	Path string `json:"path"`
@@ -390,9 +390,9 @@ type DeviceInput struct {
 	RiskLevel DeviceInputRiskLevel `json:"risk_level"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score float64 `json:"score"`
-	// Score Operator
+	// Score Operator.
 	ScoreOperator DeviceInputScoreOperator `json:"scoreOperator"`
-	// SensorConfig
+	// SensorConfig.
 	SensorConfig string `json:"sensor_config"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
@@ -402,9 +402,9 @@ type DeviceInput struct {
 	Thumbprint string `json:"thumbprint"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore float64 `json:"total_score"`
-	// Version of OS
+	// Version of OS.
 	Version string `json:"version"`
-	// Version Operator
+	// Version Operator.
 	VersionOperator DeviceInputVersionOperator `json:"versionOperator"`
 	JSON            deviceInputJSON            `json:"-"`
 	union           DeviceInputUnion
@@ -472,37 +472,30 @@ func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DeviceInputUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.FileInput],
-// [zero_trust.UniqueClientIDInput], [zero_trust.DomainJoinedInput],
-// [zero_trust.OSVersionInput], [zero_trust.FirewallInput],
-// [zero_trust.SentineloneInput],
-// [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
-// [zero_trust.DiskEncryptionInput],
-// [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
-// [zero_trust.ClientCertificateInput],
-// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
-// [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
-// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput],
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
+// Possible runtime types of the union are [FileInput], [UniqueClientIDInput],
+// [DomainJoinedInput], [OSVersionInput], [FirewallInput], [SentineloneInput],
+// [DeviceInputTeamsDevicesCarbonblackInputRequest],
+// [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
+// [DiskEncryptionInput], [DeviceInputTeamsDevicesApplicationInputRequest],
+// [ClientCertificateInput],
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequest], [WorkspaceOneInput],
+// [CrowdstrikeInput], [IntuneInput], [KolideInput], [TaniumInput],
+// [SentineloneS2sInput], [DeviceInputTeamsDevicesCustomS2sInputRequest].
 func (r DeviceInput) AsUnion() DeviceInputUnion {
 	return r.union
 }
 
 // The value to be checked against.
 //
-// Union satisfied by [zero_trust.FileInput], [zero_trust.UniqueClientIDInput],
-// [zero_trust.DomainJoinedInput], [zero_trust.OSVersionInput],
-// [zero_trust.FirewallInput], [zero_trust.SentineloneInput],
-// [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
-// [zero_trust.DiskEncryptionInput],
-// [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
-// [zero_trust.ClientCertificateInput],
-// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
-// [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
-// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput] or
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
+// Union satisfied by [FileInput], [UniqueClientIDInput], [DomainJoinedInput],
+// [OSVersionInput], [FirewallInput], [SentineloneInput],
+// [DeviceInputTeamsDevicesCarbonblackInputRequest],
+// [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
+// [DiskEncryptionInput], [DeviceInputTeamsDevicesApplicationInputRequest],
+// [ClientCertificateInput],
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequest], [WorkspaceOneInput],
+// [CrowdstrikeInput], [IntuneInput], [KolideInput], [TaniumInput],
+// [SentineloneS2sInput] or [DeviceInputTeamsDevicesCustomS2sInputRequest].
 type DeviceInputUnion interface {
 	implementsDeviceInput()
 }
@@ -538,6 +531,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DeviceInputTeamsDevicesCarbonblackInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeviceInputTeamsDevicesAccessSerialNumberListInputRequest{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -587,7 +584,7 @@ func init() {
 }
 
 type DeviceInputTeamsDevicesCarbonblackInputRequest struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
@@ -619,7 +616,7 @@ func (r deviceInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesCarbonblackInputRequest) implementsDeviceInput() {}
 
-// Operating system
+// Operating system.
 type DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
 
 const (
@@ -636,8 +633,33 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown()
 	return false
 }
 
+type DeviceInputTeamsDevicesAccessSerialNumberListInputRequest struct {
+	// UUID of Access List.
+	ID   string                                                        `json:"id,required"`
+	JSON deviceInputTeamsDevicesAccessSerialNumberListInputRequestJSON `json:"-"`
+}
+
+// deviceInputTeamsDevicesAccessSerialNumberListInputRequestJSON contains the JSON
+// metadata for the struct
+// [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest]
+type deviceInputTeamsDevicesAccessSerialNumberListInputRequestJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceInputTeamsDevicesAccessSerialNumberListInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceInputTeamsDevicesAccessSerialNumberListInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeviceInputTeamsDevicesAccessSerialNumberListInputRequest) implementsDeviceInput() {}
+
 type DeviceInputTeamsDevicesApplicationInputRequest struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
 	// Path for the application.
 	Path string `json:"path,required"`
@@ -669,7 +691,7 @@ func (r deviceInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesApplicationInputRequest) implementsDeviceInput() {}
 
-// Operating system
+// Operating system.
 type DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem string
 
 const (
@@ -692,14 +714,14 @@ type DeviceInputTeamsDevicesClientCertificateV2InputRequest struct {
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
 	CheckPrivateKey bool `json:"check_private_key,required"`
-	// Operating system
+	// Operating system.
 	OperatingSystem DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem `json:"operating_system,required"`
 	// Common Name that is protected by the client certificate. This may include one or
 	// more variables in the ${ } notation. Only ${serial_number} and ${hostname} are
 	// valid variables.
 	Cn string `json:"cn"`
 	// List of values indicating purposes for which the certificate public key can be
-	// used
+	// used.
 	ExtendedKeyUsage []DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage `json:"extended_key_usage"`
 	Locations        DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations          `json:"locations"`
 	JSON             deviceInputTeamsDevicesClientCertificateV2InputRequestJSON               `json:"-"`
@@ -728,7 +750,7 @@ func (r deviceInputTeamsDevicesClientCertificateV2InputRequestJSON) RawJSON() st
 
 func (r DeviceInputTeamsDevicesClientCertificateV2InputRequest) implementsDeviceInput() {}
 
-// Operating system
+// Operating system.
 type DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem string
 
 const (
@@ -804,7 +826,7 @@ func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStor
 type DeviceInputTeamsDevicesCustomS2sInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
-	// operator
+	// Operator.
 	Operator DeviceInputTeamsDevicesCustomS2sInputRequestOperator `json:"operator,required"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score float64                                          `json:"score,required"`
@@ -831,7 +853,7 @@ func (r deviceInputTeamsDevicesCustomS2sInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesCustomS2sInputRequest) implementsDeviceInput() {}
 
-// operator
+// Operator.
 type DeviceInputTeamsDevicesCustomS2sInputRequestOperator string
 
 const (
@@ -850,7 +872,7 @@ func (r DeviceInputTeamsDevicesCustomS2sInputRequestOperator) IsKnown() bool {
 	return false
 }
 
-// Compliance Status
+// Compliance Status.
 type DeviceInputComplianceStatus string
 
 const (
@@ -870,7 +892,7 @@ func (r DeviceInputComplianceStatus) IsKnown() bool {
 	return false
 }
 
-// Count Operator
+// Count Operator.
 type DeviceInputCountOperator string
 
 const (
@@ -907,7 +929,7 @@ func (r DeviceInputNetworkStatus) IsKnown() bool {
 	return false
 }
 
-// Operating system
+// Operating system.
 type DeviceInputOperatingSystem string
 
 const (
@@ -948,7 +970,7 @@ func (r DeviceInputOperationalState) IsKnown() bool {
 	return false
 }
 
-// operator
+// Operator.
 type DeviceInputOperator string
 
 const (
@@ -985,7 +1007,7 @@ func (r DeviceInputRiskLevel) IsKnown() bool {
 	return false
 }
 
-// Score Operator
+// Score Operator.
 type DeviceInputScoreOperator string
 
 const (
@@ -1021,7 +1043,7 @@ func (r DeviceInputState) IsKnown() bool {
 	return false
 }
 
-// Version Operator
+// Version Operator.
 type DeviceInputVersionOperator string
 
 const (
@@ -1052,21 +1074,21 @@ type DeviceInputParam struct {
 	// keeping this enabled unless the certificate was deployed without a private key.
 	CheckPrivateKey param.Field[bool]        `json:"check_private_key"`
 	CheckDisks      param.Field[interface{}] `json:"checkDisks"`
-	// Common Name that is protected by the certificate
+	// Common Name that is protected by the certificate.
 	Cn param.Field[string] `json:"cn"`
-	// Compliance Status
+	// Compliance Status.
 	ComplianceStatus param.Field[DeviceInputComplianceStatus] `json:"compliance_status"`
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id"`
-	// Count Operator
+	// Count Operator.
 	CountOperator param.Field[DeviceInputCountOperator] `json:"countOperator"`
-	// Domain
+	// Domain.
 	Domain param.Field[string] `json:"domain"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen param.Field[string] `json:"eid_last_seen"`
-	// Enabled
+	// Enabled.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Whether or not file exists
+	// Whether or not file exists.
 	Exists           param.Field[bool]        `json:"exists"`
 	ExtendedKeyUsage param.Field[interface{}] `json:"extended_key_usage"`
 	// Whether device is infected.
@@ -1080,22 +1102,22 @@ type DeviceInputParam struct {
 	Locations param.Field[interface{}] `json:"locations"`
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputNetworkStatus] `json:"network_status"`
-	// Operating system
+	// Operating system.
 	OperatingSystem param.Field[DeviceInputOperatingSystem] `json:"operating_system"`
 	// Agent operational state.
 	OperationalState param.Field[DeviceInputOperationalState] `json:"operational_state"`
-	// operator
+	// Operator.
 	Operator param.Field[DeviceInputOperator] `json:"operator"`
-	// Os Version
+	// Os Version.
 	OS param.Field[string] `json:"os"`
-	// Operating System Distribution Name (linux only)
+	// Operating System Distribution Name (linux only).
 	OSDistroName param.Field[string] `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
+	// Version of OS Distribution (linux only).
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
-	// overall
+	// Overall.
 	Overall param.Field[string] `json:"overall"`
 	// File path.
 	Path param.Field[string] `json:"path"`
@@ -1105,9 +1127,9 @@ type DeviceInputParam struct {
 	RiskLevel param.Field[DeviceInputRiskLevel] `json:"risk_level"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score param.Field[float64] `json:"score"`
-	// Score Operator
+	// Score Operator.
 	ScoreOperator param.Field[DeviceInputScoreOperator] `json:"scoreOperator"`
-	// SensorConfig
+	// SensorConfig.
 	SensorConfig param.Field[string] `json:"sensor_config"`
 	// SHA-256.
 	Sha256 param.Field[string] `json:"sha256"`
@@ -1117,9 +1139,9 @@ type DeviceInputParam struct {
 	Thumbprint param.Field[string] `json:"thumbprint"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore param.Field[float64] `json:"total_score"`
-	// Version of OS
+	// Version of OS.
 	Version param.Field[string] `json:"version"`
-	// Version Operator
+	// Version Operator.
 	VersionOperator param.Field[DeviceInputVersionOperator] `json:"versionOperator"`
 }
 
@@ -1135,6 +1157,7 @@ func (r DeviceInputParam) implementsDeviceInputUnionParam() {}
 // [zero_trust.DomainJoinedInputParam], [zero_trust.OSVersionInputParam],
 // [zero_trust.FirewallInputParam], [zero_trust.SentineloneInputParam],
 // [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequestParam],
+// [zero_trust.DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam],
 // [zero_trust.DiskEncryptionInputParam],
 // [zero_trust.DeviceInputTeamsDevicesApplicationInputRequestParam],
 // [zero_trust.ClientCertificateInputParam],
@@ -1149,7 +1172,7 @@ type DeviceInputUnionParam interface {
 }
 
 type DeviceInputTeamsDevicesCarbonblackInputRequestParam struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem param.Field[DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
@@ -1165,8 +1188,20 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) MarshalJSON() (data
 
 func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) implementsDeviceInputUnionParam() {}
 
+type DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam struct {
+	// UUID of Access List.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam) implementsDeviceInputUnionParam() {
+}
+
 type DeviceInputTeamsDevicesApplicationInputRequestParam struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem param.Field[DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Path for the application.
 	Path param.Field[string] `json:"path,required"`
@@ -1188,14 +1223,14 @@ type DeviceInputTeamsDevicesClientCertificateV2InputRequestParam struct {
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
 	CheckPrivateKey param.Field[bool] `json:"check_private_key,required"`
-	// Operating system
+	// Operating system.
 	OperatingSystem param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem] `json:"operating_system,required"`
 	// Common Name that is protected by the client certificate. This may include one or
 	// more variables in the ${ } notation. Only ${serial_number} and ${hostname} are
 	// valid variables.
 	Cn param.Field[string] `json:"cn"`
 	// List of values indicating purposes for which the certificate public key can be
-	// used
+	// used.
 	ExtendedKeyUsage param.Field[[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage] `json:"extended_key_usage"`
 	Locations        param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam]     `json:"locations"`
 }
@@ -1221,7 +1256,7 @@ func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam) Ma
 type DeviceInputTeamsDevicesCustomS2sInputRequestParam struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// operator
+	// Operator.
 	Operator param.Field[DeviceInputTeamsDevicesCustomS2sInputRequestOperator] `json:"operator,required"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score param.Field[float64] `json:"score,required"`
@@ -1335,6 +1370,7 @@ const (
 	DevicePostureRuleTypeGateway             DevicePostureRuleType = "gateway"
 	DevicePostureRuleTypeWARP                DevicePostureRuleType = "warp"
 	DevicePostureRuleTypeDiskEncryption      DevicePostureRuleType = "disk_encryption"
+	DevicePostureRuleTypeSerialNumber        DevicePostureRuleType = "serial_number"
 	DevicePostureRuleTypeSentinelone         DevicePostureRuleType = "sentinelone"
 	DevicePostureRuleTypeCarbonblack         DevicePostureRuleType = "carbonblack"
 	DevicePostureRuleTypeFirewall            DevicePostureRuleType = "firewall"
@@ -1354,7 +1390,7 @@ const (
 
 func (r DevicePostureRuleType) IsKnown() bool {
 	switch r {
-	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s, DevicePostureRuleTypeCustomS2s:
+	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSerialNumber, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s, DevicePostureRuleTypeCustomS2s:
 		return true
 	}
 	return false
@@ -1401,9 +1437,9 @@ func (r DiskEncryptionInputParam) MarshalJSON() (data []byte, err error) {
 func (r DiskEncryptionInputParam) implementsDeviceInputUnionParam() {}
 
 type DomainJoinedInput struct {
-	// Operating System
+	// Operating System.
 	OperatingSystem DomainJoinedInputOperatingSystem `json:"operating_system,required"`
-	// Domain
+	// Domain.
 	Domain string                `json:"domain"`
 	JSON   domainJoinedInputJSON `json:"-"`
 }
@@ -1427,7 +1463,7 @@ func (r domainJoinedInputJSON) RawJSON() string {
 
 func (r DomainJoinedInput) implementsDeviceInput() {}
 
-// Operating System
+// Operating System.
 type DomainJoinedInputOperatingSystem string
 
 const (
@@ -1443,9 +1479,9 @@ func (r DomainJoinedInputOperatingSystem) IsKnown() bool {
 }
 
 type DomainJoinedInputParam struct {
-	// Operating System
+	// Operating System.
 	OperatingSystem param.Field[DomainJoinedInputOperatingSystem] `json:"operating_system,required"`
-	// Domain
+	// Domain.
 	Domain param.Field[string] `json:"domain"`
 }
 
@@ -1456,11 +1492,11 @@ func (r DomainJoinedInputParam) MarshalJSON() (data []byte, err error) {
 func (r DomainJoinedInputParam) implementsDeviceInputUnionParam() {}
 
 type FileInput struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem FileInputOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
-	// Whether or not file exists
+	// Whether or not file exists.
 	Exists bool `json:"exists"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
@@ -1490,7 +1526,7 @@ func (r fileInputJSON) RawJSON() string {
 
 func (r FileInput) implementsDeviceInput() {}
 
-// Operating system
+// Operating system.
 type FileInputOperatingSystem string
 
 const (
@@ -1508,11 +1544,11 @@ func (r FileInputOperatingSystem) IsKnown() bool {
 }
 
 type FileInputParam struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem param.Field[FileInputOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
-	// Whether or not file exists
+	// Whether or not file exists.
 	Exists param.Field[bool] `json:"exists"`
 	// SHA-256.
 	Sha256 param.Field[string] `json:"sha256"`
@@ -1527,9 +1563,9 @@ func (r FileInputParam) MarshalJSON() (data []byte, err error) {
 func (r FileInputParam) implementsDeviceInputUnionParam() {}
 
 type FirewallInput struct {
-	// Enabled
+	// Enabled.
 	Enabled bool `json:"enabled,required"`
-	// Operating System
+	// Operating System.
 	OperatingSystem FirewallInputOperatingSystem `json:"operating_system,required"`
 	JSON            firewallInputJSON            `json:"-"`
 }
@@ -1552,7 +1588,7 @@ func (r firewallInputJSON) RawJSON() string {
 
 func (r FirewallInput) implementsDeviceInput() {}
 
-// Operating System
+// Operating System.
 type FirewallInputOperatingSystem string
 
 const (
@@ -1569,9 +1605,9 @@ func (r FirewallInputOperatingSystem) IsKnown() bool {
 }
 
 type FirewallInputParam struct {
-	// Enabled
+	// Enabled.
 	Enabled param.Field[bool] `json:"enabled,required"`
-	// Operating System
+	// Operating System.
 	OperatingSystem param.Field[FirewallInputOperatingSystem] `json:"operating_system,required"`
 }
 
@@ -1582,7 +1618,7 @@ func (r FirewallInputParam) MarshalJSON() (data []byte, err error) {
 func (r FirewallInputParam) implementsDeviceInputUnionParam() {}
 
 type IntuneInput struct {
-	// Compliance Status
+	// Compliance Status.
 	ComplianceStatus IntuneInputComplianceStatus `json:"compliance_status,required"`
 	// Posture Integration ID.
 	ConnectionID string          `json:"connection_id,required"`
@@ -1607,7 +1643,7 @@ func (r intuneInputJSON) RawJSON() string {
 
 func (r IntuneInput) implementsDeviceInput() {}
 
-// Compliance Status
+// Compliance Status.
 type IntuneInputComplianceStatus string
 
 const (
@@ -1628,7 +1664,7 @@ func (r IntuneInputComplianceStatus) IsKnown() bool {
 }
 
 type IntuneInputParam struct {
-	// Compliance Status
+	// Compliance Status.
 	ComplianceStatus param.Field[IntuneInputComplianceStatus] `json:"compliance_status,required"`
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
@@ -1643,7 +1679,7 @@ func (r IntuneInputParam) implementsDeviceInputUnionParam() {}
 type KolideInput struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
-	// Count Operator
+	// Count Operator.
 	CountOperator KolideInputCountOperator `json:"countOperator,required"`
 	// The Number of Issues.
 	IssueCount string          `json:"issue_count,required"`
@@ -1669,7 +1705,7 @@ func (r kolideInputJSON) RawJSON() string {
 
 func (r KolideInput) implementsDeviceInput() {}
 
-// Count Operator
+// Count Operator.
 type KolideInputCountOperator string
 
 const (
@@ -1691,7 +1727,7 @@ func (r KolideInputCountOperator) IsKnown() bool {
 type KolideInputParam struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// Count Operator
+	// Count Operator.
 	CountOperator param.Field[KolideInputCountOperator] `json:"countOperator,required"`
 	// The Number of Issues.
 	IssueCount param.Field[string] `json:"issue_count,required"`
@@ -1704,18 +1740,18 @@ func (r KolideInputParam) MarshalJSON() (data []byte, err error) {
 func (r KolideInputParam) implementsDeviceInputUnionParam() {}
 
 type OSVersionInput struct {
-	// Operating System
+	// Operating System.
 	OperatingSystem OSVersionInputOperatingSystem `json:"operating_system,required"`
-	// operator
+	// Operator.
 	Operator OSVersionInputOperator `json:"operator,required"`
-	// Version of OS
+	// Version of OS.
 	Version string `json:"version,required"`
-	// Operating System Distribution Name (linux only)
+	// Operating System Distribution Name (linux only).
 	OSDistroName string `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
+	// Version of OS Distribution (linux only).
 	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra string             `json:"os_version_extra"`
 	JSON           osVersionInputJSON `json:"-"`
 }
@@ -1742,7 +1778,7 @@ func (r osVersionInputJSON) RawJSON() string {
 
 func (r OSVersionInput) implementsDeviceInput() {}
 
-// Operating System
+// Operating System.
 type OSVersionInputOperatingSystem string
 
 const (
@@ -1757,7 +1793,7 @@ func (r OSVersionInputOperatingSystem) IsKnown() bool {
 	return false
 }
 
-// operator
+// Operator.
 type OSVersionInputOperator string
 
 const (
@@ -1777,18 +1813,18 @@ func (r OSVersionInputOperator) IsKnown() bool {
 }
 
 type OSVersionInputParam struct {
-	// Operating System
+	// Operating System.
 	OperatingSystem param.Field[OSVersionInputOperatingSystem] `json:"operating_system,required"`
-	// operator
+	// Operator.
 	Operator param.Field[OSVersionInputOperator] `json:"operator,required"`
-	// Version of OS
+	// Version of OS.
 	Version param.Field[string] `json:"version,required"`
-	// Operating System Distribution Name (linux only)
+	// Operating System Distribution Name (linux only).
 	OSDistroName param.Field[string] `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
+	// Version of OS Distribution (linux only).
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
 
@@ -1799,7 +1835,7 @@ func (r OSVersionInputParam) MarshalJSON() (data []byte, err error) {
 func (r OSVersionInputParam) implementsDeviceInputUnionParam() {}
 
 type SentineloneInput struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem SentineloneInputOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
@@ -1831,7 +1867,7 @@ func (r sentineloneInputJSON) RawJSON() string {
 
 func (r SentineloneInput) implementsDeviceInput() {}
 
-// Operating system
+// Operating system.
 type SentineloneInputOperatingSystem string
 
 const (
@@ -1849,7 +1885,7 @@ func (r SentineloneInputOperatingSystem) IsKnown() bool {
 }
 
 type SentineloneInputParam struct {
-	// Operating system
+	// Operating system.
 	OperatingSystem param.Field[SentineloneInputOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
@@ -1878,7 +1914,7 @@ type SentineloneS2sInput struct {
 	NetworkStatus SentineloneS2sInputNetworkStatus `json:"network_status"`
 	// Agent operational state.
 	OperationalState SentineloneS2sInputOperationalState `json:"operational_state"`
-	// operator
+	// Operator.
 	Operator SentineloneS2sInputOperator `json:"operator"`
 	JSON     sentineloneS2sInputJSON     `json:"-"`
 }
@@ -1946,7 +1982,7 @@ func (r SentineloneS2sInputOperationalState) IsKnown() bool {
 	return false
 }
 
-// operator
+// Operator.
 type SentineloneS2sInputOperator string
 
 const (
@@ -1978,7 +2014,7 @@ type SentineloneS2sInputParam struct {
 	NetworkStatus param.Field[SentineloneS2sInputNetworkStatus] `json:"network_status"`
 	// Agent operational state.
 	OperationalState param.Field[SentineloneS2sInputOperationalState] `json:"operational_state"`
-	// operator
+	// Operator.
 	Operator param.Field[SentineloneS2sInputOperator] `json:"operator"`
 }
 
@@ -1997,7 +2033,7 @@ type TaniumInput struct {
 	Operator TaniumInputOperator `json:"operator"`
 	// For more details on risk level, refer to the Tanium documentation.
 	RiskLevel TaniumInputRiskLevel `json:"risk_level"`
-	// Score Operator
+	// Score Operator.
 	ScoreOperator TaniumInputScoreOperator `json:"scoreOperator"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore float64         `json:"total_score"`
@@ -2063,7 +2099,7 @@ func (r TaniumInputRiskLevel) IsKnown() bool {
 	return false
 }
 
-// Score Operator
+// Score Operator.
 type TaniumInputScoreOperator string
 
 const (
@@ -2091,7 +2127,7 @@ type TaniumInputParam struct {
 	Operator param.Field[TaniumInputOperator] `json:"operator"`
 	// For more details on risk level, refer to the Tanium documentation.
 	RiskLevel param.Field[TaniumInputRiskLevel] `json:"risk_level"`
-	// Score Operator
+	// Score Operator.
 	ScoreOperator param.Field[TaniumInputScoreOperator] `json:"scoreOperator"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore param.Field[float64] `json:"total_score"`
@@ -2106,7 +2142,7 @@ func (r TaniumInputParam) implementsDeviceInputUnionParam() {}
 type UniqueClientIDInput struct {
 	// List ID.
 	ID string `json:"id,required"`
-	// Operating System
+	// Operating System.
 	OperatingSystem UniqueClientIDInputOperatingSystem `json:"operating_system,required"`
 	JSON            uniqueClientIDInputJSON            `json:"-"`
 }
@@ -2130,7 +2166,7 @@ func (r uniqueClientIDInputJSON) RawJSON() string {
 
 func (r UniqueClientIDInput) implementsDeviceInput() {}
 
-// Operating System
+// Operating System.
 type UniqueClientIDInputOperatingSystem string
 
 const (
@@ -2150,7 +2186,7 @@ func (r UniqueClientIDInputOperatingSystem) IsKnown() bool {
 type UniqueClientIDInputParam struct {
 	// List ID.
 	ID param.Field[string] `json:"id,required"`
-	// Operating System
+	// Operating System.
 	OperatingSystem param.Field[UniqueClientIDInputOperatingSystem] `json:"operating_system,required"`
 }
 
@@ -2161,7 +2197,7 @@ func (r UniqueClientIDInputParam) MarshalJSON() (data []byte, err error) {
 func (r UniqueClientIDInputParam) implementsDeviceInputUnionParam() {}
 
 type WorkspaceOneInput struct {
-	// Compliance Status
+	// Compliance Status.
 	ComplianceStatus WorkspaceOneInputComplianceStatus `json:"compliance_status,required"`
 	// Posture Integration ID.
 	ConnectionID string                `json:"connection_id,required"`
@@ -2187,7 +2223,7 @@ func (r workspaceOneInputJSON) RawJSON() string {
 
 func (r WorkspaceOneInput) implementsDeviceInput() {}
 
-// Compliance Status
+// Compliance Status.
 type WorkspaceOneInputComplianceStatus string
 
 const (
@@ -2205,7 +2241,7 @@ func (r WorkspaceOneInputComplianceStatus) IsKnown() bool {
 }
 
 type WorkspaceOneInputParam struct {
-	// Compliance Status
+	// Compliance Status.
 	ComplianceStatus param.Field[WorkspaceOneInputComplianceStatus] `json:"compliance_status,required"`
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
@@ -2273,6 +2309,7 @@ const (
 	DevicePostureNewParamsTypeGateway             DevicePostureNewParamsType = "gateway"
 	DevicePostureNewParamsTypeWARP                DevicePostureNewParamsType = "warp"
 	DevicePostureNewParamsTypeDiskEncryption      DevicePostureNewParamsType = "disk_encryption"
+	DevicePostureNewParamsTypeSerialNumber        DevicePostureNewParamsType = "serial_number"
 	DevicePostureNewParamsTypeSentinelone         DevicePostureNewParamsType = "sentinelone"
 	DevicePostureNewParamsTypeCarbonblack         DevicePostureNewParamsType = "carbonblack"
 	DevicePostureNewParamsTypeFirewall            DevicePostureNewParamsType = "firewall"
@@ -2292,7 +2329,7 @@ const (
 
 func (r DevicePostureNewParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s, DevicePostureNewParamsTypeCustomS2s:
+	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSerialNumber, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s, DevicePostureNewParamsTypeCustomS2s:
 		return true
 	}
 	return false
@@ -2375,6 +2412,7 @@ const (
 	DevicePostureUpdateParamsTypeGateway             DevicePostureUpdateParamsType = "gateway"
 	DevicePostureUpdateParamsTypeWARP                DevicePostureUpdateParamsType = "warp"
 	DevicePostureUpdateParamsTypeDiskEncryption      DevicePostureUpdateParamsType = "disk_encryption"
+	DevicePostureUpdateParamsTypeSerialNumber        DevicePostureUpdateParamsType = "serial_number"
 	DevicePostureUpdateParamsTypeSentinelone         DevicePostureUpdateParamsType = "sentinelone"
 	DevicePostureUpdateParamsTypeCarbonblack         DevicePostureUpdateParamsType = "carbonblack"
 	DevicePostureUpdateParamsTypeFirewall            DevicePostureUpdateParamsType = "firewall"
@@ -2394,7 +2432,7 @@ const (
 
 func (r DevicePostureUpdateParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s, DevicePostureUpdateParamsTypeCustomS2s:
+	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSerialNumber, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s, DevicePostureUpdateParamsTypeCustomS2s:
 		return true
 	}
 	return false

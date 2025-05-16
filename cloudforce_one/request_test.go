@@ -28,17 +28,14 @@ func TestRequestNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.Requests.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudforce_one.RequestNewParams{
-			Content:     cloudflare.F("What regions were most effected by the recent DoS?"),
-			Priority:    cloudflare.F("routine"),
-			RequestType: cloudflare.F("Victomology"),
-			Summary:     cloudflare.F("DoS attack"),
-			TLP:         cloudflare.F(cloudforce_one.RequestNewParamsTLPClear),
-		},
-	)
+	_, err := client.CloudforceOne.Requests.New(context.TODO(), cloudforce_one.RequestNewParams{
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Content:     cloudflare.F("What regions were most effected by the recent DoS?"),
+		Priority:    cloudflare.F("routine"),
+		RequestType: cloudflare.F("Victomology"),
+		Summary:     cloudflare.F("DoS attack"),
+		TLP:         cloudflare.F(cloudforce_one.RequestNewParamsTLPClear),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,9 +60,9 @@ func TestRequestUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Content:     cloudflare.F("What regions were most effected by the recent DoS?"),
 			Priority:    cloudflare.F("routine"),
 			RequestType: cloudflare.F("Victomology"),
@@ -95,22 +92,19 @@ func TestRequestListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.Requests.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudforce_one.RequestListParams{
-			Page:            cloudflare.F(int64(0)),
-			PerPage:         cloudflare.F(int64(10)),
-			CompletedAfter:  cloudflare.F(time.Now()),
-			CompletedBefore: cloudflare.F(time.Now()),
-			CreatedAfter:    cloudflare.F(time.Now()),
-			CreatedBefore:   cloudflare.F(time.Now()),
-			RequestType:     cloudflare.F("Victomology"),
-			SortBy:          cloudflare.F("created"),
-			SortOrder:       cloudflare.F(cloudforce_one.RequestListParamsSortOrderAsc),
-			Status:          cloudflare.F(cloudforce_one.RequestListParamsStatusOpen),
-		},
-	)
+	_, err := client.CloudforceOne.Requests.List(context.TODO(), cloudforce_one.RequestListParams{
+		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:            cloudflare.F(int64(0)),
+		PerPage:         cloudflare.F(int64(10)),
+		CompletedAfter:  cloudflare.F(time.Now()),
+		CompletedBefore: cloudflare.F(time.Now()),
+		CreatedAfter:    cloudflare.F(time.Now()),
+		CreatedBefore:   cloudflare.F(time.Now()),
+		RequestType:     cloudflare.F("Victomology"),
+		SortBy:          cloudflare.F("created"),
+		SortOrder:       cloudflare.F(cloudforce_one.RequestListParamsSortOrderAsc),
+		Status:          cloudflare.F(cloudforce_one.RequestListParamsStatusOpen),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -135,8 +129,10 @@ func TestRequestDelete(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -160,7 +156,9 @@ func TestRequestConstants(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.Requests.Constants(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.CloudforceOne.Requests.Constants(context.TODO(), cloudforce_one.RequestConstantsParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -185,8 +183,10 @@ func TestRequestGet(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -210,7 +210,9 @@ func TestRequestQuota(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.Requests.Quota(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.CloudforceOne.Requests.Quota(context.TODO(), cloudforce_one.RequestQuotaParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -233,7 +235,9 @@ func TestRequestTypes(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.Requests.Types(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.CloudforceOne.Requests.Types(context.TODO(), cloudforce_one.RequestTypesParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

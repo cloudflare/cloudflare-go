@@ -36,7 +36,7 @@ func NewScriptContentService(opts ...option.RequestOption) (r *ScriptContentServ
 	return
 }
 
-// Put script content without touching config or metadata
+// Put script content without touching config or metadata.
 func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	var env ScriptContentUpdateResponseEnvelope
 	if params.CfWorkerBodyPart.Present {
@@ -63,7 +63,7 @@ func (r *ScriptContentService) Update(ctx context.Context, scriptName string, pa
 	return
 }
 
-// Fetch script content only
+// Fetch script content only.
 func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query ScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
@@ -107,9 +107,9 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 type ScriptContentUpdateResponseEnvelope struct {
 	Errors   []ScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   Script                                        `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Script                                     `json:"result"`
 	JSON    scriptContentUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -118,8 +118,8 @@ type ScriptContentUpdateResponseEnvelope struct {
 type scriptContentUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

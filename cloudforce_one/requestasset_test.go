@@ -29,11 +29,11 @@ func TestRequestAssetNew(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Assets.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestAssetNewParams{
-			Page:    cloudflare.F(int64(0)),
-			PerPage: cloudflare.F(int64(10)),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Page:      cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(10)),
 		},
 	)
 	if err != nil {
@@ -60,11 +60,11 @@ func TestRequestAssetUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Assets.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestAssetUpdateParams{
-			Source: cloudflare.F("@/Users/me/example.docx"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Source:    cloudflare.F("@/Users/me/example.docx"),
 		},
 	)
 	if err != nil {
@@ -91,9 +91,11 @@ func TestRequestAssetDelete(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Assets.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestAssetDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -119,9 +121,11 @@ func TestRequestAssetGet(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Assets.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestAssetGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

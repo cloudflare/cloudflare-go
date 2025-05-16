@@ -220,7 +220,7 @@ func (r DeviceDeviceType) IsKnown() bool {
 }
 
 type DeviceUser struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
@@ -349,7 +349,7 @@ func (r deviceGetResponseAccountJSON) RawJSON() string {
 }
 
 type DeviceGetResponseUser struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`

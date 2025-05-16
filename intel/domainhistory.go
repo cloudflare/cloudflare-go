@@ -78,10 +78,10 @@ func (r domainHistoryJSON) RawJSON() string {
 }
 
 type DomainHistoryCategorization struct {
-	Categories []interface{}                   `json:"categories"`
-	End        time.Time                       `json:"end" format:"date"`
-	Start      time.Time                       `json:"start" format:"date"`
-	JSON       domainHistoryCategorizationJSON `json:"-"`
+	Categories []DomainHistoryCategorizationsCategory `json:"categories"`
+	End        time.Time                              `json:"end" format:"date"`
+	Start      time.Time                              `json:"start" format:"date"`
+	JSON       domainHistoryCategorizationJSON        `json:"-"`
 }
 
 // domainHistoryCategorizationJSON contains the JSON metadata for the struct
@@ -102,8 +102,31 @@ func (r domainHistoryCategorizationJSON) RawJSON() string {
 	return r.raw
 }
 
+type DomainHistoryCategorizationsCategory struct {
+	ID   int64                                    `json:"id"`
+	Name string                                   `json:"name"`
+	JSON domainHistoryCategorizationsCategoryJSON `json:"-"`
+}
+
+// domainHistoryCategorizationsCategoryJSON contains the JSON metadata for the
+// struct [DomainHistoryCategorizationsCategory]
+type domainHistoryCategorizationsCategoryJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainHistoryCategorizationsCategory) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainHistoryCategorizationsCategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type DomainHistoryGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Domain    param.Field[string] `query:"domain"`
 }
@@ -120,7 +143,7 @@ type DomainHistoryGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   []DomainHistory       `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    DomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       domainHistoryGetResponseEnvelopeJSON       `json:"-"`
@@ -146,7 +169,7 @@ func (r domainHistoryGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type DomainHistoryGetResponseEnvelopeSuccess bool
 
 const (
@@ -162,13 +185,13 @@ func (r DomainHistoryGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DomainHistoryGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                        `json:"total_count"`
 	JSON       domainHistoryGetResponseEnvelopeResultInfoJSON `json:"-"`
 }

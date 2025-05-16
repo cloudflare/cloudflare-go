@@ -163,10 +163,10 @@ func (r PatternParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [zero_trust.DLPProfileCustomNewResponseCustomProfile],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfile],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfile] or
-// [zero_trust.DLPProfileCustomNewResponseArray].
+// Union satisfied by [DLPProfileCustomNewResponseCustomProfile],
+// [DLPProfileCustomNewResponsePredefinedProfile],
+// [DLPProfileCustomNewResponseIntegrationProfile] or
+// [DLPProfileCustomNewResponseArray].
 type DLPProfileCustomNewResponseUnion interface {
 	implementsDLPProfileCustomNewResponseUnion()
 }
@@ -305,21 +305,20 @@ func (r *DLPProfileCustomNewResponseCustomProfileEntry) UnmarshalJSON(data []byt
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesCustomEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry].
+// [DLPProfileCustomNewResponseCustomProfileEntriesCustomEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry].
 func (r DLPProfileCustomNewResponseCustomProfileEntry) AsUnion() DLPProfileCustomNewResponseCustomProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesCustomEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntry],
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry] or
-// [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry].
+// Union satisfied by [DLPProfileCustomNewResponseCustomProfileEntriesCustomEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntry],
+// [DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry] or
+// [DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry].
 type DLPProfileCustomNewResponseCustomProfileEntriesUnion interface {
 	implementsDLPProfileCustomNewResponseCustomProfileEntry()
 }
@@ -792,22 +791,21 @@ func (r *DLPProfileCustomNewResponsePredefinedProfileEntry) UnmarshalJSON(data [
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry].
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry].
 func (r DLPProfileCustomNewResponsePredefinedProfileEntry) AsUnion() DLPProfileCustomNewResponsePredefinedProfileEntriesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntry],
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry]
-// or
-// [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry].
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntry],
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry] or
+// [DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry].
 type DLPProfileCustomNewResponsePredefinedProfileEntriesUnion interface {
 	implementsDLPProfileCustomNewResponsePredefinedProfileEntry()
 }
@@ -1270,22 +1268,21 @@ func (r *DLPProfileCustomNewResponseIntegrationProfileEntry) UnmarshalJSON(data 
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry].
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry].
 func (r DLPProfileCustomNewResponseIntegrationProfileEntry) AsUnion() DLPProfileCustomNewResponseIntegrationProfileEntriesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntry],
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry]
-// or
-// [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry].
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntry],
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry] or
+// [DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry].
 type DLPProfileCustomNewResponseIntegrationProfileEntriesUnion interface {
 	implementsDLPProfileCustomNewResponseIntegrationProfileEntry()
 }

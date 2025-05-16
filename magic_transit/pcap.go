@@ -107,6 +107,23 @@ func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParam
 	return
 }
 
+// Stop full PCAP
+func (r *PCAPService) Stop(ctx context.Context, pcapID string, body PCAPStopParams, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if pcapID == "" {
+		err = errors.New("missing required pcap_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/pcaps/%s/stop", body.AccountID, pcapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, nil, opts...)
+	return
+}
+
 type PCAP struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
@@ -283,8 +300,13 @@ type PCAPNewResponse struct {
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
 	// within the last 24h. When this field is empty, defaults to time of request.
 	OffsetTime time.Time `json:"offset_time" format:"date-time"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPNewResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -307,7 +329,9 @@ type pcapNewResponseJSON struct {
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
 	OffsetTime      apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -332,14 +356,14 @@ func (r *PCAPNewResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PCAPNewResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [magic_transit.PCAP],
-// [magic_transit.PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Possible runtime types of the union are [PCAP],
+// [PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
 func (r PCAPNewResponse) AsUnion() PCAPNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.PCAP] or
-// [magic_transit.PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Union satisfied by [PCAP] or
+// [PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPNewResponseUnion interface {
 	implementsPCAPNewResponse()
 }
@@ -376,8 +400,13 @@ type PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFullStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -399,7 +428,9 @@ type pcapNewResponseMagicVisibilityPCAPsPCAPsResponseFullJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -546,8 +577,13 @@ type PCAPListResponse struct {
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
 	// within the last 24h. When this field is empty, defaults to time of request.
 	OffsetTime time.Time `json:"offset_time" format:"date-time"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPListResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -571,7 +607,9 @@ type pcapListResponseJSON struct {
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
 	OffsetTime      apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -596,14 +634,14 @@ func (r *PCAPListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PCAPListResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [magic_transit.PCAP],
-// [magic_transit.PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Possible runtime types of the union are [PCAP],
+// [PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
 func (r PCAPListResponse) AsUnion() PCAPListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.PCAP] or
-// [magic_transit.PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Union satisfied by [PCAP] or
+// [PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPListResponseUnion interface {
 	implementsPCAPListResponse()
 }
@@ -640,8 +678,13 @@ type PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFullStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -663,7 +706,9 @@ type pcapListResponseMagicVisibilityPCAPsPCAPsResponseFullJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -810,8 +855,13 @@ type PCAPGetResponse struct {
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
 	// within the last 24h. When this field is empty, defaults to time of request.
 	OffsetTime time.Time `json:"offset_time" format:"date-time"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPGetResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -834,7 +884,9 @@ type pcapGetResponseJSON struct {
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
 	OffsetTime      apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -859,14 +911,14 @@ func (r *PCAPGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PCAPGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [magic_transit.PCAP],
-// [magic_transit.PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Possible runtime types of the union are [PCAP],
+// [PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
 func (r PCAPGetResponse) AsUnion() PCAPGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.PCAP] or
-// [magic_transit.PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Union satisfied by [PCAP] or
+// [PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPGetResponseUnion interface {
 	implementsPCAPGetResponse()
 }
@@ -903,8 +955,13 @@ type PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFullStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -926,7 +983,9 @@ type pcapGetResponseMagicVisibilityPCAPsPCAPsResponseFullJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -1345,4 +1404,9 @@ func (r PCAPGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PCAPStopParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -192,7 +192,7 @@ type Widget struct {
 	Name string `json:"name,required"`
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
+	// Region where this widget can be used. This cannot be changed after creation.
 	Region WidgetRegion `json:"region,required"`
 	// Secret key for this widget.
 	Secret string `json:"secret,required"`
@@ -263,16 +263,17 @@ func (r WidgetMode) IsKnown() bool {
 	return false
 }
 
-// Region where this widget can be used.
+// Region where this widget can be used. This cannot be changed after creation.
 type WidgetRegion string
 
 const (
 	WidgetRegionWorld WidgetRegion = "world"
+	WidgetRegionChina WidgetRegion = "china"
 )
 
 func (r WidgetRegion) IsKnown() bool {
 	switch r {
-	case WidgetRegionWorld:
+	case WidgetRegionWorld, WidgetRegionChina:
 		return true
 	}
 	return false
@@ -305,7 +306,7 @@ type WidgetListResponse struct {
 	Name string `json:"name,required"`
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
+	// Region where this widget can be used. This cannot be changed after creation.
 	Region WidgetListResponseRegion `json:"region,required"`
 	// Widget item identifier tag.
 	Sitekey string                 `json:"sitekey,required"`
@@ -374,16 +375,17 @@ func (r WidgetListResponseMode) IsKnown() bool {
 	return false
 }
 
-// Region where this widget can be used.
+// Region where this widget can be used. This cannot be changed after creation.
 type WidgetListResponseRegion string
 
 const (
 	WidgetListResponseRegionWorld WidgetListResponseRegion = "world"
+	WidgetListResponseRegionChina WidgetListResponseRegion = "china"
 )
 
 func (r WidgetListResponseRegion) IsKnown() bool {
 	switch r {
-	case WidgetListResponseRegionWorld:
+	case WidgetListResponseRegionWorld, WidgetListResponseRegionChina:
 		return true
 	}
 	return false
@@ -417,7 +419,7 @@ type WidgetNewParams struct {
 	EphemeralID param.Field[bool] `json:"ephemeral_id"`
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel param.Field[bool] `json:"offlabel"`
-	// Region where this widget can be used.
+	// Region where this widget can be used. This cannot be changed after creation.
 	Region param.Field[WidgetNewParamsRegion] `json:"region"`
 }
 
@@ -504,16 +506,17 @@ func (r WidgetNewParamsClearanceLevel) IsKnown() bool {
 	return false
 }
 
-// Region where this widget can be used.
+// Region where this widget can be used. This cannot be changed after creation.
 type WidgetNewParamsRegion string
 
 const (
 	WidgetNewParamsRegionWorld WidgetNewParamsRegion = "world"
+	WidgetNewParamsRegionChina WidgetNewParamsRegion = "china"
 )
 
 func (r WidgetNewParamsRegion) IsKnown() bool {
 	switch r {
-	case WidgetNewParamsRegionWorld:
+	case WidgetNewParamsRegionWorld, WidgetNewParamsRegionChina:
 		return true
 	}
 	return false
@@ -601,6 +604,8 @@ type WidgetUpdateParams struct {
 	EphemeralID param.Field[bool] `json:"ephemeral_id"`
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel param.Field[bool] `json:"offlabel"`
+	// Region where this widget can be used. This cannot be changed after creation.
+	Region param.Field[WidgetUpdateParamsRegion] `json:"region"`
 }
 
 func (r WidgetUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -638,6 +643,22 @@ const (
 func (r WidgetUpdateParamsClearanceLevel) IsKnown() bool {
 	switch r {
 	case WidgetUpdateParamsClearanceLevelNoClearance, WidgetUpdateParamsClearanceLevelJschallenge, WidgetUpdateParamsClearanceLevelManaged, WidgetUpdateParamsClearanceLevelInteractive:
+		return true
+	}
+	return false
+}
+
+// Region where this widget can be used. This cannot be changed after creation.
+type WidgetUpdateParamsRegion string
+
+const (
+	WidgetUpdateParamsRegionWorld WidgetUpdateParamsRegion = "world"
+	WidgetUpdateParamsRegionChina WidgetUpdateParamsRegion = "china"
+)
+
+func (r WidgetUpdateParamsRegion) IsKnown() bool {
+	switch r {
+	case WidgetUpdateParamsRegionWorld, WidgetUpdateParamsRegionChina:
 		return true
 	}
 	return false

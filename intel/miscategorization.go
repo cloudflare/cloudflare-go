@@ -183,7 +183,7 @@ func (r MiscategorizationNewResponseSuccess) IsKnown() bool {
 }
 
 type MiscategorizationNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Content category IDs to add.
 	ContentAdds param.Field[[]int64] `json:"content_adds"`

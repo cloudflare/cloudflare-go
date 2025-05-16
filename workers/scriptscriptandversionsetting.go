@@ -38,7 +38,7 @@ func NewScriptScriptAndVersionSettingService(opts ...option.RequestOption) (r *S
 	return
 }
 
-// Patch metadata or config, such as bindings or usage model
+// Patch metadata or config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptName string, params ScriptScriptAndVersionSettingEditParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingEditResponse, err error) {
 	var env ScriptScriptAndVersionSettingEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -59,7 +59,7 @@ func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptN
 	return
 }
 
-// Get metadata and config, such as bindings or usage model
+// Get metadata and config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptName string, query ScriptScriptAndVersionSettingGetParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingGetResponse, err error) {
 	var env ScriptScriptAndVersionSettingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -103,7 +103,7 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingEditResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
@@ -138,7 +138,7 @@ func (r scriptScriptAndVersionSettingEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -244,58 +244,58 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -749,12 +749,12 @@ func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispa
 }
 
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName string `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -769,9 +769,9 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableO
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	ClassName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	ClassName   apijson.Field
 	Environment apijson.Field
 	NamespaceID apijson.Field
 	ScriptName  apijson.Field
@@ -1691,16 +1691,16 @@ func (r *ScriptScriptAndVersionSettingEditResponseMigrations) UnmarshalJSON(data
 // AsUnion returns a [ScriptScriptAndVersionSettingEditResponseMigrationsUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers.ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
+// Possible runtime types of the union are [SingleStepMigration],
+// [ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 func (r ScriptScriptAndVersionSettingEditResponseMigrations) AsUnion() ScriptScriptAndVersionSettingEditResponseMigrationsUnion {
 	return r.union
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or
-// [workers.ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
+// Union satisfied by [SingleStepMigration] or
+// [ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 type ScriptScriptAndVersionSettingEditResponseMigrationsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseMigrations()
 }
@@ -1759,8 +1759,10 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64                                                    `json:"head_sampling_rate,nullable"`
-	JSON             scriptScriptAndVersionSettingEditResponseObservabilityJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptScriptAndVersionSettingEditResponseObservabilityLogs `json:"logs,nullable"`
+	JSON scriptScriptAndVersionSettingEditResponseObservabilityJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseObservabilityJSON contains the JSON
@@ -1768,6 +1770,7 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 type scriptScriptAndVersionSettingEditResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1777,6 +1780,38 @@ func (r *ScriptScriptAndVersionSettingEditResponseObservability) UnmarshalJSON(d
 }
 
 func (r scriptScriptAndVersionSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptScriptAndVersionSettingEditResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64                                                        `json:"head_sampling_rate,nullable"`
+	JSON             scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseObservabilityLogs]
+type scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1859,7 +1894,7 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingGetResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
@@ -1894,7 +1929,7 @@ func (r scriptScriptAndVersionSettingGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -2000,58 +2035,58 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -2505,12 +2540,12 @@ func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispat
 }
 
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName string `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -2525,9 +2560,9 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableOb
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	ClassName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	ClassName   apijson.Field
 	Environment apijson.Field
 	NamespaceID apijson.Field
 	ScriptName  apijson.Field
@@ -3447,16 +3482,16 @@ func (r *ScriptScriptAndVersionSettingGetResponseMigrations) UnmarshalJSON(data 
 // AsUnion returns a [ScriptScriptAndVersionSettingGetResponseMigrationsUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers.ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
+// Possible runtime types of the union are [SingleStepMigration],
+// [ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 func (r ScriptScriptAndVersionSettingGetResponseMigrations) AsUnion() ScriptScriptAndVersionSettingGetResponseMigrationsUnion {
 	return r.union
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or
-// [workers.ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
+// Union satisfied by [SingleStepMigration] or
+// [ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 type ScriptScriptAndVersionSettingGetResponseMigrationsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseMigrations()
 }
@@ -3515,8 +3550,10 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64                                                   `json:"head_sampling_rate,nullable"`
-	JSON             scriptScriptAndVersionSettingGetResponseObservabilityJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptScriptAndVersionSettingGetResponseObservabilityLogs `json:"logs,nullable"`
+	JSON scriptScriptAndVersionSettingGetResponseObservabilityJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseObservabilityJSON contains the JSON
@@ -3524,6 +3561,7 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 type scriptScriptAndVersionSettingGetResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3533,6 +3571,38 @@ func (r *ScriptScriptAndVersionSettingGetResponseObservability) UnmarshalJSON(da
 }
 
 func (r scriptScriptAndVersionSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptScriptAndVersionSettingGetResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64                                                       `json:"head_sampling_rate,nullable"`
+	JSON             scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseObservabilityLogs]
+type scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3636,7 +3706,7 @@ type ScriptScriptAndVersionSettingEditParamsSettings struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacement] `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
@@ -3648,7 +3718,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettings) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -3707,7 +3777,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) MarshalJSON() (d
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAI],
@@ -3945,12 +4015,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 }
 
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -4622,9 +4692,27 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -4674,9 +4762,9 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsUsageModel) IsKnown() boo
 type ScriptScriptAndVersionSettingEditResponseEnvelope struct {
 	Errors   []ScriptScriptAndVersionSettingEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptScriptAndVersionSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptScriptAndVersionSettingEditResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptScriptAndVersionSettingEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptScriptAndVersionSettingEditResponse                `json:"result"`
 	JSON    scriptScriptAndVersionSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4685,8 +4773,8 @@ type ScriptScriptAndVersionSettingEditResponseEnvelope struct {
 type scriptScriptAndVersionSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4822,9 +4910,9 @@ type ScriptScriptAndVersionSettingGetParams struct {
 type ScriptScriptAndVersionSettingGetResponseEnvelope struct {
 	Errors   []ScriptScriptAndVersionSettingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptScriptAndVersionSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptScriptAndVersionSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptScriptAndVersionSettingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptScriptAndVersionSettingGetResponse                `json:"result"`
 	JSON    scriptScriptAndVersionSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4833,8 +4921,8 @@ type ScriptScriptAndVersionSettingGetResponseEnvelope struct {
 type scriptScriptAndVersionSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -143,7 +143,7 @@ type BucketDomainManagedUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to enable public bucket access at the r2.dev domain.
 	Enabled param.Field[bool] `json:"enabled,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainManagedUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -151,7 +151,7 @@ func (r BucketDomainManagedUpdateParams) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainManagedUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -214,11 +214,11 @@ func (r BucketDomainManagedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BucketDomainManagedListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainManagedListParamsCfR2Jurisdiction string
 
 const (

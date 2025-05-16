@@ -237,14 +237,14 @@ func (r *QueueProducer) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [QueueProducersUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [queues.QueueProducersMqWorkerProducer],
-// [queues.QueueProducersMqR2Producer].
+// Possible runtime types of the union are [QueueProducersMqWorkerProducer],
+// [QueueProducersMqR2Producer].
 func (r QueueProducer) AsUnion() QueueProducersUnion {
 	return r.union
 }
 
-// Union satisfied by [queues.QueueProducersMqWorkerProducer] or
-// [queues.QueueProducersMqR2Producer].
+// Union satisfied by [QueueProducersMqWorkerProducer] or
+// [QueueProducersMqR2Producer].
 type QueueProducersUnion interface {
 	implementsQueueProducer()
 }

@@ -1,5 +1,37 @@
 # Changelog
 
+## 4.4.0 (2025-05-16)
+
+Full Changelog: [v4.3.0...v4.4.0](https://github.com/cloudflare/cloudflare-go/compare/v4.3.0...v4.4.0)
+
+### Features
+
+* **api:** api update ([aae9064](https://github.com/cloudflare/cloudflare-go/commit/aae90647b3d9509a6725a8d482ea3a6554e20034))
+* **api:** api update ([ac52226](https://github.com/cloudflare/cloudflare-go/commit/ac52226636bc69a42c4aa690a9daa7f34ac1ca47))
+* **api:** api update ([4fee36a](https://github.com/cloudflare/cloudflare-go/commit/4fee36a42d9d2ef04fa4b74fee187e5f13d66756))
+* **api:** api update ([91dd616](https://github.com/cloudflare/cloudflare-go/commit/91dd616d0ab27b7885a502a3a3918e7c3b635e60))
+* **api:** api update ([dcb22b4](https://github.com/cloudflare/cloudflare-go/commit/dcb22b44ced1f0669cc92bb8cf50063e4d6bf869))
+* **api:** api update ([c855087](https://github.com/cloudflare/cloudflare-go/commit/c855087ab3f224b54a30e1e120a7135a6e974226))
+* **api:** api update ([506f9d7](https://github.com/cloudflare/cloudflare-go/commit/506f9d7526a243eed8b7c3c84f336e40616c4879))
+* **api:** api update ([afdc867](https://github.com/cloudflare/cloudflare-go/commit/afdc867fd894a5c3a37c1a132ac2f61be4ce4089))
+* **api:** api update ([90a4553](https://github.com/cloudflare/cloudflare-go/commit/90a4553d8eb20f99457ddf0771455fa4fbfc3efa))
+* **api:** api update ([ddd85b6](https://github.com/cloudflare/cloudflare-go/commit/ddd85b646be6ae4320f2cca99b1bb919319f9c1b))
+* **api:** api update ([44e5806](https://github.com/cloudflare/cloudflare-go/commit/44e5806b24d47f0466bd99221394d97ce8e3832a))
+* **api:** manual updates ([90ff208](https://github.com/cloudflare/cloudflare-go/commit/90ff2085403626841617348463bd7181ccbaa0dc))
+* **api:** manual updates ([5c00227](https://github.com/cloudflare/cloudflare-go/commit/5c00227fc28d67e34d7b1036f45a58bb3553ac49))
+* **client:** add support for endpoint-specific base URLs in python ([f59c493](https://github.com/cloudflare/cloudflare-go/commit/f59c49347d6618b71d7a327b8ae5e111e47c53d3))
+* **device_settings:** swap list to get endpoint ([60da729](https://github.com/cloudflare/cloudflare-go/commit/60da7299c51d2adb348b56d920e0871257b5ba99))
+* **schema_validation:** add mapped endpoints ([f069836](https://github.com/cloudflare/cloudflare-go/commit/f0698366b4777148de63821a4566b7bbc0575e20))
+
+
+### Bug Fixes
+
+* **api:** fix path placeholders ([b915548](https://github.com/cloudflare/cloudflare-go/commit/b91554891e38b4fa490e3a0a2d2bcb1ead3cf325))
+* **client:** clean up reader resources ([cf6bee7](https://github.com/cloudflare/cloudflare-go/commit/cf6bee715a5d53aac97bc7b410d275179ae69901))
+* **client:** correctly update body in WithJSONSet ([f464861](https://github.com/cloudflare/cloudflare-go/commit/f464861c2663b588f8611311e4c8ba9470c85420))
+* **client:** remove shared import ([a684ed7](https://github.com/cloudflare/cloudflare-go/commit/a684ed735ba24c78fea1d83fa656ea1e7feffed5))
+* **urlscanner:** don't unwwrap scan response ([0b12408](https://github.com/cloudflare/cloudflare-go/commit/0b12408c0d0605d3b55b86f528290aa27061f73c))
+
 ## 4.3.0 (2025-05-05)
 
 Full Changelog: [v4.2.0...v4.3.0](https://github.com/cloudflare/cloudflare-go/compare/v4.2.0...v4.3.0)

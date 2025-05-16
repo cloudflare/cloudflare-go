@@ -143,7 +143,7 @@ func (r settingJSON) RawJSON() string {
 // The tls setting value.
 //
 // Union satisfied by [shared.UnionFloat], [shared.UnionString] or
-// [hostnames.SettingValueArray].
+// [SettingValueArray].
 type SettingValueUnion interface {
 	ImplementsSettingValueUnion()
 }

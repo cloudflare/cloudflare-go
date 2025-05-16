@@ -51,23 +51,6 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 	return
 }
 
-// Describes the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingListParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
-	var env DeviceSettingListResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/devices/settings", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Patches the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEditParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingEditResponseEnvelope
@@ -78,6 +61,23 @@ func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEdi
 	}
 	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Describes the current device settings for a Zero Trust account.
+func (r *DeviceSettingService) Get(ctx context.Context, query DeviceSettingGetParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
+	var env DeviceSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/devices/settings", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -189,53 +189,6 @@ func (r DeviceSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type DeviceSettingListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DeviceSettingListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceSettingListResponseEnvelopeJSON    `json:"-"`
-}
-
-// deviceSettingListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DeviceSettingListResponseEnvelope]
-type deviceSettingListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceSettingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceSettingListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DeviceSettingListResponseEnvelopeSuccess bool
-
-const (
-	DeviceSettingListResponseEnvelopeSuccessTrue DeviceSettingListResponseEnvelopeSuccess = true
-)
-
-func (r DeviceSettingListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DeviceSettingListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type DeviceSettingEditParams struct {
 	AccountID      param.Field[string] `path:"account_id,required"`
 	DeviceSettings DeviceSettingsParam `json:"device_settings,required"`
@@ -283,6 +236,53 @@ const (
 func (r DeviceSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DeviceSettingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DeviceSettingGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DeviceSettingGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceSettings        `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DeviceSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceSettingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// deviceSettingGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DeviceSettingGetResponseEnvelope]
+type deviceSettingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DeviceSettingGetResponseEnvelopeSuccess bool
+
+const (
+	DeviceSettingGetResponseEnvelopeSuccessTrue DeviceSettingGetResponseEnvelopeSuccess = true
+)
+
+func (r DeviceSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceSettingGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -334,28 +334,22 @@ func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [VersionGetResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.VersionGetResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.VersionGetResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [VersionGetResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [VersionGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.VersionGetResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.VersionGetResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [VersionGetResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [VersionGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type VersionGetResponseRulesUnion interface {
 	implementsVersionGetResponseRule()
 }
@@ -565,7 +559,7 @@ type VersionGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -607,24 +601,6 @@ func (r *VersionGetResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON(da
 
 func (r versionGetResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10   VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60   VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600  VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10, VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60, VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600, VersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type VersionGetResponseRulesRulesetsJSChallengeRule struct {
@@ -735,7 +711,7 @@ type VersionGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -778,24 +754,6 @@ func (r *VersionGetResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJSON(
 
 func (r versionGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, VersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.

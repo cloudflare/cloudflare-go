@@ -379,17 +379,16 @@ func (r *DeploymentEnvVar) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DeploymentEnvVarsUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [pages.DeploymentEnvVarsPagesPlainTextEnvVar],
-// [pages.DeploymentEnvVarsPagesSecretTextEnvVar].
+// Possible runtime types of the union are [DeploymentEnvVarsPagesPlainTextEnvVar],
+// [DeploymentEnvVarsPagesSecretTextEnvVar].
 func (r DeploymentEnvVar) AsUnion() DeploymentEnvVarsUnion {
 	return r.union
 }
 
 // A plaintext environment variable.
 //
-// Union satisfied by [pages.DeploymentEnvVarsPagesPlainTextEnvVar] or
-// [pages.DeploymentEnvVarsPagesSecretTextEnvVar].
+// Union satisfied by [DeploymentEnvVarsPagesPlainTextEnvVar] or
+// [DeploymentEnvVarsPagesSecretTextEnvVar].
 type DeploymentEnvVarsUnion interface {
 	implementsDeploymentEnvVar()
 }
@@ -1056,17 +1055,16 @@ func (r *ProjectDeploymentConfigsPreviewEnvVar) UnmarshalJSON(data []byte) (err 
 // you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar],
-// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar].
+// [ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar],
+// [ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar].
 func (r ProjectDeploymentConfigsPreviewEnvVar) AsUnion() ProjectDeploymentConfigsPreviewEnvVarsUnion {
 	return r.union
 }
 
 // A plaintext environment variable.
 //
-// Union satisfied by
-// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar] or
-// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar].
+// Union satisfied by [ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar]
+// or [ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar].
 type ProjectDeploymentConfigsPreviewEnvVarsUnion interface {
 	implementsProjectDeploymentConfigsPreviewEnvVar()
 }
@@ -1595,8 +1593,8 @@ func (r *ProjectDeploymentConfigsProductionEnvVar) UnmarshalJSON(data []byte) (e
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar],
-// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar].
+// [ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar],
+// [ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar].
 func (r ProjectDeploymentConfigsProductionEnvVar) AsUnion() ProjectDeploymentConfigsProductionEnvVarsUnion {
 	return r.union
 }
@@ -1604,8 +1602,8 @@ func (r ProjectDeploymentConfigsProductionEnvVar) AsUnion() ProjectDeploymentCon
 // A plaintext environment variable.
 //
 // Union satisfied by
-// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar] or
-// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar].
+// [ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar] or
+// [ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar].
 type ProjectDeploymentConfigsProductionEnvVarsUnion interface {
 	implementsProjectDeploymentConfigsProductionEnvVar()
 }

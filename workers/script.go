@@ -108,9 +108,9 @@ func (r *ScriptService) ListAutoPaging(ctx context.Context, query ScriptListPara
 }
 
 // Delete your worker. This call has no response body on a successful delete.
-func (r *ScriptService) Delete(ctx context.Context, scriptName string, params ScriptDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *ScriptService) Delete(ctx context.Context, scriptName string, params ScriptDeleteParams, opts ...option.RequestOption) (res *ScriptDeleteResponse, err error) {
+	var env ScriptDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -120,7 +120,11 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -288,9 +292,9 @@ type ScriptSetting struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// Observability settings for the Worker.
-	Observability ScriptSettingObservability `json:"observability"`
+	Observability ScriptSettingObservability `json:"observability,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript  `json:"tail_consumers"`
+	TailConsumers []ConsumerScript  `json:"tail_consumers,nullable"`
 	JSON          scriptSettingJSON `json:"-"`
 }
 
@@ -317,8 +321,10 @@ type ScriptSettingObservability struct {
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64                        `json:"head_sampling_rate,nullable"`
-	JSON             scriptSettingObservabilityJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptSettingObservabilityLogs `json:"logs,nullable"`
+	JSON scriptSettingObservabilityJSON `json:"-"`
 }
 
 // scriptSettingObservabilityJSON contains the JSON metadata for the struct
@@ -326,6 +332,7 @@ type ScriptSettingObservability struct {
 type scriptSettingObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -335,6 +342,37 @@ func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptSettingObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptSettingObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64                            `json:"head_sampling_rate,nullable"`
+	JSON             scriptSettingObservabilityLogsJSON `json:"-"`
+}
+
+// scriptSettingObservabilityLogsJSON contains the JSON metadata for the struct
+// [ScriptSettingObservabilityLogs]
+type scriptSettingObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -358,13 +396,32 @@ type ScriptSettingObservabilityParam struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[ScriptSettingObservabilityLogsParam] `json:"logs"`
 }
 
 func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Log settings for the Worker.
+type ScriptSettingObservabilityLogsParam struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptSettingObservabilityLogsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptUpdateResponse struct {
+	StartupTimeMs int64 `json:"startup_time_ms,required"`
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -382,17 +439,10 @@ type ScriptUpdateResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptUpdateResponsePlacement `json:"placement"`
-	// Enables
-	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	//
 	// Deprecated: deprecated
 	PlacementMode ScriptUpdateResponsePlacementMode `json:"placement_mode"`
-	// Status of
-	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	//
 	// Deprecated: deprecated
 	PlacementStatus ScriptUpdateResponsePlacementStatus `json:"placement_status"`
-	StartupTimeMs   int64                               `json:"startup_time_ms"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
 	// Usage model for the Worker invocations.
@@ -403,6 +453,7 @@ type ScriptUpdateResponse struct {
 // scriptUpdateResponseJSON contains the JSON metadata for the struct
 // [ScriptUpdateResponse]
 type scriptUpdateResponseJSON struct {
+	StartupTimeMs   apijson.Field
 	ID              apijson.Field
 	CreatedOn       apijson.Field
 	Etag            apijson.Field
@@ -413,7 +464,6 @@ type scriptUpdateResponseJSON struct {
 	Placement       apijson.Field
 	PlacementMode   apijson.Field
 	PlacementStatus apijson.Field
-	StartupTimeMs   apijson.Field
 	TailConsumers   apijson.Field
 	UsageModel      apijson.Field
 	raw             string
@@ -510,6 +560,8 @@ func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 	return false
 }
 
+type ScriptDeleteResponse = interface{}
+
 type ScriptUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -523,7 +575,7 @@ func (r ScriptUpdateParams) MarshalJSON() (data []byte, err error) {
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsMetadata struct {
-	// Configuration for assets within a Worker
+	// Configuration for assets within a Worker.
 	Assets param.Field[ScriptUpdateParamsMetadataAssets] `json:"assets"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -569,7 +621,7 @@ func (r ScriptUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configuration for assets within a Worker
+// Configuration for assets within a Worker.
 type ScriptUpdateParamsMetadataAssets struct {
 	// Configuration for assets within a Worker.
 	Config param.Field[ScriptUpdateParamsMetadataAssetsConfig] `json:"config"`
@@ -584,10 +636,10 @@ func (r ScriptUpdateParamsMetadataAssets) MarshalJSON() (data []byte, err error)
 // Configuration for assets within a Worker.
 type ScriptUpdateParamsMetadataAssetsConfig struct {
 	// The contents of a \_headers file (used to attach custom headers on asset
-	// responses)
+	// responses).
 	Headers param.Field[string] `json:"_headers"`
 	// The contents of a \_redirects file (used to apply redirects or proxy paths ahead
-	// of asset serving)
+	// of asset serving).
 	Redirects param.Field[string] `json:"_redirects"`
 	// Determines the redirects and rewrites of requests for HTML content.
 	HTMLHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
@@ -645,7 +697,7 @@ func (r ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
 	return false
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptUpdateParamsMetadataBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -703,7 +755,7 @@ func (r ScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error
 
 func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataBindingUnion() {}
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
@@ -940,12 +992,12 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOut
 }
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -1606,9 +1658,27 @@ type ScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 }
 
 func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type ScriptUpdateParamsMetadataObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptUpdateParamsMetadataObservabilityLogs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1676,9 +1746,9 @@ func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []ScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptUpdateResponse                `json:"result"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1687,8 +1757,8 @@ type ScriptUpdateResponseEnvelope struct {
 type scriptUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1832,6 +1902,145 @@ func (r ScriptDeleteParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type ScriptDeleteResponseEnvelope struct {
+	Errors   []ScriptDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success ScriptDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScriptDeleteResponse                `json:"result,nullable"`
+	JSON    scriptDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScriptDeleteResponseEnvelope]
+type scriptDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeleteResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           ScriptDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ScriptDeleteResponseEnvelopeErrors]
+type scriptDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    scriptDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ScriptDeleteResponseEnvelopeErrorsSource]
+type scriptDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeleteResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           ScriptDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScriptDeleteResponseEnvelopeMessages]
+type scriptDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    scriptDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ScriptDeleteResponseEnvelopeMessagesSource]
+type scriptDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptDeleteResponseEnvelopeSuccess bool
+
+const (
+	ScriptDeleteResponseEnvelopeSuccessTrue ScriptDeleteResponseEnvelopeSuccess = true
+)
+
+func (r ScriptDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type ScriptGetParams struct {

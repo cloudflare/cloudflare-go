@@ -216,7 +216,7 @@ type LogpushJob struct {
 	// (example: no permissions to write to destination bucket). Only the last failure
 	// is recorded. On successful execution of a job the error_message and last_error
 	// are set to null.
-	ErrorMessage time.Time `json:"error_message,nullable" format:"date-time"`
+	ErrorMessage string `json:"error_message,nullable"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
@@ -227,7 +227,7 @@ type LogpushJob struct {
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
 	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
 	// `http_requests` dataset.
-	Kind LogpushJobKind `json:"kind,nullable"`
+	Kind LogpushJobKind `json:"kind"`
 	// Records the last time for which logs have been successfully pushed. If the last
 	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
 	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
@@ -557,6 +557,10 @@ type JobNewParams struct {
 	Dataset param.Field[JobNewParamsDataset] `json:"dataset"`
 	// Flag that indicates if the job is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The filters to select the events to include and/or remove from your logs. For
+	// more information, refer to
+	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
+	Filter param.Field[string] `json:"filter"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
@@ -829,6 +833,10 @@ type JobUpdateParams struct {
 	DestinationConf param.Field[string] `json:"destination_conf" format:"uri"`
 	// Flag that indicates if the job is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The filters to select the events to include and/or remove from your logs. For
+	// more information, refer to
+	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
+	Filter param.Field[string] `json:"filter"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting

@@ -69,7 +69,7 @@ func (r threatEventTagNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventTagNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 	Name      param.Field[string]  `json:"name,required"`
 }

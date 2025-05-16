@@ -220,7 +220,7 @@ func (r threatEventInsightGetResponseJSON) RawJSON() string {
 }
 
 type ThreatEventInsightNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 	Content   param.Field[string]  `json:"content,required"`
 }
@@ -253,7 +253,7 @@ func (r threatEventInsightNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ThreatEventInsightDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
@@ -281,7 +281,7 @@ func (r threatEventInsightDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ThreatEventInsightEditParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 	Content   param.Field[string]  `json:"content,required"`
 }
@@ -314,7 +314,7 @@ func (r threatEventInsightEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ThreatEventInsightGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 

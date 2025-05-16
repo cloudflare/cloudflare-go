@@ -34,6 +34,29 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 	return
 }
 
+type DevicePolicyCertificates struct {
+	// The current status of the device policy certificate provisioning feature for
+	// WARP clients.
+	Enabled bool                         `json:"enabled,required"`
+	JSON    devicePolicyCertificatesJSON `json:"-"`
+}
+
+// devicePolicyCertificatesJSON contains the JSON metadata for the struct
+// [DevicePolicyCertificates]
+type devicePolicyCertificatesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyCertificates) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePolicyCertificatesJSON) RawJSON() string {
+	return r.raw
+}
+
 type DevicePolicyCertificatesParam struct {
 	// The current status of the device policy certificate provisioning feature for
 	// WARP clients.
@@ -125,7 +148,7 @@ type SettingsPolicy struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version"
+	// "os.version".
 	Match string `json:"match"`
 	// The name of the device settings profile.
 	Name     string `json:"name"`
@@ -135,8 +158,11 @@ type SettingsPolicy struct {
 	Precedence float64 `json:"precedence"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS bool                        `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              SettingsPolicyServiceModeV2 `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport bool                        `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          SettingsPolicyServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -170,6 +196,7 @@ type settingsPolicyJSON struct {
 	PolicyID                   apijson.Field
 	Precedence                 apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
+	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
@@ -213,9 +240,9 @@ func (r settingsPolicyServiceModeV2JSON) RawJSON() string {
 }
 
 type SettingsPolicyTargetTest struct {
-	// The id of the DEX test targeting this policy
+	// The id of the DEX test targeting this policy.
 	ID string `json:"id"`
-	// The name of the DEX test targeting this policy
+	// The name of the DEX test targeting this policy.
 	Name string                       `json:"name"`
 	JSON settingsPolicyTargetTestJSON `json:"-"`
 }
@@ -277,15 +304,14 @@ func (r *SplitTunnelExclude) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress],
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
+// [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress],
+// [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
 func (r SplitTunnelExclude) AsUnion() SplitTunnelExcludeUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress] or
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
+// Union satisfied by [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress]
+// or [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
 type SplitTunnelExcludeUnion interface {
 	implementsSplitTunnelExclude()
 }
@@ -458,15 +484,14 @@ func (r *SplitTunnelInclude) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress],
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
+// [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress],
+// [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
 func (r SplitTunnelInclude) AsUnion() SplitTunnelIncludeUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress] or
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
+// Union satisfied by [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress]
+// or [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
 type SplitTunnelIncludeUnion interface {
 	implementsSplitTunnelInclude()
 }

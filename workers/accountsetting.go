@@ -127,9 +127,9 @@ func (r AccountSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccountSettingUpdateResponseEnvelope struct {
 	Errors   []AccountSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccountSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountSettingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success AccountSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccountSettingUpdateResponse                `json:"result"`
 	JSON    accountSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -138,8 +138,8 @@ type AccountSettingUpdateResponseEnvelope struct {
 type accountSettingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -271,9 +271,9 @@ type AccountSettingGetParams struct {
 type AccountSettingGetResponseEnvelope struct {
 	Errors   []AccountSettingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccountSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success AccountSettingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccountSettingGetResponse                `json:"result"`
 	JSON    accountSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -282,8 +282,8 @@ type AccountSettingGetResponseEnvelope struct {
 type accountSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

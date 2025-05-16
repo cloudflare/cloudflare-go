@@ -176,19 +176,18 @@ func (r *BucketLockGetResponseRulesCondition) UnmarshalJSON(data []byte) (err er
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleDateCondition],
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
+// [BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
+// [BucketLockGetResponseRulesConditionR2LockRuleDateCondition],
+// [BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
 func (r BucketLockGetResponseRulesCondition) AsUnion() BucketLockGetResponseRulesConditionUnion {
 	return r.union
 }
 
 // Condition to apply a lock rule to an object for how long in seconds.
 //
-// Union satisfied by
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleDateCondition] or
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
+// Union satisfied by [BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
+// [BucketLockGetResponseRulesConditionR2LockRuleDateCondition] or
+// [BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
 type BucketLockGetResponseRulesConditionUnion interface {
 	implementsBucketLockGetResponseRulesCondition()
 }
@@ -356,7 +355,7 @@ type BucketLockUpdateParams struct {
 	// Account ID.
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Rules     param.Field[[]BucketLockUpdateParamsRule] `json:"rules"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLockUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -499,7 +498,7 @@ func (r BucketLockUpdateParamsRulesConditionType) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLockUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -562,11 +561,11 @@ func (r BucketLockUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BucketLockGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLockGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLockGetParamsCfR2Jurisdiction string
 
 const (

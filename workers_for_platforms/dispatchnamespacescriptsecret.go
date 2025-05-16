@@ -205,8 +205,8 @@ func (r *DispatchNamespaceScriptSecretUpdateResponse) UnmarshalJSON(data []byte)
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers_for_platforms.DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptSecretUpdateResponse) AsUnion() DispatchNamespaceScriptSecretUpdateResponseUnion {
 	return r.union
 }
@@ -214,9 +214,8 @@ func (r DispatchNamespaceScriptSecretUpdateResponse) AsUnion() DispatchNamespace
 // A secret value accessible through a binding.
 //
 // Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretText]
-// or
-// [workers_for_platforms.DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretText] or
+// [DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptSecretUpdateResponseUnion interface {
 	implementsDispatchNamespaceScriptSecretUpdateResponse()
 }
@@ -463,8 +462,8 @@ func (r *DispatchNamespaceScriptSecretListResponse) UnmarshalJSON(data []byte) (
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers_for_platforms.DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptSecretListResponse) AsUnion() DispatchNamespaceScriptSecretListResponseUnion {
 	return r.union
 }
@@ -472,9 +471,8 @@ func (r DispatchNamespaceScriptSecretListResponse) AsUnion() DispatchNamespaceSc
 // A secret value accessible through a binding.
 //
 // Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretText]
-// or
-// [workers_for_platforms.DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretText] or
+// [DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptSecretListResponseUnion interface {
 	implementsDispatchNamespaceScriptSecretListResponse()
 }
@@ -723,8 +721,8 @@ func (r *DispatchNamespaceScriptSecretGetResponse) UnmarshalJSON(data []byte) (e
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers_for_platforms.DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptSecretGetResponse) AsUnion() DispatchNamespaceScriptSecretGetResponseUnion {
 	return r.union
 }
@@ -732,9 +730,8 @@ func (r DispatchNamespaceScriptSecretGetResponse) AsUnion() DispatchNamespaceScr
 // A secret value accessible through a binding.
 //
 // Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretText]
-// or
-// [workers_for_platforms.DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretText] or
+// [DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptSecretGetResponseUnion interface {
 	implementsDispatchNamespaceScriptSecretGetResponse()
 }
@@ -1130,11 +1127,11 @@ func (r DispatchNamespaceScriptSecretUpdateParamsBodyFormat) IsKnown() bool {
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// A secret value accessible through a binding.
+	Result DispatchNamespaceScriptSecretUpdateResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// A secret value accessible through a binding.
-	Result DispatchNamespaceScriptSecretUpdateResponse             `json:"result"`
-	JSON   dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON `json:"-"`
+	JSON    dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON contains the JSON
@@ -1142,8 +1139,8 @@ type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
 type dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1432,11 +1429,11 @@ type DispatchNamespaceScriptSecretGetParams struct {
 type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptSecretGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptSecretGetResponseEnvelopeMessages `json:"messages,required"`
+	// A secret value accessible through a binding.
+	Result DispatchNamespaceScriptSecretGetResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess `json:"success,required"`
-	// A secret value accessible through a binding.
-	Result DispatchNamespaceScriptSecretGetResponse             `json:"result"`
-	JSON   dispatchNamespaceScriptSecretGetResponseEnvelopeJSON `json:"-"`
+	JSON    dispatchNamespaceScriptSecretGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // dispatchNamespaceScriptSecretGetResponseEnvelopeJSON contains the JSON metadata
@@ -1444,8 +1441,8 @@ type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
 type dispatchNamespaceScriptSecretGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

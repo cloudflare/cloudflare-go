@@ -75,41 +75,9 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 	return
 }
 
-type Schedule struct {
-	CreatedOn  string       `json:"created_on"`
-	Cron       string       `json:"cron"`
-	ModifiedOn string       `json:"modified_on"`
-	JSON       scheduleJSON `json:"-"`
-}
-
-// scheduleJSON contains the JSON metadata for the struct [Schedule]
-type scheduleJSON struct {
-	CreatedOn   apijson.Field
-	Cron        apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scheduleJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScheduleParam struct {
-	Cron param.Field[string] `json:"cron"`
-}
-
-func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScriptScheduleUpdateResponse struct {
-	Schedules []Schedule                       `json:"schedules"`
-	JSON      scriptScheduleUpdateResponseJSON `json:"-"`
+	Schedules []ScriptScheduleUpdateResponseSchedule `json:"schedules,required"`
+	JSON      scriptScheduleUpdateResponseJSON       `json:"-"`
 }
 
 // scriptScheduleUpdateResponseJSON contains the JSON metadata for the struct
@@ -128,9 +96,34 @@ func (r scriptScheduleUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScriptScheduleUpdateResponseSchedule struct {
+	Cron       string                                   `json:"cron,required"`
+	CreatedOn  string                                   `json:"created_on"`
+	ModifiedOn string                                   `json:"modified_on"`
+	JSON       scriptScheduleUpdateResponseScheduleJSON `json:"-"`
+}
+
+// scriptScheduleUpdateResponseScheduleJSON contains the JSON metadata for the
+// struct [ScriptScheduleUpdateResponseSchedule]
+type scriptScheduleUpdateResponseScheduleJSON struct {
+	Cron        apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScheduleUpdateResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScheduleUpdateResponseScheduleJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptScheduleGetResponse struct {
-	Schedules []Schedule                    `json:"schedules"`
-	JSON      scriptScheduleGetResponseJSON `json:"-"`
+	Schedules []ScriptScheduleGetResponseSchedule `json:"schedules,required"`
+	JSON      scriptScheduleGetResponseJSON       `json:"-"`
 }
 
 // scriptScheduleGetResponseJSON contains the JSON metadata for the struct
@@ -149,22 +142,55 @@ func (r scriptScheduleGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScriptScheduleGetResponseSchedule struct {
+	Cron       string                                `json:"cron,required"`
+	CreatedOn  string                                `json:"created_on"`
+	ModifiedOn string                                `json:"modified_on"`
+	JSON       scriptScheduleGetResponseScheduleJSON `json:"-"`
+}
+
+// scriptScheduleGetResponseScheduleJSON contains the JSON metadata for the struct
+// [ScriptScheduleGetResponseSchedule]
+type scriptScheduleGetResponseScheduleJSON struct {
+	Cron        apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScheduleGetResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScheduleGetResponseScheduleJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptScheduleUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      []ScheduleParam     `json:"body,required"`
+	AccountID param.Field[string]              `path:"account_id,required"`
+	Body      []ScriptScheduleUpdateParamsBody `json:"body,required"`
 }
 
 func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+type ScriptScheduleUpdateParamsBody struct {
+	Cron param.Field[string] `json:"cron,required"`
+}
+
+func (r ScriptScheduleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptScheduleUpdateResponseEnvelope struct {
 	Errors   []ScriptScheduleUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptScheduleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptScheduleUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptScheduleUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptScheduleUpdateResponse                `json:"result"`
 	JSON    scriptScheduleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -173,8 +199,8 @@ type ScriptScheduleUpdateResponseEnvelope struct {
 type scriptScheduleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -306,9 +332,9 @@ type ScriptScheduleGetParams struct {
 type ScriptScheduleGetResponseEnvelope struct {
 	Errors   []ScriptScheduleGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptScheduleGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptScheduleGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptScheduleGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptScheduleGetResponse                `json:"result"`
 	JSON    scriptScheduleGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -317,8 +343,8 @@ type ScriptScheduleGetResponseEnvelope struct {
 type scriptScheduleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

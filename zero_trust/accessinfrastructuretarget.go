@@ -135,15 +135,30 @@ func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body
 }
 
 // Adds one or more targets.
-func (r *AccessInfrastructureTargetService) BulkUpdate(ctx context.Context, params AccessInfrastructureTargetBulkUpdateParams, opts ...option.RequestOption) (res *[]AccessInfrastructureTargetBulkUpdateResponse, err error) {
+func (r *AccessInfrastructureTargetService) BulkUpdate(ctx context.Context, params AccessInfrastructureTargetBulkUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessInfrastructureTargetBulkUpdateResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Adds one or more targets.
+func (r *AccessInfrastructureTargetService) BulkUpdateAutoPaging(ctx context.Context, params AccessInfrastructureTargetBulkUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessInfrastructureTargetBulkUpdateResponse] {
+	return pagination.NewSinglePageAutoPager(r.BulkUpdate(ctx, params, opts...))
 }
 
 // Get target

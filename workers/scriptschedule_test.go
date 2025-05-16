@@ -32,7 +32,7 @@ func TestScriptScheduleUpdate(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptScheduleUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: []workers.ScheduleParam{{
+			Body: []workers.ScriptScheduleUpdateParamsBody{{
 				Cron: cloudflare.F("*/30 * * * *"),
 			}},
 		},

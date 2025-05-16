@@ -157,7 +157,7 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 type SettingUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -191,7 +191,7 @@ func (r settingUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -225,7 +225,7 @@ func (r settingEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

@@ -35,7 +35,7 @@ func NewBrandProtectionService(opts ...option.RequestOption) (r *BrandProtection
 	return
 }
 
-// Submit suspicious URL for scanning
+// Submit suspicious URL for scanning.
 func (r *BrandProtectionService) Submit(ctx context.Context, params BrandProtectionSubmitParams, opts ...option.RequestOption) (res *Submit, err error) {
 	var env BrandProtectionSubmitResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -199,7 +199,7 @@ type Submit struct {
 	// URLs that were excluded from scanning because their domain is in our no-scan
 	// list.
 	ExcludedURLs []SubmitExcludedURL `json:"excluded_urls"`
-	// URLs that were skipped because the same URL is currently being scanned
+	// URLs that were skipped because the same URL is currently being scanned.
 	SkippedURLs []SubmitSkippedURL `json:"skipped_urls"`
 	// URLs that were successfully submitted for scanning.
 	SubmittedURLs []SubmitSubmittedURL `json:"submitted_urls"`
@@ -298,7 +298,7 @@ func (r submitSubmittedURLJSON) RawJSON() string {
 type URLInfoModelResults struct {
 	// Name of the model.
 	ModelName string `json:"model_name"`
-	// Score output by the model for this submission.
+	// This is the score that is outputted by the model for this submission.
 	ModelScore float64                 `json:"model_score"`
 	JSON       urlInfoModelResultsJSON `json:"-"`
 }
@@ -321,9 +321,9 @@ func (r urlInfoModelResultsJSON) RawJSON() string {
 }
 
 type BrandProtectionSubmitParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// URL(s) to filter submissions results by
+	// URL(s) to filter submissions results by.
 	URL param.Field[string] `json:"url" format:"uri"`
 }
 
@@ -471,7 +471,7 @@ func (r BrandProtectionSubmitResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BrandProtectionURLInfoParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Submission URL(s) to filter submission results by.
 	URL param.Field[[]string] `query:"url"`

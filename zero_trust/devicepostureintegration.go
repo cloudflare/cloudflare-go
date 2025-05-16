@@ -214,14 +214,14 @@ const (
 	IntegrationTypeUptycs         IntegrationType = "uptycs"
 	IntegrationTypeIntune         IntegrationType = "intune"
 	IntegrationTypeKolide         IntegrationType = "kolide"
-	IntegrationTypeTanium         IntegrationType = "tanium"
+	IntegrationTypeTaniumS2s      IntegrationType = "tanium_s2s"
 	IntegrationTypeSentineloneS2s IntegrationType = "sentinelone_s2s"
 	IntegrationTypeCustomS2s      IntegrationType = "custom_s2s"
 )
 
 func (r IntegrationType) IsKnown() bool {
 	switch r {
-	case IntegrationTypeWorkspaceOne, IntegrationTypeCrowdstrikeS2s, IntegrationTypeUptycs, IntegrationTypeIntune, IntegrationTypeKolide, IntegrationTypeTanium, IntegrationTypeSentineloneS2s, IntegrationTypeCustomS2s:
+	case IntegrationTypeWorkspaceOne, IntegrationTypeCrowdstrikeS2s, IntegrationTypeUptycs, IntegrationTypeIntune, IntegrationTypeKolide, IntegrationTypeTaniumS2s, IntegrationTypeSentineloneS2s, IntegrationTypeCustomS2s:
 		return true
 	}
 	return false
@@ -247,10 +247,10 @@ func (r DevicePostureIntegrationNewParams) MarshalJSON() (data []byte, err error
 // The configuration object containing third-party integration information.
 type DevicePostureIntegrationNewParamsConfig struct {
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL param.Field[string] `json:"api_url"`
@@ -379,10 +379,10 @@ type DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest stru
 	// The Tanium client secret.
 	ClientSecret param.Field[string] `json:"client_secret,required"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 }
 
@@ -409,10 +409,10 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigR
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
 	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
-	// `api_url`
+	// `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
 	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
-	// the `api_url`
+	// the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
 	// The Custom Device Posture Integration API URL.
 	APIURL param.Field[string] `json:"api_url,required"`
@@ -434,14 +434,14 @@ const (
 	DevicePostureIntegrationNewParamsTypeUptycs         DevicePostureIntegrationNewParamsType = "uptycs"
 	DevicePostureIntegrationNewParamsTypeIntune         DevicePostureIntegrationNewParamsType = "intune"
 	DevicePostureIntegrationNewParamsTypeKolide         DevicePostureIntegrationNewParamsType = "kolide"
-	DevicePostureIntegrationNewParamsTypeTanium         DevicePostureIntegrationNewParamsType = "tanium"
+	DevicePostureIntegrationNewParamsTypeTaniumS2s      DevicePostureIntegrationNewParamsType = "tanium_s2s"
 	DevicePostureIntegrationNewParamsTypeSentineloneS2s DevicePostureIntegrationNewParamsType = "sentinelone_s2s"
 	DevicePostureIntegrationNewParamsTypeCustomS2s      DevicePostureIntegrationNewParamsType = "custom_s2s"
 )
 
 func (r DevicePostureIntegrationNewParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureIntegrationNewParamsTypeWorkspaceOne, DevicePostureIntegrationNewParamsTypeCrowdstrikeS2s, DevicePostureIntegrationNewParamsTypeUptycs, DevicePostureIntegrationNewParamsTypeIntune, DevicePostureIntegrationNewParamsTypeKolide, DevicePostureIntegrationNewParamsTypeTanium, DevicePostureIntegrationNewParamsTypeSentineloneS2s, DevicePostureIntegrationNewParamsTypeCustomS2s:
+	case DevicePostureIntegrationNewParamsTypeWorkspaceOne, DevicePostureIntegrationNewParamsTypeCrowdstrikeS2s, DevicePostureIntegrationNewParamsTypeUptycs, DevicePostureIntegrationNewParamsTypeIntune, DevicePostureIntegrationNewParamsTypeKolide, DevicePostureIntegrationNewParamsTypeTaniumS2s, DevicePostureIntegrationNewParamsTypeSentineloneS2s, DevicePostureIntegrationNewParamsTypeCustomS2s:
 		return true
 	}
 	return false
@@ -561,10 +561,10 @@ func (r DevicePostureIntegrationEditParams) MarshalJSON() (data []byte, err erro
 // The configuration object containing third-party integration information.
 type DevicePostureIntegrationEditParamsConfig struct {
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL param.Field[string] `json:"api_url"`
@@ -693,10 +693,10 @@ type DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest str
 	// The Tanium client secret.
 	ClientSecret param.Field[string] `json:"client_secret,required"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 }
 
@@ -723,10 +723,10 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfig
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
 	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
-	// `api_url`
+	// `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
 	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
-	// the `api_url`
+	// the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
 	// The Custom Device Posture Integration API URL.
 	APIURL param.Field[string] `json:"api_url,required"`
@@ -748,14 +748,14 @@ const (
 	DevicePostureIntegrationEditParamsTypeUptycs         DevicePostureIntegrationEditParamsType = "uptycs"
 	DevicePostureIntegrationEditParamsTypeIntune         DevicePostureIntegrationEditParamsType = "intune"
 	DevicePostureIntegrationEditParamsTypeKolide         DevicePostureIntegrationEditParamsType = "kolide"
-	DevicePostureIntegrationEditParamsTypeTanium         DevicePostureIntegrationEditParamsType = "tanium"
+	DevicePostureIntegrationEditParamsTypeTaniumS2s      DevicePostureIntegrationEditParamsType = "tanium_s2s"
 	DevicePostureIntegrationEditParamsTypeSentineloneS2s DevicePostureIntegrationEditParamsType = "sentinelone_s2s"
 	DevicePostureIntegrationEditParamsTypeCustomS2s      DevicePostureIntegrationEditParamsType = "custom_s2s"
 )
 
 func (r DevicePostureIntegrationEditParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureIntegrationEditParamsTypeWorkspaceOne, DevicePostureIntegrationEditParamsTypeCrowdstrikeS2s, DevicePostureIntegrationEditParamsTypeUptycs, DevicePostureIntegrationEditParamsTypeIntune, DevicePostureIntegrationEditParamsTypeKolide, DevicePostureIntegrationEditParamsTypeTanium, DevicePostureIntegrationEditParamsTypeSentineloneS2s, DevicePostureIntegrationEditParamsTypeCustomS2s:
+	case DevicePostureIntegrationEditParamsTypeWorkspaceOne, DevicePostureIntegrationEditParamsTypeCrowdstrikeS2s, DevicePostureIntegrationEditParamsTypeUptycs, DevicePostureIntegrationEditParamsTypeIntune, DevicePostureIntegrationEditParamsTypeKolide, DevicePostureIntegrationEditParamsTypeTaniumS2s, DevicePostureIntegrationEditParamsTypeSentineloneS2s, DevicePostureIntegrationEditParamsTypeCustomS2s:
 		return true
 	}
 	return false

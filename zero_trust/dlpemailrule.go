@@ -295,7 +295,7 @@ func (r DLPEmailRuleNewResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPEmailRuleNewResponseConditionsValueArray] or
+// Union satisfied by [DLPEmailRuleNewResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleNewResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleNewResponseConditionsValueUnion()
@@ -454,8 +454,8 @@ func (r DLPEmailRuleUpdateResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPEmailRuleUpdateResponseConditionsValueArray]
-// or [shared.UnionString].
+// Union satisfied by [DLPEmailRuleUpdateResponseConditionsValueArray] or
+// [shared.UnionString].
 type DLPEmailRuleUpdateResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()
 }
@@ -613,7 +613,7 @@ func (r DLPEmailRuleListResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPEmailRuleListResponseConditionsValueArray] or
+// Union satisfied by [DLPEmailRuleListResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleListResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleListResponseConditionsValueUnion()
@@ -772,8 +772,8 @@ func (r DLPEmailRuleDeleteResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPEmailRuleDeleteResponseConditionsValueArray]
-// or [shared.UnionString].
+// Union satisfied by [DLPEmailRuleDeleteResponseConditionsValueArray] or
+// [shared.UnionString].
 type DLPEmailRuleDeleteResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion()
 }
@@ -931,8 +931,8 @@ func (r DLPEmailRuleBulkEditResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPEmailRuleBulkEditResponseConditionsValueArray]
-// or [shared.UnionString].
+// Union satisfied by [DLPEmailRuleBulkEditResponseConditionsValueArray] or
+// [shared.UnionString].
 type DLPEmailRuleBulkEditResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion()
 }
@@ -1090,7 +1090,7 @@ func (r DLPEmailRuleGetResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.DLPEmailRuleGetResponseConditionsValueArray] or
+// Union satisfied by [DLPEmailRuleGetResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleGetResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleGetResponseConditionsValueUnion()

@@ -187,14 +187,13 @@ func (r *ConfigurationItem) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ConfigurationItemUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [firewall.LockdownIPConfiguration],
-// [firewall.LockdownCIDRConfiguration].
+// Possible runtime types of the union are [LockdownIPConfiguration],
+// [LockdownCIDRConfiguration].
 func (r ConfigurationItem) AsUnion() ConfigurationItemUnion {
 	return r.union
 }
 
-// Union satisfied by [firewall.LockdownIPConfiguration] or
-// [firewall.LockdownCIDRConfiguration].
+// Union satisfied by [LockdownIPConfiguration] or [LockdownCIDRConfiguration].
 type ConfigurationItemUnion interface {
 	implementsConfigurationItem()
 }

@@ -256,7 +256,7 @@ func (r WaitingRoomRuleAction) IsKnown() bool {
 }
 
 type RuleNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Rules  RuleNewParamsRules  `json:"rules,required"`
 }
@@ -296,7 +296,7 @@ func (r RuleNewParamsRulesAction) IsKnown() bool {
 }
 
 type RuleUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string]    `path:"zone_id,required"`
 	Rules  []RuleUpdateParamsRule `json:"rules,required"`
 }
@@ -336,12 +336,12 @@ func (r RuleUpdateParamsRulesAction) IsKnown() bool {
 }
 
 type RuleDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RuleEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to take when the expression matches.
 	Action param.Field[RuleEditParamsAction] `json:"action,required"`
@@ -443,6 +443,6 @@ func (r RuleEditParamsPositionAfter) MarshalJSON() (data []byte, err error) {
 func (r RuleEditParamsPositionAfter) implementsRuleEditParamsPositionUnion() {}
 
 type RuleGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

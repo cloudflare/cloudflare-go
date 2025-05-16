@@ -32,9 +32,8 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 		"always_online",
 		zones.SettingEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: zones.ZeroRTTParam{
-				ID:    cloudflare.F(zones.ZeroRTTID0rtt),
-				Value: cloudflare.F(zones.ZeroRTTValueOn),
+			Body: zones.SettingEditParamsBodyEnabled{
+				Enabled: cloudflare.F(true),
 			},
 		},
 	)

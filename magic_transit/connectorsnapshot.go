@@ -24,6 +24,7 @@ import (
 // the [NewConnectorSnapshotService] method instead.
 type ConnectorSnapshotService struct {
 	Options []option.RequestOption
+	Latest  *ConnectorSnapshotLatestService
 }
 
 // NewConnectorSnapshotService generates a new service that applies the given
@@ -32,6 +33,7 @@ type ConnectorSnapshotService struct {
 func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnapshotService) {
 	r = &ConnectorSnapshotService{}
 	r.Options = opts
+	r.Latest = NewConnectorSnapshotLatestService(opts...)
 	return
 }
 
@@ -175,8 +177,8 @@ type ConnectorSnapshotGetResponse struct {
 	Disks         []ConnectorSnapshotGetResponseDisk      `json:"disks"`
 	// Name of high availability state
 	HaState string `json:"ha_state"`
-	// Numeric value associated with high availability state (0 = unknown, 1 = active,
-	// 2 = standby, 3 = disabled, 4 = fault)
+	// Numeric value associated with high availability state (0 = disabled, 1 = active,
+	// 2 = standby, 3 = stopped, 4 = fault)
 	HaValue    float64                                 `json:"ha_value"`
 	Interfaces []ConnectorSnapshotGetResponseInterface `json:"interfaces"`
 	// Percentage of time over a 10 second window that all tasks were stalled

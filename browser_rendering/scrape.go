@@ -53,7 +53,7 @@ func (r *ScrapeService) New(ctx context.Context, params ScrapeNewParams, opts ..
 }
 
 type ScrapeNewResponse struct {
-	Result ScrapeNewResponseResult `json:"result,required"`
+	Results ScrapeNewResponseResults `json:"results,required"`
 	// Selector
 	Selector string                `json:"selector,required"`
 	JSON     scrapeNewResponseJSON `json:"-"`
@@ -62,7 +62,7 @@ type ScrapeNewResponse struct {
 // scrapeNewResponseJSON contains the JSON metadata for the struct
 // [ScrapeNewResponse]
 type scrapeNewResponseJSON struct {
-	Result      apijson.Field
+	Results     apijson.Field
 	Selector    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -76,8 +76,8 @@ func (r scrapeNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScrapeNewResponseResult struct {
-	Attributes []ScrapeNewResponseResultAttribute `json:"attributes,required"`
+type ScrapeNewResponseResults struct {
+	Attributes []ScrapeNewResponseResultsAttribute `json:"attributes,required"`
 	// Element height
 	Height float64 `json:"height,required"`
 	// Html content
@@ -89,13 +89,13 @@ type ScrapeNewResponseResult struct {
 	// Element top
 	Top float64 `json:"top,required"`
 	// Element width
-	Width float64                     `json:"width,required"`
-	JSON  scrapeNewResponseResultJSON `json:"-"`
+	Width float64                      `json:"width,required"`
+	JSON  scrapeNewResponseResultsJSON `json:"-"`
 }
 
-// scrapeNewResponseResultJSON contains the JSON metadata for the struct
-// [ScrapeNewResponseResult]
-type scrapeNewResponseResultJSON struct {
+// scrapeNewResponseResultsJSON contains the JSON metadata for the struct
+// [ScrapeNewResponseResults]
+type scrapeNewResponseResultsJSON struct {
 	Attributes  apijson.Field
 	Height      apijson.Field
 	HTML        apijson.Field
@@ -107,36 +107,36 @@ type scrapeNewResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScrapeNewResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ScrapeNewResponseResults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scrapeNewResponseResultJSON) RawJSON() string {
+func (r scrapeNewResponseResultsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScrapeNewResponseResultAttribute struct {
+type ScrapeNewResponseResultsAttribute struct {
 	// Attribute name
 	Name string `json:"name,required"`
 	// Attribute value
-	Value string                               `json:"value,required"`
-	JSON  scrapeNewResponseResultAttributeJSON `json:"-"`
+	Value string                                `json:"value,required"`
+	JSON  scrapeNewResponseResultsAttributeJSON `json:"-"`
 }
 
-// scrapeNewResponseResultAttributeJSON contains the JSON metadata for the struct
-// [ScrapeNewResponseResultAttribute]
-type scrapeNewResponseResultAttributeJSON struct {
+// scrapeNewResponseResultsAttributeJSON contains the JSON metadata for the struct
+// [ScrapeNewResponseResultsAttribute]
+type scrapeNewResponseResultsAttributeJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScrapeNewResponseResultAttribute) UnmarshalJSON(data []byte) (err error) {
+func (r *ScrapeNewResponseResultsAttribute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scrapeNewResponseResultAttributeJSON) RawJSON() string {
+func (r scrapeNewResponseResultsAttributeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -146,6 +146,10 @@ type ScrapeNewParams struct {
 	Elements  param.Field[[]ScrapeNewParamsElement] `json:"elements,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
 	// Adds a `<script>` tag into the page with the desired URL or content.
 	AddScriptTag param.Field[[]ScrapeNewParamsAddScriptTag] `json:"addScriptTag"`
 	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a

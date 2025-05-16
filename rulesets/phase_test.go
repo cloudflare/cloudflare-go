@@ -57,7 +57,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 					Characteristics:         cloudflare.F([]string{"ip.src"}),
-					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod60),
+					Period:                  cloudflare.F(int64(60)),
 					CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 					MitigationTimeout:       cloudflare.F(int64(600)),
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),

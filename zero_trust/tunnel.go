@@ -145,7 +145,7 @@ func (r *TunnelListResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [shared.CloudflareTunnel],
-// [zero_trust.TunnelListResponseTunnelWARPConnectorTunnel].
+// [TunnelListResponseTunnelWARPConnectorTunnel].
 func (r TunnelListResponse) AsUnion() TunnelListResponseUnion {
 	return r.union
 }
@@ -153,7 +153,7 @@ func (r TunnelListResponse) AsUnion() TunnelListResponseUnion {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
-// [zero_trust.TunnelListResponseTunnelWARPConnectorTunnel].
+// [TunnelListResponseTunnelWARPConnectorTunnel].
 type TunnelListResponseUnion interface {
 	ImplementsTunnelListResponse()
 }

@@ -76,6 +76,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers.ScriptUpdateParamsMetadataObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
+					Logs: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityLogs{
+						Enabled:          cloudflare.F(true),
+						InvocationLogs:   cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+					}),
 				}),
 				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacement{
 					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementModeSmart),
@@ -137,7 +142,7 @@ func TestScriptDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Workers.Scripts.Delete(
+	_, err := client.Workers.Scripts.Delete(
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptDeleteParams{

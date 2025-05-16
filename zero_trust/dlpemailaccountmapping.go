@@ -126,15 +126,14 @@ func (r *DLPEmailAccountMappingNewResponseAuthRequirements) UnmarshalJSON(data [
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.DLPEmailAccountMappingNewResponseAuthRequirementsObject],
-// [zero_trust.DLPEmailAccountMappingNewResponseAuthRequirementsType].
+// [DLPEmailAccountMappingNewResponseAuthRequirementsObject],
+// [DLPEmailAccountMappingNewResponseAuthRequirementsType].
 func (r DLPEmailAccountMappingNewResponseAuthRequirements) AsUnion() DLPEmailAccountMappingNewResponseAuthRequirementsUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
-// [zero_trust.DLPEmailAccountMappingNewResponseAuthRequirementsType].
+// Union satisfied by [DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
+// [DLPEmailAccountMappingNewResponseAuthRequirementsType].
 type DLPEmailAccountMappingNewResponseAuthRequirementsUnion interface {
 	implementsDLPEmailAccountMappingNewResponseAuthRequirements()
 }
@@ -290,15 +289,14 @@ func (r *DLPEmailAccountMappingGetResponseAuthRequirements) UnmarshalJSON(data [
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.DLPEmailAccountMappingGetResponseAuthRequirementsObject],
-// [zero_trust.DLPEmailAccountMappingGetResponseAuthRequirementsType].
+// [DLPEmailAccountMappingGetResponseAuthRequirementsObject],
+// [DLPEmailAccountMappingGetResponseAuthRequirementsType].
 func (r DLPEmailAccountMappingGetResponseAuthRequirements) AsUnion() DLPEmailAccountMappingGetResponseAuthRequirementsUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
-// [zero_trust.DLPEmailAccountMappingGetResponseAuthRequirementsType].
+// Union satisfied by [DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
+// [DLPEmailAccountMappingGetResponseAuthRequirementsType].
 type DLPEmailAccountMappingGetResponseAuthRequirementsUnion interface {
 	implementsDLPEmailAccountMappingGetResponseAuthRequirements()
 }

@@ -26,6 +26,7 @@ import (
 // the [NewConnectorEventService] method instead.
 type ConnectorEventService struct {
 	Options []option.RequestOption
+	Latest  *ConnectorEventLatestService
 }
 
 // NewConnectorEventService generates a new service that applies the given options
@@ -34,6 +35,7 @@ type ConnectorEventService struct {
 func NewConnectorEventService(opts ...option.RequestOption) (r *ConnectorEventService) {
 	r = &ConnectorEventService{}
 	r.Options = opts
+	r.Latest = NewConnectorEventLatestService(opts...)
 	return
 }
 
@@ -197,37 +199,40 @@ func (r *ConnectorEventGetResponseE) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ConnectorEventGetResponseEUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [magic_transit.ConnectorEventGetResponseEInit],
-// [magic_transit.ConnectorEventGetResponseELeave],
-// [magic_transit.ConnectorEventGetResponseEStartAttestation],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationFailure],
-// [magic_transit.ConnectorEventGetResponseEStartRotateCryptKey],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
-// [magic_transit.ConnectorEventGetResponseEStartUpgrade],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeFailure],
-// [magic_transit.ConnectorEventGetResponseEReconcile],
-// [magic_transit.ConnectorEventGetResponseEConfigureCloudflaredTunnel].
+// Possible runtime types of the union are [ConnectorEventGetResponseEInit],
+// [ConnectorEventGetResponseELeave], [ConnectorEventGetResponseEStartAttestation],
+// [ConnectorEventGetResponseEFinishAttestationSuccess],
+// [ConnectorEventGetResponseEFinishAttestationFailure],
+// [ConnectorEventGetResponseEStartRotateCryptKey],
+// [ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
+// [ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
+// [ConnectorEventGetResponseEStartRotatePki],
+// [ConnectorEventGetResponseEFinishRotatePkiSuccess],
+// [ConnectorEventGetResponseEFinishRotatePkiFailure],
+// [ConnectorEventGetResponseEStartUpgrade],
+// [ConnectorEventGetResponseEFinishUpgradeSuccess],
+// [ConnectorEventGetResponseEFinishUpgradeFailure],
+// [ConnectorEventGetResponseEReconcile],
+// [ConnectorEventGetResponseEConfigureCloudflaredTunnel].
 func (r ConnectorEventGetResponseE) AsUnion() ConnectorEventGetResponseEUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.ConnectorEventGetResponseEInit],
-// [magic_transit.ConnectorEventGetResponseELeave],
-// [magic_transit.ConnectorEventGetResponseEStartAttestation],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationFailure],
-// [magic_transit.ConnectorEventGetResponseEStartRotateCryptKey],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
-// [magic_transit.ConnectorEventGetResponseEStartUpgrade],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeFailure],
-// [magic_transit.ConnectorEventGetResponseEReconcile] or
-// [magic_transit.ConnectorEventGetResponseEConfigureCloudflaredTunnel].
+// Union satisfied by [ConnectorEventGetResponseEInit],
+// [ConnectorEventGetResponseELeave], [ConnectorEventGetResponseEStartAttestation],
+// [ConnectorEventGetResponseEFinishAttestationSuccess],
+// [ConnectorEventGetResponseEFinishAttestationFailure],
+// [ConnectorEventGetResponseEStartRotateCryptKey],
+// [ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
+// [ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
+// [ConnectorEventGetResponseEStartRotatePki],
+// [ConnectorEventGetResponseEFinishRotatePkiSuccess],
+// [ConnectorEventGetResponseEFinishRotatePkiFailure],
+// [ConnectorEventGetResponseEStartUpgrade],
+// [ConnectorEventGetResponseEFinishUpgradeSuccess],
+// [ConnectorEventGetResponseEFinishUpgradeFailure],
+// [ConnectorEventGetResponseEReconcile] or
+// [ConnectorEventGetResponseEConfigureCloudflaredTunnel].
 type ConnectorEventGetResponseEUnion interface {
 	implementsConnectorEventGetResponseE()
 }
@@ -275,6 +280,21 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishRotateCryptKeyFailure{}),
 			DiscriminatorValue: "FinishRotateCryptKeyFailure",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEStartRotatePki{}),
+			DiscriminatorValue: "StartRotatePki",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishRotatePkiSuccess{}),
+			DiscriminatorValue: "FinishRotatePkiSuccess",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishRotatePkiFailure{}),
+			DiscriminatorValue: "FinishRotatePkiFailure",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -618,6 +638,123 @@ func (r ConnectorEventGetResponseEFinishRotateCryptKeyFailureK) IsKnown() bool {
 	return false
 }
 
+type ConnectorEventGetResponseEStartRotatePki struct {
+	// Started PKI rotation
+	K    ConnectorEventGetResponseEStartRotatePkiK    `json:"k,required"`
+	JSON connectorEventGetResponseEStartRotatePkiJSON `json:"-"`
+}
+
+// connectorEventGetResponseEStartRotatePkiJSON contains the JSON metadata for the
+// struct [ConnectorEventGetResponseEStartRotatePki]
+type connectorEventGetResponseEStartRotatePkiJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEStartRotatePki) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEStartRotatePkiJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEStartRotatePki) implementsConnectorEventGetResponseE() {}
+
+// Started PKI rotation
+type ConnectorEventGetResponseEStartRotatePkiK string
+
+const (
+	ConnectorEventGetResponseEStartRotatePkiKStartRotatePki ConnectorEventGetResponseEStartRotatePkiK = "StartRotatePki"
+)
+
+func (r ConnectorEventGetResponseEStartRotatePkiK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEStartRotatePkiKStartRotatePki:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishRotatePkiSuccess struct {
+	// Finished PKI rotation
+	K    ConnectorEventGetResponseEFinishRotatePkiSuccessK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishRotatePkiSuccessJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishRotatePkiSuccessJSON contains the JSON metadata
+// for the struct [ConnectorEventGetResponseEFinishRotatePkiSuccess]
+type connectorEventGetResponseEFinishRotatePkiSuccessJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishRotatePkiSuccess) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishRotatePkiSuccessJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishRotatePkiSuccess) implementsConnectorEventGetResponseE() {}
+
+// Finished PKI rotation
+type ConnectorEventGetResponseEFinishRotatePkiSuccessK string
+
+const (
+	ConnectorEventGetResponseEFinishRotatePkiSuccessKFinishRotatePkiSuccess ConnectorEventGetResponseEFinishRotatePkiSuccessK = "FinishRotatePkiSuccess"
+)
+
+func (r ConnectorEventGetResponseEFinishRotatePkiSuccessK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishRotatePkiSuccessKFinishRotatePkiSuccess:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishRotatePkiFailure struct {
+	// Failed PKI rotation
+	K    ConnectorEventGetResponseEFinishRotatePkiFailureK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishRotatePkiFailureJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishRotatePkiFailureJSON contains the JSON metadata
+// for the struct [ConnectorEventGetResponseEFinishRotatePkiFailure]
+type connectorEventGetResponseEFinishRotatePkiFailureJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishRotatePkiFailure) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishRotatePkiFailureJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishRotatePkiFailure) implementsConnectorEventGetResponseE() {}
+
+// Failed PKI rotation
+type ConnectorEventGetResponseEFinishRotatePkiFailureK string
+
+const (
+	ConnectorEventGetResponseEFinishRotatePkiFailureKFinishRotatePkiFailure ConnectorEventGetResponseEFinishRotatePkiFailureK = "FinishRotatePkiFailure"
+)
+
+func (r ConnectorEventGetResponseEFinishRotatePkiFailureK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishRotatePkiFailureKFinishRotatePkiFailure:
+		return true
+	}
+	return false
+}
+
 type ConnectorEventGetResponseEStartUpgrade struct {
 	// Started upgrade
 	K ConnectorEventGetResponseEStartUpgradeK `json:"k,required"`
@@ -829,6 +966,9 @@ const (
 	ConnectorEventGetResponseEKStartRotateCryptKey         ConnectorEventGetResponseEK = "StartRotateCryptKey"
 	ConnectorEventGetResponseEKFinishRotateCryptKeySuccess ConnectorEventGetResponseEK = "FinishRotateCryptKeySuccess"
 	ConnectorEventGetResponseEKFinishRotateCryptKeyFailure ConnectorEventGetResponseEK = "FinishRotateCryptKeyFailure"
+	ConnectorEventGetResponseEKStartRotatePki              ConnectorEventGetResponseEK = "StartRotatePki"
+	ConnectorEventGetResponseEKFinishRotatePkiSuccess      ConnectorEventGetResponseEK = "FinishRotatePkiSuccess"
+	ConnectorEventGetResponseEKFinishRotatePkiFailure      ConnectorEventGetResponseEK = "FinishRotatePkiFailure"
 	ConnectorEventGetResponseEKStartUpgrade                ConnectorEventGetResponseEK = "StartUpgrade"
 	ConnectorEventGetResponseEKFinishUpgradeSuccess        ConnectorEventGetResponseEK = "FinishUpgradeSuccess"
 	ConnectorEventGetResponseEKFinishUpgradeFailure        ConnectorEventGetResponseEK = "FinishUpgradeFailure"
@@ -838,7 +978,7 @@ const (
 
 func (r ConnectorEventGetResponseEK) IsKnown() bool {
 	switch r {
-	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel:
+	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartRotatePki, ConnectorEventGetResponseEKFinishRotatePkiSuccess, ConnectorEventGetResponseEKFinishRotatePkiFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel:
 		return true
 	}
 	return false

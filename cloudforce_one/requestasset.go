@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RequestAssetService contains methods and other services that help with
@@ -37,20 +36,20 @@ func NewRequestAssetService(opts ...option.RequestOption) (r *RequestAssetServic
 }
 
 // List Request Assets
-func (r *RequestAssetService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestAssetNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetNewResponse], err error) {
+func (r *RequestAssetService) New(ctx context.Context, requestID string, params RequestAssetNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetNewResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if requestIdentifier == "" {
-		err = errors.New("missing required request_identifier parameter")
+	if requestID == "" {
+		err = errors.New("missing required request_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset", accountIdentifier, requestIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, body, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset", params.AccountID, requestID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,28 +62,28 @@ func (r *RequestAssetService) New(ctx context.Context, accountIdentifier string,
 }
 
 // List Request Assets
-func (r *RequestAssetService) NewAutoPaging(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestAssetNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetNewResponse] {
-	return pagination.NewSinglePageAutoPager(r.New(ctx, accountIdentifier, requestIdentifier, body, opts...))
+func (r *RequestAssetService) NewAutoPaging(ctx context.Context, requestID string, params RequestAssetNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, requestID, params, opts...))
 }
 
 // Update a Request Asset
-func (r *RequestAssetService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, body RequestAssetUpdateParams, opts ...option.RequestOption) (res *RequestAssetUpdateResponse, err error) {
+func (r *RequestAssetService) Update(ctx context.Context, requestID string, assetID string, params RequestAssetUpdateParams, opts ...option.RequestOption) (res *RequestAssetUpdateResponse, err error) {
 	var env RequestAssetUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if requestIdentifier == "" {
-		err = errors.New("missing required request_identifier parameter")
+	if requestID == "" {
+		err = errors.New("missing required request_id parameter")
 		return
 	}
-	if assetIdentifer == "" {
-		err = errors.New("missing required asset_identifer parameter")
+	if assetID == "" {
+		err = errors.New("missing required asset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", accountIdentifier, requestIdentifier, assetIdentifer)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", params.AccountID, requestID, assetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -93,43 +92,43 @@ func (r *RequestAssetService) Update(ctx context.Context, accountIdentifier stri
 }
 
 // Delete a Request Asset
-func (r *RequestAssetService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, opts ...option.RequestOption) (res *RequestAssetDeleteResponse, err error) {
+func (r *RequestAssetService) Delete(ctx context.Context, requestID string, assetID string, body RequestAssetDeleteParams, opts ...option.RequestOption) (res *RequestAssetDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if requestIdentifier == "" {
-		err = errors.New("missing required request_identifier parameter")
+	if requestID == "" {
+		err = errors.New("missing required request_id parameter")
 		return
 	}
-	if assetIdentifer == "" {
-		err = errors.New("missing required asset_identifer parameter")
+	if assetID == "" {
+		err = errors.New("missing required asset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", accountIdentifier, requestIdentifier, assetIdentifer)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", body.AccountID, requestID, assetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Get a Request Asset
-func (r *RequestAssetService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetGetResponse], err error) {
+func (r *RequestAssetService) Get(ctx context.Context, requestID string, assetID string, query RequestAssetGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetGetResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if requestIdentifier == "" {
-		err = errors.New("missing required request_identifier parameter")
+	if requestID == "" {
+		err = errors.New("missing required request_id parameter")
 		return
 	}
-	if assetIdentifer == "" {
-		err = errors.New("missing required asset_identifer parameter")
+	if assetID == "" {
+		err = errors.New("missing required asset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", accountIdentifier, requestIdentifier, assetIdentifer)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", query.AccountID, requestID, assetID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -143,20 +142,20 @@ func (r *RequestAssetService) Get(ctx context.Context, accountIdentifier string,
 }
 
 // Get a Request Asset
-func (r *RequestAssetService) GetAutoPaging(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetGetResponse] {
-	return pagination.NewSinglePageAutoPager(r.Get(ctx, accountIdentifier, requestIdentifier, assetIdentifer, opts...))
+func (r *RequestAssetService) GetAutoPaging(ctx context.Context, requestID string, assetID string, query RequestAssetGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, requestID, assetID, query, opts...))
 }
 
 type RequestAssetNewResponse struct {
-	// Asset ID
+	// Asset ID.
 	ID int64 `json:"id,required"`
-	// Asset name
+	// Asset name.
 	Name string `json:"name,required"`
-	// Asset creation time
+	// Defines the asset creation time.
 	Created time.Time `json:"created" format:"date-time"`
-	// Asset description
+	// Asset description.
 	Description string `json:"description"`
-	// Asset file type
+	// Asset file type.
 	FileType string                      `json:"file_type"`
 	JSON     requestAssetNewResponseJSON `json:"-"`
 }
@@ -182,15 +181,15 @@ func (r requestAssetNewResponseJSON) RawJSON() string {
 }
 
 type RequestAssetUpdateResponse struct {
-	// Asset ID
+	// Asset ID.
 	ID int64 `json:"id,required"`
-	// Asset name
+	// Asset name.
 	Name string `json:"name,required"`
-	// Asset creation time
+	// Defines the asset creation time.
 	Created time.Time `json:"created" format:"date-time"`
-	// Asset description
+	// Asset description.
 	Description string `json:"description"`
-	// Asset file type
+	// Asset file type.
 	FileType string                         `json:"file_type"`
 	JSON     requestAssetUpdateResponseJSON `json:"-"`
 }
@@ -216,9 +215,9 @@ func (r requestAssetUpdateResponseJSON) RawJSON() string {
 }
 
 type RequestAssetDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RequestAssetDeleteResponseError   `json:"errors,required"`
+	Messages []RequestAssetDeleteResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RequestAssetDeleteResponseSuccess `json:"success,required"`
 	JSON    requestAssetDeleteResponseJSON    `json:"-"`
 }
@@ -241,7 +240,103 @@ func (r requestAssetDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RequestAssetDeleteResponseError struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           RequestAssetDeleteResponseErrorsSource `json:"source"`
+	JSON             requestAssetDeleteResponseErrorJSON    `json:"-"`
+}
+
+// requestAssetDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [RequestAssetDeleteResponseError]
+type requestAssetDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RequestAssetDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetDeleteResponseErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    requestAssetDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// requestAssetDeleteResponseErrorsSourceJSON contains the JSON metadata for the
+// struct [RequestAssetDeleteResponseErrorsSource]
+type requestAssetDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetDeleteResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetDeleteResponseMessage struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RequestAssetDeleteResponseMessagesSource `json:"source"`
+	JSON             requestAssetDeleteResponseMessageJSON    `json:"-"`
+}
+
+// requestAssetDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [RequestAssetDeleteResponseMessage]
+type requestAssetDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RequestAssetDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetDeleteResponseMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    requestAssetDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// requestAssetDeleteResponseMessagesSourceJSON contains the JSON metadata for the
+// struct [RequestAssetDeleteResponseMessagesSource]
+type requestAssetDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RequestAssetDeleteResponseSuccess bool
 
 const (
@@ -257,15 +352,15 @@ func (r RequestAssetDeleteResponseSuccess) IsKnown() bool {
 }
 
 type RequestAssetGetResponse struct {
-	// Asset ID
+	// Asset ID.
 	ID int64 `json:"id,required"`
-	// Asset name
+	// Asset name.
 	Name string `json:"name,required"`
-	// Asset creation time
+	// Defines the asset creation time.
 	Created time.Time `json:"created" format:"date-time"`
-	// Asset description
+	// Asset description.
 	Description string `json:"description"`
-	// Asset file type
+	// Asset file type.
 	FileType string                      `json:"file_type"`
 	JSON     requestAssetGetResponseJSON `json:"-"`
 }
@@ -291,9 +386,11 @@ func (r requestAssetGetResponseJSON) RawJSON() string {
 }
 
 type RequestAssetNewParams struct {
-	// Page number of results
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Page number of results.
 	Page param.Field[int64] `json:"page,required"`
-	// Number of results per page
+	// Number of results per page.
 	PerPage param.Field[int64] `json:"per_page,required"`
 }
 
@@ -302,7 +399,9 @@ func (r RequestAssetNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestAssetUpdateParams struct {
-	// Asset file to upload
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Asset file to upload.
 	Source param.Field[string] `json:"source"`
 }
 
@@ -311,9 +410,9 @@ func (r RequestAssetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestAssetUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RequestAssetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RequestAssetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RequestAssetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RequestAssetUpdateResponse                `json:"result"`
 	JSON    requestAssetUpdateResponseEnvelopeJSON    `json:"-"`
@@ -338,7 +437,103 @@ func (r requestAssetUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RequestAssetUpdateResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           RequestAssetUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             requestAssetUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// requestAssetUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RequestAssetUpdateResponseEnvelopeErrors]
+type requestAssetUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RequestAssetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    requestAssetUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// requestAssetUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [RequestAssetUpdateResponseEnvelopeErrorsSource]
+type requestAssetUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetUpdateResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           RequestAssetUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             requestAssetUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// requestAssetUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RequestAssetUpdateResponseEnvelopeMessages]
+type requestAssetUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RequestAssetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    requestAssetUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// requestAssetUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [RequestAssetUpdateResponseEnvelopeMessagesSource]
+type requestAssetUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RequestAssetUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -351,4 +546,14 @@ func (r RequestAssetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RequestAssetDeleteParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type RequestAssetGetParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
 }

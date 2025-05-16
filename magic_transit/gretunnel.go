@@ -298,9 +298,8 @@ func (r GRETunnelNewResponseHealthCheckDirection) IsKnown() bool {
 // object form if the x-magic-new-hc-target header is set to true and string form
 // if x-magic-new-hc-target is absent or set to false.
 //
-// Union satisfied by
-// [magic_transit.GRETunnelNewResponseHealthCheckTargetMagicHealthCheckTarget] or
-// [shared.UnionString].
+// Union satisfied by [GRETunnelNewResponseHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
 type GRETunnelNewResponseHealthCheckTargetUnion interface {
 	ImplementsGRETunnelNewResponseHealthCheckTargetUnion()
 }
@@ -506,7 +505,7 @@ func (r GRETunnelUpdateResponseModifiedGRETunnelHealthCheckDirection) IsKnown() 
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthCheckTarget]
+// [GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion interface {
 	ImplementsGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion()
@@ -711,8 +710,8 @@ func (r GRETunnelListResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.GRETunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
-// or [shared.UnionString].
+// [GRETunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget] or
+// [shared.UnionString].
 type GRETunnelListResponseGRETunnelsHealthCheckTargetUnion interface {
 	ImplementsGRETunnelListResponseGRETunnelsHealthCheckTargetUnion()
 }
@@ -918,7 +917,7 @@ func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckDirection) IsKnown() b
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget]
+// [GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion interface {
 	ImplementsGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion()
@@ -1126,7 +1125,7 @@ func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection) IsKno
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
+// [GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion interface {
 	ImplementsGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion()
@@ -1331,8 +1330,8 @@ func (r GRETunnelGetResponseGRETunnelHealthCheckDirection) IsKnown() bool {
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget]
-// or [shared.UnionString].
+// [GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget] or
+// [shared.UnionString].
 type GRETunnelGetResponseGRETunnelHealthCheckTargetUnion interface {
 	ImplementsGRETunnelGetResponseGRETunnelHealthCheckTargetUnion()
 }

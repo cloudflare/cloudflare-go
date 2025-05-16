@@ -298,8 +298,8 @@ func (r *BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition) Unmars
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [r2.BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition],
-// [r2.BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition].
+// [BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition],
+// [BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition].
 func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition) AsUnion() BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionUnion {
 	return r.union
 }
@@ -308,9 +308,9 @@ func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition) AsUnion
 // seconds.
 //
 // Union satisfied by
-// [r2.BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition]
+// [BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition]
 // or
-// [r2.BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition].
+// [BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition].
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionUnion interface {
 	implementsBucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition()
 }
@@ -494,8 +494,8 @@ func (r *BucketLifecycleGetResponseRulesStorageClassTransitionsCondition) Unmars
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [r2.BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition],
-// [r2.BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition].
+// [BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition],
+// [BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition].
 func (r BucketLifecycleGetResponseRulesStorageClassTransitionsCondition) AsUnion() BucketLifecycleGetResponseRulesStorageClassTransitionsConditionUnion {
 	return r.union
 }
@@ -504,9 +504,9 @@ func (r BucketLifecycleGetResponseRulesStorageClassTransitionsCondition) AsUnion
 // seconds.
 //
 // Union satisfied by
-// [r2.BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition]
+// [BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition]
 // or
-// [r2.BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition].
+// [BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition].
 type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionUnion interface {
 	implementsBucketLifecycleGetResponseRulesStorageClassTransitionsCondition()
 }
@@ -644,7 +644,7 @@ type BucketLifecycleUpdateParams struct {
 	// Account ID.
 	AccountID param.Field[string]                            `path:"account_id,required"`
 	Rules     param.Field[[]BucketLifecycleUpdateParamsRule] `json:"rules"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLifecycleUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -947,7 +947,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsStorageClass) IsK
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLifecycleUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -1010,11 +1010,11 @@ func (r BucketLifecycleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BucketLifecycleGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLifecycleGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLifecycleGetParamsCfR2Jurisdiction string
 
 const (
