@@ -38,7 +38,7 @@ func NewCloudIntegrationService(opts ...option.RequestOption) (r *CloudIntegrati
 	return
 }
 
-// Create a new Cloud Integration (Closed Beta)
+// Create a new Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrationNewParams, opts ...option.RequestOption) (res *CloudIntegrationNewResponse, err error) {
 	var env CloudIntegrationNewResponseEnvelope
 	if params.Forwarded.Present {
@@ -58,7 +58,7 @@ func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrati
 	return
 }
 
-// Update a Cloud Integration (Closed Beta)
+// Update a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Update(ctx context.Context, providerID string, params CloudIntegrationUpdateParams, opts ...option.RequestOption) (res *CloudIntegrationUpdateResponse, err error) {
 	var env CloudIntegrationUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *CloudIntegrationService) Update(ctx context.Context, providerID string,
 	return
 }
 
-// List Cloud Integrations (Closed Beta)
+// List Cloud Integrations (Closed Beta).
 func (r *CloudIntegrationService) List(ctx context.Context, params CloudIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CloudIntegrationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -101,12 +101,12 @@ func (r *CloudIntegrationService) List(ctx context.Context, params CloudIntegrat
 	return res, nil
 }
 
-// List Cloud Integrations (Closed Beta)
+// List Cloud Integrations (Closed Beta).
 func (r *CloudIntegrationService) ListAutoPaging(ctx context.Context, params CloudIntegrationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CloudIntegrationListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a Cloud Integration (Closed Beta)
+// Delete a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string, body CloudIntegrationDeleteParams, opts ...option.RequestOption) (res *CloudIntegrationDeleteResponse, err error) {
 	var env CloudIntegrationDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -127,7 +127,7 @@ func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string,
 	return
 }
 
-// Run discovery for a Cloud Integration (Closed Beta)
+// Run discovery for a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Discover(ctx context.Context, providerID string, params CloudIntegrationDiscoverParams, opts ...option.RequestOption) (res *CloudIntegrationDiscoverResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -143,7 +143,7 @@ func (r *CloudIntegrationService) Discover(ctx context.Context, providerID strin
 	return
 }
 
-// Run discovery for all Cloud Integrations in an account (Closed Beta)
+// Run discovery for all Cloud Integrations in an account (Closed Beta).
 func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudIntegrationDiscoverAllParams, opts ...option.RequestOption) (res *CloudIntegrationDiscoverAllResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -155,7 +155,7 @@ func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudInt
 	return
 }
 
-// Update a Cloud Integration (Closed Beta)
+// Update a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, params CloudIntegrationEditParams, opts ...option.RequestOption) (res *CloudIntegrationEditResponse, err error) {
 	var env CloudIntegrationEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -176,7 +176,7 @@ func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, p
 	return
 }
 
-// Read a Cloud Integration (Closed Beta)
+// Read a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, params CloudIntegrationGetParams, opts ...option.RequestOption) (res *CloudIntegrationGetResponse, err error) {
 	var env CloudIntegrationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -197,7 +197,7 @@ func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, pa
 	return
 }
 
-// Get initial configuration to complete Cloud Integration setup (Closed Beta)
+// Get initial configuration to complete Cloud Integration setup (Closed Beta).
 func (r *CloudIntegrationService) InitialSetup(ctx context.Context, providerID string, query CloudIntegrationInitialSetupParams, opts ...option.RequestOption) (res *CloudIntegrationInitialSetupResponse, err error) {
 	var env CloudIntegrationInitialSetupResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -3944,7 +3944,7 @@ type CloudIntegrationListParams struct {
 	AccountID  param.Field[string] `path:"account_id,required"`
 	Cloudflare param.Field[bool]   `query:"cloudflare"`
 	Desc       param.Field[bool]   `query:"desc"`
-	// one of ["updated_at", "id", "cloud_type", "name"]
+	// One of ["updated_at", "id", "cloud_type", "name"].
 	OrderBy param.Field[string] `query:"order_by"`
 	Status  param.Field[bool]   `query:"status"`
 }

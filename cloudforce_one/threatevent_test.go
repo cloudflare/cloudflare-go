@@ -77,12 +77,13 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.List(context.TODO(), cloudforce_one.ThreatEventListParams{
-		AccountID: cloudflare.F(0.000000),
-		DatasetID: cloudflare.F([]string{"string"}),
-		Order:     cloudflare.F(cloudforce_one.ThreatEventListParamsOrderAsc),
-		OrderBy:   cloudflare.F("orderBy"),
-		Page:      cloudflare.F(0.000000),
-		PageSize:  cloudflare.F(0.000000),
+		AccountID:    cloudflare.F(0.000000),
+		DatasetID:    cloudflare.F([]string{"string"}),
+		ForceRefresh: cloudflare.F(true),
+		Order:        cloudflare.F(cloudforce_one.ThreatEventListParamsOrderAsc),
+		OrderBy:      cloudflare.F("orderBy"),
+		Page:         cloudflare.F(0.000000),
+		PageSize:     cloudflare.F(0.000000),
 		Search: cloudflare.F([]cloudforce_one.ThreatEventListParamsSearch{{
 			Field: cloudflare.F("attackerCountry"),
 			Op:    cloudflare.F(cloudforce_one.ThreatEventListParamsSearchOpEquals),

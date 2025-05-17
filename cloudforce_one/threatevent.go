@@ -75,10 +75,10 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return
 }
 
-// The `datasetId` parameter must be defined. Must provide query parameters. To
-// list existing datasets (and their IDs), use the
+// The `datasetId` must be defined (to list existing datasets (and their IDs), use
+// the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
-// endpoint.
+// endpoint). Also, must provide query parameters.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !params.AccountID.Present {
@@ -577,13 +577,14 @@ func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventListParams struct {
 	// Account ID.
-	AccountID param.Field[float64]                       `path:"account_id,required"`
-	DatasetID param.Field[[]string]                      `query:"datasetId"`
-	Order     param.Field[ThreatEventListParamsOrder]    `query:"order"`
-	OrderBy   param.Field[string]                        `query:"orderBy"`
-	Page      param.Field[float64]                       `query:"page"`
-	PageSize  param.Field[float64]                       `query:"pageSize"`
-	Search    param.Field[[]ThreatEventListParamsSearch] `query:"search"`
+	AccountID    param.Field[float64]                       `path:"account_id,required"`
+	DatasetID    param.Field[[]string]                      `query:"datasetId"`
+	ForceRefresh param.Field[bool]                          `query:"forceRefresh"`
+	Order        param.Field[ThreatEventListParamsOrder]    `query:"order"`
+	OrderBy      param.Field[string]                        `query:"orderBy"`
+	Page         param.Field[float64]                       `query:"page"`
+	PageSize     param.Field[float64]                       `query:"pageSize"`
+	Search       param.Field[[]ThreatEventListParamsSearch] `query:"search"`
 }
 
 // URLQuery serializes [ThreatEventListParams]'s query parameters as `url.Values`.
