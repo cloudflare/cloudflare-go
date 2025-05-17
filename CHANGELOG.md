@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.5.0 (2025-05-17)
+
+Full Changelog: [v4.4.0...v4.5.0](https://github.com/cloudflare/cloudflare-go/compare/v4.4.0...v4.5.0)
+
+### Features
+
+* **api:** api update ([8d8b78f](https://github.com/cloudflare/cloudflare-go/commit/8d8b78f45866bcc775cbc73b316ee6d11d5f8e79))
+* **api:** api update ([6a8add1](https://github.com/cloudflare/cloudflare-go/commit/6a8add180ff663bd4065c33489e81ed8ee717667))
+
 ## 4.4.0 (2025-05-16)
 
 Full Changelog: [v4.3.0...v4.4.0](https://github.com/cloudflare/cloudflare-go/compare/v4.3.0...v4.4.0)
