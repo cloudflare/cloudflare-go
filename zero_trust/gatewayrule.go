@@ -306,7 +306,7 @@ type GatewayRule struct {
 	// over the policy's `schedule` configuration, if any.
 	//
 	// This does not apply to HTTP or network policies.
-	Expiration GatewayRuleExpiration `json:"expiration"`
+	Expiration GatewayRuleExpiration `json:"expiration,nullable"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters []GatewayFilter `json:"filters"`
@@ -324,7 +324,7 @@ type GatewayRule struct {
 	RuleSettings RuleSetting `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
-	Schedule Schedule `json:"schedule"`
+	Schedule Schedule `json:"schedule,nullable"`
 	// The wirefilter expression used for traffic matching.
 	Traffic   string    `json:"traffic"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
@@ -440,16 +440,16 @@ func (r gatewayRuleExpirationJSON) RawJSON() string {
 type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders map[string]string `json:"add_headers"`
+	AddHeaders map[string]string `json:"add_headers,nullable"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass,nullable"`
 	// Settings for the Audit SSH action.
-	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
+	AuditSSH RuleSettingAuditSSH `json:"audit_ssh,nullable"`
 	// Configure how browser isolation behaves.
-	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
+	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls,nullable"`
 	// Custom block page settings. If missing/null, blocking will use the the account
 	// settings.
-	BlockPage RuleSettingBlockPage `json:"block_page"`
+	BlockPage RuleSettingBlockPage `json:"block_page,nullable"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -458,16 +458,16 @@ type RuleSetting struct {
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule bool `json:"bypass_parent_rule,nullable"`
 	// Configure how session check behaves.
-	CheckSession RuleSettingCheckSession `json:"check_session"`
+	CheckSession RuleSettingCheckSession `json:"check_session,nullable"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 	// are set. DNS queries will route to the address closest to their origin. Only
 	// valid when a rule's action is set to 'resolve'.
-	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers"`
+	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers,nullable"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress RuleSettingEgress `json:"egress"`
+	Egress RuleSettingEgress `json:"egress,nullable"`
 	// Set to true, to ignore the category matches at CNAME domains in a response. If
 	// unchecked, the categories in this rule will be checked against all the CNAME
 	// domain categories in a response.
@@ -481,32 +481,32 @@ type RuleSetting struct {
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override RuleSettingL4override `json:"l4override"`
+	L4override RuleSettingL4override `json:"l4override,nullable"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings"`
+	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings,nullable"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost string `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
-	OverrideIPs []string `json:"override_ips"`
+	OverrideIPs []string `json:"override_ips,nullable"`
 	// Configure DLP payload logging.
-	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
+	PayloadLog RuleSettingPayloadLog `json:"payload_log,nullable"`
 	// Settings that apply to quarantine rules
-	Quarantine RuleSettingQuarantine `json:"quarantine"`
+	Quarantine RuleSettingQuarantine `json:"quarantine,nullable"`
 	// Settings that apply to redirect rules
-	Redirect RuleSettingRedirect `json:"redirect"`
+	Redirect RuleSettingRedirect `json:"redirect,nullable"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
 	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
 	// set to 'resolve'.
-	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally"`
+	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally,nullable"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when 'dns_resolvers' are specified or
 	// 'resolve_dns_internally' is set. Only valid when a rule's action is set to
 	// 'resolve'.
-	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
+	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare,nullable"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert"`
+	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert,nullable"`
 	JSON          ruleSettingJSON          `json:"-"`
 }
 

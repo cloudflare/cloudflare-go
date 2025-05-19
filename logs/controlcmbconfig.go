@@ -85,7 +85,7 @@ func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfi
 }
 
 type CmbConfig struct {
-	// Comma-separated list of regions.
+	// Name of the region.
 	Regions string        `json:"regions"`
 	JSON    cmbConfigJSON `json:"-"`
 }
@@ -106,7 +106,7 @@ func (r cmbConfigJSON) RawJSON() string {
 }
 
 type CmbConfigParam struct {
-	// Comma-separated list of regions.
+	// Name of the region.
 	Regions param.Field[string] `json:"regions"`
 }
 
