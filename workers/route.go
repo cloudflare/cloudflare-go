@@ -148,7 +148,7 @@ type RouteNewResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string               `json:"script,required"`
+	Script string               `json:"script"`
 	JSON   routeNewResponseJSON `json:"-"`
 }
 
@@ -177,7 +177,7 @@ type RouteUpdateResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string                  `json:"script,required"`
+	Script string                  `json:"script"`
 	JSON   routeUpdateResponseJSON `json:"-"`
 }
 
@@ -206,7 +206,7 @@ type RouteListResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string                `json:"script,required"`
+	Script string                `json:"script"`
 	JSON   routeListResponseJSON `json:"-"`
 }
 
@@ -257,7 +257,7 @@ type RouteGetResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string               `json:"script,required"`
+	Script string               `json:"script"`
 	JSON   routeGetResponseJSON `json:"-"`
 }
 
@@ -286,7 +286,7 @@ type RouteNewParams struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script param.Field[string] `json:"script,required"`
+	Script param.Field[string] `json:"script"`
 }
 
 func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
@@ -439,7 +439,7 @@ type RouteUpdateParams struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script param.Field[string] `json:"script,required"`
+	Script param.Field[string] `json:"script"`
 }
 
 func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {

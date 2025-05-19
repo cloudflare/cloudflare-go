@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
-func TestRouteNew(t *testing.T) {
+func TestRouteNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -41,7 +41,7 @@ func TestRouteNew(t *testing.T) {
 	}
 }
 
-func TestRouteUpdate(t *testing.T) {
+func TestRouteUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
