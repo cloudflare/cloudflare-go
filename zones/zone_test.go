@@ -119,6 +119,7 @@ func TestZoneEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Edit(context.TODO(), zones.ZoneEditParams{
 		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Paused:            cloudflare.F(true),
 		Type:              cloudflare.F(zones.ZoneEditParamsTypeFull),
 		VanityNameServers: cloudflare.F([]string{"ns1.example.com", "ns2.example.com"}),
 	})

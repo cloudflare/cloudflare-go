@@ -707,6 +707,9 @@ func (r zoneDeleteResponseEnvelopeJSON) RawJSON() string {
 type ZoneEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Indicates whether the zone is only using Cloudflare DNS services. A true value
+	// means the zone will not receive security or performance benefits.
+	Paused param.Field[bool] `json:"paused"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup. This parameter is only
 	// available to Enterprise customers or if it has been explicitly enabled on a
