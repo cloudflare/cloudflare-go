@@ -150,7 +150,8 @@ type AppNewResponse struct {
 	AccountAppID string `json:"account_app_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames []string `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
@@ -184,7 +185,8 @@ type AppUpdateResponse struct {
 	AccountAppID string `json:"account_app_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames []string `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
@@ -294,7 +296,8 @@ type AppListResponseMagicAccountApp struct {
 	AccountAppID string `json:"account_app_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames []string `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
@@ -331,7 +334,8 @@ type AppListResponseMagicManagedApp struct {
 	ManagedAppID string `json:"managed_app_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames []string `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
@@ -368,7 +372,8 @@ type AppDeleteResponse struct {
 	AccountAppID string `json:"account_app_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames []string `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
@@ -403,7 +408,8 @@ type AppEditResponse struct {
 	AccountAppID string `json:"account_app_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames []string `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
@@ -440,7 +446,8 @@ type AppNewParams struct {
 	Type param.Field[string] `json:"type,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames param.Field[[]string] `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
 }
 
@@ -497,7 +504,8 @@ type AppUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames param.Field[[]string] `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
 	// Display name for the app.
 	Name param.Field[string] `json:"name"`
@@ -612,7 +620,8 @@ type AppEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames param.Field[[]string] `json:"hostnames"`
-	// CIDRs to associate with traffic decisions.
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
 	// Display name for the app.
 	Name param.Field[string] `json:"name"`
