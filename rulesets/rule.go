@@ -6891,11 +6891,12 @@ const (
 	SetConfigRuleActionParametersPolishOff      SetConfigRuleActionParametersPolish = "off"
 	SetConfigRuleActionParametersPolishLossless SetConfigRuleActionParametersPolish = "lossless"
 	SetConfigRuleActionParametersPolishLossy    SetConfigRuleActionParametersPolish = "lossy"
+	SetConfigRuleActionParametersPolishWebP     SetConfigRuleActionParametersPolish = "webp"
 )
 
 func (r SetConfigRuleActionParametersPolish) IsKnown() bool {
 	switch r {
-	case SetConfigRuleActionParametersPolishOff, SetConfigRuleActionParametersPolishLossless, SetConfigRuleActionParametersPolishLossy:
+	case SetConfigRuleActionParametersPolishOff, SetConfigRuleActionParametersPolishLossless, SetConfigRuleActionParametersPolishLossy, SetConfigRuleActionParametersPolishWebP:
 		return true
 	}
 	return false
