@@ -164,31 +164,31 @@ func (r Type) IsKnown() bool {
 type Zone struct {
 	// Identifier
 	ID string `json:"id,required"`
-	// The account the zone belongs to
+	// The account the zone belongs to.
 	Account ZoneAccount `json:"account,required"`
-	// The last time proof of ownership was detected and the zone was made active
+	// The last time proof of ownership was detected and the zone was made active.
 	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
-	// When the zone was created
+	// When the zone was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The interval (in seconds) from when development mode expires (positive integer)
 	// or last expired (negative integer) for the domain. If development mode has never
 	// been enabled, this value is 0.
 	DevelopmentMode float64 `json:"development_mode,required"`
-	// Metadata about the zone
+	// Metadata about the zone.
 	Meta ZoneMeta `json:"meta,required"`
-	// When the zone was last modified
+	// When the zone was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The domain name
+	// The domain name.
 	Name string `json:"name,required"`
-	// The name servers Cloudflare assigns to a zone
+	// The name servers Cloudflare assigns to a zone.
 	NameServers []string `json:"name_servers,required" format:"hostname"`
-	// DNS host at the time of switching to Cloudflare
+	// DNS host at the time of switching to Cloudflare.
 	OriginalDnshost string `json:"original_dnshost,required,nullable"`
-	// Original name servers before moving to Cloudflare
+	// Original name servers before moving to Cloudflare.
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
-	// Registrar for the domain at the time of switching to Cloudflare
+	// Registrar for the domain at the time of switching to Cloudflare.
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	// The owner of the zone
+	// The owner of the zone.
 	Owner ZoneOwner `json:"owner,required"`
 	// A Zones subscription information.
 	//
@@ -259,11 +259,11 @@ func (r zoneJSON) RawJSON() string {
 	return r.raw
 }
 
-// The account the zone belongs to
+// The account the zone belongs to.
 type ZoneAccount struct {
 	// Identifier
 	ID string `json:"id"`
-	// The name of the account
+	// The name of the account.
 	Name string          `json:"name"`
 	JSON zoneAccountJSON `json:"-"`
 }
@@ -284,19 +284,19 @@ func (r zoneAccountJSON) RawJSON() string {
 	return r.raw
 }
 
-// Metadata about the zone
+// Metadata about the zone.
 type ZoneMeta struct {
-	// The zone is only configured for CDN
+	// The zone is only configured for CDN.
 	CDNOnly bool `json:"cdn_only"`
-	// Number of Custom Certificates the zone can have
+	// Number of Custom Certificates the zone can have.
 	CustomCertificateQuota int64 `json:"custom_certificate_quota"`
-	// The zone is only configured for DNS
+	// The zone is only configured for DNS.
 	DNSOnly bool `json:"dns_only"`
-	// The zone is setup with Foundation DNS
+	// The zone is setup with Foundation DNS.
 	FoundationDNS bool `json:"foundation_dns"`
-	// Number of Page Rules a zone can have
+	// Number of Page Rules a zone can have.
 	PageRuleQuota int64 `json:"page_rule_quota"`
-	// The zone has been flagged for phishing
+	// The zone has been flagged for phishing.
 	PhishingDetected bool         `json:"phishing_detected"`
 	Step             int64        `json:"step"`
 	JSON             zoneMetaJSON `json:"-"`
@@ -323,13 +323,13 @@ func (r zoneMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-// The owner of the zone
+// The owner of the zone.
 type ZoneOwner struct {
 	// Identifier
 	ID string `json:"id"`
-	// Name of the owner
+	// Name of the owner.
 	Name string `json:"name"`
-	// The type of owner
+	// The type of owner.
 	Type string        `json:"type"`
 	JSON zoneOwnerJSON `json:"-"`
 }
@@ -371,7 +371,7 @@ type ZonePlan struct {
 	LegacyDiscount bool `json:"legacy_discount"`
 	// The legacy name of the plan.
 	LegacyID string `json:"legacy_id"`
-	// Name of the owner
+	// Name of the owner.
 	Name string `json:"name"`
 	// How much the customer is paying.
 	Price float64      `json:"price"`
@@ -493,7 +493,7 @@ func (r zoneDeleteResponseJSON) RawJSON() string {
 
 type ZoneNewParams struct {
 	Account param.Field[ZoneNewParamsAccount] `json:"account,required"`
-	// The domain name
+	// The domain name.
 	Name param.Field[string] `json:"name,required"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup.
@@ -516,7 +516,7 @@ func (r ZoneNewParamsAccount) MarshalJSON() (data []byte, err error) {
 type ZoneNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                        `json:"success,required"`
 	Result  Zone                        `json:"result"`
 	JSON    zoneNewResponseEnvelopeJSON `json:"-"`
@@ -565,7 +565,7 @@ type ZoneListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of zones per page.
 	PerPage param.Field[float64] `query:"per_page"`
-	// A zone status
+	// Specify a zone status to filter by.
 	Status param.Field[ZoneListParamsStatus] `query:"status"`
 }
 
@@ -578,7 +578,7 @@ func (r ZoneListParams) URLQuery() (v url.Values) {
 }
 
 type ZoneListParamsAccount struct {
-	// An account ID
+	// Filter by an account ID.
 	ID param.Field[string] `query:"id"`
 	// An account Name. Optional filter operators can be provided to extend refine the
 	// search:
@@ -653,7 +653,7 @@ func (r ZoneListParamsOrder) IsKnown() bool {
 	return false
 }
 
-// A zone status
+// Specify a zone status to filter by.
 type ZoneListParamsStatus string
 
 const (
@@ -679,7 +679,7 @@ type ZoneDeleteParams struct {
 type ZoneDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                           `json:"success,required"`
 	Result  ZoneDeleteResponse             `json:"result,nullable"`
 	JSON    zoneDeleteResponseEnvelopeJSON `json:"-"`
@@ -748,7 +748,7 @@ func (r ZoneEditParamsType) IsKnown() bool {
 type ZoneEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                         `json:"success,required"`
 	Result  Zone                         `json:"result"`
 	JSON    zoneEditResponseEnvelopeJSON `json:"-"`
@@ -781,7 +781,7 @@ type ZoneGetParams struct {
 type ZoneGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                        `json:"success,required"`
 	Result  Zone                        `json:"result"`
 	JSON    zoneGetResponseEnvelopeJSON `json:"-"`
