@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -73,10 +72,9 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 }
 
 // Pull a batch of messages from a Queue
-func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *pagination.SinglePage[MessagePullResponse], err error) {
-	var raw *http.Response
+func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *MessagePullResponse, err error) {
+	var env MessagePullResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -86,21 +84,12 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/pull", params.AccountID, queueID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return nil, err
+		return
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Pull a batch of messages from a Queue
-func (r *MessageService) PullAutoPaging(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MessagePullResponse] {
-	return pagination.NewSinglePageAutoPager(r.Pull(ctx, queueID, params, opts...))
+	res = &env.Result
+	return
 }
 
 // Push a message to a Queue
@@ -188,20 +177,44 @@ func (r MessageBulkPushResponseSuccess) IsKnown() bool {
 }
 
 type MessagePullResponse struct {
-	ID       string  `json:"id"`
-	Attempts float64 `json:"attempts"`
-	Body     string  `json:"body"`
-	// An ID that represents an "in-flight" message that has been pulled from a Queue.
-	// You must hold on to this ID and use it to acknowledge this message.
-	LeaseID     string                  `json:"lease_id"`
-	Metadata    interface{}             `json:"metadata"`
-	TimestampMs float64                 `json:"timestamp_ms"`
-	JSON        messagePullResponseJSON `json:"-"`
+	// The number of unacknowledged messages in the queue
+	MessageBacklogCount float64                      `json:"message_backlog_count"`
+	Messages            []MessagePullResponseMessage `json:"messages"`
+	JSON                messagePullResponseJSON      `json:"-"`
 }
 
 // messagePullResponseJSON contains the JSON metadata for the struct
 // [MessagePullResponse]
 type messagePullResponseJSON struct {
+	MessageBacklogCount apijson.Field
+	Messages            apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *MessagePullResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePullResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type MessagePullResponseMessage struct {
+	ID       string  `json:"id"`
+	Attempts float64 `json:"attempts"`
+	Body     string  `json:"body"`
+	// An ID that represents an "in-flight" message that has been pulled from a Queue.
+	// You must hold on to this ID and use it to acknowledge this message.
+	LeaseID     string                         `json:"lease_id"`
+	Metadata    interface{}                    `json:"metadata"`
+	TimestampMs float64                        `json:"timestamp_ms"`
+	JSON        messagePullResponseMessageJSON `json:"-"`
+}
+
+// messagePullResponseMessageJSON contains the JSON metadata for the struct
+// [MessagePullResponseMessage]
+type messagePullResponseMessageJSON struct {
 	ID          apijson.Field
 	Attempts    apijson.Field
 	Body        apijson.Field
@@ -212,11 +225,11 @@ type messagePullResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MessagePullResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MessagePullResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r messagePullResponseJSON) RawJSON() string {
+func (r messagePullResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -456,6 +469,49 @@ type MessagePullParams struct {
 
 func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type MessagePullResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   MessagePullResponse   `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success MessagePullResponseEnvelopeSuccess `json:"success"`
+	JSON    messagePullResponseEnvelopeJSON    `json:"-"`
+}
+
+// messagePullResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MessagePullResponseEnvelope]
+type messagePullResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessagePullResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePullResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type MessagePullResponseEnvelopeSuccess bool
+
+const (
+	MessagePullResponseEnvelopeSuccessTrue MessagePullResponseEnvelopeSuccess = true
+)
+
+func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MessagePullResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type MessagePushParams struct {
