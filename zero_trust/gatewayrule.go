@@ -584,8 +584,8 @@ type RuleSettingBISOAdminControls struct {
 	DD bool `json:"dd"`
 	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK bool `json:"dk"`
-	// Configure whether downloading enabled or not. When absent, downloading is
-	// enabled. Only applies when `version == "v2"`.
+	// Configure whether downloading enabled or not. When set with "remote_only",
+	// downloads are only available for viewing. Only applies when `version == "v2"`.
 	Download RuleSettingBISOAdminControlsDownload `json:"download"`
 	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP bool `json:"dp"`
@@ -655,18 +655,19 @@ func (r RuleSettingBISOAdminControlsCopy) IsKnown() bool {
 	return false
 }
 
-// Configure whether downloading enabled or not. When absent, downloading is
-// enabled. Only applies when `version == "v2"`.
+// Configure whether downloading enabled or not. When set with "remote_only",
+// downloads are only available for viewing. Only applies when `version == "v2"`.
 type RuleSettingBISOAdminControlsDownload string
 
 const (
-	RuleSettingBISOAdminControlsDownloadEnabled  RuleSettingBISOAdminControlsDownload = "enabled"
-	RuleSettingBISOAdminControlsDownloadDisabled RuleSettingBISOAdminControlsDownload = "disabled"
+	RuleSettingBISOAdminControlsDownloadEnabled    RuleSettingBISOAdminControlsDownload = "enabled"
+	RuleSettingBISOAdminControlsDownloadDisabled   RuleSettingBISOAdminControlsDownload = "disabled"
+	RuleSettingBISOAdminControlsDownloadRemoteOnly RuleSettingBISOAdminControlsDownload = "remote_only"
 )
 
 func (r RuleSettingBISOAdminControlsDownload) IsKnown() bool {
 	switch r {
-	case RuleSettingBISOAdminControlsDownloadEnabled, RuleSettingBISOAdminControlsDownloadDisabled:
+	case RuleSettingBISOAdminControlsDownloadEnabled, RuleSettingBISOAdminControlsDownloadDisabled, RuleSettingBISOAdminControlsDownloadRemoteOnly:
 		return true
 	}
 	return false
@@ -1223,8 +1224,8 @@ type RuleSettingBISOAdminControlsParam struct {
 	DD param.Field[bool] `json:"dd"`
 	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK param.Field[bool] `json:"dk"`
-	// Configure whether downloading enabled or not. When absent, downloading is
-	// enabled. Only applies when `version == "v2"`.
+	// Configure whether downloading enabled or not. When set with "remote_only",
+	// downloads are only available for viewing. Only applies when `version == "v2"`.
 	Download param.Field[RuleSettingBISOAdminControlsDownload] `json:"download"`
 	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP param.Field[bool] `json:"dp"`
