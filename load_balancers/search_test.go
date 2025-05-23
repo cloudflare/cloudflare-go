@@ -29,13 +29,11 @@ func TestSearchListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Searches.List(context.TODO(), load_balancers.SearchListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(1.000000),
-		SearchParams: cloudflare.F(load_balancers.SearchListParamsSearchParams{
-			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(load_balancers.SearchListParamsSearchParamsReferencesStar),
-		}),
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:       cloudflare.F(1.000000),
+		PerPage:    cloudflare.F(1.000000),
+		Query:      cloudflare.F("primary"),
+		References: cloudflare.F(load_balancers.SearchListParamsReferencesStar),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
