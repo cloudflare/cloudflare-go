@@ -2533,7 +2533,7 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type      string                           `json:"type"`
+	Type      ApplicationType                  `json:"type"`
 	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationNewResponseJSON `json:"-"`
 	union     AccessApplicationNewResponseUnion
@@ -2683,7 +2683,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -3476,7 +3476,7 @@ type AccessApplicationNewResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                          `json:"type"`
+	Type      ApplicationType                                 `json:"type"`
 	UpdatedAt time.Time                                       `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationNewResponseSaaSApplicationJSON `json:"-"`
 }
@@ -4055,7 +4055,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationNewResponseBrowserSSHApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -4192,6 +4192,31 @@ func (r accessApplicationNewResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserSSHApplication) implementsAccessApplicationNewResponse() {}
+
+// The application type.
+type AccessApplicationNewResponseBrowserSSHApplicationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationNewResponseBrowserSSHApplicationType = "self_hosted"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS           AccessApplicationNewResponseBrowserSSHApplicationType = "saas"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeSSH            AccessApplicationNewResponseBrowserSSHApplicationType = "ssh"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeVNC            AccessApplicationNewResponseBrowserSSHApplicationType = "vnc"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher    AccessApplicationNewResponseBrowserSSHApplicationType = "app_launcher"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeWARP           AccessApplicationNewResponseBrowserSSHApplicationType = "warp"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeBISO           AccessApplicationNewResponseBrowserSSHApplicationType = "biso"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark       AccessApplicationNewResponseBrowserSSHApplicationType = "bookmark"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationNewResponseBrowserSSHApplicationType = "dash_sso"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationNewResponseBrowserSSHApplicationType = "infrastructure"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeRdp            AccessApplicationNewResponseBrowserSSHApplicationType = "rdp"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRdp:
+		return true
+	}
+	return false
+}
 
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
@@ -4824,7 +4849,7 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationNewResponseBrowserVNCApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -4961,6 +4986,31 @@ func (r accessApplicationNewResponseBrowserVNCApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserVNCApplication) implementsAccessApplicationNewResponse() {}
+
+// The application type.
+type AccessApplicationNewResponseBrowserVNCApplicationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationNewResponseBrowserVNCApplicationType = "self_hosted"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS           AccessApplicationNewResponseBrowserVNCApplicationType = "saas"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeSSH            AccessApplicationNewResponseBrowserVNCApplicationType = "ssh"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeVNC            AccessApplicationNewResponseBrowserVNCApplicationType = "vnc"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher    AccessApplicationNewResponseBrowserVNCApplicationType = "app_launcher"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeWARP           AccessApplicationNewResponseBrowserVNCApplicationType = "warp"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeBISO           AccessApplicationNewResponseBrowserVNCApplicationType = "biso"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark       AccessApplicationNewResponseBrowserVNCApplicationType = "bookmark"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationNewResponseBrowserVNCApplicationType = "dash_sso"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationNewResponseBrowserVNCApplicationType = "infrastructure"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeRdp            AccessApplicationNewResponseBrowserVNCApplicationType = "rdp"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRdp:
+		return true
+	}
+	return false
+}
 
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
@@ -5590,7 +5640,7 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type AccessApplicationNewResponseAppLauncherApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -5665,6 +5715,31 @@ func (r accessApplicationNewResponseAppLauncherApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationNewResponseAppLauncherApplication) implementsAccessApplicationNewResponse() {
+}
+
+// The application type.
+type AccessApplicationNewResponseAppLauncherApplicationType string
+
+const (
+	AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationNewResponseAppLauncherApplicationType = "self_hosted"
+	AccessApplicationNewResponseAppLauncherApplicationTypeSaaS           AccessApplicationNewResponseAppLauncherApplicationType = "saas"
+	AccessApplicationNewResponseAppLauncherApplicationTypeSSH            AccessApplicationNewResponseAppLauncherApplicationType = "ssh"
+	AccessApplicationNewResponseAppLauncherApplicationTypeVNC            AccessApplicationNewResponseAppLauncherApplicationType = "vnc"
+	AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher    AccessApplicationNewResponseAppLauncherApplicationType = "app_launcher"
+	AccessApplicationNewResponseAppLauncherApplicationTypeWARP           AccessApplicationNewResponseAppLauncherApplicationType = "warp"
+	AccessApplicationNewResponseAppLauncherApplicationTypeBISO           AccessApplicationNewResponseAppLauncherApplicationType = "biso"
+	AccessApplicationNewResponseAppLauncherApplicationTypeBookmark       AccessApplicationNewResponseAppLauncherApplicationType = "bookmark"
+	AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO        AccessApplicationNewResponseAppLauncherApplicationType = "dash_sso"
+	AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure AccessApplicationNewResponseAppLauncherApplicationType = "infrastructure"
+	AccessApplicationNewResponseAppLauncherApplicationTypeRdp            AccessApplicationNewResponseAppLauncherApplicationType = "rdp"
+)
+
+func (r AccessApplicationNewResponseAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseAppLauncherApplicationFooterLink struct {
@@ -7186,7 +7261,7 @@ type AccessApplicationNewResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                              `json:"type"`
+	Type      ApplicationType                                     `json:"type"`
 	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationNewResponseBookmarkApplicationJSON `json:"-"`
 }
@@ -8042,7 +8117,7 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	Domain         string                                                             `json:"domain,required"`
 	TargetCriteria []AccessApplicationNewResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -8981,7 +9056,7 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type      string                              `json:"type"`
+	Type      ApplicationType                     `json:"type"`
 	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationUpdateResponseJSON `json:"-"`
 	union     AccessApplicationUpdateResponseUnion
@@ -9131,7 +9206,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -9925,7 +10000,7 @@ type AccessApplicationUpdateResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                             `json:"type"`
+	Type      ApplicationType                                    `json:"type"`
 	UpdatedAt time.Time                                          `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationUpdateResponseSaaSApplicationJSON `json:"-"`
 }
@@ -10505,7 +10580,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -10642,6 +10717,31 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsAccessApplicationUpdateResponse() {
+}
+
+// The application type.
+type AccessApplicationUpdateResponseBrowserSSHApplicationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationUpdateResponseBrowserSSHApplicationType = "self_hosted"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS           AccessApplicationUpdateResponseBrowserSSHApplicationType = "saas"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH            AccessApplicationUpdateResponseBrowserSSHApplicationType = "ssh"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC            AccessApplicationUpdateResponseBrowserSSHApplicationType = "vnc"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher    AccessApplicationUpdateResponseBrowserSSHApplicationType = "app_launcher"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP           AccessApplicationUpdateResponseBrowserSSHApplicationType = "warp"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO           AccessApplicationUpdateResponseBrowserSSHApplicationType = "biso"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark       AccessApplicationUpdateResponseBrowserSSHApplicationType = "bookmark"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationUpdateResponseBrowserSSHApplicationType = "dash_sso"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationUpdateResponseBrowserSSHApplicationType = "infrastructure"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp            AccessApplicationUpdateResponseBrowserSSHApplicationType = "rdp"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -11275,7 +11375,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -11412,6 +11512,31 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplication) implementsAccessApplicationUpdateResponse() {
+}
+
+// The application type.
+type AccessApplicationUpdateResponseBrowserVNCApplicationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationUpdateResponseBrowserVNCApplicationType = "self_hosted"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS           AccessApplicationUpdateResponseBrowserVNCApplicationType = "saas"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH            AccessApplicationUpdateResponseBrowserVNCApplicationType = "ssh"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC            AccessApplicationUpdateResponseBrowserVNCApplicationType = "vnc"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher    AccessApplicationUpdateResponseBrowserVNCApplicationType = "app_launcher"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP           AccessApplicationUpdateResponseBrowserVNCApplicationType = "warp"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO           AccessApplicationUpdateResponseBrowserVNCApplicationType = "biso"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark       AccessApplicationUpdateResponseBrowserVNCApplicationType = "bookmark"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationUpdateResponseBrowserVNCApplicationType = "dash_sso"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationUpdateResponseBrowserVNCApplicationType = "infrastructure"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp            AccessApplicationUpdateResponseBrowserVNCApplicationType = "rdp"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -12042,7 +12167,7 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentica
 
 type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type AccessApplicationUpdateResponseAppLauncherApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -12117,6 +12242,31 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationJSON) RawJSON() str
 }
 
 func (r AccessApplicationUpdateResponseAppLauncherApplication) implementsAccessApplicationUpdateResponse() {
+}
+
+// The application type.
+type AccessApplicationUpdateResponseAppLauncherApplicationType string
+
+const (
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationUpdateResponseAppLauncherApplicationType = "self_hosted"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS           AccessApplicationUpdateResponseAppLauncherApplicationType = "saas"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH            AccessApplicationUpdateResponseAppLauncherApplicationType = "ssh"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC            AccessApplicationUpdateResponseAppLauncherApplicationType = "vnc"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher    AccessApplicationUpdateResponseAppLauncherApplicationType = "app_launcher"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP           AccessApplicationUpdateResponseAppLauncherApplicationType = "warp"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO           AccessApplicationUpdateResponseAppLauncherApplicationType = "biso"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark       AccessApplicationUpdateResponseAppLauncherApplicationType = "bookmark"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO        AccessApplicationUpdateResponseAppLauncherApplicationType = "dash_sso"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure AccessApplicationUpdateResponseAppLauncherApplicationType = "infrastructure"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp            AccessApplicationUpdateResponseAppLauncherApplicationType = "rdp"
+)
+
+func (r AccessApplicationUpdateResponseAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseAppLauncherApplicationFooterLink struct {
@@ -13638,7 +13788,7 @@ type AccessApplicationUpdateResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                                 `json:"type"`
+	Type      ApplicationType                                        `json:"type"`
 	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationUpdateResponseBookmarkApplicationJSON `json:"-"`
 }
@@ -14496,7 +14646,7 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	Domain         string                                                                `json:"domain,required"`
 	TargetCriteria []AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -15436,7 +15586,7 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type      string                            `json:"type"`
+	Type      ApplicationType                   `json:"type"`
 	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationListResponseJSON `json:"-"`
 	union     AccessApplicationListResponseUnion
@@ -15586,7 +15736,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -16380,7 +16530,7 @@ type AccessApplicationListResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                           `json:"type"`
+	Type      ApplicationType                                  `json:"type"`
 	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationListResponseSaaSApplicationJSON `json:"-"`
 }
@@ -16959,7 +17109,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationListResponseBrowserSSHApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -17096,6 +17246,31 @@ func (r accessApplicationListResponseBrowserSSHApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserSSHApplication) implementsAccessApplicationListResponse() {
+}
+
+// The application type.
+type AccessApplicationListResponseBrowserSSHApplicationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationListResponseBrowserSSHApplicationType = "self_hosted"
+	AccessApplicationListResponseBrowserSSHApplicationTypeSaaS           AccessApplicationListResponseBrowserSSHApplicationType = "saas"
+	AccessApplicationListResponseBrowserSSHApplicationTypeSSH            AccessApplicationListResponseBrowserSSHApplicationType = "ssh"
+	AccessApplicationListResponseBrowserSSHApplicationTypeVNC            AccessApplicationListResponseBrowserSSHApplicationType = "vnc"
+	AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher    AccessApplicationListResponseBrowserSSHApplicationType = "app_launcher"
+	AccessApplicationListResponseBrowserSSHApplicationTypeWARP           AccessApplicationListResponseBrowserSSHApplicationType = "warp"
+	AccessApplicationListResponseBrowserSSHApplicationTypeBISO           AccessApplicationListResponseBrowserSSHApplicationType = "biso"
+	AccessApplicationListResponseBrowserSSHApplicationTypeBookmark       AccessApplicationListResponseBrowserSSHApplicationType = "bookmark"
+	AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationListResponseBrowserSSHApplicationType = "dash_sso"
+	AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationListResponseBrowserSSHApplicationType = "infrastructure"
+	AccessApplicationListResponseBrowserSSHApplicationTypeRdp            AccessApplicationListResponseBrowserSSHApplicationType = "rdp"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -17729,7 +17904,7 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationListResponseBrowserVNCApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -17866,6 +18041,31 @@ func (r accessApplicationListResponseBrowserVNCApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserVNCApplication) implementsAccessApplicationListResponse() {
+}
+
+// The application type.
+type AccessApplicationListResponseBrowserVNCApplicationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationListResponseBrowserVNCApplicationType = "self_hosted"
+	AccessApplicationListResponseBrowserVNCApplicationTypeSaaS           AccessApplicationListResponseBrowserVNCApplicationType = "saas"
+	AccessApplicationListResponseBrowserVNCApplicationTypeSSH            AccessApplicationListResponseBrowserVNCApplicationType = "ssh"
+	AccessApplicationListResponseBrowserVNCApplicationTypeVNC            AccessApplicationListResponseBrowserVNCApplicationType = "vnc"
+	AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher    AccessApplicationListResponseBrowserVNCApplicationType = "app_launcher"
+	AccessApplicationListResponseBrowserVNCApplicationTypeWARP           AccessApplicationListResponseBrowserVNCApplicationType = "warp"
+	AccessApplicationListResponseBrowserVNCApplicationTypeBISO           AccessApplicationListResponseBrowserVNCApplicationType = "biso"
+	AccessApplicationListResponseBrowserVNCApplicationTypeBookmark       AccessApplicationListResponseBrowserVNCApplicationType = "bookmark"
+	AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationListResponseBrowserVNCApplicationType = "dash_sso"
+	AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationListResponseBrowserVNCApplicationType = "infrastructure"
+	AccessApplicationListResponseBrowserVNCApplicationTypeRdp            AccessApplicationListResponseBrowserVNCApplicationType = "rdp"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -18496,7 +18696,7 @@ func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticati
 
 type AccessApplicationListResponseAppLauncherApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type AccessApplicationListResponseAppLauncherApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -18571,6 +18771,31 @@ func (r accessApplicationListResponseAppLauncherApplicationJSON) RawJSON() strin
 }
 
 func (r AccessApplicationListResponseAppLauncherApplication) implementsAccessApplicationListResponse() {
+}
+
+// The application type.
+type AccessApplicationListResponseAppLauncherApplicationType string
+
+const (
+	AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationListResponseAppLauncherApplicationType = "self_hosted"
+	AccessApplicationListResponseAppLauncherApplicationTypeSaaS           AccessApplicationListResponseAppLauncherApplicationType = "saas"
+	AccessApplicationListResponseAppLauncherApplicationTypeSSH            AccessApplicationListResponseAppLauncherApplicationType = "ssh"
+	AccessApplicationListResponseAppLauncherApplicationTypeVNC            AccessApplicationListResponseAppLauncherApplicationType = "vnc"
+	AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher    AccessApplicationListResponseAppLauncherApplicationType = "app_launcher"
+	AccessApplicationListResponseAppLauncherApplicationTypeWARP           AccessApplicationListResponseAppLauncherApplicationType = "warp"
+	AccessApplicationListResponseAppLauncherApplicationTypeBISO           AccessApplicationListResponseAppLauncherApplicationType = "biso"
+	AccessApplicationListResponseAppLauncherApplicationTypeBookmark       AccessApplicationListResponseAppLauncherApplicationType = "bookmark"
+	AccessApplicationListResponseAppLauncherApplicationTypeDashSSO        AccessApplicationListResponseAppLauncherApplicationType = "dash_sso"
+	AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure AccessApplicationListResponseAppLauncherApplicationType = "infrastructure"
+	AccessApplicationListResponseAppLauncherApplicationTypeRdp            AccessApplicationListResponseAppLauncherApplicationType = "rdp"
+)
+
+func (r AccessApplicationListResponseAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseAppLauncherApplicationFooterLink struct {
@@ -20092,7 +20317,7 @@ type AccessApplicationListResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                               `json:"type"`
+	Type      ApplicationType                                      `json:"type"`
 	UpdatedAt time.Time                                            `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationListResponseBookmarkApplicationJSON `json:"-"`
 }
@@ -20948,7 +21173,7 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	Domain         string                                                              `json:"domain,required"`
 	TargetCriteria []AccessApplicationListResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -21910,7 +22135,7 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type      string                           `json:"type"`
+	Type      ApplicationType                  `json:"type"`
 	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationGetResponseJSON `json:"-"`
 	union     AccessApplicationGetResponseUnion
@@ -22060,7 +22285,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -22853,7 +23078,7 @@ type AccessApplicationGetResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                          `json:"type"`
+	Type      ApplicationType                                 `json:"type"`
 	UpdatedAt time.Time                                       `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationGetResponseSaaSApplicationJSON `json:"-"`
 }
@@ -23432,7 +23657,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationGetResponseBrowserSSHApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -23569,6 +23794,31 @@ func (r accessApplicationGetResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserSSHApplication) implementsAccessApplicationGetResponse() {}
+
+// The application type.
+type AccessApplicationGetResponseBrowserSSHApplicationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationGetResponseBrowserSSHApplicationType = "self_hosted"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS           AccessApplicationGetResponseBrowserSSHApplicationType = "saas"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeSSH            AccessApplicationGetResponseBrowserSSHApplicationType = "ssh"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeVNC            AccessApplicationGetResponseBrowserSSHApplicationType = "vnc"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher    AccessApplicationGetResponseBrowserSSHApplicationType = "app_launcher"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeWARP           AccessApplicationGetResponseBrowserSSHApplicationType = "warp"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeBISO           AccessApplicationGetResponseBrowserSSHApplicationType = "biso"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark       AccessApplicationGetResponseBrowserSSHApplicationType = "bookmark"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationGetResponseBrowserSSHApplicationType = "dash_sso"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationGetResponseBrowserSSHApplicationType = "infrastructure"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeRdp            AccessApplicationGetResponseBrowserSSHApplicationType = "rdp"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRdp:
+		return true
+	}
+	return false
+}
 
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
@@ -24201,7 +24451,7 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type AccessApplicationGetResponseBrowserVNCApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -24338,6 +24588,31 @@ func (r accessApplicationGetResponseBrowserVNCApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserVNCApplication) implementsAccessApplicationGetResponse() {}
+
+// The application type.
+type AccessApplicationGetResponseBrowserVNCApplicationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationGetResponseBrowserVNCApplicationType = "self_hosted"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS           AccessApplicationGetResponseBrowserVNCApplicationType = "saas"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeSSH            AccessApplicationGetResponseBrowserVNCApplicationType = "ssh"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeVNC            AccessApplicationGetResponseBrowserVNCApplicationType = "vnc"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher    AccessApplicationGetResponseBrowserVNCApplicationType = "app_launcher"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeWARP           AccessApplicationGetResponseBrowserVNCApplicationType = "warp"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeBISO           AccessApplicationGetResponseBrowserVNCApplicationType = "biso"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark       AccessApplicationGetResponseBrowserVNCApplicationType = "bookmark"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationGetResponseBrowserVNCApplicationType = "dash_sso"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationGetResponseBrowserVNCApplicationType = "infrastructure"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeRdp            AccessApplicationGetResponseBrowserVNCApplicationType = "rdp"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRdp:
+		return true
+	}
+	return false
+}
 
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
@@ -24967,7 +25242,7 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type AccessApplicationGetResponseAppLauncherApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -25042,6 +25317,31 @@ func (r accessApplicationGetResponseAppLauncherApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationGetResponseAppLauncherApplication) implementsAccessApplicationGetResponse() {
+}
+
+// The application type.
+type AccessApplicationGetResponseAppLauncherApplicationType string
+
+const (
+	AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationGetResponseAppLauncherApplicationType = "self_hosted"
+	AccessApplicationGetResponseAppLauncherApplicationTypeSaaS           AccessApplicationGetResponseAppLauncherApplicationType = "saas"
+	AccessApplicationGetResponseAppLauncherApplicationTypeSSH            AccessApplicationGetResponseAppLauncherApplicationType = "ssh"
+	AccessApplicationGetResponseAppLauncherApplicationTypeVNC            AccessApplicationGetResponseAppLauncherApplicationType = "vnc"
+	AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher    AccessApplicationGetResponseAppLauncherApplicationType = "app_launcher"
+	AccessApplicationGetResponseAppLauncherApplicationTypeWARP           AccessApplicationGetResponseAppLauncherApplicationType = "warp"
+	AccessApplicationGetResponseAppLauncherApplicationTypeBISO           AccessApplicationGetResponseAppLauncherApplicationType = "biso"
+	AccessApplicationGetResponseAppLauncherApplicationTypeBookmark       AccessApplicationGetResponseAppLauncherApplicationType = "bookmark"
+	AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO        AccessApplicationGetResponseAppLauncherApplicationType = "dash_sso"
+	AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure AccessApplicationGetResponseAppLauncherApplicationType = "infrastructure"
+	AccessApplicationGetResponseAppLauncherApplicationTypeRdp            AccessApplicationGetResponseAppLauncherApplicationType = "rdp"
+)
+
+func (r AccessApplicationGetResponseAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseAppLauncherApplicationFooterLink struct {
@@ -26563,7 +26863,7 @@ type AccessApplicationGetResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                                              `json:"type"`
+	Type      ApplicationType                                     `json:"type"`
 	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
 	JSON      accessApplicationGetResponseBookmarkApplicationJSON `json:"-"`
 }
@@ -27419,7 +27719,7 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	Domain         string                                                             `json:"domain,required"`
 	TargetCriteria []AccessApplicationGetResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
-	Type string `json:"type,required"`
+	Type ApplicationType `json:"type,required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -28326,7 +28626,7 @@ type AccessApplicationNewParamsBody struct {
 	Tags             param.Field[interface{}] `json:"tags"`
 	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -28357,7 +28657,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -28952,7 +29252,7 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplication) MarshalJSON() (data []byte, err error) {
@@ -29368,7 +29668,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -29458,6 +29758,31 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsAccessApplicationNewParamsBodyUnion() {
+}
+
+// The application type.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted     AccessApplicationNewParamsBodyBrowserSSHApplicationType = "self_hosted"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS           AccessApplicationNewParamsBodyBrowserSSHApplicationType = "saas"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "ssh"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "vnc"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher    AccessApplicationNewParamsBodyBrowserSSHApplicationType = "app_launcher"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP           AccessApplicationNewParamsBodyBrowserSSHApplicationType = "warp"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO           AccessApplicationNewParamsBodyBrowserSSHApplicationType = "biso"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark       AccessApplicationNewParamsBodyBrowserSSHApplicationType = "bookmark"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO        AccessApplicationNewParamsBodyBrowserSSHApplicationType = "dash_sso"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure AccessApplicationNewParamsBodyBrowserSSHApplicationType = "infrastructure"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "rdp"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -29941,7 +30266,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -30031,6 +30356,31 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplication) implementsAccessApplicationNewParamsBodyUnion() {
+}
+
+// The application type.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted     AccessApplicationNewParamsBodyBrowserVNCApplicationType = "self_hosted"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS           AccessApplicationNewParamsBodyBrowserVNCApplicationType = "saas"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "ssh"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "vnc"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher    AccessApplicationNewParamsBodyBrowserVNCApplicationType = "app_launcher"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP           AccessApplicationNewParamsBodyBrowserVNCApplicationType = "warp"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO           AccessApplicationNewParamsBodyBrowserVNCApplicationType = "biso"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark       AccessApplicationNewParamsBodyBrowserVNCApplicationType = "bookmark"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO        AccessApplicationNewParamsBodyBrowserVNCApplicationType = "dash_sso"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure AccessApplicationNewParamsBodyBrowserVNCApplicationType = "infrastructure"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "rdp"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -30511,7 +30861,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticat
 
 type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -30548,6 +30898,31 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplication) MarshalJSON() (dat
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplication) implementsAccessApplicationNewParamsBodyUnion() {
+}
+
+// The application type.
+type AccessApplicationNewParamsBodyAppLauncherApplicationType string
+
+const (
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted     AccessApplicationNewParamsBodyAppLauncherApplicationType = "self_hosted"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS           AccessApplicationNewParamsBodyAppLauncherApplicationType = "saas"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH            AccessApplicationNewParamsBodyAppLauncherApplicationType = "ssh"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC            AccessApplicationNewParamsBodyAppLauncherApplicationType = "vnc"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher    AccessApplicationNewParamsBodyAppLauncherApplicationType = "app_launcher"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP           AccessApplicationNewParamsBodyAppLauncherApplicationType = "warp"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO           AccessApplicationNewParamsBodyAppLauncherApplicationType = "biso"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark       AccessApplicationNewParamsBodyAppLauncherApplicationType = "bookmark"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO        AccessApplicationNewParamsBodyAppLauncherApplicationType = "dash_sso"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure AccessApplicationNewParamsBodyAppLauncherApplicationType = "infrastructure"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp            AccessApplicationNewParamsBodyAppLauncherApplicationType = "rdp"
+)
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink struct {
@@ -31686,7 +32061,7 @@ type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 }
 
 func (r AccessApplicationNewParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
@@ -32024,7 +32399,7 @@ type AccessApplicationNewParamsBodyBrowserRdpApplication struct {
 	Domain         param.Field[string]                                                               `json:"domain,required"`
 	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriterion] `json:"target_criteria,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -32855,7 +33230,7 @@ type AccessApplicationUpdateParamsBody struct {
 	Tags             param.Field[interface{}] `json:"tags"`
 	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -32887,7 +33262,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -33482,7 +33857,7 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplication) MarshalJSON() (data []byte, err error) {
@@ -33898,7 +34273,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -33988,6 +34363,31 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// The application type.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted     AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "self_hosted"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS           AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "saas"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "ssh"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "vnc"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher    AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "app_launcher"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP           AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "warp"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO           AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "biso"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark       AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "bookmark"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO        AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "dash_sso"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "infrastructure"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "rdp"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -34471,7 +34871,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -34561,6 +34961,31 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// The application type.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted     AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "self_hosted"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS           AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "saas"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "ssh"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "vnc"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher    AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "app_launcher"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP           AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "warp"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO           AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "biso"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark       AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "bookmark"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO        AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "dash_sso"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "infrastructure"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "rdp"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -35041,7 +35466,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenti
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -35078,6 +35503,31 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) MarshalJSON() (
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// The application type.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationType string
+
+const (
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted     AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "self_hosted"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS           AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "saas"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "ssh"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "vnc"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher    AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "app_launcher"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP           AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "warp"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO           AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "biso"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark       AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "bookmark"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO        AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "dash_sso"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "infrastructure"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "rdp"
+)
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink struct {
@@ -36216,7 +36666,7 @@ type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
@@ -36554,7 +37004,7 @@ type AccessApplicationUpdateParamsBodyBrowserRdpApplication struct {
 	Domain         param.Field[string]                                                                  `json:"domain,required"`
 	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriterion] `json:"target_criteria,required"`
 	// The application type.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
