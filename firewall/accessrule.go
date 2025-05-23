@@ -297,8 +297,6 @@ func (r AccessRuleCIDRConfigurationParam) implementsAccessRuleNewParamsConfigura
 
 func (r AccessRuleCIDRConfigurationParam) implementsAccessRuleEditParamsConfigurationUnion() {}
 
-func (r AccessRuleCIDRConfigurationParam) implementsUARuleNewParamsConfigurationUnion() {}
-
 func (r AccessRuleCIDRConfigurationParam) implementsUARuleUpdateParamsConfigurationUnion() {}
 
 type AccessRuleIPConfiguration struct {
@@ -369,8 +367,6 @@ func (r AccessRuleIPConfigurationParam) implementsAccessRuleNewParamsConfigurati
 
 func (r AccessRuleIPConfigurationParam) implementsAccessRuleEditParamsConfigurationUnion() {}
 
-func (r AccessRuleIPConfigurationParam) implementsUARuleNewParamsConfigurationUnion() {}
-
 func (r AccessRuleIPConfigurationParam) implementsUARuleUpdateParamsConfigurationUnion() {}
 
 type ASNConfiguration struct {
@@ -438,8 +434,6 @@ func (r ASNConfigurationParam) MarshalJSON() (data []byte, err error) {
 func (r ASNConfigurationParam) implementsAccessRuleNewParamsConfigurationUnion() {}
 
 func (r ASNConfigurationParam) implementsAccessRuleEditParamsConfigurationUnion() {}
-
-func (r ASNConfigurationParam) implementsUARuleNewParamsConfigurationUnion() {}
 
 func (r ASNConfigurationParam) implementsUARuleUpdateParamsConfigurationUnion() {}
 
@@ -511,8 +505,6 @@ func (r CountryConfigurationParam) implementsAccessRuleNewParamsConfigurationUni
 
 func (r CountryConfigurationParam) implementsAccessRuleEditParamsConfigurationUnion() {}
 
-func (r CountryConfigurationParam) implementsUARuleNewParamsConfigurationUnion() {}
-
 func (r CountryConfigurationParam) implementsUARuleUpdateParamsConfigurationUnion() {}
 
 type IPV6Configuration struct {
@@ -580,8 +572,6 @@ func (r IPV6ConfigurationParam) MarshalJSON() (data []byte, err error) {
 func (r IPV6ConfigurationParam) implementsAccessRuleNewParamsConfigurationUnion() {}
 
 func (r IPV6ConfigurationParam) implementsAccessRuleEditParamsConfigurationUnion() {}
-
-func (r IPV6ConfigurationParam) implementsUARuleNewParamsConfigurationUnion() {}
 
 func (r IPV6ConfigurationParam) implementsUARuleUpdateParamsConfigurationUnion() {}
 

@@ -30,9 +30,9 @@ func TestUARuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.UARules.New(context.TODO(), firewall.UARuleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Configuration: cloudflare.F[firewall.UARuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
-			Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
-			Value:  cloudflare.F("198.51.100.4"),
+		Configuration: cloudflare.F(firewall.UARuleNewParamsConfiguration{
+			Target: cloudflare.F(firewall.UARuleNewParamsConfigurationTargetUA),
+			Value:  cloudflare.F("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"),
 		}),
 		Mode: cloudflare.F(firewall.UARuleNewParamsModeChallenge),
 	})

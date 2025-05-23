@@ -250,9 +250,8 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 
 type UARuleNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The rule configuration.
-	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
+	ZoneID        param.Field[string]                       `path:"zone_id,required"`
+	Configuration param.Field[UARuleNewParamsConfiguration] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[UARuleNewParamsMode] `json:"mode,required"`
 }
@@ -261,13 +260,11 @@ func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The rule configuration.
 type UARuleNewParamsConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
+	// The configuration target. You must set the target to `ua` when specifying a user
+	// agent in the rule.
 	Target param.Field[UARuleNewParamsConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
+	// the user agent to exactly match
 	Value param.Field[string] `json:"value"`
 }
 
@@ -275,33 +272,17 @@ func (r UARuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UARuleNewParamsConfiguration) implementsUARuleNewParamsConfigurationUnion() {}
-
-// The rule configuration.
-//
-// Satisfied by [firewall.AccessRuleIPConfigurationParam],
-// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
-// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
-// [UARuleNewParamsConfiguration].
-type UARuleNewParamsConfigurationUnion interface {
-	implementsUARuleNewParamsConfigurationUnion()
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the rule.
+// The configuration target. You must set the target to `ua` when specifying a user
+// agent in the rule.
 type UARuleNewParamsConfigurationTarget string
 
 const (
-	UARuleNewParamsConfigurationTargetIP      UARuleNewParamsConfigurationTarget = "ip"
-	UARuleNewParamsConfigurationTargetIp6     UARuleNewParamsConfigurationTarget = "ip6"
-	UARuleNewParamsConfigurationTargetIPRange UARuleNewParamsConfigurationTarget = "ip_range"
-	UARuleNewParamsConfigurationTargetASN     UARuleNewParamsConfigurationTarget = "asn"
-	UARuleNewParamsConfigurationTargetCountry UARuleNewParamsConfigurationTarget = "country"
+	UARuleNewParamsConfigurationTargetUA UARuleNewParamsConfigurationTarget = "ua"
 )
 
 func (r UARuleNewParamsConfigurationTarget) IsKnown() bool {
 	switch r {
-	case UARuleNewParamsConfigurationTargetIP, UARuleNewParamsConfigurationTargetIp6, UARuleNewParamsConfigurationTargetIPRange, UARuleNewParamsConfigurationTargetASN, UARuleNewParamsConfigurationTargetCountry:
+	case UARuleNewParamsConfigurationTargetUA:
 		return true
 	}
 	return false
