@@ -191,6 +191,8 @@ type NetworkVirtualNetworkNewParams struct {
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this virtual network is the default for the account.
 	IsDefault param.Field[bool] `json:"is_default"`
+	// If `true`, this virtual network is the default for the account.
+	IsDefaultNetwork param.Field[bool] `json:"is_default_network"`
 }
 
 func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
