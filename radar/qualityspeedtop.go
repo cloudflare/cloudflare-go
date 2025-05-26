@@ -63,6 +63,7 @@ func (r *QualitySpeedTopService) Locations(ctx context.Context, query QualitySpe
 }
 
 type QualitySpeedTopAsesResponse struct {
+	// Metadata for the results.
 	Meta QualitySpeedTopAsesResponseMeta   `json:"meta,required"`
 	Top0 []QualitySpeedTopAsesResponseTop0 `json:"top_0,required"`
 	JSON qualitySpeedTopAsesResponseJSON   `json:"-"`
@@ -85,19 +86,28 @@ func (r qualitySpeedTopAsesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type QualitySpeedTopAsesResponseMeta struct {
+	ConfidenceInfo QualitySpeedTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []QualitySpeedTopAsesResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                        `json:"lastUpdated,required"`
-	ConfidenceInfo QualitySpeedTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualitySpeedTopAsesResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization QualitySpeedTopAsesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []QualitySpeedTopAsesResponseMetaUnit `json:"units,required"`
+	JSON  qualitySpeedTopAsesResponseMetaJSON   `json:"-"`
 }
 
 // qualitySpeedTopAsesResponseMetaJSON contains the JSON metadata for the struct
 // [QualitySpeedTopAsesResponseMeta]
 type qualitySpeedTopAsesResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -107,6 +117,66 @@ func (r *QualitySpeedTopAsesResponseMeta) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r qualitySpeedTopAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualitySpeedTopAsesResponseMetaConfidenceInfo struct {
+	Annotations []QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                             `json:"level,required"`
+	JSON  qualitySpeedTopAsesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// qualitySpeedTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [QualitySpeedTopAsesResponseMetaConfidenceInfo]
+type qualitySpeedTopAsesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
+	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	JSON            qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation]
+type qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -135,60 +205,48 @@ func (r qualitySpeedTopAsesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type QualitySpeedTopAsesResponseMetaConfidenceInfo struct {
-	Annotations []QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                     `json:"level"`
-	JSON        qualitySpeedTopAsesResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type QualitySpeedTopAsesResponseMetaNormalization string
+
+const (
+	QualitySpeedTopAsesResponseMetaNormalizationPercentage           QualitySpeedTopAsesResponseMetaNormalization = "PERCENTAGE"
+	QualitySpeedTopAsesResponseMetaNormalizationMin0Max              QualitySpeedTopAsesResponseMetaNormalization = "MIN0_MAX"
+	QualitySpeedTopAsesResponseMetaNormalizationMinMax               QualitySpeedTopAsesResponseMetaNormalization = "MIN_MAX"
+	QualitySpeedTopAsesResponseMetaNormalizationRawValues            QualitySpeedTopAsesResponseMetaNormalization = "RAW_VALUES"
+	QualitySpeedTopAsesResponseMetaNormalizationPercentageChange     QualitySpeedTopAsesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	QualitySpeedTopAsesResponseMetaNormalizationRollingAverage       QualitySpeedTopAsesResponseMetaNormalization = "ROLLING_AVERAGE"
+	QualitySpeedTopAsesResponseMetaNormalizationOverlappedPercentage QualitySpeedTopAsesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r QualitySpeedTopAsesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case QualitySpeedTopAsesResponseMetaNormalizationPercentage, QualitySpeedTopAsesResponseMetaNormalizationMin0Max, QualitySpeedTopAsesResponseMetaNormalizationMinMax, QualitySpeedTopAsesResponseMetaNormalizationRawValues, QualitySpeedTopAsesResponseMetaNormalizationPercentageChange, QualitySpeedTopAsesResponseMetaNormalizationRollingAverage, QualitySpeedTopAsesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// qualitySpeedTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [QualitySpeedTopAsesResponseMetaConfidenceInfo]
-type qualitySpeedTopAsesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type QualitySpeedTopAsesResponseMetaUnit struct {
+	Name  string                                  `json:"name,required"`
+	Value string                                  `json:"value,required"`
+	JSON  qualitySpeedTopAsesResponseMetaUnitJSON `json:"-"`
+}
+
+// qualitySpeedTopAsesResponseMetaUnitJSON contains the JSON metadata for the
+// struct [QualitySpeedTopAsesResponseMetaUnit]
+type qualitySpeedTopAsesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *QualitySpeedTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *QualitySpeedTopAsesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r qualitySpeedTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                      `json:"dataSource,required"`
-	Description     string                                                      `json:"description,required"`
-	EventType       string                                                      `json:"eventType,required"`
-	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                      `json:"linkedUrl"`
-	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
-	JSON            qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation]
-type qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r qualitySpeedTopAsesResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -232,6 +290,7 @@ func (r qualitySpeedTopAsesResponseTop0JSON) RawJSON() string {
 }
 
 type QualitySpeedTopLocationsResponse struct {
+	// Metadata for the results.
 	Meta QualitySpeedTopLocationsResponseMeta   `json:"meta,required"`
 	Top0 []QualitySpeedTopLocationsResponseTop0 `json:"top_0,required"`
 	JSON qualitySpeedTopLocationsResponseJSON   `json:"-"`
@@ -254,19 +313,28 @@ func (r qualitySpeedTopLocationsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type QualitySpeedTopLocationsResponseMeta struct {
+	ConfidenceInfo QualitySpeedTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []QualitySpeedTopLocationsResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	ConfidenceInfo QualitySpeedTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualitySpeedTopLocationsResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization QualitySpeedTopLocationsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []QualitySpeedTopLocationsResponseMetaUnit `json:"units,required"`
+	JSON  qualitySpeedTopLocationsResponseMetaJSON   `json:"-"`
 }
 
 // qualitySpeedTopLocationsResponseMetaJSON contains the JSON metadata for the
 // struct [QualitySpeedTopLocationsResponseMeta]
 type qualitySpeedTopLocationsResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -276,6 +344,66 @@ func (r *QualitySpeedTopLocationsResponseMeta) UnmarshalJSON(data []byte) (err e
 }
 
 func (r qualitySpeedTopLocationsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualitySpeedTopLocationsResponseMetaConfidenceInfo struct {
+	Annotations []QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                  `json:"level,required"`
+	JSON  qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [QualitySpeedTopLocationsResponseMetaConfidenceInfo]
+type qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
+	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	JSON            qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation]
+type qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -304,60 +432,48 @@ func (r qualitySpeedTopLocationsResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type QualitySpeedTopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                          `json:"level"`
-	JSON        qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type QualitySpeedTopLocationsResponseMetaNormalization string
+
+const (
+	QualitySpeedTopLocationsResponseMetaNormalizationPercentage           QualitySpeedTopLocationsResponseMetaNormalization = "PERCENTAGE"
+	QualitySpeedTopLocationsResponseMetaNormalizationMin0Max              QualitySpeedTopLocationsResponseMetaNormalization = "MIN0_MAX"
+	QualitySpeedTopLocationsResponseMetaNormalizationMinMax               QualitySpeedTopLocationsResponseMetaNormalization = "MIN_MAX"
+	QualitySpeedTopLocationsResponseMetaNormalizationRawValues            QualitySpeedTopLocationsResponseMetaNormalization = "RAW_VALUES"
+	QualitySpeedTopLocationsResponseMetaNormalizationPercentageChange     QualitySpeedTopLocationsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	QualitySpeedTopLocationsResponseMetaNormalizationRollingAverage       QualitySpeedTopLocationsResponseMetaNormalization = "ROLLING_AVERAGE"
+	QualitySpeedTopLocationsResponseMetaNormalizationOverlappedPercentage QualitySpeedTopLocationsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r QualitySpeedTopLocationsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case QualitySpeedTopLocationsResponseMetaNormalizationPercentage, QualitySpeedTopLocationsResponseMetaNormalizationMin0Max, QualitySpeedTopLocationsResponseMetaNormalizationMinMax, QualitySpeedTopLocationsResponseMetaNormalizationRawValues, QualitySpeedTopLocationsResponseMetaNormalizationPercentageChange, QualitySpeedTopLocationsResponseMetaNormalizationRollingAverage, QualitySpeedTopLocationsResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [QualitySpeedTopLocationsResponseMetaConfidenceInfo]
-type qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type QualitySpeedTopLocationsResponseMetaUnit struct {
+	Name  string                                       `json:"name,required"`
+	Value string                                       `json:"value,required"`
+	JSON  qualitySpeedTopLocationsResponseMetaUnitJSON `json:"-"`
+}
+
+// qualitySpeedTopLocationsResponseMetaUnitJSON contains the JSON metadata for the
+// struct [QualitySpeedTopLocationsResponseMetaUnit]
+type qualitySpeedTopLocationsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *QualitySpeedTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *QualitySpeedTopLocationsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                           `json:"dataSource,required"`
-	Description     string                                                           `json:"description,required"`
-	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                           `json:"linkedUrl"`
-	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
-	JSON            qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation]
-type qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r qualitySpeedTopLocationsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

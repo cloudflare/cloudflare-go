@@ -49,6 +49,7 @@ func (r *EmailSecurityTopTldSpamService) Get(ctx context.Context, spam EmailSecu
 }
 
 type EmailSecurityTopTldSpamGetResponse struct {
+	// Metadata for the results.
 	Meta EmailSecurityTopTldSpamGetResponseMeta   `json:"meta,required"`
 	Top0 []EmailSecurityTopTldSpamGetResponseTop0 `json:"top_0,required"`
 	JSON emailSecurityTopTldSpamGetResponseJSON   `json:"-"`
@@ -71,19 +72,28 @@ func (r emailSecurityTopTldSpamGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailSecurityTopTldSpamGetResponseMeta struct {
+	ConfidenceInfo EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailSecurityTopTldSpamGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                               `json:"lastUpdated,required"`
-	ConfidenceInfo EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailSecurityTopTldSpamGetResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTopTldSpamGetResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTopTldSpamGetResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTopTldSpamGetResponseMetaJSON   `json:"-"`
 }
 
 // emailSecurityTopTldSpamGetResponseMetaJSON contains the JSON metadata for the
 // struct [EmailSecurityTopTldSpamGetResponseMeta]
 type emailSecurityTopTldSpamGetResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -93,6 +103,66 @@ func (r *EmailSecurityTopTldSpamGetResponseMeta) UnmarshalJSON(data []byte) (err
 }
 
 func (r emailSecurityTopTldSpamGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                    `json:"level,required"`
+	JSON  emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo]
+type emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
+	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -121,65 +191,54 @@ func (r emailSecurityTopTldSpamGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo struct {
-	Annotations []EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                            `json:"level"`
-	JSON        emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTopTldSpamGetResponseMetaNormalization string
+
+const (
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationPercentage           EmailSecurityTopTldSpamGetResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationMin0Max              EmailSecurityTopTldSpamGetResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationMinMax               EmailSecurityTopTldSpamGetResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationRawValues            EmailSecurityTopTldSpamGetResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationPercentageChange     EmailSecurityTopTldSpamGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationRollingAverage       EmailSecurityTopTldSpamGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTopTldSpamGetResponseMetaNormalizationOverlappedPercentage EmailSecurityTopTldSpamGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTopTldSpamGetResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpamGetResponseMetaNormalizationPercentage, EmailSecurityTopTldSpamGetResponseMetaNormalizationMin0Max, EmailSecurityTopTldSpamGetResponseMetaNormalizationMinMax, EmailSecurityTopTldSpamGetResponseMetaNormalizationRawValues, EmailSecurityTopTldSpamGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTldSpamGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTldSpamGetResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo]
-type emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailSecurityTopTldSpamGetResponseMetaUnit struct {
+	Name  string                                         `json:"name,required"`
+	Value string                                         `json:"value,required"`
+	JSON  emailSecurityTopTldSpamGetResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTopTldSpamGetResponseMetaUnitJSON contains the JSON metadata for
+// the struct [EmailSecurityTopTldSpamGetResponseMetaUnit]
+type emailSecurityTopTldSpamGetResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpamGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                             `json:"dataSource,required"`
-	Description     string                                                             `json:"description,required"`
-	EventType       string                                                             `json:"eventType,required"`
-	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                          `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                             `json:"linkedUrl"`
-	StartTime       time.Time                                                          `json:"startTime" format:"date-time"`
-	JSON            emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation]
-type emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailSecurityTopTldSpamGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type EmailSecurityTopTldSpamGetResponseTop0 struct {
-	Name  string                                     `json:"name,required"`
+	Name string `json:"name,required"`
+	// A numeric string.
 	Value string                                     `json:"value,required"`
 	JSON  emailSecurityTopTldSpamGetResponseTop0JSON `json:"-"`
 }

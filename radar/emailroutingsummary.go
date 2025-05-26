@@ -118,6 +118,7 @@ func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRouting
 }
 
 type EmailRoutingSummaryARCResponse struct {
+	// Metadata for the results.
 	Meta     EmailRoutingSummaryARCResponseMeta `json:"meta,required"`
 	Summary0 RadarEmailSummary                  `json:"summary_0,required"`
 	JSON     emailRoutingSummaryARCResponseJSON `json:"-"`
@@ -140,21 +141,28 @@ func (r emailRoutingSummaryARCResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailRoutingSummaryARCResponseMeta struct {
+	ConfidenceInfo EmailRoutingSummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailRoutingSummaryARCResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	Normalization  string                                           `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryARCResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailRoutingSummaryARCResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailRoutingSummaryARCResponseMetaUnit `json:"units,required"`
+	JSON  emailRoutingSummaryARCResponseMetaJSON   `json:"-"`
 }
 
 // emailRoutingSummaryARCResponseMetaJSON contains the JSON metadata for the struct
 // [EmailRoutingSummaryARCResponseMeta]
 type emailRoutingSummaryARCResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -164,6 +172,66 @@ func (r *EmailRoutingSummaryARCResponseMeta) UnmarshalJSON(data []byte) (err err
 }
 
 func (r emailRoutingSummaryARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailRoutingSummaryARCResponseMetaConfidenceInfo struct {
+	Annotations []EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                `json:"level,required"`
+	JSON  emailRoutingSummaryARCResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailRoutingSummaryARCResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [EmailRoutingSummaryARCResponseMetaConfidenceInfo]
+type emailRoutingSummaryARCResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
+	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                      `json:"startTime,required" format:"date-time"`
+	JSON            emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation]
+type emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -192,64 +260,53 @@ func (r emailRoutingSummaryARCResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingSummaryARCResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                        `json:"level"`
-	JSON        emailRoutingSummaryARCResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailRoutingSummaryARCResponseMetaNormalization string
+
+const (
+	EmailRoutingSummaryARCResponseMetaNormalizationPercentage           EmailRoutingSummaryARCResponseMetaNormalization = "PERCENTAGE"
+	EmailRoutingSummaryARCResponseMetaNormalizationMin0Max              EmailRoutingSummaryARCResponseMetaNormalization = "MIN0_MAX"
+	EmailRoutingSummaryARCResponseMetaNormalizationMinMax               EmailRoutingSummaryARCResponseMetaNormalization = "MIN_MAX"
+	EmailRoutingSummaryARCResponseMetaNormalizationRawValues            EmailRoutingSummaryARCResponseMetaNormalization = "RAW_VALUES"
+	EmailRoutingSummaryARCResponseMetaNormalizationPercentageChange     EmailRoutingSummaryARCResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailRoutingSummaryARCResponseMetaNormalizationRollingAverage       EmailRoutingSummaryARCResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailRoutingSummaryARCResponseMetaNormalizationOverlappedPercentage EmailRoutingSummaryARCResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailRoutingSummaryARCResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCResponseMetaNormalizationPercentage, EmailRoutingSummaryARCResponseMetaNormalizationMin0Max, EmailRoutingSummaryARCResponseMetaNormalizationMinMax, EmailRoutingSummaryARCResponseMetaNormalizationRawValues, EmailRoutingSummaryARCResponseMetaNormalizationPercentageChange, EmailRoutingSummaryARCResponseMetaNormalizationRollingAverage, EmailRoutingSummaryARCResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailRoutingSummaryARCResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [EmailRoutingSummaryARCResponseMetaConfidenceInfo]
-type emailRoutingSummaryARCResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailRoutingSummaryARCResponseMetaUnit struct {
+	Name  string                                     `json:"name,required"`
+	Value string                                     `json:"value,required"`
+	JSON  emailRoutingSummaryARCResponseMetaUnitJSON `json:"-"`
+}
+
+// emailRoutingSummaryARCResponseMetaUnitJSON contains the JSON metadata for the
+// struct [EmailRoutingSummaryARCResponseMetaUnit]
+type emailRoutingSummaryARCResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingSummaryARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingSummaryARCResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRoutingSummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                         `json:"dataSource,required"`
-	Description     string                                                         `json:"description,required"`
-	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                         `json:"linkedUrl"`
-	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
-	JSON            emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation]
-type emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailRoutingSummaryARCResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type EmailRoutingSummaryDKIMResponse struct {
+	// Metadata for the results.
 	Meta     EmailRoutingSummaryDKIMResponseMeta `json:"meta,required"`
 	Summary0 RadarEmailSummary                   `json:"summary_0,required"`
 	JSON     emailRoutingSummaryDKIMResponseJSON `json:"-"`
@@ -272,21 +329,28 @@ func (r emailRoutingSummaryDKIMResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailRoutingSummaryDKIMResponseMeta struct {
+	ConfidenceInfo EmailRoutingSummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailRoutingSummaryDKIMResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	Normalization  string                                            `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryDKIMResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailRoutingSummaryDKIMResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailRoutingSummaryDKIMResponseMetaUnit `json:"units,required"`
+	JSON  emailRoutingSummaryDKIMResponseMetaJSON   `json:"-"`
 }
 
 // emailRoutingSummaryDKIMResponseMetaJSON contains the JSON metadata for the
 // struct [EmailRoutingSummaryDKIMResponseMeta]
 type emailRoutingSummaryDKIMResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -296,6 +360,66 @@ func (r *EmailRoutingSummaryDKIMResponseMeta) UnmarshalJSON(data []byte) (err er
 }
 
 func (r emailRoutingSummaryDKIMResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailRoutingSummaryDKIMResponseMetaConfidenceInfo struct {
+	Annotations []EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                 `json:"level,required"`
+	JSON  emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [EmailRoutingSummaryDKIMResponseMetaConfidenceInfo]
+type emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryDKIMResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
+	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON            emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation]
+type emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -324,64 +448,53 @@ func (r emailRoutingSummaryDKIMResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingSummaryDKIMResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                         `json:"level"`
-	JSON        emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailRoutingSummaryDKIMResponseMetaNormalization string
+
+const (
+	EmailRoutingSummaryDKIMResponseMetaNormalizationPercentage           EmailRoutingSummaryDKIMResponseMetaNormalization = "PERCENTAGE"
+	EmailRoutingSummaryDKIMResponseMetaNormalizationMin0Max              EmailRoutingSummaryDKIMResponseMetaNormalization = "MIN0_MAX"
+	EmailRoutingSummaryDKIMResponseMetaNormalizationMinMax               EmailRoutingSummaryDKIMResponseMetaNormalization = "MIN_MAX"
+	EmailRoutingSummaryDKIMResponseMetaNormalizationRawValues            EmailRoutingSummaryDKIMResponseMetaNormalization = "RAW_VALUES"
+	EmailRoutingSummaryDKIMResponseMetaNormalizationPercentageChange     EmailRoutingSummaryDKIMResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailRoutingSummaryDKIMResponseMetaNormalizationRollingAverage       EmailRoutingSummaryDKIMResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailRoutingSummaryDKIMResponseMetaNormalizationOverlappedPercentage EmailRoutingSummaryDKIMResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailRoutingSummaryDKIMResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMResponseMetaNormalizationPercentage, EmailRoutingSummaryDKIMResponseMetaNormalizationMin0Max, EmailRoutingSummaryDKIMResponseMetaNormalizationMinMax, EmailRoutingSummaryDKIMResponseMetaNormalizationRawValues, EmailRoutingSummaryDKIMResponseMetaNormalizationPercentageChange, EmailRoutingSummaryDKIMResponseMetaNormalizationRollingAverage, EmailRoutingSummaryDKIMResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [EmailRoutingSummaryDKIMResponseMetaConfidenceInfo]
-type emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailRoutingSummaryDKIMResponseMetaUnit struct {
+	Name  string                                      `json:"name,required"`
+	Value string                                      `json:"value,required"`
+	JSON  emailRoutingSummaryDKIMResponseMetaUnitJSON `json:"-"`
+}
+
+// emailRoutingSummaryDKIMResponseMetaUnitJSON contains the JSON metadata for the
+// struct [EmailRoutingSummaryDKIMResponseMetaUnit]
+type emailRoutingSummaryDKIMResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingSummaryDKIMResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingSummaryDKIMResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                          `json:"dataSource,required"`
-	Description     string                                                          `json:"description,required"`
-	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                          `json:"linkedUrl"`
-	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
-	JSON            emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation]
-type emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailRoutingSummaryDKIMResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type EmailRoutingSummaryDMARCResponse struct {
+	// Metadata for the results.
 	Meta     EmailRoutingSummaryDMARCResponseMeta `json:"meta,required"`
 	Summary0 RadarEmailSummary                    `json:"summary_0,required"`
 	JSON     emailRoutingSummaryDMARCResponseJSON `json:"-"`
@@ -404,21 +517,28 @@ func (r emailRoutingSummaryDMARCResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailRoutingSummaryDMARCResponseMeta struct {
+	ConfidenceInfo EmailRoutingSummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailRoutingSummaryDMARCResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	Normalization  string                                             `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryDMARCResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailRoutingSummaryDMARCResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailRoutingSummaryDMARCResponseMetaUnit `json:"units,required"`
+	JSON  emailRoutingSummaryDMARCResponseMetaJSON   `json:"-"`
 }
 
 // emailRoutingSummaryDMARCResponseMetaJSON contains the JSON metadata for the
 // struct [EmailRoutingSummaryDMARCResponseMeta]
 type emailRoutingSummaryDMARCResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -428,6 +548,66 @@ func (r *EmailRoutingSummaryDMARCResponseMeta) UnmarshalJSON(data []byte) (err e
 }
 
 func (r emailRoutingSummaryDMARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailRoutingSummaryDMARCResponseMetaConfidenceInfo struct {
+	Annotations []EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                  `json:"level,required"`
+	JSON  emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [EmailRoutingSummaryDMARCResponseMetaConfidenceInfo]
+type emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryDMARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
+	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	JSON            emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation]
+type emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -456,64 +636,53 @@ func (r emailRoutingSummaryDMARCResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingSummaryDMARCResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                          `json:"level"`
-	JSON        emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailRoutingSummaryDMARCResponseMetaNormalization string
+
+const (
+	EmailRoutingSummaryDMARCResponseMetaNormalizationPercentage           EmailRoutingSummaryDMARCResponseMetaNormalization = "PERCENTAGE"
+	EmailRoutingSummaryDMARCResponseMetaNormalizationMin0Max              EmailRoutingSummaryDMARCResponseMetaNormalization = "MIN0_MAX"
+	EmailRoutingSummaryDMARCResponseMetaNormalizationMinMax               EmailRoutingSummaryDMARCResponseMetaNormalization = "MIN_MAX"
+	EmailRoutingSummaryDMARCResponseMetaNormalizationRawValues            EmailRoutingSummaryDMARCResponseMetaNormalization = "RAW_VALUES"
+	EmailRoutingSummaryDMARCResponseMetaNormalizationPercentageChange     EmailRoutingSummaryDMARCResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailRoutingSummaryDMARCResponseMetaNormalizationRollingAverage       EmailRoutingSummaryDMARCResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailRoutingSummaryDMARCResponseMetaNormalizationOverlappedPercentage EmailRoutingSummaryDMARCResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailRoutingSummaryDMARCResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCResponseMetaNormalizationPercentage, EmailRoutingSummaryDMARCResponseMetaNormalizationMin0Max, EmailRoutingSummaryDMARCResponseMetaNormalizationMinMax, EmailRoutingSummaryDMARCResponseMetaNormalizationRawValues, EmailRoutingSummaryDMARCResponseMetaNormalizationPercentageChange, EmailRoutingSummaryDMARCResponseMetaNormalizationRollingAverage, EmailRoutingSummaryDMARCResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [EmailRoutingSummaryDMARCResponseMetaConfidenceInfo]
-type emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailRoutingSummaryDMARCResponseMetaUnit struct {
+	Name  string                                       `json:"name,required"`
+	Value string                                       `json:"value,required"`
+	JSON  emailRoutingSummaryDMARCResponseMetaUnitJSON `json:"-"`
+}
+
+// emailRoutingSummaryDMARCResponseMetaUnitJSON contains the JSON metadata for the
+// struct [EmailRoutingSummaryDMARCResponseMetaUnit]
+type emailRoutingSummaryDMARCResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingSummaryDMARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingSummaryDMARCResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                           `json:"dataSource,required"`
-	Description     string                                                           `json:"description,required"`
-	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                           `json:"linkedUrl"`
-	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
-	JSON            emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation]
-type emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailRoutingSummaryDMARCResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type EmailRoutingSummaryEncryptedResponse struct {
+	// Metadata for the results.
 	Meta     EmailRoutingSummaryEncryptedResponseMeta     `json:"meta,required"`
 	Summary0 EmailRoutingSummaryEncryptedResponseSummary0 `json:"summary_0,required"`
 	JSON     emailRoutingSummaryEncryptedResponseJSON     `json:"-"`
@@ -536,21 +705,28 @@ func (r emailRoutingSummaryEncryptedResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailRoutingSummaryEncryptedResponseMeta struct {
+	ConfidenceInfo EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailRoutingSummaryEncryptedResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                 `json:"lastUpdated,required"`
-	Normalization  string                                                 `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryEncryptedResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailRoutingSummaryEncryptedResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailRoutingSummaryEncryptedResponseMetaUnit `json:"units,required"`
+	JSON  emailRoutingSummaryEncryptedResponseMetaJSON   `json:"-"`
 }
 
 // emailRoutingSummaryEncryptedResponseMetaJSON contains the JSON metadata for the
 // struct [EmailRoutingSummaryEncryptedResponseMeta]
 type emailRoutingSummaryEncryptedResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -560,6 +736,66 @@ func (r *EmailRoutingSummaryEncryptedResponseMeta) UnmarshalJSON(data []byte) (e
 }
 
 func (r emailRoutingSummaryEncryptedResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo struct {
+	Annotations []EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                      `json:"level,required"`
+	JSON  emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo]
+type emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
+	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                            `json:"startTime,required" format:"date-time"`
+	JSON            emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation]
+type emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -588,65 +824,55 @@ func (r emailRoutingSummaryEncryptedResponseMetaDateRangeJSON) RawJSON() string 
 	return r.raw
 }
 
-type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                              `json:"level"`
-	JSON        emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailRoutingSummaryEncryptedResponseMetaNormalization string
+
+const (
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationPercentage           EmailRoutingSummaryEncryptedResponseMetaNormalization = "PERCENTAGE"
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationMin0Max              EmailRoutingSummaryEncryptedResponseMetaNormalization = "MIN0_MAX"
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationMinMax               EmailRoutingSummaryEncryptedResponseMetaNormalization = "MIN_MAX"
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationRawValues            EmailRoutingSummaryEncryptedResponseMetaNormalization = "RAW_VALUES"
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationPercentageChange     EmailRoutingSummaryEncryptedResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationRollingAverage       EmailRoutingSummaryEncryptedResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailRoutingSummaryEncryptedResponseMetaNormalizationOverlappedPercentage EmailRoutingSummaryEncryptedResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailRoutingSummaryEncryptedResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedResponseMetaNormalizationPercentage, EmailRoutingSummaryEncryptedResponseMetaNormalizationMin0Max, EmailRoutingSummaryEncryptedResponseMetaNormalizationMinMax, EmailRoutingSummaryEncryptedResponseMetaNormalizationRawValues, EmailRoutingSummaryEncryptedResponseMetaNormalizationPercentageChange, EmailRoutingSummaryEncryptedResponseMetaNormalizationRollingAverage, EmailRoutingSummaryEncryptedResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo]
-type emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailRoutingSummaryEncryptedResponseMetaUnit struct {
+	Name  string                                           `json:"name,required"`
+	Value string                                           `json:"value,required"`
+	JSON  emailRoutingSummaryEncryptedResponseMetaUnitJSON `json:"-"`
+}
+
+// emailRoutingSummaryEncryptedResponseMetaUnitJSON contains the JSON metadata for
+// the struct [EmailRoutingSummaryEncryptedResponseMetaUnit]
+type emailRoutingSummaryEncryptedResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingSummaryEncryptedResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                               `json:"dataSource,required"`
-	Description     string                                                               `json:"description,required"`
-	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                               `json:"linkedUrl"`
-	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
-	JSON            emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation]
-type emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailRoutingSummaryEncryptedResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type EmailRoutingSummaryEncryptedResponseSummary0 struct {
-	Encrypted    string                                           `json:"ENCRYPTED,required"`
+	// A numeric string.
+	Encrypted string `json:"ENCRYPTED,required"`
+	// A numeric string.
 	NotEncrypted string                                           `json:"NOT_ENCRYPTED,required"`
 	JSON         emailRoutingSummaryEncryptedResponseSummary0JSON `json:"-"`
 }
@@ -669,6 +895,7 @@ func (r emailRoutingSummaryEncryptedResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryIPVersionResponse struct {
+	// Metadata for the results.
 	Meta     EmailRoutingSummaryIPVersionResponseMeta     `json:"meta,required"`
 	Summary0 EmailRoutingSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
 	JSON     emailRoutingSummaryIPVersionResponseJSON     `json:"-"`
@@ -691,21 +918,28 @@ func (r emailRoutingSummaryIPVersionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailRoutingSummaryIPVersionResponseMeta struct {
+	ConfidenceInfo EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailRoutingSummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                 `json:"lastUpdated,required"`
-	Normalization  string                                                 `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryIPVersionResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailRoutingSummaryIPVersionResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailRoutingSummaryIPVersionResponseMetaUnit `json:"units,required"`
+	JSON  emailRoutingSummaryIPVersionResponseMetaJSON   `json:"-"`
 }
 
 // emailRoutingSummaryIPVersionResponseMetaJSON contains the JSON metadata for the
 // struct [EmailRoutingSummaryIPVersionResponseMeta]
 type emailRoutingSummaryIPVersionResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -715,6 +949,66 @@ func (r *EmailRoutingSummaryIPVersionResponseMeta) UnmarshalJSON(data []byte) (e
 }
 
 func (r emailRoutingSummaryIPVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo struct {
+	Annotations []EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                      `json:"level,required"`
+	JSON  emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo]
+type emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
+	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                            `json:"startTime,required" format:"date-time"`
+	JSON            emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation]
+type emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -743,65 +1037,55 @@ func (r emailRoutingSummaryIPVersionResponseMetaDateRangeJSON) RawJSON() string 
 	return r.raw
 }
 
-type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                              `json:"level"`
-	JSON        emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailRoutingSummaryIPVersionResponseMetaNormalization string
+
+const (
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationPercentage           EmailRoutingSummaryIPVersionResponseMetaNormalization = "PERCENTAGE"
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationMin0Max              EmailRoutingSummaryIPVersionResponseMetaNormalization = "MIN0_MAX"
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationMinMax               EmailRoutingSummaryIPVersionResponseMetaNormalization = "MIN_MAX"
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationRawValues            EmailRoutingSummaryIPVersionResponseMetaNormalization = "RAW_VALUES"
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationPercentageChange     EmailRoutingSummaryIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationRollingAverage       EmailRoutingSummaryIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailRoutingSummaryIPVersionResponseMetaNormalizationOverlappedPercentage EmailRoutingSummaryIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailRoutingSummaryIPVersionResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionResponseMetaNormalizationPercentage, EmailRoutingSummaryIPVersionResponseMetaNormalizationMin0Max, EmailRoutingSummaryIPVersionResponseMetaNormalizationMinMax, EmailRoutingSummaryIPVersionResponseMetaNormalizationRawValues, EmailRoutingSummaryIPVersionResponseMetaNormalizationPercentageChange, EmailRoutingSummaryIPVersionResponseMetaNormalizationRollingAverage, EmailRoutingSummaryIPVersionResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo]
-type emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailRoutingSummaryIPVersionResponseMetaUnit struct {
+	Name  string                                           `json:"name,required"`
+	Value string                                           `json:"value,required"`
+	JSON  emailRoutingSummaryIPVersionResponseMetaUnitJSON `json:"-"`
+}
+
+// emailRoutingSummaryIPVersionResponseMetaUnitJSON contains the JSON metadata for
+// the struct [EmailRoutingSummaryIPVersionResponseMetaUnit]
+type emailRoutingSummaryIPVersionResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingSummaryIPVersionResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                               `json:"dataSource,required"`
-	Description     string                                                               `json:"description,required"`
-	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                               `json:"linkedUrl"`
-	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
-	JSON            emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation]
-type emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailRoutingSummaryIPVersionResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type EmailRoutingSummaryIPVersionResponseSummary0 struct {
-	IPv4 string                                           `json:"IPv4,required"`
+	// A numeric string.
+	IPv4 string `json:"IPv4,required"`
+	// A numeric string.
 	IPv6 string                                           `json:"IPv6,required"`
 	JSON emailRoutingSummaryIPVersionResponseSummary0JSON `json:"-"`
 }
@@ -824,6 +1108,7 @@ func (r emailRoutingSummaryIPVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailRoutingSummarySPFResponse struct {
+	// Metadata for the results.
 	Meta     EmailRoutingSummarySPFResponseMeta `json:"meta,required"`
 	Summary0 RadarEmailSummary                  `json:"summary_0,required"`
 	JSON     emailRoutingSummarySPFResponseJSON `json:"-"`
@@ -846,21 +1131,28 @@ func (r emailRoutingSummarySPFResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type EmailRoutingSummarySPFResponseMeta struct {
+	ConfidenceInfo EmailRoutingSummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []EmailRoutingSummarySPFResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	Normalization  string                                           `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummarySPFResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailRoutingSummarySPFResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailRoutingSummarySPFResponseMetaUnit `json:"units,required"`
+	JSON  emailRoutingSummarySPFResponseMetaJSON   `json:"-"`
 }
 
 // emailRoutingSummarySPFResponseMetaJSON contains the JSON metadata for the struct
 // [EmailRoutingSummarySPFResponseMeta]
 type emailRoutingSummarySPFResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -870,6 +1162,66 @@ func (r *EmailRoutingSummarySPFResponseMeta) UnmarshalJSON(data []byte) (err err
 }
 
 func (r emailRoutingSummarySPFResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailRoutingSummarySPFResponseMetaConfidenceInfo struct {
+	Annotations []EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                `json:"level,required"`
+	JSON  emailRoutingSummarySPFResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailRoutingSummarySPFResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [EmailRoutingSummarySPFResponseMetaConfidenceInfo]
+type emailRoutingSummarySPFResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummarySPFResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummarySPFResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
+	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                      `json:"startTime,required" format:"date-time"`
+	JSON            emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation]
+type emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -898,60 +1250,48 @@ func (r emailRoutingSummarySPFResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingSummarySPFResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                        `json:"level"`
-	JSON        emailRoutingSummarySPFResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailRoutingSummarySPFResponseMetaNormalization string
+
+const (
+	EmailRoutingSummarySPFResponseMetaNormalizationPercentage           EmailRoutingSummarySPFResponseMetaNormalization = "PERCENTAGE"
+	EmailRoutingSummarySPFResponseMetaNormalizationMin0Max              EmailRoutingSummarySPFResponseMetaNormalization = "MIN0_MAX"
+	EmailRoutingSummarySPFResponseMetaNormalizationMinMax               EmailRoutingSummarySPFResponseMetaNormalization = "MIN_MAX"
+	EmailRoutingSummarySPFResponseMetaNormalizationRawValues            EmailRoutingSummarySPFResponseMetaNormalization = "RAW_VALUES"
+	EmailRoutingSummarySPFResponseMetaNormalizationPercentageChange     EmailRoutingSummarySPFResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailRoutingSummarySPFResponseMetaNormalizationRollingAverage       EmailRoutingSummarySPFResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailRoutingSummarySPFResponseMetaNormalizationOverlappedPercentage EmailRoutingSummarySPFResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailRoutingSummarySPFResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFResponseMetaNormalizationPercentage, EmailRoutingSummarySPFResponseMetaNormalizationMin0Max, EmailRoutingSummarySPFResponseMetaNormalizationMinMax, EmailRoutingSummarySPFResponseMetaNormalizationRawValues, EmailRoutingSummarySPFResponseMetaNormalizationPercentageChange, EmailRoutingSummarySPFResponseMetaNormalizationRollingAverage, EmailRoutingSummarySPFResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// emailRoutingSummarySPFResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [EmailRoutingSummarySPFResponseMetaConfidenceInfo]
-type emailRoutingSummarySPFResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type EmailRoutingSummarySPFResponseMetaUnit struct {
+	Name  string                                     `json:"name,required"`
+	Value string                                     `json:"value,required"`
+	JSON  emailRoutingSummarySPFResponseMetaUnitJSON `json:"-"`
+}
+
+// emailRoutingSummarySPFResponseMetaUnitJSON contains the JSON metadata for the
+// struct [EmailRoutingSummarySPFResponseMetaUnit]
+type emailRoutingSummarySPFResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingSummarySPFResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingSummarySPFResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailRoutingSummarySPFResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                         `json:"dataSource,required"`
-	Description     string                                                         `json:"description,required"`
-	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                         `json:"linkedUrl"`
-	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
-	JSON            emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation]
-type emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailRoutingSummarySPFResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

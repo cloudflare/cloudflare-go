@@ -61,6 +61,7 @@ func (r *AttackLayer3TopLocationService) Target(ctx context.Context, query Attac
 }
 
 type AttackLayer3TopLocationOriginResponse struct {
+	// Metadata for the results.
 	Meta AttackLayer3TopLocationOriginResponseMeta   `json:"meta,required"`
 	Top0 []AttackLayer3TopLocationOriginResponseTop0 `json:"top_0,required"`
 	JSON attackLayer3TopLocationOriginResponseJSON   `json:"-"`
@@ -83,19 +84,28 @@ func (r attackLayer3TopLocationOriginResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AttackLayer3TopLocationOriginResponseMeta struct {
+	ConfidenceInfo AttackLayer3TopLocationOriginResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AttackLayer3TopLocationOriginResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                  `json:"lastUpdated,required"`
-	ConfidenceInfo AttackLayer3TopLocationOriginResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer3TopLocationOriginResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AttackLayer3TopLocationOriginResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AttackLayer3TopLocationOriginResponseMetaUnit `json:"units,required"`
+	JSON  attackLayer3TopLocationOriginResponseMetaJSON   `json:"-"`
 }
 
 // attackLayer3TopLocationOriginResponseMetaJSON contains the JSON metadata for the
 // struct [AttackLayer3TopLocationOriginResponseMeta]
 type attackLayer3TopLocationOriginResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -105,6 +115,67 @@ func (r *AttackLayer3TopLocationOriginResponseMeta) UnmarshalJSON(data []byte) (
 }
 
 func (r attackLayer3TopLocationOriginResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3TopLocationOriginResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                       `json:"level,required"`
+	JSON  attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [AttackLayer3TopLocationOriginResponseMetaConfidenceInfo]
+type attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3TopLocationOriginResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	JSON            attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation]
+type attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -133,61 +204,48 @@ func (r attackLayer3TopLocationOriginResponseMetaDateRangeJSON) RawJSON() string
 	return r.raw
 }
 
-type AttackLayer3TopLocationOriginResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                               `json:"level"`
-	JSON        attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer3TopLocationOriginResponseMetaNormalization string
+
+const (
+	AttackLayer3TopLocationOriginResponseMetaNormalizationPercentage           AttackLayer3TopLocationOriginResponseMetaNormalization = "PERCENTAGE"
+	AttackLayer3TopLocationOriginResponseMetaNormalizationMin0Max              AttackLayer3TopLocationOriginResponseMetaNormalization = "MIN0_MAX"
+	AttackLayer3TopLocationOriginResponseMetaNormalizationMinMax               AttackLayer3TopLocationOriginResponseMetaNormalization = "MIN_MAX"
+	AttackLayer3TopLocationOriginResponseMetaNormalizationRawValues            AttackLayer3TopLocationOriginResponseMetaNormalization = "RAW_VALUES"
+	AttackLayer3TopLocationOriginResponseMetaNormalizationPercentageChange     AttackLayer3TopLocationOriginResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AttackLayer3TopLocationOriginResponseMetaNormalizationRollingAverage       AttackLayer3TopLocationOriginResponseMetaNormalization = "ROLLING_AVERAGE"
+	AttackLayer3TopLocationOriginResponseMetaNormalizationOverlappedPercentage AttackLayer3TopLocationOriginResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AttackLayer3TopLocationOriginResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationOriginResponseMetaNormalizationPercentage, AttackLayer3TopLocationOriginResponseMetaNormalizationMin0Max, AttackLayer3TopLocationOriginResponseMetaNormalizationMinMax, AttackLayer3TopLocationOriginResponseMetaNormalizationRawValues, AttackLayer3TopLocationOriginResponseMetaNormalizationPercentageChange, AttackLayer3TopLocationOriginResponseMetaNormalizationRollingAverage, AttackLayer3TopLocationOriginResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [AttackLayer3TopLocationOriginResponseMetaConfidenceInfo]
-type attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AttackLayer3TopLocationOriginResponseMetaUnit struct {
+	Name  string                                            `json:"name,required"`
+	Value string                                            `json:"value,required"`
+	JSON  attackLayer3TopLocationOriginResponseMetaUnitJSON `json:"-"`
+}
+
+// attackLayer3TopLocationOriginResponseMetaUnitJSON contains the JSON metadata for
+// the struct [AttackLayer3TopLocationOriginResponseMetaUnit]
+type attackLayer3TopLocationOriginResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AttackLayer3TopLocationOriginResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AttackLayer3TopLocationOriginResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                `json:"dataSource,required"`
-	Description     string                                                                `json:"description,required"`
-	EventType       string                                                                `json:"eventType,required"`
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                             `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                `json:"linkedUrl"`
-	StartTime       time.Time                                                             `json:"startTime" format:"date-time"`
-	JSON            attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation]
-type attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r attackLayer3TopLocationOriginResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -219,6 +277,7 @@ func (r attackLayer3TopLocationOriginResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationTargetResponse struct {
+	// Metadata for the results.
 	Meta AttackLayer3TopLocationTargetResponseMeta   `json:"meta,required"`
 	Top0 []AttackLayer3TopLocationTargetResponseTop0 `json:"top_0,required"`
 	JSON attackLayer3TopLocationTargetResponseJSON   `json:"-"`
@@ -241,19 +300,28 @@ func (r attackLayer3TopLocationTargetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AttackLayer3TopLocationTargetResponseMeta struct {
+	ConfidenceInfo AttackLayer3TopLocationTargetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AttackLayer3TopLocationTargetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                  `json:"lastUpdated,required"`
-	ConfidenceInfo AttackLayer3TopLocationTargetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer3TopLocationTargetResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AttackLayer3TopLocationTargetResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AttackLayer3TopLocationTargetResponseMetaUnit `json:"units,required"`
+	JSON  attackLayer3TopLocationTargetResponseMetaJSON   `json:"-"`
 }
 
 // attackLayer3TopLocationTargetResponseMetaJSON contains the JSON metadata for the
 // struct [AttackLayer3TopLocationTargetResponseMeta]
 type attackLayer3TopLocationTargetResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -263,6 +331,67 @@ func (r *AttackLayer3TopLocationTargetResponseMeta) UnmarshalJSON(data []byte) (
 }
 
 func (r attackLayer3TopLocationTargetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3TopLocationTargetResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                       `json:"level,required"`
+	JSON  attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [AttackLayer3TopLocationTargetResponseMetaConfidenceInfo]
+type attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3TopLocationTargetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	JSON            attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation]
+type attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -291,61 +420,48 @@ func (r attackLayer3TopLocationTargetResponseMetaDateRangeJSON) RawJSON() string
 	return r.raw
 }
 
-type AttackLayer3TopLocationTargetResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                               `json:"level"`
-	JSON        attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer3TopLocationTargetResponseMetaNormalization string
+
+const (
+	AttackLayer3TopLocationTargetResponseMetaNormalizationPercentage           AttackLayer3TopLocationTargetResponseMetaNormalization = "PERCENTAGE"
+	AttackLayer3TopLocationTargetResponseMetaNormalizationMin0Max              AttackLayer3TopLocationTargetResponseMetaNormalization = "MIN0_MAX"
+	AttackLayer3TopLocationTargetResponseMetaNormalizationMinMax               AttackLayer3TopLocationTargetResponseMetaNormalization = "MIN_MAX"
+	AttackLayer3TopLocationTargetResponseMetaNormalizationRawValues            AttackLayer3TopLocationTargetResponseMetaNormalization = "RAW_VALUES"
+	AttackLayer3TopLocationTargetResponseMetaNormalizationPercentageChange     AttackLayer3TopLocationTargetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AttackLayer3TopLocationTargetResponseMetaNormalizationRollingAverage       AttackLayer3TopLocationTargetResponseMetaNormalization = "ROLLING_AVERAGE"
+	AttackLayer3TopLocationTargetResponseMetaNormalizationOverlappedPercentage AttackLayer3TopLocationTargetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AttackLayer3TopLocationTargetResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationTargetResponseMetaNormalizationPercentage, AttackLayer3TopLocationTargetResponseMetaNormalizationMin0Max, AttackLayer3TopLocationTargetResponseMetaNormalizationMinMax, AttackLayer3TopLocationTargetResponseMetaNormalizationRawValues, AttackLayer3TopLocationTargetResponseMetaNormalizationPercentageChange, AttackLayer3TopLocationTargetResponseMetaNormalizationRollingAverage, AttackLayer3TopLocationTargetResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [AttackLayer3TopLocationTargetResponseMetaConfidenceInfo]
-type attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AttackLayer3TopLocationTargetResponseMetaUnit struct {
+	Name  string                                            `json:"name,required"`
+	Value string                                            `json:"value,required"`
+	JSON  attackLayer3TopLocationTargetResponseMetaUnitJSON `json:"-"`
+}
+
+// attackLayer3TopLocationTargetResponseMetaUnitJSON contains the JSON metadata for
+// the struct [AttackLayer3TopLocationTargetResponseMetaUnit]
+type attackLayer3TopLocationTargetResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AttackLayer3TopLocationTargetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AttackLayer3TopLocationTargetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                `json:"dataSource,required"`
-	Description     string                                                                `json:"description,required"`
-	EventType       string                                                                `json:"eventType,required"`
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                             `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                `json:"linkedUrl"`
-	StartTime       time.Time                                                             `json:"startTime" format:"date-time"`
-	JSON            attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation]
-type attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r attackLayer3TopLocationTargetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

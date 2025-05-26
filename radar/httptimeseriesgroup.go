@@ -168,7 +168,8 @@ func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPT
 }
 
 type HTTPTimeseriesGroupBotClassResponse struct {
-	Meta   interface{}                               `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupBotClassResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupBotClassResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupBotClassResponseJSON   `json:"-"`
 }
@@ -190,10 +191,200 @@ func (r httpTimeseriesGroupBotClassResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupBotClassResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupBotClassResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupBotClassResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupBotClassResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupBotClassResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupBotClassResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupBotClassResponseMetaJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupBotClassResponseMeta]
+type httpTimeseriesGroupBotClassResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBotClassResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBotClassResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupBotClassResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupBotClassResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupBotClassResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupBotClassResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupBotClassResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupBotClassResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupBotClassResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupBotClassResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupBotClassResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                     `json:"level,required"`
+	JSON  httpTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo]
+type httpTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
+	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                           `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupBotClassResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupBotClassResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBotClassResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupBotClassResponseMetaDateRange]
+type httpTimeseriesGroupBotClassResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBotClassResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBotClassResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupBotClassResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationPercentage           HTTPTimeseriesGroupBotClassResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupBotClassResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationMinMax               HTTPTimeseriesGroupBotClassResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationRawValues            HTTPTimeseriesGroupBotClassResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupBotClassResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupBotClassResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupBotClassResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupBotClassResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupBotClassResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassResponseMetaNormalizationPercentage, HTTPTimeseriesGroupBotClassResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupBotClassResponseMetaNormalizationMinMax, HTTPTimeseriesGroupBotClassResponseMetaNormalizationRawValues, HTTPTimeseriesGroupBotClassResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupBotClassResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupBotClassResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupBotClassResponseMetaUnit struct {
+	Name  string                                          `json:"name,required"`
+	Value string                                          `json:"value,required"`
+	JSON  httpTimeseriesGroupBotClassResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBotClassResponseMetaUnitJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupBotClassResponseMetaUnit]
+type httpTimeseriesGroupBotClassResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBotClassResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBotClassResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupBotClassResponseSerie0 struct {
 	Bot        []string                                      `json:"bot,required"`
 	Human      []string                                      `json:"human,required"`
-	Timestamps []string                                      `json:"timestamps,required"`
+	Timestamps []time.Time                                   `json:"timestamps,required" format:"date-time"`
 	JSON       httpTimeseriesGroupBotClassResponseSerie0JSON `json:"-"`
 }
 
@@ -216,7 +407,8 @@ func (r httpTimeseriesGroupBotClassResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupBrowserResponse struct {
-	Meta   interface{}                              `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupBrowserResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupBrowserResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupBrowserResponseJSON   `json:"-"`
 }
@@ -238,8 +430,198 @@ func (r httpTimeseriesGroupBrowserResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupBrowserResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupBrowserResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupBrowserResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupBrowserResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupBrowserResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupBrowserResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserResponseMetaJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupBrowserResponseMeta]
+type httpTimeseriesGroupBrowserResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupBrowserResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupBrowserResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupBrowserResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupBrowserResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupBrowserResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupBrowserResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupBrowserResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupBrowserResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupBrowserResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                    `json:"level,required"`
+	JSON  httpTimeseriesGroupBrowserResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo]
+type httpTimeseriesGroupBrowserResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
+	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupBrowserResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupBrowserResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupBrowserResponseMetaDateRange]
+type httpTimeseriesGroupBrowserResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupBrowserResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationPercentage           HTTPTimeseriesGroupBrowserResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupBrowserResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationMinMax               HTTPTimeseriesGroupBrowserResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationRawValues            HTTPTimeseriesGroupBrowserResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupBrowserResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupBrowserResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupBrowserResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupBrowserResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupBrowserResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserResponseMetaNormalizationPercentage, HTTPTimeseriesGroupBrowserResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupBrowserResponseMetaNormalizationMinMax, HTTPTimeseriesGroupBrowserResponseMetaNormalizationRawValues, HTTPTimeseriesGroupBrowserResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupBrowserResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupBrowserResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupBrowserResponseMetaUnit struct {
+	Name  string                                         `json:"name,required"`
+	Value string                                         `json:"value,required"`
+	JSON  httpTimeseriesGroupBrowserResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserResponseMetaUnitJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupBrowserResponseMetaUnit]
+type httpTimeseriesGroupBrowserResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupBrowserResponseSerie0 struct {
-	Timestamps  []string                                     `json:"timestamps,required"`
+	Timestamps  []time.Time                                  `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                          `json:"-,extras"`
 	JSON        httpTimeseriesGroupBrowserResponseSerie0JSON `json:"-"`
 }
@@ -261,7 +643,8 @@ func (r httpTimeseriesGroupBrowserResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupBrowserFamilyResponse struct {
-	Meta   interface{}                                    `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupBrowserFamilyResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupBrowserFamilyResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupBrowserFamilyResponseJSON   `json:"-"`
 }
@@ -283,8 +666,199 @@ func (r httpTimeseriesGroupBrowserFamilyResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupBrowserFamilyResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupBrowserFamilyResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserFamilyResponseMetaJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupBrowserFamilyResponseMeta]
+type httpTimeseriesGroupBrowserFamilyResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserFamilyResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserFamilyResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupBrowserFamilyResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                          `json:"level,required"`
+	JSON  httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo]
+type httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupBrowserFamilyResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserFamilyResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange]
+type httpTimeseriesGroupBrowserFamilyResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserFamilyResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationPercentage           HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationMinMax               HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationRawValues            HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationPercentage, HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationMinMax, HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationRawValues, HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit struct {
+	Name  string                                               `json:"name,required"`
+	Value string                                               `json:"value,required"`
+	JSON  httpTimeseriesGroupBrowserFamilyResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupBrowserFamilyResponseMetaUnitJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit]
+type httpTimeseriesGroupBrowserFamilyResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupBrowserFamilyResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupBrowserFamilyResponseSerie0 struct {
-	Timestamps  []string                                           `json:"timestamps,required"`
+	Timestamps  []time.Time                                        `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                                `json:"-,extras"`
 	JSON        httpTimeseriesGroupBrowserFamilyResponseSerie0JSON `json:"-"`
 }
@@ -306,7 +880,8 @@ func (r httpTimeseriesGroupBrowserFamilyResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupDeviceTypeResponse struct {
-	Meta   interface{}                                 `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupDeviceTypeResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupDeviceTypeResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupDeviceTypeResponseJSON   `json:"-"`
 }
@@ -328,11 +903,202 @@ func (r httpTimeseriesGroupDeviceTypeResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupDeviceTypeResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupDeviceTypeResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupDeviceTypeResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupDeviceTypeResponseMetaJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupDeviceTypeResponseMeta]
+type httpTimeseriesGroupDeviceTypeResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupDeviceTypeResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupDeviceTypeResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupDeviceTypeResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                       `json:"level,required"`
+	JSON  httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo]
+type httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupDeviceTypeResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupDeviceTypeResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange]
+type httpTimeseriesGroupDeviceTypeResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupDeviceTypeResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationPercentage           HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationMinMax               HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationRawValues            HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationPercentage, HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationMinMax, HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationRawValues, HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupDeviceTypeResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupDeviceTypeResponseMetaUnit struct {
+	Name  string                                            `json:"name,required"`
+	Value string                                            `json:"value,required"`
+	JSON  httpTimeseriesGroupDeviceTypeResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupDeviceTypeResponseMetaUnitJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupDeviceTypeResponseMetaUnit]
+type httpTimeseriesGroupDeviceTypeResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupDeviceTypeResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupDeviceTypeResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupDeviceTypeResponseSerie0 struct {
 	Desktop    []string                                        `json:"desktop,required"`
 	Mobile     []string                                        `json:"mobile,required"`
 	Other      []string                                        `json:"other,required"`
-	Timestamps []string                                        `json:"timestamps,required"`
+	Timestamps []time.Time                                     `json:"timestamps,required" format:"date-time"`
 	JSON       httpTimeseriesGroupDeviceTypeResponseSerie0JSON `json:"-"`
 }
 
@@ -356,7 +1122,8 @@ func (r httpTimeseriesGroupDeviceTypeResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupHTTPProtocolResponse struct {
-	Meta   interface{}                                   `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupHTTPProtocolResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupHTTPProtocolResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupHTTPProtocolResponseJSON   `json:"-"`
 }
@@ -378,10 +1145,201 @@ func (r httpTimeseriesGroupHTTPProtocolResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupHTTPProtocolResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupHTTPProtocolResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPProtocolResponseMetaJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupHTTPProtocolResponseMeta]
+type httpTimeseriesGroupHTTPProtocolResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPProtocolResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPProtocolResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupHTTPProtocolResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                         `json:"level,required"`
+	JSON  httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo]
+type httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                               `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupHTTPProtocolResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPProtocolResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange]
+type httpTimeseriesGroupHTTPProtocolResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPProtocolResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationPercentage           HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationMinMax               HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationRawValues            HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationPercentage, HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationMinMax, HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationRawValues, HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit struct {
+	Name  string                                              `json:"name,required"`
+	Value string                                              `json:"value,required"`
+	JSON  httpTimeseriesGroupHTTPProtocolResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPProtocolResponseMetaUnitJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit]
+type httpTimeseriesGroupHTTPProtocolResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPProtocolResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupHTTPProtocolResponseSerie0 struct {
 	HTTP       []string                                          `json:"http,required"`
 	HTTPS      []string                                          `json:"https,required"`
-	Timestamps []string                                          `json:"timestamps,required"`
+	Timestamps []time.Time                                       `json:"timestamps,required" format:"date-time"`
 	JSON       httpTimeseriesGroupHTTPProtocolResponseSerie0JSON `json:"-"`
 }
 
@@ -404,7 +1362,8 @@ func (r httpTimeseriesGroupHTTPProtocolResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupHTTPVersionResponse struct {
-	Meta   interface{}                                  `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupHTTPVersionResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupHTTPVersionResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupHTTPVersionResponseJSON   `json:"-"`
 }
@@ -426,11 +1385,202 @@ func (r httpTimeseriesGroupHTTPVersionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupHTTPVersionResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupHTTPVersionResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupHTTPVersionResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPVersionResponseMetaJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupHTTPVersionResponseMeta]
+type httpTimeseriesGroupHTTPVersionResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupHTTPVersionResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                        `json:"level,required"`
+	JSON  httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo]
+type httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                              `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupHTTPVersionResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPVersionResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange]
+type httpTimeseriesGroupHTTPVersionResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationPercentage           HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationMinMax               HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationRawValues            HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationPercentage, HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationMinMax, HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationRawValues, HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupHTTPVersionResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupHTTPVersionResponseMetaUnit struct {
+	Name  string                                             `json:"name,required"`
+	Value string                                             `json:"value,required"`
+	JSON  httpTimeseriesGroupHTTPVersionResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupHTTPVersionResponseMetaUnitJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupHTTPVersionResponseMetaUnit]
+type httpTimeseriesGroupHTTPVersionResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupHTTPVersionResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupHTTPVersionResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupHTTPVersionResponseSerie0 struct {
 	HTTP1X     []string                                         `json:"HTTP/1.x,required"`
 	HTTP2      []string                                         `json:"HTTP/2,required"`
 	HTTP3      []string                                         `json:"HTTP/3,required"`
-	Timestamps []string                                         `json:"timestamps,required"`
+	Timestamps []time.Time                                      `json:"timestamps,required" format:"date-time"`
 	JSON       httpTimeseriesGroupHTTPVersionResponseSerie0JSON `json:"-"`
 }
 
@@ -454,7 +1604,8 @@ func (r httpTimeseriesGroupHTTPVersionResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupIPVersionResponse struct {
-	Meta   interface{}                                `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupIPVersionResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupIPVersionResponseJSON   `json:"-"`
 }
@@ -476,10 +1627,200 @@ func (r httpTimeseriesGroupIPVersionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupIPVersionResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupIPVersionResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupIPVersionResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupIPVersionResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupIPVersionResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupIPVersionResponseMetaJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupIPVersionResponseMeta]
+type httpTimeseriesGroupIPVersionResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupIPVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupIPVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupIPVersionResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupIPVersionResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupIPVersionResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupIPVersionResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupIPVersionResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupIPVersionResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupIPVersionResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupIPVersionResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                      `json:"level,required"`
+	JSON  httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo]
+type httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
+	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                            `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupIPVersionResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupIPVersionResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupIPVersionResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupIPVersionResponseMetaDateRange]
+type httpTimeseriesGroupIPVersionResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupIPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupIPVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupIPVersionResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationPercentage           HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationMinMax               HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationRawValues            HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupIPVersionResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionResponseMetaNormalizationPercentage, HTTPTimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupIPVersionResponseMetaNormalizationMinMax, HTTPTimeseriesGroupIPVersionResponseMetaNormalizationRawValues, HTTPTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupIPVersionResponseMetaUnit struct {
+	Name  string                                           `json:"name,required"`
+	Value string                                           `json:"value,required"`
+	JSON  httpTimeseriesGroupIPVersionResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupIPVersionResponseMetaUnitJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupIPVersionResponseMetaUnit]
+type httpTimeseriesGroupIPVersionResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupIPVersionResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupIPVersionResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupIPVersionResponseSerie0 struct {
 	IPv4       []string                                       `json:"IPv4,required"`
 	IPv6       []string                                       `json:"IPv6,required"`
-	Timestamps []string                                       `json:"timestamps,required"`
+	Timestamps []time.Time                                    `json:"timestamps,required" format:"date-time"`
 	JSON       httpTimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
 }
 
@@ -502,7 +1843,8 @@ func (r httpTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupOSResponse struct {
-	Meta   interface{}                         `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupOSResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupOSResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupOSResponseJSON   `json:"-"`
 }
@@ -524,8 +1866,198 @@ func (r httpTimeseriesGroupOSResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupOSResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupOSResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupOSResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupOSResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupOSResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupOSResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupOSResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupOSResponseMetaJSON contains the JSON metadata for the struct
+// [HTTPTimeseriesGroupOSResponseMeta]
+type httpTimeseriesGroupOSResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupOSResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupOSResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupOSResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupOSResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupOSResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupOSResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupOSResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupOSResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupOSResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupOSResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupOSResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupOSResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupOSResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupOSResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupOSResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupOSResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupOSResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupOSResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupOSResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                               `json:"level,required"`
+	JSON  httpTimeseriesGroupOSResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupOSResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupOSResponseMetaConfidenceInfo]
+type httpTimeseriesGroupOSResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupOSResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupOSResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupOSResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupOSResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupOSResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupOSResponseMetaDateRange]
+type httpTimeseriesGroupOSResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupOSResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupOSResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupOSResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupOSResponseMetaNormalizationPercentage           HTTPTimeseriesGroupOSResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupOSResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupOSResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupOSResponseMetaNormalizationMinMax               HTTPTimeseriesGroupOSResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupOSResponseMetaNormalizationRawValues            HTTPTimeseriesGroupOSResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupOSResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupOSResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupOSResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupOSResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupOSResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupOSResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupOSResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSResponseMetaNormalizationPercentage, HTTPTimeseriesGroupOSResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupOSResponseMetaNormalizationMinMax, HTTPTimeseriesGroupOSResponseMetaNormalizationRawValues, HTTPTimeseriesGroupOSResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupOSResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupOSResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupOSResponseMetaUnit struct {
+	Name  string                                    `json:"name,required"`
+	Value string                                    `json:"value,required"`
+	JSON  httpTimeseriesGroupOSResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupOSResponseMetaUnitJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupOSResponseMetaUnit]
+type httpTimeseriesGroupOSResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupOSResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupOSResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupOSResponseSerie0 struct {
-	Timestamps  []string                                `json:"timestamps,required"`
+	Timestamps  []time.Time                             `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                     `json:"-,extras"`
 	JSON        httpTimeseriesGroupOSResponseSerie0JSON `json:"-"`
 }
@@ -547,7 +2079,8 @@ func (r httpTimeseriesGroupOSResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupPostQuantumResponse struct {
-	Meta   interface{}                                  `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupPostQuantumResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupPostQuantumResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupPostQuantumResponseJSON   `json:"-"`
 }
@@ -569,10 +2102,201 @@ func (r httpTimeseriesGroupPostQuantumResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupPostQuantumResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupPostQuantumResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupPostQuantumResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupPostQuantumResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupPostQuantumResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseMetaJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupPostQuantumResponseMeta]
+type httpTimeseriesGroupPostQuantumResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupPostQuantumResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                        `json:"level,required"`
+	JSON  httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo]
+type httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                              `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupPostQuantumResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupPostQuantumResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupPostQuantumResponseMetaDateRange]
+type httpTimeseriesGroupPostQuantumResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupPostQuantumResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationPercentage           HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationMinMax               HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationRawValues            HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupPostQuantumResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupPostQuantumResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationPercentage, HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationMinMax, HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationRawValues, HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupPostQuantumResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupPostQuantumResponseMetaUnit struct {
+	Name  string                                             `json:"name,required"`
+	Value string                                             `json:"value,required"`
+	JSON  httpTimeseriesGroupPostQuantumResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupPostQuantumResponseMetaUnitJSON contains the JSON metadata
+// for the struct [HTTPTimeseriesGroupPostQuantumResponseMetaUnit]
+type httpTimeseriesGroupPostQuantumResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupPostQuantumResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupPostQuantumResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupPostQuantumResponseSerie0 struct {
 	NotSupported []string                                         `json:"NOT_SUPPORTED,required"`
 	Supported    []string                                         `json:"SUPPORTED,required"`
-	Timestamps   []string                                         `json:"timestamps,required"`
+	Timestamps   []time.Time                                      `json:"timestamps,required" format:"date-time"`
 	JSON         httpTimeseriesGroupPostQuantumResponseSerie0JSON `json:"-"`
 }
 
@@ -595,7 +2319,8 @@ func (r httpTimeseriesGroupPostQuantumResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupTLSVersionResponse struct {
-	Meta   interface{}                                 `json:"meta,required"`
+	// Metadata for the results.
+	Meta   HTTPTimeseriesGroupTLSVersionResponseMeta   `json:"meta,required"`
 	Serie0 HTTPTimeseriesGroupTLSVersionResponseSerie0 `json:"serie_0,required"`
 	JSON   httpTimeseriesGroupTLSVersionResponseJSON   `json:"-"`
 }
@@ -617,8 +2342,199 @@ func (r httpTimeseriesGroupTLSVersionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type HTTPTimeseriesGroupTLSVersionResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []HTTPTimeseriesGroupTLSVersionResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPTimeseriesGroupTLSVersionResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPTimeseriesGroupTLSVersionResponseMetaUnit `json:"units,required"`
+	JSON  httpTimeseriesGroupTLSVersionResponseMetaJSON   `json:"-"`
+}
+
+// httpTimeseriesGroupTLSVersionResponseMetaJSON contains the JSON metadata for the
+// struct [HTTPTimeseriesGroupTLSVersionResponseMeta]
+type httpTimeseriesGroupTLSVersionResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupTLSVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupTLSVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval string
+
+const (
+	HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalFifteenMinutes HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneHour        HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_HOUR"
+	HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneDay         HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_DAY"
+	HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneWeek        HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_WEEK"
+	HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneMonth       HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalFifteenMinutes, HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneHour, HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneDay, HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneWeek, HTTPTimeseriesGroupTLSVersionResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo struct {
+	Annotations []HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                       `json:"level,required"`
+	JSON  httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo]
+type httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	JSON            httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation]
+type httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPTimeseriesGroupTLSVersionResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	JSON      httpTimeseriesGroupTLSVersionResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpTimeseriesGroupTLSVersionResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [HTTPTimeseriesGroupTLSVersionResponseMetaDateRange]
+type httpTimeseriesGroupTLSVersionResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupTLSVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupTLSVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesGroupTLSVersionResponseMetaNormalization string
+
+const (
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationPercentage           HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "PERCENTAGE"
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationMin0Max              HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "MIN0_MAX"
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationMinMax               HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "MIN_MAX"
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationRawValues            HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "RAW_VALUES"
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationPercentageChange     HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationRollingAverage       HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationOverlappedPercentage HTTPTimeseriesGroupTLSVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPTimeseriesGroupTLSVersionResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationPercentage, HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationMin0Max, HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationMinMax, HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationRawValues, HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationPercentageChange, HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationRollingAverage, HTTPTimeseriesGroupTLSVersionResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupTLSVersionResponseMetaUnit struct {
+	Name  string                                            `json:"name,required"`
+	Value string                                            `json:"value,required"`
+	JSON  httpTimeseriesGroupTLSVersionResponseMetaUnitJSON `json:"-"`
+}
+
+// httpTimeseriesGroupTLSVersionResponseMetaUnitJSON contains the JSON metadata for
+// the struct [HTTPTimeseriesGroupTLSVersionResponseMetaUnit]
+type httpTimeseriesGroupTLSVersionResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPTimeseriesGroupTLSVersionResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpTimeseriesGroupTLSVersionResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTimeseriesGroupTLSVersionResponseSerie0 struct {
-	Timestamps []string                                        `json:"timestamps,required"`
+	Timestamps []time.Time                                     `json:"timestamps,required" format:"date-time"`
 	TLS1_0     []string                                        `json:"TLS 1.0,required"`
 	TLS1_1     []string                                        `json:"TLS 1.1,required"`
 	TLS1_2     []string                                        `json:"TLS 1.2,required"`

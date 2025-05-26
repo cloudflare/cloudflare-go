@@ -63,6 +63,7 @@ func (r *QualityIQIService) TimeseriesGroups(ctx context.Context, query QualityI
 }
 
 type QualityIQISummaryResponse struct {
+	// Metadata for the results.
 	Meta     QualityIQISummaryResponseMeta     `json:"meta,required"`
 	Summary0 QualityIQISummaryResponseSummary0 `json:"summary_0,required"`
 	JSON     qualityIQISummaryResponseJSON     `json:"-"`
@@ -85,21 +86,28 @@ func (r qualityIQISummaryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type QualityIQISummaryResponseMeta struct {
+	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []QualityIQISummaryResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                      `json:"lastUpdated,required"`
-	Normalization  string                                      `json:"normalization,required"`
-	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualityIQISummaryResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization QualityIQISummaryResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []QualityIQISummaryResponseMetaUnit `json:"units,required"`
+	JSON  qualityIQISummaryResponseMetaJSON   `json:"-"`
 }
 
 // qualityIQISummaryResponseMetaJSON contains the JSON metadata for the struct
 // [QualityIQISummaryResponseMeta]
 type qualityIQISummaryResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -109,6 +117,65 @@ func (r *QualityIQISummaryResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r qualityIQISummaryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualityIQISummaryResponseMetaConfidenceInfo struct {
+	Annotations []QualityIQISummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                           `json:"level,required"`
+	JSON  qualityIQISummaryResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// qualityIQISummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [QualityIQISummaryResponseMetaConfidenceInfo]
+type qualityIQISummaryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualityIQISummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQISummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
+	LinkedURL       string                                                    `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                 `json:"startTime,required" format:"date-time"`
+	JSON            qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [QualityIQISummaryResponseMetaConfidenceInfoAnnotation]
+type qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualityIQISummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -137,59 +204,48 @@ func (r qualityIQISummaryResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type QualityIQISummaryResponseMetaConfidenceInfo struct {
-	Annotations []QualityIQISummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                   `json:"level"`
-	JSON        qualityIQISummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type QualityIQISummaryResponseMetaNormalization string
+
+const (
+	QualityIQISummaryResponseMetaNormalizationPercentage           QualityIQISummaryResponseMetaNormalization = "PERCENTAGE"
+	QualityIQISummaryResponseMetaNormalizationMin0Max              QualityIQISummaryResponseMetaNormalization = "MIN0_MAX"
+	QualityIQISummaryResponseMetaNormalizationMinMax               QualityIQISummaryResponseMetaNormalization = "MIN_MAX"
+	QualityIQISummaryResponseMetaNormalizationRawValues            QualityIQISummaryResponseMetaNormalization = "RAW_VALUES"
+	QualityIQISummaryResponseMetaNormalizationPercentageChange     QualityIQISummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	QualityIQISummaryResponseMetaNormalizationRollingAverage       QualityIQISummaryResponseMetaNormalization = "ROLLING_AVERAGE"
+	QualityIQISummaryResponseMetaNormalizationOverlappedPercentage QualityIQISummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r QualityIQISummaryResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case QualityIQISummaryResponseMetaNormalizationPercentage, QualityIQISummaryResponseMetaNormalizationMin0Max, QualityIQISummaryResponseMetaNormalizationMinMax, QualityIQISummaryResponseMetaNormalizationRawValues, QualityIQISummaryResponseMetaNormalizationPercentageChange, QualityIQISummaryResponseMetaNormalizationRollingAverage, QualityIQISummaryResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// qualityIQISummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [QualityIQISummaryResponseMetaConfidenceInfo]
-type qualityIQISummaryResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type QualityIQISummaryResponseMetaUnit struct {
+	Name  string                                `json:"name,required"`
+	Value string                                `json:"value,required"`
+	JSON  qualityIQISummaryResponseMetaUnitJSON `json:"-"`
+}
+
+// qualityIQISummaryResponseMetaUnitJSON contains the JSON metadata for the struct
+// [QualityIQISummaryResponseMetaUnit]
+type qualityIQISummaryResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *QualityIQISummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *QualityIQISummaryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r qualityIQISummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                    `json:"dataSource,required"`
-	Description     string                                                    `json:"description,required"`
-	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [QualityIQISummaryResponseMetaConfidenceInfoAnnotation]
-type qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *QualityIQISummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r qualityIQISummaryResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -219,7 +275,8 @@ func (r qualityIQISummaryResponseSummary0JSON) RawJSON() string {
 }
 
 type QualityIQITimeseriesGroupsResponse struct {
-	Meta   interface{}                              `json:"meta,required"`
+	// Metadata for the results.
+	Meta   QualityIQITimeseriesGroupsResponseMeta   `json:"meta,required"`
 	Serie0 QualityIQITimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
 	JSON   qualityIQITimeseriesGroupsResponseJSON   `json:"-"`
 }
@@ -238,6 +295,196 @@ func (r *QualityIQITimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err err
 }
 
 func (r qualityIQITimeseriesGroupsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type QualityIQITimeseriesGroupsResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    QualityIQITimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo QualityIQITimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []QualityIQITimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization QualityIQITimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []QualityIQITimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	JSON  qualityIQITimeseriesGroupsResponseMetaJSON   `json:"-"`
+}
+
+// qualityIQITimeseriesGroupsResponseMetaJSON contains the JSON metadata for the
+// struct [QualityIQITimeseriesGroupsResponseMeta]
+type qualityIQITimeseriesGroupsResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *QualityIQITimeseriesGroupsResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQITimeseriesGroupsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type QualityIQITimeseriesGroupsResponseMetaAggInterval string
+
+const (
+	QualityIQITimeseriesGroupsResponseMetaAggIntervalFifteenMinutes QualityIQITimeseriesGroupsResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	QualityIQITimeseriesGroupsResponseMetaAggIntervalOneHour        QualityIQITimeseriesGroupsResponseMetaAggInterval = "ONE_HOUR"
+	QualityIQITimeseriesGroupsResponseMetaAggIntervalOneDay         QualityIQITimeseriesGroupsResponseMetaAggInterval = "ONE_DAY"
+	QualityIQITimeseriesGroupsResponseMetaAggIntervalOneWeek        QualityIQITimeseriesGroupsResponseMetaAggInterval = "ONE_WEEK"
+	QualityIQITimeseriesGroupsResponseMetaAggIntervalOneMonth       QualityIQITimeseriesGroupsResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r QualityIQITimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsResponseMetaAggIntervalFifteenMinutes, QualityIQITimeseriesGroupsResponseMetaAggIntervalOneHour, QualityIQITimeseriesGroupsResponseMetaAggIntervalOneDay, QualityIQITimeseriesGroupsResponseMetaAggIntervalOneWeek, QualityIQITimeseriesGroupsResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type QualityIQITimeseriesGroupsResponseMetaConfidenceInfo struct {
+	Annotations []QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                    `json:"level,required"`
+	JSON  qualityIQITimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// qualityIQITimeseriesGroupsResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [QualityIQITimeseriesGroupsResponseMetaConfidenceInfo]
+type qualityIQITimeseriesGroupsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualityIQITimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQITimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
+	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	JSON            qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
+type qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualityIQITimeseriesGroupsResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	JSON      qualityIQITimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
+}
+
+// qualityIQITimeseriesGroupsResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [QualityIQITimeseriesGroupsResponseMetaDateRange]
+type qualityIQITimeseriesGroupsResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualityIQITimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQITimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type QualityIQITimeseriesGroupsResponseMetaNormalization string
+
+const (
+	QualityIQITimeseriesGroupsResponseMetaNormalizationPercentage           QualityIQITimeseriesGroupsResponseMetaNormalization = "PERCENTAGE"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationMin0Max              QualityIQITimeseriesGroupsResponseMetaNormalization = "MIN0_MAX"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationMinMax               QualityIQITimeseriesGroupsResponseMetaNormalization = "MIN_MAX"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationRawValues            QualityIQITimeseriesGroupsResponseMetaNormalization = "RAW_VALUES"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationPercentageChange     QualityIQITimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationRollingAverage       QualityIQITimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationOverlappedPercentage QualityIQITimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r QualityIQITimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsResponseMetaNormalizationPercentage, QualityIQITimeseriesGroupsResponseMetaNormalizationMin0Max, QualityIQITimeseriesGroupsResponseMetaNormalizationMinMax, QualityIQITimeseriesGroupsResponseMetaNormalizationRawValues, QualityIQITimeseriesGroupsResponseMetaNormalizationPercentageChange, QualityIQITimeseriesGroupsResponseMetaNormalizationRollingAverage, QualityIQITimeseriesGroupsResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type QualityIQITimeseriesGroupsResponseMetaUnit struct {
+	Name  string                                         `json:"name,required"`
+	Value string                                         `json:"value,required"`
+	JSON  qualityIQITimeseriesGroupsResponseMetaUnitJSON `json:"-"`
+}
+
+// qualityIQITimeseriesGroupsResponseMetaUnitJSON contains the JSON metadata for
+// the struct [QualityIQITimeseriesGroupsResponseMetaUnit]
+type qualityIQITimeseriesGroupsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualityIQITimeseriesGroupsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQITimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -50,6 +50,7 @@ func (r *HTTPAseOSService) Get(ctx context.Context, os HTTPAseOSGetParamsOS, que
 }
 
 type HTTPAseOSGetResponse struct {
+	// Metadata for the results.
 	Meta HTTPAseOSGetResponseMeta   `json:"meta,required"`
 	Top0 []HTTPAseOSGetResponseTop0 `json:"top_0,required"`
 	JSON httpAseOSGetResponseJSON   `json:"-"`
@@ -72,19 +73,28 @@ func (r httpAseOSGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type HTTPAseOSGetResponseMeta struct {
+	ConfidenceInfo HTTPAseOSGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []HTTPAseOSGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                 `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseOSGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpAseOSGetResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPAseOSGetResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPAseOSGetResponseMetaUnit `json:"units,required"`
+	JSON  httpAseOSGetResponseMetaJSON   `json:"-"`
 }
 
 // httpAseOSGetResponseMetaJSON contains the JSON metadata for the struct
 // [HTTPAseOSGetResponseMeta]
 type httpAseOSGetResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -94,6 +104,65 @@ func (r *HTTPAseOSGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r httpAseOSGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseOSGetResponseMetaConfidenceInfo struct {
+	Annotations []HTTPAseOSGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                      `json:"level,required"`
+	JSON  httpAseOSGetResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpAseOSGetResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [HTTPAseOSGetResponseMetaConfidenceInfo]
+type httpAseOSGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseOSGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseOSGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPAseOSGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
+	LinkedURL       string                                               `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON            httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
+// for the struct [HTTPAseOSGetResponseMetaConfidenceInfoAnnotation]
+type httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPAseOSGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -122,67 +191,57 @@ func (r httpAseOSGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPAseOSGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseOSGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        httpAseOSGetResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPAseOSGetResponseMetaNormalization string
+
+const (
+	HTTPAseOSGetResponseMetaNormalizationPercentage           HTTPAseOSGetResponseMetaNormalization = "PERCENTAGE"
+	HTTPAseOSGetResponseMetaNormalizationMin0Max              HTTPAseOSGetResponseMetaNormalization = "MIN0_MAX"
+	HTTPAseOSGetResponseMetaNormalizationMinMax               HTTPAseOSGetResponseMetaNormalization = "MIN_MAX"
+	HTTPAseOSGetResponseMetaNormalizationRawValues            HTTPAseOSGetResponseMetaNormalization = "RAW_VALUES"
+	HTTPAseOSGetResponseMetaNormalizationPercentageChange     HTTPAseOSGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPAseOSGetResponseMetaNormalizationRollingAverage       HTTPAseOSGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPAseOSGetResponseMetaNormalizationOverlappedPercentage HTTPAseOSGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPAseOSGetResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetResponseMetaNormalizationPercentage, HTTPAseOSGetResponseMetaNormalizationMin0Max, HTTPAseOSGetResponseMetaNormalizationMinMax, HTTPAseOSGetResponseMetaNormalizationRawValues, HTTPAseOSGetResponseMetaNormalizationPercentageChange, HTTPAseOSGetResponseMetaNormalizationRollingAverage, HTTPAseOSGetResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// httpAseOSGetResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [HTTPAseOSGetResponseMetaConfidenceInfo]
-type httpAseOSGetResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type HTTPAseOSGetResponseMetaUnit struct {
+	Name  string                           `json:"name,required"`
+	Value string                           `json:"value,required"`
+	JSON  httpAseOSGetResponseMetaUnitJSON `json:"-"`
+}
+
+// httpAseOSGetResponseMetaUnitJSON contains the JSON metadata for the struct
+// [HTTPAseOSGetResponseMetaUnit]
+type httpAseOSGetResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HTTPAseOSGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPAseOSGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r httpAseOSGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseOSGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                               `json:"dataSource,required"`
-	Description     string                                               `json:"description,required"`
-	EventType       string                                               `json:"eventType,required"`
-	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
-	EndTime         time.Time                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                               `json:"linkedUrl"`
-	StartTime       time.Time                                            `json:"startTime" format:"date-time"`
-	JSON            httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [HTTPAseOSGetResponseMetaConfidenceInfoAnnotation]
-type httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPAseOSGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r httpAseOSGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type HTTPAseOSGetResponseTop0 struct {
-	ClientASN    int64                        `json:"clientASN,required"`
-	ClientAsName string                       `json:"clientASName,required"`
-	Value        string                       `json:"value,required"`
-	JSON         httpAseOSGetResponseTop0JSON `json:"-"`
+	ClientASN    int64  `json:"clientASN,required"`
+	ClientAsName string `json:"clientASName,required"`
+	// A numeric string.
+	Value string                       `json:"value,required"`
+	JSON  httpAseOSGetResponseTop0JSON `json:"-"`
 }
 
 // httpAseOSGetResponseTop0JSON contains the JSON metadata for the struct

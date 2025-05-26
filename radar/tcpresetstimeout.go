@@ -63,6 +63,7 @@ func (r *TCPResetsTimeoutService) TimeseriesGroups(ctx context.Context, query TC
 }
 
 type TCPResetsTimeoutSummaryResponse struct {
+	// Metadata for the results.
 	Meta     TCPResetsTimeoutSummaryResponseMeta     `json:"meta,required"`
 	Summary0 TCPResetsTimeoutSummaryResponseSummary0 `json:"summary_0,required"`
 	JSON     tcpResetsTimeoutSummaryResponseJSON     `json:"-"`
@@ -85,17 +86,28 @@ func (r tcpResetsTimeoutSummaryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type TCPResetsTimeoutSummaryResponseMeta struct {
+	ConfidenceInfo TCPResetsTimeoutSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []TCPResetsTimeoutSummaryResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo TCPResetsTimeoutSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           tcpResetsTimeoutSummaryResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization TCPResetsTimeoutSummaryResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []TCPResetsTimeoutSummaryResponseMetaUnit `json:"units,required"`
+	JSON  tcpResetsTimeoutSummaryResponseMetaJSON   `json:"-"`
 }
 
 // tcpResetsTimeoutSummaryResponseMetaJSON contains the JSON metadata for the
 // struct [TCPResetsTimeoutSummaryResponseMeta]
 type tcpResetsTimeoutSummaryResponseMetaJSON struct {
-	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -105,6 +117,66 @@ func (r *TCPResetsTimeoutSummaryResponseMeta) UnmarshalJSON(data []byte) (err er
 }
 
 func (r tcpResetsTimeoutSummaryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type TCPResetsTimeoutSummaryResponseMetaConfidenceInfo struct {
+	Annotations []TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                 `json:"level,required"`
+	JSON  tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [TCPResetsTimeoutSummaryResponseMetaConfidenceInfo]
+type tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
+	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON            tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation]
+type tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -133,60 +205,48 @@ func (r tcpResetsTimeoutSummaryResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TCPResetsTimeoutSummaryResponseMetaConfidenceInfo struct {
-	Annotations []TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                         `json:"level"`
-	JSON        tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type TCPResetsTimeoutSummaryResponseMetaNormalization string
+
+const (
+	TCPResetsTimeoutSummaryResponseMetaNormalizationPercentage           TCPResetsTimeoutSummaryResponseMetaNormalization = "PERCENTAGE"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationMin0Max              TCPResetsTimeoutSummaryResponseMetaNormalization = "MIN0_MAX"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationMinMax               TCPResetsTimeoutSummaryResponseMetaNormalization = "MIN_MAX"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationRawValues            TCPResetsTimeoutSummaryResponseMetaNormalization = "RAW_VALUES"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationPercentageChange     TCPResetsTimeoutSummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationRollingAverage       TCPResetsTimeoutSummaryResponseMetaNormalization = "ROLLING_AVERAGE"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationOverlappedPercentage TCPResetsTimeoutSummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r TCPResetsTimeoutSummaryResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutSummaryResponseMetaNormalizationPercentage, TCPResetsTimeoutSummaryResponseMetaNormalizationMin0Max, TCPResetsTimeoutSummaryResponseMetaNormalizationMinMax, TCPResetsTimeoutSummaryResponseMetaNormalizationRawValues, TCPResetsTimeoutSummaryResponseMetaNormalizationPercentageChange, TCPResetsTimeoutSummaryResponseMetaNormalizationRollingAverage, TCPResetsTimeoutSummaryResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [TCPResetsTimeoutSummaryResponseMetaConfidenceInfo]
-type tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type TCPResetsTimeoutSummaryResponseMetaUnit struct {
+	Name  string                                      `json:"name,required"`
+	Value string                                      `json:"value,required"`
+	JSON  tcpResetsTimeoutSummaryResponseMetaUnitJSON `json:"-"`
+}
+
+// tcpResetsTimeoutSummaryResponseMetaUnitJSON contains the JSON metadata for the
+// struct [TCPResetsTimeoutSummaryResponseMetaUnit]
+type tcpResetsTimeoutSummaryResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *TCPResetsTimeoutSummaryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                          `json:"dataSource,required"`
-	Description     string                                                          `json:"description,required"`
-	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                          `json:"linkedUrl"`
-	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
-	JSON            tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation]
-type tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r tcpResetsTimeoutSummaryResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -229,6 +289,7 @@ func (r tcpResetsTimeoutSummaryResponseSummary0JSON) RawJSON() string {
 }
 
 type TCPResetsTimeoutTimeseriesGroupsResponse struct {
+	// Metadata for the results.
 	Meta   TCPResetsTimeoutTimeseriesGroupsResponseMeta   `json:"meta,required"`
 	Serie0 TCPResetsTimeoutTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
 	JSON   tcpResetsTimeoutTimeseriesGroupsResponseJSON   `json:"-"`
@@ -251,21 +312,33 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type TCPResetsTimeoutTimeseriesGroupsResponseMeta struct {
-	AggInterval    string                                                     `json:"aggInterval,required"`
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []TCPResetsTimeoutTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    time.Time                                                  `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []TCPResetsTimeoutTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	JSON  tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
 // tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON contains the JSON metadata for
 // the struct [TCPResetsTimeoutTimeseriesGroupsResponseMeta]
 type tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON struct {
 	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -275,6 +348,88 @@ func (r *TCPResetsTimeoutTimeseriesGroupsResponseMeta) UnmarshalJSON(data []byte
 }
 
 func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval string
+
+const (
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalFifteenMinutes TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneHour        TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval = "ONE_HOUR"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneDay         TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval = "ONE_DAY"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneWeek        TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval = "ONE_WEEK"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneMonth       TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r TCPResetsTimeoutTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalFifteenMinutes, TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneHour, TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneDay, TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneWeek, TCPResetsTimeoutTimeseriesGroupsResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo struct {
+	Annotations []TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                          `json:"level,required"`
+	JSON  tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo]
+type tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	JSON            tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
+type tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -303,61 +458,48 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() str
 	return r.raw
 }
 
-type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                  `json:"level"`
-	JSON        tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization string
+
+const (
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentage           TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMin0Max              TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "MIN0_MAX"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMinMax               TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "MIN_MAX"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRawValues            TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "RAW_VALUES"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentageChange     TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRollingAverage       TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMin0Max, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMinMax, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRawValues, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentageChange, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRollingAverage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo]
-type tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaUnit struct {
+	Name  string                                               `json:"name,required"`
+	Value string                                               `json:"value,required"`
+	JSON  tcpResetsTimeoutTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
+}
+
+// tcpResetsTimeoutTimeseriesGroupsResponseMetaUnitJSON contains the JSON metadata
+// for the struct [TCPResetsTimeoutTimeseriesGroupsResponseMetaUnit]
+type tcpResetsTimeoutTimeseriesGroupsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                   `json:"dataSource,required"`
-	Description     string                                                                   `json:"description,required"`
-	EventType       string                                                                   `json:"eventType,required"`
-	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                   `json:"linkedUrl"`
-	StartTime       time.Time                                                                `json:"startTime" format:"date-time"`
-	JSON            tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
-type tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

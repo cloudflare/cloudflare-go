@@ -49,6 +49,7 @@ func (r *HTTPLocationIPVersionService) Get(ctx context.Context, ipVersion HTTPLo
 }
 
 type HTTPLocationIPVersionGetResponse struct {
+	// Metadata for the results.
 	Meta HTTPLocationIPVersionGetResponseMeta   `json:"meta,required"`
 	Top0 []HTTPLocationIPVersionGetResponseTop0 `json:"top_0,required"`
 	JSON httpLocationIPVersionGetResponseJSON   `json:"-"`
@@ -71,19 +72,28 @@ func (r httpLocationIPVersionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type HTTPLocationIPVersionGetResponseMeta struct {
+	ConfidenceInfo HTTPLocationIPVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []HTTPLocationIPVersionGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                             `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPLocationIPVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpLocationIPVersionGetResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPLocationIPVersionGetResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPLocationIPVersionGetResponseMetaUnit `json:"units,required"`
+	JSON  httpLocationIPVersionGetResponseMetaJSON   `json:"-"`
 }
 
 // httpLocationIPVersionGetResponseMetaJSON contains the JSON metadata for the
 // struct [HTTPLocationIPVersionGetResponseMeta]
 type httpLocationIPVersionGetResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -93,6 +103,66 @@ func (r *HTTPLocationIPVersionGetResponseMeta) UnmarshalJSON(data []byte) (err e
 }
 
 func (r httpLocationIPVersionGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPLocationIPVersionGetResponseMetaConfidenceInfo struct {
+	Annotations []HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                  `json:"level,required"`
+	JSON  httpLocationIPVersionGetResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpLocationIPVersionGetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [HTTPLocationIPVersionGetResponseMetaConfidenceInfo]
+type httpLocationIPVersionGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPLocationIPVersionGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpLocationIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
+	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	JSON            httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation]
+type httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -121,68 +191,57 @@ func (r httpLocationIPVersionGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPLocationIPVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                          `json:"level"`
-	JSON        httpLocationIPVersionGetResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPLocationIPVersionGetResponseMetaNormalization string
+
+const (
+	HTTPLocationIPVersionGetResponseMetaNormalizationPercentage           HTTPLocationIPVersionGetResponseMetaNormalization = "PERCENTAGE"
+	HTTPLocationIPVersionGetResponseMetaNormalizationMin0Max              HTTPLocationIPVersionGetResponseMetaNormalization = "MIN0_MAX"
+	HTTPLocationIPVersionGetResponseMetaNormalizationMinMax               HTTPLocationIPVersionGetResponseMetaNormalization = "MIN_MAX"
+	HTTPLocationIPVersionGetResponseMetaNormalizationRawValues            HTTPLocationIPVersionGetResponseMetaNormalization = "RAW_VALUES"
+	HTTPLocationIPVersionGetResponseMetaNormalizationPercentageChange     HTTPLocationIPVersionGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPLocationIPVersionGetResponseMetaNormalizationRollingAverage       HTTPLocationIPVersionGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPLocationIPVersionGetResponseMetaNormalizationOverlappedPercentage HTTPLocationIPVersionGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPLocationIPVersionGetResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPLocationIPVersionGetResponseMetaNormalizationPercentage, HTTPLocationIPVersionGetResponseMetaNormalizationMin0Max, HTTPLocationIPVersionGetResponseMetaNormalizationMinMax, HTTPLocationIPVersionGetResponseMetaNormalizationRawValues, HTTPLocationIPVersionGetResponseMetaNormalizationPercentageChange, HTTPLocationIPVersionGetResponseMetaNormalizationRollingAverage, HTTPLocationIPVersionGetResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// httpLocationIPVersionGetResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [HTTPLocationIPVersionGetResponseMetaConfidenceInfo]
-type httpLocationIPVersionGetResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type HTTPLocationIPVersionGetResponseMetaUnit struct {
+	Name  string                                       `json:"name,required"`
+	Value string                                       `json:"value,required"`
+	JSON  httpLocationIPVersionGetResponseMetaUnitJSON `json:"-"`
+}
+
+// httpLocationIPVersionGetResponseMetaUnitJSON contains the JSON metadata for the
+// struct [HTTPLocationIPVersionGetResponseMetaUnit]
+type httpLocationIPVersionGetResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HTTPLocationIPVersionGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPLocationIPVersionGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r httpLocationIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                           `json:"dataSource,required"`
-	Description     string                                                           `json:"description,required"`
-	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                           `json:"linkedUrl"`
-	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
-	JSON            httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation]
-type httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r httpLocationIPVersionGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type HTTPLocationIPVersionGetResponseTop0 struct {
-	ClientCountryAlpha2 string                                   `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                   `json:"clientCountryName,required"`
-	Value               string                                   `json:"value,required"`
-	JSON                httpLocationIPVersionGetResponseTop0JSON `json:"-"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string `json:"clientCountryName,required"`
+	// A numeric string.
+	Value string                                   `json:"value,required"`
+	JSON  httpLocationIPVersionGetResponseTop0JSON `json:"-"`
 }
 
 // httpLocationIPVersionGetResponseTop0JSON contains the JSON metadata for the

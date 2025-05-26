@@ -61,7 +61,8 @@ func (r *AIInferenceTimeseriesGroupSummaryService) Task(ctx context.Context, que
 }
 
 type AIInferenceTimeseriesGroupSummaryModelResponse struct {
-	Meta   interface{}                                          `json:"meta,required"`
+	// Metadata for the results.
+	Meta   AIInferenceTimeseriesGroupSummaryModelResponseMeta   `json:"meta,required"`
 	Serie0 AIInferenceTimeseriesGroupSummaryModelResponseSerie0 `json:"serie_0,required"`
 	JSON   aiInferenceTimeseriesGroupSummaryModelResponseJSON   `json:"-"`
 }
@@ -83,8 +84,200 @@ func (r aiInferenceTimeseriesGroupSummaryModelResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type AIInferenceTimeseriesGroupSummaryModelResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []AIInferenceTimeseriesGroupSummaryModelResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AIInferenceTimeseriesGroupSummaryModelResponseMetaUnit `json:"units,required"`
+	JSON  aiInferenceTimeseriesGroupSummaryModelResponseMetaJSON   `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryModelResponseMetaJSON contains the JSON
+// metadata for the struct [AIInferenceTimeseriesGroupSummaryModelResponseMeta]
+type aiInferenceTimeseriesGroupSummaryModelResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryModelResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryModelResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval string
+
+const (
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalFifteenMinutes AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneHour        AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval = "ONE_HOUR"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneDay         AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval = "ONE_DAY"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneWeek        AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval = "ONE_WEEK"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneMonth       AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r AIInferenceTimeseriesGroupSummaryModelResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalFifteenMinutes, AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneHour, AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneDay, AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneWeek, AIInferenceTimeseriesGroupSummaryModelResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfo struct {
+	Annotations []AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                                `json:"level,required"`
+	JSON  aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoJSON contains
+// the JSON metadata for the struct
+// [AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfo]
+type aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                           `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                         `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                      `json:"startTime,required" format:"date-time"`
+	JSON            aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation]
+type aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIInferenceTimeseriesGroupSummaryModelResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON      aiInferenceTimeseriesGroupSummaryModelResponseMetaDateRangeJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryModelResponseMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [AIInferenceTimeseriesGroupSummaryModelResponseMetaDateRange]
+type aiInferenceTimeseriesGroupSummaryModelResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryModelResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryModelResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization string
+
+const (
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentage           AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "PERCENTAGE"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMin0Max              AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "MIN0_MAX"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMinMax               AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "MIN_MAX"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRawValues            AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "RAW_VALUES"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentageChange     AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRollingAverage       AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "ROLLING_AVERAGE"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationOverlappedPercentage AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMin0Max, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMinMax, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRawValues, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentageChange, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRollingAverage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type AIInferenceTimeseriesGroupSummaryModelResponseMetaUnit struct {
+	Name  string                                                     `json:"name,required"`
+	Value string                                                     `json:"value,required"`
+	JSON  aiInferenceTimeseriesGroupSummaryModelResponseMetaUnitJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryModelResponseMetaUnitJSON contains the JSON
+// metadata for the struct [AIInferenceTimeseriesGroupSummaryModelResponseMetaUnit]
+type aiInferenceTimeseriesGroupSummaryModelResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryModelResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryModelResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIInferenceTimeseriesGroupSummaryModelResponseSerie0 struct {
-	Timestamps  []string                                                 `json:"timestamps,required"`
+	Timestamps  []time.Time                                              `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                                      `json:"-,extras"`
 	JSON        aiInferenceTimeseriesGroupSummaryModelResponseSerie0JSON `json:"-"`
 }
@@ -106,7 +299,8 @@ func (r aiInferenceTimeseriesGroupSummaryModelResponseSerie0JSON) RawJSON() stri
 }
 
 type AIInferenceTimeseriesGroupSummaryTaskResponse struct {
-	Meta   interface{}                                         `json:"meta,required"`
+	// Metadata for the results.
+	Meta   AIInferenceTimeseriesGroupSummaryTaskResponseMeta   `json:"meta,required"`
 	Serie0 AIInferenceTimeseriesGroupSummaryTaskResponseSerie0 `json:"serie_0,required"`
 	JSON   aiInferenceTimeseriesGroupSummaryTaskResponseJSON   `json:"-"`
 }
@@ -128,8 +322,200 @@ func (r aiInferenceTimeseriesGroupSummaryTaskResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type AIInferenceTimeseriesGroupSummaryTaskResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []AIInferenceTimeseriesGroupSummaryTaskResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AIInferenceTimeseriesGroupSummaryTaskResponseMetaUnit `json:"units,required"`
+	JSON  aiInferenceTimeseriesGroupSummaryTaskResponseMetaJSON   `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryTaskResponseMetaJSON contains the JSON metadata
+// for the struct [AIInferenceTimeseriesGroupSummaryTaskResponseMeta]
+type aiInferenceTimeseriesGroupSummaryTaskResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryTaskResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryTaskResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval string
+
+const (
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalFifteenMinutes AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneHour        AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval = "ONE_HOUR"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneDay         AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval = "ONE_DAY"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneWeek        AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval = "ONE_WEEK"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneMonth       AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalFifteenMinutes, AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneHour, AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneDay, AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneWeek, AIInferenceTimeseriesGroupSummaryTaskResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfo struct {
+	Annotations []AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                               `json:"level,required"`
+	JSON  aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfo]
+type aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                        `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                     `json:"startTime,required" format:"date-time"`
+	JSON            aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation]
+type aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIInferenceTimeseriesGroupSummaryTaskResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                      `json:"startTime,required" format:"date-time"`
+	JSON      aiInferenceTimeseriesGroupSummaryTaskResponseMetaDateRangeJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryTaskResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [AIInferenceTimeseriesGroupSummaryTaskResponseMetaDateRange]
+type aiInferenceTimeseriesGroupSummaryTaskResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryTaskResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryTaskResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization string
+
+const (
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentage           AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "PERCENTAGE"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMin0Max              AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "MIN0_MAX"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMinMax               AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "MIN_MAX"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRawValues            AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "RAW_VALUES"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentageChange     AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRollingAverage       AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "ROLLING_AVERAGE"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationOverlappedPercentage AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMin0Max, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMinMax, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRawValues, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentageChange, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRollingAverage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type AIInferenceTimeseriesGroupSummaryTaskResponseMetaUnit struct {
+	Name  string                                                    `json:"name,required"`
+	Value string                                                    `json:"value,required"`
+	JSON  aiInferenceTimeseriesGroupSummaryTaskResponseMetaUnitJSON `json:"-"`
+}
+
+// aiInferenceTimeseriesGroupSummaryTaskResponseMetaUnitJSON contains the JSON
+// metadata for the struct [AIInferenceTimeseriesGroupSummaryTaskResponseMetaUnit]
+type aiInferenceTimeseriesGroupSummaryTaskResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceTimeseriesGroupSummaryTaskResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceTimeseriesGroupSummaryTaskResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIInferenceTimeseriesGroupSummaryTaskResponseSerie0 struct {
-	Timestamps  []string                                                `json:"timestamps,required"`
+	Timestamps  []time.Time                                             `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                                     `json:"-,extras"`
 	JSON        aiInferenceTimeseriesGroupSummaryTaskResponseSerie0JSON `json:"-"`
 }

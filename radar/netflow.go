@@ -64,6 +64,7 @@ func (r *NetflowService) Timeseries(ctx context.Context, query NetflowTimeseries
 }
 
 type NetflowSummaryResponse struct {
+	// Metadata for the results.
 	Meta     NetflowSummaryResponseMeta     `json:"meta,required"`
 	Summary0 NetflowSummaryResponseSummary0 `json:"summary_0,required"`
 	JSON     netflowSummaryResponseJSON     `json:"-"`
@@ -86,17 +87,28 @@ func (r netflowSummaryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type NetflowSummaryResponseMeta struct {
+	ConfidenceInfo NetflowSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []NetflowSummaryResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo NetflowSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           netflowSummaryResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization NetflowSummaryResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []NetflowSummaryResponseMetaUnit `json:"units,required"`
+	JSON  netflowSummaryResponseMetaJSON   `json:"-"`
 }
 
 // netflowSummaryResponseMetaJSON contains the JSON metadata for the struct
 // [NetflowSummaryResponseMeta]
 type netflowSummaryResponseMetaJSON struct {
-	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -106,6 +118,65 @@ func (r *NetflowSummaryResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r netflowSummaryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetflowSummaryResponseMetaConfidenceInfo struct {
+	Annotations []NetflowSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                        `json:"level,required"`
+	JSON  netflowSummaryResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// netflowSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [NetflowSummaryResponseMetaConfidenceInfo]
+type netflowSummaryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type NetflowSummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
+	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                              `json:"startTime,required" format:"date-time"`
+	JSON            netflowSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// netflowSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [NetflowSummaryResponseMetaConfidenceInfoAnnotation]
+type netflowSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *NetflowSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -134,64 +205,55 @@ func (r netflowSummaryResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetflowSummaryResponseMetaConfidenceInfo struct {
-	Annotations []NetflowSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        netflowSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type NetflowSummaryResponseMetaNormalization string
+
+const (
+	NetflowSummaryResponseMetaNormalizationPercentage           NetflowSummaryResponseMetaNormalization = "PERCENTAGE"
+	NetflowSummaryResponseMetaNormalizationMin0Max              NetflowSummaryResponseMetaNormalization = "MIN0_MAX"
+	NetflowSummaryResponseMetaNormalizationMinMax               NetflowSummaryResponseMetaNormalization = "MIN_MAX"
+	NetflowSummaryResponseMetaNormalizationRawValues            NetflowSummaryResponseMetaNormalization = "RAW_VALUES"
+	NetflowSummaryResponseMetaNormalizationPercentageChange     NetflowSummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	NetflowSummaryResponseMetaNormalizationRollingAverage       NetflowSummaryResponseMetaNormalization = "ROLLING_AVERAGE"
+	NetflowSummaryResponseMetaNormalizationOverlappedPercentage NetflowSummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r NetflowSummaryResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case NetflowSummaryResponseMetaNormalizationPercentage, NetflowSummaryResponseMetaNormalizationMin0Max, NetflowSummaryResponseMetaNormalizationMinMax, NetflowSummaryResponseMetaNormalizationRawValues, NetflowSummaryResponseMetaNormalizationPercentageChange, NetflowSummaryResponseMetaNormalizationRollingAverage, NetflowSummaryResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// netflowSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [NetflowSummaryResponseMetaConfidenceInfo]
-type netflowSummaryResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type NetflowSummaryResponseMetaUnit struct {
+	Name  string                             `json:"name,required"`
+	Value string                             `json:"value,required"`
+	JSON  netflowSummaryResponseMetaUnitJSON `json:"-"`
+}
+
+// netflowSummaryResponseMetaUnitJSON contains the JSON metadata for the struct
+// [NetflowSummaryResponseMetaUnit]
+type netflowSummaryResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NetflowSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *NetflowSummaryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r netflowSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetflowSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                 `json:"dataSource,required"`
-	Description     string                                                 `json:"description,required"`
-	EventType       string                                                 `json:"eventType,required"`
-	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
-	EndTime         time.Time                                              `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                 `json:"linkedUrl"`
-	StartTime       time.Time                                              `json:"startTime" format:"date-time"`
-	JSON            netflowSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// netflowSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [NetflowSummaryResponseMetaConfidenceInfoAnnotation]
-type netflowSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *NetflowSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r netflowSummaryResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type NetflowSummaryResponseSummary0 struct {
-	HTTP  string                             `json:"HTTP,required"`
+	// A numeric string.
+	HTTP string `json:"HTTP,required"`
+	// A numeric string.
 	Other string                             `json:"OTHER,required"`
 	JSON  netflowSummaryResponseSummary0JSON `json:"-"`
 }
@@ -214,6 +276,7 @@ func (r netflowSummaryResponseSummary0JSON) RawJSON() string {
 }
 
 type NetflowTimeseriesResponse struct {
+	// Metadata for the results.
 	Meta   NetflowTimeseriesResponseMeta   `json:"meta,required"`
 	Serie0 NetflowTimeseriesResponseSerie0 `json:"serie_0,required"`
 	JSON   netflowTimeseriesResponseJSON   `json:"-"`
@@ -236,21 +299,33 @@ func (r netflowTimeseriesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type NetflowTimeseriesResponseMeta struct {
-	AggInterval    string                                      `json:"aggInterval,required"`
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    NetflowTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo NetflowTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []NetflowTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    time.Time                                   `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo NetflowTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           netflowTimeseriesResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization NetflowTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []NetflowTimeseriesResponseMetaUnit `json:"units,required"`
+	JSON  netflowTimeseriesResponseMetaJSON   `json:"-"`
 }
 
 // netflowTimeseriesResponseMetaJSON contains the JSON metadata for the struct
 // [NetflowTimeseriesResponseMeta]
 type netflowTimeseriesResponseMetaJSON struct {
 	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -260,6 +335,86 @@ func (r *NetflowTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r netflowTimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type NetflowTimeseriesResponseMetaAggInterval string
+
+const (
+	NetflowTimeseriesResponseMetaAggIntervalFifteenMinutes NetflowTimeseriesResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	NetflowTimeseriesResponseMetaAggIntervalOneHour        NetflowTimeseriesResponseMetaAggInterval = "ONE_HOUR"
+	NetflowTimeseriesResponseMetaAggIntervalOneDay         NetflowTimeseriesResponseMetaAggInterval = "ONE_DAY"
+	NetflowTimeseriesResponseMetaAggIntervalOneWeek        NetflowTimeseriesResponseMetaAggInterval = "ONE_WEEK"
+	NetflowTimeseriesResponseMetaAggIntervalOneMonth       NetflowTimeseriesResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r NetflowTimeseriesResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesResponseMetaAggIntervalFifteenMinutes, NetflowTimeseriesResponseMetaAggIntervalOneHour, NetflowTimeseriesResponseMetaAggIntervalOneDay, NetflowTimeseriesResponseMetaAggIntervalOneWeek, NetflowTimeseriesResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type NetflowTimeseriesResponseMetaConfidenceInfo struct {
+	Annotations []NetflowTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                           `json:"level,required"`
+	JSON  netflowTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// netflowTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [NetflowTimeseriesResponseMetaConfidenceInfo]
+type netflowTimeseriesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type NetflowTimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
+	LinkedURL       string                                                    `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                 `json:"startTime,required" format:"date-time"`
+	JSON            netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [NetflowTimeseriesResponseMetaConfidenceInfoAnnotation]
+type netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *NetflowTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -288,59 +443,48 @@ func (r netflowTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetflowTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []NetflowTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                   `json:"level"`
-	JSON        netflowTimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type NetflowTimeseriesResponseMetaNormalization string
+
+const (
+	NetflowTimeseriesResponseMetaNormalizationPercentage           NetflowTimeseriesResponseMetaNormalization = "PERCENTAGE"
+	NetflowTimeseriesResponseMetaNormalizationMin0Max              NetflowTimeseriesResponseMetaNormalization = "MIN0_MAX"
+	NetflowTimeseriesResponseMetaNormalizationMinMax               NetflowTimeseriesResponseMetaNormalization = "MIN_MAX"
+	NetflowTimeseriesResponseMetaNormalizationRawValues            NetflowTimeseriesResponseMetaNormalization = "RAW_VALUES"
+	NetflowTimeseriesResponseMetaNormalizationPercentageChange     NetflowTimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	NetflowTimeseriesResponseMetaNormalizationRollingAverage       NetflowTimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
+	NetflowTimeseriesResponseMetaNormalizationOverlappedPercentage NetflowTimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r NetflowTimeseriesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesResponseMetaNormalizationPercentage, NetflowTimeseriesResponseMetaNormalizationMin0Max, NetflowTimeseriesResponseMetaNormalizationMinMax, NetflowTimeseriesResponseMetaNormalizationRawValues, NetflowTimeseriesResponseMetaNormalizationPercentageChange, NetflowTimeseriesResponseMetaNormalizationRollingAverage, NetflowTimeseriesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// netflowTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [NetflowTimeseriesResponseMetaConfidenceInfo]
-type netflowTimeseriesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type NetflowTimeseriesResponseMetaUnit struct {
+	Name  string                                `json:"name,required"`
+	Value string                                `json:"value,required"`
+	JSON  netflowTimeseriesResponseMetaUnitJSON `json:"-"`
+}
+
+// netflowTimeseriesResponseMetaUnitJSON contains the JSON metadata for the struct
+// [NetflowTimeseriesResponseMetaUnit]
+type netflowTimeseriesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NetflowTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *NetflowTimeseriesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r netflowTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetflowTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                    `json:"dataSource,required"`
-	Description     string                                                    `json:"description,required"`
-	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [NetflowTimeseriesResponseMetaConfidenceInfoAnnotation]
-type netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *NetflowTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r netflowTimeseriesResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
