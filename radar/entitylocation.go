@@ -89,8 +89,10 @@ func (r entityLocationListResponseJSON) RawJSON() string {
 }
 
 type EntityLocationListResponseLocation struct {
-	Alpha2    string                                 `json:"alpha2,required"`
-	Latitude  string                                 `json:"latitude,required"`
+	Alpha2 string `json:"alpha2,required"`
+	// A numeric string.
+	Latitude string `json:"latitude,required"`
+	// A numeric string.
 	Longitude string                                 `json:"longitude,required"`
 	Name      string                                 `json:"name,required"`
 	JSON      entityLocationListResponseLocationJSON `json:"-"`
@@ -137,14 +139,16 @@ func (r entityLocationGetResponseJSON) RawJSON() string {
 }
 
 type EntityLocationGetResponseLocation struct {
-	Alpha2          string                                `json:"alpha2,required"`
-	ConfidenceLevel int64                                 `json:"confidenceLevel,required"`
-	Latitude        string                                `json:"latitude,required"`
-	Longitude       string                                `json:"longitude,required"`
-	Name            string                                `json:"name,required"`
-	Region          string                                `json:"region,required"`
-	Subregion       string                                `json:"subregion,required"`
-	JSON            entityLocationGetResponseLocationJSON `json:"-"`
+	Alpha2          string `json:"alpha2,required"`
+	ConfidenceLevel int64  `json:"confidenceLevel,required"`
+	// A numeric string.
+	Latitude string `json:"latitude,required"`
+	// A numeric string.
+	Longitude string                                `json:"longitude,required"`
+	Name      string                                `json:"name,required"`
+	Region    string                                `json:"region,required"`
+	Subregion string                                `json:"subregion,required"`
+	JSON      entityLocationGetResponseLocationJSON `json:"-"`
 }
 
 // entityLocationGetResponseLocationJSON contains the JSON metadata for the struct

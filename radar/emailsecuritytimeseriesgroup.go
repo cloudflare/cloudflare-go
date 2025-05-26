@@ -158,7 +158,8 @@ func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, qu
 }
 
 type EmailSecurityTimeseriesGroupARCResponse struct {
-	Meta   interface{}                                 `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupARCResponseMeta `json:"meta,required"`
 	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupARCResponseJSON `json:"-"`
 }
@@ -180,8 +181,200 @@ func (r emailSecurityTimeseriesGroupARCResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupARCResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupARCResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupARCResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupARCResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupARCResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupARCResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupARCResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTimeseriesGroupARCResponseMeta]
+type emailSecurityTimeseriesGroupARCResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupARCResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupARCResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupARCResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupARCResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupARCResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupARCResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupARCResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupARCResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupARCResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                         `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                               `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupARCResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupARCResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupARCResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupARCResponseMetaDateRange]
+type emailSecurityTimeseriesGroupARCResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupARCResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupARCResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupARCResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupARCResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupARCResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupARCResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupARCResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupARCResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupARCResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupARCResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupARCResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupARCResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupARCResponseMetaUnit struct {
+	Name  string                                              `json:"name,required"`
+	Value string                                              `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupARCResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupARCResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupARCResponseMetaUnit]
+type emailSecurityTimeseriesGroupARCResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupARCResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupARCResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailSecurityTimeseriesGroupDKIMResponse struct {
-	Meta   interface{}                                  `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupDKIMResponseMeta `json:"meta,required"`
 	Serie0 RadarEmailSeries                             `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupDKIMResponseJSON `json:"-"`
 }
@@ -203,8 +396,200 @@ func (r emailSecurityTimeseriesGroupDKIMResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupDKIMResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupDKIMResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupDKIMResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupDKIMResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDKIMResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTimeseriesGroupDKIMResponseMeta]
+type emailSecurityTimeseriesGroupDKIMResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDKIMResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDKIMResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupDKIMResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupDKIMResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                          `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupDKIMResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupDKIMResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDKIMResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupDKIMResponseMetaDateRange]
+type emailSecurityTimeseriesGroupDKIMResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDKIMResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDKIMResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupDKIMResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupDKIMResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupDKIMResponseMetaUnit struct {
+	Name  string                                               `json:"name,required"`
+	Value string                                               `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupDKIMResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDKIMResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupDKIMResponseMetaUnit]
+type emailSecurityTimeseriesGroupDKIMResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDKIMResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDKIMResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailSecurityTimeseriesGroupDMARCResponse struct {
-	Meta   interface{}                                   `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupDMARCResponseMeta `json:"meta,required"`
 	Serie0 RadarEmailSeries                              `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupDMARCResponseJSON `json:"-"`
 }
@@ -226,8 +611,200 @@ func (r emailSecurityTimeseriesGroupDMARCResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupDMARCResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupDMARCResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupDMARCResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupDMARCResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDMARCResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTimeseriesGroupDMARCResponseMeta]
+type emailSecurityTimeseriesGroupDMARCResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDMARCResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDMARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupDMARCResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupDMARCResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                           `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                      `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                    `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                 `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupDMARCResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                  `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupDMARCResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDMARCResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupDMARCResponseMetaDateRange]
+type emailSecurityTimeseriesGroupDMARCResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDMARCResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDMARCResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupDMARCResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupDMARCResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupDMARCResponseMetaUnit struct {
+	Name  string                                                `json:"name,required"`
+	Value string                                                `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupDMARCResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupDMARCResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupDMARCResponseMetaUnit]
+type emailSecurityTimeseriesGroupDMARCResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupDMARCResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupDMARCResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailSecurityTimeseriesGroupMaliciousResponse struct {
-	Meta   interface{}                                         `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupMaliciousResponseMeta   `json:"meta,required"`
 	Serie0 EmailSecurityTimeseriesGroupMaliciousResponseSerie0 `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupMaliciousResponseJSON   `json:"-"`
 }
@@ -246,6 +823,198 @@ func (r *EmailSecurityTimeseriesGroupMaliciousResponse) UnmarshalJSON(data []byt
 }
 
 func (r emailSecurityTimeseriesGroupMaliciousResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupMaliciousResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupMaliciousResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupMaliciousResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupMaliciousResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupMaliciousResponseMetaJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupMaliciousResponseMeta]
+type emailSecurityTimeseriesGroupMaliciousResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupMaliciousResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupMaliciousResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupMaliciousResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupMaliciousResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                               `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                        `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                     `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupMaliciousResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                      `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupMaliciousResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupMaliciousResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [EmailSecurityTimeseriesGroupMaliciousResponseMetaDateRange]
+type emailSecurityTimeseriesGroupMaliciousResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupMaliciousResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupMaliciousResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupMaliciousResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupMaliciousResponseMetaUnit struct {
+	Name  string                                                    `json:"name,required"`
+	Value string                                                    `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupMaliciousResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupMaliciousResponseMetaUnitJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupMaliciousResponseMetaUnit]
+type emailSecurityTimeseriesGroupMaliciousResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupMaliciousResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupMaliciousResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -273,7 +1042,8 @@ func (r emailSecurityTimeseriesGroupMaliciousResponseSerie0JSON) RawJSON() strin
 }
 
 type EmailSecurityTimeseriesGroupSpamResponse struct {
-	Meta   interface{}                                    `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupSpamResponseMeta   `json:"meta,required"`
 	Serie0 EmailSecurityTimeseriesGroupSpamResponseSerie0 `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupSpamResponseJSON   `json:"-"`
 }
@@ -292,6 +1062,197 @@ func (r *EmailSecurityTimeseriesGroupSpamResponse) UnmarshalJSON(data []byte) (e
 }
 
 func (r emailSecurityTimeseriesGroupSpamResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupSpamResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupSpamResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupSpamResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupSpamResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupSpamResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpamResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTimeseriesGroupSpamResponseMeta]
+type emailSecurityTimeseriesGroupSpamResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpamResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpamResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupSpamResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupSpamResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                          `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupSpamResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupSpamResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpamResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupSpamResponseMetaDateRange]
+type emailSecurityTimeseriesGroupSpamResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpamResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpamResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupSpamResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupSpamResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupSpamResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupSpamResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupSpamResponseMetaUnit struct {
+	Name  string                                               `json:"name,required"`
+	Value string                                               `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupSpamResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpamResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupSpamResponseMetaUnit]
+type emailSecurityTimeseriesGroupSpamResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpamResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpamResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -319,7 +1280,8 @@ func (r emailSecurityTimeseriesGroupSpamResponseSerie0JSON) RawJSON() string {
 }
 
 type EmailSecurityTimeseriesGroupSPFResponse struct {
-	Meta   interface{}                                 `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupSPFResponseMeta `json:"meta,required"`
 	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupSPFResponseJSON `json:"-"`
 }
@@ -341,8 +1303,200 @@ func (r emailSecurityTimeseriesGroupSPFResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupSPFResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupSPFResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupSPFResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupSPFResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupSPFResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSPFResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTimeseriesGroupSPFResponseMeta]
+type emailSecurityTimeseriesGroupSPFResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSPFResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSPFResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupSPFResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupSPFResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                         `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                               `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupSPFResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupSPFResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSPFResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupSPFResponseMetaDateRange]
+type emailSecurityTimeseriesGroupSPFResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSPFResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSPFResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupSPFResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupSPFResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupSPFResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupSPFResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupSPFResponseMetaUnit struct {
+	Name  string                                              `json:"name,required"`
+	Value string                                              `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupSPFResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSPFResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupSPFResponseMetaUnit]
+type emailSecurityTimeseriesGroupSPFResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSPFResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSPFResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailSecurityTimeseriesGroupSpoofResponse struct {
-	Meta   interface{}                                     `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupSpoofResponseMeta   `json:"meta,required"`
 	Serie0 EmailSecurityTimeseriesGroupSpoofResponseSerie0 `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupSpoofResponseJSON   `json:"-"`
 }
@@ -361,6 +1515,197 @@ func (r *EmailSecurityTimeseriesGroupSpoofResponse) UnmarshalJSON(data []byte) (
 }
 
 func (r emailSecurityTimeseriesGroupSpoofResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupSpoofResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupSpoofResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupSpoofResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupSpoofResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpoofResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTimeseriesGroupSpoofResponseMeta]
+type emailSecurityTimeseriesGroupSpoofResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpoofResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpoofResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupSpoofResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupSpoofResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                           `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                      `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                    `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                 `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupSpoofResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                  `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupSpoofResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpoofResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupSpoofResponseMetaDateRange]
+type emailSecurityTimeseriesGroupSpoofResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpoofResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpoofResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupSpoofResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupSpoofResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupSpoofResponseMetaUnit struct {
+	Name  string                                                `json:"name,required"`
+	Value string                                                `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupSpoofResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupSpoofResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTimeseriesGroupSpoofResponseMetaUnit]
+type emailSecurityTimeseriesGroupSpoofResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupSpoofResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupSpoofResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -388,7 +1733,8 @@ func (r emailSecurityTimeseriesGroupSpoofResponseSerie0JSON) RawJSON() string {
 }
 
 type EmailSecurityTimeseriesGroupThreatCategoryResponse struct {
-	Meta   interface{}                                              `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupThreatCategoryResponseMeta   `json:"meta,required"`
 	Serie0 EmailSecurityTimeseriesGroupThreatCategoryResponseSerie0 `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupThreatCategoryResponseJSON   `json:"-"`
 }
@@ -407,6 +1753,199 @@ func (r *EmailSecurityTimeseriesGroupThreatCategoryResponse) UnmarshalJSON(data 
 }
 
 func (r emailSecurityTimeseriesGroupThreatCategoryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupThreatCategoryResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupThreatCategoryResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupThreatCategoryResponseMetaJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupThreatCategoryResponseMeta]
+type emailSecurityTimeseriesGroupThreatCategoryResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupThreatCategoryResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupThreatCategoryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                                    `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                               `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                             `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                          `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                           `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRange]
+type emailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupThreatCategoryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupThreatCategoryResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaUnit struct {
+	Name  string                                                         `json:"name,required"`
+	Value string                                                         `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupThreatCategoryResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupThreatCategoryResponseMetaUnitJSON contains the JSON
+// metadata for the struct
+// [EmailSecurityTimeseriesGroupThreatCategoryResponseMetaUnit]
+type emailSecurityTimeseriesGroupThreatCategoryResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupThreatCategoryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupThreatCategoryResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -439,7 +1978,8 @@ func (r emailSecurityTimeseriesGroupThreatCategoryResponseSerie0JSON) RawJSON() 
 }
 
 type EmailSecurityTimeseriesGroupTLSVersionResponse struct {
-	Meta   interface{}                                          `json:"meta,required"`
+	// Metadata for the results.
+	Meta   EmailSecurityTimeseriesGroupTLSVersionResponseMeta   `json:"meta,required"`
 	Serie0 EmailSecurityTimeseriesGroupTLSVersionResponseSerie0 `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupTLSVersionResponseJSON   `json:"-"`
 }
@@ -458,6 +1998,198 @@ func (r *EmailSecurityTimeseriesGroupTLSVersionResponse) UnmarshalJSON(data []by
 }
 
 func (r emailSecurityTimeseriesGroupTLSVersionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type EmailSecurityTimeseriesGroupTLSVersionResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []EmailSecurityTimeseriesGroupTLSVersionResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []EmailSecurityTimeseriesGroupTLSVersionResponseMetaUnit `json:"units,required"`
+	JSON  emailSecurityTimeseriesGroupTLSVersionResponseMetaJSON   `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupTLSVersionResponseMetaJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupTLSVersionResponseMeta]
+type emailSecurityTimeseriesGroupTLSVersionResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupTLSVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupTLSVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval string
+
+const (
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalFifteenMinutes EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneHour        EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_HOUR"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneDay         EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_DAY"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneWeek        EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_WEEK"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneMonth       EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalFifteenMinutes, EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneHour, EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneDay, EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneWeek, EmailSecurityTimeseriesGroupTLSVersionResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                                `json:"level,required"`
+	JSON  emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON contains
+// the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfo]
+type emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                           `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                         `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                      `json:"startTime,required" format:"date-time"`
+	JSON            emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTimeseriesGroupTLSVersionResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON      emailSecurityTimeseriesGroupTLSVersionResponseMetaDateRangeJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupTLSVersionResponseMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [EmailSecurityTimeseriesGroupTLSVersionResponseMetaDateRange]
+type emailSecurityTimeseriesGroupTLSVersionResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupTLSVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupTLSVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization string
+
+const (
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationPercentage           EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationMin0Max              EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationMinMax               EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationRawValues            EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationPercentageChange     EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationRollingAverage       EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationOverlappedPercentage EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationPercentage, EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationMin0Max, EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationMinMax, EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationRawValues, EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationPercentageChange, EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationRollingAverage, EmailSecurityTimeseriesGroupTLSVersionResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type EmailSecurityTimeseriesGroupTLSVersionResponseMetaUnit struct {
+	Name  string                                                     `json:"name,required"`
+	Value string                                                     `json:"value,required"`
+	JSON  emailSecurityTimeseriesGroupTLSVersionResponseMetaUnitJSON `json:"-"`
+}
+
+// emailSecurityTimeseriesGroupTLSVersionResponseMetaUnitJSON contains the JSON
+// metadata for the struct [EmailSecurityTimeseriesGroupTLSVersionResponseMetaUnit]
+type emailSecurityTimeseriesGroupTLSVersionResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTimeseriesGroupTLSVersionResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTimeseriesGroupTLSVersionResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

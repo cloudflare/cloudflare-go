@@ -115,6 +115,7 @@ func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112Summ
 }
 
 type AS112SummaryDNSSECResponse struct {
+	// Metadata for the results.
 	Meta     AS112SummaryDNSSECResponseMeta     `json:"meta,required"`
 	Summary0 AS112SummaryDNSSECResponseSummary0 `json:"summary_0,required"`
 	JSON     as112SummaryDNSSECResponseJSON     `json:"-"`
@@ -137,21 +138,28 @@ func (r as112SummaryDNSSECResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AS112SummaryDNSSECResponseMeta struct {
+	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AS112SummaryDNSSECResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                       `json:"lastUpdated,required"`
-	Normalization  string                                       `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryDNSSECResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AS112SummaryDNSSECResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AS112SummaryDNSSECResponseMetaUnit `json:"units,required"`
+	JSON  as112SummaryDNSSECResponseMetaJSON   `json:"-"`
 }
 
 // as112SummaryDNSSECResponseMetaJSON contains the JSON metadata for the struct
 // [AS112SummaryDNSSECResponseMeta]
 type as112SummaryDNSSECResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -161,6 +169,65 @@ func (r *AS112SummaryDNSSECResponseMeta) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r as112SummaryDNSSECResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112SummaryDNSSECResponseMetaConfidenceInfo struct {
+	Annotations []AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                            `json:"level,required"`
+	JSON  as112SummaryDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// as112SummaryDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [AS112SummaryDNSSECResponseMetaConfidenceInfo]
+type as112SummaryDNSSECResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112SummaryDNSSECResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
+	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                  `json:"startTime,required" format:"date-time"`
+	JSON            as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation]
+type as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -189,66 +256,57 @@ func (r as112SummaryDNSSECResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112SummaryDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                    `json:"level"`
-	JSON        as112SummaryDNSSECResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AS112SummaryDNSSECResponseMetaNormalization string
+
+const (
+	AS112SummaryDNSSECResponseMetaNormalizationPercentage           AS112SummaryDNSSECResponseMetaNormalization = "PERCENTAGE"
+	AS112SummaryDNSSECResponseMetaNormalizationMin0Max              AS112SummaryDNSSECResponseMetaNormalization = "MIN0_MAX"
+	AS112SummaryDNSSECResponseMetaNormalizationMinMax               AS112SummaryDNSSECResponseMetaNormalization = "MIN_MAX"
+	AS112SummaryDNSSECResponseMetaNormalizationRawValues            AS112SummaryDNSSECResponseMetaNormalization = "RAW_VALUES"
+	AS112SummaryDNSSECResponseMetaNormalizationPercentageChange     AS112SummaryDNSSECResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AS112SummaryDNSSECResponseMetaNormalizationRollingAverage       AS112SummaryDNSSECResponseMetaNormalization = "ROLLING_AVERAGE"
+	AS112SummaryDNSSECResponseMetaNormalizationOverlappedPercentage AS112SummaryDNSSECResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AS112SummaryDNSSECResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AS112SummaryDNSSECResponseMetaNormalizationPercentage, AS112SummaryDNSSECResponseMetaNormalizationMin0Max, AS112SummaryDNSSECResponseMetaNormalizationMinMax, AS112SummaryDNSSECResponseMetaNormalizationRawValues, AS112SummaryDNSSECResponseMetaNormalizationPercentageChange, AS112SummaryDNSSECResponseMetaNormalizationRollingAverage, AS112SummaryDNSSECResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// as112SummaryDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [AS112SummaryDNSSECResponseMetaConfidenceInfo]
-type as112SummaryDNSSECResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AS112SummaryDNSSECResponseMetaUnit struct {
+	Name  string                                 `json:"name,required"`
+	Value string                                 `json:"value,required"`
+	JSON  as112SummaryDNSSECResponseMetaUnitJSON `json:"-"`
+}
+
+// as112SummaryDNSSECResponseMetaUnitJSON contains the JSON metadata for the struct
+// [AS112SummaryDNSSECResponseMetaUnit]
+type as112SummaryDNSSECResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AS112SummaryDNSSECResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AS112SummaryDNSSECResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r as112SummaryDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                     `json:"dataSource,required"`
-	Description     string                                                     `json:"description,required"`
-	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                     `json:"linkedUrl"`
-	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
-	JSON            as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation]
-type as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r as112SummaryDNSSECResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type AS112SummaryDNSSECResponseSummary0 struct {
-	NotSupported string                                 `json:"NOT_SUPPORTED,required"`
-	Supported    string                                 `json:"SUPPORTED,required"`
-	JSON         as112SummaryDNSSECResponseSummary0JSON `json:"-"`
+	// A numeric string.
+	NotSupported string `json:"NOT_SUPPORTED,required"`
+	// A numeric string.
+	Supported string                                 `json:"SUPPORTED,required"`
+	JSON      as112SummaryDNSSECResponseSummary0JSON `json:"-"`
 }
 
 // as112SummaryDNSSECResponseSummary0JSON contains the JSON metadata for the struct
@@ -269,6 +327,7 @@ func (r as112SummaryDNSSECResponseSummary0JSON) RawJSON() string {
 }
 
 type AS112SummaryEdnsResponse struct {
+	// Metadata for the results.
 	Meta     AS112SummaryEdnsResponseMeta     `json:"meta,required"`
 	Summary0 AS112SummaryEdnsResponseSummary0 `json:"summary_0,required"`
 	JSON     as112SummaryEdnsResponseJSON     `json:"-"`
@@ -291,21 +350,28 @@ func (r as112SummaryEdnsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AS112SummaryEdnsResponseMeta struct {
+	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AS112SummaryEdnsResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                     `json:"lastUpdated,required"`
-	Normalization  string                                     `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryEdnsResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AS112SummaryEdnsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AS112SummaryEdnsResponseMetaUnit `json:"units,required"`
+	JSON  as112SummaryEdnsResponseMetaJSON   `json:"-"`
 }
 
 // as112SummaryEdnsResponseMetaJSON contains the JSON metadata for the struct
 // [AS112SummaryEdnsResponseMeta]
 type as112SummaryEdnsResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -315,6 +381,65 @@ func (r *AS112SummaryEdnsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r as112SummaryEdnsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112SummaryEdnsResponseMetaConfidenceInfo struct {
+	Annotations []AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                          `json:"level,required"`
+	JSON  as112SummaryEdnsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// as112SummaryEdnsResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [AS112SummaryEdnsResponseMetaConfidenceInfo]
+type as112SummaryEdnsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112SummaryEdnsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryEdnsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
+	LinkedURL       string                                                   `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                `json:"startTime,required" format:"date-time"`
+	JSON            as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation]
+type as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -343,66 +468,57 @@ func (r as112SummaryEdnsResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112SummaryEdnsResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                  `json:"level"`
-	JSON        as112SummaryEdnsResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AS112SummaryEdnsResponseMetaNormalization string
+
+const (
+	AS112SummaryEdnsResponseMetaNormalizationPercentage           AS112SummaryEdnsResponseMetaNormalization = "PERCENTAGE"
+	AS112SummaryEdnsResponseMetaNormalizationMin0Max              AS112SummaryEdnsResponseMetaNormalization = "MIN0_MAX"
+	AS112SummaryEdnsResponseMetaNormalizationMinMax               AS112SummaryEdnsResponseMetaNormalization = "MIN_MAX"
+	AS112SummaryEdnsResponseMetaNormalizationRawValues            AS112SummaryEdnsResponseMetaNormalization = "RAW_VALUES"
+	AS112SummaryEdnsResponseMetaNormalizationPercentageChange     AS112SummaryEdnsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AS112SummaryEdnsResponseMetaNormalizationRollingAverage       AS112SummaryEdnsResponseMetaNormalization = "ROLLING_AVERAGE"
+	AS112SummaryEdnsResponseMetaNormalizationOverlappedPercentage AS112SummaryEdnsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AS112SummaryEdnsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AS112SummaryEdnsResponseMetaNormalizationPercentage, AS112SummaryEdnsResponseMetaNormalizationMin0Max, AS112SummaryEdnsResponseMetaNormalizationMinMax, AS112SummaryEdnsResponseMetaNormalizationRawValues, AS112SummaryEdnsResponseMetaNormalizationPercentageChange, AS112SummaryEdnsResponseMetaNormalizationRollingAverage, AS112SummaryEdnsResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// as112SummaryEdnsResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [AS112SummaryEdnsResponseMetaConfidenceInfo]
-type as112SummaryEdnsResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AS112SummaryEdnsResponseMetaUnit struct {
+	Name  string                               `json:"name,required"`
+	Value string                               `json:"value,required"`
+	JSON  as112SummaryEdnsResponseMetaUnitJSON `json:"-"`
+}
+
+// as112SummaryEdnsResponseMetaUnitJSON contains the JSON metadata for the struct
+// [AS112SummaryEdnsResponseMetaUnit]
+type as112SummaryEdnsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AS112SummaryEdnsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AS112SummaryEdnsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r as112SummaryEdnsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                   `json:"dataSource,required"`
-	Description     string                                                   `json:"description,required"`
-	EventType       string                                                   `json:"eventType,required"`
-	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                   `json:"linkedUrl"`
-	StartTime       time.Time                                                `json:"startTime" format:"date-time"`
-	JSON            as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation]
-type as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r as112SummaryEdnsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type AS112SummaryEdnsResponseSummary0 struct {
-	NotSupported string                               `json:"NOT_SUPPORTED,required"`
-	Supported    string                               `json:"SUPPORTED,required"`
-	JSON         as112SummaryEdnsResponseSummary0JSON `json:"-"`
+	// A numeric string.
+	NotSupported string `json:"NOT_SUPPORTED,required"`
+	// A numeric string.
+	Supported string                               `json:"SUPPORTED,required"`
+	JSON      as112SummaryEdnsResponseSummary0JSON `json:"-"`
 }
 
 // as112SummaryEdnsResponseSummary0JSON contains the JSON metadata for the struct
@@ -423,6 +539,7 @@ func (r as112SummaryEdnsResponseSummary0JSON) RawJSON() string {
 }
 
 type AS112SummaryIPVersionResponse struct {
+	// Metadata for the results.
 	Meta     AS112SummaryIPVersionResponseMeta     `json:"meta,required"`
 	Summary0 AS112SummaryIPVersionResponseSummary0 `json:"summary_0,required"`
 	JSON     as112SummaryIPVersionResponseJSON     `json:"-"`
@@ -445,21 +562,28 @@ func (r as112SummaryIPVersionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AS112SummaryIPVersionResponseMeta struct {
+	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AS112SummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                          `json:"lastUpdated,required"`
-	Normalization  string                                          `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryIPVersionResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AS112SummaryIPVersionResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AS112SummaryIPVersionResponseMetaUnit `json:"units,required"`
+	JSON  as112SummaryIPVersionResponseMetaJSON   `json:"-"`
 }
 
 // as112SummaryIPVersionResponseMetaJSON contains the JSON metadata for the struct
 // [AS112SummaryIPVersionResponseMeta]
 type as112SummaryIPVersionResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -469,6 +593,66 @@ func (r *AS112SummaryIPVersionResponseMeta) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r as112SummaryIPVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112SummaryIPVersionResponseMetaConfidenceInfo struct {
+	Annotations []AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                               `json:"level,required"`
+	JSON  as112SummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// as112SummaryIPVersionResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [AS112SummaryIPVersionResponseMetaConfidenceInfo]
+type as112SummaryIPVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112SummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON            as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation]
+type as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -497,65 +681,55 @@ func (r as112SummaryIPVersionResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112SummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                       `json:"level"`
-	JSON        as112SummaryIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AS112SummaryIPVersionResponseMetaNormalization string
+
+const (
+	AS112SummaryIPVersionResponseMetaNormalizationPercentage           AS112SummaryIPVersionResponseMetaNormalization = "PERCENTAGE"
+	AS112SummaryIPVersionResponseMetaNormalizationMin0Max              AS112SummaryIPVersionResponseMetaNormalization = "MIN0_MAX"
+	AS112SummaryIPVersionResponseMetaNormalizationMinMax               AS112SummaryIPVersionResponseMetaNormalization = "MIN_MAX"
+	AS112SummaryIPVersionResponseMetaNormalizationRawValues            AS112SummaryIPVersionResponseMetaNormalization = "RAW_VALUES"
+	AS112SummaryIPVersionResponseMetaNormalizationPercentageChange     AS112SummaryIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AS112SummaryIPVersionResponseMetaNormalizationRollingAverage       AS112SummaryIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
+	AS112SummaryIPVersionResponseMetaNormalizationOverlappedPercentage AS112SummaryIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AS112SummaryIPVersionResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AS112SummaryIPVersionResponseMetaNormalizationPercentage, AS112SummaryIPVersionResponseMetaNormalizationMin0Max, AS112SummaryIPVersionResponseMetaNormalizationMinMax, AS112SummaryIPVersionResponseMetaNormalizationRawValues, AS112SummaryIPVersionResponseMetaNormalizationPercentageChange, AS112SummaryIPVersionResponseMetaNormalizationRollingAverage, AS112SummaryIPVersionResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// as112SummaryIPVersionResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [AS112SummaryIPVersionResponseMetaConfidenceInfo]
-type as112SummaryIPVersionResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AS112SummaryIPVersionResponseMetaUnit struct {
+	Name  string                                    `json:"name,required"`
+	Value string                                    `json:"value,required"`
+	JSON  as112SummaryIPVersionResponseMetaUnitJSON `json:"-"`
+}
+
+// as112SummaryIPVersionResponseMetaUnitJSON contains the JSON metadata for the
+// struct [AS112SummaryIPVersionResponseMetaUnit]
+type as112SummaryIPVersionResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AS112SummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AS112SummaryIPVersionResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r as112SummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                        `json:"dataSource,required"`
-	Description     string                                                        `json:"description,required"`
-	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                        `json:"linkedUrl"`
-	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
-	JSON            as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation]
-type as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r as112SummaryIPVersionResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type AS112SummaryIPVersionResponseSummary0 struct {
-	IPv4 string                                    `json:"IPv4,required"`
+	// A numeric string.
+	IPv4 string `json:"IPv4,required"`
+	// A numeric string.
 	IPv6 string                                    `json:"IPv6,required"`
 	JSON as112SummaryIPVersionResponseSummary0JSON `json:"-"`
 }
@@ -578,6 +752,7 @@ func (r as112SummaryIPVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type AS112SummaryProtocolResponse struct {
+	// Metadata for the results.
 	Meta     AS112SummaryProtocolResponseMeta     `json:"meta,required"`
 	Summary0 AS112SummaryProtocolResponseSummary0 `json:"summary_0,required"`
 	JSON     as112SummaryProtocolResponseJSON     `json:"-"`
@@ -600,21 +775,28 @@ func (r as112SummaryProtocolResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AS112SummaryProtocolResponseMeta struct {
+	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AS112SummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                         `json:"lastUpdated,required"`
-	Normalization  string                                         `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryProtocolResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AS112SummaryProtocolResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AS112SummaryProtocolResponseMetaUnit `json:"units,required"`
+	JSON  as112SummaryProtocolResponseMetaJSON   `json:"-"`
 }
 
 // as112SummaryProtocolResponseMetaJSON contains the JSON metadata for the struct
 // [AS112SummaryProtocolResponseMeta]
 type as112SummaryProtocolResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -624,6 +806,66 @@ func (r *AS112SummaryProtocolResponseMeta) UnmarshalJSON(data []byte) (err error
 }
 
 func (r as112SummaryProtocolResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112SummaryProtocolResponseMetaConfidenceInfo struct {
+	Annotations []AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                              `json:"level,required"`
+	JSON  as112SummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// as112SummaryProtocolResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [AS112SummaryProtocolResponseMetaConfidenceInfo]
+type as112SummaryProtocolResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112SummaryProtocolResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
+	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                    `json:"startTime,required" format:"date-time"`
+	JSON            as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation]
+type as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -652,69 +894,61 @@ func (r as112SummaryProtocolResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112SummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                      `json:"level"`
-	JSON        as112SummaryProtocolResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AS112SummaryProtocolResponseMetaNormalization string
+
+const (
+	AS112SummaryProtocolResponseMetaNormalizationPercentage           AS112SummaryProtocolResponseMetaNormalization = "PERCENTAGE"
+	AS112SummaryProtocolResponseMetaNormalizationMin0Max              AS112SummaryProtocolResponseMetaNormalization = "MIN0_MAX"
+	AS112SummaryProtocolResponseMetaNormalizationMinMax               AS112SummaryProtocolResponseMetaNormalization = "MIN_MAX"
+	AS112SummaryProtocolResponseMetaNormalizationRawValues            AS112SummaryProtocolResponseMetaNormalization = "RAW_VALUES"
+	AS112SummaryProtocolResponseMetaNormalizationPercentageChange     AS112SummaryProtocolResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AS112SummaryProtocolResponseMetaNormalizationRollingAverage       AS112SummaryProtocolResponseMetaNormalization = "ROLLING_AVERAGE"
+	AS112SummaryProtocolResponseMetaNormalizationOverlappedPercentage AS112SummaryProtocolResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AS112SummaryProtocolResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AS112SummaryProtocolResponseMetaNormalizationPercentage, AS112SummaryProtocolResponseMetaNormalizationMin0Max, AS112SummaryProtocolResponseMetaNormalizationMinMax, AS112SummaryProtocolResponseMetaNormalizationRawValues, AS112SummaryProtocolResponseMetaNormalizationPercentageChange, AS112SummaryProtocolResponseMetaNormalizationRollingAverage, AS112SummaryProtocolResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// as112SummaryProtocolResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [AS112SummaryProtocolResponseMetaConfidenceInfo]
-type as112SummaryProtocolResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AS112SummaryProtocolResponseMetaUnit struct {
+	Name  string                                   `json:"name,required"`
+	Value string                                   `json:"value,required"`
+	JSON  as112SummaryProtocolResponseMetaUnitJSON `json:"-"`
+}
+
+// as112SummaryProtocolResponseMetaUnitJSON contains the JSON metadata for the
+// struct [AS112SummaryProtocolResponseMetaUnit]
+type as112SummaryProtocolResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AS112SummaryProtocolResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AS112SummaryProtocolResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r as112SummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                       `json:"dataSource,required"`
-	Description     string                                                       `json:"description,required"`
-	EventType       string                                                       `json:"eventType,required"`
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                       `json:"linkedUrl"`
-	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
-	JSON            as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation]
-type as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r as112SummaryProtocolResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type AS112SummaryProtocolResponseSummary0 struct {
-	HTTPS string                                   `json:"HTTPS,required"`
-	TCP   string                                   `json:"TCP,required"`
-	TLS   string                                   `json:"TLS,required"`
-	Udp   string                                   `json:"UDP,required"`
-	JSON  as112SummaryProtocolResponseSummary0JSON `json:"-"`
+	// A numeric string.
+	HTTPS string `json:"HTTPS,required"`
+	// A numeric string.
+	TCP string `json:"TCP,required"`
+	// A numeric string.
+	TLS string `json:"TLS,required"`
+	// A numeric string.
+	Udp  string                                   `json:"UDP,required"`
+	JSON as112SummaryProtocolResponseSummary0JSON `json:"-"`
 }
 
 // as112SummaryProtocolResponseSummary0JSON contains the JSON metadata for the
@@ -737,6 +971,7 @@ func (r as112SummaryProtocolResponseSummary0JSON) RawJSON() string {
 }
 
 type AS112SummaryQueryTypeResponse struct {
+	// Metadata for the results.
 	Meta     AS112SummaryQueryTypeResponseMeta `json:"meta,required"`
 	Summary0 map[string]string                 `json:"summary_0,required"`
 	JSON     as112SummaryQueryTypeResponseJSON `json:"-"`
@@ -759,21 +994,28 @@ func (r as112SummaryQueryTypeResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AS112SummaryQueryTypeResponseMeta struct {
+	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AS112SummaryQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                          `json:"lastUpdated,required"`
-	Normalization  string                                          `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryQueryTypeResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AS112SummaryQueryTypeResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AS112SummaryQueryTypeResponseMetaUnit `json:"units,required"`
+	JSON  as112SummaryQueryTypeResponseMetaJSON   `json:"-"`
 }
 
 // as112SummaryQueryTypeResponseMetaJSON contains the JSON metadata for the struct
 // [AS112SummaryQueryTypeResponseMeta]
 type as112SummaryQueryTypeResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -783,6 +1025,66 @@ func (r *AS112SummaryQueryTypeResponseMeta) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r as112SummaryQueryTypeResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112SummaryQueryTypeResponseMetaConfidenceInfo struct {
+	Annotations []AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                               `json:"level,required"`
+	JSON  as112SummaryQueryTypeResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// as112SummaryQueryTypeResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [AS112SummaryQueryTypeResponseMetaConfidenceInfo]
+type as112SummaryQueryTypeResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112SummaryQueryTypeResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON            as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation]
+type as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -811,64 +1113,53 @@ func (r as112SummaryQueryTypeResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112SummaryQueryTypeResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                       `json:"level"`
-	JSON        as112SummaryQueryTypeResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AS112SummaryQueryTypeResponseMetaNormalization string
+
+const (
+	AS112SummaryQueryTypeResponseMetaNormalizationPercentage           AS112SummaryQueryTypeResponseMetaNormalization = "PERCENTAGE"
+	AS112SummaryQueryTypeResponseMetaNormalizationMin0Max              AS112SummaryQueryTypeResponseMetaNormalization = "MIN0_MAX"
+	AS112SummaryQueryTypeResponseMetaNormalizationMinMax               AS112SummaryQueryTypeResponseMetaNormalization = "MIN_MAX"
+	AS112SummaryQueryTypeResponseMetaNormalizationRawValues            AS112SummaryQueryTypeResponseMetaNormalization = "RAW_VALUES"
+	AS112SummaryQueryTypeResponseMetaNormalizationPercentageChange     AS112SummaryQueryTypeResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AS112SummaryQueryTypeResponseMetaNormalizationRollingAverage       AS112SummaryQueryTypeResponseMetaNormalization = "ROLLING_AVERAGE"
+	AS112SummaryQueryTypeResponseMetaNormalizationOverlappedPercentage AS112SummaryQueryTypeResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AS112SummaryQueryTypeResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AS112SummaryQueryTypeResponseMetaNormalizationPercentage, AS112SummaryQueryTypeResponseMetaNormalizationMin0Max, AS112SummaryQueryTypeResponseMetaNormalizationMinMax, AS112SummaryQueryTypeResponseMetaNormalizationRawValues, AS112SummaryQueryTypeResponseMetaNormalizationPercentageChange, AS112SummaryQueryTypeResponseMetaNormalizationRollingAverage, AS112SummaryQueryTypeResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// as112SummaryQueryTypeResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [AS112SummaryQueryTypeResponseMetaConfidenceInfo]
-type as112SummaryQueryTypeResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AS112SummaryQueryTypeResponseMetaUnit struct {
+	Name  string                                    `json:"name,required"`
+	Value string                                    `json:"value,required"`
+	JSON  as112SummaryQueryTypeResponseMetaUnitJSON `json:"-"`
+}
+
+// as112SummaryQueryTypeResponseMetaUnitJSON contains the JSON metadata for the
+// struct [AS112SummaryQueryTypeResponseMetaUnit]
+type as112SummaryQueryTypeResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AS112SummaryQueryTypeResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AS112SummaryQueryTypeResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r as112SummaryQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                        `json:"dataSource,required"`
-	Description     string                                                        `json:"description,required"`
-	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                        `json:"linkedUrl"`
-	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
-	JSON            as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation]
-type as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r as112SummaryQueryTypeResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type AS112SummaryResponseCodesResponse struct {
+	// Metadata for the results.
 	Meta     AS112SummaryResponseCodesResponseMeta `json:"meta,required"`
 	Summary0 map[string]string                     `json:"summary_0,required"`
 	JSON     as112SummaryResponseCodesResponseJSON `json:"-"`
@@ -891,21 +1182,28 @@ func (r as112SummaryResponseCodesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type AS112SummaryResponseCodesResponseMeta struct {
+	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []AS112SummaryResponseCodesResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                              `json:"lastUpdated,required"`
-	Normalization  string                                              `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryResponseCodesResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AS112SummaryResponseCodesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AS112SummaryResponseCodesResponseMetaUnit `json:"units,required"`
+	JSON  as112SummaryResponseCodesResponseMetaJSON   `json:"-"`
 }
 
 // as112SummaryResponseCodesResponseMetaJSON contains the JSON metadata for the
 // struct [AS112SummaryResponseCodesResponseMeta]
 type as112SummaryResponseCodesResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -915,6 +1213,66 @@ func (r *AS112SummaryResponseCodesResponseMeta) UnmarshalJSON(data []byte) (err 
 }
 
 func (r as112SummaryResponseCodesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AS112SummaryResponseCodesResponseMetaConfidenceInfo struct {
+	Annotations []AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                   `json:"level,required"`
+	JSON  as112SummaryResponseCodesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// as112SummaryResponseCodesResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [AS112SummaryResponseCodesResponseMetaConfidenceInfo]
+type as112SummaryResponseCodesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AS112SummaryResponseCodesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryResponseCodesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
+	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                         `json:"startTime,required" format:"date-time"`
+	JSON            as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation]
+type as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -943,60 +1301,48 @@ func (r as112SummaryResponseCodesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112SummaryResponseCodesResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                           `json:"level"`
-	JSON        as112SummaryResponseCodesResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AS112SummaryResponseCodesResponseMetaNormalization string
+
+const (
+	AS112SummaryResponseCodesResponseMetaNormalizationPercentage           AS112SummaryResponseCodesResponseMetaNormalization = "PERCENTAGE"
+	AS112SummaryResponseCodesResponseMetaNormalizationMin0Max              AS112SummaryResponseCodesResponseMetaNormalization = "MIN0_MAX"
+	AS112SummaryResponseCodesResponseMetaNormalizationMinMax               AS112SummaryResponseCodesResponseMetaNormalization = "MIN_MAX"
+	AS112SummaryResponseCodesResponseMetaNormalizationRawValues            AS112SummaryResponseCodesResponseMetaNormalization = "RAW_VALUES"
+	AS112SummaryResponseCodesResponseMetaNormalizationPercentageChange     AS112SummaryResponseCodesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AS112SummaryResponseCodesResponseMetaNormalizationRollingAverage       AS112SummaryResponseCodesResponseMetaNormalization = "ROLLING_AVERAGE"
+	AS112SummaryResponseCodesResponseMetaNormalizationOverlappedPercentage AS112SummaryResponseCodesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AS112SummaryResponseCodesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AS112SummaryResponseCodesResponseMetaNormalizationPercentage, AS112SummaryResponseCodesResponseMetaNormalizationMin0Max, AS112SummaryResponseCodesResponseMetaNormalizationMinMax, AS112SummaryResponseCodesResponseMetaNormalizationRawValues, AS112SummaryResponseCodesResponseMetaNormalizationPercentageChange, AS112SummaryResponseCodesResponseMetaNormalizationRollingAverage, AS112SummaryResponseCodesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// as112SummaryResponseCodesResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [AS112SummaryResponseCodesResponseMetaConfidenceInfo]
-type as112SummaryResponseCodesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type AS112SummaryResponseCodesResponseMetaUnit struct {
+	Name  string                                        `json:"name,required"`
+	Value string                                        `json:"value,required"`
+	JSON  as112SummaryResponseCodesResponseMetaUnitJSON `json:"-"`
+}
+
+// as112SummaryResponseCodesResponseMetaUnitJSON contains the JSON metadata for the
+// struct [AS112SummaryResponseCodesResponseMetaUnit]
+type as112SummaryResponseCodesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AS112SummaryResponseCodesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AS112SummaryResponseCodesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r as112SummaryResponseCodesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                            `json:"dataSource,required"`
-	Description     string                                                            `json:"description,required"`
-	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                            `json:"linkedUrl"`
-	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
-	JSON            as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation]
-type as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r as112SummaryResponseCodesResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 

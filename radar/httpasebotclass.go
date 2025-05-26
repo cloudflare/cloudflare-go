@@ -50,6 +50,7 @@ func (r *HTTPAseBotClassService) Get(ctx context.Context, botClass HTTPAseBotCla
 }
 
 type HTTPAseBotClassGetResponse struct {
+	// Metadata for the results.
 	Meta HTTPAseBotClassGetResponseMeta   `json:"meta,required"`
 	Top0 []HTTPAseBotClassGetResponseTop0 `json:"top_0,required"`
 	JSON httpAseBotClassGetResponseJSON   `json:"-"`
@@ -72,19 +73,28 @@ func (r httpAseBotClassGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type HTTPAseBotClassGetResponseMeta struct {
+	ConfidenceInfo HTTPAseBotClassGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []HTTPAseBotClassGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                       `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseBotClassGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpAseBotClassGetResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPAseBotClassGetResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPAseBotClassGetResponseMetaUnit `json:"units,required"`
+	JSON  httpAseBotClassGetResponseMetaJSON   `json:"-"`
 }
 
 // httpAseBotClassGetResponseMetaJSON contains the JSON metadata for the struct
 // [HTTPAseBotClassGetResponseMeta]
 type httpAseBotClassGetResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -94,6 +104,65 @@ func (r *HTTPAseBotClassGetResponseMeta) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r httpAseBotClassGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseBotClassGetResponseMetaConfidenceInfo struct {
+	Annotations []HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                            `json:"level,required"`
+	JSON  httpAseBotClassGetResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpAseBotClassGetResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [HTTPAseBotClassGetResponseMetaConfidenceInfo]
+type httpAseBotClassGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseBotClassGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
+	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                  `json:"startTime,required" format:"date-time"`
+	JSON            httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation]
+type httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -122,67 +191,57 @@ func (r httpAseBotClassGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPAseBotClassGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                    `json:"level"`
-	JSON        httpAseBotClassGetResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPAseBotClassGetResponseMetaNormalization string
+
+const (
+	HTTPAseBotClassGetResponseMetaNormalizationPercentage           HTTPAseBotClassGetResponseMetaNormalization = "PERCENTAGE"
+	HTTPAseBotClassGetResponseMetaNormalizationMin0Max              HTTPAseBotClassGetResponseMetaNormalization = "MIN0_MAX"
+	HTTPAseBotClassGetResponseMetaNormalizationMinMax               HTTPAseBotClassGetResponseMetaNormalization = "MIN_MAX"
+	HTTPAseBotClassGetResponseMetaNormalizationRawValues            HTTPAseBotClassGetResponseMetaNormalization = "RAW_VALUES"
+	HTTPAseBotClassGetResponseMetaNormalizationPercentageChange     HTTPAseBotClassGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPAseBotClassGetResponseMetaNormalizationRollingAverage       HTTPAseBotClassGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPAseBotClassGetResponseMetaNormalizationOverlappedPercentage HTTPAseBotClassGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPAseBotClassGetResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetResponseMetaNormalizationPercentage, HTTPAseBotClassGetResponseMetaNormalizationMin0Max, HTTPAseBotClassGetResponseMetaNormalizationMinMax, HTTPAseBotClassGetResponseMetaNormalizationRawValues, HTTPAseBotClassGetResponseMetaNormalizationPercentageChange, HTTPAseBotClassGetResponseMetaNormalizationRollingAverage, HTTPAseBotClassGetResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// httpAseBotClassGetResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [HTTPAseBotClassGetResponseMetaConfidenceInfo]
-type httpAseBotClassGetResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type HTTPAseBotClassGetResponseMetaUnit struct {
+	Name  string                                 `json:"name,required"`
+	Value string                                 `json:"value,required"`
+	JSON  httpAseBotClassGetResponseMetaUnitJSON `json:"-"`
+}
+
+// httpAseBotClassGetResponseMetaUnitJSON contains the JSON metadata for the struct
+// [HTTPAseBotClassGetResponseMetaUnit]
+type httpAseBotClassGetResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HTTPAseBotClassGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPAseBotClassGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r httpAseBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                     `json:"dataSource,required"`
-	Description     string                                                     `json:"description,required"`
-	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                     `json:"linkedUrl"`
-	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
-	JSON            httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation]
-type httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r httpAseBotClassGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type HTTPAseBotClassGetResponseTop0 struct {
-	ClientASN    int64                              `json:"clientASN,required"`
-	ClientAsName string                             `json:"clientASName,required"`
-	Value        string                             `json:"value,required"`
-	JSON         httpAseBotClassGetResponseTop0JSON `json:"-"`
+	ClientASN    int64  `json:"clientASN,required"`
+	ClientAsName string `json:"clientASName,required"`
+	// A numeric string.
+	Value string                             `json:"value,required"`
+	JSON  httpAseBotClassGetResponseTop0JSON `json:"-"`
 }
 
 // httpAseBotClassGetResponseTop0JSON contains the JSON metadata for the struct

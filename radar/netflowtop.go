@@ -61,6 +61,8 @@ func (r *NetflowTopService) Locations(ctx context.Context, query NetflowTopLocat
 }
 
 type NetflowTopAsesResponse struct {
+	// Metadata for the results.
+	Meta NetflowTopAsesResponseMeta   `json:"meta,required"`
 	Top0 []NetflowTopAsesResponseTop0 `json:"top_0,required"`
 	JSON netflowTopAsesResponseJSON   `json:"-"`
 }
@@ -68,6 +70,7 @@ type NetflowTopAsesResponse struct {
 // netflowTopAsesResponseJSON contains the JSON metadata for the struct
 // [NetflowTopAsesResponse]
 type netflowTopAsesResponseJSON struct {
+	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -81,11 +84,175 @@ func (r netflowTopAsesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type NetflowTopAsesResponseMeta struct {
+	ConfidenceInfo NetflowTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	DateRange      []NetflowTopAsesResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization NetflowTopAsesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []NetflowTopAsesResponseMetaUnit `json:"units,required"`
+	JSON  netflowTopAsesResponseMetaJSON   `json:"-"`
+}
+
+// netflowTopAsesResponseMetaJSON contains the JSON metadata for the struct
+// [NetflowTopAsesResponseMeta]
+type netflowTopAsesResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *NetflowTopAsesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetflowTopAsesResponseMetaConfidenceInfo struct {
+	Annotations []NetflowTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                        `json:"level,required"`
+	JSON  netflowTopAsesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// netflowTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [NetflowTopAsesResponseMetaConfidenceInfo]
+type netflowTopAsesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type NetflowTopAsesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
+	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                              `json:"startTime,required" format:"date-time"`
+	JSON            netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [NetflowTopAsesResponseMetaConfidenceInfoAnnotation]
+type netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *NetflowTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetflowTopAsesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
+	JSON      netflowTopAsesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// netflowTopAsesResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [NetflowTopAsesResponseMetaDateRange]
+type netflowTopAsesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTopAsesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopAsesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type NetflowTopAsesResponseMetaNormalization string
+
+const (
+	NetflowTopAsesResponseMetaNormalizationPercentage           NetflowTopAsesResponseMetaNormalization = "PERCENTAGE"
+	NetflowTopAsesResponseMetaNormalizationMin0Max              NetflowTopAsesResponseMetaNormalization = "MIN0_MAX"
+	NetflowTopAsesResponseMetaNormalizationMinMax               NetflowTopAsesResponseMetaNormalization = "MIN_MAX"
+	NetflowTopAsesResponseMetaNormalizationRawValues            NetflowTopAsesResponseMetaNormalization = "RAW_VALUES"
+	NetflowTopAsesResponseMetaNormalizationPercentageChange     NetflowTopAsesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	NetflowTopAsesResponseMetaNormalizationRollingAverage       NetflowTopAsesResponseMetaNormalization = "ROLLING_AVERAGE"
+	NetflowTopAsesResponseMetaNormalizationOverlappedPercentage NetflowTopAsesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r NetflowTopAsesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case NetflowTopAsesResponseMetaNormalizationPercentage, NetflowTopAsesResponseMetaNormalizationMin0Max, NetflowTopAsesResponseMetaNormalizationMinMax, NetflowTopAsesResponseMetaNormalizationRawValues, NetflowTopAsesResponseMetaNormalizationPercentageChange, NetflowTopAsesResponseMetaNormalizationRollingAverage, NetflowTopAsesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type NetflowTopAsesResponseMetaUnit struct {
+	Name  string                             `json:"name,required"`
+	Value string                             `json:"value,required"`
+	JSON  netflowTopAsesResponseMetaUnitJSON `json:"-"`
+}
+
+// netflowTopAsesResponseMetaUnitJSON contains the JSON metadata for the struct
+// [NetflowTopAsesResponseMetaUnit]
+type netflowTopAsesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTopAsesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopAsesResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type NetflowTopAsesResponseTop0 struct {
-	ClientASN    float64                        `json:"clientASN,required"`
-	ClientAsName string                         `json:"clientASName,required"`
-	Value        string                         `json:"value,required"`
-	JSON         netflowTopAsesResponseTop0JSON `json:"-"`
+	ClientASN    float64 `json:"clientASN,required"`
+	ClientAsName string  `json:"clientASName,required"`
+	// A numeric string.
+	Value string                         `json:"value,required"`
+	JSON  netflowTopAsesResponseTop0JSON `json:"-"`
 }
 
 // netflowTopAsesResponseTop0JSON contains the JSON metadata for the struct
@@ -107,6 +274,8 @@ func (r netflowTopAsesResponseTop0JSON) RawJSON() string {
 }
 
 type NetflowTopLocationsResponse struct {
+	// Metadata for the results.
+	Meta NetflowTopLocationsResponseMeta   `json:"meta,required"`
 	Top0 []NetflowTopLocationsResponseTop0 `json:"top_0,required"`
 	JSON netflowTopLocationsResponseJSON   `json:"-"`
 }
@@ -114,6 +283,7 @@ type NetflowTopLocationsResponse struct {
 // netflowTopLocationsResponseJSON contains the JSON metadata for the struct
 // [NetflowTopLocationsResponse]
 type netflowTopLocationsResponseJSON struct {
+	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -127,11 +297,176 @@ func (r netflowTopLocationsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type NetflowTopLocationsResponseMeta struct {
+	ConfidenceInfo NetflowTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	DateRange      []NetflowTopLocationsResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization NetflowTopLocationsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []NetflowTopLocationsResponseMetaUnit `json:"units,required"`
+	JSON  netflowTopLocationsResponseMetaJSON   `json:"-"`
+}
+
+// netflowTopLocationsResponseMetaJSON contains the JSON metadata for the struct
+// [NetflowTopLocationsResponseMeta]
+type netflowTopLocationsResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *NetflowTopLocationsResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopLocationsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetflowTopLocationsResponseMetaConfidenceInfo struct {
+	Annotations []NetflowTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                             `json:"level,required"`
+	JSON  netflowTopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// netflowTopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [NetflowTopLocationsResponseMetaConfidenceInfo]
+type netflowTopLocationsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type NetflowTopLocationsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
+	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	JSON            netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [NetflowTopLocationsResponseMetaConfidenceInfoAnnotation]
+type netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *NetflowTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetflowTopLocationsResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      netflowTopLocationsResponseMetaDateRangeJSON `json:"-"`
+}
+
+// netflowTopLocationsResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [NetflowTopLocationsResponseMetaDateRange]
+type netflowTopLocationsResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTopLocationsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopLocationsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type NetflowTopLocationsResponseMetaNormalization string
+
+const (
+	NetflowTopLocationsResponseMetaNormalizationPercentage           NetflowTopLocationsResponseMetaNormalization = "PERCENTAGE"
+	NetflowTopLocationsResponseMetaNormalizationMin0Max              NetflowTopLocationsResponseMetaNormalization = "MIN0_MAX"
+	NetflowTopLocationsResponseMetaNormalizationMinMax               NetflowTopLocationsResponseMetaNormalization = "MIN_MAX"
+	NetflowTopLocationsResponseMetaNormalizationRawValues            NetflowTopLocationsResponseMetaNormalization = "RAW_VALUES"
+	NetflowTopLocationsResponseMetaNormalizationPercentageChange     NetflowTopLocationsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	NetflowTopLocationsResponseMetaNormalizationRollingAverage       NetflowTopLocationsResponseMetaNormalization = "ROLLING_AVERAGE"
+	NetflowTopLocationsResponseMetaNormalizationOverlappedPercentage NetflowTopLocationsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r NetflowTopLocationsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case NetflowTopLocationsResponseMetaNormalizationPercentage, NetflowTopLocationsResponseMetaNormalizationMin0Max, NetflowTopLocationsResponseMetaNormalizationMinMax, NetflowTopLocationsResponseMetaNormalizationRawValues, NetflowTopLocationsResponseMetaNormalizationPercentageChange, NetflowTopLocationsResponseMetaNormalizationRollingAverage, NetflowTopLocationsResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type NetflowTopLocationsResponseMetaUnit struct {
+	Name  string                                  `json:"name,required"`
+	Value string                                  `json:"value,required"`
+	JSON  netflowTopLocationsResponseMetaUnitJSON `json:"-"`
+}
+
+// netflowTopLocationsResponseMetaUnitJSON contains the JSON metadata for the
+// struct [NetflowTopLocationsResponseMetaUnit]
+type netflowTopLocationsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetflowTopLocationsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r netflowTopLocationsResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type NetflowTopLocationsResponseTop0 struct {
-	ClientCountryAlpha2 string                              `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                              `json:"clientCountryName,required"`
-	Value               string                              `json:"value,required"`
-	JSON                netflowTopLocationsResponseTop0JSON `json:"-"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string `json:"clientCountryName,required"`
+	// A numeric string.
+	Value string                              `json:"value,required"`
+	JSON  netflowTopLocationsResponseTop0JSON `json:"-"`
 }
 
 // netflowTopLocationsResponseTop0JSON contains the JSON metadata for the struct

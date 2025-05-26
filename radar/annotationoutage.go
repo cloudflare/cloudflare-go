@@ -90,9 +90,9 @@ type AnnotationOutageGetResponseAnnotation struct {
 	Locations        []string                                                `json:"locations,required"`
 	LocationsDetails []AnnotationOutageGetResponseAnnotationsLocationsDetail `json:"locationsDetails,required"`
 	Outage           AnnotationOutageGetResponseAnnotationsOutage            `json:"outage,required"`
-	StartDate        string                                                  `json:"startDate,required"`
+	StartDate        time.Time                                               `json:"startDate,required" format:"date-time"`
 	Description      string                                                  `json:"description"`
-	EndDate          string                                                  `json:"endDate"`
+	EndDate          time.Time                                               `json:"endDate" format:"date-time"`
 	LinkedURL        string                                                  `json:"linkedUrl"`
 	Scope            string                                                  `json:"scope"`
 	JSON             annotationOutageGetResponseAnnotationJSON               `json:"-"`
@@ -243,10 +243,11 @@ func (r annotationOutageLocationsResponseJSON) RawJSON() string {
 }
 
 type AnnotationOutageLocationsResponseAnnotation struct {
-	ClientCountryAlpha2 string                                          `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                          `json:"clientCountryName,required"`
-	Value               string                                          `json:"value,required"`
-	JSON                annotationOutageLocationsResponseAnnotationJSON `json:"-"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string `json:"clientCountryName,required"`
+	// A numeric string.
+	Value string                                          `json:"value,required"`
+	JSON  annotationOutageLocationsResponseAnnotationJSON `json:"-"`
 }
 
 // annotationOutageLocationsResponseAnnotationJSON contains the JSON metadata for

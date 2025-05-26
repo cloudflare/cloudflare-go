@@ -50,6 +50,7 @@ func (r *HTTPAseBrowserFamilyService) Get(ctx context.Context, browserFamily HTT
 }
 
 type HTTPAseBrowserFamilyGetResponse struct {
+	// Metadata for the results.
 	Meta HTTPAseBrowserFamilyGetResponseMeta   `json:"meta,required"`
 	Top0 []HTTPAseBrowserFamilyGetResponseTop0 `json:"top_0,required"`
 	JSON httpAseBrowserFamilyGetResponseJSON   `json:"-"`
@@ -72,19 +73,28 @@ func (r httpAseBrowserFamilyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type HTTPAseBrowserFamilyGetResponseMeta struct {
+	ConfidenceInfo HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []HTTPAseBrowserFamilyGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpAseBrowserFamilyGetResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization HTTPAseBrowserFamilyGetResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []HTTPAseBrowserFamilyGetResponseMetaUnit `json:"units,required"`
+	JSON  httpAseBrowserFamilyGetResponseMetaJSON   `json:"-"`
 }
 
 // httpAseBrowserFamilyGetResponseMetaJSON contains the JSON metadata for the
 // struct [HTTPAseBrowserFamilyGetResponseMeta]
 type httpAseBrowserFamilyGetResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -94,6 +104,66 @@ func (r *HTTPAseBrowserFamilyGetResponseMeta) UnmarshalJSON(data []byte) (err er
 }
 
 func (r httpAseBrowserFamilyGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo struct {
+	Annotations []HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                 `json:"level,required"`
+	JSON  httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo]
+type httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
+	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON            httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation]
+type httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -122,68 +192,57 @@ func (r httpAseBrowserFamilyGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                         `json:"level"`
-	JSON        httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPAseBrowserFamilyGetResponseMetaNormalization string
+
+const (
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationPercentage           HTTPAseBrowserFamilyGetResponseMetaNormalization = "PERCENTAGE"
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationMin0Max              HTTPAseBrowserFamilyGetResponseMetaNormalization = "MIN0_MAX"
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationMinMax               HTTPAseBrowserFamilyGetResponseMetaNormalization = "MIN_MAX"
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationRawValues            HTTPAseBrowserFamilyGetResponseMetaNormalization = "RAW_VALUES"
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationPercentageChange     HTTPAseBrowserFamilyGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationRollingAverage       HTTPAseBrowserFamilyGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	HTTPAseBrowserFamilyGetResponseMetaNormalizationOverlappedPercentage HTTPAseBrowserFamilyGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r HTTPAseBrowserFamilyGetResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case HTTPAseBrowserFamilyGetResponseMetaNormalizationPercentage, HTTPAseBrowserFamilyGetResponseMetaNormalizationMin0Max, HTTPAseBrowserFamilyGetResponseMetaNormalizationMinMax, HTTPAseBrowserFamilyGetResponseMetaNormalizationRawValues, HTTPAseBrowserFamilyGetResponseMetaNormalizationPercentageChange, HTTPAseBrowserFamilyGetResponseMetaNormalizationRollingAverage, HTTPAseBrowserFamilyGetResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo]
-type httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type HTTPAseBrowserFamilyGetResponseMetaUnit struct {
+	Name  string                                      `json:"name,required"`
+	Value string                                      `json:"value,required"`
+	JSON  httpAseBrowserFamilyGetResponseMetaUnitJSON `json:"-"`
+}
+
+// httpAseBrowserFamilyGetResponseMetaUnitJSON contains the JSON metadata for the
+// struct [HTTPAseBrowserFamilyGetResponseMetaUnit]
+type httpAseBrowserFamilyGetResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HTTPAseBrowserFamilyGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *HTTPAseBrowserFamilyGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r httpAseBrowserFamilyGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                          `json:"dataSource,required"`
-	Description     string                                                          `json:"description,required"`
-	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                          `json:"linkedUrl"`
-	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
-	JSON            httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation]
-type httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r httpAseBrowserFamilyGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type HTTPAseBrowserFamilyGetResponseTop0 struct {
-	ClientASN    int64                                   `json:"clientASN,required"`
-	ClientAsName string                                  `json:"clientASName,required"`
-	Value        string                                  `json:"value,required"`
-	JSON         httpAseBrowserFamilyGetResponseTop0JSON `json:"-"`
+	ClientASN    int64  `json:"clientASN,required"`
+	ClientAsName string `json:"clientASName,required"`
+	// A numeric string.
+	Value string                                  `json:"value,required"`
+	JSON  httpAseBrowserFamilyGetResponseTop0JSON `json:"-"`
 }
 
 // httpAseBrowserFamilyGetResponseTop0JSON contains the JSON metadata for the

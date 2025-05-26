@@ -50,6 +50,7 @@ func (r *RobotsTXTTopService) DomainCategories(ctx context.Context, query Robots
 }
 
 type RobotsTXTTopDomainCategoriesResponse struct {
+	// Metadata for the results.
 	Meta RobotsTXTTopDomainCategoriesResponseMeta   `json:"meta,required"`
 	Top0 []RobotsTXTTopDomainCategoriesResponseTop0 `json:"top_0,required"`
 	JSON robotsTXTTopDomainCategoriesResponseJSON   `json:"-"`
@@ -72,22 +73,27 @@ func (r robotsTXTTopDomainCategoriesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type RobotsTXTTopDomainCategoriesResponseMeta struct {
+	ConfidenceInfo RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []RobotsTXTTopDomainCategoriesResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                 `json:"lastUpdated,required"`
-	Normalization  string                                                 `json:"normalization,required"`
-	ConfidenceInfo RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	Units          []RobotsTXTTopDomainCategoriesResponseMetaUnit         `json:"units"`
-	JSON           robotsTXTTopDomainCategoriesResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization RobotsTXTTopDomainCategoriesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []RobotsTXTTopDomainCategoriesResponseMetaUnit `json:"units,required"`
+	JSON  robotsTXTTopDomainCategoriesResponseMetaJSON   `json:"-"`
 }
 
 // robotsTXTTopDomainCategoriesResponseMetaJSON contains the JSON metadata for the
 // struct [RobotsTXTTopDomainCategoriesResponseMeta]
 type robotsTXTTopDomainCategoriesResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
 	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -98,6 +104,66 @@ func (r *RobotsTXTTopDomainCategoriesResponseMeta) UnmarshalJSON(data []byte) (e
 }
 
 func (r robotsTXTTopDomainCategoriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo struct {
+	Annotations []RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                      `json:"level,required"`
+	JSON  robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo]
+type robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
+	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                            `json:"startTime,required" format:"date-time"`
+	JSON            robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation]
+type robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -126,61 +192,26 @@ func (r robotsTXTTopDomainCategoriesResponseMetaDateRangeJSON) RawJSON() string 
 	return r.raw
 }
 
-type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo struct {
-	Annotations []RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                              `json:"level"`
-	JSON        robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON         `json:"-"`
-}
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type RobotsTXTTopDomainCategoriesResponseMetaNormalization string
 
-// robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo]
-type robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationPercentage           RobotsTXTTopDomainCategoriesResponseMetaNormalization = "PERCENTAGE"
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationMin0Max              RobotsTXTTopDomainCategoriesResponseMetaNormalization = "MIN0_MAX"
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationMinMax               RobotsTXTTopDomainCategoriesResponseMetaNormalization = "MIN_MAX"
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationRawValues            RobotsTXTTopDomainCategoriesResponseMetaNormalization = "RAW_VALUES"
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationPercentageChange     RobotsTXTTopDomainCategoriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationRollingAverage       RobotsTXTTopDomainCategoriesResponseMetaNormalization = "ROLLING_AVERAGE"
+	RobotsTXTTopDomainCategoriesResponseMetaNormalizationOverlappedPercentage RobotsTXTTopDomainCategoriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
 
-func (r *RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                               `json:"dataSource,required"`
-	Description     string                                                               `json:"description,required"`
-	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                               `json:"linkedUrl"`
-	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
-	JSON            robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation]
-type robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
+func (r RobotsTXTTopDomainCategoriesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case RobotsTXTTopDomainCategoriesResponseMetaNormalizationPercentage, RobotsTXTTopDomainCategoriesResponseMetaNormalizationMin0Max, RobotsTXTTopDomainCategoriesResponseMetaNormalizationMinMax, RobotsTXTTopDomainCategoriesResponseMetaNormalizationRawValues, RobotsTXTTopDomainCategoriesResponseMetaNormalizationPercentageChange, RobotsTXTTopDomainCategoriesResponseMetaNormalizationRollingAverage, RobotsTXTTopDomainCategoriesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
 type RobotsTXTTopDomainCategoriesResponseMetaUnit struct {

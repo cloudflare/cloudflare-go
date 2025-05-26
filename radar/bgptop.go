@@ -119,9 +119,10 @@ func (r bgpTopPrefixesResponseMetaDateRangeJSON) RawJSON() string {
 }
 
 type BGPTopPrefixesResponseTop0 struct {
-	Prefix string                         `json:"prefix,required"`
-	Value  string                         `json:"value,required"`
-	JSON   bgpTopPrefixesResponseTop0JSON `json:"-"`
+	Prefix string `json:"prefix,required"`
+	// A numeric string.
+	Value string                         `json:"value,required"`
+	JSON  bgpTopPrefixesResponseTop0JSON `json:"-"`
 }
 
 // bgpTopPrefixesResponseTop0JSON contains the JSON metadata for the struct

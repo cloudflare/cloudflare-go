@@ -62,6 +62,7 @@ func (r *LeakedCredentialSummaryService) Compromised(ctx context.Context, query 
 }
 
 type LeakedCredentialSummaryBotClassResponse struct {
+	// Metadata for the results.
 	Meta     LeakedCredentialSummaryBotClassResponseMeta     `json:"meta,required"`
 	Summary0 LeakedCredentialSummaryBotClassResponseSummary0 `json:"summary_0,required"`
 	JSON     leakedCredentialSummaryBotClassResponseJSON     `json:"-"`
@@ -84,21 +85,28 @@ func (r leakedCredentialSummaryBotClassResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type LeakedCredentialSummaryBotClassResponseMeta struct {
+	ConfidenceInfo LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []LeakedCredentialSummaryBotClassResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                    `json:"lastUpdated,required"`
-	Normalization  string                                                    `json:"normalization,required"`
-	ConfidenceInfo LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           leakedCredentialSummaryBotClassResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization LeakedCredentialSummaryBotClassResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []LeakedCredentialSummaryBotClassResponseMetaUnit `json:"units,required"`
+	JSON  leakedCredentialSummaryBotClassResponseMetaJSON   `json:"-"`
 }
 
 // leakedCredentialSummaryBotClassResponseMetaJSON contains the JSON metadata for
 // the struct [LeakedCredentialSummaryBotClassResponseMeta]
 type leakedCredentialSummaryBotClassResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -108,6 +116,67 @@ func (r *LeakedCredentialSummaryBotClassResponseMeta) UnmarshalJSON(data []byte)
 }
 
 func (r leakedCredentialSummaryBotClassResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo struct {
+	Annotations []LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                         `json:"level,required"`
+	JSON  leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo]
+type leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                               `json:"startTime,required" format:"date-time"`
+	JSON            leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation]
+type leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -136,66 +205,55 @@ func (r leakedCredentialSummaryBotClassResponseMetaDateRangeJSON) RawJSON() stri
 	return r.raw
 }
 
-type LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo struct {
-	Annotations []LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                 `json:"level"`
-	JSON        leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type LeakedCredentialSummaryBotClassResponseMetaNormalization string
+
+const (
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentage           LeakedCredentialSummaryBotClassResponseMetaNormalization = "PERCENTAGE"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationMin0Max              LeakedCredentialSummaryBotClassResponseMetaNormalization = "MIN0_MAX"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationMinMax               LeakedCredentialSummaryBotClassResponseMetaNormalization = "MIN_MAX"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationRawValues            LeakedCredentialSummaryBotClassResponseMetaNormalization = "RAW_VALUES"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentageChange     LeakedCredentialSummaryBotClassResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationRollingAverage       LeakedCredentialSummaryBotClassResponseMetaNormalization = "ROLLING_AVERAGE"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationOverlappedPercentage LeakedCredentialSummaryBotClassResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r LeakedCredentialSummaryBotClassResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentage, LeakedCredentialSummaryBotClassResponseMetaNormalizationMin0Max, LeakedCredentialSummaryBotClassResponseMetaNormalizationMinMax, LeakedCredentialSummaryBotClassResponseMetaNormalizationRawValues, LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentageChange, LeakedCredentialSummaryBotClassResponseMetaNormalizationRollingAverage, LeakedCredentialSummaryBotClassResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo]
-type leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type LeakedCredentialSummaryBotClassResponseMetaUnit struct {
+	Name  string                                              `json:"name,required"`
+	Value string                                              `json:"value,required"`
+	JSON  leakedCredentialSummaryBotClassResponseMetaUnitJSON `json:"-"`
+}
+
+// leakedCredentialSummaryBotClassResponseMetaUnitJSON contains the JSON metadata
+// for the struct [LeakedCredentialSummaryBotClassResponseMetaUnit]
+type leakedCredentialSummaryBotClassResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LeakedCredentialSummaryBotClassResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                  `json:"dataSource,required"`
-	Description     string                                                                  `json:"description,required"`
-	EventType       string                                                                  `json:"eventType,required"`
-	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                               `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                  `json:"linkedUrl"`
-	StartTime       time.Time                                                               `json:"startTime" format:"date-time"`
-	JSON            leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation]
-type leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r leakedCredentialSummaryBotClassResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type LeakedCredentialSummaryBotClassResponseSummary0 struct {
-	Bot   string                                              `json:"bot,required"`
+	// A numeric string.
+	Bot string `json:"bot,required"`
+	// A numeric string.
 	Human string                                              `json:"human,required"`
 	JSON  leakedCredentialSummaryBotClassResponseSummary0JSON `json:"-"`
 }
@@ -218,6 +276,7 @@ func (r leakedCredentialSummaryBotClassResponseSummary0JSON) RawJSON() string {
 }
 
 type LeakedCredentialSummaryCompromisedResponse struct {
+	// Metadata for the results.
 	Meta     LeakedCredentialSummaryCompromisedResponseMeta     `json:"meta,required"`
 	Summary0 LeakedCredentialSummaryCompromisedResponseSummary0 `json:"summary_0,required"`
 	JSON     leakedCredentialSummaryCompromisedResponseJSON     `json:"-"`
@@ -240,21 +299,28 @@ func (r leakedCredentialSummaryCompromisedResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type LeakedCredentialSummaryCompromisedResponseMeta struct {
+	ConfidenceInfo LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []LeakedCredentialSummaryCompromisedResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                       `json:"lastUpdated,required"`
-	Normalization  string                                                       `json:"normalization,required"`
-	ConfidenceInfo LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           leakedCredentialSummaryCompromisedResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization LeakedCredentialSummaryCompromisedResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []LeakedCredentialSummaryCompromisedResponseMetaUnit `json:"units,required"`
+	JSON  leakedCredentialSummaryCompromisedResponseMetaJSON   `json:"-"`
 }
 
 // leakedCredentialSummaryCompromisedResponseMetaJSON contains the JSON metadata
 // for the struct [LeakedCredentialSummaryCompromisedResponseMeta]
 type leakedCredentialSummaryCompromisedResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -264,6 +330,67 @@ func (r *LeakedCredentialSummaryCompromisedResponseMeta) UnmarshalJSON(data []by
 }
 
 func (r leakedCredentialSummaryCompromisedResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo struct {
+	Annotations []LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                            `json:"level,required"`
+	JSON  leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo]
+type leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                       `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                     `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                                  `json:"startTime,required" format:"date-time"`
+	JSON            leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation]
+type leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -293,66 +420,55 @@ func (r leakedCredentialSummaryCompromisedResponseMetaDateRangeJSON) RawJSON() s
 	return r.raw
 }
 
-type LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo struct {
-	Annotations []LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                    `json:"level"`
-	JSON        leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type LeakedCredentialSummaryCompromisedResponseMetaNormalization string
+
+const (
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentage           LeakedCredentialSummaryCompromisedResponseMetaNormalization = "PERCENTAGE"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationMin0Max              LeakedCredentialSummaryCompromisedResponseMetaNormalization = "MIN0_MAX"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationMinMax               LeakedCredentialSummaryCompromisedResponseMetaNormalization = "MIN_MAX"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationRawValues            LeakedCredentialSummaryCompromisedResponseMetaNormalization = "RAW_VALUES"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentageChange     LeakedCredentialSummaryCompromisedResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationRollingAverage       LeakedCredentialSummaryCompromisedResponseMetaNormalization = "ROLLING_AVERAGE"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationOverlappedPercentage LeakedCredentialSummaryCompromisedResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r LeakedCredentialSummaryCompromisedResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationMin0Max, LeakedCredentialSummaryCompromisedResponseMetaNormalizationMinMax, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRawValues, LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentageChange, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRollingAverage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON contains the
-// JSON metadata for the struct
-// [LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo]
-type leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type LeakedCredentialSummaryCompromisedResponseMetaUnit struct {
+	Name  string                                                 `json:"name,required"`
+	Value string                                                 `json:"value,required"`
+	JSON  leakedCredentialSummaryCompromisedResponseMetaUnitJSON `json:"-"`
+}
+
+// leakedCredentialSummaryCompromisedResponseMetaUnitJSON contains the JSON
+// metadata for the struct [LeakedCredentialSummaryCompromisedResponseMetaUnit]
+type leakedCredentialSummaryCompromisedResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LeakedCredentialSummaryCompromisedResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                     `json:"dataSource,required"`
-	Description     string                                                                     `json:"description,required"`
-	EventType       string                                                                     `json:"eventType,required"`
-	IsInstantaneous bool                                                                       `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                  `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                     `json:"linkedUrl"`
-	StartTime       time.Time                                                                  `json:"startTime" format:"date-time"`
-	JSON            leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation]
-type leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r leakedCredentialSummaryCompromisedResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type LeakedCredentialSummaryCompromisedResponseSummary0 struct {
-	Clean       string                                                 `json:"CLEAN,required"`
+	// A numeric string.
+	Clean string `json:"CLEAN,required"`
+	// A numeric string.
 	Compromised string                                                 `json:"COMPROMISED,required"`
 	JSON        leakedCredentialSummaryCompromisedResponseSummary0JSON `json:"-"`
 }

@@ -48,7 +48,8 @@ func (r *AITimeseriesGroupService) UserAgent(ctx context.Context, query AITimese
 }
 
 type AITimeseriesGroupUserAgentResponse struct {
-	Meta   interface{}                              `json:"meta,required"`
+	// Metadata for the results.
+	Meta   AITimeseriesGroupUserAgentResponseMeta   `json:"meta,required"`
 	Serie0 AITimeseriesGroupUserAgentResponseSerie0 `json:"serie_0,required"`
 	JSON   aiTimeseriesGroupUserAgentResponseJSON   `json:"-"`
 }
@@ -70,8 +71,198 @@ func (r aiTimeseriesGroupUserAgentResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type AITimeseriesGroupUserAgentResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    AITimeseriesGroupUserAgentResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo AITimeseriesGroupUserAgentResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []AITimeseriesGroupUserAgentResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AITimeseriesGroupUserAgentResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AITimeseriesGroupUserAgentResponseMetaUnit `json:"units,required"`
+	JSON  aiTimeseriesGroupUserAgentResponseMetaJSON   `json:"-"`
+}
+
+// aiTimeseriesGroupUserAgentResponseMetaJSON contains the JSON metadata for the
+// struct [AITimeseriesGroupUserAgentResponseMeta]
+type aiTimeseriesGroupUserAgentResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AITimeseriesGroupUserAgentResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiTimeseriesGroupUserAgentResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AITimeseriesGroupUserAgentResponseMetaAggInterval string
+
+const (
+	AITimeseriesGroupUserAgentResponseMetaAggIntervalFifteenMinutes AITimeseriesGroupUserAgentResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	AITimeseriesGroupUserAgentResponseMetaAggIntervalOneHour        AITimeseriesGroupUserAgentResponseMetaAggInterval = "ONE_HOUR"
+	AITimeseriesGroupUserAgentResponseMetaAggIntervalOneDay         AITimeseriesGroupUserAgentResponseMetaAggInterval = "ONE_DAY"
+	AITimeseriesGroupUserAgentResponseMetaAggIntervalOneWeek        AITimeseriesGroupUserAgentResponseMetaAggInterval = "ONE_WEEK"
+	AITimeseriesGroupUserAgentResponseMetaAggIntervalOneMonth       AITimeseriesGroupUserAgentResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r AITimeseriesGroupUserAgentResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case AITimeseriesGroupUserAgentResponseMetaAggIntervalFifteenMinutes, AITimeseriesGroupUserAgentResponseMetaAggIntervalOneHour, AITimeseriesGroupUserAgentResponseMetaAggIntervalOneDay, AITimeseriesGroupUserAgentResponseMetaAggIntervalOneWeek, AITimeseriesGroupUserAgentResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type AITimeseriesGroupUserAgentResponseMetaConfidenceInfo struct {
+	Annotations []AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                    `json:"level,required"`
+	JSON  aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [AITimeseriesGroupUserAgentResponseMetaConfidenceInfo]
+type aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AITimeseriesGroupUserAgentResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
+	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	JSON            aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation]
+type aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AITimeseriesGroupUserAgentResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	JSON      aiTimeseriesGroupUserAgentResponseMetaDateRangeJSON `json:"-"`
+}
+
+// aiTimeseriesGroupUserAgentResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [AITimeseriesGroupUserAgentResponseMetaDateRange]
+type aiTimeseriesGroupUserAgentResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AITimeseriesGroupUserAgentResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiTimeseriesGroupUserAgentResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AITimeseriesGroupUserAgentResponseMetaNormalization string
+
+const (
+	AITimeseriesGroupUserAgentResponseMetaNormalizationPercentage           AITimeseriesGroupUserAgentResponseMetaNormalization = "PERCENTAGE"
+	AITimeseriesGroupUserAgentResponseMetaNormalizationMin0Max              AITimeseriesGroupUserAgentResponseMetaNormalization = "MIN0_MAX"
+	AITimeseriesGroupUserAgentResponseMetaNormalizationMinMax               AITimeseriesGroupUserAgentResponseMetaNormalization = "MIN_MAX"
+	AITimeseriesGroupUserAgentResponseMetaNormalizationRawValues            AITimeseriesGroupUserAgentResponseMetaNormalization = "RAW_VALUES"
+	AITimeseriesGroupUserAgentResponseMetaNormalizationPercentageChange     AITimeseriesGroupUserAgentResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AITimeseriesGroupUserAgentResponseMetaNormalizationRollingAverage       AITimeseriesGroupUserAgentResponseMetaNormalization = "ROLLING_AVERAGE"
+	AITimeseriesGroupUserAgentResponseMetaNormalizationOverlappedPercentage AITimeseriesGroupUserAgentResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r AITimeseriesGroupUserAgentResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AITimeseriesGroupUserAgentResponseMetaNormalizationPercentage, AITimeseriesGroupUserAgentResponseMetaNormalizationMin0Max, AITimeseriesGroupUserAgentResponseMetaNormalizationMinMax, AITimeseriesGroupUserAgentResponseMetaNormalizationRawValues, AITimeseriesGroupUserAgentResponseMetaNormalizationPercentageChange, AITimeseriesGroupUserAgentResponseMetaNormalizationRollingAverage, AITimeseriesGroupUserAgentResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type AITimeseriesGroupUserAgentResponseMetaUnit struct {
+	Name  string                                         `json:"name,required"`
+	Value string                                         `json:"value,required"`
+	JSON  aiTimeseriesGroupUserAgentResponseMetaUnitJSON `json:"-"`
+}
+
+// aiTimeseriesGroupUserAgentResponseMetaUnitJSON contains the JSON metadata for
+// the struct [AITimeseriesGroupUserAgentResponseMetaUnit]
+type aiTimeseriesGroupUserAgentResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AITimeseriesGroupUserAgentResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiTimeseriesGroupUserAgentResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type AITimeseriesGroupUserAgentResponseSerie0 struct {
-	Timestamps  []string                                     `json:"timestamps,required"`
+	Timestamps  []time.Time                                  `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                          `json:"-,extras"`
 	JSON        aiTimeseriesGroupUserAgentResponseSerie0JSON `json:"-"`
 }

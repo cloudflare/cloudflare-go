@@ -49,16 +49,17 @@ func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesPara
 }
 
 type BgpipTimeseriesResponse struct {
-	Meta     BgpipTimeseriesResponseMeta     `json:"meta,required"`
-	Serie174 BgpipTimeseriesResponseSerie174 `json:"serie_174,required"`
-	JSON     bgpipTimeseriesResponseJSON     `json:"-"`
+	// Metadata for the results.
+	Meta   BgpipTimeseriesResponseMeta   `json:"meta,required"`
+	Serie0 BgpipTimeseriesResponseSerie0 `json:"serie_0,required"`
+	JSON   bgpipTimeseriesResponseJSON   `json:"-"`
 }
 
 // bgpipTimeseriesResponseJSON contains the JSON metadata for the struct
 // [BgpipTimeseriesResponse]
 type bgpipTimeseriesResponseJSON struct {
 	Meta        apijson.Field
-	Serie174    apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -71,17 +72,37 @@ func (r bgpipTimeseriesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type BgpipTimeseriesResponseMeta struct {
-	Queries []BgpipTimeseriesResponseMetaQuery `json:"queries,required"`
-	JSON    bgpipTimeseriesResponseMetaJSON    `json:"-"`
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    BgpipTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo BgpipTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []BgpipTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization BgpipTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []BgpipTimeseriesResponseMetaUnit `json:"units,required"`
+	Delay BgpipTimeseriesResponseMetaDelay  `json:"delay"`
+	JSON  bgpipTimeseriesResponseMetaJSON   `json:"-"`
 }
 
 // bgpipTimeseriesResponseMetaJSON contains the JSON metadata for the struct
 // [BgpipTimeseriesResponseMeta]
 type bgpipTimeseriesResponseMetaJSON struct {
-	Queries     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	Delay          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *BgpipTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
@@ -92,62 +113,295 @@ func (r bgpipTimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type BgpipTimeseriesResponseMetaQuery struct {
-	DateRange BgpipTimeseriesResponseMetaQueriesDateRange `json:"dateRange,required"`
-	Entity    string                                      `json:"entity,required"`
-	JSON      bgpipTimeseriesResponseMetaQueryJSON        `json:"-"`
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type BgpipTimeseriesResponseMetaAggInterval string
+
+const (
+	BgpipTimeseriesResponseMetaAggIntervalFifteenMinutes BgpipTimeseriesResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	BgpipTimeseriesResponseMetaAggIntervalOneHour        BgpipTimeseriesResponseMetaAggInterval = "ONE_HOUR"
+	BgpipTimeseriesResponseMetaAggIntervalOneDay         BgpipTimeseriesResponseMetaAggInterval = "ONE_DAY"
+	BgpipTimeseriesResponseMetaAggIntervalOneWeek        BgpipTimeseriesResponseMetaAggInterval = "ONE_WEEK"
+	BgpipTimeseriesResponseMetaAggIntervalOneMonth       BgpipTimeseriesResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r BgpipTimeseriesResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case BgpipTimeseriesResponseMetaAggIntervalFifteenMinutes, BgpipTimeseriesResponseMetaAggIntervalOneHour, BgpipTimeseriesResponseMetaAggIntervalOneDay, BgpipTimeseriesResponseMetaAggIntervalOneWeek, BgpipTimeseriesResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
 }
 
-// bgpipTimeseriesResponseMetaQueryJSON contains the JSON metadata for the struct
-// [BgpipTimeseriesResponseMetaQuery]
-type bgpipTimeseriesResponseMetaQueryJSON struct {
-	DateRange   apijson.Field
-	Entity      apijson.Field
+type BgpipTimeseriesResponseMetaConfidenceInfo struct {
+	Annotations []BgpipTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                         `json:"level,required"`
+	JSON  bgpipTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [BgpipTimeseriesResponseMetaConfidenceInfo]
+type bgpipTimeseriesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BgpipTimeseriesResponseMetaQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *BgpipTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpipTimeseriesResponseMetaQueryJSON) RawJSON() string {
+func (r bgpipTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-type BgpipTimeseriesResponseMetaQueriesDateRange struct {
-	EndTime   string                                          `json:"endTime,required"`
-	StartTime string                                          `json:"startTime,required"`
-	JSON      bgpipTimeseriesResponseMetaQueriesDateRangeJSON `json:"-"`
+// Annotation associated with the result (e.g. outage or other type of event).
+type BgpipTimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
+	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON            bgpipTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// bgpipTimeseriesResponseMetaQueriesDateRangeJSON contains the JSON metadata for
-// the struct [BgpipTimeseriesResponseMetaQueriesDateRange]
-type bgpipTimeseriesResponseMetaQueriesDateRangeJSON struct {
+// bgpipTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [BgpipTimeseriesResponseMetaConfidenceInfoAnnotation]
+type bgpipTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
+	JSON      bgpipTimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [BgpipTimeseriesResponseMetaDateRange]
+type bgpipTimeseriesResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BgpipTimeseriesResponseMetaQueriesDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *BgpipTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpipTimeseriesResponseMetaQueriesDateRangeJSON) RawJSON() string {
+func (r bgpipTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type BgpipTimeseriesResponseSerie174 struct {
-	IPV4       []string                            `json:"ipv4,required"`
-	IPV6       []string                            `json:"ipv6,required"`
-	Timestamps []time.Time                         `json:"timestamps,required" format:"date-time"`
-	JSON       bgpipTimeseriesResponseSerie174JSON `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type BgpipTimeseriesResponseMetaNormalization string
+
+const (
+	BgpipTimeseriesResponseMetaNormalizationPercentage           BgpipTimeseriesResponseMetaNormalization = "PERCENTAGE"
+	BgpipTimeseriesResponseMetaNormalizationMin0Max              BgpipTimeseriesResponseMetaNormalization = "MIN0_MAX"
+	BgpipTimeseriesResponseMetaNormalizationMinMax               BgpipTimeseriesResponseMetaNormalization = "MIN_MAX"
+	BgpipTimeseriesResponseMetaNormalizationRawValues            BgpipTimeseriesResponseMetaNormalization = "RAW_VALUES"
+	BgpipTimeseriesResponseMetaNormalizationPercentageChange     BgpipTimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	BgpipTimeseriesResponseMetaNormalizationRollingAverage       BgpipTimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
+	BgpipTimeseriesResponseMetaNormalizationOverlappedPercentage BgpipTimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r BgpipTimeseriesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case BgpipTimeseriesResponseMetaNormalizationPercentage, BgpipTimeseriesResponseMetaNormalizationMin0Max, BgpipTimeseriesResponseMetaNormalizationMinMax, BgpipTimeseriesResponseMetaNormalizationRawValues, BgpipTimeseriesResponseMetaNormalizationPercentageChange, BgpipTimeseriesResponseMetaNormalizationRollingAverage, BgpipTimeseriesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// bgpipTimeseriesResponseSerie174JSON contains the JSON metadata for the struct
-// [BgpipTimeseriesResponseSerie174]
-type bgpipTimeseriesResponseSerie174JSON struct {
+type BgpipTimeseriesResponseMetaUnit struct {
+	Name  string                              `json:"name,required"`
+	Value string                              `json:"value,required"`
+	JSON  bgpipTimeseriesResponseMetaUnitJSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaUnitJSON contains the JSON metadata for the struct
+// [BgpipTimeseriesResponseMetaUnit]
+type bgpipTimeseriesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaDelay struct {
+	ASNData     BgpipTimeseriesResponseMetaDelayASNData     `json:"asn_data,required"`
+	CountryData BgpipTimeseriesResponseMetaDelayCountryData `json:"country_data,required"`
+	Healthy     bool                                        `json:"healthy,required"`
+	NowTs       float64                                     `json:"nowTs,required"`
+	JSON        bgpipTimeseriesResponseMetaDelayJSON        `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaDelayJSON contains the JSON metadata for the struct
+// [BgpipTimeseriesResponseMetaDelay]
+type bgpipTimeseriesResponseMetaDelayJSON struct {
+	ASNData     apijson.Field
+	CountryData apijson.Field
+	Healthy     apijson.Field
+	NowTs       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaDelay) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaDelayJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaDelayASNData struct {
+	DelaySecs float64                                       `json:"delaySecs,required"`
+	DelayStr  string                                        `json:"delayStr,required"`
+	Healthy   bool                                          `json:"healthy,required"`
+	Latest    BgpipTimeseriesResponseMetaDelayASNDataLatest `json:"latest,required"`
+	JSON      bgpipTimeseriesResponseMetaDelayASNDataJSON   `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaDelayASNDataJSON contains the JSON metadata for the
+// struct [BgpipTimeseriesResponseMetaDelayASNData]
+type bgpipTimeseriesResponseMetaDelayASNDataJSON struct {
+	DelaySecs   apijson.Field
+	DelayStr    apijson.Field
+	Healthy     apijson.Field
+	Latest      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaDelayASNData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaDelayASNDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaDelayASNDataLatest struct {
+	EntriesCount float64                                           `json:"entries_count,required"`
+	Path         string                                            `json:"path,required"`
+	Timestamp    float64                                           `json:"timestamp,required"`
+	JSON         bgpipTimeseriesResponseMetaDelayASNDataLatestJSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaDelayASNDataLatestJSON contains the JSON metadata for
+// the struct [BgpipTimeseriesResponseMetaDelayASNDataLatest]
+type bgpipTimeseriesResponseMetaDelayASNDataLatestJSON struct {
+	EntriesCount apijson.Field
+	Path         apijson.Field
+	Timestamp    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaDelayASNDataLatest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaDelayASNDataLatestJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaDelayCountryData struct {
+	DelaySecs float64                                           `json:"delaySecs,required"`
+	DelayStr  string                                            `json:"delayStr,required"`
+	Healthy   bool                                              `json:"healthy,required"`
+	Latest    BgpipTimeseriesResponseMetaDelayCountryDataLatest `json:"latest,required"`
+	JSON      bgpipTimeseriesResponseMetaDelayCountryDataJSON   `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaDelayCountryDataJSON contains the JSON metadata for
+// the struct [BgpipTimeseriesResponseMetaDelayCountryData]
+type bgpipTimeseriesResponseMetaDelayCountryDataJSON struct {
+	DelaySecs   apijson.Field
+	DelayStr    apijson.Field
+	Healthy     apijson.Field
+	Latest      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaDelayCountryData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaDelayCountryDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaDelayCountryDataLatest struct {
+	Count     float64                                               `json:"count,required"`
+	Timestamp float64                                               `json:"timestamp,required"`
+	JSON      bgpipTimeseriesResponseMetaDelayCountryDataLatestJSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaDelayCountryDataLatestJSON contains the JSON metadata
+// for the struct [BgpipTimeseriesResponseMetaDelayCountryDataLatest]
+type bgpipTimeseriesResponseMetaDelayCountryDataLatestJSON struct {
+	Count       apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaDelayCountryDataLatest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaDelayCountryDataLatestJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseSerie0 struct {
+	IPV4       []string                          `json:"ipv4,required"`
+	IPV6       []string                          `json:"ipv6,required"`
+	Timestamps []time.Time                       `json:"timestamps,required" format:"date-time"`
+	JSON       bgpipTimeseriesResponseSerie0JSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseSerie0JSON contains the JSON metadata for the struct
+// [BgpipTimeseriesResponseSerie0]
+type bgpipTimeseriesResponseSerie0JSON struct {
 	IPV4        apijson.Field
 	IPV6        apijson.Field
 	Timestamps  apijson.Field
@@ -155,11 +409,11 @@ type bgpipTimeseriesResponseSerie174JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BgpipTimeseriesResponseSerie174) UnmarshalJSON(data []byte) (err error) {
+func (r *BgpipTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpipTimeseriesResponseSerie174JSON) RawJSON() string {
+func (r bgpipTimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

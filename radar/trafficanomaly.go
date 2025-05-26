@@ -78,7 +78,7 @@ type TrafficAnomalyGetResponseTrafficAnomaly struct {
 	Type                 string                                                   `json:"type,required"`
 	UUID                 string                                                   `json:"uuid,required"`
 	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails"`
-	EndDate              string                                                   `json:"endDate"`
+	EndDate              time.Time                                                `json:"endDate" format:"date-time"`
 	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails"`
 	VisibleInDataSources []string                                                 `json:"visibleInDataSources"`
 	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON              `json:"-"`

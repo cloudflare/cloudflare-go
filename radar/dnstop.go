@@ -62,6 +62,7 @@ func (r *DNSTopService) Locations(ctx context.Context, query DNSTopLocationsPara
 }
 
 type DNSTopAsesResponse struct {
+	// Metadata for the results.
 	Meta DNSTopAsesResponseMeta   `json:"meta,required"`
 	Top0 []DNSTopAsesResponseTop0 `json:"top_0,required"`
 	JSON dnsTopAsesResponseJSON   `json:"-"`
@@ -84,17 +85,28 @@ func (r dnsTopAsesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type DNSTopAsesResponseMeta struct {
+	ConfidenceInfo DNSTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []DNSTopAsesResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo DNSTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           dnsTopAsesResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization DNSTopAsesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []DNSTopAsesResponseMetaUnit `json:"units,required"`
+	JSON  dnsTopAsesResponseMetaJSON   `json:"-"`
 }
 
 // dnsTopAsesResponseMetaJSON contains the JSON metadata for the struct
 // [DNSTopAsesResponseMeta]
 type dnsTopAsesResponseMetaJSON struct {
-	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -104,6 +116,65 @@ func (r *DNSTopAsesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsTopAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSTopAsesResponseMetaConfidenceInfo struct {
+	Annotations []DNSTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                    `json:"level,required"`
+	JSON  dnsTopAsesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// dnsTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [DNSTopAsesResponseMetaConfidenceInfo]
+type dnsTopAsesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type DNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
+	LinkedURL       string                                             `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                          `json:"startTime,required" format:"date-time"`
+	JSON            dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
+// for the struct [DNSTopAsesResponseMetaConfidenceInfoAnnotation]
+type dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -132,67 +203,57 @@ func (r dnsTopAsesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSTopAsesResponseMetaConfidenceInfo struct {
-	Annotations []DNSTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                            `json:"level"`
-	JSON        dnsTopAsesResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type DNSTopAsesResponseMetaNormalization string
+
+const (
+	DNSTopAsesResponseMetaNormalizationPercentage           DNSTopAsesResponseMetaNormalization = "PERCENTAGE"
+	DNSTopAsesResponseMetaNormalizationMin0Max              DNSTopAsesResponseMetaNormalization = "MIN0_MAX"
+	DNSTopAsesResponseMetaNormalizationMinMax               DNSTopAsesResponseMetaNormalization = "MIN_MAX"
+	DNSTopAsesResponseMetaNormalizationRawValues            DNSTopAsesResponseMetaNormalization = "RAW_VALUES"
+	DNSTopAsesResponseMetaNormalizationPercentageChange     DNSTopAsesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	DNSTopAsesResponseMetaNormalizationRollingAverage       DNSTopAsesResponseMetaNormalization = "ROLLING_AVERAGE"
+	DNSTopAsesResponseMetaNormalizationOverlappedPercentage DNSTopAsesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r DNSTopAsesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case DNSTopAsesResponseMetaNormalizationPercentage, DNSTopAsesResponseMetaNormalizationMin0Max, DNSTopAsesResponseMetaNormalizationMinMax, DNSTopAsesResponseMetaNormalizationRawValues, DNSTopAsesResponseMetaNormalizationPercentageChange, DNSTopAsesResponseMetaNormalizationRollingAverage, DNSTopAsesResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// dnsTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [DNSTopAsesResponseMetaConfidenceInfo]
-type dnsTopAsesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type DNSTopAsesResponseMetaUnit struct {
+	Name  string                         `json:"name,required"`
+	Value string                         `json:"value,required"`
+	JSON  dnsTopAsesResponseMetaUnitJSON `json:"-"`
+}
+
+// dnsTopAsesResponseMetaUnitJSON contains the JSON metadata for the struct
+// [DNSTopAsesResponseMetaUnit]
+type dnsTopAsesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSTopAsesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                             `json:"dataSource,required"`
-	Description     string                                             `json:"description,required"`
-	EventType       string                                             `json:"eventType,required"`
-	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
-	EndTime         time.Time                                          `json:"endTime" format:"date-time"`
-	LinkedURL       string                                             `json:"linkedUrl"`
-	StartTime       time.Time                                          `json:"startTime" format:"date-time"`
-	JSON            dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [DNSTopAsesResponseMetaConfidenceInfoAnnotation]
-type dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DNSTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r dnsTopAsesResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type DNSTopAsesResponseTop0 struct {
-	ClientASN    int64                      `json:"clientASN,required"`
-	ClientAsName string                     `json:"clientASName,required"`
-	Value        string                     `json:"value,required"`
-	JSON         dnsTopAsesResponseTop0JSON `json:"-"`
+	ClientASN    int64  `json:"clientASN,required"`
+	ClientAsName string `json:"clientASName,required"`
+	// A numeric string.
+	Value string                     `json:"value,required"`
+	JSON  dnsTopAsesResponseTop0JSON `json:"-"`
 }
 
 // dnsTopAsesResponseTop0JSON contains the JSON metadata for the struct
@@ -214,6 +275,7 @@ func (r dnsTopAsesResponseTop0JSON) RawJSON() string {
 }
 
 type DNSTopLocationsResponse struct {
+	// Metadata for the results.
 	Meta DNSTopLocationsResponseMeta   `json:"meta,required"`
 	Top0 []DNSTopLocationsResponseTop0 `json:"top_0,required"`
 	JSON dnsTopLocationsResponseJSON   `json:"-"`
@@ -236,17 +298,28 @@ func (r dnsTopLocationsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type DNSTopLocationsResponseMeta struct {
+	ConfidenceInfo DNSTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []DNSTopLocationsResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo DNSTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           dnsTopLocationsResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization DNSTopLocationsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []DNSTopLocationsResponseMetaUnit `json:"units,required"`
+	JSON  dnsTopLocationsResponseMetaJSON   `json:"-"`
 }
 
 // dnsTopLocationsResponseMetaJSON contains the JSON metadata for the struct
 // [DNSTopLocationsResponseMeta]
 type dnsTopLocationsResponseMetaJSON struct {
-	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -256,6 +329,65 @@ func (r *DNSTopLocationsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsTopLocationsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSTopLocationsResponseMetaConfidenceInfo struct {
+	Annotations []DNSTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                         `json:"level,required"`
+	JSON  dnsTopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// dnsTopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [DNSTopLocationsResponseMetaConfidenceInfo]
+type dnsTopLocationsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type DNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
+	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON            dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [DNSTopLocationsResponseMetaConfidenceInfoAnnotation]
+type dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -284,67 +416,57 @@ func (r dnsTopLocationsResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSTopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []DNSTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                 `json:"level"`
-	JSON        dnsTopLocationsResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type DNSTopLocationsResponseMetaNormalization string
+
+const (
+	DNSTopLocationsResponseMetaNormalizationPercentage           DNSTopLocationsResponseMetaNormalization = "PERCENTAGE"
+	DNSTopLocationsResponseMetaNormalizationMin0Max              DNSTopLocationsResponseMetaNormalization = "MIN0_MAX"
+	DNSTopLocationsResponseMetaNormalizationMinMax               DNSTopLocationsResponseMetaNormalization = "MIN_MAX"
+	DNSTopLocationsResponseMetaNormalizationRawValues            DNSTopLocationsResponseMetaNormalization = "RAW_VALUES"
+	DNSTopLocationsResponseMetaNormalizationPercentageChange     DNSTopLocationsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	DNSTopLocationsResponseMetaNormalizationRollingAverage       DNSTopLocationsResponseMetaNormalization = "ROLLING_AVERAGE"
+	DNSTopLocationsResponseMetaNormalizationOverlappedPercentage DNSTopLocationsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r DNSTopLocationsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case DNSTopLocationsResponseMetaNormalizationPercentage, DNSTopLocationsResponseMetaNormalizationMin0Max, DNSTopLocationsResponseMetaNormalizationMinMax, DNSTopLocationsResponseMetaNormalizationRawValues, DNSTopLocationsResponseMetaNormalizationPercentageChange, DNSTopLocationsResponseMetaNormalizationRollingAverage, DNSTopLocationsResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// dnsTopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [DNSTopLocationsResponseMetaConfidenceInfo]
-type dnsTopLocationsResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type DNSTopLocationsResponseMetaUnit struct {
+	Name  string                              `json:"name,required"`
+	Value string                              `json:"value,required"`
+	JSON  dnsTopLocationsResponseMetaUnitJSON `json:"-"`
+}
+
+// dnsTopLocationsResponseMetaUnitJSON contains the JSON metadata for the struct
+// [DNSTopLocationsResponseMetaUnit]
+type dnsTopLocationsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSTopLocationsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                  `json:"dataSource,required"`
-	Description     string                                                  `json:"description,required"`
-	EventType       string                                                  `json:"eventType,required"`
-	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
-	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                  `json:"linkedUrl"`
-	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
-	JSON            dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [DNSTopLocationsResponseMetaConfidenceInfoAnnotation]
-type dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DNSTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r dnsTopLocationsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type DNSTopLocationsResponseTop0 struct {
-	ClientCountryAlpha2 string                          `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                          `json:"clientCountryName,required"`
-	Value               string                          `json:"value,required"`
-	JSON                dnsTopLocationsResponseTop0JSON `json:"-"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string `json:"clientCountryName,required"`
+	// A numeric string.
+	Value string                          `json:"value,required"`
+	JSON  dnsTopLocationsResponseTop0JSON `json:"-"`
 }
 
 // dnsTopLocationsResponseTop0JSON contains the JSON metadata for the struct

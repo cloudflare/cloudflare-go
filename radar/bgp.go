@@ -82,10 +82,10 @@ func (r bgpTimeseriesResponseJSON) RawJSON() string {
 }
 
 type BGPTimeseriesResponseMeta struct {
-	AggInterval    string                                  `json:"aggInterval,required"`
+	AggInterval    BGPTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo BGPTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []BGPTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    time.Time                               `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo BGPTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           bgpTimeseriesResponseMetaJSON           `json:"-"`
 }
 
@@ -93,9 +93,9 @@ type BGPTimeseriesResponseMeta struct {
 // [BGPTimeseriesResponseMeta]
 type bgpTimeseriesResponseMetaJSON struct {
 	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
-	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -105,6 +105,82 @@ func (r *BGPTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpTimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPTimeseriesResponseMetaAggInterval string
+
+const (
+	BGPTimeseriesResponseMetaAggInterval15m BGPTimeseriesResponseMetaAggInterval = "15m"
+	BGPTimeseriesResponseMetaAggInterval1h  BGPTimeseriesResponseMetaAggInterval = "1h"
+	BGPTimeseriesResponseMetaAggInterval1d  BGPTimeseriesResponseMetaAggInterval = "1d"
+	BGPTimeseriesResponseMetaAggInterval1w  BGPTimeseriesResponseMetaAggInterval = "1w"
+)
+
+func (r BGPTimeseriesResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesResponseMetaAggInterval15m, BGPTimeseriesResponseMetaAggInterval1h, BGPTimeseriesResponseMetaAggInterval1d, BGPTimeseriesResponseMetaAggInterval1w:
+		return true
+	}
+	return false
+}
+
+type BGPTimeseriesResponseMetaConfidenceInfo struct {
+	Annotations []BGPTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                       `json:"level,required"`
+	JSON  bgpTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// bgpTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
+// struct [BGPTimeseriesResponseMetaConfidenceInfo]
+type bgpTimeseriesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
+	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                             `json:"startTime,required" format:"date-time"`
+	JSON            bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
+// for the struct [BGPTimeseriesResponseMetaConfidenceInfoAnnotation]
+type bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *BGPTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -130,62 +206,6 @@ func (r *BGPTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err err
 }
 
 func (r bgpTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []BGPTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                               `json:"level"`
-	JSON        bgpTimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// bgpTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [BGPTimeseriesResponseMetaConfidenceInfo]
-type bgpTimeseriesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                `json:"dataSource,required"`
-	Description     string                                                `json:"description,required"`
-	EventType       string                                                `json:"eventType,required"`
-	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
-	EndTime         time.Time                                             `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                `json:"linkedUrl"`
-	StartTime       time.Time                                             `json:"startTime" format:"date-time"`
-	JSON            bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [BGPTimeseriesResponseMetaConfidenceInfoAnnotation]
-type bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *BGPTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

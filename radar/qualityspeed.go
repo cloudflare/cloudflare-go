@@ -66,8 +66,9 @@ func (r *QualitySpeedService) Summary(ctx context.Context, query QualitySpeedSum
 
 type QualitySpeedHistogramResponse struct {
 	Histogram0 QualitySpeedHistogramResponseHistogram0 `json:"histogram_0,required"`
-	Meta       interface{}                             `json:"meta,required"`
-	JSON       qualitySpeedHistogramResponseJSON       `json:"-"`
+	// Metadata for the results.
+	Meta QualitySpeedHistogramResponseMeta `json:"meta,required"`
+	JSON qualitySpeedHistogramResponseJSON `json:"-"`
 }
 
 // qualitySpeedHistogramResponseJSON contains the JSON metadata for the struct
@@ -112,7 +113,177 @@ func (r qualitySpeedHistogramResponseHistogram0JSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
+type QualitySpeedHistogramResponseMeta struct {
+	// The width for every bucket in the histogram.
+	BucketSize     int64                                           `json:"bucketSize,required"`
+	ConfidenceInfo QualitySpeedHistogramResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	DateRange      []QualitySpeedHistogramResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization QualitySpeedHistogramResponseMetaNormalization `json:"normalization,required"`
+	TotalTests    []int64                                        `json:"totalTests,required"`
+	// Measurement units for the results.
+	Units []QualitySpeedHistogramResponseMetaUnit `json:"units,required"`
+	JSON  qualitySpeedHistogramResponseMetaJSON   `json:"-"`
+}
+
+// qualitySpeedHistogramResponseMetaJSON contains the JSON metadata for the struct
+// [QualitySpeedHistogramResponseMeta]
+type qualitySpeedHistogramResponseMetaJSON struct {
+	BucketSize     apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	TotalTests     apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *QualitySpeedHistogramResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedHistogramResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualitySpeedHistogramResponseMetaConfidenceInfo struct {
+	Annotations []QualitySpeedHistogramResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                               `json:"level,required"`
+	JSON  qualitySpeedHistogramResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// qualitySpeedHistogramResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [QualitySpeedHistogramResponseMetaConfidenceInfo]
+type qualitySpeedHistogramResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedHistogramResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedHistogramResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type QualitySpeedHistogramResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON            qualitySpeedHistogramResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualitySpeedHistogramResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [QualitySpeedHistogramResponseMetaConfidenceInfoAnnotation]
+type qualitySpeedHistogramResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualitySpeedHistogramResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedHistogramResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualitySpeedHistogramResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	JSON      qualitySpeedHistogramResponseMetaDateRangeJSON `json:"-"`
+}
+
+// qualitySpeedHistogramResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [QualitySpeedHistogramResponseMetaDateRange]
+type qualitySpeedHistogramResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedHistogramResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedHistogramResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type QualitySpeedHistogramResponseMetaNormalization string
+
+const (
+	QualitySpeedHistogramResponseMetaNormalizationPercentage           QualitySpeedHistogramResponseMetaNormalization = "PERCENTAGE"
+	QualitySpeedHistogramResponseMetaNormalizationMin0Max              QualitySpeedHistogramResponseMetaNormalization = "MIN0_MAX"
+	QualitySpeedHistogramResponseMetaNormalizationMinMax               QualitySpeedHistogramResponseMetaNormalization = "MIN_MAX"
+	QualitySpeedHistogramResponseMetaNormalizationRawValues            QualitySpeedHistogramResponseMetaNormalization = "RAW_VALUES"
+	QualitySpeedHistogramResponseMetaNormalizationPercentageChange     QualitySpeedHistogramResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	QualitySpeedHistogramResponseMetaNormalizationRollingAverage       QualitySpeedHistogramResponseMetaNormalization = "ROLLING_AVERAGE"
+	QualitySpeedHistogramResponseMetaNormalizationOverlappedPercentage QualitySpeedHistogramResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r QualitySpeedHistogramResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case QualitySpeedHistogramResponseMetaNormalizationPercentage, QualitySpeedHistogramResponseMetaNormalizationMin0Max, QualitySpeedHistogramResponseMetaNormalizationMinMax, QualitySpeedHistogramResponseMetaNormalizationRawValues, QualitySpeedHistogramResponseMetaNormalizationPercentageChange, QualitySpeedHistogramResponseMetaNormalizationRollingAverage, QualitySpeedHistogramResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
+}
+
+type QualitySpeedHistogramResponseMetaUnit struct {
+	Name  string                                    `json:"name,required"`
+	Value string                                    `json:"value,required"`
+	JSON  qualitySpeedHistogramResponseMetaUnitJSON `json:"-"`
+}
+
+// qualitySpeedHistogramResponseMetaUnitJSON contains the JSON metadata for the
+// struct [QualitySpeedHistogramResponseMetaUnit]
+type qualitySpeedHistogramResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedHistogramResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedHistogramResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
 type QualitySpeedSummaryResponse struct {
+	// Metadata for the results.
 	Meta     QualitySpeedSummaryResponseMeta     `json:"meta,required"`
 	Summary0 QualitySpeedSummaryResponseSummary0 `json:"summary_0,required"`
 	JSON     qualitySpeedSummaryResponseJSON     `json:"-"`
@@ -135,21 +306,28 @@ func (r qualitySpeedSummaryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type QualitySpeedSummaryResponseMeta struct {
+	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []QualitySpeedSummaryResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                        `json:"lastUpdated,required"`
-	Normalization  string                                        `json:"normalization,required"`
-	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualitySpeedSummaryResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization QualitySpeedSummaryResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []QualitySpeedSummaryResponseMetaUnit `json:"units,required"`
+	JSON  qualitySpeedSummaryResponseMetaJSON   `json:"-"`
 }
 
 // qualitySpeedSummaryResponseMetaJSON contains the JSON metadata for the struct
 // [QualitySpeedSummaryResponseMeta]
 type qualitySpeedSummaryResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
-	ConfidenceInfo apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -159,6 +337,66 @@ func (r *QualitySpeedSummaryResponseMeta) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r qualitySpeedSummaryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualitySpeedSummaryResponseMetaConfidenceInfo struct {
+	Annotations []QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                             `json:"level,required"`
+	JSON  qualitySpeedSummaryResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// qualitySpeedSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [QualitySpeedSummaryResponseMetaConfidenceInfo]
+type qualitySpeedSummaryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualitySpeedSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
+	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
+	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	JSON            qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation]
+type qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndTime         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -187,60 +425,48 @@ func (r qualitySpeedSummaryResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type QualitySpeedSummaryResponseMetaConfidenceInfo struct {
-	Annotations []QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                     `json:"level"`
-	JSON        qualitySpeedSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type QualitySpeedSummaryResponseMetaNormalization string
+
+const (
+	QualitySpeedSummaryResponseMetaNormalizationPercentage           QualitySpeedSummaryResponseMetaNormalization = "PERCENTAGE"
+	QualitySpeedSummaryResponseMetaNormalizationMin0Max              QualitySpeedSummaryResponseMetaNormalization = "MIN0_MAX"
+	QualitySpeedSummaryResponseMetaNormalizationMinMax               QualitySpeedSummaryResponseMetaNormalization = "MIN_MAX"
+	QualitySpeedSummaryResponseMetaNormalizationRawValues            QualitySpeedSummaryResponseMetaNormalization = "RAW_VALUES"
+	QualitySpeedSummaryResponseMetaNormalizationPercentageChange     QualitySpeedSummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	QualitySpeedSummaryResponseMetaNormalizationRollingAverage       QualitySpeedSummaryResponseMetaNormalization = "ROLLING_AVERAGE"
+	QualitySpeedSummaryResponseMetaNormalizationOverlappedPercentage QualitySpeedSummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+)
+
+func (r QualitySpeedSummaryResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case QualitySpeedSummaryResponseMetaNormalizationPercentage, QualitySpeedSummaryResponseMetaNormalizationMin0Max, QualitySpeedSummaryResponseMetaNormalizationMinMax, QualitySpeedSummaryResponseMetaNormalizationRawValues, QualitySpeedSummaryResponseMetaNormalizationPercentageChange, QualitySpeedSummaryResponseMetaNormalizationRollingAverage, QualitySpeedSummaryResponseMetaNormalizationOverlappedPercentage:
+		return true
+	}
+	return false
 }
 
-// qualitySpeedSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [QualitySpeedSummaryResponseMetaConfidenceInfo]
-type qualitySpeedSummaryResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type QualitySpeedSummaryResponseMetaUnit struct {
+	Name  string                                  `json:"name,required"`
+	Value string                                  `json:"value,required"`
+	JSON  qualitySpeedSummaryResponseMetaUnitJSON `json:"-"`
+}
+
+// qualitySpeedSummaryResponseMetaUnitJSON contains the JSON metadata for the
+// struct [QualitySpeedSummaryResponseMetaUnit]
+type qualitySpeedSummaryResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *QualitySpeedSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *QualitySpeedSummaryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r qualitySpeedSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                      `json:"dataSource,required"`
-	Description     string                                                      `json:"description,required"`
-	EventType       string                                                      `json:"eventType,required"`
-	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                      `json:"linkedUrl"`
-	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
-	JSON            qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation]
-type qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r qualitySpeedSummaryResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
