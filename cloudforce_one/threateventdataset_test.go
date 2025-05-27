@@ -84,7 +84,7 @@ func TestThreatEventDatasetEdit(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Datasets.Edit(
 		context.TODO(),
-		"dataset_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventDatasetEditParams{
 			AccountID: cloudflare.F(0.000000),
 			IsPublic:  cloudflare.F(true),
@@ -116,7 +116,7 @@ func TestThreatEventDatasetGet(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Datasets.Get(
 		context.TODO(),
-		"dataset_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventDatasetGetParams{
 			AccountID: cloudflare.F(0.000000),
 		},

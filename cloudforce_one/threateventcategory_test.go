@@ -86,7 +86,7 @@ func TestThreatEventCategoryDelete(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.Delete(
 		context.TODO(),
-		"category_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventCategoryDeleteParams{
 			AccountID: cloudflare.F(0.000000),
 		},
@@ -116,7 +116,7 @@ func TestThreatEventCategoryEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.Edit(
 		context.TODO(),
-		"category_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventCategoryEditParams{
 			AccountID:   cloudflare.F(0.000000),
 			KillChain:   cloudflare.F(0.000000),
@@ -150,7 +150,7 @@ func TestThreatEventCategoryGet(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.Get(
 		context.TODO(),
-		"category_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventCategoryGetParams{
 			AccountID: cloudflare.F(0.000000),
 		},

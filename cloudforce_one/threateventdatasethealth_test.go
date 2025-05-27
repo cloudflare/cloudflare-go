@@ -29,7 +29,7 @@ func TestThreatEventDatasetHealthGet(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Datasets.Health.Get(
 		context.TODO(),
-		"dataset_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventDatasetHealthGetParams{
 			AccountID: cloudflare.F(0.000000),
 		},
