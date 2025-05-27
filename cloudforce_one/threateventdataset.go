@@ -22,6 +22,7 @@ import (
 // the [NewThreatEventDatasetService] method instead.
 type ThreatEventDatasetService struct {
 	Options []option.RequestOption
+	Health  *ThreatEventDatasetHealthService
 }
 
 // NewThreatEventDatasetService generates a new service that applies the given
@@ -30,6 +31,7 @@ type ThreatEventDatasetService struct {
 func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventDatasetService) {
 	r = &ThreatEventDatasetService{}
 	r.Options = opts
+	r.Health = NewThreatEventDatasetHealthService(opts...)
 	return
 }
 
