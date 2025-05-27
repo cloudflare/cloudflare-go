@@ -122,15 +122,15 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 }
 
 // Removes one or more targets.
-func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, params AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch_delete", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -1242,12 +1242,6 @@ type AccessInfrastructureTargetDeleteParams struct {
 type AccessInfrastructureTargetBulkDeleteParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// List of target IDs to bulk delete
-	TargetIDs param.Field[[]string] `json:"target_ids,required" format:"uuid"`
-}
-
-func (r AccessInfrastructureTargetBulkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type AccessInfrastructureTargetBulkUpdateParams struct {

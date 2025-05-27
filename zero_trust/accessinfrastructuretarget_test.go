@@ -180,7 +180,6 @@ func TestAccessInfrastructureTargetBulkDelete(t *testing.T) {
 	)
 	err := client.ZeroTrust.Access.Infrastructure.Targets.BulkDelete(context.TODO(), zero_trust.AccessInfrastructureTargetBulkDeleteParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		TargetIDs: cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
