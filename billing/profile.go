@@ -36,6 +36,8 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 }
 
 // Gets the current billing profile for the account.
+//
+// Deprecated: deprecated
 func (r *ProfileService) Get(ctx context.Context, query ProfileGetParams, opts ...option.RequestOption) (res *ProfileGetResponse, err error) {
 	var env ProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -36,6 +36,8 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 }
 
 // Create a new Bookmark application.
+//
+// Deprecated: deprecated
 func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, params AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -57,6 +59,8 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 }
 
 // Updates a configured Bookmark application.
+//
+// Deprecated: deprecated
 func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, params AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -78,6 +82,8 @@ func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, p
 }
 
 // Lists Bookmark applications.
+//
+// Deprecated: deprecated
 func (r *AccessBookmarkService) List(ctx context.Context, query AccessBookmarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Bookmark], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -100,11 +106,15 @@ func (r *AccessBookmarkService) List(ctx context.Context, query AccessBookmarkLi
 }
 
 // Lists Bookmark applications.
+//
+// Deprecated: deprecated
 func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, query AccessBookmarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Bookmark] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a Bookmark application.
+//
+// Deprecated: deprecated
 func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	var env AccessBookmarkDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -126,6 +136,8 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, b
 }
 
 // Fetches a single Bookmark application.
+//
+// Deprecated: deprecated
 func (r *AccessBookmarkService) Get(ctx context.Context, bookmarkID string, query AccessBookmarkGetParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

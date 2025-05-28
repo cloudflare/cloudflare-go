@@ -38,6 +38,8 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 //
 // **Deprecated**: please use POST
 // /accounts/{account_id}/devices/registrations/unrevoke instead.
+//
+// Deprecated: deprecated
 func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DeviceUnrevokeNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

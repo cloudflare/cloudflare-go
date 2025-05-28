@@ -33,6 +33,8 @@ func NewBillingProfileService(opts ...option.RequestOption) (r *BillingProfileSe
 }
 
 // Accesses your billing profile object.
+//
+// Deprecated: deprecated
 func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestOption) (res *BillingProfileGetResponse, err error) {
 	var env BillingProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
