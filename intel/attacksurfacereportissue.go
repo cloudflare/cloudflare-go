@@ -38,6 +38,8 @@ func NewAttackSurfaceReportIssueService(opts ...option.RequestOption) (r *Attack
 }
 
 // Get Security Center Issues
+//
+// Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AttackSurfaceReportIssueListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -60,11 +62,15 @@ func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params Attac
 }
 
 // Get Security Center Issues
+//
+// Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[AttackSurfaceReportIssueListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Get Security Center Issue Counts by Class
+//
+// Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
 	var env AttackSurfaceReportIssueClassResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -82,6 +88,8 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 }
 
 // Archive Security Center Insight
+//
+// Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -98,6 +106,8 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 }
 
 // Get Security Center Issue Counts by Severity
+//
+// Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
 	var env AttackSurfaceReportIssueSeverityResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -115,6 +125,8 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 }
 
 // Get Security Center Issue Counts by Type
+//
+// Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
 	var env AttackSurfaceReportIssueTypeResponseEnvelope
 	opts = append(r.Options[:], opts...)

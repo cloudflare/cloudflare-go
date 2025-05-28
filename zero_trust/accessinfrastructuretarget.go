@@ -122,6 +122,8 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 }
 
 // Removes one or more targets.
+//
+// Deprecated: deprecated
 func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)

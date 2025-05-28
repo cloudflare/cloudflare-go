@@ -40,6 +40,8 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 // **Deprecated:** please use GET
 // /accounts/{account_id}/devices/registrations/{registration_id}/override_codes
 // instead.
+//
+// Deprecated: deprecated
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceOverrideCodeListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -71,6 +73,8 @@ func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, q
 // **Deprecated:** please use GET
 // /accounts/{account_id}/devices/registrations/{registration_id}/override_codes
 // instead.
+//
+// Deprecated: deprecated
 func (r *DeviceOverrideCodeService) ListAutoPaging(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceOverrideCodeListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, deviceID, query, opts...))
 }

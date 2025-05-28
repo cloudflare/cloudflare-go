@@ -66,6 +66,8 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 //
 // - GET /accounts/{account_id}/devices/physical-devices
 // - GET /accounts/{account_id}/devices/registrations
+//
+// Deprecated: deprecated
 func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Device], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -93,6 +95,8 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 //
 // - GET /accounts/{account_id}/devices/physical-devices
 // - GET /accounts/{account_id}/devices/registrations
+//
+// Deprecated: deprecated
 func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Device] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
@@ -103,6 +107,8 @@ func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListPara
 //
 // - GET /accounts/{account_id}/devices/physical-devices/{device_id}
 // - GET /accounts/{account_id}/devices/registrations/{registration_id}
+//
+// Deprecated: deprecated
 func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
 	var env DeviceGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
