@@ -687,6 +687,8 @@ type CNIListParams struct {
 	Limit     param.Field[int64]  `query:"limit"`
 	// If specified, only show CNIs associated with the specified slot
 	Slot param.Field[string] `query:"slot"`
+	// If specified, only show cnis associated with the specified tunnel id
+	TunnelID param.Field[string] `query:"tunnel_id"`
 }
 
 // URLQuery serializes [CNIListParams]'s query parameters as `url.Values`.
