@@ -154,16 +154,16 @@ type ScanNewResponse struct {
 	// URL to api report.
 	API     string `json:"api,required"`
 	Message string `json:"message,required"`
-	// URL to report.
+	// Public URL to report.
 	Result string `json:"result,required"`
 	// Canonical form of submitted URL. Use this if you want to later search by URL.
 	URL string `json:"url,required"`
 	// Scan ID.
 	UUID string `json:"uuid,required" format:"uuid"`
 	// Submitted visibility status.
-	Visibility string                 `json:"visibility,required"`
-	Options    ScanNewResponseOptions `json:"options"`
-	JSON       scanNewResponseJSON    `json:"-"`
+	Visibility ScanNewResponseVisibility `json:"visibility,required"`
+	Options    ScanNewResponseOptions    `json:"options"`
+	JSON       scanNewResponseJSON       `json:"-"`
 }
 
 // scanNewResponseJSON contains the JSON metadata for the struct [ScanNewResponse]
@@ -185,6 +185,22 @@ func (r *ScanNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r scanNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Submitted visibility status.
+type ScanNewResponseVisibility string
+
+const (
+	ScanNewResponseVisibilityPublic   ScanNewResponseVisibility = "public"
+	ScanNewResponseVisibilityUnlisted ScanNewResponseVisibility = "unlisted"
+)
+
+func (r ScanNewResponseVisibility) IsKnown() bool {
+	switch r {
+	case ScanNewResponseVisibilityPublic, ScanNewResponseVisibilityUnlisted:
+		return true
+	}
+	return false
 }
 
 type ScanNewResponseOptions struct {
@@ -372,9 +388,9 @@ type ScanBulkNewResponse struct {
 	// Scan ID.
 	UUID string `json:"uuid,required" format:"uuid"`
 	// Submitted visibility status.
-	Visibility string                     `json:"visibility,required"`
-	Options    ScanBulkNewResponseOptions `json:"options"`
-	JSON       scanBulkNewResponseJSON    `json:"-"`
+	Visibility ScanBulkNewResponseVisibility `json:"visibility,required"`
+	Options    ScanBulkNewResponseOptions    `json:"options"`
+	JSON       scanBulkNewResponseJSON       `json:"-"`
 }
 
 // scanBulkNewResponseJSON contains the JSON metadata for the struct
@@ -396,6 +412,22 @@ func (r *ScanBulkNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r scanBulkNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Submitted visibility status.
+type ScanBulkNewResponseVisibility string
+
+const (
+	ScanBulkNewResponseVisibilityPublic   ScanBulkNewResponseVisibility = "public"
+	ScanBulkNewResponseVisibilityUnlisted ScanBulkNewResponseVisibility = "unlisted"
+)
+
+func (r ScanBulkNewResponseVisibility) IsKnown() bool {
+	switch r {
+	case ScanBulkNewResponseVisibilityPublic, ScanBulkNewResponseVisibilityUnlisted:
+		return true
+	}
+	return false
 }
 
 type ScanBulkNewResponseOptions struct {
@@ -2607,8 +2639,9 @@ func (r scanHARResponseLogPagesPageTimingsJSON) RawJSON() string {
 
 type ScanNewParams struct {
 	// Account ID.
-	AccountID   param.Field[string]               `path:"account_id,required"`
-	URL         param.Field[string]               `json:"url,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	URL       param.Field[string] `json:"url,required"`
+	// Country to geo egress from
 	Country     param.Field[ScanNewParamsCountry] `json:"country"`
 	Customagent param.Field[string]               `json:"customagent"`
 	// Set custom headers.
@@ -2628,6 +2661,7 @@ func (r ScanNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Country to geo egress from
 type ScanNewParamsCountry string
 
 const (
