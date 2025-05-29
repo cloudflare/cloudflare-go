@@ -23,7 +23,7 @@ import (
 type RequestOption = requestconfig.RequestOption
 
 // WithAPIVersion returns a RequestOption that defines the API version the client is attempting
-// to use. While any value can be set here, invalid values are ignored and will recieve the
+// to use. While any value can be set here, invalid values are ignored and will receive the
 // default value of today.
 func WithAPIVersion(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {

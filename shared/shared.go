@@ -29,7 +29,7 @@ type AuditLog struct {
 	OldValue string           `json:"oldValue"`
 	Owner    AuditLogOwner    `json:"owner"`
 	Resource AuditLogResource `json:"resource"`
-	// A UTC RFC3339 timestamp that specifies when the action being logged occured.
+	// A UTC RFC3339 timestamp that specifies when the action being logged occurred.
 	When time.Time    `json:"when" format:"date-time"`
 	JSON auditLogJSON `json:"-"`
 }

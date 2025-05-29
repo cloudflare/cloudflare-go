@@ -35,7 +35,7 @@ func NewSFUService(opts ...option.RequestOption) (r *SFUService) {
 	return
 }
 
-// Creates a new Cloudflare calls app. An app is an unique enviroment where each
+// Creates a new Cloudflare calls app. An app is an unique environment where each
 // Session can access all Tracks within the app.
 func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...option.RequestOption) (res *SFUNewResponse, err error) {
 	var env SFUNewResponseEnvelope
