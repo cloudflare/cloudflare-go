@@ -851,9 +851,9 @@ func (r instanceNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// In ISO 8601 with no timezone offsets and in UTC.
+	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
-	// In ISO 8601 with no timezone offsets and in UTC.
+	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateStart param.Field[time.Time]                `query:"date_start" format:"date-time"`
 	Page      param.Field[float64]                  `query:"page"`
 	PerPage   param.Field[float64]                  `query:"per_page"`
