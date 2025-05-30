@@ -4640,7 +4640,7 @@ func (r SettingEditResponseZonesSchemasBrowserCacheTTLID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesSchemasBrowserCacheTTLValue float64
+type SettingEditResponseZonesSchemasBrowserCacheTTLValue int64
 
 const (
 	SettingEditResponseZonesSchemasBrowserCacheTTLValue0        SettingEditResponseZonesSchemasBrowserCacheTTLValue = 0
@@ -7885,7 +7885,7 @@ func (r SettingGetResponseZonesSchemasBrowserCacheTTLID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesSchemasBrowserCacheTTLValue float64
+type SettingGetResponseZonesSchemasBrowserCacheTTLValue int64
 
 const (
 	SettingGetResponseZonesSchemasBrowserCacheTTLValue0        SettingGetResponseZonesSchemasBrowserCacheTTLValue = 0
