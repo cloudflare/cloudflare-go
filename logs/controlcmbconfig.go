@@ -85,6 +85,8 @@ func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfi
 }
 
 type CmbConfig struct {
+	// Allow out of region access
+	AllowOutOfRegionAccess bool `json:"allow_out_of_region_access"`
 	// Name of the region.
 	Regions string        `json:"regions"`
 	JSON    cmbConfigJSON `json:"-"`
@@ -92,9 +94,10 @@ type CmbConfig struct {
 
 // cmbConfigJSON contains the JSON metadata for the struct [CmbConfig]
 type cmbConfigJSON struct {
-	Regions     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AllowOutOfRegionAccess apijson.Field
+	Regions                apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *CmbConfig) UnmarshalJSON(data []byte) (err error) {
@@ -106,6 +109,8 @@ func (r cmbConfigJSON) RawJSON() string {
 }
 
 type CmbConfigParam struct {
+	// Allow out of region access
+	AllowOutOfRegionAccess param.Field[bool] `json:"allow_out_of_region_access"`
 	// Name of the region.
 	Regions param.Field[string] `json:"regions"`
 }

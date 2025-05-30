@@ -30,7 +30,8 @@ func TestControlCmbConfigNewWithOptionalParams(t *testing.T) {
 	_, err := client.Logs.Control.Cmb.Config.New(context.TODO(), logs.ControlCmbConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		CmbConfig: logs.CmbConfigParam{
-			Regions: cloudflare.F("eu"),
+			AllowOutOfRegionAccess: cloudflare.F(false),
+			Regions:                cloudflare.F("eu"),
 		},
 	})
 	if err != nil {
