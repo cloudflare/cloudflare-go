@@ -478,7 +478,7 @@ type WorkflowListParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
-	// Filter workflows by name.
+	// Allows filtering workflows` name.
 	Search param.Field[string] `query:"search"`
 }
 
