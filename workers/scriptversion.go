@@ -251,9 +251,11 @@ type ScriptVersionNewResponseResourcesBindingsResult struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                         `json:"usages"`
-	JSON   scriptVersionNewResponseResourcesBindingsResultJSON `json:"-"`
-	union  ScriptVersionNewResponseResourcesBindingsResultUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                              `json:"workflow_name"`
+	JSON         scriptVersionNewResponseResourcesBindingsResultJSON `json:"-"`
+	union        ScriptVersionNewResponseResourcesBindingsResultUnion
 }
 
 // scriptVersionNewResponseResourcesBindingsResultJSON contains the JSON metadata
@@ -283,6 +285,7 @@ type scriptVersionNewResponseResourcesBindingsResultJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -325,7 +328,8 @@ func (r *ScriptVersionNewResponseResourcesBindingsResult) UnmarshalJSON(data []b
 // [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize],
 // [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
 // [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey].
+// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey],
+// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow].
 func (r ScriptVersionNewResponseResourcesBindingsResult) AsUnion() ScriptVersionNewResponseResourcesBindingsResultUnion {
 	return r.union
 }
@@ -353,8 +357,9 @@ func (r ScriptVersionNewResponseResourcesBindingsResult) AsUnion() ScriptVersion
 // [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer],
 // [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize],
 // [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret]
-// or [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey].
+// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
+// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey] or
+// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow].
 type ScriptVersionNewResponseResourcesBindingsResultUnion interface {
 	implementsScriptVersionNewResponseResourcesBindingsResult()
 }
@@ -472,6 +477,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -1618,6 +1628,53 @@ func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretK
 	return false
 }
 
+type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                                                        `json:"workflow_name,required"`
+	JSON         scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON
+// contains the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow]
+type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow) implementsScriptVersionNewResponseResourcesBindingsResult() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType string
+
+const (
+	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptVersionNewResponseResourcesBindingsResultType string
 
@@ -1644,11 +1701,12 @@ const (
 	ScriptVersionNewResponseResourcesBindingsResultTypeVersionMetadata        ScriptVersionNewResponseResourcesBindingsResultType = "version_metadata"
 	ScriptVersionNewResponseResourcesBindingsResultTypeSecretsStoreSecret     ScriptVersionNewResponseResourcesBindingsResultType = "secrets_store_secret"
 	ScriptVersionNewResponseResourcesBindingsResultTypeSecretKey              ScriptVersionNewResponseResourcesBindingsResultType = "secret_key"
+	ScriptVersionNewResponseResourcesBindingsResultTypeWorkflow               ScriptVersionNewResponseResourcesBindingsResultType = "workflow"
 )
 
 func (r ScriptVersionNewResponseResourcesBindingsResultType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultTypeAI, ScriptVersionNewResponseResourcesBindingsResultTypeAnalyticsEngine, ScriptVersionNewResponseResourcesBindingsResultTypeAssets, ScriptVersionNewResponseResourcesBindingsResultTypeBrowser, ScriptVersionNewResponseResourcesBindingsResultTypeD1, ScriptVersionNewResponseResourcesBindingsResultTypeDispatchNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeDurableObjectNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeHyperdrive, ScriptVersionNewResponseResourcesBindingsResultTypeJson, ScriptVersionNewResponseResourcesBindingsResultTypeKVNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeMTLSCertificate, ScriptVersionNewResponseResourcesBindingsResultTypePlainText, ScriptVersionNewResponseResourcesBindingsResultTypePipelines, ScriptVersionNewResponseResourcesBindingsResultTypeQueue, ScriptVersionNewResponseResourcesBindingsResultTypeR2Bucket, ScriptVersionNewResponseResourcesBindingsResultTypeSecretText, ScriptVersionNewResponseResourcesBindingsResultTypeService, ScriptVersionNewResponseResourcesBindingsResultTypeTailConsumer, ScriptVersionNewResponseResourcesBindingsResultTypeVectorize, ScriptVersionNewResponseResourcesBindingsResultTypeVersionMetadata, ScriptVersionNewResponseResourcesBindingsResultTypeSecretsStoreSecret, ScriptVersionNewResponseResourcesBindingsResultTypeSecretKey:
+	case ScriptVersionNewResponseResourcesBindingsResultTypeAI, ScriptVersionNewResponseResourcesBindingsResultTypeAnalyticsEngine, ScriptVersionNewResponseResourcesBindingsResultTypeAssets, ScriptVersionNewResponseResourcesBindingsResultTypeBrowser, ScriptVersionNewResponseResourcesBindingsResultTypeD1, ScriptVersionNewResponseResourcesBindingsResultTypeDispatchNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeDurableObjectNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeHyperdrive, ScriptVersionNewResponseResourcesBindingsResultTypeJson, ScriptVersionNewResponseResourcesBindingsResultTypeKVNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeMTLSCertificate, ScriptVersionNewResponseResourcesBindingsResultTypePlainText, ScriptVersionNewResponseResourcesBindingsResultTypePipelines, ScriptVersionNewResponseResourcesBindingsResultTypeQueue, ScriptVersionNewResponseResourcesBindingsResultTypeR2Bucket, ScriptVersionNewResponseResourcesBindingsResultTypeSecretText, ScriptVersionNewResponseResourcesBindingsResultTypeService, ScriptVersionNewResponseResourcesBindingsResultTypeTailConsumer, ScriptVersionNewResponseResourcesBindingsResultTypeVectorize, ScriptVersionNewResponseResourcesBindingsResultTypeVersionMetadata, ScriptVersionNewResponseResourcesBindingsResultTypeSecretsStoreSecret, ScriptVersionNewResponseResourcesBindingsResultTypeSecretKey, ScriptVersionNewResponseResourcesBindingsResultTypeWorkflow:
 		return true
 	}
 	return false
@@ -2051,9 +2109,11 @@ type ScriptVersionGetResponseResourcesBindingsResult struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                         `json:"usages"`
-	JSON   scriptVersionGetResponseResourcesBindingsResultJSON `json:"-"`
-	union  ScriptVersionGetResponseResourcesBindingsResultUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                              `json:"workflow_name"`
+	JSON         scriptVersionGetResponseResourcesBindingsResultJSON `json:"-"`
+	union        ScriptVersionGetResponseResourcesBindingsResultUnion
 }
 
 // scriptVersionGetResponseResourcesBindingsResultJSON contains the JSON metadata
@@ -2083,6 +2143,7 @@ type scriptVersionGetResponseResourcesBindingsResultJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -2125,7 +2186,8 @@ func (r *ScriptVersionGetResponseResourcesBindingsResult) UnmarshalJSON(data []b
 // [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize],
 // [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
 // [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey].
+// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey],
+// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow].
 func (r ScriptVersionGetResponseResourcesBindingsResult) AsUnion() ScriptVersionGetResponseResourcesBindingsResultUnion {
 	return r.union
 }
@@ -2153,8 +2215,9 @@ func (r ScriptVersionGetResponseResourcesBindingsResult) AsUnion() ScriptVersion
 // [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer],
 // [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize],
 // [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret]
-// or [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey].
+// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
+// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey] or
+// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow].
 type ScriptVersionGetResponseResourcesBindingsResultUnion interface {
 	implementsScriptVersionGetResponseResourcesBindingsResult()
 }
@@ -2272,6 +2335,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -3418,6 +3486,53 @@ func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretK
 	return false
 }
 
+type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                                                        `json:"workflow_name,required"`
+	JSON         scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON
+// contains the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow]
+type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow) implementsScriptVersionGetResponseResourcesBindingsResult() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType string
+
+const (
+	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptVersionGetResponseResourcesBindingsResultType string
 
@@ -3444,11 +3559,12 @@ const (
 	ScriptVersionGetResponseResourcesBindingsResultTypeVersionMetadata        ScriptVersionGetResponseResourcesBindingsResultType = "version_metadata"
 	ScriptVersionGetResponseResourcesBindingsResultTypeSecretsStoreSecret     ScriptVersionGetResponseResourcesBindingsResultType = "secrets_store_secret"
 	ScriptVersionGetResponseResourcesBindingsResultTypeSecretKey              ScriptVersionGetResponseResourcesBindingsResultType = "secret_key"
+	ScriptVersionGetResponseResourcesBindingsResultTypeWorkflow               ScriptVersionGetResponseResourcesBindingsResultType = "workflow"
 )
 
 func (r ScriptVersionGetResponseResourcesBindingsResultType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultTypeAI, ScriptVersionGetResponseResourcesBindingsResultTypeAnalyticsEngine, ScriptVersionGetResponseResourcesBindingsResultTypeAssets, ScriptVersionGetResponseResourcesBindingsResultTypeBrowser, ScriptVersionGetResponseResourcesBindingsResultTypeD1, ScriptVersionGetResponseResourcesBindingsResultTypeDispatchNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeDurableObjectNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeHyperdrive, ScriptVersionGetResponseResourcesBindingsResultTypeJson, ScriptVersionGetResponseResourcesBindingsResultTypeKVNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeMTLSCertificate, ScriptVersionGetResponseResourcesBindingsResultTypePlainText, ScriptVersionGetResponseResourcesBindingsResultTypePipelines, ScriptVersionGetResponseResourcesBindingsResultTypeQueue, ScriptVersionGetResponseResourcesBindingsResultTypeR2Bucket, ScriptVersionGetResponseResourcesBindingsResultTypeSecretText, ScriptVersionGetResponseResourcesBindingsResultTypeService, ScriptVersionGetResponseResourcesBindingsResultTypeTailConsumer, ScriptVersionGetResponseResourcesBindingsResultTypeVectorize, ScriptVersionGetResponseResourcesBindingsResultTypeVersionMetadata, ScriptVersionGetResponseResourcesBindingsResultTypeSecretsStoreSecret, ScriptVersionGetResponseResourcesBindingsResultTypeSecretKey:
+	case ScriptVersionGetResponseResourcesBindingsResultTypeAI, ScriptVersionGetResponseResourcesBindingsResultTypeAnalyticsEngine, ScriptVersionGetResponseResourcesBindingsResultTypeAssets, ScriptVersionGetResponseResourcesBindingsResultTypeBrowser, ScriptVersionGetResponseResourcesBindingsResultTypeD1, ScriptVersionGetResponseResourcesBindingsResultTypeDispatchNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeDurableObjectNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeHyperdrive, ScriptVersionGetResponseResourcesBindingsResultTypeJson, ScriptVersionGetResponseResourcesBindingsResultTypeKVNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeMTLSCertificate, ScriptVersionGetResponseResourcesBindingsResultTypePlainText, ScriptVersionGetResponseResourcesBindingsResultTypePipelines, ScriptVersionGetResponseResourcesBindingsResultTypeQueue, ScriptVersionGetResponseResourcesBindingsResultTypeR2Bucket, ScriptVersionGetResponseResourcesBindingsResultTypeSecretText, ScriptVersionGetResponseResourcesBindingsResultTypeService, ScriptVersionGetResponseResourcesBindingsResultTypeTailConsumer, ScriptVersionGetResponseResourcesBindingsResultTypeVectorize, ScriptVersionGetResponseResourcesBindingsResultTypeVersionMetadata, ScriptVersionGetResponseResourcesBindingsResultTypeSecretsStoreSecret, ScriptVersionGetResponseResourcesBindingsResultTypeSecretKey, ScriptVersionGetResponseResourcesBindingsResultTypeWorkflow:
 		return true
 	}
 	return false
@@ -3754,6 +3870,8 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name"`
 }
 
 func (r ScriptVersionNewParamsMetadataBinding) MarshalJSON() (data []byte, err error) {
@@ -3788,6 +3906,7 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsM
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKey],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflow],
 // [ScriptVersionNewParamsMetadataBinding].
 type ScriptVersionNewParamsMetadataBindingUnion interface {
 	implementsScriptVersionNewParamsMetadataBindingUnion()
@@ -4558,6 +4677,37 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKeyUsage) 
 	return false
 }
 
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name,required"`
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflow) implementsScriptVersionNewParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflowType string
+
+const (
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptVersionNewParamsMetadataBindingsType string
 
@@ -4584,11 +4734,12 @@ const (
 	ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsType = "version_metadata"
 	ScriptVersionNewParamsMetadataBindingsTypeSecretsStoreSecret     ScriptVersionNewParamsMetadataBindingsType = "secrets_store_secret"
 	ScriptVersionNewParamsMetadataBindingsTypeSecretKey              ScriptVersionNewParamsMetadataBindingsType = "secret_key"
+	ScriptVersionNewParamsMetadataBindingsTypeWorkflow               ScriptVersionNewParamsMetadataBindingsType = "workflow"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsTypeAI, ScriptVersionNewParamsMetadataBindingsTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsTypeAssets, ScriptVersionNewParamsMetadataBindingsTypeBrowser, ScriptVersionNewParamsMetadataBindingsTypeD1, ScriptVersionNewParamsMetadataBindingsTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsTypeJson, ScriptVersionNewParamsMetadataBindingsTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsTypePlainText, ScriptVersionNewParamsMetadataBindingsTypePipelines, ScriptVersionNewParamsMetadataBindingsTypeQueue, ScriptVersionNewParamsMetadataBindingsTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsTypeSecretText, ScriptVersionNewParamsMetadataBindingsTypeService, ScriptVersionNewParamsMetadataBindingsTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsTypeVectorize, ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata, ScriptVersionNewParamsMetadataBindingsTypeSecretsStoreSecret, ScriptVersionNewParamsMetadataBindingsTypeSecretKey:
+	case ScriptVersionNewParamsMetadataBindingsTypeAI, ScriptVersionNewParamsMetadataBindingsTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsTypeAssets, ScriptVersionNewParamsMetadataBindingsTypeBrowser, ScriptVersionNewParamsMetadataBindingsTypeD1, ScriptVersionNewParamsMetadataBindingsTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsTypeJson, ScriptVersionNewParamsMetadataBindingsTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsTypePlainText, ScriptVersionNewParamsMetadataBindingsTypePipelines, ScriptVersionNewParamsMetadataBindingsTypeQueue, ScriptVersionNewParamsMetadataBindingsTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsTypeSecretText, ScriptVersionNewParamsMetadataBindingsTypeService, ScriptVersionNewParamsMetadataBindingsTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsTypeVectorize, ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata, ScriptVersionNewParamsMetadataBindingsTypeSecretsStoreSecret, ScriptVersionNewParamsMetadataBindingsTypeSecretKey, ScriptVersionNewParamsMetadataBindingsTypeWorkflow:
 		return true
 	}
 	return false

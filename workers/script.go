@@ -747,6 +747,8 @@ type ScriptUpdateParamsMetadataBinding struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name"`
 }
 
 func (r ScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error) {
@@ -779,6 +781,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow],
 // [ScriptUpdateParamsMetadataBinding].
 type ScriptUpdateParamsMetadataBindingUnion interface {
 	implementsScriptUpdateParamsMetadataBindingUnion()
@@ -1549,6 +1552,37 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage) IsKn
 	return false
 }
 
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) implementsScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptUpdateParamsMetadataBindingsType string
 
@@ -1575,11 +1609,12 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeVersionMetadata        ScriptUpdateParamsMetadataBindingsType = "version_metadata"
 	ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret     ScriptUpdateParamsMetadataBindingsType = "secrets_store_secret"
 	ScriptUpdateParamsMetadataBindingsTypeSecretKey              ScriptUpdateParamsMetadataBindingsType = "secret_key"
+	ScriptUpdateParamsMetadataBindingsTypeWorkflow               ScriptUpdateParamsMetadataBindingsType = "workflow"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTailConsumer, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTailConsumer, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow:
 		return true
 	}
 	return false

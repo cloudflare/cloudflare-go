@@ -126,9 +126,11 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                   `json:"usages"`
-	JSON   dispatchNamespaceScriptBindingGetResponseJSON `json:"-"`
-	union  DispatchNamespaceScriptBindingGetResponseUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                        `json:"workflow_name"`
+	JSON         dispatchNamespaceScriptBindingGetResponseJSON `json:"-"`
+	union        DispatchNamespaceScriptBindingGetResponseUnion
 }
 
 // dispatchNamespaceScriptBindingGetResponseJSON contains the JSON metadata for the
@@ -158,6 +160,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -200,7 +203,8 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret],
-// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow].
 func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceScriptBindingGetResponseUnion {
 	return r.union
 }
@@ -228,8 +232,9 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
-// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret]
-// or [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey] or
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow].
 type DispatchNamespaceScriptBindingGetResponseUnion interface {
 	implementsDispatchNamespaceScriptBindingGetResponse()
 }
@@ -347,6 +352,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -1493,6 +1503,53 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsag
 	return false
 }
 
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                                                  `json:"workflow_name,required"`
+	JSON         dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowTypeWorkflow DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptBindingGetResponseType string
 
@@ -1519,11 +1576,12 @@ const (
 	DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseType = "version_metadata"
 	DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret     DispatchNamespaceScriptBindingGetResponseType = "secrets_store_secret"
 	DispatchNamespaceScriptBindingGetResponseTypeSecretKey              DispatchNamespaceScriptBindingGetResponseType = "secret_key"
+	DispatchNamespaceScriptBindingGetResponseTypeWorkflow               DispatchNamespaceScriptBindingGetResponseType = "workflow"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey:
+	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow:
 		return true
 	}
 	return false
