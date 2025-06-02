@@ -534,6 +534,8 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithRolesStatus) IsKnown() bool {
 type MemberUpdateParamsBodyIAMUpdateMemberWithRolesUser struct {
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// User's first name
 	FirstName param.Field[string] `json:"first_name"`
 	// User's last name
