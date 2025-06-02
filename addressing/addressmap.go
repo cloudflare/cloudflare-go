@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/ips"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
@@ -231,7 +232,7 @@ type AddressMapNewResponse struct {
 	// with IP addresses on an Address Map until the map is enabled.
 	Enabled bool `json:"enabled,nullable"`
 	// The set of IPs on the Address Map.
-	IPs []AddressMapNewResponseIP `json:"ips"`
+	IPs ips.IPs `json:"ips"`
 	// Zones and Accounts which will be assigned IPs on this Address Map. A zone
 	// membership will take priority over an account membership.
 	Memberships []AddressMapNewResponseMembership `json:"memberships"`
@@ -261,30 +262,6 @@ func (r *AddressMapNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r addressMapNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapNewResponseIP struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// An IPv4 or IPv6 address.
-	IP   string                      `json:"ip"`
-	JSON addressMapNewResponseIPJSON `json:"-"`
-}
-
-// addressMapNewResponseIPJSON contains the JSON metadata for the struct
-// [AddressMapNewResponseIP]
-type addressMapNewResponseIPJSON struct {
-	CreatedAt   apijson.Field
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapNewResponseIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapNewResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -511,7 +488,7 @@ type AddressMapGetResponse struct {
 	// with IP addresses on an Address Map until the map is enabled.
 	Enabled bool `json:"enabled,nullable"`
 	// The set of IPs on the Address Map.
-	IPs []AddressMapGetResponseIP `json:"ips"`
+	IPs ips.IPs `json:"ips"`
 	// Zones and Accounts which will be assigned IPs on this Address Map. A zone
 	// membership will take priority over an account membership.
 	Memberships []AddressMapGetResponseMembership `json:"memberships"`
@@ -541,30 +518,6 @@ func (r *AddressMapGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r addressMapGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapGetResponseIP struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// An IPv4 or IPv6 address.
-	IP   string                      `json:"ip"`
-	JSON addressMapGetResponseIPJSON `json:"-"`
-}
-
-// addressMapGetResponseIPJSON contains the JSON metadata for the struct
-// [AddressMapGetResponseIP]
-type addressMapGetResponseIPJSON struct {
-	CreatedAt   apijson.Field
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapGetResponseIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapGetResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
