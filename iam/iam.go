@@ -16,6 +16,7 @@ type IAMService struct {
 	Options          []option.RequestOption
 	PermissionGroups *PermissionGroupService
 	ResourceGroups   *ResourceGroupService
+	UserGroups       *UserGroupService
 }
 
 // NewIAMService generates a new service that applies the given options to each
@@ -26,5 +27,6 @@ func NewIAMService(opts ...option.RequestOption) (r *IAMService) {
 	r.Options = opts
 	r.PermissionGroups = NewPermissionGroupService(opts...)
 	r.ResourceGroups = NewResourceGroupService(opts...)
+	r.UserGroups = NewUserGroupService(opts...)
 	return
 }
