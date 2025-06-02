@@ -200,9 +200,11 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                           `json:"usages"`
-	JSON   dispatchNamespaceScriptSettingEditResponseBindingJSON `json:"-"`
-	union  DispatchNamespaceScriptSettingEditResponseBindingsUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                                `json:"workflow_name"`
+	JSON         dispatchNamespaceScriptSettingEditResponseBindingJSON `json:"-"`
+	union        DispatchNamespaceScriptSettingEditResponseBindingsUnion
 }
 
 // dispatchNamespaceScriptSettingEditResponseBindingJSON contains the JSON metadata
@@ -232,6 +234,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -274,7 +277,8 @@ func (r *DispatchNamespaceScriptSettingEditResponseBinding) UnmarshalJSON(data [
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow].
 func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNamespaceScriptSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -302,9 +306,10 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey]
 // or
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow].
 type DispatchNamespaceScriptSettingEditResponseBindingsUnion interface {
 	implementsDispatchNamespaceScriptSettingEditResponseBinding()
 }
@@ -422,6 +427,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -1568,6 +1578,53 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 	return false
 }
 
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                                                           `json:"workflow_name,required"`
+	JSON         dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow]
+type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowTypeWorkflow DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptSettingEditResponseBindingsType string
 
@@ -1594,11 +1651,12 @@ const (
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata        DispatchNamespaceScriptSettingEditResponseBindingsType = "version_metadata"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret     DispatchNamespaceScriptSettingEditResponseBindingsType = "secrets_store_secret"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey              DispatchNamespaceScriptSettingEditResponseBindingsType = "secret_key"
+	DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow               DispatchNamespaceScriptSettingEditResponseBindingsType = "workflow"
 )
 
 func (r DispatchNamespaceScriptSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseBindingsTypeAI, DispatchNamespaceScriptSettingEditResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditResponseBindingsTypeAssets, DispatchNamespaceScriptSettingEditResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingEditResponseBindingsTypeD1, DispatchNamespaceScriptSettingEditResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditResponseBindingsTypeJson, DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText, DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines, DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue, DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingEditResponseBindingsTypeService, DispatchNamespaceScriptSettingEditResponseBindingsTypeTailConsumer, DispatchNamespaceScriptSettingEditResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey:
+	case DispatchNamespaceScriptSettingEditResponseBindingsTypeAI, DispatchNamespaceScriptSettingEditResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditResponseBindingsTypeAssets, DispatchNamespaceScriptSettingEditResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingEditResponseBindingsTypeD1, DispatchNamespaceScriptSettingEditResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditResponseBindingsTypeJson, DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText, DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines, DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue, DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingEditResponseBindingsTypeService, DispatchNamespaceScriptSettingEditResponseBindingsTypeTailConsumer, DispatchNamespaceScriptSettingEditResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -1994,9 +2052,11 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                          `json:"usages"`
-	JSON   dispatchNamespaceScriptSettingGetResponseBindingJSON `json:"-"`
-	union  DispatchNamespaceScriptSettingGetResponseBindingsUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                               `json:"workflow_name"`
+	JSON         dispatchNamespaceScriptSettingGetResponseBindingJSON `json:"-"`
+	union        DispatchNamespaceScriptSettingGetResponseBindingsUnion
 }
 
 // dispatchNamespaceScriptSettingGetResponseBindingJSON contains the JSON metadata
@@ -2026,6 +2086,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -2068,7 +2129,8 @@ func (r *DispatchNamespaceScriptSettingGetResponseBinding) UnmarshalJSON(data []
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow].
 func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchNamespaceScriptSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2096,9 +2158,10 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey]
 // or
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow].
 type DispatchNamespaceScriptSettingGetResponseBindingsUnion interface {
 	implementsDispatchNamespaceScriptSettingGetResponseBinding()
 }
@@ -2216,6 +2279,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -3362,6 +3430,53 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 	return false
 }
 
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                                                          `json:"workflow_name,required"`
+	JSON         dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow]
+type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowTypeWorkflow DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptSettingGetResponseBindingsType string
 
@@ -3388,11 +3503,12 @@ const (
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata        DispatchNamespaceScriptSettingGetResponseBindingsType = "version_metadata"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret     DispatchNamespaceScriptSettingGetResponseBindingsType = "secrets_store_secret"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey              DispatchNamespaceScriptSettingGetResponseBindingsType = "secret_key"
+	DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow               DispatchNamespaceScriptSettingGetResponseBindingsType = "workflow"
 )
 
 func (r DispatchNamespaceScriptSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseBindingsTypeAI, DispatchNamespaceScriptSettingGetResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingGetResponseBindingsTypeAssets, DispatchNamespaceScriptSettingGetResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingGetResponseBindingsTypeD1, DispatchNamespaceScriptSettingGetResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingGetResponseBindingsTypeJson, DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText, DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines, DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue, DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingGetResponseBindingsTypeService, DispatchNamespaceScriptSettingGetResponseBindingsTypeTailConsumer, DispatchNamespaceScriptSettingGetResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey:
+	case DispatchNamespaceScriptSettingGetResponseBindingsTypeAI, DispatchNamespaceScriptSettingGetResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingGetResponseBindingsTypeAssets, DispatchNamespaceScriptSettingGetResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingGetResponseBindingsTypeD1, DispatchNamespaceScriptSettingGetResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingGetResponseBindingsTypeJson, DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText, DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines, DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue, DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingGetResponseBindingsTypeService, DispatchNamespaceScriptSettingGetResponseBindingsTypeTailConsumer, DispatchNamespaceScriptSettingGetResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -3782,6 +3898,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) MarshalJSON() (data []byte, err error) {
@@ -3816,6 +3934,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsDispa
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow],
 // [DispatchNamespaceScriptSettingEditParamsSettingsBinding].
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingUnion interface {
 	implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion()
@@ -4586,6 +4705,37 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return false
 }
 
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name,required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowTypeWorkflow DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsType string
 
@@ -4612,11 +4762,12 @@ const (
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata        DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "version_metadata"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret     DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "secrets_store_secret"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "secret_key"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow               DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "workflow"
 )
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAI, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAssets, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeBrowser, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeD1, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeJson, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeTailConsumer, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVectorize, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey:
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAI, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAssets, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeBrowser, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeD1, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeJson, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeTailConsumer, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVectorize, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow:
 		return true
 	}
 	return false
