@@ -347,34 +347,25 @@ func (r logAuditListResponseZoneJSON) RawJSON() string {
 type LogAuditListParams struct {
 	// The unique id that identifies the account.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Filters actions based on a given timestamp in the format yyyy-mm-dd, returning
-	// only logs that occurred on and before the specified date.
+	// Limits the returned results to logs older than the specified date. This can be a
+	// date string 2019-04-30 (interpreted in UTC) or an absolute timestamp that
+	// conforms to RFC3339.
 	Before param.Field[time.Time] `query:"before,required" format:"date"`
-	// Filters actions based on a given timestamp in the format yyyy-mm-dd, returning
-	// only logs that occurred on and after the specified date.
-	Since param.Field[time.Time] `query:"since,required" format:"date"`
-	// Filters by the account name.
-	AccountName param.Field[string] `query:"account_name"`
-	// Whether the action was successful or not.
-	ActionResult param.Field[LogAuditListParamsActionResult] `query:"action_result"`
-	// Filters by the action type.
-	ActionType param.Field[LogAuditListParamsActionType] `query:"action_type"`
-	// Filters by the actor context.
-	ActorContext param.Field[LogAuditListParamsActorContext] `query:"actor_context"`
-	// Filters by the actor's email address.
-	ActorEmail param.Field[string] `query:"actor_email" format:"email"`
-	// Filters by the actor ID. This can be either the Account ID or User ID.
-	ActorID param.Field[string] `query:"actor_id"`
-	// The IP address where the action was initiated.
-	ActorIPAddress param.Field[string] `query:"actor_ip_address"`
-	// Filters by the API token ID when the actor context is an api_token or oauth.
-	ActorTokenID param.Field[string] `query:"actor_token_id"`
-	// Filters by the API token name when the actor context is an api_token or oauth.
-	ActorTokenName param.Field[string] `query:"actor_token_name"`
-	// Filters by the actor type.
-	ActorType param.Field[LogAuditListParamsActorType] `query:"actor_type"`
-	// Finds a specific log by its ID.
-	AuditLogID param.Field[string] `query:"audit_log_id"`
+	// Limits the returned results to logs newer than the specified date. This can be a
+	// date string 2019-04-30 (interpreted in UTC) or an absolute timestamp that
+	// conforms to RFC3339.
+	Since          param.Field[time.Time]                        `query:"since,required" format:"date"`
+	AccountName    param.Field[LogAuditListParamsAccountName]    `query:"account_name"`
+	ActionResult   param.Field[LogAuditListParamsActionResult]   `query:"action_result"`
+	ActionType     param.Field[LogAuditListParamsActionType]     `query:"action_type"`
+	ActorContext   param.Field[LogAuditListParamsActorContext]   `query:"actor_context"`
+	ActorEmail     param.Field[LogAuditListParamsActorEmail]     `query:"actor_email"`
+	ActorID        param.Field[LogAuditListParamsActorID]        `query:"actor_id"`
+	ActorIPAddress param.Field[LogAuditListParamsActorIPAddress] `query:"actor_ip_address"`
+	ActorTokenID   param.Field[LogAuditListParamsActorTokenID]   `query:"actor_token_id"`
+	ActorTokenName param.Field[LogAuditListParamsActorTokenName] `query:"actor_token_name"`
+	ActorType      param.Field[LogAuditListParamsActorType]      `query:"actor_type"`
+	AuditLogID     param.Field[LogAuditListParamsAuditLogID]     `query:"audit_log_id"`
 	// The cursor is an opaque token used to paginate through large sets of records. It
 	// indicates the position from which to continue when requesting the next set of
 	// records. A valid cursor value can be obtained from the cursor object in the
@@ -384,29 +375,17 @@ type LogAuditListParams struct {
 	Direction param.Field[LogAuditListParamsDirection] `query:"direction"`
 	// The number limits the objects to return. The cursor attribute may be used to
 	// iterate over the next batch of objects if there are more than the limit.
-	Limit param.Field[float64] `query:"limit"`
-	// Filters by the response CF Ray ID.
-	RawCfRayID param.Field[string] `query:"raw_cf_ray_id"`
-	// The HTTP method for the API call.
-	RawMethod param.Field[string] `query:"raw_method"`
-	// The response status code that was returned.
-	RawStatusCode param.Field[int64] `query:"raw_status_code"`
-	// Filters by the request URI.
-	RawURI param.Field[string] `query:"raw_uri"`
-	// Filters by the resource ID.
-	ResourceID param.Field[string] `query:"resource_id"`
-	// Filters audit logs by the Cloudflare product associated with the changed
-	// resource.
-	ResourceProduct param.Field[string] `query:"resource_product"`
-	// Filters by the resource scope, specifying whether the resource is associated
-	// with an user, an account, or a zone.
-	ResourceScope param.Field[LogAuditListParamsResourceScope] `query:"resource_scope"`
-	// Filters audit logs based on the unique type of resource changed by the action.
-	ResourceType param.Field[string] `query:"resource_type"`
-	// Filters by the zone ID.
-	ZoneID param.Field[string] `query:"zone_id"`
-	// Filters by the zone name associated with the change.
-	ZoneName param.Field[string] `query:"zone_name"`
+	Limit           param.Field[float64]                           `query:"limit"`
+	RawCfRayID      param.Field[LogAuditListParamsRawCfRayID]      `query:"raw_cf_ray_id"`
+	RawMethod       param.Field[LogAuditListParamsRawMethod]       `query:"raw_method"`
+	RawStatusCode   param.Field[LogAuditListParamsRawStatusCode]   `query:"raw_status_code"`
+	RawURI          param.Field[LogAuditListParamsRawURI]          `query:"raw_uri"`
+	ResourceID      param.Field[LogAuditListParamsResourceID]      `query:"resource_id"`
+	ResourceProduct param.Field[LogAuditListParamsResourceProduct] `query:"resource_product"`
+	ResourceScope   param.Field[LogAuditListParamsResourceScope]   `query:"resource_scope"`
+	ResourceType    param.Field[LogAuditListParamsResourceType]    `query:"resource_type"`
+	ZoneID          param.Field[LogAuditListParamsZoneID]          `query:"zone_id"`
+	ZoneName        param.Field[LogAuditListParamsZoneName]        `query:"zone_name"`
 }
 
 // URLQuery serializes [LogAuditListParams]'s query parameters as `url.Values`.
@@ -417,74 +396,227 @@ func (r LogAuditListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Whether the action was successful or not.
-type LogAuditListParamsActionResult string
+type LogAuditListParamsAccountName struct {
+	// Filters out audit logs by the account name.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsAccountName]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsAccountName) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActionResult struct {
+	// Filters out audit logs by whether the action was successful or not.
+	Not param.Field[[]LogAuditListParamsActionResultNot] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActionResult]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActionResult) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActionResultNot string
 
 const (
-	LogAuditListParamsActionResultSuccess LogAuditListParamsActionResult = "success"
-	LogAuditListParamsActionResultFailure LogAuditListParamsActionResult = "failure"
+	LogAuditListParamsActionResultNotSuccess LogAuditListParamsActionResultNot = "success"
+	LogAuditListParamsActionResultNotFailure LogAuditListParamsActionResultNot = "failure"
 )
 
-func (r LogAuditListParamsActionResult) IsKnown() bool {
+func (r LogAuditListParamsActionResultNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActionResultSuccess, LogAuditListParamsActionResultFailure:
+	case LogAuditListParamsActionResultNotSuccess, LogAuditListParamsActionResultNotFailure:
 		return true
 	}
 	return false
 }
 
-// Filters by the action type.
-type LogAuditListParamsActionType string
+type LogAuditListParamsActionType struct {
+	// Filters out audit logs by the action type.
+	Not param.Field[[]LogAuditListParamsActionTypeNot] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActionType]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActionType) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActionTypeNot string
 
 const (
-	LogAuditListParamsActionTypeCreate LogAuditListParamsActionType = "create"
-	LogAuditListParamsActionTypeDelete LogAuditListParamsActionType = "delete"
-	LogAuditListParamsActionTypeView   LogAuditListParamsActionType = "view"
-	LogAuditListParamsActionTypeUpdate LogAuditListParamsActionType = "update"
+	LogAuditListParamsActionTypeNotCreate LogAuditListParamsActionTypeNot = "create"
+	LogAuditListParamsActionTypeNotDelete LogAuditListParamsActionTypeNot = "delete"
+	LogAuditListParamsActionTypeNotView   LogAuditListParamsActionTypeNot = "view"
+	LogAuditListParamsActionTypeNotUpdate LogAuditListParamsActionTypeNot = "update"
 )
 
-func (r LogAuditListParamsActionType) IsKnown() bool {
+func (r LogAuditListParamsActionTypeNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActionTypeCreate, LogAuditListParamsActionTypeDelete, LogAuditListParamsActionTypeView, LogAuditListParamsActionTypeUpdate:
+	case LogAuditListParamsActionTypeNotCreate, LogAuditListParamsActionTypeNotDelete, LogAuditListParamsActionTypeNotView, LogAuditListParamsActionTypeNotUpdate:
 		return true
 	}
 	return false
 }
 
-// Filters by the actor context.
-type LogAuditListParamsActorContext string
+type LogAuditListParamsActorContext struct {
+	// Filters out audit logs by the actor context.
+	Not param.Field[[]LogAuditListParamsActorContextNot] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorContext]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorContext) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorContextNot string
 
 const (
-	LogAuditListParamsActorContextAPIKey      LogAuditListParamsActorContext = "api_key"
-	LogAuditListParamsActorContextAPIToken    LogAuditListParamsActorContext = "api_token"
-	LogAuditListParamsActorContextDash        LogAuditListParamsActorContext = "dash"
-	LogAuditListParamsActorContextOAuth       LogAuditListParamsActorContext = "oauth"
-	LogAuditListParamsActorContextOriginCAKey LogAuditListParamsActorContext = "origin_ca_key"
+	LogAuditListParamsActorContextNotAPIKey      LogAuditListParamsActorContextNot = "api_key"
+	LogAuditListParamsActorContextNotAPIToken    LogAuditListParamsActorContextNot = "api_token"
+	LogAuditListParamsActorContextNotDash        LogAuditListParamsActorContextNot = "dash"
+	LogAuditListParamsActorContextNotOAuth       LogAuditListParamsActorContextNot = "oauth"
+	LogAuditListParamsActorContextNotOriginCAKey LogAuditListParamsActorContextNot = "origin_ca_key"
 )
 
-func (r LogAuditListParamsActorContext) IsKnown() bool {
+func (r LogAuditListParamsActorContextNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActorContextAPIKey, LogAuditListParamsActorContextAPIToken, LogAuditListParamsActorContextDash, LogAuditListParamsActorContextOAuth, LogAuditListParamsActorContextOriginCAKey:
+	case LogAuditListParamsActorContextNotAPIKey, LogAuditListParamsActorContextNotAPIToken, LogAuditListParamsActorContextNotDash, LogAuditListParamsActorContextNotOAuth, LogAuditListParamsActorContextNotOriginCAKey:
 		return true
 	}
 	return false
 }
 
-// Filters by the actor type.
-type LogAuditListParamsActorType string
+type LogAuditListParamsActorEmail struct {
+	// Filters out audit logs by the actor's email address.
+	Not param.Field[[]string] `query:"not" format:"email"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorEmail]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorEmail) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorID struct {
+	// Filters out audit logs by the actor ID. This can be either the Account ID or
+	// User ID.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorIPAddress struct {
+	// Filters out audit logs IP address where the action was initiated.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorIPAddress]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorIPAddress) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorTokenID struct {
+	// Filters out audit logs by the API token ID when the actor context is an
+	// api_token or oauth.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorTokenID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorTokenID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorTokenName struct {
+	// Filters out audit logs by the API token name when the actor context is an
+	// api_token or oauth.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorTokenName]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorTokenName) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorType struct {
+	// Filters out audit logs by the actor type.
+	Not param.Field[[]LogAuditListParamsActorTypeNot] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsActorType]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsActorType) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsActorTypeNot string
 
 const (
-	LogAuditListParamsActorTypeCloudflareAdmin LogAuditListParamsActorType = "cloudflare_admin"
-	LogAuditListParamsActorTypeAccount         LogAuditListParamsActorType = "account"
-	LogAuditListParamsActorTypeUser            LogAuditListParamsActorType = "user"
+	LogAuditListParamsActorTypeNotCloudflareAdmin LogAuditListParamsActorTypeNot = "cloudflare_admin"
+	LogAuditListParamsActorTypeNotAccount         LogAuditListParamsActorTypeNot = "account"
+	LogAuditListParamsActorTypeNotUser            LogAuditListParamsActorTypeNot = "user"
 )
 
-func (r LogAuditListParamsActorType) IsKnown() bool {
+func (r LogAuditListParamsActorTypeNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActorTypeCloudflareAdmin, LogAuditListParamsActorTypeAccount, LogAuditListParamsActorTypeUser:
+	case LogAuditListParamsActorTypeNotCloudflareAdmin, LogAuditListParamsActorTypeNotAccount, LogAuditListParamsActorTypeNotUser:
 		return true
 	}
 	return false
+}
+
+type LogAuditListParamsAuditLogID struct {
+	// Filters out audit logs by their IDs.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsAuditLogID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsAuditLogID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 // Sets sorting order.
@@ -503,20 +635,161 @@ func (r LogAuditListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Filters by the resource scope, specifying whether the resource is associated
-// with an user, an account, or a zone.
-type LogAuditListParamsResourceScope string
+type LogAuditListParamsRawCfRayID struct {
+	// Filters out audit logs by the response CF Ray ID.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsRawCfRayID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsRawCfRayID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsRawMethod struct {
+	// Filters out audit logs by the HTTP method for the API call.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsRawMethod]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsRawMethod) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsRawStatusCode struct {
+	// Filters out audit logs by the response status code that was returned.
+	Not param.Field[[]int64] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsRawStatusCode]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsRawStatusCode) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsRawURI struct {
+	// Filters out audit logs by the request URI.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsRawURI]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsRawURI) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsResourceID struct {
+	// Filters out audit logs by the resource ID.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsResourceID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsResourceID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsResourceProduct struct {
+	// Filters out audit logs by the Cloudflare product associated with the changed
+	// resource.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsResourceProduct]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsResourceProduct) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsResourceScope struct {
+	// Filters out audit logs by the resource scope, specifying whether the resource is
+	// associated with an user, an account, or a zone.
+	Not param.Field[[]LogAuditListParamsResourceScopeNot] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsResourceScope]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsResourceScope) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsResourceScopeNot string
 
 const (
-	LogAuditListParamsResourceScopeAccounts LogAuditListParamsResourceScope = "accounts"
-	LogAuditListParamsResourceScopeUser     LogAuditListParamsResourceScope = "user"
-	LogAuditListParamsResourceScopeZones    LogAuditListParamsResourceScope = "zones"
+	LogAuditListParamsResourceScopeNotAccounts LogAuditListParamsResourceScopeNot = "accounts"
+	LogAuditListParamsResourceScopeNotUser     LogAuditListParamsResourceScopeNot = "user"
+	LogAuditListParamsResourceScopeNotZones    LogAuditListParamsResourceScopeNot = "zones"
 )
 
-func (r LogAuditListParamsResourceScope) IsKnown() bool {
+func (r LogAuditListParamsResourceScopeNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsResourceScopeAccounts, LogAuditListParamsResourceScopeUser, LogAuditListParamsResourceScopeZones:
+	case LogAuditListParamsResourceScopeNotAccounts, LogAuditListParamsResourceScopeNotUser, LogAuditListParamsResourceScopeNotZones:
 		return true
 	}
 	return false
+}
+
+type LogAuditListParamsResourceType struct {
+	// Filters out audit logs based on the unique type of resource changed by the
+	// action.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsResourceType]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsResourceType) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsZoneID struct {
+	// Filters out audit logs by the zone ID.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsZoneID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsZoneID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogAuditListParamsZoneName struct {
+	// Filters out audit logs by the zone name associated with the change.
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsZoneName]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsZoneName) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
