@@ -513,11 +513,11 @@ func (r MemberPoliciesAccess) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type MemberPoliciesPermissionGroup struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta MemberPoliciesPermissionGroupsMeta `json:"meta"`
-	// Name of the group.
+	// Name of the permission group.
 	Name string                            `json:"name"`
 	JSON memberPoliciesPermissionGroupJSON `json:"-"`
 }
@@ -566,7 +566,7 @@ func (r memberPoliciesPermissionGroupsMetaJSON) RawJSON() string {
 
 // A group of scoped resources.
 type MemberPoliciesResourceGroup struct {
-	// Identifier of the group.
+	// Identifier of the resource group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
 	Scope []MemberPoliciesResourceGroupsScope `json:"scope,required"`
@@ -1302,11 +1302,11 @@ func (r TokenPolicyEffect) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenPolicyPermissionGroup struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta TokenPolicyPermissionGroupsMeta `json:"meta"`
-	// Name of the group.
+	// Name of the permission group.
 	Name string                         `json:"name"`
 	JSON tokenPolicyPermissionGroupJSON `json:"-"`
 }
@@ -1369,7 +1369,7 @@ func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenPolicyPermissionGroupParam struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID param.Field[string] `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta param.Field[TokenPolicyPermissionGroupsMetaParam] `json:"meta"`

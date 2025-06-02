@@ -28,7 +28,7 @@ func TestResourceGroupNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.IAM.ResourceGroups.New(context.TODO(), iam.ResourceGroupNewParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("NewResourceGroup"),
 		Scope: cloudflare.F(iam.ResourceGroupNewParamsScope{
 			Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
@@ -61,9 +61,9 @@ func TestResourceGroupUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.IAM.ResourceGroups.Update(
 		context.TODO(),
-		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.ResourceGroupUpdateParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("UpdatedResourceGroup"),
 			Scope: cloudflare.F(iam.ResourceGroupUpdateParamsScope{
 				Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
@@ -96,8 +96,8 @@ func TestResourceGroupListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.IAM.ResourceGroups.List(context.TODO(), iam.ResourceGroupListParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-		ID:        cloudflare.F("6d7f2f5f5b1d4a0e9081fdc98d432fd1"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("NameOfTheResourceGroup"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
@@ -126,9 +126,9 @@ func TestResourceGroupDelete(t *testing.T) {
 	)
 	_, err := client.IAM.ResourceGroups.Delete(
 		context.TODO(),
-		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.ResourceGroupDeleteParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -155,9 +155,9 @@ func TestResourceGroupGet(t *testing.T) {
 	)
 	_, err := client.IAM.ResourceGroups.Get(
 		context.TODO(),
-		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.ResourceGroupGetParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
