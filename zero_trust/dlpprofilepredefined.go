@@ -76,15 +76,15 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 }
 
 type DLPProfilePredefinedUpdateParams struct {
-	AccountID           param.Field[string]                                  `path:"account_id,required"`
-	Entries             param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries,required"`
-	AIContextEnabled    param.Field[bool]                                    `json:"ai_context_enabled"`
-	AllowedMatchCount   param.Field[int64]                                   `json:"allowed_match_count"`
-	ConfidenceThreshold param.Field[string]                                  `json:"confidence_threshold"`
+	AccountID           param.Field[string] `path:"account_id,required"`
+	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
-	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
-	OCREnabled       param.Field[bool]                  `json:"ocr_enabled"`
+	ContextAwareness param.Field[ContextAwarenessParam]                   `json:"context_awareness"`
+	Entries          param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries"`
+	OCREnabled       param.Field[bool]                                    `json:"ocr_enabled"`
 }
 
 func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error) {

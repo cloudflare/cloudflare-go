@@ -29,35 +29,31 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Custom.New(context.TODO(), zero_trust.DLPProfileCustomNewParams{
 		AccountID: cloudflare.F("account_id"),
-		Body: zero_trust.DLPProfileCustomNewParamsBodyProfiles{
-			Profiles: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfile{{
-				Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}}),
-				Name:                cloudflare.F("name"),
-				AIContextEnabled:    cloudflare.F(true),
-				AllowedMatchCount:   cloudflare.F(int64(5)),
-				ConfidenceThreshold: cloudflare.F("confidence_threshold"),
-				ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-					Enabled: cloudflare.F(true),
-					Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-						Files: cloudflare.F(true),
-					}),
-				}),
-				Description: cloudflare.F("description"),
-				OCREnabled:  cloudflare.F(true),
-				SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObjectEntryTypeCustom),
-				}}),
-			}}),
-		},
+		Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsEntryUnion{zero_trust.DLPProfileCustomNewParamsEntriesDLPNewCustomEntry{
+			Enabled: cloudflare.F(true),
+			Name:    cloudflare.F("name"),
+			Pattern: cloudflare.F(zero_trust.PatternParam{
+				Regex:      cloudflare.F("regex"),
+				Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
+			}),
+		}}),
+		Name:                cloudflare.F("name"),
+		AIContextEnabled:    cloudflare.F(true),
+		AllowedMatchCount:   cloudflare.F(int64(5)),
+		ConfidenceThreshold: cloudflare.F("confidence_threshold"),
+		ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
+			Enabled: cloudflare.F(true),
+			Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
+				Files: cloudflare.F(true),
+			}),
+		}),
+		Description: cloudflare.F("description"),
+		OCREnabled:  cloudflare.F(true),
+		SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsSharedEntriesObject{
+			Enabled:   cloudflare.F(true),
+			EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsSharedEntriesObjectEntryTypeCustom),
+		}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
