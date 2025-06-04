@@ -385,7 +385,7 @@ type SchemaNewParams struct {
 	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
 	Source param.Field[string] `json:"source,required"`
 	// An indicator if this schema is enabled
-	ValidationEnabled param.Field[bool] `json:"validation_enabled"`
+	ValidationEnabled param.Field[bool] `json:"validation_enabled,required"`
 }
 
 func (r SchemaNewParams) MarshalJSON() (data []byte, err error) {
