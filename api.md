@@ -1018,7 +1018,6 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#NAPTRRecordParam">NAPTRRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#NSRecordParam">NSRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#PTRRecordParam">PTRRecordParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#RecordUnionParam">RecordUnionParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#RecordTagsParam">RecordTagsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SMIMEARecordParam">SMIMEARecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SRVRecordParam">SRVRecordParam</a>
