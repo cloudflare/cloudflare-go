@@ -1509,8 +1509,14 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow struct 
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType `json:"type,required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string                                                                  `json:"workflow_name,required"`
-	JSON         dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON `json:"-"`
+	WorkflowName string `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName string `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName string                                                                  `json:"script_name"`
+	JSON       dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON contains
@@ -1520,6 +1526,8 @@ type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowJSON str
 	Name         apijson.Field
 	Type         apijson.Field
 	WorkflowName apijson.Field
+	ClassName    apijson.Field
+	ScriptName   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }

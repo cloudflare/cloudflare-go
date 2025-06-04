@@ -383,15 +383,11 @@ type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig struct {
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
 	NotFoundHandling param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
-	// When true, requests will always invoke the Worker script. Otherwise, attempt to
-	// serve an asset matching the request, falling back to the Worker script.
-	RunWorkerFirst param.Field[bool] `json:"run_worker_first"`
-	// When true and the incoming request matches an asset, that will be served instead
-	// of invoking the Worker script. When false, requests will always invoke the
-	// Worker script.
-	//
-	// Deprecated: deprecated
-	ServeDirectly param.Field[bool] `json:"serve_directly"`
+	// Contains a list path rules to control routing to either the Worker or assets.
+	// Glob (\*) and negative (!) rules are supported. Rules must start with either '/'
+	// or '!/'. At least one non-negative rule must be provided, and negative rules
+	// have higher precedence than non-negative rules.
+	RunWorkerFirst param.Field[[]string] `json:"run_worker_first"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
@@ -1298,6 +1294,12 @@ type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkfl
 	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName param.Field[string] `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName param.Field[string] `json:"script_name"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
