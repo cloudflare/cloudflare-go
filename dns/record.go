@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
@@ -336,6 +335,8 @@ func (r aRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ARecord) implementsRecordResponse() {}
+
 // Settings for the DNS record.
 type ARecordSettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -409,7 +410,17 @@ func (r ARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ARecordParam) implementsRecordUnionParam() {}
+func (r ARecordParam) implementsBatchPatchUnionParam() {}
+
+func (r ARecordParam) implementsBatchPutUnionParam() {}
+
+func (r ARecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r ARecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r ARecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r ARecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type ARecordSettingsParam struct {
@@ -474,6 +485,8 @@ func (r *AAAARecord) UnmarshalJSON(data []byte) (err error) {
 func (r aaaaRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r AAAARecord) implementsRecordResponse() {}
 
 // Settings for the DNS record.
 type AAAARecordSettings struct {
@@ -549,7 +562,17 @@ func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AAAARecordParam) implementsRecordUnionParam() {}
+func (r AAAARecordParam) implementsBatchPatchUnionParam() {}
+
+func (r AAAARecordParam) implementsBatchPutUnionParam() {}
+
+func (r AAAARecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r AAAARecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r AAAARecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r AAAARecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type AAAARecordSettingsParam struct {
@@ -569,166 +592,50 @@ func (r AAAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [dns.BatchPatchAParam], [dns.BatchPatchAAAAParam],
-// [dns.BatchPatchCAAParam], [dns.BatchPatchCERTParam], [dns.BatchPatchCNAMEParam],
-// [dns.BatchPatchDNSKEYParam], [dns.BatchPatchDSParam],
-// [dns.BatchPatchHTTPSParam], [dns.BatchPatchLOCParam], [dns.BatchPatchMXParam],
-// [dns.BatchPatchNAPTRParam], [dns.BatchPatchNSParam],
-// [dns.BatchPatchOpenpgpkeyParam], [dns.BatchPatchPTRParam],
-// [dns.BatchPatchSMIMEAParam], [dns.BatchPatchSRVParam],
-// [dns.BatchPatchSSHFPParam], [dns.BatchPatchSVCBParam],
-// [dns.BatchPatchTLSAParam], [dns.BatchPatchTXTParam], [dns.BatchPatchURIParam].
+type BatchPatchParam struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[BatchPatchType] `json:"type"`
+}
+
+func (r BatchPatchParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchParam) implementsBatchPatchUnionParam() {}
+
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.BatchPatchDNSRecordsOpenpgpkeyRecordParam], [dns.PTRRecordParam],
+// [dns.TXTRecordParam], [dns.CAARecordParam], [dns.CERTRecordParam],
+// [dns.DNSKEYRecordParam], [dns.DSRecordParam], [dns.HTTPSRecordParam],
+// [dns.LOCRecordParam], [dns.NAPTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.URIRecordParam], [BatchPatchParam].
 type BatchPatchUnionParam interface {
 	implementsBatchPatchUnionParam()
 }
 
-type BatchPatchAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	ARecordParam
-}
-
-func (r BatchPatchAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchAParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchAAAAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	AAAARecordParam
-}
-
-func (r BatchPatchAAAAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchAAAAParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchCAAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	CAARecordParam
-}
-
-func (r BatchPatchCAAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchCAAParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchCERTParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	CERTRecordParam
-}
-
-func (r BatchPatchCERTParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchCERTParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchCNAMEParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	CNAMERecordParam
-}
-
-func (r BatchPatchCNAMEParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchCNAMEParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchDNSKEYParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	DNSKEYRecordParam
-}
-
-func (r BatchPatchDNSKEYParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchDNSKEYParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchDSParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	DSRecordParam
-}
-
-func (r BatchPatchDSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchDSParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchHTTPSParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	HTTPSRecordParam
-}
-
-func (r BatchPatchHTTPSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchHTTPSParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchLOCParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	LOCRecordParam
-}
-
-func (r BatchPatchLOCParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchLOCParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchMXParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	MXRecordParam
-}
-
-func (r BatchPatchMXParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchMXParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchNAPTRParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	NAPTRRecordParam
-}
-
-func (r BatchPatchNAPTRParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchNAPTRParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchNSParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	NSRecordParam
-}
-
-func (r BatchPatchNSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchNSParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchOpenpgpkeyParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+type BatchPatchDNSRecordsOpenpgpkeyRecordParam struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -740,7 +647,7 @@ type BatchPatchOpenpgpkeyParam struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Settings for the DNS record.
-	Settings param.Field[BatchPatchOpenpgpkeySettingsParam] `json:"settings"`
+	Settings param.Field[BatchPatchDNSRecordsOpenpgpkeyRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -748,17 +655,17 @@ type BatchPatchOpenpgpkeyParam struct {
 	// Enterprise zones.
 	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
-	Type param.Field[BatchPatchOpenpgpkeyType] `json:"type"`
+	Type param.Field[BatchPatchDNSRecordsOpenpgpkeyRecordType] `json:"type"`
 }
 
-func (r BatchPatchOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchDNSRecordsOpenpgpkeyRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchOpenpgpkeyParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchDNSRecordsOpenpgpkeyRecordParam) implementsBatchPatchUnionParam() {}
 
 // Settings for the DNS record.
-type BatchPatchOpenpgpkeySettingsParam struct {
+type BatchPatchDNSRecordsOpenpgpkeyRecordSettingsParam struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
@@ -771,325 +678,134 @@ type BatchPatchOpenpgpkeySettingsParam struct {
 	IPV6Only param.Field[bool] `json:"ipv6_only"`
 }
 
-func (r BatchPatchOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchDNSRecordsOpenpgpkeyRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Record type.
-type BatchPatchOpenpgpkeyType string
+type BatchPatchDNSRecordsOpenpgpkeyRecordType string
 
 const (
-	BatchPatchOpenpgpkeyTypeOpenpgpkey BatchPatchOpenpgpkeyType = "OPENPGPKEY"
+	BatchPatchDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey BatchPatchDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
 )
 
-func (r BatchPatchOpenpgpkeyType) IsKnown() bool {
+func (r BatchPatchDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
 	switch r {
-	case BatchPatchOpenpgpkeyTypeOpenpgpkey:
+	case BatchPatchDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
 		return true
 	}
 	return false
 }
 
-type BatchPatchPTRParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	PTRRecordParam
+// Record type.
+type BatchPatchType string
+
+const (
+	BatchPatchTypeA          BatchPatchType = "A"
+	BatchPatchTypeAAAA       BatchPatchType = "AAAA"
+	BatchPatchTypeCNAME      BatchPatchType = "CNAME"
+	BatchPatchTypeMX         BatchPatchType = "MX"
+	BatchPatchTypeNS         BatchPatchType = "NS"
+	BatchPatchTypeOpenpgpkey BatchPatchType = "OPENPGPKEY"
+	BatchPatchTypePTR        BatchPatchType = "PTR"
+	BatchPatchTypeTXT        BatchPatchType = "TXT"
+	BatchPatchTypeCAA        BatchPatchType = "CAA"
+	BatchPatchTypeCERT       BatchPatchType = "CERT"
+	BatchPatchTypeDNSKEY     BatchPatchType = "DNSKEY"
+	BatchPatchTypeDS         BatchPatchType = "DS"
+	BatchPatchTypeHTTPS      BatchPatchType = "HTTPS"
+	BatchPatchTypeLOC        BatchPatchType = "LOC"
+	BatchPatchTypeNAPTR      BatchPatchType = "NAPTR"
+	BatchPatchTypeSMIMEA     BatchPatchType = "SMIMEA"
+	BatchPatchTypeSRV        BatchPatchType = "SRV"
+	BatchPatchTypeSSHFP      BatchPatchType = "SSHFP"
+	BatchPatchTypeSVCB       BatchPatchType = "SVCB"
+	BatchPatchTypeTLSA       BatchPatchType = "TLSA"
+	BatchPatchTypeURI        BatchPatchType = "URI"
+)
+
+func (r BatchPatchType) IsKnown() bool {
+	switch r {
+	case BatchPatchTypeA, BatchPatchTypeAAAA, BatchPatchTypeCNAME, BatchPatchTypeMX, BatchPatchTypeNS, BatchPatchTypeOpenpgpkey, BatchPatchTypePTR, BatchPatchTypeTXT, BatchPatchTypeCAA, BatchPatchTypeCERT, BatchPatchTypeDNSKEY, BatchPatchTypeDS, BatchPatchTypeHTTPS, BatchPatchTypeLOC, BatchPatchTypeNAPTR, BatchPatchTypeSMIMEA, BatchPatchTypeSRV, BatchPatchTypeSSHFP, BatchPatchTypeSVCB, BatchPatchTypeTLSA, BatchPatchTypeURI:
+		return true
+	}
+	return false
 }
 
-func (r BatchPatchPTRParam) MarshalJSON() (data []byte, err error) {
+type BatchPutParam struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[BatchPutType] `json:"type"`
+}
+
+func (r BatchPutParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchPTRParam) implementsBatchPatchUnionParam() {}
+func (r BatchPutParam) implementsBatchPutUnionParam() {}
 
-type BatchPatchSMIMEAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	SMIMEARecordParam
-}
-
-func (r BatchPatchSMIMEAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchSMIMEAParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchSRVParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	SRVRecordParam
-}
-
-func (r BatchPatchSRVParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchSRVParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchSSHFPParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	SSHFPRecordParam
-}
-
-func (r BatchPatchSSHFPParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchSSHFPParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchSVCBParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	SVCBRecordParam
-}
-
-func (r BatchPatchSVCBParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchSVCBParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchTLSAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	TLSARecordParam
-}
-
-func (r BatchPatchTLSAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchTLSAParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchTXTParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	TXTRecordParam
-}
-
-func (r BatchPatchTXTParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchTXTParam) implementsBatchPatchUnionParam() {}
-
-type BatchPatchURIParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
-	URIRecordParam
-}
-
-func (r BatchPatchURIParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPatchURIParam) implementsBatchPatchUnionParam() {}
-
-// Satisfied by [dns.BatchPutAParam], [dns.BatchPutAAAAParam],
-// [dns.BatchPutCAAParam], [dns.BatchPutCERTParam], [dns.BatchPutCNAMEParam],
-// [dns.BatchPutDNSKEYParam], [dns.BatchPutDSParam], [dns.BatchPutHTTPSParam],
-// [dns.BatchPutLOCParam], [dns.BatchPutMXParam], [dns.BatchPutNAPTRParam],
-// [dns.BatchPutNSParam], [dns.BatchPutOpenpgpkeyParam], [dns.BatchPutPTRParam],
-// [dns.BatchPutSMIMEAParam], [dns.BatchPutSRVParam], [dns.BatchPutSSHFPParam],
-// [dns.BatchPutSVCBParam], [dns.BatchPutTLSAParam], [dns.BatchPutTXTParam],
-// [dns.BatchPutURIParam].
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.BatchPutDNSRecordsOpenpgpkeyRecordParam], [dns.PTRRecordParam],
+// [dns.TXTRecordParam], [dns.CAARecordParam], [dns.CERTRecordParam],
+// [dns.DNSKEYRecordParam], [dns.DSRecordParam], [dns.HTTPSRecordParam],
+// [dns.LOCRecordParam], [dns.NAPTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.URIRecordParam], [BatchPutParam].
 type BatchPutUnionParam interface {
 	implementsBatchPutUnionParam()
 }
 
-type BatchPutAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	ARecordParam
-}
-
-func (r BatchPutAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutAParam) implementsBatchPutUnionParam() {}
-
-type BatchPutAAAAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	AAAARecordParam
-}
-
-func (r BatchPutAAAAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutAAAAParam) implementsBatchPutUnionParam() {}
-
-type BatchPutCAAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	CAARecordParam
-}
-
-func (r BatchPutCAAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutCAAParam) implementsBatchPutUnionParam() {}
-
-type BatchPutCERTParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	CERTRecordParam
-}
-
-func (r BatchPutCERTParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutCERTParam) implementsBatchPutUnionParam() {}
-
-type BatchPutCNAMEParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	CNAMERecordParam
-}
-
-func (r BatchPutCNAMEParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutCNAMEParam) implementsBatchPutUnionParam() {}
-
-type BatchPutDNSKEYParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	DNSKEYRecordParam
-}
-
-func (r BatchPutDNSKEYParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutDNSKEYParam) implementsBatchPutUnionParam() {}
-
-type BatchPutDSParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	DSRecordParam
-}
-
-func (r BatchPutDSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutDSParam) implementsBatchPutUnionParam() {}
-
-type BatchPutHTTPSParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	HTTPSRecordParam
-}
-
-func (r BatchPutHTTPSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutHTTPSParam) implementsBatchPutUnionParam() {}
-
-type BatchPutLOCParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	LOCRecordParam
-}
-
-func (r BatchPutLOCParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutLOCParam) implementsBatchPutUnionParam() {}
-
-type BatchPutMXParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	MXRecordParam
-}
-
-func (r BatchPutMXParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutMXParam) implementsBatchPutUnionParam() {}
-
-type BatchPutNAPTRParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	NAPTRRecordParam
-}
-
-func (r BatchPutNAPTRParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutNAPTRParam) implementsBatchPutUnionParam() {}
-
-type BatchPutNSParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	NSRecordParam
-}
-
-func (r BatchPutNSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutNSParam) implementsBatchPutUnionParam() {}
-
-type BatchPutOpenpgpkeyParam struct {
-	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-	Content param.Field[string] `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[BatchPutOpenpgpkeyType] `json:"type,required"`
-	// Identifier.
-	ID param.Field[string] `json:"id"`
+type BatchPutDNSRecordsOpenpgpkeyRecordParam struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Settings for the DNS record.
-	Settings param.Field[BatchPutOpenpgpkeySettingsParam] `json:"settings"`
+	Settings param.Field[BatchPutDNSRecordsOpenpgpkeyRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
 	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[BatchPutDNSRecordsOpenpgpkeyRecordType] `json:"type"`
 }
 
-func (r BatchPutOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutDNSRecordsOpenpgpkeyRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutOpenpgpkeyParam) implementsBatchPutUnionParam() {}
-
-// Record type.
-type BatchPutOpenpgpkeyType string
-
-const (
-	BatchPutOpenpgpkeyTypeOpenpgpkey BatchPutOpenpgpkeyType = "OPENPGPKEY"
-)
-
-func (r BatchPutOpenpgpkeyType) IsKnown() bool {
-	switch r {
-	case BatchPutOpenpgpkeyTypeOpenpgpkey:
-		return true
-	}
-	return false
-}
+func (r BatchPutDNSRecordsOpenpgpkeyRecordParam) implementsBatchPutUnionParam() {}
 
 // Settings for the DNS record.
-type BatchPutOpenpgpkeySettingsParam struct {
+type BatchPutDNSRecordsOpenpgpkeyRecordSettingsParam struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
@@ -1102,105 +818,59 @@ type BatchPutOpenpgpkeySettingsParam struct {
 	IPV6Only param.Field[bool] `json:"ipv6_only"`
 }
 
-func (r BatchPutOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutDNSRecordsOpenpgpkeyRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type BatchPutPTRParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	PTRRecordParam
+// Record type.
+type BatchPutDNSRecordsOpenpgpkeyRecordType string
+
+const (
+	BatchPutDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey BatchPutDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+)
+
+func (r BatchPutDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+	switch r {
+	case BatchPutDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+		return true
+	}
+	return false
 }
 
-func (r BatchPutPTRParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// Record type.
+type BatchPutType string
+
+const (
+	BatchPutTypeA          BatchPutType = "A"
+	BatchPutTypeAAAA       BatchPutType = "AAAA"
+	BatchPutTypeCNAME      BatchPutType = "CNAME"
+	BatchPutTypeMX         BatchPutType = "MX"
+	BatchPutTypeNS         BatchPutType = "NS"
+	BatchPutTypeOpenpgpkey BatchPutType = "OPENPGPKEY"
+	BatchPutTypePTR        BatchPutType = "PTR"
+	BatchPutTypeTXT        BatchPutType = "TXT"
+	BatchPutTypeCAA        BatchPutType = "CAA"
+	BatchPutTypeCERT       BatchPutType = "CERT"
+	BatchPutTypeDNSKEY     BatchPutType = "DNSKEY"
+	BatchPutTypeDS         BatchPutType = "DS"
+	BatchPutTypeHTTPS      BatchPutType = "HTTPS"
+	BatchPutTypeLOC        BatchPutType = "LOC"
+	BatchPutTypeNAPTR      BatchPutType = "NAPTR"
+	BatchPutTypeSMIMEA     BatchPutType = "SMIMEA"
+	BatchPutTypeSRV        BatchPutType = "SRV"
+	BatchPutTypeSSHFP      BatchPutType = "SSHFP"
+	BatchPutTypeSVCB       BatchPutType = "SVCB"
+	BatchPutTypeTLSA       BatchPutType = "TLSA"
+	BatchPutTypeURI        BatchPutType = "URI"
+)
+
+func (r BatchPutType) IsKnown() bool {
+	switch r {
+	case BatchPutTypeA, BatchPutTypeAAAA, BatchPutTypeCNAME, BatchPutTypeMX, BatchPutTypeNS, BatchPutTypeOpenpgpkey, BatchPutTypePTR, BatchPutTypeTXT, BatchPutTypeCAA, BatchPutTypeCERT, BatchPutTypeDNSKEY, BatchPutTypeDS, BatchPutTypeHTTPS, BatchPutTypeLOC, BatchPutTypeNAPTR, BatchPutTypeSMIMEA, BatchPutTypeSRV, BatchPutTypeSSHFP, BatchPutTypeSVCB, BatchPutTypeTLSA, BatchPutTypeURI:
+		return true
+	}
+	return false
 }
-
-func (r BatchPutPTRParam) implementsBatchPutUnionParam() {}
-
-type BatchPutSMIMEAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	SMIMEARecordParam
-}
-
-func (r BatchPutSMIMEAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutSMIMEAParam) implementsBatchPutUnionParam() {}
-
-type BatchPutSRVParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	SRVRecordParam
-}
-
-func (r BatchPutSRVParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutSRVParam) implementsBatchPutUnionParam() {}
-
-type BatchPutSSHFPParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	SSHFPRecordParam
-}
-
-func (r BatchPutSSHFPParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutSSHFPParam) implementsBatchPutUnionParam() {}
-
-type BatchPutSVCBParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	SVCBRecordParam
-}
-
-func (r BatchPutSVCBParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutSVCBParam) implementsBatchPutUnionParam() {}
-
-type BatchPutTLSAParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	TLSARecordParam
-}
-
-func (r BatchPutTLSAParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutTLSAParam) implementsBatchPutUnionParam() {}
-
-type BatchPutTXTParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	TXTRecordParam
-}
-
-func (r BatchPutTXTParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutTXTParam) implementsBatchPutUnionParam() {}
-
-type BatchPutURIParam struct {
-	// Identifier.
-	ID param.Field[string] `json:"id"`
-	URIRecordParam
-}
-
-func (r BatchPutURIParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r BatchPutURIParam) implementsBatchPutUnionParam() {}
 
 type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1250,6 +920,8 @@ func (r *CAARecord) UnmarshalJSON(data []byte) (err error) {
 func (r caaRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r CAARecord) implementsRecordResponse() {}
 
 // Components of a CAA record.
 type CAARecordData struct {
@@ -1353,7 +1025,17 @@ func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CAARecordParam) implementsRecordUnionParam() {}
+func (r CAARecordParam) implementsBatchPatchUnionParam() {}
+
+func (r CAARecordParam) implementsBatchPutUnionParam() {}
+
+func (r CAARecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r CAARecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r CAARecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r CAARecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a CAA record.
 type CAARecordDataParam struct {
@@ -1435,6 +1117,8 @@ func (r *CERTRecord) UnmarshalJSON(data []byte) (err error) {
 func (r certRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r CERTRecord) implementsRecordResponse() {}
 
 // Components of a CERT record.
 type CERTRecordData struct {
@@ -1541,7 +1225,17 @@ func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CERTRecordParam) implementsRecordUnionParam() {}
+func (r CERTRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r CERTRecordParam) implementsBatchPutUnionParam() {}
+
+func (r CERTRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r CERTRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r CERTRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r CERTRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a CERT record.
 type CERTRecordDataParam struct {
@@ -1623,6 +1317,8 @@ func (r cnameRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r CNAMERecord) implementsRecordResponse() {}
+
 // Settings for the DNS record.
 type CNAMERecordSettings struct {
 	// If enabled, causes the CNAME record to be resolved externally and the resulting
@@ -1703,7 +1399,17 @@ func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CNAMERecordParam) implementsRecordUnionParam() {}
+func (r CNAMERecordParam) implementsBatchPatchUnionParam() {}
+
+func (r CNAMERecordParam) implementsBatchPutUnionParam() {}
+
+func (r CNAMERecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r CNAMERecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r CNAMERecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r CNAMERecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type CNAMERecordSettingsParam struct {
@@ -1776,6 +1482,8 @@ func (r *DNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
 func (r dnskeyRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r DNSKEYRecord) implementsRecordResponse() {}
 
 // Components of a DNSKEY record.
 type DNSKEYRecordData struct {
@@ -1883,7 +1591,17 @@ func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DNSKEYRecordParam) implementsRecordUnionParam() {}
+func (r DNSKEYRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r DNSKEYRecordParam) implementsBatchPutUnionParam() {}
+
+func (r DNSKEYRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r DNSKEYRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r DNSKEYRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r DNSKEYRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a DNSKEY record.
 type DNSKEYRecordDataParam struct {
@@ -1967,6 +1685,8 @@ func (r *DSRecord) UnmarshalJSON(data []byte) (err error) {
 func (r dsRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r DSRecord) implementsRecordResponse() {}
 
 // Components of a DS record.
 type DSRecordData struct {
@@ -2073,7 +1793,17 @@ func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DSRecordParam) implementsRecordUnionParam() {}
+func (r DSRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r DSRecordParam) implementsBatchPutUnionParam() {}
+
+func (r DSRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r DSRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r DSRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r DSRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a DS record.
 type DSRecordDataParam struct {
@@ -2157,6 +1887,8 @@ func (r *HTTPSRecord) UnmarshalJSON(data []byte) (err error) {
 func (r httpsRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r HTTPSRecord) implementsRecordResponse() {}
 
 // Components of a HTTPS record.
 type HTTPSRecordData struct {
@@ -2260,7 +1992,17 @@ func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HTTPSRecordParam) implementsRecordUnionParam() {}
+func (r HTTPSRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r HTTPSRecordParam) implementsBatchPutUnionParam() {}
+
+func (r HTTPSRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r HTTPSRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r HTTPSRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r HTTPSRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a HTTPS record.
 type HTTPSRecordDataParam struct {
@@ -2342,6 +2084,8 @@ func (r *LOCRecord) UnmarshalJSON(data []byte) (err error) {
 func (r locRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r LOCRecord) implementsRecordResponse() {}
 
 // Components of a LOC record.
 type LOCRecordData struct {
@@ -2504,7 +2248,17 @@ func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LOCRecordParam) implementsRecordUnionParam() {}
+func (r LOCRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r LOCRecordParam) implementsBatchPutUnionParam() {}
+
+func (r LOCRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r LOCRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r LOCRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r LOCRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a LOC record.
 type LOCRecordDataParam struct {
@@ -2606,6 +2360,8 @@ func (r mxRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r MXRecord) implementsRecordResponse() {}
+
 // Settings for the DNS record.
 type MXRecordSettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -2683,7 +2439,17 @@ func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MXRecordParam) implementsRecordUnionParam() {}
+func (r MXRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r MXRecordParam) implementsBatchPutUnionParam() {}
+
+func (r MXRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r MXRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r MXRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r MXRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type MXRecordSettingsParam struct {
@@ -2751,6 +2517,8 @@ func (r *NAPTRRecord) UnmarshalJSON(data []byte) (err error) {
 func (r naptrRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r NAPTRRecord) implementsRecordResponse() {}
 
 // Components of a NAPTR record.
 type NAPTRRecordData struct {
@@ -2863,7 +2631,17 @@ func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r NAPTRRecordParam) implementsRecordUnionParam() {}
+func (r NAPTRRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r NAPTRRecordParam) implementsBatchPutUnionParam() {}
+
+func (r NAPTRRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r NAPTRRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r NAPTRRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r NAPTRRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a NAPTR record.
 type NAPTRRecordDataParam struct {
@@ -2949,6 +2727,8 @@ func (r nsRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r NSRecord) implementsRecordResponse() {}
+
 // Settings for the DNS record.
 type NSRecordSettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -3023,7 +2803,17 @@ func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r NSRecordParam) implementsRecordUnionParam() {}
+func (r NSRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r NSRecordParam) implementsBatchPutUnionParam() {}
+
+func (r NSRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r NSRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r NSRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r NSRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type NSRecordSettingsParam struct {
@@ -3088,6 +2878,8 @@ func (r *PTRRecord) UnmarshalJSON(data []byte) (err error) {
 func (r ptrRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r PTRRecord) implementsRecordResponse() {}
 
 // Settings for the DNS record.
 type PTRRecordSettings struct {
@@ -3163,7 +2955,17 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PTRRecordParam) implementsRecordUnionParam() {}
+func (r PTRRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r PTRRecordParam) implementsBatchPutUnionParam() {}
+
+func (r PTRRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r PTRRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r PTRRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r PTRRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type PTRRecordSettingsParam struct {
@@ -3183,190 +2985,36 @@ func (r PTRRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// A valid IPv4 address.
-	Content param.Field[string]      `json:"content" format:"ipv4"`
-	Data    param.Field[interface{}] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied  param.Field[bool]        `json:"proxied"`
-	Settings param.Field[interface{}] `json:"settings"`
-	Tags     param.Field[interface{}] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-	// Record type.
-	Type param.Field[RecordType] `json:"type"`
-}
-
-func (r RecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RecordParam) implementsRecordUnionParam() {}
-
-// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CAARecordParam],
-// [dns.CERTRecordParam], [dns.CNAMERecordParam], [dns.DNSKEYRecordParam],
-// [dns.DSRecordParam], [dns.HTTPSRecordParam], [dns.LOCRecordParam],
-// [dns.MXRecordParam], [dns.NAPTRRecordParam], [dns.NSRecordParam],
-// [dns.RecordOpenpgpkeyParam], [dns.PTRRecordParam], [dns.SMIMEARecordParam],
-// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
-// [dns.TLSARecordParam], [dns.TXTRecordParam], [dns.URIRecordParam],
-// [RecordParam].
-type RecordUnionParam interface {
-	implementsRecordUnionParam()
-}
-
-type RecordOpenpgpkeyParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-	Content param.Field[string] `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Settings for the DNS record.
-	Settings param.Field[RecordOpenpgpkeySettingsParam] `json:"settings"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-	// Record type.
-	Type param.Field[RecordOpenpgpkeyType] `json:"type"`
-}
-
-func (r RecordOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RecordOpenpgpkeyParam) implementsRecordUnionParam() {}
-
-// Settings for the DNS record.
-type RecordOpenpgpkeySettingsParam struct {
-	// When enabled, only A records will be generated, and AAAA records will not be
-	// created. This setting is intended for exceptional cases. Note that this option
-	// only applies to proxied records and it has no effect on whether Cloudflare
-	// communicates with the origin using IPv4 or IPv6.
-	IPV4Only param.Field[bool] `json:"ipv4_only"`
-	// When enabled, only AAAA records will be generated, and A records will not be
-	// created. This setting is intended for exceptional cases. Note that this option
-	// only applies to proxied records and it has no effect on whether Cloudflare
-	// communicates with the origin using IPv4 or IPv6.
-	IPV6Only param.Field[bool] `json:"ipv6_only"`
-}
-
-func (r RecordOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Record type.
-type RecordOpenpgpkeyType string
-
-const (
-	RecordOpenpgpkeyTypeOpenpgpkey RecordOpenpgpkeyType = "OPENPGPKEY"
-)
-
-func (r RecordOpenpgpkeyType) IsKnown() bool {
-	switch r {
-	case RecordOpenpgpkeyTypeOpenpgpkey:
-		return true
-	}
-	return false
-}
-
-// Record type.
-type RecordType string
-
-const (
-	RecordTypeA          RecordType = "A"
-	RecordTypeAAAA       RecordType = "AAAA"
-	RecordTypeCAA        RecordType = "CAA"
-	RecordTypeCERT       RecordType = "CERT"
-	RecordTypeCNAME      RecordType = "CNAME"
-	RecordTypeDNSKEY     RecordType = "DNSKEY"
-	RecordTypeDS         RecordType = "DS"
-	RecordTypeHTTPS      RecordType = "HTTPS"
-	RecordTypeLOC        RecordType = "LOC"
-	RecordTypeMX         RecordType = "MX"
-	RecordTypeNAPTR      RecordType = "NAPTR"
-	RecordTypeNS         RecordType = "NS"
-	RecordTypeOpenpgpkey RecordType = "OPENPGPKEY"
-	RecordTypePTR        RecordType = "PTR"
-	RecordTypeSMIMEA     RecordType = "SMIMEA"
-	RecordTypeSRV        RecordType = "SRV"
-	RecordTypeSSHFP      RecordType = "SSHFP"
-	RecordTypeSVCB       RecordType = "SVCB"
-	RecordTypeTLSA       RecordType = "TLSA"
-	RecordTypeTXT        RecordType = "TXT"
-	RecordTypeURI        RecordType = "URI"
-)
-
-func (r RecordType) IsKnown() bool {
-	switch r {
-	case RecordTypeA, RecordTypeAAAA, RecordTypeCAA, RecordTypeCERT, RecordTypeCNAME, RecordTypeDNSKEY, RecordTypeDS, RecordTypeHTTPS, RecordTypeLOC, RecordTypeMX, RecordTypeNAPTR, RecordTypeNS, RecordTypeOpenpgpkey, RecordTypePTR, RecordTypeSMIMEA, RecordTypeSRV, RecordTypeSSHFP, RecordTypeSVCB, RecordTypeTLSA, RecordTypeTXT, RecordTypeURI:
-		return true
-	}
-	return false
-}
-
 type RecordResponse struct {
-	// Identifier.
-	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// This field can have the runtime type of [interface{}].
-	Meta interface{} `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
-	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [CNAMERecordSettings], [MXRecordSettings], [NSRecordSettings],
+	// [RecordResponseDNSRecordsOpenpgpkeyRecordSettings], [PTRRecordSettings],
+	// [TXTRecordSettings], [CAARecordSettings], [CERTRecordSettings],
 	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
-	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
-	// [NSRecordSettings], [RecordResponseOpenpgpkeySettings], [PTRRecordSettings],
-	// [SMIMEARecordSettings], [SRVRecordSettings], [SSHFPRecordSettings],
-	// [SVCBRecordSettings], [TLSARecordSettings], [TXTRecordSettings],
-	// [URIRecordSettings].
+	// [LOCRecordSettings], [NAPTRRecordSettings], [SMIMEARecordSettings],
+	// [SRVRecordSettings], [SSHFPRecordSettings], [SVCBRecordSettings],
+	// [TLSARecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3379,25 +3027,18 @@ type RecordResponse struct {
 
 // recordResponseJSON contains the JSON metadata for the struct [RecordResponse]
 type recordResponseJSON struct {
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Data              apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Name              apijson.Field
-	Priority          apijson.Field
-	Proxiable         apijson.Field
-	Proxied           apijson.Field
-	Settings          apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	Type              apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	Comment     apijson.Field
+	Content     apijson.Field
+	Data        apijson.Field
+	Name        apijson.Field
+	Priority    apijson.Field
+	Proxied     apijson.Field
+	Settings    apijson.Field
+	Tags        apijson.Field
+	TTL         apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r recordResponseJSON) RawJSON() string {
@@ -3416,25 +3057,20 @@ func (r *RecordResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RecordResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [RecordResponseA], [RecordResponseAAAA],
-// [RecordResponseCAA], [RecordResponseCERT], [RecordResponseCNAME],
-// [RecordResponseDNSKEY], [RecordResponseDS], [RecordResponseHTTPS],
-// [RecordResponseLOC], [RecordResponseMX], [RecordResponseNAPTR],
-// [RecordResponseNS], [RecordResponseOpenpgpkey], [RecordResponsePTR],
-// [RecordResponseSMIMEA], [RecordResponseSRV], [RecordResponseSSHFP],
-// [RecordResponseSVCB], [RecordResponseTLSA], [RecordResponseTXT],
-// [RecordResponseURI].
+// Possible runtime types of the union are [ARecord], [AAAARecord], [CNAMERecord],
+// [MXRecord], [NSRecord], [RecordResponseDNSRecordsOpenpgpkeyRecord], [PTRRecord],
+// [TXTRecord], [CAARecord], [CERTRecord], [DNSKEYRecord], [DSRecord],
+// [HTTPSRecord], [LOCRecord], [NAPTRRecord], [SMIMEARecord], [SRVRecord],
+// [SSHFPRecord], [SVCBRecord], [TLSARecord], [URIRecord].
 func (r RecordResponse) AsUnion() RecordResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [RecordResponseA], [RecordResponseAAAA], [RecordResponseCAA],
-// [RecordResponseCERT], [RecordResponseCNAME], [RecordResponseDNSKEY],
-// [RecordResponseDS], [RecordResponseHTTPS], [RecordResponseLOC],
-// [RecordResponseMX], [RecordResponseNAPTR], [RecordResponseNS],
-// [RecordResponseOpenpgpkey], [RecordResponsePTR], [RecordResponseSMIMEA],
-// [RecordResponseSRV], [RecordResponseSSHFP], [RecordResponseSVCB],
-// [RecordResponseTLSA], [RecordResponseTXT] or [RecordResponseURI].
+// Union satisfied by [ARecord], [AAAARecord], [CNAMERecord], [MXRecord],
+// [NSRecord], [RecordResponseDNSRecordsOpenpgpkeyRecord], [PTRRecord],
+// [TXTRecord], [CAARecord], [CERTRecord], [DNSKEYRecord], [DSRecord],
+// [HTTPSRecord], [LOCRecord], [NAPTRRecord], [SMIMEARecord], [SRVRecord],
+// [SSHFPRecord], [SVCBRecord], [TLSARecord] or [URIRecord].
 type RecordResponseUnion interface {
 	implementsRecordResponse()
 }
@@ -3442,702 +3078,145 @@ type RecordResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordResponseUnion)(nil)).Elem(),
-		"type",
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseA{}),
-			DiscriminatorValue: "A",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseAAAA{}),
-			DiscriminatorValue: "AAAA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AAAARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCAA{}),
-			DiscriminatorValue: "CAA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CNAMERecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCERT{}),
-			DiscriminatorValue: "CERT",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MXRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCNAME{}),
-			DiscriminatorValue: "CNAME",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NSRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseDNSKEY{}),
-			DiscriminatorValue: "DNSKEY",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseDNSRecordsOpenpgpkeyRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseDS{}),
-			DiscriminatorValue: "DS",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PTRRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseHTTPS{}),
-			DiscriminatorValue: "HTTPS",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TXTRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseLOC{}),
-			DiscriminatorValue: "LOC",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CAARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseMX{}),
-			DiscriminatorValue: "MX",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CERTRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseNAPTR{}),
-			DiscriminatorValue: "NAPTR",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DNSKEYRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseNS{}),
-			DiscriminatorValue: "NS",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DSRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseOpenpgpkey{}),
-			DiscriminatorValue: "OPENPGPKEY",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HTTPSRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponsePTR{}),
-			DiscriminatorValue: "PTR",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(LOCRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSMIMEA{}),
-			DiscriminatorValue: "SMIMEA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NAPTRRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSRV{}),
-			DiscriminatorValue: "SRV",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SMIMEARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSSHFP{}),
-			DiscriminatorValue: "SSHFP",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SRVRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSVCB{}),
-			DiscriminatorValue: "SVCB",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SSHFPRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseTLSA{}),
-			DiscriminatorValue: "TLSA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SVCBRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseTXT{}),
-			DiscriminatorValue: "TXT",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TLSARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseURI{}),
-			DiscriminatorValue: "URI",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URIRecord{}),
 		},
 	)
 }
 
-type RecordResponseA struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time           `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseAJSON `json:"-"`
-	ARecord
-}
-
-// recordResponseAJSON contains the JSON metadata for the struct [RecordResponseA]
-type recordResponseAJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseA) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseAJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseA) implementsRecordResponse() {}
-
-type RecordResponseAAAA struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseAAAAJSON `json:"-"`
-	AAAARecord
-}
-
-// recordResponseAAAAJSON contains the JSON metadata for the struct
-// [RecordResponseAAAA]
-type recordResponseAAAAJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseAAAA) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseAAAAJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseAAAA) implementsRecordResponse() {}
-
-type RecordResponseCAA struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCAAJSON `json:"-"`
-	CAARecord
-}
-
-// recordResponseCAAJSON contains the JSON metadata for the struct
-// [RecordResponseCAA]
-type recordResponseCAAJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseCAA) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseCAAJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseCAA) implementsRecordResponse() {}
-
-type RecordResponseCERT struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCERTJSON `json:"-"`
-	CERTRecord
-}
-
-// recordResponseCERTJSON contains the JSON metadata for the struct
-// [RecordResponseCERT]
-type recordResponseCERTJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseCERT) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseCERTJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseCERT) implementsRecordResponse() {}
-
-type RecordResponseCNAME struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCNAMEJSON `json:"-"`
-	CNAMERecord
-}
-
-// recordResponseCNAMEJSON contains the JSON metadata for the struct
-// [RecordResponseCNAME]
-type recordResponseCNAMEJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseCNAME) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseCNAMEJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseCNAME) implementsRecordResponse() {}
-
-type RecordResponseDNSKEY struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDNSKEYJSON `json:"-"`
-	DNSKEYRecord
-}
-
-// recordResponseDNSKEYJSON contains the JSON metadata for the struct
-// [RecordResponseDNSKEY]
-type recordResponseDNSKEYJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseDNSKEYJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseDNSKEY) implementsRecordResponse() {}
-
-type RecordResponseDS struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDSJSON `json:"-"`
-	DSRecord
-}
-
-// recordResponseDSJSON contains the JSON metadata for the struct
-// [RecordResponseDS]
-type recordResponseDSJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseDS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseDSJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseDS) implementsRecordResponse() {}
-
-type RecordResponseHTTPS struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseHTTPSJSON `json:"-"`
-	HTTPSRecord
-}
-
-// recordResponseHTTPSJSON contains the JSON metadata for the struct
-// [RecordResponseHTTPS]
-type recordResponseHTTPSJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseHTTPSJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseHTTPS) implementsRecordResponse() {}
-
-type RecordResponseLOC struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseLOCJSON `json:"-"`
-	LOCRecord
-}
-
-// recordResponseLOCJSON contains the JSON metadata for the struct
-// [RecordResponseLOC]
-type recordResponseLOCJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseLOC) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseLOCJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseLOC) implementsRecordResponse() {}
-
-type RecordResponseMX struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseMXJSON `json:"-"`
-	MXRecord
-}
-
-// recordResponseMXJSON contains the JSON metadata for the struct
-// [RecordResponseMX]
-type recordResponseMXJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseMX) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseMXJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseMX) implementsRecordResponse() {}
-
-type RecordResponseNAPTR struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNAPTRJSON `json:"-"`
-	NAPTRRecord
-}
-
-// recordResponseNAPTRJSON contains the JSON metadata for the struct
-// [RecordResponseNAPTR]
-type recordResponseNAPTRJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseNAPTRJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseNAPTR) implementsRecordResponse() {}
-
-type RecordResponseNS struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNSJSON `json:"-"`
-	NSRecord
-}
-
-// recordResponseNSJSON contains the JSON metadata for the struct
-// [RecordResponseNS]
-type recordResponseNSJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseNS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseNSJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseNS) implementsRecordResponse() {}
-
-type RecordResponseOpenpgpkey struct {
-	// Identifier.
-	ID string `json:"id,required"`
+type RecordResponseDNSRecordsOpenpgpkeyRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment string `json:"comment,required"`
+	Comment string `json:"comment"`
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-	Content string `json:"content,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	Content string `json:"content"`
 	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Name string `json:"name"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
-	Proxied bool `json:"proxied,required"`
+	Proxied bool `json:"proxied"`
 	// Settings for the DNS record.
-	Settings RecordResponseOpenpgpkeySettings `json:"settings,required"`
+	Settings RecordResponseDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags,required"`
+	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordResponseOpenpgpkeyType `json:"type,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseOpenpgpkeyJSON `json:"-"`
+	Type RecordResponseDNSRecordsOpenpgpkeyRecordType `json:"type"`
+	JSON recordResponseDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
 }
 
-// recordResponseOpenpgpkeyJSON contains the JSON metadata for the struct
-// [RecordResponseOpenpgpkey]
-type recordResponseOpenpgpkeyJSON struct {
-	ID                apijson.Field
-	Comment           apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Name              apijson.Field
-	Proxiable         apijson.Field
-	Proxied           apijson.Field
-	Settings          apijson.Field
-	Tags              apijson.Field
-	TTL               apijson.Field
-	Type              apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+// recordResponseDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata for the
+// struct [RecordResponseDNSRecordsOpenpgpkeyRecord]
+type recordResponseDNSRecordsOpenpgpkeyRecordJSON struct {
+	Comment     apijson.Field
+	Content     apijson.Field
+	Name        apijson.Field
+	Proxied     apijson.Field
+	Settings    apijson.Field
+	Tags        apijson.Field
+	TTL         apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseOpenpgpkeyJSON) RawJSON() string {
+func (r recordResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseOpenpgpkey) implementsRecordResponse() {}
+func (r RecordResponseDNSRecordsOpenpgpkeyRecord) implementsRecordResponse() {}
 
 // Settings for the DNS record.
-type RecordResponseOpenpgpkeySettings struct {
+type RecordResponseDNSRecordsOpenpgpkeyRecordSettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
@@ -4147,385 +3226,41 @@ type RecordResponseOpenpgpkeySettings struct {
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
 	// communicates with the origin using IPv4 or IPv6.
-	IPV6Only bool                                 `json:"ipv6_only"`
-	JSON     recordResponseOpenpgpkeySettingsJSON `json:"-"`
+	IPV6Only bool                                                 `json:"ipv6_only"`
+	JSON     recordResponseDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
 }
 
-// recordResponseOpenpgpkeySettingsJSON contains the JSON metadata for the struct
-// [RecordResponseOpenpgpkeySettings]
-type recordResponseOpenpgpkeySettingsJSON struct {
+// recordResponseDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON metadata
+// for the struct [RecordResponseDNSRecordsOpenpgpkeyRecordSettings]
+type recordResponseDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
 	IPV4Only    apijson.Field
 	IPV6Only    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordResponseOpenpgpkeySettings) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseOpenpgpkeySettingsJSON) RawJSON() string {
+func (r recordResponseDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Record type.
-type RecordResponseOpenpgpkeyType string
+type RecordResponseDNSRecordsOpenpgpkeyRecordType string
 
 const (
-	RecordResponseOpenpgpkeyTypeOpenpgpkey RecordResponseOpenpgpkeyType = "OPENPGPKEY"
+	RecordResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordResponseDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
 )
 
-func (r RecordResponseOpenpgpkeyType) IsKnown() bool {
+func (r RecordResponseDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
 	switch r {
-	case RecordResponseOpenpgpkeyTypeOpenpgpkey:
+	case RecordResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
 		return true
 	}
 	return false
 }
-
-type RecordResponsePTR struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponsePTRJSON `json:"-"`
-	PTRRecord
-}
-
-// recordResponsePTRJSON contains the JSON metadata for the struct
-// [RecordResponsePTR]
-type recordResponsePTRJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponsePTR) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponsePTRJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponsePTR) implementsRecordResponse() {}
-
-type RecordResponseSMIMEA struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSMIMEAJSON `json:"-"`
-	SMIMEARecord
-}
-
-// recordResponseSMIMEAJSON contains the JSON metadata for the struct
-// [RecordResponseSMIMEA]
-type recordResponseSMIMEAJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseSMIMEA) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseSMIMEAJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseSMIMEA) implementsRecordResponse() {}
-
-type RecordResponseSRV struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSRVJSON `json:"-"`
-	SRVRecord
-}
-
-// recordResponseSRVJSON contains the JSON metadata for the struct
-// [RecordResponseSRV]
-type recordResponseSRVJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseSRV) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseSRVJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseSRV) implementsRecordResponse() {}
-
-type RecordResponseSSHFP struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSSHFPJSON `json:"-"`
-	SSHFPRecord
-}
-
-// recordResponseSSHFPJSON contains the JSON metadata for the struct
-// [RecordResponseSSHFP]
-type recordResponseSSHFPJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseSSHFPJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseSSHFP) implementsRecordResponse() {}
-
-type RecordResponseSVCB struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSVCBJSON `json:"-"`
-	SVCBRecord
-}
-
-// recordResponseSVCBJSON contains the JSON metadata for the struct
-// [RecordResponseSVCB]
-type recordResponseSVCBJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseSVCB) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseSVCBJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseSVCB) implementsRecordResponse() {}
-
-type RecordResponseTLSA struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTLSAJSON `json:"-"`
-	TLSARecord
-}
-
-// recordResponseTLSAJSON contains the JSON metadata for the struct
-// [RecordResponseTLSA]
-type recordResponseTLSAJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseTLSA) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseTLSAJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseTLSA) implementsRecordResponse() {}
-
-type RecordResponseTXT struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTXTJSON `json:"-"`
-	TXTRecord
-}
-
-// recordResponseTXTJSON contains the JSON metadata for the struct
-// [RecordResponseTXT]
-type recordResponseTXTJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseTXT) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseTXTJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseTXT) implementsRecordResponse() {}
-
-type RecordResponseURI struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseURIJSON `json:"-"`
-	URIRecord
-}
-
-// recordResponseURIJSON contains the JSON metadata for the struct
-// [RecordResponseURI]
-type recordResponseURIJSON struct {
-	ID                apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	CommentModifiedOn apijson.Field
-	TagsModifiedOn    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordResponseURI) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordResponseURIJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordResponseURI) implementsRecordResponse() {}
 
 // Record type.
 type RecordResponseType string
@@ -4533,30 +3268,30 @@ type RecordResponseType string
 const (
 	RecordResponseTypeA          RecordResponseType = "A"
 	RecordResponseTypeAAAA       RecordResponseType = "AAAA"
+	RecordResponseTypeCNAME      RecordResponseType = "CNAME"
+	RecordResponseTypeMX         RecordResponseType = "MX"
+	RecordResponseTypeNS         RecordResponseType = "NS"
+	RecordResponseTypeOpenpgpkey RecordResponseType = "OPENPGPKEY"
+	RecordResponseTypePTR        RecordResponseType = "PTR"
+	RecordResponseTypeTXT        RecordResponseType = "TXT"
 	RecordResponseTypeCAA        RecordResponseType = "CAA"
 	RecordResponseTypeCERT       RecordResponseType = "CERT"
-	RecordResponseTypeCNAME      RecordResponseType = "CNAME"
 	RecordResponseTypeDNSKEY     RecordResponseType = "DNSKEY"
 	RecordResponseTypeDS         RecordResponseType = "DS"
 	RecordResponseTypeHTTPS      RecordResponseType = "HTTPS"
 	RecordResponseTypeLOC        RecordResponseType = "LOC"
-	RecordResponseTypeMX         RecordResponseType = "MX"
 	RecordResponseTypeNAPTR      RecordResponseType = "NAPTR"
-	RecordResponseTypeNS         RecordResponseType = "NS"
-	RecordResponseTypeOpenpgpkey RecordResponseType = "OPENPGPKEY"
-	RecordResponseTypePTR        RecordResponseType = "PTR"
 	RecordResponseTypeSMIMEA     RecordResponseType = "SMIMEA"
 	RecordResponseTypeSRV        RecordResponseType = "SRV"
 	RecordResponseTypeSSHFP      RecordResponseType = "SSHFP"
 	RecordResponseTypeSVCB       RecordResponseType = "SVCB"
 	RecordResponseTypeTLSA       RecordResponseType = "TLSA"
-	RecordResponseTypeTXT        RecordResponseType = "TXT"
 	RecordResponseTypeURI        RecordResponseType = "URI"
 )
 
 func (r RecordResponseType) IsKnown() bool {
 	switch r {
-	case RecordResponseTypeA, RecordResponseTypeAAAA, RecordResponseTypeCAA, RecordResponseTypeCERT, RecordResponseTypeCNAME, RecordResponseTypeDNSKEY, RecordResponseTypeDS, RecordResponseTypeHTTPS, RecordResponseTypeLOC, RecordResponseTypeMX, RecordResponseTypeNAPTR, RecordResponseTypeNS, RecordResponseTypeOpenpgpkey, RecordResponseTypePTR, RecordResponseTypeSMIMEA, RecordResponseTypeSRV, RecordResponseTypeSSHFP, RecordResponseTypeSVCB, RecordResponseTypeTLSA, RecordResponseTypeTXT, RecordResponseTypeURI:
+	case RecordResponseTypeA, RecordResponseTypeAAAA, RecordResponseTypeCNAME, RecordResponseTypeMX, RecordResponseTypeNS, RecordResponseTypeOpenpgpkey, RecordResponseTypePTR, RecordResponseTypeTXT, RecordResponseTypeCAA, RecordResponseTypeCERT, RecordResponseTypeDNSKEY, RecordResponseTypeDS, RecordResponseTypeHTTPS, RecordResponseTypeLOC, RecordResponseTypeNAPTR, RecordResponseTypeSMIMEA, RecordResponseTypeSRV, RecordResponseTypeSSHFP, RecordResponseTypeSVCB, RecordResponseTypeTLSA, RecordResponseTypeURI:
 		return true
 	}
 	return false
@@ -4614,6 +3349,8 @@ func (r *SMIMEARecord) UnmarshalJSON(data []byte) (err error) {
 func (r smimeaRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r SMIMEARecord) implementsRecordResponse() {}
 
 // Components of a SMIMEA record.
 type SMIMEARecordData struct {
@@ -4721,7 +3458,17 @@ func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SMIMEARecordParam) implementsRecordUnionParam() {}
+func (r SMIMEARecordParam) implementsBatchPatchUnionParam() {}
+
+func (r SMIMEARecordParam) implementsBatchPutUnionParam() {}
+
+func (r SMIMEARecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r SMIMEARecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r SMIMEARecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r SMIMEARecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a SMIMEA record.
 type SMIMEARecordDataParam struct {
@@ -4806,6 +3553,8 @@ func (r *SRVRecord) UnmarshalJSON(data []byte) (err error) {
 func (r srvRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r SRVRecord) implementsRecordResponse() {}
 
 // Components of a SRV record.
 type SRVRecordData struct {
@@ -4913,7 +3662,17 @@ func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SRVRecordParam) implementsRecordUnionParam() {}
+func (r SRVRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r SRVRecordParam) implementsBatchPutUnionParam() {}
+
+func (r SRVRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r SRVRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r SRVRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r SRVRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a SRV record.
 type SRVRecordDataParam struct {
@@ -4998,6 +3757,8 @@ func (r *SSHFPRecord) UnmarshalJSON(data []byte) (err error) {
 func (r sshfpRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r SSHFPRecord) implementsRecordResponse() {}
 
 // Components of a SSHFP record.
 type SSHFPRecordData struct {
@@ -5101,7 +3862,17 @@ func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SSHFPRecordParam) implementsRecordUnionParam() {}
+func (r SSHFPRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r SSHFPRecordParam) implementsBatchPutUnionParam() {}
+
+func (r SSHFPRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r SSHFPRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r SSHFPRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r SSHFPRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a SSHFP record.
 type SSHFPRecordDataParam struct {
@@ -5183,6 +3954,8 @@ func (r *SVCBRecord) UnmarshalJSON(data []byte) (err error) {
 func (r svcbRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r SVCBRecord) implementsRecordResponse() {}
 
 // Components of a SVCB record.
 type SVCBRecordData struct {
@@ -5286,7 +4059,17 @@ func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SVCBRecordParam) implementsRecordUnionParam() {}
+func (r SVCBRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r SVCBRecordParam) implementsBatchPutUnionParam() {}
+
+func (r SVCBRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r SVCBRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r SVCBRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r SVCBRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a SVCB record.
 type SVCBRecordDataParam struct {
@@ -5368,6 +4151,8 @@ func (r *TLSARecord) UnmarshalJSON(data []byte) (err error) {
 func (r tlsaRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r TLSARecord) implementsRecordResponse() {}
 
 // Components of a TLSA record.
 type TLSARecordData struct {
@@ -5474,7 +4259,17 @@ func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TLSARecordParam) implementsRecordUnionParam() {}
+func (r TLSARecordParam) implementsBatchPatchUnionParam() {}
+
+func (r TLSARecordParam) implementsBatchPutUnionParam() {}
+
+func (r TLSARecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r TLSARecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r TLSARecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r TLSARecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a TLSA record.
 type TLSARecordDataParam struct {
@@ -5578,6 +4373,8 @@ func (r txtRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r TXTRecord) implementsRecordResponse() {}
+
 // Settings for the DNS record.
 type TXTRecordSettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -5657,7 +4454,17 @@ func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TXTRecordParam) implementsRecordUnionParam() {}
+func (r TXTRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r TXTRecordParam) implementsBatchPutUnionParam() {}
+
+func (r TXTRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r TXTRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r TXTRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r TXTRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Settings for the DNS record.
 type TXTRecordSettingsParam struct {
@@ -5729,6 +4536,8 @@ func (r *URIRecord) UnmarshalJSON(data []byte) (err error) {
 func (r uriRecordJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r URIRecord) implementsRecordResponse() {}
 
 // Components of a URI record.
 type URIRecordData struct {
@@ -5832,7 +4641,17 @@ func (r URIRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r URIRecordParam) implementsRecordUnionParam() {}
+func (r URIRecordParam) implementsBatchPatchUnionParam() {}
+
+func (r URIRecordParam) implementsBatchPutUnionParam() {}
+
+func (r URIRecordParam) implementsRecordNewParamsBodyUnion() {}
+
+func (r URIRecordParam) implementsRecordUpdateParamsBodyUnion() {}
+
+func (r URIRecordParam) implementsRecordBatchParamsPostUnion() {}
+
+func (r URIRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a URI record.
 type URIRecordDataParam struct {
@@ -5965,12 +4784,152 @@ func (r recordScanResponseJSON) RawJSON() string {
 
 type RecordNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Record RecordUnionParam    `json:"record,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   RecordNewParamsBodyUnion `json:"body,required"`
 }
 
 func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Record)
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RecordNewParamsBody struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordNewParamsBodyType] `json:"type"`
+}
+
+func (r RecordNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordNewParamsBody) implementsRecordNewParamsBodyUnion() {}
+
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord], [dns.PTRRecordParam],
+// [dns.TXTRecordParam], [dns.CAARecordParam], [dns.CERTRecordParam],
+// [dns.DNSKEYRecordParam], [dns.DSRecordParam], [dns.HTTPSRecordParam],
+// [dns.LOCRecordParam], [dns.NAPTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.URIRecordParam], [RecordNewParamsBody].
+type RecordNewParamsBodyUnion interface {
+	implementsRecordNewParamsBodyUnion()
+}
+
+type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type"`
+}
+
+func (r RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord) implementsRecordNewParamsBodyUnion() {}
+
+// Settings for the DNS record.
+type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Record type.
+type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType string
+
+const (
+	RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+)
+
+func (r RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+	switch r {
+	case RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+// Record type.
+type RecordNewParamsBodyType string
+
+const (
+	RecordNewParamsBodyTypeA          RecordNewParamsBodyType = "A"
+	RecordNewParamsBodyTypeAAAA       RecordNewParamsBodyType = "AAAA"
+	RecordNewParamsBodyTypeCNAME      RecordNewParamsBodyType = "CNAME"
+	RecordNewParamsBodyTypeMX         RecordNewParamsBodyType = "MX"
+	RecordNewParamsBodyTypeNS         RecordNewParamsBodyType = "NS"
+	RecordNewParamsBodyTypeOpenpgpkey RecordNewParamsBodyType = "OPENPGPKEY"
+	RecordNewParamsBodyTypePTR        RecordNewParamsBodyType = "PTR"
+	RecordNewParamsBodyTypeTXT        RecordNewParamsBodyType = "TXT"
+	RecordNewParamsBodyTypeCAA        RecordNewParamsBodyType = "CAA"
+	RecordNewParamsBodyTypeCERT       RecordNewParamsBodyType = "CERT"
+	RecordNewParamsBodyTypeDNSKEY     RecordNewParamsBodyType = "DNSKEY"
+	RecordNewParamsBodyTypeDS         RecordNewParamsBodyType = "DS"
+	RecordNewParamsBodyTypeHTTPS      RecordNewParamsBodyType = "HTTPS"
+	RecordNewParamsBodyTypeLOC        RecordNewParamsBodyType = "LOC"
+	RecordNewParamsBodyTypeNAPTR      RecordNewParamsBodyType = "NAPTR"
+	RecordNewParamsBodyTypeSMIMEA     RecordNewParamsBodyType = "SMIMEA"
+	RecordNewParamsBodyTypeSRV        RecordNewParamsBodyType = "SRV"
+	RecordNewParamsBodyTypeSSHFP      RecordNewParamsBodyType = "SSHFP"
+	RecordNewParamsBodyTypeSVCB       RecordNewParamsBodyType = "SVCB"
+	RecordNewParamsBodyTypeTLSA       RecordNewParamsBodyType = "TLSA"
+	RecordNewParamsBodyTypeURI        RecordNewParamsBodyType = "URI"
+)
+
+func (r RecordNewParamsBodyType) IsKnown() bool {
+	switch r {
+	case RecordNewParamsBodyTypeA, RecordNewParamsBodyTypeAAAA, RecordNewParamsBodyTypeCNAME, RecordNewParamsBodyTypeMX, RecordNewParamsBodyTypeNS, RecordNewParamsBodyTypeOpenpgpkey, RecordNewParamsBodyTypePTR, RecordNewParamsBodyTypeTXT, RecordNewParamsBodyTypeCAA, RecordNewParamsBodyTypeCERT, RecordNewParamsBodyTypeDNSKEY, RecordNewParamsBodyTypeDS, RecordNewParamsBodyTypeHTTPS, RecordNewParamsBodyTypeLOC, RecordNewParamsBodyTypeNAPTR, RecordNewParamsBodyTypeSMIMEA, RecordNewParamsBodyTypeSRV, RecordNewParamsBodyTypeSSHFP, RecordNewParamsBodyTypeSVCB, RecordNewParamsBodyTypeTLSA, RecordNewParamsBodyTypeURI:
+		return true
+	}
+	return false
 }
 
 type RecordNewResponseEnvelope struct {
@@ -6114,12 +5073,152 @@ func (r RecordNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Record RecordUnionParam    `json:"record,required"`
+	ZoneID param.Field[string]         `path:"zone_id,required"`
+	Body   RecordUpdateParamsBodyUnion `json:"body,required"`
 }
 
 func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Record)
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RecordUpdateParamsBody struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordUpdateParamsBodyType] `json:"type"`
+}
+
+func (r RecordUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordUpdateParamsBody) implementsRecordUpdateParamsBodyUnion() {}
+
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord], [dns.PTRRecordParam],
+// [dns.TXTRecordParam], [dns.CAARecordParam], [dns.CERTRecordParam],
+// [dns.DNSKEYRecordParam], [dns.DSRecordParam], [dns.HTTPSRecordParam],
+// [dns.LOCRecordParam], [dns.NAPTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.URIRecordParam], [RecordUpdateParamsBody].
+type RecordUpdateParamsBodyUnion interface {
+	implementsRecordUpdateParamsBodyUnion()
+}
+
+type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type"`
+}
+
+func (r RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord) implementsRecordUpdateParamsBodyUnion() {}
+
+// Settings for the DNS record.
+type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Record type.
+type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType string
+
+const (
+	RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+)
+
+func (r RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+	switch r {
+	case RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+// Record type.
+type RecordUpdateParamsBodyType string
+
+const (
+	RecordUpdateParamsBodyTypeA          RecordUpdateParamsBodyType = "A"
+	RecordUpdateParamsBodyTypeAAAA       RecordUpdateParamsBodyType = "AAAA"
+	RecordUpdateParamsBodyTypeCNAME      RecordUpdateParamsBodyType = "CNAME"
+	RecordUpdateParamsBodyTypeMX         RecordUpdateParamsBodyType = "MX"
+	RecordUpdateParamsBodyTypeNS         RecordUpdateParamsBodyType = "NS"
+	RecordUpdateParamsBodyTypeOpenpgpkey RecordUpdateParamsBodyType = "OPENPGPKEY"
+	RecordUpdateParamsBodyTypePTR        RecordUpdateParamsBodyType = "PTR"
+	RecordUpdateParamsBodyTypeTXT        RecordUpdateParamsBodyType = "TXT"
+	RecordUpdateParamsBodyTypeCAA        RecordUpdateParamsBodyType = "CAA"
+	RecordUpdateParamsBodyTypeCERT       RecordUpdateParamsBodyType = "CERT"
+	RecordUpdateParamsBodyTypeDNSKEY     RecordUpdateParamsBodyType = "DNSKEY"
+	RecordUpdateParamsBodyTypeDS         RecordUpdateParamsBodyType = "DS"
+	RecordUpdateParamsBodyTypeHTTPS      RecordUpdateParamsBodyType = "HTTPS"
+	RecordUpdateParamsBodyTypeLOC        RecordUpdateParamsBodyType = "LOC"
+	RecordUpdateParamsBodyTypeNAPTR      RecordUpdateParamsBodyType = "NAPTR"
+	RecordUpdateParamsBodyTypeSMIMEA     RecordUpdateParamsBodyType = "SMIMEA"
+	RecordUpdateParamsBodyTypeSRV        RecordUpdateParamsBodyType = "SRV"
+	RecordUpdateParamsBodyTypeSSHFP      RecordUpdateParamsBodyType = "SSHFP"
+	RecordUpdateParamsBodyTypeSVCB       RecordUpdateParamsBodyType = "SVCB"
+	RecordUpdateParamsBodyTypeTLSA       RecordUpdateParamsBodyType = "TLSA"
+	RecordUpdateParamsBodyTypeURI        RecordUpdateParamsBodyType = "URI"
+)
+
+func (r RecordUpdateParamsBodyType) IsKnown() bool {
+	switch r {
+	case RecordUpdateParamsBodyTypeA, RecordUpdateParamsBodyTypeAAAA, RecordUpdateParamsBodyTypeCNAME, RecordUpdateParamsBodyTypeMX, RecordUpdateParamsBodyTypeNS, RecordUpdateParamsBodyTypeOpenpgpkey, RecordUpdateParamsBodyTypePTR, RecordUpdateParamsBodyTypeTXT, RecordUpdateParamsBodyTypeCAA, RecordUpdateParamsBodyTypeCERT, RecordUpdateParamsBodyTypeDNSKEY, RecordUpdateParamsBodyTypeDS, RecordUpdateParamsBodyTypeHTTPS, RecordUpdateParamsBodyTypeLOC, RecordUpdateParamsBodyTypeNAPTR, RecordUpdateParamsBodyTypeSMIMEA, RecordUpdateParamsBodyTypeSRV, RecordUpdateParamsBodyTypeSSHFP, RecordUpdateParamsBodyTypeSVCB, RecordUpdateParamsBodyTypeTLSA, RecordUpdateParamsBodyTypeURI:
+		return true
+	}
+	return false
 }
 
 type RecordUpdateResponseEnvelope struct {
@@ -6523,11 +5622,11 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecordBatchParams struct {
 	// Identifier.
-	ZoneID  param.Field[string]                    `path:"zone_id,required"`
-	Deletes param.Field[[]RecordBatchParamsDelete] `json:"deletes"`
-	Patches param.Field[[]BatchPatchUnionParam]    `json:"patches"`
-	Posts   param.Field[[]RecordUnionParam]        `json:"posts"`
-	Puts    param.Field[[]BatchPutUnionParam]      `json:"puts"`
+	ZoneID  param.Field[string]                       `path:"zone_id,required"`
+	Deletes param.Field[[]RecordBatchParamsDelete]    `json:"deletes"`
+	Patches param.Field[[]BatchPatchUnionParam]       `json:"patches"`
+	Posts   param.Field[[]RecordBatchParamsPostUnion] `json:"posts"`
+	Puts    param.Field[[]BatchPutUnionParam]         `json:"puts"`
 }
 
 func (r RecordBatchParams) MarshalJSON() (data []byte, err error) {
@@ -6541,6 +5640,146 @@ type RecordBatchParamsDelete struct {
 
 func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type RecordBatchParamsPost struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordBatchParamsPostsType] `json:"type"`
+}
+
+func (r RecordBatchParamsPost) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordBatchParamsPost) implementsRecordBatchParamsPostUnion() {}
+
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord], [dns.PTRRecordParam],
+// [dns.TXTRecordParam], [dns.CAARecordParam], [dns.CERTRecordParam],
+// [dns.DNSKEYRecordParam], [dns.DSRecordParam], [dns.HTTPSRecordParam],
+// [dns.LOCRecordParam], [dns.NAPTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.URIRecordParam], [RecordBatchParamsPost].
+type RecordBatchParamsPostUnion interface {
+	implementsRecordBatchParamsPostUnion()
+}
+
+type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType] `json:"type"`
+}
+
+func (r RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord) implementsRecordBatchParamsPostUnion() {}
+
+// Settings for the DNS record.
+type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Record type.
+type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType string
+
+const (
+	RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+)
+
+func (r RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+	switch r {
+	case RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+// Record type.
+type RecordBatchParamsPostsType string
+
+const (
+	RecordBatchParamsPostsTypeA          RecordBatchParamsPostsType = "A"
+	RecordBatchParamsPostsTypeAAAA       RecordBatchParamsPostsType = "AAAA"
+	RecordBatchParamsPostsTypeCNAME      RecordBatchParamsPostsType = "CNAME"
+	RecordBatchParamsPostsTypeMX         RecordBatchParamsPostsType = "MX"
+	RecordBatchParamsPostsTypeNS         RecordBatchParamsPostsType = "NS"
+	RecordBatchParamsPostsTypeOpenpgpkey RecordBatchParamsPostsType = "OPENPGPKEY"
+	RecordBatchParamsPostsTypePTR        RecordBatchParamsPostsType = "PTR"
+	RecordBatchParamsPostsTypeTXT        RecordBatchParamsPostsType = "TXT"
+	RecordBatchParamsPostsTypeCAA        RecordBatchParamsPostsType = "CAA"
+	RecordBatchParamsPostsTypeCERT       RecordBatchParamsPostsType = "CERT"
+	RecordBatchParamsPostsTypeDNSKEY     RecordBatchParamsPostsType = "DNSKEY"
+	RecordBatchParamsPostsTypeDS         RecordBatchParamsPostsType = "DS"
+	RecordBatchParamsPostsTypeHTTPS      RecordBatchParamsPostsType = "HTTPS"
+	RecordBatchParamsPostsTypeLOC        RecordBatchParamsPostsType = "LOC"
+	RecordBatchParamsPostsTypeNAPTR      RecordBatchParamsPostsType = "NAPTR"
+	RecordBatchParamsPostsTypeSMIMEA     RecordBatchParamsPostsType = "SMIMEA"
+	RecordBatchParamsPostsTypeSRV        RecordBatchParamsPostsType = "SRV"
+	RecordBatchParamsPostsTypeSSHFP      RecordBatchParamsPostsType = "SSHFP"
+	RecordBatchParamsPostsTypeSVCB       RecordBatchParamsPostsType = "SVCB"
+	RecordBatchParamsPostsTypeTLSA       RecordBatchParamsPostsType = "TLSA"
+	RecordBatchParamsPostsTypeURI        RecordBatchParamsPostsType = "URI"
+)
+
+func (r RecordBatchParamsPostsType) IsKnown() bool {
+	switch r {
+	case RecordBatchParamsPostsTypeA, RecordBatchParamsPostsTypeAAAA, RecordBatchParamsPostsTypeCNAME, RecordBatchParamsPostsTypeMX, RecordBatchParamsPostsTypeNS, RecordBatchParamsPostsTypeOpenpgpkey, RecordBatchParamsPostsTypePTR, RecordBatchParamsPostsTypeTXT, RecordBatchParamsPostsTypeCAA, RecordBatchParamsPostsTypeCERT, RecordBatchParamsPostsTypeDNSKEY, RecordBatchParamsPostsTypeDS, RecordBatchParamsPostsTypeHTTPS, RecordBatchParamsPostsTypeLOC, RecordBatchParamsPostsTypeNAPTR, RecordBatchParamsPostsTypeSMIMEA, RecordBatchParamsPostsTypeSRV, RecordBatchParamsPostsTypeSSHFP, RecordBatchParamsPostsTypeSVCB, RecordBatchParamsPostsTypeTLSA, RecordBatchParamsPostsTypeURI:
+		return true
+	}
+	return false
 }
 
 type RecordBatchResponseEnvelope struct {
@@ -6684,12 +5923,152 @@ func (r RecordBatchResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Record RecordUnionParam    `json:"record,required"`
+	ZoneID param.Field[string]       `path:"zone_id,required"`
+	Body   RecordEditParamsBodyUnion `json:"body,required"`
 }
 
 func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Record)
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RecordEditParamsBody struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordEditParamsBodyType] `json:"type"`
+}
+
+func (r RecordEditParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordEditParamsBody) implementsRecordEditParamsBodyUnion() {}
+
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord], [dns.PTRRecordParam],
+// [dns.TXTRecordParam], [dns.CAARecordParam], [dns.CERTRecordParam],
+// [dns.DNSKEYRecordParam], [dns.DSRecordParam], [dns.HTTPSRecordParam],
+// [dns.LOCRecordParam], [dns.NAPTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.URIRecordParam], [RecordEditParamsBody].
+type RecordEditParamsBodyUnion interface {
+	implementsRecordEditParamsBodyUnion()
+}
+
+type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord struct {
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type"`
+}
+
+func (r RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord) implementsRecordEditParamsBodyUnion() {}
+
+// Settings for the DNS record.
+type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Record type.
+type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType string
+
+const (
+	RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+)
+
+func (r RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+	switch r {
+	case RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+// Record type.
+type RecordEditParamsBodyType string
+
+const (
+	RecordEditParamsBodyTypeA          RecordEditParamsBodyType = "A"
+	RecordEditParamsBodyTypeAAAA       RecordEditParamsBodyType = "AAAA"
+	RecordEditParamsBodyTypeCNAME      RecordEditParamsBodyType = "CNAME"
+	RecordEditParamsBodyTypeMX         RecordEditParamsBodyType = "MX"
+	RecordEditParamsBodyTypeNS         RecordEditParamsBodyType = "NS"
+	RecordEditParamsBodyTypeOpenpgpkey RecordEditParamsBodyType = "OPENPGPKEY"
+	RecordEditParamsBodyTypePTR        RecordEditParamsBodyType = "PTR"
+	RecordEditParamsBodyTypeTXT        RecordEditParamsBodyType = "TXT"
+	RecordEditParamsBodyTypeCAA        RecordEditParamsBodyType = "CAA"
+	RecordEditParamsBodyTypeCERT       RecordEditParamsBodyType = "CERT"
+	RecordEditParamsBodyTypeDNSKEY     RecordEditParamsBodyType = "DNSKEY"
+	RecordEditParamsBodyTypeDS         RecordEditParamsBodyType = "DS"
+	RecordEditParamsBodyTypeHTTPS      RecordEditParamsBodyType = "HTTPS"
+	RecordEditParamsBodyTypeLOC        RecordEditParamsBodyType = "LOC"
+	RecordEditParamsBodyTypeNAPTR      RecordEditParamsBodyType = "NAPTR"
+	RecordEditParamsBodyTypeSMIMEA     RecordEditParamsBodyType = "SMIMEA"
+	RecordEditParamsBodyTypeSRV        RecordEditParamsBodyType = "SRV"
+	RecordEditParamsBodyTypeSSHFP      RecordEditParamsBodyType = "SSHFP"
+	RecordEditParamsBodyTypeSVCB       RecordEditParamsBodyType = "SVCB"
+	RecordEditParamsBodyTypeTLSA       RecordEditParamsBodyType = "TLSA"
+	RecordEditParamsBodyTypeURI        RecordEditParamsBodyType = "URI"
+)
+
+func (r RecordEditParamsBodyType) IsKnown() bool {
+	switch r {
+	case RecordEditParamsBodyTypeA, RecordEditParamsBodyTypeAAAA, RecordEditParamsBodyTypeCNAME, RecordEditParamsBodyTypeMX, RecordEditParamsBodyTypeNS, RecordEditParamsBodyTypeOpenpgpkey, RecordEditParamsBodyTypePTR, RecordEditParamsBodyTypeTXT, RecordEditParamsBodyTypeCAA, RecordEditParamsBodyTypeCERT, RecordEditParamsBodyTypeDNSKEY, RecordEditParamsBodyTypeDS, RecordEditParamsBodyTypeHTTPS, RecordEditParamsBodyTypeLOC, RecordEditParamsBodyTypeNAPTR, RecordEditParamsBodyTypeSMIMEA, RecordEditParamsBodyTypeSRV, RecordEditParamsBodyTypeSSHFP, RecordEditParamsBodyTypeSVCB, RecordEditParamsBodyTypeTLSA, RecordEditParamsBodyTypeURI:
+		return true
+	}
+	return false
 }
 
 type RecordEditResponseEnvelope struct {
