@@ -1584,8 +1584,14 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflo
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string                                                                           `json:"workflow_name,required"`
-	JSON         dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
+	WorkflowName string `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName string `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName string                                                                           `json:"script_name"`
+	JSON       dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowJSON
@@ -1595,6 +1601,8 @@ type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflo
 	Name         apijson.Field
 	Type         apijson.Field
 	WorkflowName apijson.Field
+	ClassName    apijson.Field
+	ScriptName   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -3436,8 +3444,14 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string                                                                          `json:"workflow_name,required"`
-	JSON         dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
+	WorkflowName string `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName string `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName string                                                                          `json:"script_name"`
+	JSON       dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowJSON
@@ -3447,6 +3461,8 @@ type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow
 	Name         apijson.Field
 	Type         apijson.Field
 	WorkflowName apijson.Field
+	ClassName    apijson.Field
+	ScriptName   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -4712,6 +4728,12 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindW
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName param.Field[string] `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName param.Field[string] `json:"script_name"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
