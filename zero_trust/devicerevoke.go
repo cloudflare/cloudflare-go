@@ -34,9 +34,7 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 	return
 }
 
-// Revokes a list of devices. Not supported when
-// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
-// is enabled.
+// Revokes a list of registrations.
 //
 // **Deprecated**: please use POST
 // /accounts/{account_id}/devices/registrations/revoke instead.
