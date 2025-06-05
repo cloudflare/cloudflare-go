@@ -105,7 +105,7 @@ func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, query De
 	return
 }
 
-// Revokes all registrations associated with the specified device.
+// Revokes all WARP registrations associated with the specified device.
 func (r *DeviceDeviceService) Revoke(ctx context.Context, deviceID string, body DeviceDeviceRevokeParams, opts ...option.RequestOption) (res *DeviceDeviceRevokeResponse, err error) {
 	var env DeviceDeviceRevokeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -149,7 +149,7 @@ type DeviceDeviceListResponse struct {
 	DeviceType string `json:"device_type,nullable"`
 	// A string that uniquely identifies the hardware or virtual machine (VM).
 	HardwareID string `json:"hardware_id,nullable"`
-	// The last Access user to use the WARP device.
+	// The last user to use the WARP device.
 	LastSeenUser DeviceDeviceListResponseLastSeenUser `json:"last_seen_user,nullable"`
 	// The device MAC address.
 	MacAddress string `json:"mac_address,nullable"`
@@ -202,7 +202,7 @@ func (r deviceDeviceListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The last Access user to use the WARP device.
+// The last user to use the WARP device.
 type DeviceDeviceListResponseLastSeenUser struct {
 	// UUID.
 	ID string `json:"id"`
@@ -256,7 +256,7 @@ type DeviceDeviceGetResponse struct {
 	DeviceType string `json:"device_type,nullable"`
 	// A string that uniquely identifies the hardware or virtual machine (VM).
 	HardwareID string `json:"hardware_id,nullable"`
-	// The last Access user to use the WARP device.
+	// The last user to use the WARP device.
 	LastSeenUser DeviceDeviceGetResponseLastSeenUser `json:"last_seen_user,nullable"`
 	// The device MAC address.
 	MacAddress string `json:"mac_address,nullable"`
@@ -309,7 +309,7 @@ func (r deviceDeviceGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The last Access user to use the WARP device.
+// The last user to use the WARP device.
 type DeviceDeviceGetResponseLastSeenUser struct {
 	// UUID.
 	ID string `json:"id"`
