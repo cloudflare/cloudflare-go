@@ -31,7 +31,7 @@ func TestConnectorEventListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"connector_id",
 		magic_transit.ConnectorEventListParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 			From:      cloudflare.F(0.000000),
 			To:        cloudflare.F(0.000000),
 			Cursor:    cloudflare.F("cursor"),
@@ -66,7 +66,7 @@ func TestConnectorEventGet(t *testing.T) {
 		0.000000,
 		0.000000,
 		magic_transit.ConnectorEventGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

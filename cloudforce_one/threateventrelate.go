@@ -37,7 +37,7 @@ func NewThreatEventRelateService(opts ...option.RequestOption) (r *ThreatEventRe
 func (r *ThreatEventRelateService) Delete(ctx context.Context, eventID string, body ThreatEventRelateDeleteParams, opts ...option.RequestOption) (res *ThreatEventRelateDeleteResponse, err error) {
 	var env ThreatEventRelateDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !body.AccountID.Present {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *ThreatEventRelateService) Delete(ctx context.Context, eventID string, b
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/relate/%s", body.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/relate/%s", body.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -77,7 +77,7 @@ func (r threatEventRelateDeleteResponseJSON) RawJSON() string {
 
 type ThreatEventRelateDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventRelateDeleteResponseEnvelope struct {

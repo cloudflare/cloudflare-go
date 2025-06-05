@@ -36,11 +36,11 @@ func NewThreatEventAttackerService(opts ...option.RequestOption) (r *ThreatEvent
 // Lists attackers
 func (r *ThreatEventAttackerService) List(ctx context.Context, query ThreatEventAttackerListParams, opts ...option.RequestOption) (res *ThreatEventAttackerListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/attackers", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/attackers", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -91,5 +91,5 @@ func (r threatEventAttackerListResponseItemsJSON) RawJSON() string {
 
 type ThreatEventAttackerListParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }

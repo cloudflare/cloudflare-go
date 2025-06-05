@@ -41,7 +41,7 @@ func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnap
 func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
 	var env ConnectorSnapshotListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -49,7 +49,7 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/snapshots", params.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/snapshots", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -62,7 +62,7 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
 	var env ConnectorSnapshotGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -70,7 +70,7 @@ func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, 
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/snapshots/%v", query.AccountID, connectorID, snapshotT)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/snapshots/%v", query.AccountID, connectorID, snapshotT)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1037,7 +1037,7 @@ func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotListParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id,required"`
 	From      param.Field[float64] `query:"from,required"`
 	To        param.Field[float64] `query:"to,required"`
 	Cursor    param.Field[string]  `query:"cursor"`
@@ -1127,7 +1127,7 @@ func (r connectorSnapshotListResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotGetParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorSnapshotGetResponseEnvelope struct {

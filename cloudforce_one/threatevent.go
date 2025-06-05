@@ -66,11 +66,11 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 // endpoint.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.PathAccountID.Present {
+	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/create", params.PathAccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/create", params.PathAccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
@@ -81,11 +81,11 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 // endpoint). Also, must provide query parameters.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
@@ -96,7 +96,7 @@ func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListPar
 // endpoint.
 func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body ThreatEventDeleteParams, opts ...option.RequestOption) (res *ThreatEventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !body.AccountID.Present {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -104,7 +104,7 @@ func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body Th
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s", body.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", body.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -115,11 +115,11 @@ func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body Th
 // endpoint.
 func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *[]ThreatEventBulkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/create/bulk", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/create/bulk", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
@@ -127,7 +127,7 @@ func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulk
 // Updates an event
 func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params ThreatEventEditParams, opts ...option.RequestOption) (res *ThreatEventEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -135,7 +135,7 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s", params.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", params.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return
 }
@@ -143,7 +143,7 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 // Reads an event
 func (r *ThreatEventService) Get(ctx context.Context, eventID string, query ThreatEventGetParams, opts ...option.RequestOption) (res *ThreatEventGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -151,7 +151,7 @@ func (r *ThreatEventService) Get(ctx context.Context, eventID string, query Thre
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s", query.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", query.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -544,7 +544,7 @@ func (r threatEventGetResponseJSON) RawJSON() string {
 
 type ThreatEventNewParams struct {
 	// Account ID.
-	PathAccountID   param.Field[float64]                 `path:"account_id,required"`
+	PathAccountID   param.Field[string]                  `path:"account_id,required"`
 	Attacker        param.Field[string]                  `json:"attacker,required"`
 	AttackerCountry param.Field[string]                  `json:"attackerCountry,required"`
 	Category        param.Field[string]                  `json:"category,required"`
@@ -577,7 +577,7 @@ func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventListParams struct {
 	// Account ID.
-	AccountID    param.Field[float64]                       `path:"account_id,required"`
+	AccountID    param.Field[string]                        `path:"account_id,required"`
 	DatasetID    param.Field[[]string]                      `query:"datasetId"`
 	ForceRefresh param.Field[bool]                          `query:"forceRefresh"`
 	Order        param.Field[ThreatEventListParamsOrder]    `query:"order"`
@@ -667,12 +667,12 @@ type ThreatEventListParamsSearchValueArrayItemUnion interface {
 
 type ThreatEventDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventBulkNewParams struct {
 	// Account ID.
-	AccountID param.Field[float64]                        `path:"account_id,required"`
+	AccountID param.Field[string]                         `path:"account_id,required"`
 	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data,required"`
 	DatasetID param.Field[string]                         `json:"datasetId,required"`
 }
@@ -714,7 +714,7 @@ func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) 
 
 type ThreatEventEditParams struct {
 	// Account ID.
-	AccountID       param.Field[float64]   `path:"account_id,required"`
+	AccountID       param.Field[string]    `path:"account_id,required"`
 	Attacker        param.Field[string]    `json:"attacker"`
 	AttackerCountry param.Field[string]    `json:"attackerCountry"`
 	Category        param.Field[string]    `json:"category"`
@@ -733,5 +733,5 @@ func (r ThreatEventEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventGetParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }

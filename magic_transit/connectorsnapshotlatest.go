@@ -37,7 +37,7 @@ func NewConnectorSnapshotLatestService(opts ...option.RequestOption) (r *Connect
 func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID string, query ConnectorSnapshotLatestListParams, opts ...option.RequestOption) (res *ConnectorSnapshotLatestListResponse, err error) {
 	var env ConnectorSnapshotLatestListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID s
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/snapshots/latest", query.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/snapshots/latest", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -986,7 +986,7 @@ func (r connectorSnapshotLatestListResponseItemsTunnelJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotLatestListParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorSnapshotLatestListResponseEnvelope struct {

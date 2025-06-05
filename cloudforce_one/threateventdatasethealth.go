@@ -36,7 +36,7 @@ func NewThreatEventDatasetHealthService(opts ...option.RequestOption) (r *Threat
 // Benchmark Durable Object warmup
 func (r *ThreatEventDatasetHealthService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetHealthGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetHealthGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -44,7 +44,7 @@ func (r *ThreatEventDatasetHealthService) Get(ctx context.Context, datasetID str
 		err = errors.New("missing required dataset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset/%s/health", query.AccountID, datasetID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/%s/health", query.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -95,5 +95,5 @@ func (r threatEventDatasetHealthGetResponseItemsJSON) RawJSON() string {
 
 type ThreatEventDatasetHealthGetParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -31,7 +31,7 @@ func TestConnectorSnapshotListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"connector_id",
 		magic_transit.ConnectorSnapshotListParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 			From:      cloudflare.F(0.000000),
 			To:        cloudflare.F(0.000000),
 			Cursor:    cloudflare.F("cursor"),
@@ -65,7 +65,7 @@ func TestConnectorSnapshotGet(t *testing.T) {
 		"connector_id",
 		0.000000,
 		magic_transit.ConnectorSnapshotGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

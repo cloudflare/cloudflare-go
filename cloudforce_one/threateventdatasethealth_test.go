@@ -31,7 +31,7 @@ func TestThreatEventDatasetHealthGet(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventDatasetHealthGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
