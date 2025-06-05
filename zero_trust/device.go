@@ -60,7 +60,9 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	return
 }
 
-// List WARP registrations.
+// List WARP devices. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account.
 //
 // **Deprecated**: please use one of the following endpoints instead:
 //
@@ -89,7 +91,9 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 	return res, nil
 }
 
-// List WARP registrations.
+// List WARP devices. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account.
 //
 // **Deprecated**: please use one of the following endpoints instead:
 //
@@ -101,7 +105,9 @@ func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListPara
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Fetches a single WARP registration.
+// Fetches a single WARP device. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account.
 //
 // **Deprecated**: please use one of the following endpoints instead:
 //
