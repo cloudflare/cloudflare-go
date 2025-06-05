@@ -29,7 +29,7 @@ func TestThreatEventDatasetNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Datasets.New(context.TODO(), cloudforce_one.ThreatEventDatasetNewParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 		IsPublic:  cloudflare.F(true),
 		Name:      cloudflare.F("x"),
 	})
@@ -57,7 +57,7 @@ func TestThreatEventDatasetList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Datasets.List(context.TODO(), cloudforce_one.ThreatEventDatasetListParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -86,7 +86,7 @@ func TestThreatEventDatasetEdit(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventDatasetEditParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 			IsPublic:  cloudflare.F(true),
 			Name:      cloudflare.F("x"),
 		},
@@ -118,7 +118,7 @@ func TestThreatEventDatasetGet(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventDatasetGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -149,7 +149,7 @@ func TestThreatEventDatasetRaw(t *testing.T) {
 		"dataset_id",
 		"event_id",
 		cloudforce_one.ThreatEventDatasetRawParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

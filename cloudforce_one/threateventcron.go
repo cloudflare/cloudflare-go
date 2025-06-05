@@ -36,11 +36,11 @@ func NewThreatEventCronService(opts ...option.RequestOption) (r *ThreatEventCron
 // Reads the last cron update time
 func (r *ThreatEventCronService) List(ctx context.Context, query ThreatEventCronListParams, opts ...option.RequestOption) (res *ThreatEventCronListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/cron", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/cron", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -48,11 +48,11 @@ func (r *ThreatEventCronService) List(ctx context.Context, query ThreatEventCron
 // Reads the last cron update time
 func (r *ThreatEventCronService) Edit(ctx context.Context, body ThreatEventCronEditParams, opts ...option.RequestOption) (res *ThreatEventCronEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !body.AccountID.Present {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/cron", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/cron", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &res, opts...)
 	return
 }
@@ -103,10 +103,10 @@ func (r threatEventCronEditResponseJSON) RawJSON() string {
 
 type ThreatEventCronListParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventCronEditParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }

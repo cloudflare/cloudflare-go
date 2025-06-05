@@ -39,7 +39,7 @@ func NewConnectorEventLatestService(opts ...option.RequestOption) (r *ConnectorE
 func (r *ConnectorEventLatestService) List(ctx context.Context, connectorID string, query ConnectorEventLatestListParams, opts ...option.RequestOption) (res *ConnectorEventLatestListResponse, err error) {
 	var env ConnectorEventLatestListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -47,7 +47,7 @@ func (r *ConnectorEventLatestService) List(ctx context.Context, connectorID stri
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/events/latest", query.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/events/latest", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -953,7 +953,7 @@ func (r ConnectorEventLatestListResponseItemsEK) IsKnown() bool {
 }
 
 type ConnectorEventLatestListParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorEventLatestListResponseEnvelope struct {

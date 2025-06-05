@@ -32,7 +32,7 @@ func TestThreatEventInsightNew(t *testing.T) {
 		context.TODO(),
 		"event_id",
 		cloudforce_one.ThreatEventInsightNewParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 			Content:   cloudflare.F("Here is some additional context _in markdown_"),
 		},
 	)
@@ -64,7 +64,7 @@ func TestThreatEventInsightDelete(t *testing.T) {
 		"event_id",
 		"insight_id",
 		cloudforce_one.ThreatEventInsightDeleteParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -95,7 +95,7 @@ func TestThreatEventInsightEdit(t *testing.T) {
 		"event_id",
 		"insight_id",
 		cloudforce_one.ThreatEventInsightEditParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 			Content:   cloudflare.F("Updated: Here is some additional context _in markdown_"),
 		},
 	)
@@ -127,7 +127,7 @@ func TestThreatEventInsightGet(t *testing.T) {
 		"event_id",
 		"insight_id",
 		cloudforce_one.ThreatEventInsightGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

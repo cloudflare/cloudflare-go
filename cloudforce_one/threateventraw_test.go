@@ -33,7 +33,7 @@ func TestThreatEventRawEditWithOptionalParams(t *testing.T) {
 		"event_id",
 		"raw_id",
 		cloudforce_one.ThreatEventRawEditParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 			Data:      cloudflare.F[any](map[string]interface{}{}),
 			Source:    cloudflare.F("example.com"),
 			TLP:       cloudflare.F("amber"),
@@ -67,7 +67,7 @@ func TestThreatEventRawGet(t *testing.T) {
 		"event_id",
 		"raw_id",
 		cloudforce_one.ThreatEventRawGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

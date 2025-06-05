@@ -31,7 +31,7 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.New(context.TODO(), cloudforce_one.ThreatEventNewParams{
-		PathAccountID:   cloudflare.F(0.000000),
+		PathAccountID:   cloudflare.F("account_id"),
 		Attacker:        cloudflare.F("Flying Yeti"),
 		AttackerCountry: cloudflare.F("CN"),
 		Category:        cloudflare.F("Domain Resolution"),
@@ -77,7 +77,7 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.List(context.TODO(), cloudforce_one.ThreatEventListParams{
-		AccountID:    cloudflare.F(0.000000),
+		AccountID:    cloudflare.F("account_id"),
 		DatasetID:    cloudflare.F([]string{"string"}),
 		ForceRefresh: cloudflare.F(true),
 		Order:        cloudflare.F(cloudforce_one.ThreatEventListParamsOrderAsc),
@@ -117,7 +117,7 @@ func TestThreatEventDelete(t *testing.T) {
 		context.TODO(),
 		"event_id",
 		cloudforce_one.ThreatEventDeleteParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -144,7 +144,7 @@ func TestThreatEventBulkNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.BulkNew(context.TODO(), cloudforce_one.ThreatEventBulkNewParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 		Data: cloudflare.F([]cloudforce_one.ThreatEventBulkNewParamsData{{
 			Attacker:        cloudflare.F("Flying Yeti"),
 			AttackerCountry: cloudflare.F("CN"),
@@ -196,7 +196,7 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"event_id",
 		cloudforce_one.ThreatEventEditParams{
-			AccountID:       cloudflare.F(0.000000),
+			AccountID:       cloudflare.F("account_id"),
 			Attacker:        cloudflare.F("Flying Yeti"),
 			AttackerCountry: cloudflare.F("CN"),
 			Category:        cloudflare.F("Domain Resolution"),
@@ -236,7 +236,7 @@ func TestThreatEventGet(t *testing.T) {
 		context.TODO(),
 		"event_id",
 		cloudforce_one.ThreatEventGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

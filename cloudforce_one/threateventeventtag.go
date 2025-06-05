@@ -37,7 +37,7 @@ func NewThreatEventEventTagService(opts ...option.RequestOption) (r *ThreatEvent
 func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, params ThreatEventEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventEventTagNewResponse, err error) {
 	var env ThreatEventEventTagNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, pa
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/event_tag/%s/create", params.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/event_tag/%s/create", params.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -58,7 +58,7 @@ func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, pa
 func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string, body ThreatEventEventTagDeleteParams, opts ...option.RequestOption) (res *ThreatEventEventTagDeleteResponse, err error) {
 	var env ThreatEventEventTagDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !body.AccountID.Present {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -66,7 +66,7 @@ func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string,
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/event_tag/%s", body.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/event_tag/%s", body.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -119,7 +119,7 @@ func (r threatEventEventTagDeleteResponseJSON) RawJSON() string {
 
 type ThreatEventEventTagNewParams struct {
 	// Account ID.
-	AccountID param.Field[float64]  `path:"account_id,required"`
+	AccountID param.Field[string]   `path:"account_id,required"`
 	Tags      param.Field[[]string] `json:"tags,required"`
 }
 
@@ -152,7 +152,7 @@ func (r threatEventEventTagNewResponseEnvelopeJSON) RawJSON() string {
 
 type ThreatEventEventTagDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventEventTagDeleteResponseEnvelope struct {

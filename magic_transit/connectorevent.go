@@ -43,7 +43,7 @@ func NewConnectorEventService(opts ...option.RequestOption) (r *ConnectorEventSe
 func (r *ConnectorEventService) List(ctx context.Context, connectorID string, params ConnectorEventListParams, opts ...option.RequestOption) (res *ConnectorEventListResponse, err error) {
 	var env ConnectorEventListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -51,7 +51,7 @@ func (r *ConnectorEventService) List(ctx context.Context, connectorID string, pa
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/events", params.AccountID, connectorID)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/events", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -64,7 +64,7 @@ func (r *ConnectorEventService) List(ctx context.Context, connectorID string, pa
 func (r *ConnectorEventService) Get(ctx context.Context, connectorID string, eventT float64, eventN float64, query ConnectorEventGetParams, opts ...option.RequestOption) (res *ConnectorEventGetResponse, err error) {
 	var env ConnectorEventGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -72,7 +72,7 @@ func (r *ConnectorEventService) Get(ctx context.Context, connectorID string, eve
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/events/%v.%v", query.AccountID, connectorID, eventT, eventN)
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/events/%v.%v", query.AccountID, connectorID, eventT, eventN)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -985,7 +985,7 @@ func (r ConnectorEventGetResponseEK) IsKnown() bool {
 }
 
 type ConnectorEventListParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id,required"`
 	From      param.Field[float64] `query:"from,required"`
 	To        param.Field[float64] `query:"to,required"`
 	Cursor    param.Field[string]  `query:"cursor"`
@@ -1075,7 +1075,7 @@ func (r connectorEventListResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ConnectorEventGetParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorEventGetResponseEnvelope struct {
