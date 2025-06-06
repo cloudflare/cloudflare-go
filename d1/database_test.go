@@ -245,8 +245,8 @@ func TestDatabaseImport(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseImportParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: d1.DatabaseImportParamsBodyObject{
-				Action: cloudflare.F(d1.DatabaseImportParamsBodyObjectActionInit),
+			Body: d1.DatabaseImportParamsBodyInit{
+				Action: cloudflare.F(d1.DatabaseImportParamsBodyInitActionInit),
 				Etag:   cloudflare.F("etag"),
 			},
 		},
