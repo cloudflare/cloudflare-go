@@ -154,7 +154,7 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Append: cloudflare.F([]zero_trust.GatewayItemParam{{
+			Append: cloudflare.F([]zero_trust.GatewayListEditParamsAppend{{
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
 			}}),

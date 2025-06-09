@@ -258,6 +258,10 @@ type TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	//
+	// Deprecated: This field will start returning an empty array. To fetch the
+	// connections of a given tunnel, please use the dedicated endpoint
+	// `/accounts/{account_id}/{tunnel_type}/{tunnel_id}/connections`
 	Connections []TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -554,6 +558,10 @@ type TunnelWARPConnectorListResponseTunnelWARPConnectorTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	//
+	// Deprecated: This field will start returning an empty array. To fetch the
+	// connections of a given tunnel, please use the dedicated endpoint
+	// `/accounts/{account_id}/{tunnel_type}/{tunnel_id}/connections`
 	Connections []TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -850,6 +858,10 @@ type TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	//
+	// Deprecated: This field will start returning an empty array. To fetch the
+	// connections of a given tunnel, please use the dedicated endpoint
+	// `/accounts/{account_id}/{tunnel_type}/{tunnel_id}/connections`
 	Connections []TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -1146,6 +1158,10 @@ type TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	//
+	// Deprecated: This field will start returning an empty array. To fetch the
+	// connections of a given tunnel, please use the dedicated endpoint
+	// `/accounts/{account_id}/{tunnel_type}/{tunnel_id}/connections`
 	Connections []TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -1442,6 +1458,10 @@ type TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnel struct {
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	//
+	// Deprecated: This field will start returning an empty array. To fetch the
+	// connections of a given tunnel, please use the dedicated endpoint
+	// `/accounts/{account_id}/{tunnel_type}/{tunnel_id}/connections`
 	Connections []TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
