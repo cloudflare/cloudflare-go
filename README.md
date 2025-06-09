@@ -5,6 +5,8 @@
 The Cloudflare Go library provides convenient access to the [Cloudflare REST API](https://developers.cloudflare.com/api)
 from applications written in Go.
 
+It is generated with [Stainless](https://www.stainless.com/).
+
 ## Installation
 
 <!-- x-release-please-start-version -->
@@ -420,9 +422,9 @@ middleware has been applied.
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 
-1. Changes that only affect static types, without breaking runtime behavior.
-1. Changes to library internals which are technically public but not intended or documented for external use. 
-1. Changes that we do not expect to impact the vast majority of users in practice.
+
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
+2. Changes that we do not expect to impact the vast majority of users in practice.
 
 ## Maintenance
 

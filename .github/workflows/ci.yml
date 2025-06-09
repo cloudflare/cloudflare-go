@@ -12,6 +12,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+
 jobs:
   lint:
     timeout-minutes: 10
@@ -32,6 +33,7 @@ jobs:
     timeout-minutes: 10
     name: test
     runs-on: ${{ github.repository == 'stainless-sdks/cloudflare-go' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
+
 
     steps:
       - uses: actions/checkout@v4
