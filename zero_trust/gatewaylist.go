@@ -541,13 +541,24 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayListEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The items in the list.
-	Append param.Field[[]GatewayItemParam] `json:"append"`
+	// items to add to the list.
+	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
 	// A list of the item values you want to remove.
 	Remove param.Field[[]string] `json:"remove"`
 }
 
 func (r GatewayListEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type GatewayListEditParamsAppend struct {
+	// The description of the list item, if present
+	Description param.Field[string] `json:"description"`
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r GatewayListEditParamsAppend) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
