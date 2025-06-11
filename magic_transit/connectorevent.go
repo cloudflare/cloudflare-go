@@ -985,6 +985,7 @@ func (r ConnectorEventGetResponseEK) IsKnown() bool {
 }
 
 type ConnectorEventListParams struct {
+	// Account identifier
 	AccountID param.Field[string]  `path:"account_id,required"`
 	From      param.Field[float64] `query:"from,required"`
 	To        param.Field[float64] `query:"to,required"`
@@ -1075,6 +1076,7 @@ func (r connectorEventListResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ConnectorEventGetParams struct {
+	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

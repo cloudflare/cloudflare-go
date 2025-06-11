@@ -953,6 +953,7 @@ func (r ConnectorEventLatestListResponseItemsEK) IsKnown() bool {
 }
 
 type ConnectorEventLatestListParams struct {
+	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

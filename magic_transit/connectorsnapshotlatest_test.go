@@ -31,7 +31,7 @@ func TestConnectorSnapshotLatestList(t *testing.T) {
 		context.TODO(),
 		"connector_id",
 		magic_transit.ConnectorSnapshotLatestListParams{
-			AccountID: cloudflare.F("account_id"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
