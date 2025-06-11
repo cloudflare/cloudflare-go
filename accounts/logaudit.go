@@ -592,14 +592,15 @@ func (r LogAuditListParamsActorType) URLQuery() (v url.Values) {
 type LogAuditListParamsActorTypeNot string
 
 const (
-	LogAuditListParamsActorTypeNotCloudflareAdmin LogAuditListParamsActorTypeNot = "cloudflare_admin"
 	LogAuditListParamsActorTypeNotAccount         LogAuditListParamsActorTypeNot = "account"
+	LogAuditListParamsActorTypeNotCloudflareAdmin LogAuditListParamsActorTypeNot = "cloudflare_admin"
+	LogAuditListParamsActorTypeNotSystem          LogAuditListParamsActorTypeNot = "system"
 	LogAuditListParamsActorTypeNotUser            LogAuditListParamsActorTypeNot = "user"
 )
 
 func (r LogAuditListParamsActorTypeNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActorTypeNotCloudflareAdmin, LogAuditListParamsActorTypeNotAccount, LogAuditListParamsActorTypeNotUser:
+	case LogAuditListParamsActorTypeNotAccount, LogAuditListParamsActorTypeNotCloudflareAdmin, LogAuditListParamsActorTypeNotSystem, LogAuditListParamsActorTypeNotUser:
 		return true
 	}
 	return false
