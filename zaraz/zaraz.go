@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZarazService contains methods and other services that help with interacting with
@@ -150,7 +149,7 @@ func (r NeoEventParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ZarazUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Zaraz workflow
 	Workflow Workflow `json:"workflow,required"`
@@ -161,8 +160,8 @@ func (r ZarazUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZarazUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ZarazUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZarazUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Zaraz workflow
 	Result Workflow `json:"result,required"`
 	// Whether the API call was successful
@@ -186,5 +185,101 @@ func (r *ZarazUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r zarazUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZarazUpdateResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           ZarazUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             zarazUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// zarazUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ZarazUpdateResponseEnvelopeErrors]
+type zarazUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zarazUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZarazUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    zarazUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// zarazUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ZarazUpdateResponseEnvelopeErrorsSource]
+type zarazUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zarazUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZarazUpdateResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           ZarazUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             zarazUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// zarazUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ZarazUpdateResponseEnvelopeMessages]
+type zarazUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zarazUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZarazUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    zarazUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// zarazUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [ZarazUpdateResponseEnvelopeMessagesSource]
+type zarazUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zarazUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }

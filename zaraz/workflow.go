@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WorkflowService contains methods and other services that help with interacting
@@ -68,13 +67,13 @@ func (r Workflow) IsKnown() bool {
 }
 
 type WorkflowGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type WorkflowGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []WorkflowGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkflowGetResponseEnvelopeMessages `json:"messages,required"`
 	// Zaraz workflow
 	Result Workflow `json:"result,required"`
 	// Whether the API call was successful
@@ -98,5 +97,101 @@ func (r *WorkflowGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workflowGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowGetResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           WorkflowGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             workflowGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// workflowGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [WorkflowGetResponseEnvelopeErrors]
+type workflowGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WorkflowGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    workflowGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// workflowGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [WorkflowGetResponseEnvelopeErrorsSource]
+type workflowGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowGetResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           WorkflowGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             workflowGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// workflowGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WorkflowGetResponseEnvelopeMessages]
+type workflowGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WorkflowGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    workflowGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// workflowGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [WorkflowGetResponseEnvelopeMessagesSource]
+type workflowGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
