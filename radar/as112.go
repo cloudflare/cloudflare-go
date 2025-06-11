@@ -164,12 +164,12 @@ func (r as112TimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type AS112TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                               `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                               `json:"startDate,required" format:"date-time"`
 	JSON            as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -178,11 +178,11 @@ type AS112TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 type as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -232,11 +232,12 @@ const (
 	AS112TimeseriesResponseMetaNormalizationPercentageChange     AS112TimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AS112TimeseriesResponseMetaNormalizationRollingAverage       AS112TimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
 	AS112TimeseriesResponseMetaNormalizationOverlappedPercentage AS112TimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AS112TimeseriesResponseMetaNormalizationRatio                AS112TimeseriesResponseMetaNormalization = "RATIO"
 )
 
 func (r AS112TimeseriesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesResponseMetaNormalizationPercentage, AS112TimeseriesResponseMetaNormalizationMin0Max, AS112TimeseriesResponseMetaNormalizationMinMax, AS112TimeseriesResponseMetaNormalizationRawValues, AS112TimeseriesResponseMetaNormalizationPercentageChange, AS112TimeseriesResponseMetaNormalizationRollingAverage, AS112TimeseriesResponseMetaNormalizationOverlappedPercentage:
+	case AS112TimeseriesResponseMetaNormalizationPercentage, AS112TimeseriesResponseMetaNormalizationMin0Max, AS112TimeseriesResponseMetaNormalizationMinMax, AS112TimeseriesResponseMetaNormalizationRawValues, AS112TimeseriesResponseMetaNormalizationPercentageChange, AS112TimeseriesResponseMetaNormalizationRollingAverage, AS112TimeseriesResponseMetaNormalizationOverlappedPercentage, AS112TimeseriesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

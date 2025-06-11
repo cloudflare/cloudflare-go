@@ -135,12 +135,12 @@ func (r httpAseHTTPProtocolGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
 	JSON            httpAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -150,11 +150,11 @@ type HTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation struct {
 type httpAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -204,11 +204,12 @@ const (
 	HTTPAseHTTPProtocolGetResponseMetaNormalizationPercentageChange     HTTPAseHTTPProtocolGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPAseHTTPProtocolGetResponseMetaNormalizationRollingAverage       HTTPAseHTTPProtocolGetResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPAseHTTPProtocolGetResponseMetaNormalizationOverlappedPercentage HTTPAseHTTPProtocolGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPAseHTTPProtocolGetResponseMetaNormalizationRatio                HTTPAseHTTPProtocolGetResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPAseHTTPProtocolGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPAseHTTPProtocolGetResponseMetaNormalizationPercentage, HTTPAseHTTPProtocolGetResponseMetaNormalizationMin0Max, HTTPAseHTTPProtocolGetResponseMetaNormalizationMinMax, HTTPAseHTTPProtocolGetResponseMetaNormalizationRawValues, HTTPAseHTTPProtocolGetResponseMetaNormalizationPercentageChange, HTTPAseHTTPProtocolGetResponseMetaNormalizationRollingAverage, HTTPAseHTTPProtocolGetResponseMetaNormalizationOverlappedPercentage:
+	case HTTPAseHTTPProtocolGetResponseMetaNormalizationPercentage, HTTPAseHTTPProtocolGetResponseMetaNormalizationMin0Max, HTTPAseHTTPProtocolGetResponseMetaNormalizationMinMax, HTTPAseHTTPProtocolGetResponseMetaNormalizationRawValues, HTTPAseHTTPProtocolGetResponseMetaNormalizationPercentageChange, HTTPAseHTTPProtocolGetResponseMetaNormalizationRollingAverage, HTTPAseHTTPProtocolGetResponseMetaNormalizationOverlappedPercentage, HTTPAseHTTPProtocolGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

@@ -230,12 +230,12 @@ func (r emailRoutingTimeseriesGroupARCResponseMetaConfidenceInfoJSON) RawJSON() 
 type EmailRoutingTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                              `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
 	JSON            emailRoutingTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -245,11 +245,11 @@ type EmailRoutingTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation struct {
 type emailRoutingTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -299,11 +299,12 @@ const (
 	EmailRoutingTimeseriesGroupARCResponseMetaNormalizationPercentageChange     EmailRoutingTimeseriesGroupARCResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRollingAverage       EmailRoutingTimeseriesGroupARCResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailRoutingTimeseriesGroupARCResponseMetaNormalizationOverlappedPercentage EmailRoutingTimeseriesGroupARCResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRatio                EmailRoutingTimeseriesGroupARCResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailRoutingTimeseriesGroupARCResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupARCResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationOverlappedPercentage:
+	case EmailRoutingTimeseriesGroupARCResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationOverlappedPercentage, EmailRoutingTimeseriesGroupARCResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -445,12 +446,12 @@ func (r emailRoutingTimeseriesGroupDKIMResponseMetaConfidenceInfoJSON) RawJSON()
 type EmailRoutingTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                               `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                               `json:"startDate,required" format:"date-time"`
 	JSON            emailRoutingTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -460,11 +461,11 @@ type EmailRoutingTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation struct 
 type emailRoutingTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -514,11 +515,12 @@ const (
 	EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationPercentageChange     EmailRoutingTimeseriesGroupDKIMResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRollingAverage       EmailRoutingTimeseriesGroupDKIMResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationOverlappedPercentage EmailRoutingTimeseriesGroupDKIMResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRatio                EmailRoutingTimeseriesGroupDKIMResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailRoutingTimeseriesGroupDKIMResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationOverlappedPercentage:
+	case EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationOverlappedPercentage, EmailRoutingTimeseriesGroupDKIMResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -660,12 +662,12 @@ func (r emailRoutingTimeseriesGroupDMARCResponseMetaConfidenceInfoJSON) RawJSON(
 type EmailRoutingTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                `json:"startDate,required" format:"date-time"`
 	JSON            emailRoutingTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -675,11 +677,11 @@ type EmailRoutingTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation struct
 type emailRoutingTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -729,11 +731,12 @@ const (
 	EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationPercentageChange     EmailRoutingTimeseriesGroupDMARCResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRollingAverage       EmailRoutingTimeseriesGroupDMARCResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationOverlappedPercentage EmailRoutingTimeseriesGroupDMARCResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRatio                EmailRoutingTimeseriesGroupDMARCResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailRoutingTimeseriesGroupDMARCResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationOverlappedPercentage:
+	case EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationOverlappedPercentage, EmailRoutingTimeseriesGroupDMARCResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -875,12 +878,12 @@ func (r emailRoutingTimeseriesGroupEncryptedResponseMetaConfidenceInfoJSON) RawJ
 type EmailRoutingTimeseriesGroupEncryptedResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                       `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                    `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                    `json:"startDate,required" format:"date-time"`
 	JSON            emailRoutingTimeseriesGroupEncryptedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -890,11 +893,11 @@ type EmailRoutingTimeseriesGroupEncryptedResponseMetaConfidenceInfoAnnotation st
 type emailRoutingTimeseriesGroupEncryptedResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -945,11 +948,12 @@ const (
 	EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationPercentageChange     EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRollingAverage       EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationOverlappedPercentage EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRatio                EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationOverlappedPercentage:
+	case EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationOverlappedPercentage, EmailRoutingTimeseriesGroupEncryptedResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1114,12 +1118,12 @@ func (r emailRoutingTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON) RawJ
 type EmailRoutingTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                       `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                    `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                    `json:"startDate,required" format:"date-time"`
 	JSON            emailRoutingTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1129,11 +1133,11 @@ type EmailRoutingTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation st
 type emailRoutingTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1184,11 +1188,12 @@ const (
 	EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange     EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage       EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRatio                EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage:
+	case EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage, EmailRoutingTimeseriesGroupIPVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1353,12 +1358,12 @@ func (r emailRoutingTimeseriesGroupSPFResponseMetaConfidenceInfoJSON) RawJSON() 
 type EmailRoutingTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                              `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
 	JSON            emailRoutingTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1368,11 +1373,11 @@ type EmailRoutingTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation struct {
 type emailRoutingTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1422,11 +1427,12 @@ const (
 	EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationPercentageChange     EmailRoutingTimeseriesGroupSPFResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRollingAverage       EmailRoutingTimeseriesGroupSPFResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationOverlappedPercentage EmailRoutingTimeseriesGroupSPFResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRatio                EmailRoutingTimeseriesGroupSPFResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailRoutingTimeseriesGroupSPFResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationOverlappedPercentage:
+	case EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationPercentage, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationMin0Max, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationMinMax, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRawValues, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationPercentageChange, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRollingAverage, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationOverlappedPercentage, EmailRoutingTimeseriesGroupSPFResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

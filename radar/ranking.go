@@ -182,12 +182,12 @@ func (r rankingTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string 
 type RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                       `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                       `json:"startDate,required" format:"date-time"`
 	JSON            rankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -197,11 +197,11 @@ type RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 type rankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -251,11 +251,12 @@ const (
 	RankingTimeseriesGroupsResponseMetaNormalizationPercentageChange     RankingTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	RankingTimeseriesGroupsResponseMetaNormalizationRollingAverage       RankingTimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
 	RankingTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage RankingTimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	RankingTimeseriesGroupsResponseMetaNormalizationRatio                RankingTimeseriesGroupsResponseMetaNormalization = "RATIO"
 )
 
 func (r RankingTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case RankingTimeseriesGroupsResponseMetaNormalizationPercentage, RankingTimeseriesGroupsResponseMetaNormalizationMin0Max, RankingTimeseriesGroupsResponseMetaNormalizationMinMax, RankingTimeseriesGroupsResponseMetaNormalizationRawValues, RankingTimeseriesGroupsResponseMetaNormalizationPercentageChange, RankingTimeseriesGroupsResponseMetaNormalizationRollingAverage, RankingTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage:
+	case RankingTimeseriesGroupsResponseMetaNormalizationPercentage, RankingTimeseriesGroupsResponseMetaNormalizationMin0Max, RankingTimeseriesGroupsResponseMetaNormalizationMinMax, RankingTimeseriesGroupsResponseMetaNormalizationRawValues, RankingTimeseriesGroupsResponseMetaNormalizationPercentageChange, RankingTimeseriesGroupsResponseMetaNormalizationRollingAverage, RankingTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage, RankingTimeseriesGroupsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -412,12 +413,12 @@ func (r rankingTopResponseMetaConfidenceInfoJSON) RawJSON() string {
 type RankingTopResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                             `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                          `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                          `json:"startDate,required" format:"date-time"`
 	JSON            rankingTopResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -426,11 +427,11 @@ type RankingTopResponseMetaConfidenceInfoAnnotation struct {
 type rankingTopResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -480,11 +481,12 @@ const (
 	RankingTopResponseMetaNormalizationPercentageChange     RankingTopResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	RankingTopResponseMetaNormalizationRollingAverage       RankingTopResponseMetaNormalization = "ROLLING_AVERAGE"
 	RankingTopResponseMetaNormalizationOverlappedPercentage RankingTopResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	RankingTopResponseMetaNormalizationRatio                RankingTopResponseMetaNormalization = "RATIO"
 )
 
 func (r RankingTopResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case RankingTopResponseMetaNormalizationPercentage, RankingTopResponseMetaNormalizationMin0Max, RankingTopResponseMetaNormalizationMinMax, RankingTopResponseMetaNormalizationRawValues, RankingTopResponseMetaNormalizationPercentageChange, RankingTopResponseMetaNormalizationRollingAverage, RankingTopResponseMetaNormalizationOverlappedPercentage:
+	case RankingTopResponseMetaNormalizationPercentage, RankingTopResponseMetaNormalizationMin0Max, RankingTopResponseMetaNormalizationMinMax, RankingTopResponseMetaNormalizationRawValues, RankingTopResponseMetaNormalizationPercentageChange, RankingTopResponseMetaNormalizationRollingAverage, RankingTopResponseMetaNormalizationOverlappedPercentage, RankingTopResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

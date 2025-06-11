@@ -135,12 +135,12 @@ func (r httpLocationTLSVersionGetResponseMetaConfidenceInfoJSON) RawJSON() strin
 type HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                         `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                         `json:"startDate,required" format:"date-time"`
 	JSON            httpLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -150,11 +150,11 @@ type HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation struct {
 type httpLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -204,11 +204,12 @@ const (
 	HTTPLocationTLSVersionGetResponseMetaNormalizationPercentageChange     HTTPLocationTLSVersionGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPLocationTLSVersionGetResponseMetaNormalizationRollingAverage       HTTPLocationTLSVersionGetResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPLocationTLSVersionGetResponseMetaNormalizationOverlappedPercentage HTTPLocationTLSVersionGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPLocationTLSVersionGetResponseMetaNormalizationRatio                HTTPLocationTLSVersionGetResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPLocationTLSVersionGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPLocationTLSVersionGetResponseMetaNormalizationPercentage, HTTPLocationTLSVersionGetResponseMetaNormalizationMin0Max, HTTPLocationTLSVersionGetResponseMetaNormalizationMinMax, HTTPLocationTLSVersionGetResponseMetaNormalizationRawValues, HTTPLocationTLSVersionGetResponseMetaNormalizationPercentageChange, HTTPLocationTLSVersionGetResponseMetaNormalizationRollingAverage, HTTPLocationTLSVersionGetResponseMetaNormalizationOverlappedPercentage:
+	case HTTPLocationTLSVersionGetResponseMetaNormalizationPercentage, HTTPLocationTLSVersionGetResponseMetaNormalizationMin0Max, HTTPLocationTLSVersionGetResponseMetaNormalizationMinMax, HTTPLocationTLSVersionGetResponseMetaNormalizationRawValues, HTTPLocationTLSVersionGetResponseMetaNormalizationPercentageChange, HTTPLocationTLSVersionGetResponseMetaNormalizationRollingAverage, HTTPLocationTLSVersionGetResponseMetaNormalizationOverlappedPercentage, HTTPLocationTLSVersionGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

@@ -229,12 +229,12 @@ func (r httpSummaryBotClassResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -244,11 +244,11 @@ type HTTPSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -298,11 +298,12 @@ const (
 	HTTPSummaryBotClassResponseMetaNormalizationPercentageChange     HTTPSummaryBotClassResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryBotClassResponseMetaNormalizationRollingAverage       HTTPSummaryBotClassResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryBotClassResponseMetaNormalizationOverlappedPercentage HTTPSummaryBotClassResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryBotClassResponseMetaNormalizationRatio                HTTPSummaryBotClassResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryBotClassResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryBotClassResponseMetaNormalizationPercentage, HTTPSummaryBotClassResponseMetaNormalizationMin0Max, HTTPSummaryBotClassResponseMetaNormalizationMinMax, HTTPSummaryBotClassResponseMetaNormalizationRawValues, HTTPSummaryBotClassResponseMetaNormalizationPercentageChange, HTTPSummaryBotClassResponseMetaNormalizationRollingAverage, HTTPSummaryBotClassResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryBotClassResponseMetaNormalizationPercentage, HTTPSummaryBotClassResponseMetaNormalizationMin0Max, HTTPSummaryBotClassResponseMetaNormalizationMinMax, HTTPSummaryBotClassResponseMetaNormalizationRawValues, HTTPSummaryBotClassResponseMetaNormalizationPercentageChange, HTTPSummaryBotClassResponseMetaNormalizationRollingAverage, HTTPSummaryBotClassResponseMetaNormalizationOverlappedPercentage, HTTPSummaryBotClassResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -442,12 +443,12 @@ func (r httpSummaryDeviceTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryDeviceTypeResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                     `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryDeviceTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -457,11 +458,11 @@ type HTTPSummaryDeviceTypeResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryDeviceTypeResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -511,11 +512,12 @@ const (
 	HTTPSummaryDeviceTypeResponseMetaNormalizationPercentageChange     HTTPSummaryDeviceTypeResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryDeviceTypeResponseMetaNormalizationRollingAverage       HTTPSummaryDeviceTypeResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryDeviceTypeResponseMetaNormalizationOverlappedPercentage HTTPSummaryDeviceTypeResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryDeviceTypeResponseMetaNormalizationRatio                HTTPSummaryDeviceTypeResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryDeviceTypeResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryDeviceTypeResponseMetaNormalizationPercentage, HTTPSummaryDeviceTypeResponseMetaNormalizationMin0Max, HTTPSummaryDeviceTypeResponseMetaNormalizationMinMax, HTTPSummaryDeviceTypeResponseMetaNormalizationRawValues, HTTPSummaryDeviceTypeResponseMetaNormalizationPercentageChange, HTTPSummaryDeviceTypeResponseMetaNormalizationRollingAverage, HTTPSummaryDeviceTypeResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryDeviceTypeResponseMetaNormalizationPercentage, HTTPSummaryDeviceTypeResponseMetaNormalizationMin0Max, HTTPSummaryDeviceTypeResponseMetaNormalizationMinMax, HTTPSummaryDeviceTypeResponseMetaNormalizationRawValues, HTTPSummaryDeviceTypeResponseMetaNormalizationPercentageChange, HTTPSummaryDeviceTypeResponseMetaNormalizationRollingAverage, HTTPSummaryDeviceTypeResponseMetaNormalizationOverlappedPercentage, HTTPSummaryDeviceTypeResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -658,12 +660,12 @@ func (r httpSummaryHTTPProtocolResponseMetaConfidenceInfoJSON) RawJSON() string 
 type HTTPSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                       `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                       `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -673,11 +675,11 @@ type HTTPSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -727,11 +729,12 @@ const (
 	HTTPSummaryHTTPProtocolResponseMetaNormalizationPercentageChange     HTTPSummaryHTTPProtocolResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryHTTPProtocolResponseMetaNormalizationRollingAverage       HTTPSummaryHTTPProtocolResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryHTTPProtocolResponseMetaNormalizationOverlappedPercentage HTTPSummaryHTTPProtocolResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryHTTPProtocolResponseMetaNormalizationRatio                HTTPSummaryHTTPProtocolResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryHTTPProtocolResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryHTTPProtocolResponseMetaNormalizationPercentage, HTTPSummaryHTTPProtocolResponseMetaNormalizationMin0Max, HTTPSummaryHTTPProtocolResponseMetaNormalizationMinMax, HTTPSummaryHTTPProtocolResponseMetaNormalizationRawValues, HTTPSummaryHTTPProtocolResponseMetaNormalizationPercentageChange, HTTPSummaryHTTPProtocolResponseMetaNormalizationRollingAverage, HTTPSummaryHTTPProtocolResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryHTTPProtocolResponseMetaNormalizationPercentage, HTTPSummaryHTTPProtocolResponseMetaNormalizationMin0Max, HTTPSummaryHTTPProtocolResponseMetaNormalizationMinMax, HTTPSummaryHTTPProtocolResponseMetaNormalizationRawValues, HTTPSummaryHTTPProtocolResponseMetaNormalizationPercentageChange, HTTPSummaryHTTPProtocolResponseMetaNormalizationRollingAverage, HTTPSummaryHTTPProtocolResponseMetaNormalizationOverlappedPercentage, HTTPSummaryHTTPProtocolResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -871,12 +874,12 @@ func (r httpSummaryHTTPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryHTTPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -886,11 +889,11 @@ type HTTPSummaryHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryHTTPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -940,11 +943,12 @@ const (
 	HTTPSummaryHTTPVersionResponseMetaNormalizationPercentageChange     HTTPSummaryHTTPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryHTTPVersionResponseMetaNormalizationRollingAverage       HTTPSummaryHTTPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryHTTPVersionResponseMetaNormalizationOverlappedPercentage HTTPSummaryHTTPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryHTTPVersionResponseMetaNormalizationRatio                HTTPSummaryHTTPVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryHTTPVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryHTTPVersionResponseMetaNormalizationPercentage, HTTPSummaryHTTPVersionResponseMetaNormalizationMin0Max, HTTPSummaryHTTPVersionResponseMetaNormalizationMinMax, HTTPSummaryHTTPVersionResponseMetaNormalizationRawValues, HTTPSummaryHTTPVersionResponseMetaNormalizationPercentageChange, HTTPSummaryHTTPVersionResponseMetaNormalizationRollingAverage, HTTPSummaryHTTPVersionResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryHTTPVersionResponseMetaNormalizationPercentage, HTTPSummaryHTTPVersionResponseMetaNormalizationMin0Max, HTTPSummaryHTTPVersionResponseMetaNormalizationMinMax, HTTPSummaryHTTPVersionResponseMetaNormalizationRawValues, HTTPSummaryHTTPVersionResponseMetaNormalizationPercentageChange, HTTPSummaryHTTPVersionResponseMetaNormalizationRollingAverage, HTTPSummaryHTTPVersionResponseMetaNormalizationOverlappedPercentage, HTTPSummaryHTTPVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1087,12 +1091,12 @@ func (r httpSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                    `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1102,11 +1106,11 @@ type HTTPSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1156,11 +1160,12 @@ const (
 	HTTPSummaryIPVersionResponseMetaNormalizationPercentageChange     HTTPSummaryIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryIPVersionResponseMetaNormalizationRollingAverage       HTTPSummaryIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryIPVersionResponseMetaNormalizationOverlappedPercentage HTTPSummaryIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryIPVersionResponseMetaNormalizationRatio                HTTPSummaryIPVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryIPVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryIPVersionResponseMetaNormalizationPercentage, HTTPSummaryIPVersionResponseMetaNormalizationMin0Max, HTTPSummaryIPVersionResponseMetaNormalizationMinMax, HTTPSummaryIPVersionResponseMetaNormalizationRawValues, HTTPSummaryIPVersionResponseMetaNormalizationPercentageChange, HTTPSummaryIPVersionResponseMetaNormalizationRollingAverage, HTTPSummaryIPVersionResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryIPVersionResponseMetaNormalizationPercentage, HTTPSummaryIPVersionResponseMetaNormalizationMin0Max, HTTPSummaryIPVersionResponseMetaNormalizationMinMax, HTTPSummaryIPVersionResponseMetaNormalizationRawValues, HTTPSummaryIPVersionResponseMetaNormalizationPercentageChange, HTTPSummaryIPVersionResponseMetaNormalizationRollingAverage, HTTPSummaryIPVersionResponseMetaNormalizationOverlappedPercentage, HTTPSummaryIPVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1300,12 +1305,12 @@ func (r httpSummaryOSResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryOSResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                             `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryOSResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1314,11 +1319,11 @@ type HTTPSummaryOSResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryOSResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1368,11 +1373,12 @@ const (
 	HTTPSummaryOSResponseMetaNormalizationPercentageChange     HTTPSummaryOSResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryOSResponseMetaNormalizationRollingAverage       HTTPSummaryOSResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryOSResponseMetaNormalizationOverlappedPercentage HTTPSummaryOSResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryOSResponseMetaNormalizationRatio                HTTPSummaryOSResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryOSResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryOSResponseMetaNormalizationPercentage, HTTPSummaryOSResponseMetaNormalizationMin0Max, HTTPSummaryOSResponseMetaNormalizationMinMax, HTTPSummaryOSResponseMetaNormalizationRawValues, HTTPSummaryOSResponseMetaNormalizationPercentageChange, HTTPSummaryOSResponseMetaNormalizationRollingAverage, HTTPSummaryOSResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryOSResponseMetaNormalizationPercentage, HTTPSummaryOSResponseMetaNormalizationMin0Max, HTTPSummaryOSResponseMetaNormalizationMinMax, HTTPSummaryOSResponseMetaNormalizationRawValues, HTTPSummaryOSResponseMetaNormalizationPercentageChange, HTTPSummaryOSResponseMetaNormalizationRollingAverage, HTTPSummaryOSResponseMetaNormalizationOverlappedPercentage, HTTPSummaryOSResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1512,12 +1518,12 @@ func (r httpSummaryPostQuantumResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1527,11 +1533,11 @@ type HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1581,11 +1587,12 @@ const (
 	HTTPSummaryPostQuantumResponseMetaNormalizationPercentageChange     HTTPSummaryPostQuantumResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryPostQuantumResponseMetaNormalizationRollingAverage       HTTPSummaryPostQuantumResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryPostQuantumResponseMetaNormalizationOverlappedPercentage HTTPSummaryPostQuantumResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryPostQuantumResponseMetaNormalizationRatio                HTTPSummaryPostQuantumResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryPostQuantumResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryPostQuantumResponseMetaNormalizationPercentage, HTTPSummaryPostQuantumResponseMetaNormalizationMin0Max, HTTPSummaryPostQuantumResponseMetaNormalizationMinMax, HTTPSummaryPostQuantumResponseMetaNormalizationRawValues, HTTPSummaryPostQuantumResponseMetaNormalizationPercentageChange, HTTPSummaryPostQuantumResponseMetaNormalizationRollingAverage, HTTPSummaryPostQuantumResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryPostQuantumResponseMetaNormalizationPercentage, HTTPSummaryPostQuantumResponseMetaNormalizationMin0Max, HTTPSummaryPostQuantumResponseMetaNormalizationMinMax, HTTPSummaryPostQuantumResponseMetaNormalizationRawValues, HTTPSummaryPostQuantumResponseMetaNormalizationPercentageChange, HTTPSummaryPostQuantumResponseMetaNormalizationRollingAverage, HTTPSummaryPostQuantumResponseMetaNormalizationOverlappedPercentage, HTTPSummaryPostQuantumResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1725,12 +1732,12 @@ func (r httpSummaryTLSVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPSummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                     `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
 	JSON            httpSummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1740,11 +1747,11 @@ type HTTPSummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 type httpSummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1794,11 +1801,12 @@ const (
 	HTTPSummaryTLSVersionResponseMetaNormalizationPercentageChange     HTTPSummaryTLSVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPSummaryTLSVersionResponseMetaNormalizationRollingAverage       HTTPSummaryTLSVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPSummaryTLSVersionResponseMetaNormalizationOverlappedPercentage HTTPSummaryTLSVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPSummaryTLSVersionResponseMetaNormalizationRatio                HTTPSummaryTLSVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPSummaryTLSVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPSummaryTLSVersionResponseMetaNormalizationPercentage, HTTPSummaryTLSVersionResponseMetaNormalizationMin0Max, HTTPSummaryTLSVersionResponseMetaNormalizationMinMax, HTTPSummaryTLSVersionResponseMetaNormalizationRawValues, HTTPSummaryTLSVersionResponseMetaNormalizationPercentageChange, HTTPSummaryTLSVersionResponseMetaNormalizationRollingAverage, HTTPSummaryTLSVersionResponseMetaNormalizationOverlappedPercentage:
+	case HTTPSummaryTLSVersionResponseMetaNormalizationPercentage, HTTPSummaryTLSVersionResponseMetaNormalizationMin0Max, HTTPSummaryTLSVersionResponseMetaNormalizationMinMax, HTTPSummaryTLSVersionResponseMetaNormalizationRawValues, HTTPSummaryTLSVersionResponseMetaNormalizationPercentageChange, HTTPSummaryTLSVersionResponseMetaNormalizationRollingAverage, HTTPSummaryTLSVersionResponseMetaNormalizationOverlappedPercentage, HTTPSummaryTLSVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

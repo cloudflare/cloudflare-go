@@ -135,12 +135,12 @@ func (r httpAseBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                  `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
 	JSON            httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -149,11 +149,11 @@ type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
 type httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -203,11 +203,12 @@ const (
 	HTTPAseBotClassGetResponseMetaNormalizationPercentageChange     HTTPAseBotClassGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPAseBotClassGetResponseMetaNormalizationRollingAverage       HTTPAseBotClassGetResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPAseBotClassGetResponseMetaNormalizationOverlappedPercentage HTTPAseBotClassGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPAseBotClassGetResponseMetaNormalizationRatio                HTTPAseBotClassGetResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPAseBotClassGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPAseBotClassGetResponseMetaNormalizationPercentage, HTTPAseBotClassGetResponseMetaNormalizationMin0Max, HTTPAseBotClassGetResponseMetaNormalizationMinMax, HTTPAseBotClassGetResponseMetaNormalizationRawValues, HTTPAseBotClassGetResponseMetaNormalizationPercentageChange, HTTPAseBotClassGetResponseMetaNormalizationRollingAverage, HTTPAseBotClassGetResponseMetaNormalizationOverlappedPercentage:
+	case HTTPAseBotClassGetResponseMetaNormalizationPercentage, HTTPAseBotClassGetResponseMetaNormalizationMin0Max, HTTPAseBotClassGetResponseMetaNormalizationMinMax, HTTPAseBotClassGetResponseMetaNormalizationRawValues, HTTPAseBotClassGetResponseMetaNormalizationPercentageChange, HTTPAseBotClassGetResponseMetaNormalizationRollingAverage, HTTPAseBotClassGetResponseMetaNormalizationOverlappedPercentage, HTTPAseBotClassGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

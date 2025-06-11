@@ -134,12 +134,12 @@ func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON) RawJSON() str
 type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                           `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
 	JSON            emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -149,11 +149,11 @@ type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation struct {
 type emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -203,11 +203,12 @@ const (
 	EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentageChange     EmailSecurityTopTldSpoofGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	EmailSecurityTopTldSpoofGetResponseMetaNormalizationRollingAverage       EmailSecurityTopTldSpoofGetResponseMetaNormalization = "ROLLING_AVERAGE"
 	EmailSecurityTopTldSpoofGetResponseMetaNormalizationOverlappedPercentage EmailSecurityTopTldSpoofGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationRatio                EmailSecurityTopTldSpoofGetResponseMetaNormalization = "RATIO"
 )
 
 func (r EmailSecurityTopTldSpoofGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationMin0Max, EmailSecurityTopTldSpoofGetResponseMetaNormalizationMinMax, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRawValues, EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationOverlappedPercentage:
+	case EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationMin0Max, EmailSecurityTopTldSpoofGetResponseMetaNormalizationMinMax, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRawValues, EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationOverlappedPercentage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

@@ -147,12 +147,12 @@ func (r verifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
 type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                  `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
 	JSON            verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -161,11 +161,11 @@ type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
 type verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -215,11 +215,12 @@ const (
 	VerifiedBotTopBotsResponseMetaNormalizationPercentageChange     VerifiedBotTopBotsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	VerifiedBotTopBotsResponseMetaNormalizationRollingAverage       VerifiedBotTopBotsResponseMetaNormalization = "ROLLING_AVERAGE"
 	VerifiedBotTopBotsResponseMetaNormalizationOverlappedPercentage VerifiedBotTopBotsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	VerifiedBotTopBotsResponseMetaNormalizationRatio                VerifiedBotTopBotsResponseMetaNormalization = "RATIO"
 )
 
 func (r VerifiedBotTopBotsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case VerifiedBotTopBotsResponseMetaNormalizationPercentage, VerifiedBotTopBotsResponseMetaNormalizationMin0Max, VerifiedBotTopBotsResponseMetaNormalizationMinMax, VerifiedBotTopBotsResponseMetaNormalizationRawValues, VerifiedBotTopBotsResponseMetaNormalizationPercentageChange, VerifiedBotTopBotsResponseMetaNormalizationRollingAverage, VerifiedBotTopBotsResponseMetaNormalizationOverlappedPercentage:
+	case VerifiedBotTopBotsResponseMetaNormalizationPercentage, VerifiedBotTopBotsResponseMetaNormalizationMin0Max, VerifiedBotTopBotsResponseMetaNormalizationMinMax, VerifiedBotTopBotsResponseMetaNormalizationRawValues, VerifiedBotTopBotsResponseMetaNormalizationPercentageChange, VerifiedBotTopBotsResponseMetaNormalizationRollingAverage, VerifiedBotTopBotsResponseMetaNormalizationOverlappedPercentage, VerifiedBotTopBotsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -362,12 +363,12 @@ func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string
 type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
 	JSON            verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -377,11 +378,11 @@ type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
 type verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -431,11 +432,12 @@ const (
 	VerifiedBotTopCategoriesResponseMetaNormalizationPercentageChange     VerifiedBotTopCategoriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	VerifiedBotTopCategoriesResponseMetaNormalizationRollingAverage       VerifiedBotTopCategoriesResponseMetaNormalization = "ROLLING_AVERAGE"
 	VerifiedBotTopCategoriesResponseMetaNormalizationOverlappedPercentage VerifiedBotTopCategoriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	VerifiedBotTopCategoriesResponseMetaNormalizationRatio                VerifiedBotTopCategoriesResponseMetaNormalization = "RATIO"
 )
 
 func (r VerifiedBotTopCategoriesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case VerifiedBotTopCategoriesResponseMetaNormalizationPercentage, VerifiedBotTopCategoriesResponseMetaNormalizationMin0Max, VerifiedBotTopCategoriesResponseMetaNormalizationMinMax, VerifiedBotTopCategoriesResponseMetaNormalizationRawValues, VerifiedBotTopCategoriesResponseMetaNormalizationPercentageChange, VerifiedBotTopCategoriesResponseMetaNormalizationRollingAverage, VerifiedBotTopCategoriesResponseMetaNormalizationOverlappedPercentage:
+	case VerifiedBotTopCategoriesResponseMetaNormalizationPercentage, VerifiedBotTopCategoriesResponseMetaNormalizationMin0Max, VerifiedBotTopCategoriesResponseMetaNormalizationMinMax, VerifiedBotTopCategoriesResponseMetaNormalizationRawValues, VerifiedBotTopCategoriesResponseMetaNormalizationPercentageChange, VerifiedBotTopCategoriesResponseMetaNormalizationRollingAverage, VerifiedBotTopCategoriesResponseMetaNormalizationOverlappedPercentage, VerifiedBotTopCategoriesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

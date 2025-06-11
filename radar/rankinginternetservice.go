@@ -231,12 +231,12 @@ func (r rankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoJSON) Ra
 type RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                      `json:"startDate,required" format:"date-time"`
 	JSON            rankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -246,11 +246,11 @@ type RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotation 
 type rankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -301,11 +301,12 @@ const (
 	RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationPercentageChange     RankingInternetServiceTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRollingAverage       RankingInternetServiceTimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
 	RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage RankingInternetServiceTimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRatio                RankingInternetServiceTimeseriesGroupsResponseMetaNormalization = "RATIO"
 )
 
 func (r RankingInternetServiceTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationPercentage, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationMin0Max, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationMinMax, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRawValues, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationPercentageChange, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRollingAverage, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage:
+	case RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationPercentage, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationMin0Max, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationMinMax, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRawValues, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationPercentageChange, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRollingAverage, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage, RankingInternetServiceTimeseriesGroupsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -462,12 +463,12 @@ func (r rankingInternetServiceTopResponseMetaConfidenceInfoJSON) RawJSON() strin
 type RankingInternetServiceTopResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                         `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                         `json:"startDate,required" format:"date-time"`
 	JSON            rankingInternetServiceTopResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -477,11 +478,11 @@ type RankingInternetServiceTopResponseMetaConfidenceInfoAnnotation struct {
 type rankingInternetServiceTopResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -531,11 +532,12 @@ const (
 	RankingInternetServiceTopResponseMetaNormalizationPercentageChange     RankingInternetServiceTopResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	RankingInternetServiceTopResponseMetaNormalizationRollingAverage       RankingInternetServiceTopResponseMetaNormalization = "ROLLING_AVERAGE"
 	RankingInternetServiceTopResponseMetaNormalizationOverlappedPercentage RankingInternetServiceTopResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	RankingInternetServiceTopResponseMetaNormalizationRatio                RankingInternetServiceTopResponseMetaNormalization = "RATIO"
 )
 
 func (r RankingInternetServiceTopResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case RankingInternetServiceTopResponseMetaNormalizationPercentage, RankingInternetServiceTopResponseMetaNormalizationMin0Max, RankingInternetServiceTopResponseMetaNormalizationMinMax, RankingInternetServiceTopResponseMetaNormalizationRawValues, RankingInternetServiceTopResponseMetaNormalizationPercentageChange, RankingInternetServiceTopResponseMetaNormalizationRollingAverage, RankingInternetServiceTopResponseMetaNormalizationOverlappedPercentage:
+	case RankingInternetServiceTopResponseMetaNormalizationPercentage, RankingInternetServiceTopResponseMetaNormalizationMin0Max, RankingInternetServiceTopResponseMetaNormalizationMinMax, RankingInternetServiceTopResponseMetaNormalizationRawValues, RankingInternetServiceTopResponseMetaNormalizationPercentageChange, RankingInternetServiceTopResponseMetaNormalizationRollingAverage, RankingInternetServiceTopResponseMetaNormalizationOverlappedPercentage, RankingInternetServiceTopResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

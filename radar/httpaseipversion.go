@@ -135,12 +135,12 @@ func (r httpAseIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
 	JSON            httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -150,11 +150,11 @@ type HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
 type httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -204,11 +204,12 @@ const (
 	HTTPAseIPVersionGetResponseMetaNormalizationPercentageChange     HTTPAseIPVersionGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPAseIPVersionGetResponseMetaNormalizationRollingAverage       HTTPAseIPVersionGetResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPAseIPVersionGetResponseMetaNormalizationOverlappedPercentage HTTPAseIPVersionGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPAseIPVersionGetResponseMetaNormalizationRatio                HTTPAseIPVersionGetResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPAseIPVersionGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPAseIPVersionGetResponseMetaNormalizationPercentage, HTTPAseIPVersionGetResponseMetaNormalizationMin0Max, HTTPAseIPVersionGetResponseMetaNormalizationMinMax, HTTPAseIPVersionGetResponseMetaNormalizationRawValues, HTTPAseIPVersionGetResponseMetaNormalizationPercentageChange, HTTPAseIPVersionGetResponseMetaNormalizationRollingAverage, HTTPAseIPVersionGetResponseMetaNormalizationOverlappedPercentage:
+	case HTTPAseIPVersionGetResponseMetaNormalizationPercentage, HTTPAseIPVersionGetResponseMetaNormalizationMin0Max, HTTPAseIPVersionGetResponseMetaNormalizationMinMax, HTTPAseIPVersionGetResponseMetaNormalizationRawValues, HTTPAseIPVersionGetResponseMetaNormalizationPercentageChange, HTTPAseIPVersionGetResponseMetaNormalizationRollingAverage, HTTPAseIPVersionGetResponseMetaNormalizationOverlappedPercentage, HTTPAseIPVersionGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

@@ -148,12 +148,12 @@ func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON) RawJSON() string 
 type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                       `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                       `json:"startDate,required" format:"date-time"`
 	JSON            tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -163,11 +163,11 @@ type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation struct {
 type tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -217,11 +217,12 @@ const (
 	TCPResetsTimeoutSummaryResponseMetaNormalizationPercentageChange     TCPResetsTimeoutSummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	TCPResetsTimeoutSummaryResponseMetaNormalizationRollingAverage       TCPResetsTimeoutSummaryResponseMetaNormalization = "ROLLING_AVERAGE"
 	TCPResetsTimeoutSummaryResponseMetaNormalizationOverlappedPercentage TCPResetsTimeoutSummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	TCPResetsTimeoutSummaryResponseMetaNormalizationRatio                TCPResetsTimeoutSummaryResponseMetaNormalization = "RATIO"
 )
 
 func (r TCPResetsTimeoutSummaryResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case TCPResetsTimeoutSummaryResponseMetaNormalizationPercentage, TCPResetsTimeoutSummaryResponseMetaNormalizationMin0Max, TCPResetsTimeoutSummaryResponseMetaNormalizationMinMax, TCPResetsTimeoutSummaryResponseMetaNormalizationRawValues, TCPResetsTimeoutSummaryResponseMetaNormalizationPercentageChange, TCPResetsTimeoutSummaryResponseMetaNormalizationRollingAverage, TCPResetsTimeoutSummaryResponseMetaNormalizationOverlappedPercentage:
+	case TCPResetsTimeoutSummaryResponseMetaNormalizationPercentage, TCPResetsTimeoutSummaryResponseMetaNormalizationMin0Max, TCPResetsTimeoutSummaryResponseMetaNormalizationMinMax, TCPResetsTimeoutSummaryResponseMetaNormalizationRawValues, TCPResetsTimeoutSummaryResponseMetaNormalizationPercentageChange, TCPResetsTimeoutSummaryResponseMetaNormalizationRollingAverage, TCPResetsTimeoutSummaryResponseMetaNormalizationOverlappedPercentage, TCPResetsTimeoutSummaryResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -401,12 +402,12 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON(
 type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                `json:"startDate,required" format:"date-time"`
 	JSON            tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -416,11 +417,11 @@ type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct
 type tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -470,11 +471,12 @@ const (
 	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentageChange     TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRollingAverage       TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
 	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRatio                TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization = "RATIO"
 )
 
 func (r TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMin0Max, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMinMax, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRawValues, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentageChange, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRollingAverage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage:
+	case TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMin0Max, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationMinMax, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRawValues, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationPercentageChange, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRollingAverage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage, TCPResetsTimeoutTimeseriesGroupsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

@@ -146,12 +146,12 @@ func (r httpTopBrowserResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPTopBrowserResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                              `json:"startDate,required" format:"date-time"`
 	JSON            httpTopBrowserResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -160,11 +160,11 @@ type HTTPTopBrowserResponseMetaConfidenceInfoAnnotation struct {
 type httpTopBrowserResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -214,11 +214,12 @@ const (
 	HTTPTopBrowserResponseMetaNormalizationPercentageChange     HTTPTopBrowserResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPTopBrowserResponseMetaNormalizationRollingAverage       HTTPTopBrowserResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPTopBrowserResponseMetaNormalizationOverlappedPercentage HTTPTopBrowserResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPTopBrowserResponseMetaNormalizationRatio                HTTPTopBrowserResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPTopBrowserResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPTopBrowserResponseMetaNormalizationPercentage, HTTPTopBrowserResponseMetaNormalizationMin0Max, HTTPTopBrowserResponseMetaNormalizationMinMax, HTTPTopBrowserResponseMetaNormalizationRawValues, HTTPTopBrowserResponseMetaNormalizationPercentageChange, HTTPTopBrowserResponseMetaNormalizationRollingAverage, HTTPTopBrowserResponseMetaNormalizationOverlappedPercentage:
+	case HTTPTopBrowserResponseMetaNormalizationPercentage, HTTPTopBrowserResponseMetaNormalizationMin0Max, HTTPTopBrowserResponseMetaNormalizationMinMax, HTTPTopBrowserResponseMetaNormalizationRawValues, HTTPTopBrowserResponseMetaNormalizationPercentageChange, HTTPTopBrowserResponseMetaNormalizationRollingAverage, HTTPTopBrowserResponseMetaNormalizationOverlappedPercentage, HTTPTopBrowserResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -356,12 +357,12 @@ func (r httpTopBrowserFamilyResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                    `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
 	JSON            httpTopBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -371,11 +372,11 @@ type HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation struct {
 type httpTopBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -425,11 +426,12 @@ const (
 	HTTPTopBrowserFamilyResponseMetaNormalizationPercentageChange     HTTPTopBrowserFamilyResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPTopBrowserFamilyResponseMetaNormalizationRollingAverage       HTTPTopBrowserFamilyResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPTopBrowserFamilyResponseMetaNormalizationOverlappedPercentage HTTPTopBrowserFamilyResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPTopBrowserFamilyResponseMetaNormalizationRatio                HTTPTopBrowserFamilyResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPTopBrowserFamilyResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPTopBrowserFamilyResponseMetaNormalizationPercentage, HTTPTopBrowserFamilyResponseMetaNormalizationMin0Max, HTTPTopBrowserFamilyResponseMetaNormalizationMinMax, HTTPTopBrowserFamilyResponseMetaNormalizationRawValues, HTTPTopBrowserFamilyResponseMetaNormalizationPercentageChange, HTTPTopBrowserFamilyResponseMetaNormalizationRollingAverage, HTTPTopBrowserFamilyResponseMetaNormalizationOverlappedPercentage:
+	case HTTPTopBrowserFamilyResponseMetaNormalizationPercentage, HTTPTopBrowserFamilyResponseMetaNormalizationMin0Max, HTTPTopBrowserFamilyResponseMetaNormalizationMinMax, HTTPTopBrowserFamilyResponseMetaNormalizationRawValues, HTTPTopBrowserFamilyResponseMetaNormalizationPercentageChange, HTTPTopBrowserFamilyResponseMetaNormalizationRollingAverage, HTTPTopBrowserFamilyResponseMetaNormalizationOverlappedPercentage, HTTPTopBrowserFamilyResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

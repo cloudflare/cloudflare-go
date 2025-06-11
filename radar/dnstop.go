@@ -147,12 +147,12 @@ func (r dnsTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type DNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                             `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                          `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                          `json:"startDate,required" format:"date-time"`
 	JSON            dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -161,11 +161,11 @@ type DNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
 type dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -215,11 +215,12 @@ const (
 	DNSTopAsesResponseMetaNormalizationPercentageChange     DNSTopAsesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTopAsesResponseMetaNormalizationRollingAverage       DNSTopAsesResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTopAsesResponseMetaNormalizationOverlappedPercentage DNSTopAsesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTopAsesResponseMetaNormalizationRatio                DNSTopAsesResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTopAsesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTopAsesResponseMetaNormalizationPercentage, DNSTopAsesResponseMetaNormalizationMin0Max, DNSTopAsesResponseMetaNormalizationMinMax, DNSTopAsesResponseMetaNormalizationRawValues, DNSTopAsesResponseMetaNormalizationPercentageChange, DNSTopAsesResponseMetaNormalizationRollingAverage, DNSTopAsesResponseMetaNormalizationOverlappedPercentage:
+	case DNSTopAsesResponseMetaNormalizationPercentage, DNSTopAsesResponseMetaNormalizationMin0Max, DNSTopAsesResponseMetaNormalizationMinMax, DNSTopAsesResponseMetaNormalizationRawValues, DNSTopAsesResponseMetaNormalizationPercentageChange, DNSTopAsesResponseMetaNormalizationRollingAverage, DNSTopAsesResponseMetaNormalizationOverlappedPercentage, DNSTopAsesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -360,12 +361,12 @@ func (r dnsTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
 type DNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                               `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                               `json:"startDate,required" format:"date-time"`
 	JSON            dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -374,11 +375,11 @@ type DNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 type dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -428,11 +429,12 @@ const (
 	DNSTopLocationsResponseMetaNormalizationPercentageChange     DNSTopLocationsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTopLocationsResponseMetaNormalizationRollingAverage       DNSTopLocationsResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTopLocationsResponseMetaNormalizationOverlappedPercentage DNSTopLocationsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTopLocationsResponseMetaNormalizationRatio                DNSTopLocationsResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTopLocationsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTopLocationsResponseMetaNormalizationPercentage, DNSTopLocationsResponseMetaNormalizationMin0Max, DNSTopLocationsResponseMetaNormalizationMinMax, DNSTopLocationsResponseMetaNormalizationRawValues, DNSTopLocationsResponseMetaNormalizationPercentageChange, DNSTopLocationsResponseMetaNormalizationRollingAverage, DNSTopLocationsResponseMetaNormalizationOverlappedPercentage:
+	case DNSTopLocationsResponseMetaNormalizationPercentage, DNSTopLocationsResponseMetaNormalizationMin0Max, DNSTopLocationsResponseMetaNormalizationMinMax, DNSTopLocationsResponseMetaNormalizationRawValues, DNSTopLocationsResponseMetaNormalizationPercentageChange, DNSTopLocationsResponseMetaNormalizationRollingAverage, DNSTopLocationsResponseMetaNormalizationOverlappedPercentage, DNSTopLocationsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

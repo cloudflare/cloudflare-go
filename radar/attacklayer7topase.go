@@ -135,12 +135,12 @@ func (r attackLayer7TopAseOriginResponseMetaConfidenceInfoJSON) RawJSON() string
 type AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -150,11 +150,11 @@ type AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation struct {
 type attackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -204,11 +204,12 @@ const (
 	AttackLayer7TopAseOriginResponseMetaNormalizationPercentageChange     AttackLayer7TopAseOriginResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TopAseOriginResponseMetaNormalizationRollingAverage       AttackLayer7TopAseOriginResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TopAseOriginResponseMetaNormalizationOverlappedPercentage AttackLayer7TopAseOriginResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TopAseOriginResponseMetaNormalizationRatio                AttackLayer7TopAseOriginResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TopAseOriginResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TopAseOriginResponseMetaNormalizationPercentage, AttackLayer7TopAseOriginResponseMetaNormalizationMin0Max, AttackLayer7TopAseOriginResponseMetaNormalizationMinMax, AttackLayer7TopAseOriginResponseMetaNormalizationRawValues, AttackLayer7TopAseOriginResponseMetaNormalizationPercentageChange, AttackLayer7TopAseOriginResponseMetaNormalizationRollingAverage, AttackLayer7TopAseOriginResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TopAseOriginResponseMetaNormalizationPercentage, AttackLayer7TopAseOriginResponseMetaNormalizationMin0Max, AttackLayer7TopAseOriginResponseMetaNormalizationMinMax, AttackLayer7TopAseOriginResponseMetaNormalizationRawValues, AttackLayer7TopAseOriginResponseMetaNormalizationPercentageChange, AttackLayer7TopAseOriginResponseMetaNormalizationRollingAverage, AttackLayer7TopAseOriginResponseMetaNormalizationOverlappedPercentage, AttackLayer7TopAseOriginResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

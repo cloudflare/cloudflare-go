@@ -118,15 +118,15 @@ func (r SearchGlobalParams) URLQuery() (v url.Values) {
 type SearchGlobalParamsExclude string
 
 const (
-	SearchGlobalParamsExcludeSpecialEvents SearchGlobalParamsExclude = "SPECIAL_EVENTS"
-	SearchGlobalParamsExcludeNotebooks     SearchGlobalParamsExclude = "NOTEBOOKS"
-	SearchGlobalParamsExcludeLocations     SearchGlobalParamsExclude = "LOCATIONS"
 	SearchGlobalParamsExcludeASNs          SearchGlobalParamsExclude = "ASNS"
+	SearchGlobalParamsExcludeLocations     SearchGlobalParamsExclude = "LOCATIONS"
+	SearchGlobalParamsExcludeNotebooks     SearchGlobalParamsExclude = "NOTEBOOKS"
+	SearchGlobalParamsExcludeSpecialEvents SearchGlobalParamsExclude = "SPECIAL_EVENTS"
 )
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeSpecialEvents, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeASNs:
+	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeSpecialEvents:
 		return true
 	}
 	return false
@@ -151,15 +151,15 @@ func (r SearchGlobalParamsFormat) IsKnown() bool {
 type SearchGlobalParamsInclude string
 
 const (
-	SearchGlobalParamsIncludeSpecialEvents SearchGlobalParamsInclude = "SPECIAL_EVENTS"
-	SearchGlobalParamsIncludeNotebooks     SearchGlobalParamsInclude = "NOTEBOOKS"
-	SearchGlobalParamsIncludeLocations     SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeASNs          SearchGlobalParamsInclude = "ASNS"
+	SearchGlobalParamsIncludeLocations     SearchGlobalParamsInclude = "LOCATIONS"
+	SearchGlobalParamsIncludeNotebooks     SearchGlobalParamsInclude = "NOTEBOOKS"
+	SearchGlobalParamsIncludeSpecialEvents SearchGlobalParamsInclude = "SPECIAL_EVENTS"
 )
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeSpecialEvents, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeASNs:
+	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeSpecialEvents:
 		return true
 	}
 	return false

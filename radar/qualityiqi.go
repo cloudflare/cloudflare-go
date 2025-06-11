@@ -148,12 +148,12 @@ func (r qualityIQISummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	LinkedURL       string                                                    `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                 `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                 `json:"startDate,required" format:"date-time"`
 	JSON            qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -162,11 +162,11 @@ type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
 type qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -216,11 +216,12 @@ const (
 	QualityIQISummaryResponseMetaNormalizationPercentageChange     QualityIQISummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	QualityIQISummaryResponseMetaNormalizationRollingAverage       QualityIQISummaryResponseMetaNormalization = "ROLLING_AVERAGE"
 	QualityIQISummaryResponseMetaNormalizationOverlappedPercentage QualityIQISummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	QualityIQISummaryResponseMetaNormalizationRatio                QualityIQISummaryResponseMetaNormalization = "RATIO"
 )
 
 func (r QualityIQISummaryResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case QualityIQISummaryResponseMetaNormalizationPercentage, QualityIQISummaryResponseMetaNormalizationMin0Max, QualityIQISummaryResponseMetaNormalizationMinMax, QualityIQISummaryResponseMetaNormalizationRawValues, QualityIQISummaryResponseMetaNormalizationPercentageChange, QualityIQISummaryResponseMetaNormalizationRollingAverage, QualityIQISummaryResponseMetaNormalizationOverlappedPercentage:
+	case QualityIQISummaryResponseMetaNormalizationPercentage, QualityIQISummaryResponseMetaNormalizationMin0Max, QualityIQISummaryResponseMetaNormalizationMinMax, QualityIQISummaryResponseMetaNormalizationRawValues, QualityIQISummaryResponseMetaNormalizationPercentageChange, QualityIQISummaryResponseMetaNormalizationRollingAverage, QualityIQISummaryResponseMetaNormalizationOverlappedPercentage, QualityIQISummaryResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -386,12 +387,12 @@ func (r qualityIQITimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() stri
 type QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
 	JSON            qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -401,11 +402,11 @@ type QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 type qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -455,11 +456,12 @@ const (
 	QualityIQITimeseriesGroupsResponseMetaNormalizationPercentageChange     QualityIQITimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	QualityIQITimeseriesGroupsResponseMetaNormalizationRollingAverage       QualityIQITimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
 	QualityIQITimeseriesGroupsResponseMetaNormalizationOverlappedPercentage QualityIQITimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	QualityIQITimeseriesGroupsResponseMetaNormalizationRatio                QualityIQITimeseriesGroupsResponseMetaNormalization = "RATIO"
 )
 
 func (r QualityIQITimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case QualityIQITimeseriesGroupsResponseMetaNormalizationPercentage, QualityIQITimeseriesGroupsResponseMetaNormalizationMin0Max, QualityIQITimeseriesGroupsResponseMetaNormalizationMinMax, QualityIQITimeseriesGroupsResponseMetaNormalizationRawValues, QualityIQITimeseriesGroupsResponseMetaNormalizationPercentageChange, QualityIQITimeseriesGroupsResponseMetaNormalizationRollingAverage, QualityIQITimeseriesGroupsResponseMetaNormalizationOverlappedPercentage:
+	case QualityIQITimeseriesGroupsResponseMetaNormalizationPercentage, QualityIQITimeseriesGroupsResponseMetaNormalizationMin0Max, QualityIQITimeseriesGroupsResponseMetaNormalizationMinMax, QualityIQITimeseriesGroupsResponseMetaNormalizationRawValues, QualityIQITimeseriesGroupsResponseMetaNormalizationPercentageChange, QualityIQITimeseriesGroupsResponseMetaNormalizationRollingAverage, QualityIQITimeseriesGroupsResponseMetaNormalizationOverlappedPercentage, QualityIQITimeseriesGroupsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

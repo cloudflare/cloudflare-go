@@ -148,12 +148,12 @@ func (r qualitySpeedTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
 	JSON            qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -163,11 +163,11 @@ type QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation struct {
 type qualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -217,11 +217,12 @@ const (
 	QualitySpeedTopAsesResponseMetaNormalizationPercentageChange     QualitySpeedTopAsesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	QualitySpeedTopAsesResponseMetaNormalizationRollingAverage       QualitySpeedTopAsesResponseMetaNormalization = "ROLLING_AVERAGE"
 	QualitySpeedTopAsesResponseMetaNormalizationOverlappedPercentage QualitySpeedTopAsesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	QualitySpeedTopAsesResponseMetaNormalizationRatio                QualitySpeedTopAsesResponseMetaNormalization = "RATIO"
 )
 
 func (r QualitySpeedTopAsesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case QualitySpeedTopAsesResponseMetaNormalizationPercentage, QualitySpeedTopAsesResponseMetaNormalizationMin0Max, QualitySpeedTopAsesResponseMetaNormalizationMinMax, QualitySpeedTopAsesResponseMetaNormalizationRawValues, QualitySpeedTopAsesResponseMetaNormalizationPercentageChange, QualitySpeedTopAsesResponseMetaNormalizationRollingAverage, QualitySpeedTopAsesResponseMetaNormalizationOverlappedPercentage:
+	case QualitySpeedTopAsesResponseMetaNormalizationPercentage, QualitySpeedTopAsesResponseMetaNormalizationMin0Max, QualitySpeedTopAsesResponseMetaNormalizationMinMax, QualitySpeedTopAsesResponseMetaNormalizationRawValues, QualitySpeedTopAsesResponseMetaNormalizationPercentageChange, QualitySpeedTopAsesResponseMetaNormalizationRollingAverage, QualitySpeedTopAsesResponseMetaNormalizationOverlappedPercentage, QualitySpeedTopAsesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -375,12 +376,12 @@ func (r qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string
 type QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
 	JSON            qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -390,11 +391,11 @@ type QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 type qualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -444,11 +445,12 @@ const (
 	QualitySpeedTopLocationsResponseMetaNormalizationPercentageChange     QualitySpeedTopLocationsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	QualitySpeedTopLocationsResponseMetaNormalizationRollingAverage       QualitySpeedTopLocationsResponseMetaNormalization = "ROLLING_AVERAGE"
 	QualitySpeedTopLocationsResponseMetaNormalizationOverlappedPercentage QualitySpeedTopLocationsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	QualitySpeedTopLocationsResponseMetaNormalizationRatio                QualitySpeedTopLocationsResponseMetaNormalization = "RATIO"
 )
 
 func (r QualitySpeedTopLocationsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case QualitySpeedTopLocationsResponseMetaNormalizationPercentage, QualitySpeedTopLocationsResponseMetaNormalizationMin0Max, QualitySpeedTopLocationsResponseMetaNormalizationMinMax, QualitySpeedTopLocationsResponseMetaNormalizationRawValues, QualitySpeedTopLocationsResponseMetaNormalizationPercentageChange, QualitySpeedTopLocationsResponseMetaNormalizationRollingAverage, QualitySpeedTopLocationsResponseMetaNormalizationOverlappedPercentage:
+	case QualitySpeedTopLocationsResponseMetaNormalizationPercentage, QualitySpeedTopLocationsResponseMetaNormalizationMin0Max, QualitySpeedTopLocationsResponseMetaNormalizationMinMax, QualitySpeedTopLocationsResponseMetaNormalizationRawValues, QualitySpeedTopLocationsResponseMetaNormalizationPercentageChange, QualitySpeedTopLocationsResponseMetaNormalizationRollingAverage, QualitySpeedTopLocationsResponseMetaNormalizationOverlappedPercentage, QualitySpeedTopLocationsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
