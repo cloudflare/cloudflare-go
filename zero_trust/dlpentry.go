@@ -1699,35 +1699,85 @@ func (r DLPEntryUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r DLPEntryUpdateParamsBody) implementsDLPEntryUpdateParamsBodyUnion() {}
 
-// Satisfied by [zero_trust.DLPEntryUpdateParamsBodyObject],
-// [zero_trust.DLPEntryUpdateParamsBodyObject],
-// [zero_trust.DLPEntryUpdateParamsBodyObject], [DLPEntryUpdateParamsBody].
+// Satisfied by [zero_trust.DLPEntryUpdateParamsBodyCustom],
+// [zero_trust.DLPEntryUpdateParamsBodyPredefined],
+// [zero_trust.DLPEntryUpdateParamsBodyIntegration], [DLPEntryUpdateParamsBody].
 type DLPEntryUpdateParamsBodyUnion interface {
 	implementsDLPEntryUpdateParamsBodyUnion()
 }
 
-type DLPEntryUpdateParamsBodyObject struct {
+type DLPEntryUpdateParamsBodyCustom struct {
 	Name    param.Field[string]                             `json:"name,required"`
 	Pattern param.Field[PatternParam]                       `json:"pattern,required"`
-	Type    param.Field[DLPEntryUpdateParamsBodyObjectType] `json:"type,required"`
+	Type    param.Field[DLPEntryUpdateParamsBodyCustomType] `json:"type,required"`
 	Enabled param.Field[bool]                               `json:"enabled"`
 }
 
-func (r DLPEntryUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
+func (r DLPEntryUpdateParamsBodyCustom) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEntryUpdateParamsBodyObject) implementsDLPEntryUpdateParamsBodyUnion() {}
+func (r DLPEntryUpdateParamsBodyCustom) implementsDLPEntryUpdateParamsBodyUnion() {}
 
-type DLPEntryUpdateParamsBodyObjectType string
+type DLPEntryUpdateParamsBodyCustomType string
 
 const (
-	DLPEntryUpdateParamsBodyObjectTypeCustom DLPEntryUpdateParamsBodyObjectType = "custom"
+	DLPEntryUpdateParamsBodyCustomTypeCustom DLPEntryUpdateParamsBodyCustomType = "custom"
 )
 
-func (r DLPEntryUpdateParamsBodyObjectType) IsKnown() bool {
+func (r DLPEntryUpdateParamsBodyCustomType) IsKnown() bool {
 	switch r {
-	case DLPEntryUpdateParamsBodyObjectTypeCustom:
+	case DLPEntryUpdateParamsBodyCustomTypeCustom:
+		return true
+	}
+	return false
+}
+
+type DLPEntryUpdateParamsBodyPredefined struct {
+	Type    param.Field[DLPEntryUpdateParamsBodyPredefinedType] `json:"type,required"`
+	Enabled param.Field[bool]                                   `json:"enabled"`
+}
+
+func (r DLPEntryUpdateParamsBodyPredefined) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPEntryUpdateParamsBodyPredefined) implementsDLPEntryUpdateParamsBodyUnion() {}
+
+type DLPEntryUpdateParamsBodyPredefinedType string
+
+const (
+	DLPEntryUpdateParamsBodyPredefinedTypePredefined DLPEntryUpdateParamsBodyPredefinedType = "predefined"
+)
+
+func (r DLPEntryUpdateParamsBodyPredefinedType) IsKnown() bool {
+	switch r {
+	case DLPEntryUpdateParamsBodyPredefinedTypePredefined:
+		return true
+	}
+	return false
+}
+
+type DLPEntryUpdateParamsBodyIntegration struct {
+	Type    param.Field[DLPEntryUpdateParamsBodyIntegrationType] `json:"type,required"`
+	Enabled param.Field[bool]                                    `json:"enabled"`
+}
+
+func (r DLPEntryUpdateParamsBodyIntegration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPEntryUpdateParamsBodyIntegration) implementsDLPEntryUpdateParamsBodyUnion() {}
+
+type DLPEntryUpdateParamsBodyIntegrationType string
+
+const (
+	DLPEntryUpdateParamsBodyIntegrationTypeIntegration DLPEntryUpdateParamsBodyIntegrationType = "integration"
+)
+
+func (r DLPEntryUpdateParamsBodyIntegrationType) IsKnown() bool {
+	switch r {
+	case DLPEntryUpdateParamsBodyIntegrationTypeIntegration:
 		return true
 	}
 	return false

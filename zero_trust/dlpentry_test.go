@@ -65,13 +65,13 @@ func TestDLPEntryUpdateWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPEntryUpdateParams{
 			AccountID: cloudflare.F("account_id"),
-			Body: zero_trust.DLPEntryUpdateParamsBodyObject{
+			Body: zero_trust.DLPEntryUpdateParamsBodyCustom{
 				Name: cloudflare.F("name"),
 				Pattern: cloudflare.F(zero_trust.PatternParam{
 					Regex:      cloudflare.F("regex"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
-				Type:    cloudflare.F(zero_trust.DLPEntryUpdateParamsBodyObjectTypeCustom),
+				Type:    cloudflare.F(zero_trust.DLPEntryUpdateParamsBodyCustomTypeCustom),
 				Enabled: cloudflare.F(true),
 			},
 		},
