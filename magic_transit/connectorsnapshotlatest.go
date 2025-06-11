@@ -986,6 +986,7 @@ func (r connectorSnapshotLatestListResponseItemsTunnelJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotLatestListParams struct {
+	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

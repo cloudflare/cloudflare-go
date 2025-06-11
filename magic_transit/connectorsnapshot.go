@@ -1037,6 +1037,7 @@ func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotListParams struct {
+	// Account identifier
 	AccountID param.Field[string]  `path:"account_id,required"`
 	From      param.Field[float64] `query:"from,required"`
 	To        param.Field[float64] `query:"to,required"`
@@ -1127,6 +1128,7 @@ func (r connectorSnapshotListResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotGetParams struct {
+	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
