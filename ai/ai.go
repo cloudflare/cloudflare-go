@@ -641,7 +641,7 @@ func (r AIRunParamsBody) implementsAIRunParamsBodyUnion() {}
 // [ai.AIRunParamsBodyPrompt], [ai.AIRunParamsBodyTextGeneration],
 // [ai.AIRunParamsBodyTranslation], [ai.AIRunParamsBodySummarization],
 // [ai.AIRunParamsBodyImageToText], [ai.AIRunParamsBodyObject],
-// [ai.AIRunParamsBodyObject], [AIRunParamsBody].
+// [ai.AIRunParamsBodyImageTextToText], [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
 	implementsAIRunParamsBodyUnion()
 }
@@ -1141,6 +1141,54 @@ func (r AIRunParamsBodyObject) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyObject) implementsAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyImageTextToText struct {
+	// Image in base64 encoded format.
+	Image param.Field[string] `json:"image,required"`
+	// An array of message objects representing the conversation history.
+	Messages param.Field[[]AIRunParamsBodyImageTextToTextMessage] `json:"messages,required"`
+	// Decreases the likelihood of the model repeating the same lines verbatim.
+	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
+	// Whether to ignore the EOS token and continue generating tokens after the EOS
+	// token is generated.
+	IgnoreEos param.Field[bool] `json:"ignore_eos"`
+	// The maximum number of tokens to generate in the response.
+	MaxTokens param.Field[int64] `json:"max_tokens"`
+	// Increases the likelihood of the model introducing new topics.
+	PresencePenalty param.Field[float64] `json:"presence_penalty"`
+	// Penalty for repeated tokens; higher values discourage repetition.
+	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	// Random seed for reproducibility of the generation.
+	Seed param.Field[float64] `json:"seed"`
+	// Controls the randomness of the output; higher values produce more random
+	// results.
+	Temperature param.Field[float64] `json:"temperature"`
+	// Limits the AI to choose from the top 'k' most probable words. Lower values make
+	// responses more focused; higher values introduce more variety and potential
+	// surprises.
+	TopK param.Field[float64] `json:"top_k"`
+	// Controls the creativity of the AI's responses by adjusting how many possible
+	// words it considers. Lower values make outputs more predictable; higher values
+	// allow for more varied and creative responses.
+	TopP param.Field[float64] `json:"top_p"`
+}
+
+func (r AIRunParamsBodyImageTextToText) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyImageTextToText) implementsAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyImageTextToTextMessage struct {
+	// The content of the message as a string.
+	Content param.Field[string] `json:"content,required"`
+	// The role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').
+	Role param.Field[string] `json:"role,required"`
+}
+
+func (r AIRunParamsBodyImageTextToTextMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type AIRunResponseEnvelope struct {
 	// An array of classification results for the input text
