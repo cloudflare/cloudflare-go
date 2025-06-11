@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HistoryService contains methods and other services that help with interacting
@@ -119,7 +118,7 @@ func (r historyListResponseJSON) RawJSON() string {
 }
 
 type HistoryUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// ID of the Zaraz configuration to restore.
 	Body int64 `json:"body,required"`
@@ -130,8 +129,8 @@ func (r HistoryUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HistoryUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []HistoryUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HistoryUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful
@@ -158,8 +157,104 @@ func (r historyUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type HistoryUpdateResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           HistoryUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             historyUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// historyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [HistoryUpdateResponseEnvelopeErrors]
+type historyUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *HistoryUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r historyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type HistoryUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    historyUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// historyUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [HistoryUpdateResponseEnvelopeErrorsSource]
+type historyUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HistoryUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r historyUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type HistoryUpdateResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           HistoryUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             historyUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// historyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [HistoryUpdateResponseEnvelopeMessages]
+type historyUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *HistoryUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r historyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type HistoryUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    historyUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// historyUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [HistoryUpdateResponseEnvelopeMessagesSource]
+type historyUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HistoryUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r historyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
 type HistoryListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Maximum amount of results to list. Default value is 10.
 	Limit param.Field[int64] `query:"limit"`

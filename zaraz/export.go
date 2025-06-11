@@ -46,6 +46,6 @@ func (r *ExportService) Get(ctx context.Context, query ExportGetParams, opts ...
 }
 
 type ExportGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
