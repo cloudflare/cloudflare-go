@@ -146,12 +146,12 @@ func (r netflowTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type NetflowTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                              `json:"startDate,required" format:"date-time"`
 	JSON            netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -160,11 +160,11 @@ type NetflowTopAsesResponseMetaConfidenceInfoAnnotation struct {
 type netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -214,11 +214,12 @@ const (
 	NetflowTopAsesResponseMetaNormalizationPercentageChange     NetflowTopAsesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	NetflowTopAsesResponseMetaNormalizationRollingAverage       NetflowTopAsesResponseMetaNormalization = "ROLLING_AVERAGE"
 	NetflowTopAsesResponseMetaNormalizationOverlappedPercentage NetflowTopAsesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	NetflowTopAsesResponseMetaNormalizationRatio                NetflowTopAsesResponseMetaNormalization = "RATIO"
 )
 
 func (r NetflowTopAsesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case NetflowTopAsesResponseMetaNormalizationPercentage, NetflowTopAsesResponseMetaNormalizationMin0Max, NetflowTopAsesResponseMetaNormalizationMinMax, NetflowTopAsesResponseMetaNormalizationRawValues, NetflowTopAsesResponseMetaNormalizationPercentageChange, NetflowTopAsesResponseMetaNormalizationRollingAverage, NetflowTopAsesResponseMetaNormalizationOverlappedPercentage:
+	case NetflowTopAsesResponseMetaNormalizationPercentage, NetflowTopAsesResponseMetaNormalizationMin0Max, NetflowTopAsesResponseMetaNormalizationMinMax, NetflowTopAsesResponseMetaNormalizationRawValues, NetflowTopAsesResponseMetaNormalizationPercentageChange, NetflowTopAsesResponseMetaNormalizationRollingAverage, NetflowTopAsesResponseMetaNormalizationOverlappedPercentage, NetflowTopAsesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -359,12 +360,12 @@ func (r netflowTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
 type NetflowTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                   `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
 	JSON            netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -374,11 +375,11 @@ type NetflowTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 type netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -428,11 +429,12 @@ const (
 	NetflowTopLocationsResponseMetaNormalizationPercentageChange     NetflowTopLocationsResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	NetflowTopLocationsResponseMetaNormalizationRollingAverage       NetflowTopLocationsResponseMetaNormalization = "ROLLING_AVERAGE"
 	NetflowTopLocationsResponseMetaNormalizationOverlappedPercentage NetflowTopLocationsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	NetflowTopLocationsResponseMetaNormalizationRatio                NetflowTopLocationsResponseMetaNormalization = "RATIO"
 )
 
 func (r NetflowTopLocationsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case NetflowTopLocationsResponseMetaNormalizationPercentage, NetflowTopLocationsResponseMetaNormalizationMin0Max, NetflowTopLocationsResponseMetaNormalizationMinMax, NetflowTopLocationsResponseMetaNormalizationRawValues, NetflowTopLocationsResponseMetaNormalizationPercentageChange, NetflowTopLocationsResponseMetaNormalizationRollingAverage, NetflowTopLocationsResponseMetaNormalizationOverlappedPercentage:
+	case NetflowTopLocationsResponseMetaNormalizationPercentage, NetflowTopLocationsResponseMetaNormalizationMin0Max, NetflowTopLocationsResponseMetaNormalizationMinMax, NetflowTopLocationsResponseMetaNormalizationRawValues, NetflowTopLocationsResponseMetaNormalizationPercentageChange, NetflowTopLocationsResponseMetaNormalizationRollingAverage, NetflowTopLocationsResponseMetaNormalizationOverlappedPercentage, NetflowTopLocationsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

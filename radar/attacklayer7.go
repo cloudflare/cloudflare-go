@@ -165,12 +165,12 @@ func (r attackLayer7TimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -180,11 +180,11 @@ type AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 type attackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -234,11 +234,12 @@ const (
 	AttackLayer7TimeseriesResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesResponseMetaNormalizationRatio                AttackLayer7TimeseriesResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesResponseMetaNormalizationPercentage, AttackLayer7TimeseriesResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesResponseMetaNormalizationMinMax, AttackLayer7TimeseriesResponseMetaNormalizationRawValues, AttackLayer7TimeseriesResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesResponseMetaNormalizationPercentage, AttackLayer7TimeseriesResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesResponseMetaNormalizationMinMax, AttackLayer7TimeseriesResponseMetaNormalizationRawValues, AttackLayer7TimeseriesResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

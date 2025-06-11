@@ -149,12 +149,12 @@ func (r httpLocationGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 type HTTPLocationGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                               `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                               `json:"startDate,required" format:"date-time"`
 	JSON            httpLocationGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -163,11 +163,11 @@ type HTTPLocationGetResponseMetaConfidenceInfoAnnotation struct {
 type httpLocationGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -217,11 +217,12 @@ const (
 	HTTPLocationGetResponseMetaNormalizationPercentageChange     HTTPLocationGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	HTTPLocationGetResponseMetaNormalizationRollingAverage       HTTPLocationGetResponseMetaNormalization = "ROLLING_AVERAGE"
 	HTTPLocationGetResponseMetaNormalizationOverlappedPercentage HTTPLocationGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	HTTPLocationGetResponseMetaNormalizationRatio                HTTPLocationGetResponseMetaNormalization = "RATIO"
 )
 
 func (r HTTPLocationGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case HTTPLocationGetResponseMetaNormalizationPercentage, HTTPLocationGetResponseMetaNormalizationMin0Max, HTTPLocationGetResponseMetaNormalizationMinMax, HTTPLocationGetResponseMetaNormalizationRawValues, HTTPLocationGetResponseMetaNormalizationPercentageChange, HTTPLocationGetResponseMetaNormalizationRollingAverage, HTTPLocationGetResponseMetaNormalizationOverlappedPercentage:
+	case HTTPLocationGetResponseMetaNormalizationPercentage, HTTPLocationGetResponseMetaNormalizationMin0Max, HTTPLocationGetResponseMetaNormalizationMinMax, HTTPLocationGetResponseMetaNormalizationRawValues, HTTPLocationGetResponseMetaNormalizationPercentageChange, HTTPLocationGetResponseMetaNormalizationRollingAverage, HTTPLocationGetResponseMetaNormalizationOverlappedPercentage, HTTPLocationGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

@@ -238,12 +238,12 @@ func (r attackLayer7TimeseriesGroupHTTPMethodResponseMetaConfidenceInfoJSON) Raw
 type AttackLayer7TimeseriesGroupHTTPMethodResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                        `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                     `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                     `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupHTTPMethodResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -253,11 +253,11 @@ type AttackLayer7TimeseriesGroupHTTPMethodResponseMetaConfidenceInfoAnnotation s
 type attackLayer7TimeseriesGroupHTTPMethodResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -308,11 +308,12 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupHTTPMethodResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -476,12 +477,12 @@ func (r attackLayer7TimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON) Ra
 type AttackLayer7TimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                      `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -491,11 +492,11 @@ type AttackLayer7TimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation 
 type attackLayer7TimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -546,11 +547,12 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupHTTPVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -719,12 +721,12 @@ func (r attackLayer7TimeseriesGroupIndustryResponseMetaConfidenceInfoJSON) RawJS
 type AttackLayer7TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                      `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                   `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                   `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -734,11 +736,11 @@ type AttackLayer7TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotation str
 type attackLayer7TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -789,11 +791,12 @@ const (
 	AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupIndustryResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupIndustryResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupIndustryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupIndustryResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupIndustryResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupIndustryResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -957,12 +960,12 @@ func (r attackLayer7TimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON) RawJ
 type AttackLayer7TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                       `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                    `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                    `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -972,11 +975,11 @@ type AttackLayer7TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation st
 type attackLayer7TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1027,11 +1030,12 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupIPVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1198,12 +1202,12 @@ func (r attackLayer7TimeseriesGroupManagedRulesResponseMetaConfidenceInfoJSON) R
 type AttackLayer7TimeseriesGroupManagedRulesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                          `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                       `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                       `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupManagedRulesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1213,11 +1217,11 @@ type AttackLayer7TimeseriesGroupManagedRulesResponseMetaConfidenceInfoAnnotation
 type attackLayer7TimeseriesGroupManagedRulesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1268,11 +1272,12 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupManagedRulesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1438,12 +1443,12 @@ func (r attackLayer7TimeseriesGroupMitigationProductResponseMetaConfidenceInfoJS
 type AttackLayer7TimeseriesGroupMitigationProductResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                                 `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                               `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                            `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                            `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupMitigationProductResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1453,11 +1458,11 @@ type AttackLayer7TimeseriesGroupMitigationProductResponseMetaConfidenceInfoAnnot
 type attackLayer7TimeseriesGroupMitigationProductResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1508,11 +1513,12 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupMitigationProductResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1678,12 +1684,12 @@ func (r attackLayer7TimeseriesGroupVerticalResponseMetaConfidenceInfoJSON) RawJS
 type AttackLayer7TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                      `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                   `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                   `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1693,11 +1699,11 @@ type AttackLayer7TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotation str
 type attackLayer7TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1748,11 +1754,12 @@ const (
 	AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupVerticalResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupVerticalResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupVerticalResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupVerticalResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TimeseriesGroupVerticalResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupVerticalResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

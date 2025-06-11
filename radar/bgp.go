@@ -153,12 +153,12 @@ func (r bgpTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                             `json:"startDate,required" format:"date-time"`
 	JSON            bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -167,11 +167,11 @@ type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 type bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

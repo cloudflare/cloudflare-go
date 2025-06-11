@@ -173,12 +173,12 @@ func (r aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoJSON) Ra
 type AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                         `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                      `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                      `json:"startDate,required" format:"date-time"`
 	JSON            aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -188,11 +188,11 @@ type AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation 
 type aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -243,11 +243,12 @@ const (
 	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentageChange     AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRollingAverage       AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "ROLLING_AVERAGE"
 	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationOverlappedPercentage AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRatio                AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization = "RATIO"
 )
 
 func (r AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMin0Max, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMinMax, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRawValues, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentageChange, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRollingAverage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationOverlappedPercentage:
+	case AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMin0Max, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationMinMax, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRawValues, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationPercentageChange, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRollingAverage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationOverlappedPercentage, AIInferenceTimeseriesGroupSummaryModelResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -411,12 +412,12 @@ func (r aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoJSON) Raw
 type AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                        `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                     `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                     `json:"startDate,required" format:"date-time"`
 	JSON            aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -426,11 +427,11 @@ type AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation s
 type aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -481,11 +482,12 @@ const (
 	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentageChange     AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRollingAverage       AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "ROLLING_AVERAGE"
 	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationOverlappedPercentage AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRatio                AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization = "RATIO"
 )
 
 func (r AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMin0Max, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMinMax, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRawValues, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentageChange, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRollingAverage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationOverlappedPercentage:
+	case AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMin0Max, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationMinMax, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRawValues, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationPercentageChange, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRollingAverage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationOverlappedPercentage, AIInferenceTimeseriesGroupSummaryTaskResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

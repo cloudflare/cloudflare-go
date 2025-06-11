@@ -279,12 +279,12 @@ func (r dnsTimeseriesGroupCacheHitResponseMetaConfidenceInfoJSON) RawJSON() stri
 type DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -294,11 +294,11 @@ type DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -348,11 +348,12 @@ const (
 	DNSTimeseriesGroupCacheHitResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupCacheHitResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupCacheHitResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupCacheHitResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupCacheHitResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupCacheHitResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupCacheHitResponseMetaNormalizationRatio                DNSTimeseriesGroupCacheHitResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupCacheHitResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupCacheHitResponseMetaNormalizationPercentage, DNSTimeseriesGroupCacheHitResponseMetaNormalizationMin0Max, DNSTimeseriesGroupCacheHitResponseMetaNormalizationMinMax, DNSTimeseriesGroupCacheHitResponseMetaNormalizationRawValues, DNSTimeseriesGroupCacheHitResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupCacheHitResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupCacheHitResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupCacheHitResponseMetaNormalizationPercentage, DNSTimeseriesGroupCacheHitResponseMetaNormalizationMin0Max, DNSTimeseriesGroupCacheHitResponseMetaNormalizationMinMax, DNSTimeseriesGroupCacheHitResponseMetaNormalizationRawValues, DNSTimeseriesGroupCacheHitResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupCacheHitResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupCacheHitResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupCacheHitResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -516,12 +517,12 @@ func (r dnsTimeseriesGroupDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string
 type DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                        `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -531,11 +532,11 @@ type DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -585,11 +586,12 @@ const (
 	DNSTimeseriesGroupDNSSECResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupDNSSECResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupDNSSECResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupDNSSECResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupDNSSECResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupDNSSECResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupDNSSECResponseMetaNormalizationRatio                DNSTimeseriesGroupDNSSECResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupDNSSECResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupDNSSECResponseMetaNormalizationPercentage, DNSTimeseriesGroupDNSSECResponseMetaNormalizationMin0Max, DNSTimeseriesGroupDNSSECResponseMetaNormalizationMinMax, DNSTimeseriesGroupDNSSECResponseMetaNormalizationRawValues, DNSTimeseriesGroupDNSSECResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupDNSSECResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupDNSSECResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupDNSSECResponseMetaNormalizationPercentage, DNSTimeseriesGroupDNSSECResponseMetaNormalizationMin0Max, DNSTimeseriesGroupDNSSECResponseMetaNormalizationMinMax, DNSTimeseriesGroupDNSSECResponseMetaNormalizationRawValues, DNSTimeseriesGroupDNSSECResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupDNSSECResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupDNSSECResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupDNSSECResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -758,12 +760,12 @@ func (r dnsTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoJSON) RawJSON() s
 type DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -773,11 +775,11 @@ type DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -827,11 +829,12 @@ const (
 	DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRatio                DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationPercentage, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationMin0Max, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationMinMax, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRawValues, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationPercentage, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationMin0Max, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationMinMax, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRawValues, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupDNSSECAwareResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -995,12 +998,12 @@ func (r dnsTimeseriesGroupDnssece2EResponseMetaConfidenceInfoJSON) RawJSON() str
 type DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                           `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1010,11 +1013,11 @@ type DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1064,11 +1067,12 @@ const (
 	DNSTimeseriesGroupDnssece2EResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupDnssece2EResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupDnssece2EResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupDnssece2EResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupDnssece2EResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRatio                DNSTimeseriesGroupDnssece2EResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupDnssece2EResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupDnssece2EResponseMetaNormalizationPercentage, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationMin0Max, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationMinMax, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRawValues, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupDnssece2EResponseMetaNormalizationPercentage, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationMin0Max, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationMinMax, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRawValues, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupDnssece2EResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1232,12 +1236,12 @@ func (r dnsTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON) RawJSON() str
 type DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                           `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1247,11 +1251,11 @@ type DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1301,11 +1305,12 @@ const (
 	DNSTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupIPVersionResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupIPVersionResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupIPVersionResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupIPVersionResponseMetaNormalizationRatio                DNSTimeseriesGroupIPVersionResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupIPVersionResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupIPVersionResponseMetaNormalizationPercentage, DNSTimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, DNSTimeseriesGroupIPVersionResponseMetaNormalizationMinMax, DNSTimeseriesGroupIPVersionResponseMetaNormalizationRawValues, DNSTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupIPVersionResponseMetaNormalizationPercentage, DNSTimeseriesGroupIPVersionResponseMetaNormalizationMin0Max, DNSTimeseriesGroupIPVersionResponseMetaNormalizationMinMax, DNSTimeseriesGroupIPVersionResponseMetaNormalizationRawValues, DNSTimeseriesGroupIPVersionResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupIPVersionResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupIPVersionResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupIPVersionResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1470,12 +1475,12 @@ func (r dnsTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoJSON) RawJSON(
 type DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1485,11 +1490,11 @@ type DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotation struct
 type dnsTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1539,11 +1544,12 @@ const (
 	DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRatio                DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationPercentage, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationMin0Max, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationMinMax, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRawValues, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationPercentage, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationMin0Max, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationMinMax, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRawValues, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupMatchingAnswerResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1707,12 +1713,12 @@ func (r dnsTimeseriesGroupProtocolResponseMetaConfidenceInfoJSON) RawJSON() stri
 type DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                          `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1722,11 +1728,11 @@ type DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1776,11 +1782,12 @@ const (
 	DNSTimeseriesGroupProtocolResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupProtocolResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupProtocolResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupProtocolResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupProtocolResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupProtocolResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupProtocolResponseMetaNormalizationRatio                DNSTimeseriesGroupProtocolResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupProtocolResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupProtocolResponseMetaNormalizationPercentage, DNSTimeseriesGroupProtocolResponseMetaNormalizationMin0Max, DNSTimeseriesGroupProtocolResponseMetaNormalizationMinMax, DNSTimeseriesGroupProtocolResponseMetaNormalizationRawValues, DNSTimeseriesGroupProtocolResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupProtocolResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupProtocolResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupProtocolResponseMetaNormalizationPercentage, DNSTimeseriesGroupProtocolResponseMetaNormalizationMin0Max, DNSTimeseriesGroupProtocolResponseMetaNormalizationMinMax, DNSTimeseriesGroupProtocolResponseMetaNormalizationRawValues, DNSTimeseriesGroupProtocolResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupProtocolResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupProtocolResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupProtocolResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -1948,12 +1955,12 @@ func (r dnsTimeseriesGroupQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() str
 type DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                           `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1963,11 +1970,11 @@ type DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2017,11 +2024,12 @@ const (
 	DNSTimeseriesGroupQueryTypeResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupQueryTypeResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupQueryTypeResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupQueryTypeResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupQueryTypeResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRatio                DNSTimeseriesGroupQueryTypeResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupQueryTypeResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupQueryTypeResponseMetaNormalizationPercentage, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationMin0Max, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationMinMax, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRawValues, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupQueryTypeResponseMetaNormalizationPercentage, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationMin0Max, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationMinMax, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRawValues, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupQueryTypeResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -2185,12 +2193,12 @@ func (r dnsTimeseriesGroupResponseCodeResponseMetaConfidenceInfoJSON) RawJSON() 
 type DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                              `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2200,11 +2208,11 @@ type DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2254,11 +2262,12 @@ const (
 	DNSTimeseriesGroupResponseCodeResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupResponseCodeResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupResponseCodeResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupResponseCodeResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupResponseCodeResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRatio                DNSTimeseriesGroupResponseCodeResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupResponseCodeResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupResponseCodeResponseMetaNormalizationPercentage, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationMin0Max, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationMinMax, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRawValues, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupResponseCodeResponseMetaNormalizationPercentage, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationMin0Max, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationMinMax, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRawValues, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupResponseCodeResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -2422,12 +2431,12 @@ func (r dnsTimeseriesGroupResponseTTLResponseMetaConfidenceInfoJSON) RawJSON() s
 type DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2437,11 +2446,11 @@ type DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2491,11 +2500,12 @@ const (
 	DNSTimeseriesGroupResponseTTLResponseMetaNormalizationPercentageChange     DNSTimeseriesGroupResponseTTLResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRollingAverage       DNSTimeseriesGroupResponseTTLResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesGroupResponseTTLResponseMetaNormalizationOverlappedPercentage DNSTimeseriesGroupResponseTTLResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRatio                DNSTimeseriesGroupResponseTTLResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesGroupResponseTTLResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupResponseTTLResponseMetaNormalizationPercentage, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationMin0Max, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationMinMax, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRawValues, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesGroupResponseTTLResponseMetaNormalizationPercentage, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationMin0Max, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationMinMax, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRawValues, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationPercentageChange, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRollingAverage, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesGroupResponseTTLResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

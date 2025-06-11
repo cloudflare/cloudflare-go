@@ -148,12 +148,12 @@ func (r leakedCredentialSummaryBotClassResponseMetaConfidenceInfoJSON) RawJSON()
 type LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                               `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                               `json:"startDate,required" format:"date-time"`
 	JSON            leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -163,11 +163,11 @@ type LeakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotation struct 
 type leakedCredentialSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -217,11 +217,12 @@ const (
 	LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentageChange     LeakedCredentialSummaryBotClassResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	LeakedCredentialSummaryBotClassResponseMetaNormalizationRollingAverage       LeakedCredentialSummaryBotClassResponseMetaNormalization = "ROLLING_AVERAGE"
 	LeakedCredentialSummaryBotClassResponseMetaNormalizationOverlappedPercentage LeakedCredentialSummaryBotClassResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	LeakedCredentialSummaryBotClassResponseMetaNormalizationRatio                LeakedCredentialSummaryBotClassResponseMetaNormalization = "RATIO"
 )
 
 func (r LeakedCredentialSummaryBotClassResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentage, LeakedCredentialSummaryBotClassResponseMetaNormalizationMin0Max, LeakedCredentialSummaryBotClassResponseMetaNormalizationMinMax, LeakedCredentialSummaryBotClassResponseMetaNormalizationRawValues, LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentageChange, LeakedCredentialSummaryBotClassResponseMetaNormalizationRollingAverage, LeakedCredentialSummaryBotClassResponseMetaNormalizationOverlappedPercentage:
+	case LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentage, LeakedCredentialSummaryBotClassResponseMetaNormalizationMin0Max, LeakedCredentialSummaryBotClassResponseMetaNormalizationMinMax, LeakedCredentialSummaryBotClassResponseMetaNormalizationRawValues, LeakedCredentialSummaryBotClassResponseMetaNormalizationPercentageChange, LeakedCredentialSummaryBotClassResponseMetaNormalizationRollingAverage, LeakedCredentialSummaryBotClassResponseMetaNormalizationOverlappedPercentage, LeakedCredentialSummaryBotClassResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -362,12 +363,12 @@ func (r leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoJSON) RawJSO
 type LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                     `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                                  `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                                  `json:"startDate,required" format:"date-time"`
 	JSON            leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -377,11 +378,11 @@ type LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotation stru
 type leakedCredentialSummaryCompromisedResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -432,11 +433,12 @@ const (
 	LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentageChange     LeakedCredentialSummaryCompromisedResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	LeakedCredentialSummaryCompromisedResponseMetaNormalizationRollingAverage       LeakedCredentialSummaryCompromisedResponseMetaNormalization = "ROLLING_AVERAGE"
 	LeakedCredentialSummaryCompromisedResponseMetaNormalizationOverlappedPercentage LeakedCredentialSummaryCompromisedResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	LeakedCredentialSummaryCompromisedResponseMetaNormalizationRatio                LeakedCredentialSummaryCompromisedResponseMetaNormalization = "RATIO"
 )
 
 func (r LeakedCredentialSummaryCompromisedResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationMin0Max, LeakedCredentialSummaryCompromisedResponseMetaNormalizationMinMax, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRawValues, LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentageChange, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRollingAverage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationOverlappedPercentage:
+	case LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationMin0Max, LeakedCredentialSummaryCompromisedResponseMetaNormalizationMinMax, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRawValues, LeakedCredentialSummaryCompromisedResponseMetaNormalizationPercentageChange, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRollingAverage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationOverlappedPercentage, LeakedCredentialSummaryCompromisedResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

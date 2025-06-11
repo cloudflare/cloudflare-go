@@ -151,12 +151,12 @@ func (r attackLayer7TopLocationOriginResponseMetaConfidenceInfoJSON) RawJSON() s
 type AttackLayer7TopLocationOriginResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -166,11 +166,11 @@ type AttackLayer7TopLocationOriginResponseMetaConfidenceInfoAnnotation struct {
 type attackLayer7TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -220,11 +220,12 @@ const (
 	AttackLayer7TopLocationOriginResponseMetaNormalizationPercentageChange     AttackLayer7TopLocationOriginResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TopLocationOriginResponseMetaNormalizationRollingAverage       AttackLayer7TopLocationOriginResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TopLocationOriginResponseMetaNormalizationOverlappedPercentage AttackLayer7TopLocationOriginResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TopLocationOriginResponseMetaNormalizationRatio                AttackLayer7TopLocationOriginResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TopLocationOriginResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TopLocationOriginResponseMetaNormalizationPercentage, AttackLayer7TopLocationOriginResponseMetaNormalizationMin0Max, AttackLayer7TopLocationOriginResponseMetaNormalizationMinMax, AttackLayer7TopLocationOriginResponseMetaNormalizationRawValues, AttackLayer7TopLocationOriginResponseMetaNormalizationPercentageChange, AttackLayer7TopLocationOriginResponseMetaNormalizationRollingAverage, AttackLayer7TopLocationOriginResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TopLocationOriginResponseMetaNormalizationPercentage, AttackLayer7TopLocationOriginResponseMetaNormalizationMin0Max, AttackLayer7TopLocationOriginResponseMetaNormalizationMinMax, AttackLayer7TopLocationOriginResponseMetaNormalizationRawValues, AttackLayer7TopLocationOriginResponseMetaNormalizationPercentageChange, AttackLayer7TopLocationOriginResponseMetaNormalizationRollingAverage, AttackLayer7TopLocationOriginResponseMetaNormalizationOverlappedPercentage, AttackLayer7TopLocationOriginResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
@@ -367,12 +368,12 @@ func (r attackLayer7TopLocationTargetResponseMetaConfidenceInfoJSON) RawJSON() s
 type AttackLayer7TopLocationTargetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
 	JSON            attackLayer7TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -382,11 +383,11 @@ type AttackLayer7TopLocationTargetResponseMetaConfidenceInfoAnnotation struct {
 type attackLayer7TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -436,11 +437,12 @@ const (
 	AttackLayer7TopLocationTargetResponseMetaNormalizationPercentageChange     AttackLayer7TopLocationTargetResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TopLocationTargetResponseMetaNormalizationRollingAverage       AttackLayer7TopLocationTargetResponseMetaNormalization = "ROLLING_AVERAGE"
 	AttackLayer7TopLocationTargetResponseMetaNormalizationOverlappedPercentage AttackLayer7TopLocationTargetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TopLocationTargetResponseMetaNormalizationRatio                AttackLayer7TopLocationTargetResponseMetaNormalization = "RATIO"
 )
 
 func (r AttackLayer7TopLocationTargetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case AttackLayer7TopLocationTargetResponseMetaNormalizationPercentage, AttackLayer7TopLocationTargetResponseMetaNormalizationMin0Max, AttackLayer7TopLocationTargetResponseMetaNormalizationMinMax, AttackLayer7TopLocationTargetResponseMetaNormalizationRawValues, AttackLayer7TopLocationTargetResponseMetaNormalizationPercentageChange, AttackLayer7TopLocationTargetResponseMetaNormalizationRollingAverage, AttackLayer7TopLocationTargetResponseMetaNormalizationOverlappedPercentage:
+	case AttackLayer7TopLocationTargetResponseMetaNormalizationPercentage, AttackLayer7TopLocationTargetResponseMetaNormalizationMin0Max, AttackLayer7TopLocationTargetResponseMetaNormalizationMinMax, AttackLayer7TopLocationTargetResponseMetaNormalizationRawValues, AttackLayer7TopLocationTargetResponseMetaNormalizationPercentageChange, AttackLayer7TopLocationTargetResponseMetaNormalizationRollingAverage, AttackLayer7TopLocationTargetResponseMetaNormalizationOverlappedPercentage, AttackLayer7TopLocationTargetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false

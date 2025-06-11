@@ -164,12 +164,12 @@ func (r dnsTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 type DNSTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource  string    `json:"dataSource,required"`
 	Description string    `json:"description,required"`
-	EndTime     time.Time `json:"endTime,required" format:"date-time"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
 	EventType   string    `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
-	StartTime       time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartDate       time.Time                                             `json:"startDate,required" format:"date-time"`
 	JSON            dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -178,11 +178,11 @@ type DNSTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 type dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
-	EndTime         apijson.Field
+	EndDate         apijson.Field
 	EventType       apijson.Field
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
-	StartTime       apijson.Field
+	StartDate       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -232,11 +232,12 @@ const (
 	DNSTimeseriesResponseMetaNormalizationPercentageChange     DNSTimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
 	DNSTimeseriesResponseMetaNormalizationRollingAverage       DNSTimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
 	DNSTimeseriesResponseMetaNormalizationOverlappedPercentage DNSTimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	DNSTimeseriesResponseMetaNormalizationRatio                DNSTimeseriesResponseMetaNormalization = "RATIO"
 )
 
 func (r DNSTimeseriesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesResponseMetaNormalizationPercentage, DNSTimeseriesResponseMetaNormalizationMin0Max, DNSTimeseriesResponseMetaNormalizationMinMax, DNSTimeseriesResponseMetaNormalizationRawValues, DNSTimeseriesResponseMetaNormalizationPercentageChange, DNSTimeseriesResponseMetaNormalizationRollingAverage, DNSTimeseriesResponseMetaNormalizationOverlappedPercentage:
+	case DNSTimeseriesResponseMetaNormalizationPercentage, DNSTimeseriesResponseMetaNormalizationMin0Max, DNSTimeseriesResponseMetaNormalizationMinMax, DNSTimeseriesResponseMetaNormalizationRawValues, DNSTimeseriesResponseMetaNormalizationPercentageChange, DNSTimeseriesResponseMetaNormalizationRollingAverage, DNSTimeseriesResponseMetaNormalizationOverlappedPercentage, DNSTimeseriesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
