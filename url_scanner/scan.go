@@ -950,7 +950,7 @@ type ScanGetResponseDataRequestsResponseGeoip struct {
 	Country     string                                       `json:"country,required"`
 	CountryName string                                       `json:"country_name,required"`
 	GeonameID   string                                       `json:"geonameId,required"`
-	Ll          []interface{}                                `json:"ll,required"`
+	Ll          []float64                                    `json:"ll,required"`
 	Region      string                                       `json:"region,required"`
 	JSON        scanGetResponseDataRequestsResponseGeoipJSON `json:"-"`
 }
