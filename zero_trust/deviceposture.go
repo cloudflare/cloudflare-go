@@ -398,6 +398,8 @@ type DeviceInput struct {
 	Sha256 string `json:"sha256"`
 	// For more details on state, please refer to the Crowdstrike documentation.
 	State DeviceInputState `json:"state"`
+	// This field can have the runtime type of [[]string].
+	SubjectAlternativeNames interface{} `json:"subject_alternative_names"`
 	// Signing certificate thumbprint.
 	Thumbprint string `json:"thumbprint"`
 	// For more details on total score, refer to the Tanium documentation.
@@ -412,48 +414,49 @@ type DeviceInput struct {
 
 // deviceInputJSON contains the JSON metadata for the struct [DeviceInput]
 type deviceInputJSON struct {
-	ID               apijson.Field
-	ActiveThreats    apijson.Field
-	CertificateID    apijson.Field
-	CheckPrivateKey  apijson.Field
-	CheckDisks       apijson.Field
-	Cn               apijson.Field
-	ComplianceStatus apijson.Field
-	ConnectionID     apijson.Field
-	CountOperator    apijson.Field
-	Domain           apijson.Field
-	EidLastSeen      apijson.Field
-	Enabled          apijson.Field
-	Exists           apijson.Field
-	ExtendedKeyUsage apijson.Field
-	Infected         apijson.Field
-	IsActive         apijson.Field
-	IssueCount       apijson.Field
-	LastSeen         apijson.Field
-	Locations        apijson.Field
-	NetworkStatus    apijson.Field
-	OperatingSystem  apijson.Field
-	OperationalState apijson.Field
-	Operator         apijson.Field
-	OS               apijson.Field
-	OSDistroName     apijson.Field
-	OSDistroRevision apijson.Field
-	OSVersionExtra   apijson.Field
-	Overall          apijson.Field
-	Path             apijson.Field
-	RequireAll       apijson.Field
-	RiskLevel        apijson.Field
-	Score            apijson.Field
-	ScoreOperator    apijson.Field
-	SensorConfig     apijson.Field
-	Sha256           apijson.Field
-	State            apijson.Field
-	Thumbprint       apijson.Field
-	TotalScore       apijson.Field
-	Version          apijson.Field
-	VersionOperator  apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                      apijson.Field
+	ActiveThreats           apijson.Field
+	CertificateID           apijson.Field
+	CheckPrivateKey         apijson.Field
+	CheckDisks              apijson.Field
+	Cn                      apijson.Field
+	ComplianceStatus        apijson.Field
+	ConnectionID            apijson.Field
+	CountOperator           apijson.Field
+	Domain                  apijson.Field
+	EidLastSeen             apijson.Field
+	Enabled                 apijson.Field
+	Exists                  apijson.Field
+	ExtendedKeyUsage        apijson.Field
+	Infected                apijson.Field
+	IsActive                apijson.Field
+	IssueCount              apijson.Field
+	LastSeen                apijson.Field
+	Locations               apijson.Field
+	NetworkStatus           apijson.Field
+	OperatingSystem         apijson.Field
+	OperationalState        apijson.Field
+	Operator                apijson.Field
+	OS                      apijson.Field
+	OSDistroName            apijson.Field
+	OSDistroRevision        apijson.Field
+	OSVersionExtra          apijson.Field
+	Overall                 apijson.Field
+	Path                    apijson.Field
+	RequireAll              apijson.Field
+	RiskLevel               apijson.Field
+	Score                   apijson.Field
+	ScoreOperator           apijson.Field
+	SensorConfig            apijson.Field
+	Sha256                  apijson.Field
+	State                   apijson.Field
+	SubjectAlternativeNames apijson.Field
+	Thumbprint              apijson.Field
+	TotalScore              apijson.Field
+	Version                 apijson.Field
+	VersionOperator         apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r deviceInputJSON) RawJSON() string {
@@ -716,28 +719,30 @@ type DeviceInputTeamsDevicesClientCertificateV2InputRequest struct {
 	CheckPrivateKey bool `json:"check_private_key,required"`
 	// Operating system.
 	OperatingSystem DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem `json:"operating_system,required"`
-	// Common Name that is protected by the client certificate. This may include one or
-	// more variables in the ${ } notation. Only ${serial_number} and ${hostname} are
-	// valid variables.
+	// Certificate Common Name. This may include one or more variables in the ${ }
+	// notation. Only ${serial_number} and ${hostname} are valid variables.
 	Cn string `json:"cn"`
 	// List of values indicating purposes for which the certificate public key can be
 	// used.
 	ExtendedKeyUsage []DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage `json:"extended_key_usage"`
 	Locations        DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations          `json:"locations"`
-	JSON             deviceInputTeamsDevicesClientCertificateV2InputRequestJSON               `json:"-"`
+	// List of certificate Subject Alternative Names.
+	SubjectAlternativeNames []string                                                   `json:"subject_alternative_names"`
+	JSON                    deviceInputTeamsDevicesClientCertificateV2InputRequestJSON `json:"-"`
 }
 
 // deviceInputTeamsDevicesClientCertificateV2InputRequestJSON contains the JSON
 // metadata for the struct [DeviceInputTeamsDevicesClientCertificateV2InputRequest]
 type deviceInputTeamsDevicesClientCertificateV2InputRequestJSON struct {
-	CertificateID    apijson.Field
-	CheckPrivateKey  apijson.Field
-	OperatingSystem  apijson.Field
-	Cn               apijson.Field
-	ExtendedKeyUsage apijson.Field
-	Locations        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	CertificateID           apijson.Field
+	CheckPrivateKey         apijson.Field
+	OperatingSystem         apijson.Field
+	Cn                      apijson.Field
+	ExtendedKeyUsage        apijson.Field
+	Locations               apijson.Field
+	SubjectAlternativeNames apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *DeviceInputTeamsDevicesClientCertificateV2InputRequest) UnmarshalJSON(data []byte) (err error) {
@@ -1134,7 +1139,8 @@ type DeviceInputParam struct {
 	// SHA-256.
 	Sha256 param.Field[string] `json:"sha256"`
 	// For more details on state, please refer to the Crowdstrike documentation.
-	State param.Field[DeviceInputState] `json:"state"`
+	State                   param.Field[DeviceInputState] `json:"state"`
+	SubjectAlternativeNames param.Field[interface{}]      `json:"subject_alternative_names"`
 	// Signing certificate thumbprint.
 	Thumbprint param.Field[string] `json:"thumbprint"`
 	// For more details on total score, refer to the Tanium documentation.
@@ -1225,14 +1231,15 @@ type DeviceInputTeamsDevicesClientCertificateV2InputRequestParam struct {
 	CheckPrivateKey param.Field[bool] `json:"check_private_key,required"`
 	// Operating system.
 	OperatingSystem param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem] `json:"operating_system,required"`
-	// Common Name that is protected by the client certificate. This may include one or
-	// more variables in the ${ } notation. Only ${serial_number} and ${hostname} are
-	// valid variables.
+	// Certificate Common Name. This may include one or more variables in the ${ }
+	// notation. Only ${serial_number} and ${hostname} are valid variables.
 	Cn param.Field[string] `json:"cn"`
 	// List of values indicating purposes for which the certificate public key can be
 	// used.
 	ExtendedKeyUsage param.Field[[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage] `json:"extended_key_usage"`
 	Locations        param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam]     `json:"locations"`
+	// List of certificate Subject Alternative Names.
+	SubjectAlternativeNames param.Field[[]string] `json:"subject_alternative_names"`
 }
 
 func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestParam) MarshalJSON() (data []byte, err error) {
