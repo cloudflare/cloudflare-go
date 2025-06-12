@@ -329,8 +329,10 @@ type GatewayRule struct {
 	Traffic   string    `json:"traffic"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// version number of the rule
-	Version int64           `json:"version"`
-	JSON    gatewayRuleJSON `json:"-"`
+	Version int64 `json:"version"`
+	// Warning for a misconfigured rule, if any.
+	WarningStatus string          `json:"warning_status,nullable"`
+	JSON          gatewayRuleJSON `json:"-"`
 }
 
 // gatewayRuleJSON contains the JSON metadata for the struct [GatewayRule]
@@ -352,6 +354,7 @@ type gatewayRuleJSON struct {
 	Traffic       apijson.Field
 	UpdatedAt     apijson.Field
 	Version       apijson.Field
+	WarningStatus apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
