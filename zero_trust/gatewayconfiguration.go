@@ -481,6 +481,8 @@ type GatewayConfigurationSettings struct {
 	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
 	// Anti-virus settings.
 	Antivirus AntiVirusSettings `json:"antivirus,nullable"`
+	// Setting to enable App Control
+	AppControlSettings GatewayConfigurationSettingsAppControlSettings `json:"app-control-settings,nullable"`
 	// Block page layout settings.
 	BlockPage BlockPageSettings `json:"block_page,nullable"`
 	// DLP body scanning settings.
@@ -515,6 +517,7 @@ type GatewayConfigurationSettings struct {
 type gatewayConfigurationSettingsJSON struct {
 	ActivityLog           apijson.Field
 	Antivirus             apijson.Field
+	AppControlSettings    apijson.Field
 	BlockPage             apijson.Field
 	BodyScanning          apijson.Field
 	BrowserIsolation      apijson.Field
@@ -535,6 +538,29 @@ func (r *GatewayConfigurationSettings) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r gatewayConfigurationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Setting to enable App Control
+type GatewayConfigurationSettingsAppControlSettings struct {
+	// Enable App Control
+	Enabled bool                                               `json:"enabled"`
+	JSON    gatewayConfigurationSettingsAppControlSettingsJSON `json:"-"`
+}
+
+// gatewayConfigurationSettingsAppControlSettingsJSON contains the JSON metadata
+// for the struct [GatewayConfigurationSettingsAppControlSettings]
+type gatewayConfigurationSettingsAppControlSettingsJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettingsAppControlSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsAppControlSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -635,6 +661,8 @@ type GatewayConfigurationSettingsParam struct {
 	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
 	// Anti-virus settings.
 	Antivirus param.Field[AntiVirusSettingsParam] `json:"antivirus"`
+	// Setting to enable App Control
+	AppControlSettings param.Field[GatewayConfigurationSettingsAppControlSettingsParam] `json:"app-control-settings"`
 	// Block page layout settings.
 	BlockPage param.Field[BlockPageSettingsParam] `json:"block_page"`
 	// DLP body scanning settings.
@@ -664,6 +692,16 @@ type GatewayConfigurationSettingsParam struct {
 }
 
 func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Setting to enable App Control
+type GatewayConfigurationSettingsAppControlSettingsParam struct {
+	// Enable App Control
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r GatewayConfigurationSettingsAppControlSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
