@@ -47,6 +47,8 @@ func NewWAFPackageService(opts ...option.RequestOption) (r *WAFPackageService) {
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFPackageListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -72,6 +74,8 @@ func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParam
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageService) ListAutoPaging(ctx context.Context, params WAFPackageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFPackageListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -80,6 +84,8 @@ func (r *WAFPackageService) ListAutoPaging(ctx context.Context, params WAFPackag
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAFPackageGetParams, opts ...option.RequestOption) (res *WAFPackageGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {

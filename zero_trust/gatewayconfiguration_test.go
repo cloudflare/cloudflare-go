@@ -44,6 +44,9 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 					SupportURL:     cloudflare.F("support_url"),
 				}),
 			}),
+			AppControlSettings: cloudflare.F(zero_trust.GatewayConfigurationSettingsAppControlSettingsParam{
+				Enabled: cloudflare.F(false),
+			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
 				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
@@ -131,6 +134,9 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 					Msg:            cloudflare.F("msg"),
 					SupportURL:     cloudflare.F("support_url"),
 				}),
+			}),
+			AppControlSettings: cloudflare.F(zero_trust.GatewayConfigurationSettingsAppControlSettingsParam{
+				Enabled: cloudflare.F(false),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
 				BackgroundColor: cloudflare.F("background_color"),

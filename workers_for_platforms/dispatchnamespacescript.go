@@ -383,15 +383,11 @@ type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig struct {
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
 	NotFoundHandling param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
-	// When true, requests will always invoke the Worker script. Otherwise, attempt to
-	// serve an asset matching the request, falling back to the Worker script.
-	RunWorkerFirst param.Field[bool] `json:"run_worker_first"`
-	// When true and the incoming request matches an asset, that will be served instead
-	// of invoking the Worker script. When false, requests will always invoke the
-	// Worker script.
-	//
-	// Deprecated: deprecated
-	ServeDirectly param.Field[bool] `json:"serve_directly"`
+	// Contains a list path rules to control routing to either the Worker or assets.
+	// Glob (\*) and negative (!) rules are supported. Rules must start with either '/'
+	// or '!/'. At least one non-negative rule must be provided, and negative rules
+	// have higher precedence than non-negative rules.
+	RunWorkerFirst param.Field[[]string] `json:"run_worker_first"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
@@ -484,6 +480,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error) {
@@ -518,6 +516,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow],
 // [DispatchNamespaceScriptUpdateParamsMetadataBinding].
 type DispatchNamespaceScriptUpdateParamsMetadataBindingUnion interface {
 	implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion()
@@ -1288,6 +1287,43 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSec
 	return false
 }
 
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName param.Field[string] `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName param.Field[string] `json:"script_name"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsType string
 
@@ -1314,11 +1350,12 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "version_metadata"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret     DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secrets_store_secret"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secret_key"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow               DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "workflow"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow:
 		return true
 	}
 	return false

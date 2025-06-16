@@ -33,7 +33,7 @@ func NewOnRampAddressSpaceService(opts ...option.RequestOption) (r *OnRampAddres
 	return
 }
 
-// Update the Magic WAN Address Space (Closed Beta)
+// Update the Magic WAN Address Space (Closed Beta).
 func (r *OnRampAddressSpaceService) Update(ctx context.Context, params OnRampAddressSpaceUpdateParams, opts ...option.RequestOption) (res *OnRampAddressSpaceUpdateResponse, err error) {
 	var env OnRampAddressSpaceUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -50,7 +50,7 @@ func (r *OnRampAddressSpaceService) Update(ctx context.Context, params OnRampAdd
 	return
 }
 
-// Read the Magic WAN Address Space (Closed Beta)
+// Read the Magic WAN Address Space (Closed Beta).
 func (r *OnRampAddressSpaceService) List(ctx context.Context, query OnRampAddressSpaceListParams, opts ...option.RequestOption) (res *OnRampAddressSpaceListResponse, err error) {
 	var env OnRampAddressSpaceListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -67,7 +67,7 @@ func (r *OnRampAddressSpaceService) List(ctx context.Context, query OnRampAddres
 	return
 }
 
-// Update the Magic WAN Address Space (Closed Beta)
+// Update the Magic WAN Address Space (Closed Beta).
 func (r *OnRampAddressSpaceService) Edit(ctx context.Context, params OnRampAddressSpaceEditParams, opts ...option.RequestOption) (res *OnRampAddressSpaceEditResponse, err error) {
 	var env OnRampAddressSpaceEditResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -31,11 +31,7 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfilePredefinedUpdateParams{
-			AccountID: cloudflare.F("account_id"),
-			Entries: cloudflare.F([]zero_trust.DLPProfilePredefinedUpdateParamsEntry{{
-				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				Enabled: cloudflare.F(true),
-			}}),
+			AccountID:           cloudflare.F("account_id"),
 			AIContextEnabled:    cloudflare.F(true),
 			AllowedMatchCount:   cloudflare.F(int64(0)),
 			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
@@ -45,6 +41,10 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 					Files: cloudflare.F(true),
 				}),
 			}),
+			Entries: cloudflare.F([]zero_trust.DLPProfilePredefinedUpdateParamsEntry{{
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}}),
 			OCREnabled: cloudflare.F(true),
 		},
 	)

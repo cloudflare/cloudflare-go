@@ -29,7 +29,7 @@ func TestThreatEventTagNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Tags.New(context.TODO(), cloudforce_one.ThreatEventTagNewParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 		Name:      cloudflare.F("name"),
 	})
 	if err != nil {

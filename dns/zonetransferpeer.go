@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferPeerService contains methods and other services that help with
@@ -238,9 +237,9 @@ func (r ZoneTransferPeerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferPeerNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ZoneTransferPeerNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneTransferPeerNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ZoneTransferPeerNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Peer                                       `json:"result"`
 	JSON    zoneTransferPeerNewResponseEnvelopeJSON    `json:"-"`
@@ -265,7 +264,103 @@ func (r zoneTransferPeerNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ZoneTransferPeerNewResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ZoneTransferPeerNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             zoneTransferPeerNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// zoneTransferPeerNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZoneTransferPeerNewResponseEnvelopeErrors]
+type zoneTransferPeerNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    zoneTransferPeerNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ZoneTransferPeerNewResponseEnvelopeErrorsSource]
+type zoneTransferPeerNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerNewResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ZoneTransferPeerNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             zoneTransferPeerNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// zoneTransferPeerNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ZoneTransferPeerNewResponseEnvelopeMessages]
+type zoneTransferPeerNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    zoneTransferPeerNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ZoneTransferPeerNewResponseEnvelopeMessagesSource]
+type zoneTransferPeerNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ZoneTransferPeerNewResponseEnvelopeSuccess bool
 
 const (
@@ -290,9 +385,9 @@ func (r ZoneTransferPeerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferPeerUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ZoneTransferPeerUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneTransferPeerUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ZoneTransferPeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Peer                                          `json:"result"`
 	JSON    zoneTransferPeerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -317,7 +412,103 @@ func (r zoneTransferPeerUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ZoneTransferPeerUpdateResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           ZoneTransferPeerUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             zoneTransferPeerUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// zoneTransferPeerUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ZoneTransferPeerUpdateResponseEnvelopeErrors]
+type zoneTransferPeerUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    zoneTransferPeerUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [ZoneTransferPeerUpdateResponseEnvelopeErrorsSource]
+type zoneTransferPeerUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           ZoneTransferPeerUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             zoneTransferPeerUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// zoneTransferPeerUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ZoneTransferPeerUpdateResponseEnvelopeMessages]
+type zoneTransferPeerUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    zoneTransferPeerUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [ZoneTransferPeerUpdateResponseEnvelopeMessagesSource]
+type zoneTransferPeerUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ZoneTransferPeerUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -341,9 +532,9 @@ type ZoneTransferPeerDeleteParams struct {
 }
 
 type ZoneTransferPeerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ZoneTransferPeerDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneTransferPeerDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ZoneTransferPeerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferPeerDeleteResponse                `json:"result"`
 	JSON    zoneTransferPeerDeleteResponseEnvelopeJSON    `json:"-"`
@@ -368,7 +559,103 @@ func (r zoneTransferPeerDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ZoneTransferPeerDeleteResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           ZoneTransferPeerDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             zoneTransferPeerDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// zoneTransferPeerDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ZoneTransferPeerDeleteResponseEnvelopeErrors]
+type zoneTransferPeerDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    zoneTransferPeerDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [ZoneTransferPeerDeleteResponseEnvelopeErrorsSource]
+type zoneTransferPeerDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           ZoneTransferPeerDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             zoneTransferPeerDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// zoneTransferPeerDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ZoneTransferPeerDeleteResponseEnvelopeMessages]
+type zoneTransferPeerDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    zoneTransferPeerDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [ZoneTransferPeerDeleteResponseEnvelopeMessagesSource]
+type zoneTransferPeerDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ZoneTransferPeerDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -388,9 +675,9 @@ type ZoneTransferPeerGetParams struct {
 }
 
 type ZoneTransferPeerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ZoneTransferPeerGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneTransferPeerGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ZoneTransferPeerGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Peer                                       `json:"result"`
 	JSON    zoneTransferPeerGetResponseEnvelopeJSON    `json:"-"`
@@ -415,7 +702,103 @@ func (r zoneTransferPeerGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ZoneTransferPeerGetResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ZoneTransferPeerGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             zoneTransferPeerGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// zoneTransferPeerGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZoneTransferPeerGetResponseEnvelopeErrors]
+type zoneTransferPeerGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    zoneTransferPeerGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ZoneTransferPeerGetResponseEnvelopeErrorsSource]
+type zoneTransferPeerGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerGetResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ZoneTransferPeerGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             zoneTransferPeerGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// zoneTransferPeerGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ZoneTransferPeerGetResponseEnvelopeMessages]
+type zoneTransferPeerGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZoneTransferPeerGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    zoneTransferPeerGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// zoneTransferPeerGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ZoneTransferPeerGetResponseEnvelopeMessagesSource]
+type zoneTransferPeerGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTransferPeerGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTransferPeerGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ZoneTransferPeerGetResponseEnvelopeSuccess bool
 
 const (

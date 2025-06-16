@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/schema_validation"
 )
 
-func TestSchemaNewWithOptionalParams(t *testing.T) {
+func TestSchemaNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

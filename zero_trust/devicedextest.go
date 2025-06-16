@@ -42,7 +42,7 @@ func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewP
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -63,7 +63,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 		err = errors.New("missing required dex_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", params.AccountID, dexTestID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", params.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -81,7 +81,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 		err = errors.New("missing required dex_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", body.AccountID, dexTestID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", body.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -133,7 +133,7 @@ func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query 
 		err = errors.New("missing required dex_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", query.AccountID, dexTestID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", query.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

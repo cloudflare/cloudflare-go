@@ -69,9 +69,128 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 	return
 }
 
-type UserEditResponse = interface{}
+type UserEditResponse struct {
+	// Identifier of the user.
+	ID string `json:"id"`
+	// Lists the betas that the user is participating in.
+	Betas []string `json:"betas"`
+	// The country in which the user lives.
+	Country string `json:"country,nullable"`
+	// User's first name
+	FirstName string `json:"first_name,nullable"`
+	// Indicates whether user has any business zones
+	HasBusinessZones bool `json:"has_business_zones"`
+	// Indicates whether user has any enterprise zones
+	HasEnterpriseZones bool `json:"has_enterprise_zones"`
+	// Indicates whether user has any pro zones
+	HasProZones bool `json:"has_pro_zones"`
+	// User's last name
+	LastName      string         `json:"last_name,nullable"`
+	Organizations []Organization `json:"organizations"`
+	// Indicates whether user has been suspended
+	Suspended bool `json:"suspended"`
+	// User's telephone number
+	Telephone string `json:"telephone,nullable"`
+	// Indicates whether two-factor authentication is enabled for the user account.
+	// Does not apply to API authentication.
+	TwoFactorAuthenticationEnabled bool `json:"two_factor_authentication_enabled"`
+	// Indicates whether two-factor authentication is required by one of the accounts
+	// that the user is a member of.
+	TwoFactorAuthenticationLocked bool `json:"two_factor_authentication_locked"`
+	// The zipcode or postal code where the user lives.
+	Zipcode string               `json:"zipcode,nullable"`
+	JSON    userEditResponseJSON `json:"-"`
+}
 
-type UserGetResponse = interface{}
+// userEditResponseJSON contains the JSON metadata for the struct
+// [UserEditResponse]
+type userEditResponseJSON struct {
+	ID                             apijson.Field
+	Betas                          apijson.Field
+	Country                        apijson.Field
+	FirstName                      apijson.Field
+	HasBusinessZones               apijson.Field
+	HasEnterpriseZones             apijson.Field
+	HasProZones                    apijson.Field
+	LastName                       apijson.Field
+	Organizations                  apijson.Field
+	Suspended                      apijson.Field
+	Telephone                      apijson.Field
+	TwoFactorAuthenticationEnabled apijson.Field
+	TwoFactorAuthenticationLocked  apijson.Field
+	Zipcode                        apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
+}
+
+func (r *UserEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserGetResponse struct {
+	// Identifier of the user.
+	ID string `json:"id"`
+	// Lists the betas that the user is participating in.
+	Betas []string `json:"betas"`
+	// The country in which the user lives.
+	Country string `json:"country,nullable"`
+	// User's first name
+	FirstName string `json:"first_name,nullable"`
+	// Indicates whether user has any business zones
+	HasBusinessZones bool `json:"has_business_zones"`
+	// Indicates whether user has any enterprise zones
+	HasEnterpriseZones bool `json:"has_enterprise_zones"`
+	// Indicates whether user has any pro zones
+	HasProZones bool `json:"has_pro_zones"`
+	// User's last name
+	LastName      string         `json:"last_name,nullable"`
+	Organizations []Organization `json:"organizations"`
+	// Indicates whether user has been suspended
+	Suspended bool `json:"suspended"`
+	// User's telephone number
+	Telephone string `json:"telephone,nullable"`
+	// Indicates whether two-factor authentication is enabled for the user account.
+	// Does not apply to API authentication.
+	TwoFactorAuthenticationEnabled bool `json:"two_factor_authentication_enabled"`
+	// Indicates whether two-factor authentication is required by one of the accounts
+	// that the user is a member of.
+	TwoFactorAuthenticationLocked bool `json:"two_factor_authentication_locked"`
+	// The zipcode or postal code where the user lives.
+	Zipcode string              `json:"zipcode,nullable"`
+	JSON    userGetResponseJSON `json:"-"`
+}
+
+// userGetResponseJSON contains the JSON metadata for the struct [UserGetResponse]
+type userGetResponseJSON struct {
+	ID                             apijson.Field
+	Betas                          apijson.Field
+	Country                        apijson.Field
+	FirstName                      apijson.Field
+	HasBusinessZones               apijson.Field
+	HasEnterpriseZones             apijson.Field
+	HasProZones                    apijson.Field
+	LastName                       apijson.Field
+	Organizations                  apijson.Field
+	Suspended                      apijson.Field
+	Telephone                      apijson.Field
+	TwoFactorAuthenticationEnabled apijson.Field
+	TwoFactorAuthenticationLocked  apijson.Field
+	Zipcode                        apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
+}
+
+func (r *UserGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGetResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type UserEditParams struct {
 	// The country in which the user lives.

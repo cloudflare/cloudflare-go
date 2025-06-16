@@ -29,9 +29,9 @@ func TestSearchGlobalWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Search.Global(context.TODO(), radar.SearchGlobalParams{
 		Query:         cloudflare.F("United"),
-		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeSpecialEvents}),
+		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeASNs}),
 		Format:        cloudflare.F(radar.SearchGlobalParamsFormatJson),
-		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeSpecialEvents}),
+		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeASNs}),
 		Limit:         cloudflare.F(int64(5)),
 		LimitPerGroup: cloudflare.F(0.000000),
 	})

@@ -38,6 +38,8 @@ func NewPrefixAdvertisementStatusService(opts ...option.RequestOption) (r *Prefi
 //
 // **Deprecated:** Prefer the BGP Prefixes endpoints, which additionally allow for
 // advertising and withdrawing subnets of an IP prefix.
+//
+// Deprecated: deprecated
 func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID string, params PrefixAdvertisementStatusEditParams, opts ...option.RequestOption) (res *PrefixAdvertisementStatusEditResponse, err error) {
 	var env PrefixAdvertisementStatusEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -62,6 +64,8 @@ func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID st
 //
 // **Deprecated:** Prefer the BGP Prefixes endpoints, which additionally allow for
 // advertising and withdrawing subnets of an IP prefix.
+//
+// Deprecated: deprecated
 func (r *PrefixAdvertisementStatusService) Get(ctx context.Context, prefixID string, query PrefixAdvertisementStatusGetParams, opts ...option.RequestOption) (res *PrefixAdvertisementStatusGetResponse, err error) {
 	var env PrefixAdvertisementStatusGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

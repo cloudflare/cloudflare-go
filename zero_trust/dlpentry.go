@@ -237,15 +237,19 @@ func (r *DLPEntryUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [DLPEntryUpdateResponseCustomEntry],
 // [DLPEntryUpdateResponsePredefinedEntry],
 // [DLPEntryUpdateResponseIntegrationEntry],
-// [DLPEntryUpdateResponseExactDataEntry], [DLPEntryUpdateResponseWordListEntry].
+// [DLPEntryUpdateResponseExactDataEntry],
+// [DLPEntryUpdateResponseDocumentTemplateEntry],
+// [DLPEntryUpdateResponseWordListEntry].
 func (r DLPEntryUpdateResponse) AsUnion() DLPEntryUpdateResponseUnion {
 	return r.union
 }
 
 // Union satisfied by [DLPEntryUpdateResponseCustomEntry],
 // [DLPEntryUpdateResponsePredefinedEntry],
-// [DLPEntryUpdateResponseIntegrationEntry], [DLPEntryUpdateResponseExactDataEntry]
-// or [DLPEntryUpdateResponseWordListEntry].
+// [DLPEntryUpdateResponseIntegrationEntry],
+// [DLPEntryUpdateResponseExactDataEntry],
+// [DLPEntryUpdateResponseDocumentTemplateEntry] or
+// [DLPEntryUpdateResponseWordListEntry].
 type DLPEntryUpdateResponseUnion interface {
 	implementsDLPEntryUpdateResponse()
 }
@@ -269,6 +273,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DLPEntryUpdateResponseExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryUpdateResponseDocumentTemplateEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -503,6 +511,53 @@ func (r DLPEntryUpdateResponseExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type DLPEntryUpdateResponseDocumentTemplateEntry struct {
+	ID        string                                          `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                            `json:"enabled,required"`
+	Name      string                                          `json:"name,required"`
+	Type      DLPEntryUpdateResponseDocumentTemplateEntryType `json:"type,required"`
+	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
+	JSON      dlpEntryUpdateResponseDocumentTemplateEntryJSON `json:"-"`
+}
+
+// dlpEntryUpdateResponseDocumentTemplateEntryJSON contains the JSON metadata for
+// the struct [DLPEntryUpdateResponseDocumentTemplateEntry]
+type dlpEntryUpdateResponseDocumentTemplateEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryUpdateResponseDocumentTemplateEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryUpdateResponseDocumentTemplateEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DLPEntryUpdateResponseDocumentTemplateEntry) implementsDLPEntryUpdateResponse() {}
+
+type DLPEntryUpdateResponseDocumentTemplateEntryType string
+
+const (
+	DLPEntryUpdateResponseDocumentTemplateEntryTypeDocumentTemplate DLPEntryUpdateResponseDocumentTemplateEntryType = "document_template"
+)
+
+func (r DLPEntryUpdateResponseDocumentTemplateEntryType) IsKnown() bool {
+	switch r {
+	case DLPEntryUpdateResponseDocumentTemplateEntryTypeDocumentTemplate:
+		return true
+	}
+	return false
+}
+
 type DLPEntryUpdateResponseWordListEntry struct {
 	ID        string                                  `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                               `json:"created_at,required" format:"date-time"`
@@ -557,16 +612,17 @@ func (r DLPEntryUpdateResponseWordListEntryType) IsKnown() bool {
 type DLPEntryUpdateResponseType string
 
 const (
-	DLPEntryUpdateResponseTypeCustom      DLPEntryUpdateResponseType = "custom"
-	DLPEntryUpdateResponseTypePredefined  DLPEntryUpdateResponseType = "predefined"
-	DLPEntryUpdateResponseTypeIntegration DLPEntryUpdateResponseType = "integration"
-	DLPEntryUpdateResponseTypeExactData   DLPEntryUpdateResponseType = "exact_data"
-	DLPEntryUpdateResponseTypeWordList    DLPEntryUpdateResponseType = "word_list"
+	DLPEntryUpdateResponseTypeCustom           DLPEntryUpdateResponseType = "custom"
+	DLPEntryUpdateResponseTypePredefined       DLPEntryUpdateResponseType = "predefined"
+	DLPEntryUpdateResponseTypeIntegration      DLPEntryUpdateResponseType = "integration"
+	DLPEntryUpdateResponseTypeExactData        DLPEntryUpdateResponseType = "exact_data"
+	DLPEntryUpdateResponseTypeDocumentTemplate DLPEntryUpdateResponseType = "document_template"
+	DLPEntryUpdateResponseTypeWordList         DLPEntryUpdateResponseType = "word_list"
 )
 
 func (r DLPEntryUpdateResponseType) IsKnown() bool {
 	switch r {
-	case DLPEntryUpdateResponseTypeCustom, DLPEntryUpdateResponseTypePredefined, DLPEntryUpdateResponseTypeIntegration, DLPEntryUpdateResponseTypeExactData, DLPEntryUpdateResponseTypeWordList:
+	case DLPEntryUpdateResponseTypeCustom, DLPEntryUpdateResponseTypePredefined, DLPEntryUpdateResponseTypeIntegration, DLPEntryUpdateResponseTypeExactData, DLPEntryUpdateResponseTypeDocumentTemplate, DLPEntryUpdateResponseTypeWordList:
 		return true
 	}
 	return false
@@ -631,14 +687,18 @@ func (r *DLPEntryListResponse) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [DLPEntryListResponseCustomEntry],
 // [DLPEntryListResponsePredefinedEntry], [DLPEntryListResponseIntegrationEntry],
-// [DLPEntryListResponseExactDataEntry], [DLPEntryListResponseWordListEntry].
+// [DLPEntryListResponseExactDataEntry],
+// [DLPEntryListResponseDocumentTemplateEntry],
+// [DLPEntryListResponseWordListEntry].
 func (r DLPEntryListResponse) AsUnion() DLPEntryListResponseUnion {
 	return r.union
 }
 
 // Union satisfied by [DLPEntryListResponseCustomEntry],
 // [DLPEntryListResponsePredefinedEntry], [DLPEntryListResponseIntegrationEntry],
-// [DLPEntryListResponseExactDataEntry] or [DLPEntryListResponseWordListEntry].
+// [DLPEntryListResponseExactDataEntry],
+// [DLPEntryListResponseDocumentTemplateEntry] or
+// [DLPEntryListResponseWordListEntry].
 type DLPEntryListResponseUnion interface {
 	implementsDLPEntryListResponse()
 }
@@ -662,6 +722,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DLPEntryListResponseExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponseDocumentTemplateEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -896,6 +960,53 @@ func (r DLPEntryListResponseExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type DLPEntryListResponseDocumentTemplateEntry struct {
+	ID        string                                        `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                     `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                          `json:"enabled,required"`
+	Name      string                                        `json:"name,required"`
+	Type      DLPEntryListResponseDocumentTemplateEntryType `json:"type,required"`
+	UpdatedAt time.Time                                     `json:"updated_at,required" format:"date-time"`
+	JSON      dlpEntryListResponseDocumentTemplateEntryJSON `json:"-"`
+}
+
+// dlpEntryListResponseDocumentTemplateEntryJSON contains the JSON metadata for the
+// struct [DLPEntryListResponseDocumentTemplateEntry]
+type dlpEntryListResponseDocumentTemplateEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryListResponseDocumentTemplateEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryListResponseDocumentTemplateEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DLPEntryListResponseDocumentTemplateEntry) implementsDLPEntryListResponse() {}
+
+type DLPEntryListResponseDocumentTemplateEntryType string
+
+const (
+	DLPEntryListResponseDocumentTemplateEntryTypeDocumentTemplate DLPEntryListResponseDocumentTemplateEntryType = "document_template"
+)
+
+func (r DLPEntryListResponseDocumentTemplateEntryType) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseDocumentTemplateEntryTypeDocumentTemplate:
+		return true
+	}
+	return false
+}
+
 type DLPEntryListResponseWordListEntry struct {
 	ID        string                                `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
@@ -950,16 +1061,17 @@ func (r DLPEntryListResponseWordListEntryType) IsKnown() bool {
 type DLPEntryListResponseType string
 
 const (
-	DLPEntryListResponseTypeCustom      DLPEntryListResponseType = "custom"
-	DLPEntryListResponseTypePredefined  DLPEntryListResponseType = "predefined"
-	DLPEntryListResponseTypeIntegration DLPEntryListResponseType = "integration"
-	DLPEntryListResponseTypeExactData   DLPEntryListResponseType = "exact_data"
-	DLPEntryListResponseTypeWordList    DLPEntryListResponseType = "word_list"
+	DLPEntryListResponseTypeCustom           DLPEntryListResponseType = "custom"
+	DLPEntryListResponseTypePredefined       DLPEntryListResponseType = "predefined"
+	DLPEntryListResponseTypeIntegration      DLPEntryListResponseType = "integration"
+	DLPEntryListResponseTypeExactData        DLPEntryListResponseType = "exact_data"
+	DLPEntryListResponseTypeDocumentTemplate DLPEntryListResponseType = "document_template"
+	DLPEntryListResponseTypeWordList         DLPEntryListResponseType = "word_list"
 )
 
 func (r DLPEntryListResponseType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponseTypeCustom, DLPEntryListResponseTypePredefined, DLPEntryListResponseTypeIntegration, DLPEntryListResponseTypeExactData, DLPEntryListResponseTypeWordList:
+	case DLPEntryListResponseTypeCustom, DLPEntryListResponseTypePredefined, DLPEntryListResponseTypeIntegration, DLPEntryListResponseTypeExactData, DLPEntryListResponseTypeDocumentTemplate, DLPEntryListResponseTypeWordList:
 		return true
 	}
 	return false
@@ -1026,14 +1138,16 @@ func (r *DLPEntryGetResponse) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [DLPEntryGetResponseCustomEntry],
 // [DLPEntryGetResponsePredefinedEntry], [DLPEntryGetResponseIntegrationEntry],
-// [DLPEntryGetResponseExactDataEntry], [DLPEntryGetResponseWordListEntry].
+// [DLPEntryGetResponseExactDataEntry], [DLPEntryGetResponseDocumentTemplateEntry],
+// [DLPEntryGetResponseWordListEntry].
 func (r DLPEntryGetResponse) AsUnion() DLPEntryGetResponseUnion {
 	return r.union
 }
 
 // Union satisfied by [DLPEntryGetResponseCustomEntry],
 // [DLPEntryGetResponsePredefinedEntry], [DLPEntryGetResponseIntegrationEntry],
-// [DLPEntryGetResponseExactDataEntry] or [DLPEntryGetResponseWordListEntry].
+// [DLPEntryGetResponseExactDataEntry], [DLPEntryGetResponseDocumentTemplateEntry]
+// or [DLPEntryGetResponseWordListEntry].
 type DLPEntryGetResponseUnion interface {
 	implementsDLPEntryGetResponse()
 }
@@ -1057,6 +1171,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DLPEntryGetResponseExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryGetResponseDocumentTemplateEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1291,6 +1409,53 @@ func (r DLPEntryGetResponseExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type DLPEntryGetResponseDocumentTemplateEntry struct {
+	ID        string                                       `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                         `json:"enabled,required"`
+	Name      string                                       `json:"name,required"`
+	Type      DLPEntryGetResponseDocumentTemplateEntryType `json:"type,required"`
+	UpdatedAt time.Time                                    `json:"updated_at,required" format:"date-time"`
+	JSON      dlpEntryGetResponseDocumentTemplateEntryJSON `json:"-"`
+}
+
+// dlpEntryGetResponseDocumentTemplateEntryJSON contains the JSON metadata for the
+// struct [DLPEntryGetResponseDocumentTemplateEntry]
+type dlpEntryGetResponseDocumentTemplateEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryGetResponseDocumentTemplateEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryGetResponseDocumentTemplateEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DLPEntryGetResponseDocumentTemplateEntry) implementsDLPEntryGetResponse() {}
+
+type DLPEntryGetResponseDocumentTemplateEntryType string
+
+const (
+	DLPEntryGetResponseDocumentTemplateEntryTypeDocumentTemplate DLPEntryGetResponseDocumentTemplateEntryType = "document_template"
+)
+
+func (r DLPEntryGetResponseDocumentTemplateEntryType) IsKnown() bool {
+	switch r {
+	case DLPEntryGetResponseDocumentTemplateEntryTypeDocumentTemplate:
+		return true
+	}
+	return false
+}
+
 type DLPEntryGetResponseWordListEntry struct {
 	ID        string                               `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                            `json:"created_at,required" format:"date-time"`
@@ -1345,16 +1510,17 @@ func (r DLPEntryGetResponseWordListEntryType) IsKnown() bool {
 type DLPEntryGetResponseType string
 
 const (
-	DLPEntryGetResponseTypeCustom      DLPEntryGetResponseType = "custom"
-	DLPEntryGetResponseTypePredefined  DLPEntryGetResponseType = "predefined"
-	DLPEntryGetResponseTypeIntegration DLPEntryGetResponseType = "integration"
-	DLPEntryGetResponseTypeExactData   DLPEntryGetResponseType = "exact_data"
-	DLPEntryGetResponseTypeWordList    DLPEntryGetResponseType = "word_list"
+	DLPEntryGetResponseTypeCustom           DLPEntryGetResponseType = "custom"
+	DLPEntryGetResponseTypePredefined       DLPEntryGetResponseType = "predefined"
+	DLPEntryGetResponseTypeIntegration      DLPEntryGetResponseType = "integration"
+	DLPEntryGetResponseTypeExactData        DLPEntryGetResponseType = "exact_data"
+	DLPEntryGetResponseTypeDocumentTemplate DLPEntryGetResponseType = "document_template"
+	DLPEntryGetResponseTypeWordList         DLPEntryGetResponseType = "word_list"
 )
 
 func (r DLPEntryGetResponseType) IsKnown() bool {
 	switch r {
-	case DLPEntryGetResponseTypeCustom, DLPEntryGetResponseTypePredefined, DLPEntryGetResponseTypeIntegration, DLPEntryGetResponseTypeExactData, DLPEntryGetResponseTypeWordList:
+	case DLPEntryGetResponseTypeCustom, DLPEntryGetResponseTypePredefined, DLPEntryGetResponseTypeIntegration, DLPEntryGetResponseTypeExactData, DLPEntryGetResponseTypeDocumentTemplate, DLPEntryGetResponseTypeWordList:
 		return true
 	}
 	return false
@@ -1533,35 +1699,85 @@ func (r DLPEntryUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r DLPEntryUpdateParamsBody) implementsDLPEntryUpdateParamsBodyUnion() {}
 
-// Satisfied by [zero_trust.DLPEntryUpdateParamsBodyObject],
-// [zero_trust.DLPEntryUpdateParamsBodyObject],
-// [zero_trust.DLPEntryUpdateParamsBodyObject], [DLPEntryUpdateParamsBody].
+// Satisfied by [zero_trust.DLPEntryUpdateParamsBodyCustom],
+// [zero_trust.DLPEntryUpdateParamsBodyPredefined],
+// [zero_trust.DLPEntryUpdateParamsBodyIntegration], [DLPEntryUpdateParamsBody].
 type DLPEntryUpdateParamsBodyUnion interface {
 	implementsDLPEntryUpdateParamsBodyUnion()
 }
 
-type DLPEntryUpdateParamsBodyObject struct {
+type DLPEntryUpdateParamsBodyCustom struct {
 	Name    param.Field[string]                             `json:"name,required"`
 	Pattern param.Field[PatternParam]                       `json:"pattern,required"`
-	Type    param.Field[DLPEntryUpdateParamsBodyObjectType] `json:"type,required"`
+	Type    param.Field[DLPEntryUpdateParamsBodyCustomType] `json:"type,required"`
 	Enabled param.Field[bool]                               `json:"enabled"`
 }
 
-func (r DLPEntryUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
+func (r DLPEntryUpdateParamsBodyCustom) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEntryUpdateParamsBodyObject) implementsDLPEntryUpdateParamsBodyUnion() {}
+func (r DLPEntryUpdateParamsBodyCustom) implementsDLPEntryUpdateParamsBodyUnion() {}
 
-type DLPEntryUpdateParamsBodyObjectType string
+type DLPEntryUpdateParamsBodyCustomType string
 
 const (
-	DLPEntryUpdateParamsBodyObjectTypeCustom DLPEntryUpdateParamsBodyObjectType = "custom"
+	DLPEntryUpdateParamsBodyCustomTypeCustom DLPEntryUpdateParamsBodyCustomType = "custom"
 )
 
-func (r DLPEntryUpdateParamsBodyObjectType) IsKnown() bool {
+func (r DLPEntryUpdateParamsBodyCustomType) IsKnown() bool {
 	switch r {
-	case DLPEntryUpdateParamsBodyObjectTypeCustom:
+	case DLPEntryUpdateParamsBodyCustomTypeCustom:
+		return true
+	}
+	return false
+}
+
+type DLPEntryUpdateParamsBodyPredefined struct {
+	Type    param.Field[DLPEntryUpdateParamsBodyPredefinedType] `json:"type,required"`
+	Enabled param.Field[bool]                                   `json:"enabled"`
+}
+
+func (r DLPEntryUpdateParamsBodyPredefined) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPEntryUpdateParamsBodyPredefined) implementsDLPEntryUpdateParamsBodyUnion() {}
+
+type DLPEntryUpdateParamsBodyPredefinedType string
+
+const (
+	DLPEntryUpdateParamsBodyPredefinedTypePredefined DLPEntryUpdateParamsBodyPredefinedType = "predefined"
+)
+
+func (r DLPEntryUpdateParamsBodyPredefinedType) IsKnown() bool {
+	switch r {
+	case DLPEntryUpdateParamsBodyPredefinedTypePredefined:
+		return true
+	}
+	return false
+}
+
+type DLPEntryUpdateParamsBodyIntegration struct {
+	Type    param.Field[DLPEntryUpdateParamsBodyIntegrationType] `json:"type,required"`
+	Enabled param.Field[bool]                                    `json:"enabled"`
+}
+
+func (r DLPEntryUpdateParamsBodyIntegration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPEntryUpdateParamsBodyIntegration) implementsDLPEntryUpdateParamsBodyUnion() {}
+
+type DLPEntryUpdateParamsBodyIntegrationType string
+
+const (
+	DLPEntryUpdateParamsBodyIntegrationTypeIntegration DLPEntryUpdateParamsBodyIntegrationType = "integration"
+)
+
+func (r DLPEntryUpdateParamsBodyIntegrationType) IsKnown() bool {
+	switch r {
+	case DLPEntryUpdateParamsBodyIntegrationTypeIntegration:
 		return true
 	}
 	return false

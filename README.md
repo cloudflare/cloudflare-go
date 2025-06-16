@@ -5,6 +5,8 @@
 The Cloudflare Go library provides convenient access to the [Cloudflare REST API](https://developers.cloudflare.com/api)
 from applications written in Go.
 
+It is generated with [Stainless](https://www.stainless.com/).
+
 ## Installation
 
 <!-- x-release-please-start-version -->
@@ -22,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.4.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.5.0'
 ```
 
 <!-- x-release-please-end -->
@@ -49,8 +51,7 @@ import (
 
 func main() {
 	client := cloudflare.NewClient(
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"), // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
-		option.WithAPIEmail("user@example.com"),               // defaults to os.LookupEnv("CLOUDFLARE_EMAIL")
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"), // defaults to os.LookupEnv("CLOUDFLARE_API_TOKEN")
 	)
 	zone, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
@@ -421,9 +422,8 @@ middleware has been applied.
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 
-1. Changes that only affect static types, without breaking runtime behavior.
-1. Changes to library internals which are technically public but not intended or documented for external use. 
-1. Changes that we do not expect to impact the vast majority of users in practice.
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
+2. Changes that we do not expect to impact the vast majority of users in practice.
 
 ## Maintenance
 

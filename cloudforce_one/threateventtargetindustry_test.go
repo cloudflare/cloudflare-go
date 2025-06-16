@@ -29,7 +29,7 @@ func TestThreatEventTargetIndustryList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.TargetIndustries.List(context.TODO(), cloudforce_one.ThreatEventTargetIndustryListParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

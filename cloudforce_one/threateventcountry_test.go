@@ -29,7 +29,7 @@ func TestThreatEventCountryList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Countries.List(context.TODO(), cloudforce_one.ThreatEventCountryListParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

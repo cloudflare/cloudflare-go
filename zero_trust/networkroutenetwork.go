@@ -38,6 +38,9 @@ func NewNetworkRouteNetworkService(opts ...option.RequestOption) (r *NetworkRout
 
 // Routes a private network through a Cloudflare Tunnel. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
+//
+// Deprecated: This endpoint and its related APIs are deprecated in favor of the
+// equivalent Tunnel Route (without CIDR) APIs.
 func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNetworkNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -65,6 +68,9 @@ func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded s
 // is missing it will assume Cloudflare Tunnel as default. If tunnel_id is provided
 // it will delete the route from that tunnel, otherwise it will delete the route
 // based on the vnet and tun_type.
+//
+// Deprecated: This endpoint and its related APIs are deprecated in favor of the
+// equivalent Tunnel Route (without CIDR) APIs.
 func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNetworkDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -87,6 +93,9 @@ func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncode
 
 // Updates an existing private network route in an account. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
+//
+// Deprecated: This endpoint and its related APIs are deprecated in favor of the
+// equivalent Tunnel Route (without CIDR) APIs.
 func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNetworkEditResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -34,12 +34,15 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 	return
 }
 
-// Fetches a one-time use admin override code for a registration. This relies on
-// the **Admin Override** setting being enabled in your device configuration.
-//
-// **Deprecated:** please use GET
+// Fetches a one-time use admin override code for a device. This relies on the
+// **Admin Override** setting being enabled in your device configuration. Not
+// supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account. **Deprecated:** please use GET
 // /accounts/{account_id}/devices/registrations/{registration_id}/override_codes
 // instead.
+//
+// Deprecated: deprecated
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceOverrideCodeListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -65,12 +68,15 @@ func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, q
 	return res, nil
 }
 
-// Fetches a one-time use admin override code for a registration. This relies on
-// the **Admin Override** setting being enabled in your device configuration.
-//
-// **Deprecated:** please use GET
+// Fetches a one-time use admin override code for a device. This relies on the
+// **Admin Override** setting being enabled in your device configuration. Not
+// supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account. **Deprecated:** please use GET
 // /accounts/{account_id}/devices/registrations/{registration_id}/override_codes
 // instead.
+//
+// Deprecated: deprecated
 func (r *DeviceOverrideCodeService) ListAutoPaging(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceOverrideCodeListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, deviceID, query, opts...))
 }

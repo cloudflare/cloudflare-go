@@ -40,7 +40,7 @@ func NewOnRampService(opts ...option.RequestOption) (r *OnRampService) {
 	return
 }
 
-// Create a new On-ramp (Closed Beta)
+// Create a new On-ramp (Closed Beta).
 func (r *OnRampService) New(ctx context.Context, params OnRampNewParams, opts ...option.RequestOption) (res *OnRampNewResponse, err error) {
 	var env OnRampNewResponseEnvelope
 	if params.Forwarded.Present {
@@ -60,7 +60,7 @@ func (r *OnRampService) New(ctx context.Context, params OnRampNewParams, opts ..
 	return
 }
 
-// Update an On-ramp (Closed Beta)
+// Update an On-ramp (Closed Beta).
 func (r *OnRampService) Update(ctx context.Context, onrampID string, params OnRampUpdateParams, opts ...option.RequestOption) (res *OnRampUpdateResponse, err error) {
 	var env OnRampUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -81,7 +81,7 @@ func (r *OnRampService) Update(ctx context.Context, onrampID string, params OnRa
 	return
 }
 
-// List On-ramps (Closed Beta)
+// List On-ramps (Closed Beta).
 func (r *OnRampService) List(ctx context.Context, params OnRampListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OnRampListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -103,12 +103,12 @@ func (r *OnRampService) List(ctx context.Context, params OnRampListParams, opts 
 	return res, nil
 }
 
-// List On-ramps (Closed Beta)
+// List On-ramps (Closed Beta).
 func (r *OnRampService) ListAutoPaging(ctx context.Context, params OnRampListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OnRampListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete an On-ramp (Closed Beta)
+// Delete an On-ramp (Closed Beta).
 func (r *OnRampService) Delete(ctx context.Context, onrampID string, params OnRampDeleteParams, opts ...option.RequestOption) (res *OnRampDeleteResponse, err error) {
 	var env OnRampDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -129,7 +129,7 @@ func (r *OnRampService) Delete(ctx context.Context, onrampID string, params OnRa
 	return
 }
 
-// Apply an On-ramp (Closed Beta)
+// Apply an On-ramp (Closed Beta).
 func (r *OnRampService) Apply(ctx context.Context, onrampID string, body OnRampApplyParams, opts ...option.RequestOption) (res *OnRampApplyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -145,7 +145,7 @@ func (r *OnRampService) Apply(ctx context.Context, onrampID string, body OnRampA
 	return
 }
 
-// Update an On-ramp (Closed Beta)
+// Update an On-ramp (Closed Beta).
 func (r *OnRampService) Edit(ctx context.Context, onrampID string, params OnRampEditParams, opts ...option.RequestOption) (res *OnRampEditResponse, err error) {
 	var env OnRampEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -166,7 +166,7 @@ func (r *OnRampService) Edit(ctx context.Context, onrampID string, params OnRamp
 	return
 }
 
-// Export an On-ramp to terraform ready file(s) (Closed Beta)
+// Export an On-ramp to terraform ready file(s) (Closed Beta).
 func (r *OnRampService) Export(ctx context.Context, onrampID string, body OnRampExportParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/zip")}, opts...)
@@ -183,7 +183,7 @@ func (r *OnRampService) Export(ctx context.Context, onrampID string, body OnRamp
 	return
 }
 
-// Read an On-ramp (Closed Beta)
+// Read an On-ramp (Closed Beta).
 func (r *OnRampService) Get(ctx context.Context, onrampID string, params OnRampGetParams, opts ...option.RequestOption) (res *OnRampGetResponse, err error) {
 	var env OnRampGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -204,7 +204,7 @@ func (r *OnRampService) Get(ctx context.Context, onrampID string, params OnRampG
 	return
 }
 
-// Plan an On-ramp (Closed Beta)
+// Plan an On-ramp (Closed Beta).
 func (r *OnRampService) Plan(ctx context.Context, onrampID string, body OnRampPlanParams, opts ...option.RequestOption) (res *OnRampPlanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -247,7 +247,7 @@ type OnRampNewResponse struct {
 	Status                        OnRampNewResponseStatus                       `json:"status"`
 	VPC                           string                                        `json:"vpc" format:"uuid"`
 	VPCsByID                      map[string]OnRampNewResponseVPCsByID          `json:"vpcs_by_id"`
-	// The list of vpc IDs for which resource details could not be generated.
+	// The list of vpc IDs for which resource details failed to generate.
 	VPCsByIDUnavailable []string              `json:"vpcs_by_id_unavailable" format:"uuid"`
 	JSON                onRampNewResponseJSON `json:"-"`
 }
@@ -4072,7 +4072,7 @@ type OnRampUpdateResponse struct {
 	Status                        OnRampUpdateResponseStatus                       `json:"status"`
 	VPC                           string                                           `json:"vpc" format:"uuid"`
 	VPCsByID                      map[string]OnRampUpdateResponseVPCsByID          `json:"vpcs_by_id"`
-	// The list of vpc IDs for which resource details could not be generated.
+	// The list of vpc IDs for which resource details failed to generate.
 	VPCsByIDUnavailable []string                 `json:"vpcs_by_id_unavailable" format:"uuid"`
 	JSON                onRampUpdateResponseJSON `json:"-"`
 }
@@ -7900,7 +7900,7 @@ type OnRampListResponse struct {
 	Status                        OnRampListResponseStatus                       `json:"status"`
 	VPC                           string                                         `json:"vpc" format:"uuid"`
 	VPCsByID                      map[string]OnRampListResponseVPCsByID          `json:"vpcs_by_id"`
-	// The list of vpc IDs for which resource details could not be generated.
+	// The list of vpc IDs for which resource details failed to generate.
 	VPCsByIDUnavailable []string               `json:"vpcs_by_id_unavailable" format:"uuid"`
 	JSON                onRampListResponseJSON `json:"-"`
 }
@@ -12257,7 +12257,7 @@ type OnRampEditResponse struct {
 	Status                        OnRampEditResponseStatus                       `json:"status"`
 	VPC                           string                                         `json:"vpc" format:"uuid"`
 	VPCsByID                      map[string]OnRampEditResponseVPCsByID          `json:"vpcs_by_id"`
-	// The list of vpc IDs for which resource details could not be generated.
+	// The list of vpc IDs for which resource details failed to generate.
 	VPCsByIDUnavailable []string               `json:"vpcs_by_id_unavailable" format:"uuid"`
 	JSON                onRampEditResponseJSON `json:"-"`
 }
@@ -16084,7 +16084,7 @@ type OnRampGetResponse struct {
 	Status                        OnRampGetResponseStatus                       `json:"status"`
 	VPC                           string                                        `json:"vpc" format:"uuid"`
 	VPCsByID                      map[string]OnRampGetResponseVPCsByID          `json:"vpcs_by_id"`
-	// The list of vpc IDs for which resource details could not be generated.
+	// The list of vpc IDs for which resource details failed to generate.
 	VPCsByIDUnavailable []string              `json:"vpcs_by_id_unavailable" format:"uuid"`
 	JSON                onRampGetResponseJSON `json:"-"`
 }
@@ -21487,7 +21487,7 @@ func (r onRampUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 type OnRampListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	Desc      param.Field[bool]   `query:"desc"`
-	// one of ["updated_at", "id", "cloud_type", "name"]
+	// One of ["updated_at", "id", "cloud_type", "name"].
 	OrderBy param.Field[string] `query:"order_by"`
 	Status  param.Field[bool]   `query:"status"`
 	VPCs    param.Field[bool]   `query:"vpcs"`

@@ -113,6 +113,7 @@ func TestCNIListWithOptionalParams(t *testing.T) {
 		Cursor:    cloudflare.F(int64(0)),
 		Limit:     cloudflare.F(int64(0)),
 		Slot:      cloudflare.F("slot"),
+		TunnelID:  cloudflare.F("tunnel_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

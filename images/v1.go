@@ -70,6 +70,8 @@ func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.
 
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
+//
+// Deprecated: deprecated
 func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[V1ListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -93,6 +95,8 @@ func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...optio
 
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
+//
+// Deprecated: deprecated
 func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[V1ListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }

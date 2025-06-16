@@ -343,6 +343,7 @@ func (r *ProfileCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
 // [ProfileCustomProfileEntriesExactDataEntry],
+// [ProfileCustomProfileEntriesDocumentTemplateEntry],
 // [ProfileCustomProfileEntriesWordListEntry].
 func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 	return r.union
@@ -351,7 +352,8 @@ func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 // Union satisfied by [ProfileCustomProfileEntriesCustomEntry],
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
-// [ProfileCustomProfileEntriesExactDataEntry] or
+// [ProfileCustomProfileEntriesExactDataEntry],
+// [ProfileCustomProfileEntriesDocumentTemplateEntry] or
 // [ProfileCustomProfileEntriesWordListEntry].
 type ProfileCustomProfileEntriesUnion interface {
 	implementsProfileCustomProfileEntry()
@@ -376,6 +378,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileCustomProfileEntriesExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesDocumentTemplateEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -610,6 +616,53 @@ func (r ProfileCustomProfileEntriesExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type ProfileCustomProfileEntriesDocumentTemplateEntry struct {
+	ID        string                                               `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                 `json:"enabled,required"`
+	Name      string                                               `json:"name,required"`
+	Type      ProfileCustomProfileEntriesDocumentTemplateEntryType `json:"type,required"`
+	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
+	JSON      profileCustomProfileEntriesDocumentTemplateEntryJSON `json:"-"`
+}
+
+// profileCustomProfileEntriesDocumentTemplateEntryJSON contains the JSON metadata
+// for the struct [ProfileCustomProfileEntriesDocumentTemplateEntry]
+type profileCustomProfileEntriesDocumentTemplateEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomProfileEntriesDocumentTemplateEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomProfileEntriesDocumentTemplateEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomProfileEntriesDocumentTemplateEntry) implementsProfileCustomProfileEntry() {}
+
+type ProfileCustomProfileEntriesDocumentTemplateEntryType string
+
+const (
+	ProfileCustomProfileEntriesDocumentTemplateEntryTypeDocumentTemplate ProfileCustomProfileEntriesDocumentTemplateEntryType = "document_template"
+)
+
+func (r ProfileCustomProfileEntriesDocumentTemplateEntryType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesDocumentTemplateEntryTypeDocumentTemplate:
+		return true
+	}
+	return false
+}
+
 type ProfileCustomProfileEntriesWordListEntry struct {
 	ID        string                                       `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
@@ -664,16 +717,17 @@ func (r ProfileCustomProfileEntriesWordListEntryType) IsKnown() bool {
 type ProfileCustomProfileEntriesType string
 
 const (
-	ProfileCustomProfileEntriesTypeCustom      ProfileCustomProfileEntriesType = "custom"
-	ProfileCustomProfileEntriesTypePredefined  ProfileCustomProfileEntriesType = "predefined"
-	ProfileCustomProfileEntriesTypeIntegration ProfileCustomProfileEntriesType = "integration"
-	ProfileCustomProfileEntriesTypeExactData   ProfileCustomProfileEntriesType = "exact_data"
-	ProfileCustomProfileEntriesTypeWordList    ProfileCustomProfileEntriesType = "word_list"
+	ProfileCustomProfileEntriesTypeCustom           ProfileCustomProfileEntriesType = "custom"
+	ProfileCustomProfileEntriesTypePredefined       ProfileCustomProfileEntriesType = "predefined"
+	ProfileCustomProfileEntriesTypeIntegration      ProfileCustomProfileEntriesType = "integration"
+	ProfileCustomProfileEntriesTypeExactData        ProfileCustomProfileEntriesType = "exact_data"
+	ProfileCustomProfileEntriesTypeDocumentTemplate ProfileCustomProfileEntriesType = "document_template"
+	ProfileCustomProfileEntriesTypeWordList         ProfileCustomProfileEntriesType = "word_list"
 )
 
 func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeWordList:
+	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeDocumentTemplate, ProfileCustomProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -818,6 +872,7 @@ func (r *ProfilePredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
 // [ProfilePredefinedProfileEntriesExactDataEntry],
+// [ProfilePredefinedProfileEntriesDocumentTemplateEntry],
 // [ProfilePredefinedProfileEntriesWordListEntry].
 func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntriesUnion {
 	return r.union
@@ -826,7 +881,8 @@ func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntries
 // Union satisfied by [ProfilePredefinedProfileEntriesCustomEntry],
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
-// [ProfilePredefinedProfileEntriesExactDataEntry] or
+// [ProfilePredefinedProfileEntriesExactDataEntry],
+// [ProfilePredefinedProfileEntriesDocumentTemplateEntry] or
 // [ProfilePredefinedProfileEntriesWordListEntry].
 type ProfilePredefinedProfileEntriesUnion interface {
 	implementsProfilePredefinedProfileEntry()
@@ -851,6 +907,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesDocumentTemplateEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1086,6 +1146,54 @@ func (r ProfilePredefinedProfileEntriesExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type ProfilePredefinedProfileEntriesDocumentTemplateEntry struct {
+	ID        string                                                   `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                                `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                     `json:"enabled,required"`
+	Name      string                                                   `json:"name,required"`
+	Type      ProfilePredefinedProfileEntriesDocumentTemplateEntryType `json:"type,required"`
+	UpdatedAt time.Time                                                `json:"updated_at,required" format:"date-time"`
+	JSON      profilePredefinedProfileEntriesDocumentTemplateEntryJSON `json:"-"`
+}
+
+// profilePredefinedProfileEntriesDocumentTemplateEntryJSON contains the JSON
+// metadata for the struct [ProfilePredefinedProfileEntriesDocumentTemplateEntry]
+type profilePredefinedProfileEntriesDocumentTemplateEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedProfileEntriesDocumentTemplateEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedProfileEntriesDocumentTemplateEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedProfileEntriesDocumentTemplateEntry) implementsProfilePredefinedProfileEntry() {
+}
+
+type ProfilePredefinedProfileEntriesDocumentTemplateEntryType string
+
+const (
+	ProfilePredefinedProfileEntriesDocumentTemplateEntryTypeDocumentTemplate ProfilePredefinedProfileEntriesDocumentTemplateEntryType = "document_template"
+)
+
+func (r ProfilePredefinedProfileEntriesDocumentTemplateEntryType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesDocumentTemplateEntryTypeDocumentTemplate:
+		return true
+	}
+	return false
+}
+
 type ProfilePredefinedProfileEntriesWordListEntry struct {
 	ID        string                                           `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                                        `json:"created_at,required" format:"date-time"`
@@ -1140,16 +1248,17 @@ func (r ProfilePredefinedProfileEntriesWordListEntryType) IsKnown() bool {
 type ProfilePredefinedProfileEntriesType string
 
 const (
-	ProfilePredefinedProfileEntriesTypeCustom      ProfilePredefinedProfileEntriesType = "custom"
-	ProfilePredefinedProfileEntriesTypePredefined  ProfilePredefinedProfileEntriesType = "predefined"
-	ProfilePredefinedProfileEntriesTypeIntegration ProfilePredefinedProfileEntriesType = "integration"
-	ProfilePredefinedProfileEntriesTypeExactData   ProfilePredefinedProfileEntriesType = "exact_data"
-	ProfilePredefinedProfileEntriesTypeWordList    ProfilePredefinedProfileEntriesType = "word_list"
+	ProfilePredefinedProfileEntriesTypeCustom           ProfilePredefinedProfileEntriesType = "custom"
+	ProfilePredefinedProfileEntriesTypePredefined       ProfilePredefinedProfileEntriesType = "predefined"
+	ProfilePredefinedProfileEntriesTypeIntegration      ProfilePredefinedProfileEntriesType = "integration"
+	ProfilePredefinedProfileEntriesTypeExactData        ProfilePredefinedProfileEntriesType = "exact_data"
+	ProfilePredefinedProfileEntriesTypeDocumentTemplate ProfilePredefinedProfileEntriesType = "document_template"
+	ProfilePredefinedProfileEntriesTypeWordList         ProfilePredefinedProfileEntriesType = "word_list"
 )
 
 func (r ProfilePredefinedProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeWordList:
+	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeDocumentTemplate, ProfilePredefinedProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -1284,6 +1393,7 @@ func (r *ProfileIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) 
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
 // [ProfileIntegrationProfileEntriesExactDataEntry],
+// [ProfileIntegrationProfileEntriesDocumentTemplateEntry],
 // [ProfileIntegrationProfileEntriesWordListEntry].
 func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntriesUnion {
 	return r.union
@@ -1292,7 +1402,8 @@ func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntri
 // Union satisfied by [ProfileIntegrationProfileEntriesCustomEntry],
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
-// [ProfileIntegrationProfileEntriesExactDataEntry] or
+// [ProfileIntegrationProfileEntriesExactDataEntry],
+// [ProfileIntegrationProfileEntriesDocumentTemplateEntry] or
 // [ProfileIntegrationProfileEntriesWordListEntry].
 type ProfileIntegrationProfileEntriesUnion interface {
 	implementsProfileIntegrationProfileEntry()
@@ -1317,6 +1428,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesDocumentTemplateEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1553,6 +1668,54 @@ func (r ProfileIntegrationProfileEntriesExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type ProfileIntegrationProfileEntriesDocumentTemplateEntry struct {
+	ID        string                                                    `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                                 `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                      `json:"enabled,required"`
+	Name      string                                                    `json:"name,required"`
+	Type      ProfileIntegrationProfileEntriesDocumentTemplateEntryType `json:"type,required"`
+	UpdatedAt time.Time                                                 `json:"updated_at,required" format:"date-time"`
+	JSON      profileIntegrationProfileEntriesDocumentTemplateEntryJSON `json:"-"`
+}
+
+// profileIntegrationProfileEntriesDocumentTemplateEntryJSON contains the JSON
+// metadata for the struct [ProfileIntegrationProfileEntriesDocumentTemplateEntry]
+type profileIntegrationProfileEntriesDocumentTemplateEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationProfileEntriesDocumentTemplateEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationProfileEntriesDocumentTemplateEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationProfileEntriesDocumentTemplateEntry) implementsProfileIntegrationProfileEntry() {
+}
+
+type ProfileIntegrationProfileEntriesDocumentTemplateEntryType string
+
+const (
+	ProfileIntegrationProfileEntriesDocumentTemplateEntryTypeDocumentTemplate ProfileIntegrationProfileEntriesDocumentTemplateEntryType = "document_template"
+)
+
+func (r ProfileIntegrationProfileEntriesDocumentTemplateEntryType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesDocumentTemplateEntryTypeDocumentTemplate:
+		return true
+	}
+	return false
+}
+
 type ProfileIntegrationProfileEntriesWordListEntry struct {
 	ID        string                                            `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
@@ -1607,16 +1770,17 @@ func (r ProfileIntegrationProfileEntriesWordListEntryType) IsKnown() bool {
 type ProfileIntegrationProfileEntriesType string
 
 const (
-	ProfileIntegrationProfileEntriesTypeCustom      ProfileIntegrationProfileEntriesType = "custom"
-	ProfileIntegrationProfileEntriesTypePredefined  ProfileIntegrationProfileEntriesType = "predefined"
-	ProfileIntegrationProfileEntriesTypeIntegration ProfileIntegrationProfileEntriesType = "integration"
-	ProfileIntegrationProfileEntriesTypeExactData   ProfileIntegrationProfileEntriesType = "exact_data"
-	ProfileIntegrationProfileEntriesTypeWordList    ProfileIntegrationProfileEntriesType = "word_list"
+	ProfileIntegrationProfileEntriesTypeCustom           ProfileIntegrationProfileEntriesType = "custom"
+	ProfileIntegrationProfileEntriesTypePredefined       ProfileIntegrationProfileEntriesType = "predefined"
+	ProfileIntegrationProfileEntriesTypeIntegration      ProfileIntegrationProfileEntriesType = "integration"
+	ProfileIntegrationProfileEntriesTypeExactData        ProfileIntegrationProfileEntriesType = "exact_data"
+	ProfileIntegrationProfileEntriesTypeDocumentTemplate ProfileIntegrationProfileEntriesType = "document_template"
+	ProfileIntegrationProfileEntriesTypeWordList         ProfileIntegrationProfileEntriesType = "word_list"
 )
 
 func (r ProfileIntegrationProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeWordList:
+	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeDocumentTemplate, ProfileIntegrationProfileEntriesTypeWordList:
 		return true
 	}
 	return false

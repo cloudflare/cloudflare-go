@@ -28,10 +28,11 @@ func TestNetworkVirtualNetworkNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.New(context.TODO(), zero_trust.NetworkVirtualNetworkNewParams{
-		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Name:      cloudflare.F("us-east-1-vpc"),
-		Comment:   cloudflare.F("Staging VPC for data science"),
-		IsDefault: cloudflare.F(true),
+		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Name:             cloudflare.F("us-east-1-vpc"),
+		Comment:          cloudflare.F("Staging VPC for data science"),
+		IsDefault:        cloudflare.F(true),
+		IsDefaultNetwork: cloudflare.F(false),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -119,7 +120,7 @@ func TestNetworkVirtualNetworkEditWithOptionalParams(t *testing.T) {
 		zero_trust.NetworkVirtualNetworkEditParams{
 			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Comment:          cloudflare.F("Staging VPC for data science"),
-			IsDefaultNetwork: cloudflare.F(true),
+			IsDefaultNetwork: cloudflare.F(false),
 			Name:             cloudflare.F("us-east-1-vpc"),
 		},
 	)

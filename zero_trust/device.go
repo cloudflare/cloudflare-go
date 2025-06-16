@@ -60,12 +60,16 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	return
 }
 
-// List WARP registrations.
+// List WARP devices. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account.
 //
 // **Deprecated**: please use one of the following endpoints instead:
 //
 // - GET /accounts/{account_id}/devices/physical-devices
 // - GET /accounts/{account_id}/devices/registrations
+//
+// Deprecated: deprecated
 func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Device], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -87,22 +91,30 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 	return res, nil
 }
 
-// List WARP registrations.
+// List WARP devices. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account.
 //
 // **Deprecated**: please use one of the following endpoints instead:
 //
 // - GET /accounts/{account_id}/devices/physical-devices
 // - GET /accounts/{account_id}/devices/registrations
+//
+// Deprecated: deprecated
 func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Device] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Fetches a single WARP registration.
+// Fetches a single WARP device. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled for the account.
 //
 // **Deprecated**: please use one of the following endpoints instead:
 //
 // - GET /accounts/{account_id}/devices/physical-devices/{device_id}
 // - GET /accounts/{account_id}/devices/registrations/{registration_id}
+//
+// Deprecated: deprecated
 func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
 	var env DeviceGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

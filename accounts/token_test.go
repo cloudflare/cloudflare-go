@@ -31,7 +31,7 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Tokens.New(context.TODO(), accounts.TokenNewParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("readonly token"),
 		Policies: cloudflare.F([]shared.TokenPolicyParam{{
 			Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
@@ -89,7 +89,7 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"ed17574386854bf78a67040be0a770b0",
 		accounts.TokenUpdateParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Token: shared.TokenParam{
 				Condition: cloudflare.F(shared.TokenConditionParam{
 					RequestIP: cloudflare.F(shared.TokenConditionRequestIPParam{
@@ -148,7 +148,7 @@ func TestTokenListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Tokens.List(context.TODO(), accounts.TokenListParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction: cloudflare.F(accounts.TokenListParamsDirectionDesc),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
@@ -180,7 +180,7 @@ func TestTokenDelete(t *testing.T) {
 		context.TODO(),
 		"ed17574386854bf78a67040be0a770b0",
 		accounts.TokenDeleteParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -210,7 +210,7 @@ func TestTokenGet(t *testing.T) {
 		context.TODO(),
 		"ed17574386854bf78a67040be0a770b0",
 		accounts.TokenGetParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -237,7 +237,7 @@ func TestTokenVerify(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Tokens.Verify(context.TODO(), accounts.TokenVerifyParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -36,11 +36,11 @@ func NewThreatEventTagService(opts ...option.RequestOption) (r *ThreatEventTagSe
 // Creates a new tag
 func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventTagNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/tags/create", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/tags/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
@@ -70,8 +70,8 @@ func (r threatEventTagNewResponseJSON) RawJSON() string {
 
 type ThreatEventTagNewParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
-	Name      param.Field[string]  `json:"name,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Name      param.Field[string] `json:"name,required"`
 }
 
 func (r ThreatEventTagNewParams) MarshalJSON() (data []byte, err error) {

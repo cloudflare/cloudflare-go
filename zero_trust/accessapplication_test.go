@@ -31,7 +31,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
 		Body: zero_trust.AccessApplicationNewParamsBodySelfHostedApplication{
 			Domain:                   cloudflare.F("test.example.com/admin"),
-			Type:                     cloudflare.F("self_hosted"),
+			Type:                     cloudflare.F(zero_trust.ApplicationTypeSelfHosted),
 			AllowAuthenticateViaWARP: cloudflare.F(true),
 			AllowIframe:              cloudflare.F(true),
 			AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252"}),
@@ -151,7 +151,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessApplicationUpdateParams{
 			Body: zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication{
 				Domain:                   cloudflare.F("test.example.com/admin"),
-				Type:                     cloudflare.F("self_hosted"),
+				Type:                     cloudflare.F(zero_trust.ApplicationTypeSelfHosted),
 				AllowAuthenticateViaWARP: cloudflare.F(true),
 				AllowIframe:              cloudflare.F(true),
 				AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252"}),

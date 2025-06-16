@@ -39,6 +39,8 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 }
 
 // Lists organizations the user is associated with.
+//
+// Deprecated: deprecated
 func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Organization], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -57,11 +59,15 @@ func (r *OrganizationService) List(ctx context.Context, query OrganizationListPa
 }
 
 // Lists organizations the user is associated with.
+//
+// Deprecated: deprecated
 func (r *OrganizationService) ListAutoPaging(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Organization] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Removes association to an organization.
+//
+// Deprecated: deprecated
 func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if organizationID == "" {
@@ -74,6 +80,8 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 }
 
 // Gets a specific organization the user is associated with.
+//
+// Deprecated: deprecated
 func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponse, err error) {
 	var env OrganizationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

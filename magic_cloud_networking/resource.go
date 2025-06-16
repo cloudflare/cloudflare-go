@@ -38,7 +38,7 @@ func NewResourceService(opts ...option.RequestOption) (r *ResourceService) {
 	return
 }
 
-// List resources in the Resource Catalog (Closed Beta)
+// List resources in the Resource Catalog (Closed Beta).
 func (r *ResourceService) List(ctx context.Context, params ResourceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -60,12 +60,12 @@ func (r *ResourceService) List(ctx context.Context, params ResourceListParams, o
 	return res, nil
 }
 
-// List resources in the Resource Catalog (Closed Beta)
+// List resources in the Resource Catalog (Closed Beta).
 func (r *ResourceService) ListAutoPaging(ctx context.Context, params ResourceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ResourceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Export resources in the Resource Catalog as a JSON file (Closed Beta)
+// Export resources in the Resource Catalog as a JSON file (Closed Beta).
 func (r *ResourceService) Export(ctx context.Context, params ResourceExportParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
@@ -78,7 +78,7 @@ func (r *ResourceService) Export(ctx context.Context, params ResourceExportParam
 	return
 }
 
-// Read an resource from the Resource Catalog (Closed Beta)
+// Read an resource from the Resource Catalog (Closed Beta).
 func (r *ResourceService) Get(ctx context.Context, resourceID string, params ResourceGetParams, opts ...option.RequestOption) (res *ResourceGetResponse, err error) {
 	var env ResourceGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *ResourceService) Get(ctx context.Context, resourceID string, params Res
 	return
 }
 
-// Preview Rego query result against the latest resource catalog (Closed Beta)
+// Preview Rego query result against the latest resource catalog (Closed Beta).
 func (r *ResourceService) PolicyPreview(ctx context.Context, params ResourcePolicyPreviewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ResourcePolicyPreviewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -3211,7 +3211,7 @@ type ResourceListParams struct {
 	Cloudflare param.Field[bool]   `query:"cloudflare"`
 	Desc       param.Field[bool]   `query:"desc"`
 	Managed    param.Field[bool]   `query:"managed"`
-	// one of ["id", "resource_type", "region"]
+	// One of ["id", "resource_type", "region"].
 	OrderBy       param.Field[string]                           `query:"order_by"`
 	Page          param.Field[int64]                            `query:"page"`
 	PerPage       param.Field[int64]                            `query:"per_page"`
@@ -3305,7 +3305,7 @@ func (r ResourceListParamsResourceType) IsKnown() bool {
 type ResourceExportParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	Desc      param.Field[bool]   `query:"desc"`
-	// one of ["id", "resource_type", "region"]
+	// One of ["id", "resource_type", "region"].
 	OrderBy       param.Field[string]                             `query:"order_by"`
 	ProviderID    param.Field[string]                             `query:"provider_id"`
 	Region        param.Field[string]                             `query:"region"`

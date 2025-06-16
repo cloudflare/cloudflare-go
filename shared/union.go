@@ -52,6 +52,9 @@ func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersV
 func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion()  {}
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()          {}
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()           {}
+func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
+func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+}
 func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
 func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
@@ -171,7 +174,10 @@ func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersFiltersVal
 func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion()           {}
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()                   {}
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
-func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
+func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
+func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+}
+func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
 func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
@@ -247,7 +253,10 @@ func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersFiltersVa
 func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion()           {}
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()                   {}
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
-func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
+func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
+func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+}
+func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
 func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                {}

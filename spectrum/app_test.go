@@ -42,9 +42,9 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 			TLS:              cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTLSFull),
 			TrafficType:      cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTrafficTypeDirect),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
-				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
-				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
+			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsDynamicParam{
+				Connectivity: cloudflare.F(spectrum.EdgeIPsDynamicConnectivityAll),
+				Type:         cloudflare.F(spectrum.EdgeIPsDynamicTypeDynamic),
 			}),
 			OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080"}),
 			OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
@@ -94,9 +94,9 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 				TLS:              cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTLSFull),
 				TrafficType:      cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeDirect),
 				ArgoSmartRouting: cloudflare.F(true),
-				EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
-					Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
-					Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
+				EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsDynamicParam{
+					Connectivity: cloudflare.F(spectrum.EdgeIPsDynamicConnectivityAll),
+					Type:         cloudflare.F(spectrum.EdgeIPsDynamicTypeDynamic),
 				}),
 				OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080"}),
 				OriginDNS: cloudflare.F(spectrum.OriginDNSParam{

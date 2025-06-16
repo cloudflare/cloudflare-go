@@ -32,7 +32,7 @@ func TestThreatEventRelateDelete(t *testing.T) {
 		context.TODO(),
 		"event_id",
 		cloudforce_one.ThreatEventRelateDeleteParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

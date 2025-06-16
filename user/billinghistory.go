@@ -36,6 +36,8 @@ func NewBillingHistoryService(opts ...option.RequestOption) (r *BillingHistorySe
 }
 
 // Accesses your billing history object.
+//
+// Deprecated: deprecated
 func (r *BillingHistoryService) List(ctx context.Context, query BillingHistoryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[BillingHistory], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -54,6 +56,8 @@ func (r *BillingHistoryService) List(ctx context.Context, query BillingHistoryLi
 }
 
 // Accesses your billing history object.
+//
+// Deprecated: deprecated
 func (r *BillingHistoryService) ListAutoPaging(ctx context.Context, query BillingHistoryListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[BillingHistory] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }

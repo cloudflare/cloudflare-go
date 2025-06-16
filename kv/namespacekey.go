@@ -72,6 +72,8 @@ func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID st
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
+//
+// Deprecated: Please use kv.namespaces.bulk_delete instead
 func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string, params NamespaceKeyBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceKeyBulkDeleteResponse, err error) {
 	var env NamespaceKeyBulkDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -96,6 +98,8 @@ func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string
 // at most 100. Keys must contain text-based values. If value is json, it can be
 // requested to return in JSON, instead of string. Metadata can be return if
 // withMetadata is true.
+//
+// Deprecated: Please use kv.namespaces.bulk_get instead
 func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, params NamespaceKeyBulkGetParams, opts ...option.RequestOption) (res *NamespaceKeyBulkGetResponse, err error) {
 	var env NamespaceKeyBulkGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -122,6 +126,8 @@ func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, p
 // `expiration_ttl` is specified, the key-value pair will never expire. If both are
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
+//
+// Deprecated: Please use kv.namespaces.bulk_update instead
 func (r *NamespaceKeyService) BulkUpdate(ctx context.Context, namespaceID string, params NamespaceKeyBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceKeyBulkUpdateResponse, err error) {
 	var env NamespaceKeyBulkUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)

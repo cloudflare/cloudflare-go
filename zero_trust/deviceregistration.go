@@ -36,7 +36,7 @@ func NewDeviceRegistrationService(opts ...option.RequestOption) (r *DeviceRegist
 	return
 }
 
-// List WARP registrations.
+// Lists WARP registrations.
 func (r *DeviceRegistrationService) List(ctx context.Context, params DeviceRegistrationListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[DeviceRegistrationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -58,7 +58,7 @@ func (r *DeviceRegistrationService) List(ctx context.Context, params DeviceRegis
 	return res, nil
 }
 
-// List WARP registrations.
+// Lists WARP registrations.
 func (r *DeviceRegistrationService) ListAutoPaging(ctx context.Context, params DeviceRegistrationListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[DeviceRegistrationListResponse] {
 	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
@@ -491,7 +491,7 @@ func (r DeviceRegistrationListParamsStatus) IsKnown() bool {
 }
 
 type DeviceRegistrationListParamsUser struct {
-	// Filter by Access user ID.
+	// Filter by user ID.
 	ID param.Field[[]string] `query:"id"`
 }
 

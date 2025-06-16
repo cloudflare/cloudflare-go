@@ -193,6 +193,8 @@ func (r accountSettingsJSON) RawJSON() string {
 }
 
 type AccountParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// Account name
 	Name param.Field[string] `json:"name,required"`
 	// Account settings

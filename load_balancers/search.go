@@ -154,10 +154,14 @@ func (r SearchListResponseResourcesResourceType) IsKnown() bool {
 
 type SearchListParams struct {
 	// Identifier
-	AccountID    param.Field[string]                       `path:"account_id,required"`
-	Page         param.Field[float64]                      `query:"page"`
-	PerPage      param.Field[float64]                      `query:"per_page"`
-	SearchParams param.Field[SearchListParamsSearchParams] `query:"search_params"`
+	AccountID param.Field[string]  `path:"account_id,required"`
+	Page      param.Field[float64] `query:"page"`
+	PerPage   param.Field[float64] `query:"per_page"`
+	// Search query term.
+	Query param.Field[string] `query:"query"`
+	// The type of references to include. "\*" to include both referral and referrer
+	// references. "" to not include any reference information.
+	References param.Field[SearchListParamsReferences] `query:"references"`
 }
 
 // URLQuery serializes [SearchListParams]'s query parameters as `url.Values`.
@@ -168,35 +172,20 @@ func (r SearchListParams) URLQuery() (v url.Values) {
 	})
 }
 
-type SearchListParamsSearchParams struct {
-	// Search query term.
-	Query param.Field[string] `query:"query"`
-	// The type of references to include ("\*" for all).
-	References param.Field[SearchListParamsSearchParamsReferences] `query:"references"`
-}
-
-// URLQuery serializes [SearchListParamsSearchParams]'s query parameters as
-// `url.Values`.
-func (r SearchListParamsSearchParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-// The type of references to include ("\*" for all).
-type SearchListParamsSearchParamsReferences string
+// The type of references to include. "\*" to include both referral and referrer
+// references. "" to not include any reference information.
+type SearchListParamsReferences string
 
 const (
-	SearchListParamsSearchParamsReferencesEmpty    SearchListParamsSearchParamsReferences = ""
-	SearchListParamsSearchParamsReferencesStar     SearchListParamsSearchParamsReferences = "*"
-	SearchListParamsSearchParamsReferencesReferral SearchListParamsSearchParamsReferences = "referral"
-	SearchListParamsSearchParamsReferencesReferrer SearchListParamsSearchParamsReferences = "referrer"
+	SearchListParamsReferencesEmpty    SearchListParamsReferences = ""
+	SearchListParamsReferencesStar     SearchListParamsReferences = "*"
+	SearchListParamsReferencesReferral SearchListParamsReferences = "referral"
+	SearchListParamsReferencesReferrer SearchListParamsReferences = "referrer"
 )
 
-func (r SearchListParamsSearchParamsReferences) IsKnown() bool {
+func (r SearchListParamsReferences) IsKnown() bool {
 	switch r {
-	case SearchListParamsSearchParamsReferencesEmpty, SearchListParamsSearchParamsReferencesStar, SearchListParamsSearchParamsReferencesReferral, SearchListParamsSearchParamsReferencesReferrer:
+	case SearchListParamsReferencesEmpty, SearchListParamsReferencesStar, SearchListParamsReferencesReferral, SearchListParamsReferencesReferrer:
 		return true
 	}
 	return false

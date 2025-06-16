@@ -34,10 +34,14 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 	return
 }
 
-// Unrevokes a list of registrations.
+// Unrevokes a list of devices. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled.
 //
 // **Deprecated**: please use POST
 // /accounts/{account_id}/devices/registrations/unrevoke instead.
+//
+// Deprecated: deprecated
 func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DeviceUnrevokeNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

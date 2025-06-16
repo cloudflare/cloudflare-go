@@ -109,6 +109,7 @@ type InvestigateListResponse struct {
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
 	PostfixID        string                                  `json:"postfix_id,required"`
+	Properties       InvestigateListResponseProperties       `json:"properties,required"`
 	Ts               string                                  `json:"ts,required"`
 	AlertID          string                                  `json:"alert_id,nullable"`
 	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
@@ -136,6 +137,7 @@ type investigateListResponseJSON struct {
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
 	PostfixID         apijson.Field
+	Properties        apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
 	DeliveryMode      apijson.Field
@@ -159,6 +161,27 @@ func (r *InvestigateListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r investigateListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateListResponseProperties struct {
+	WhitelistedPatternType string                                `json:"whitelisted_pattern_type"`
+	JSON                   investigateListResponsePropertiesJSON `json:"-"`
+}
+
+// investigateListResponsePropertiesJSON contains the JSON metadata for the struct
+// [InvestigateListResponseProperties]
+type investigateListResponsePropertiesJSON struct {
+	WhitelistedPatternType apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *InvestigateListResponseProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateListResponsePropertiesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -299,6 +322,7 @@ type InvestigateGetResponse struct {
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
 	PostfixID        string                                 `json:"postfix_id,required"`
+	Properties       InvestigateGetResponseProperties       `json:"properties,required"`
 	Ts               string                                 `json:"ts,required"`
 	AlertID          string                                 `json:"alert_id,nullable"`
 	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
@@ -326,6 +350,7 @@ type investigateGetResponseJSON struct {
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
 	PostfixID         apijson.Field
+	Properties        apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
 	DeliveryMode      apijson.Field
@@ -349,6 +374,27 @@ func (r *InvestigateGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r investigateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseProperties struct {
+	WhitelistedPatternType string                               `json:"whitelisted_pattern_type"`
+	JSON                   investigateGetResponsePropertiesJSON `json:"-"`
+}
+
+// investigateGetResponsePropertiesJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseProperties]
+type investigateGetResponsePropertiesJSON struct {
+	WhitelistedPatternType apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponsePropertiesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -37,7 +37,7 @@ func NewThreatEventInsightService(opts ...option.RequestOption) (r *ThreatEventI
 func (r *ThreatEventInsightService) New(ctx context.Context, eventID string, params ThreatEventInsightNewParams, opts ...option.RequestOption) (res *ThreatEventInsightNewResponse, err error) {
 	var env ThreatEventInsightNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *ThreatEventInsightService) New(ctx context.Context, eventID string, par
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/create", params.AccountID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s/insight/create", params.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -58,7 +58,7 @@ func (r *ThreatEventInsightService) New(ctx context.Context, eventID string, par
 func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, insightID string, body ThreatEventInsightDeleteParams, opts ...option.RequestOption) (res *ThreatEventInsightDeleteResponse, err error) {
 	var env ThreatEventInsightDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !body.AccountID.Present {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -70,7 +70,7 @@ func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, 
 		err = errors.New("missing required insight_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/%s", body.AccountID, eventID, insightID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s/insight/%s", body.AccountID, eventID, insightID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -83,7 +83,7 @@ func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, 
 func (r *ThreatEventInsightService) Edit(ctx context.Context, eventID string, insightID string, params ThreatEventInsightEditParams, opts ...option.RequestOption) (res *ThreatEventInsightEditResponse, err error) {
 	var env ThreatEventInsightEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -95,7 +95,7 @@ func (r *ThreatEventInsightService) Edit(ctx context.Context, eventID string, in
 		err = errors.New("missing required insight_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/%s", params.AccountID, eventID, insightID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s/insight/%s", params.AccountID, eventID, insightID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -108,7 +108,7 @@ func (r *ThreatEventInsightService) Edit(ctx context.Context, eventID string, in
 func (r *ThreatEventInsightService) Get(ctx context.Context, eventID string, insightID string, query ThreatEventInsightGetParams, opts ...option.RequestOption) (res *ThreatEventInsightGetResponse, err error) {
 	var env ThreatEventInsightGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -120,7 +120,7 @@ func (r *ThreatEventInsightService) Get(ctx context.Context, eventID string, ins
 		err = errors.New("missing required insight_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/%s", query.AccountID, eventID, insightID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s/insight/%s", query.AccountID, eventID, insightID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -221,8 +221,8 @@ func (r threatEventInsightGetResponseJSON) RawJSON() string {
 
 type ThreatEventInsightNewParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
-	Content   param.Field[string]  `json:"content,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Content   param.Field[string] `json:"content,required"`
 }
 
 func (r ThreatEventInsightNewParams) MarshalJSON() (data []byte, err error) {
@@ -254,7 +254,7 @@ func (r threatEventInsightNewResponseEnvelopeJSON) RawJSON() string {
 
 type ThreatEventInsightDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventInsightDeleteResponseEnvelope struct {
@@ -282,8 +282,8 @@ func (r threatEventInsightDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ThreatEventInsightEditParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
-	Content   param.Field[string]  `json:"content,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Content   param.Field[string] `json:"content,required"`
 }
 
 func (r ThreatEventInsightEditParams) MarshalJSON() (data []byte, err error) {
@@ -315,7 +315,7 @@ func (r threatEventInsightEditResponseEnvelopeJSON) RawJSON() string {
 
 type ThreatEventInsightGetParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventInsightGetResponseEnvelope struct {

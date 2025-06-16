@@ -638,10 +638,10 @@ func (r AIRunParamsBody) implementsAIRunParamsBodyUnion() {}
 // [ai.AIRunParamsBodyTextEmbeddings],
 // [ai.AIRunParamsBodyAutomaticSpeechRecognition],
 // [ai.AIRunParamsBodyImageClassification], [ai.AIRunParamsBodyObjectDetection],
-// [ai.AIRunParamsBodyPrompt], [ai.AIRunParamsBodyMessages],
+// [ai.AIRunParamsBodyPrompt], [ai.AIRunParamsBodyTextGeneration],
 // [ai.AIRunParamsBodyTranslation], [ai.AIRunParamsBodySummarization],
 // [ai.AIRunParamsBodyImageToText], [ai.AIRunParamsBodyObject],
-// [ai.AIRunParamsBodyObject], [AIRunParamsBody].
+// [ai.AIRunParamsBodyImageTextToText], [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
 	implementsAIRunParamsBodyUnion()
 }
@@ -834,12 +834,12 @@ func (r AIRunParamsBodyPromptResponseFormatType) IsKnown() bool {
 	return false
 }
 
-type AIRunParamsBodyMessages struct {
+type AIRunParamsBodyTextGeneration struct {
 	// An array of message objects representing the conversation history.
-	Messages param.Field[[]AIRunParamsBodyMessagesMessage] `json:"messages,required"`
+	Messages param.Field[[]AIRunParamsBodyTextGenerationMessage] `json:"messages,required"`
 	// Decreases the likelihood of the model repeating the same lines verbatim.
-	FrequencyPenalty param.Field[float64]                           `json:"frequency_penalty"`
-	Functions        param.Field[[]AIRunParamsBodyMessagesFunction] `json:"functions"`
+	FrequencyPenalty param.Field[float64]                                 `json:"frequency_penalty"`
+	Functions        param.Field[[]AIRunParamsBodyTextGenerationFunction] `json:"functions"`
 	// The maximum number of tokens to generate in the response.
 	MaxTokens param.Field[int64] `json:"max_tokens"`
 	// Increases the likelihood of the model introducing new topics.
@@ -848,8 +848,8 @@ type AIRunParamsBodyMessages struct {
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
-	RepetitionPenalty param.Field[float64]                               `json:"repetition_penalty"`
-	ResponseFormat    param.Field[AIRunParamsBodyMessagesResponseFormat] `json:"response_format"`
+	RepetitionPenalty param.Field[float64]                                     `json:"repetition_penalty"`
+	ResponseFormat    param.Field[AIRunParamsBodyTextGenerationResponseFormat] `json:"response_format"`
 	// Random seed for reproducibility of the generation.
 	Seed param.Field[int64] `json:"seed"`
 	// If true, the response will be streamed back incrementally using SSE, Server Sent
@@ -859,7 +859,7 @@ type AIRunParamsBodyMessages struct {
 	// results.
 	Temperature param.Field[float64] `json:"temperature"`
 	// A list of tools available for the assistant to use.
-	Tools param.Field[[]AIRunParamsBodyMessagesToolUnion] `json:"tools"`
+	Tools param.Field[[]AIRunParamsBodyTextGenerationToolUnion] `json:"tools"`
 	// Limits the AI to choose from the top 'k' most probable words. Lower values make
 	// responses more focused; higher values introduce more variety and potential
 	// surprises.
@@ -870,57 +870,57 @@ type AIRunParamsBodyMessages struct {
 	TopP param.Field[float64] `json:"top_p"`
 }
 
-func (r AIRunParamsBodyMessages) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGeneration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessages) implementsAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextGeneration) implementsAIRunParamsBodyUnion() {}
 
-type AIRunParamsBodyMessagesMessage struct {
+type AIRunParamsBodyTextGenerationMessage struct {
 	// The content of the message as a string.
 	Content param.Field[string] `json:"content,required"`
 	// The role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').
 	Role param.Field[string] `json:"role,required"`
 }
 
-func (r AIRunParamsBodyMessagesMessage) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationMessage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AIRunParamsBodyMessagesFunction struct {
+type AIRunParamsBodyTextGenerationFunction struct {
 	Code param.Field[string] `json:"code,required"`
 	Name param.Field[string] `json:"name,required"`
 }
 
-func (r AIRunParamsBodyMessagesFunction) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationFunction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AIRunParamsBodyMessagesResponseFormat struct {
-	JsonSchema param.Field[interface{}]                               `json:"json_schema"`
-	Type       param.Field[AIRunParamsBodyMessagesResponseFormatType] `json:"type"`
+type AIRunParamsBodyTextGenerationResponseFormat struct {
+	JsonSchema param.Field[interface{}]                                     `json:"json_schema"`
+	Type       param.Field[AIRunParamsBodyTextGenerationResponseFormatType] `json:"type"`
 }
 
-func (r AIRunParamsBodyMessagesResponseFormat) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationResponseFormat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AIRunParamsBodyMessagesResponseFormatType string
+type AIRunParamsBodyTextGenerationResponseFormatType string
 
 const (
-	AIRunParamsBodyMessagesResponseFormatTypeJsonObject AIRunParamsBodyMessagesResponseFormatType = "json_object"
-	AIRunParamsBodyMessagesResponseFormatTypeJsonSchema AIRunParamsBodyMessagesResponseFormatType = "json_schema"
+	AIRunParamsBodyTextGenerationResponseFormatTypeJsonObject AIRunParamsBodyTextGenerationResponseFormatType = "json_object"
+	AIRunParamsBodyTextGenerationResponseFormatTypeJsonSchema AIRunParamsBodyTextGenerationResponseFormatType = "json_schema"
 )
 
-func (r AIRunParamsBodyMessagesResponseFormatType) IsKnown() bool {
+func (r AIRunParamsBodyTextGenerationResponseFormatType) IsKnown() bool {
 	switch r {
-	case AIRunParamsBodyMessagesResponseFormatTypeJsonObject, AIRunParamsBodyMessagesResponseFormatTypeJsonSchema:
+	case AIRunParamsBodyTextGenerationResponseFormatTypeJsonObject, AIRunParamsBodyTextGenerationResponseFormatTypeJsonSchema:
 		return true
 	}
 	return false
 }
 
-type AIRunParamsBodyMessagesTool struct {
+type AIRunParamsBodyTextGenerationTool struct {
 	// A brief description of what the tool does.
 	Description param.Field[string]      `json:"description"`
 	Function    param.Field[interface{}] `json:"function"`
@@ -931,55 +931,110 @@ type AIRunParamsBodyMessagesTool struct {
 	Type param.Field[string] `json:"type"`
 }
 
-func (r AIRunParamsBodyMessagesTool) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationTool) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessagesTool) implementsAIRunParamsBodyMessagesToolUnion() {}
+func (r AIRunParamsBodyTextGenerationTool) implementsAIRunParamsBodyTextGenerationToolUnion() {}
 
-// Satisfied by [ai.AIRunParamsBodyMessagesToolsObject],
-// [ai.AIRunParamsBodyMessagesToolsObject], [AIRunParamsBodyMessagesTool].
-type AIRunParamsBodyMessagesToolUnion interface {
-	implementsAIRunParamsBodyMessagesToolUnion()
+// Satisfied by [ai.AIRunParamsBodyTextGenerationToolsObject],
+// [ai.AIRunParamsBodyTextGenerationToolsFunction],
+// [AIRunParamsBodyTextGenerationTool].
+type AIRunParamsBodyTextGenerationToolUnion interface {
+	implementsAIRunParamsBodyTextGenerationToolUnion()
 }
 
-type AIRunParamsBodyMessagesToolsObject struct {
+type AIRunParamsBodyTextGenerationToolsObject struct {
 	// A brief description of what the tool does.
 	Description param.Field[string] `json:"description,required"`
 	// The name of the tool. More descriptive the better.
 	Name param.Field[string] `json:"name,required"`
 	// Schema defining the parameters accepted by the tool.
-	Parameters param.Field[AIRunParamsBodyMessagesToolsObjectParameters] `json:"parameters,required"`
+	Parameters param.Field[AIRunParamsBodyTextGenerationToolsObjectParameters] `json:"parameters,required"`
 }
 
-func (r AIRunParamsBodyMessagesToolsObject) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationToolsObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessagesToolsObject) implementsAIRunParamsBodyMessagesToolUnion() {}
+func (r AIRunParamsBodyTextGenerationToolsObject) implementsAIRunParamsBodyTextGenerationToolUnion() {
+}
 
 // Schema defining the parameters accepted by the tool.
-type AIRunParamsBodyMessagesToolsObjectParameters struct {
+type AIRunParamsBodyTextGenerationToolsObjectParameters struct {
 	// Definitions of each parameter.
-	Properties param.Field[map[string]AIRunParamsBodyMessagesToolsObjectParametersProperties] `json:"properties,required"`
+	Properties param.Field[map[string]AIRunParamsBodyTextGenerationToolsObjectParametersProperties] `json:"properties,required"`
 	// The type of the parameters object (usually 'object').
 	Type param.Field[string] `json:"type,required"`
 	// List of required parameter names.
 	Required param.Field[[]string] `json:"required"`
 }
 
-func (r AIRunParamsBodyMessagesToolsObjectParameters) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationToolsObjectParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AIRunParamsBodyMessagesToolsObjectParametersProperties struct {
+type AIRunParamsBodyTextGenerationToolsObjectParametersProperties struct {
 	// A description of the expected parameter.
 	Description param.Field[string] `json:"description,required"`
 	// The data type of the parameter.
 	Type param.Field[string] `json:"type,required"`
 }
 
-func (r AIRunParamsBodyMessagesToolsObjectParametersProperties) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsBodyTextGenerationToolsObjectParametersProperties) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIRunParamsBodyTextGenerationToolsFunction struct {
+	// Details of the function tool.
+	Function param.Field[AIRunParamsBodyTextGenerationToolsFunctionFunction] `json:"function,required"`
+	// Specifies the type of tool (e.g., 'function').
+	Type param.Field[string] `json:"type,required"`
+}
+
+func (r AIRunParamsBodyTextGenerationToolsFunction) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyTextGenerationToolsFunction) implementsAIRunParamsBodyTextGenerationToolUnion() {
+}
+
+// Details of the function tool.
+type AIRunParamsBodyTextGenerationToolsFunctionFunction struct {
+	// A brief description of what the function does.
+	Description param.Field[string] `json:"description,required"`
+	// The name of the function.
+	Name param.Field[string] `json:"name,required"`
+	// Schema defining the parameters accepted by the function.
+	Parameters param.Field[AIRunParamsBodyTextGenerationToolsFunctionFunctionParameters] `json:"parameters,required"`
+}
+
+func (r AIRunParamsBodyTextGenerationToolsFunctionFunction) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Schema defining the parameters accepted by the function.
+type AIRunParamsBodyTextGenerationToolsFunctionFunctionParameters struct {
+	// Definitions of each parameter.
+	Properties param.Field[map[string]AIRunParamsBodyTextGenerationToolsFunctionFunctionParametersProperties] `json:"properties,required"`
+	// The type of the parameters object (usually 'object').
+	Type param.Field[string] `json:"type,required"`
+	// List of required parameter names.
+	Required param.Field[[]string] `json:"required"`
+}
+
+func (r AIRunParamsBodyTextGenerationToolsFunctionFunctionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIRunParamsBodyTextGenerationToolsFunctionFunctionParametersProperties struct {
+	// A description of the expected parameter.
+	Description param.Field[string] `json:"description,required"`
+	// The data type of the parameter.
+	Type param.Field[string] `json:"type,required"`
+}
+
+func (r AIRunParamsBodyTextGenerationToolsFunctionFunctionParametersProperties) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1086,6 +1141,54 @@ func (r AIRunParamsBodyObject) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyObject) implementsAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyImageTextToText struct {
+	// Image in base64 encoded format.
+	Image param.Field[string] `json:"image,required"`
+	// An array of message objects representing the conversation history.
+	Messages param.Field[[]AIRunParamsBodyImageTextToTextMessage] `json:"messages,required"`
+	// Decreases the likelihood of the model repeating the same lines verbatim.
+	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
+	// Whether to ignore the EOS token and continue generating tokens after the EOS
+	// token is generated.
+	IgnoreEos param.Field[bool] `json:"ignore_eos"`
+	// The maximum number of tokens to generate in the response.
+	MaxTokens param.Field[int64] `json:"max_tokens"`
+	// Increases the likelihood of the model introducing new topics.
+	PresencePenalty param.Field[float64] `json:"presence_penalty"`
+	// Penalty for repeated tokens; higher values discourage repetition.
+	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	// Random seed for reproducibility of the generation.
+	Seed param.Field[float64] `json:"seed"`
+	// Controls the randomness of the output; higher values produce more random
+	// results.
+	Temperature param.Field[float64] `json:"temperature"`
+	// Limits the AI to choose from the top 'k' most probable words. Lower values make
+	// responses more focused; higher values introduce more variety and potential
+	// surprises.
+	TopK param.Field[float64] `json:"top_k"`
+	// Controls the creativity of the AI's responses by adjusting how many possible
+	// words it considers. Lower values make outputs more predictable; higher values
+	// allow for more varied and creative responses.
+	TopP param.Field[float64] `json:"top_p"`
+}
+
+func (r AIRunParamsBodyImageTextToText) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyImageTextToText) implementsAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyImageTextToTextMessage struct {
+	// The content of the message as a string.
+	Content param.Field[string] `json:"content,required"`
+	// The role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').
+	Role param.Field[string] `json:"role,required"`
+}
+
+func (r AIRunParamsBodyImageTextToTextMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type AIRunResponseEnvelope struct {
 	// An array of classification results for the input text

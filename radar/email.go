@@ -56,8 +56,11 @@ func (r radarEmailSeriesJSON) RawJSON() string {
 }
 
 type RadarEmailSummary struct {
-	Fail string                `json:"FAIL,required"`
-	None string                `json:"NONE,required"`
+	// A numeric string.
+	Fail string `json:"FAIL,required"`
+	// A numeric string.
+	None string `json:"NONE,required"`
+	// A numeric string.
 	Pass string                `json:"PASS,required"`
 	JSON radarEmailSummaryJSON `json:"-"`
 }

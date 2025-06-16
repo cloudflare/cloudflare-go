@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
@@ -51,66 +52,30 @@ func (r *IPService) List(ctx context.Context, query IPListParams, opts ...option
 	return
 }
 
-type IPs struct {
-	// A digest of the IP data. Useful for determining if the data has changed.
-	Etag string `json:"etag"`
-	// List of Cloudflare IPv4 CIDR addresses.
-	IPV4CIDRs []string `json:"ipv4_cidrs"`
-	// List of Cloudflare IPv6 CIDR addresses.
-	IPV6CIDRs []string `json:"ipv6_cidrs"`
-	JSON      ipsJSON  `json:"-"`
+type IPs []IPsItem
+
+type IPsItem struct {
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// An IPv4 or IPv6 address.
+	IP   string      `json:"ip"`
+	JSON ipsItemJSON `json:"-"`
 }
 
-// ipsJSON contains the JSON metadata for the struct [IPs]
-type ipsJSON struct {
-	Etag        apijson.Field
-	IPV4CIDRs   apijson.Field
-	IPV6CIDRs   apijson.Field
+// ipsItemJSON contains the JSON metadata for the struct [IPsItem]
+type ipsItemJSON struct {
+	CreatedAt   apijson.Field
+	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IPs) UnmarshalJSON(data []byte) (err error) {
+func (r *IPsItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ipsJSON) RawJSON() string {
+func (r ipsItemJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r IPs) implementsIPListResponse() {}
-
-type JDCloudIPs struct {
-	// A digest of the IP data. Useful for determining if the data has changed.
-	Etag string `json:"etag"`
-	// List of Cloudflare IPv4 CIDR addresses.
-	IPV4CIDRs []string `json:"ipv4_cidrs"`
-	// List of Cloudflare IPv6 CIDR addresses.
-	IPV6CIDRs []string `json:"ipv6_cidrs"`
-	// List IPv4 and IPv6 CIDRs, only populated if `?networks=jdcloud` is used.
-	JDCloudCIDRs []string       `json:"jdcloud_cidrs"`
-	JSON         JDCloudIPsJSON `json:"-"`
-}
-
-// JDCloudIPsJSON contains the JSON metadata for the struct [JDCloudIPs]
-type JDCloudIPsJSON struct {
-	Etag         apijson.Field
-	IPV4CIDRs    apijson.Field
-	IPV6CIDRs    apijson.Field
-	JDCloudCIDRs apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *JDCloudIPs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r JDCloudIPsJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r JDCloudIPs) implementsIPListResponse() {}
 
 type IPListResponse struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
@@ -151,12 +116,14 @@ func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [IPListResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [IPs], [JDCloudIPs].
+// Possible runtime types of the union are [IPListResponsePublicIPIPs],
+// [IPListResponsePublicIPIPsJDCloud].
 func (r IPListResponse) AsUnion() IPListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [IPs] or [JDCloudIPs].
+// Union satisfied by [IPListResponsePublicIPIPs] or
+// [IPListResponsePublicIPIPsJDCloud].
 type IPListResponseUnion interface {
 	implementsIPListResponse()
 }
@@ -167,14 +134,77 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPs{}),
+			Type:       reflect.TypeOf(IPListResponsePublicIPIPs{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(JDCloudIPs{}),
+			Type:       reflect.TypeOf(IPListResponsePublicIPIPsJDCloud{}),
 		},
 	)
 }
+
+type IPListResponsePublicIPIPs struct {
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag string `json:"etag"`
+	// List of Cloudflare IPv4 CIDR addresses.
+	IPV4CIDRs []string `json:"ipv4_cidrs"`
+	// List of Cloudflare IPv6 CIDR addresses.
+	IPV6CIDRs []string                      `json:"ipv6_cidrs"`
+	JSON      ipListResponsePublicIpiPsJSON `json:"-"`
+}
+
+// ipListResponsePublicIpiPsJSON contains the JSON metadata for the struct
+// [IPListResponsePublicIPIPs]
+type ipListResponsePublicIpiPsJSON struct {
+	Etag        apijson.Field
+	IPV4CIDRs   apijson.Field
+	IPV6CIDRs   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPListResponsePublicIPIPs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponsePublicIpiPsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r IPListResponsePublicIPIPs) implementsIPListResponse() {}
+
+type IPListResponsePublicIPIPsJDCloud struct {
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag string `json:"etag"`
+	// List of Cloudflare IPv4 CIDR addresses.
+	IPV4CIDRs []string `json:"ipv4_cidrs"`
+	// List of Cloudflare IPv6 CIDR addresses.
+	IPV6CIDRs []string `json:"ipv6_cidrs"`
+	// List IPv4 and IPv6 CIDRs, only populated if `?networks=jdcloud` is used.
+	JDCloudCIDRs []string                             `json:"jdcloud_cidrs"`
+	JSON         ipListResponsePublicIpiPsJDCloudJSON `json:"-"`
+}
+
+// ipListResponsePublicIpiPsJDCloudJSON contains the JSON metadata for the struct
+// [IPListResponsePublicIPIPsJDCloud]
+type ipListResponsePublicIpiPsJDCloudJSON struct {
+	Etag         apijson.Field
+	IPV4CIDRs    apijson.Field
+	IPV6CIDRs    apijson.Field
+	JDCloudCIDRs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *IPListResponsePublicIPIPsJDCloud) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponsePublicIpiPsJDCloudJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r IPListResponsePublicIPIPsJDCloud) implementsIPListResponse() {}
 
 type IPListParams struct {
 	// Specified as `jdcloud` to list IPs used by JD Cloud data centers.

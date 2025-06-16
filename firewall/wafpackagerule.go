@@ -43,6 +43,8 @@ func NewWAFPackageRuleService(opts ...option.RequestOption) (r *WAFPackageRuleSe
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageRuleService) List(ctx context.Context, packageID string, params WAFPackageRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFPackageRuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -72,6 +74,8 @@ func (r *WAFPackageRuleService) List(ctx context.Context, packageID string, para
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFPackageRuleListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
@@ -80,6 +84,8 @@ func (r *WAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID st
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, ruleID string, params WAFPackageRuleEditParams, opts ...option.RequestOption) (res *WAFPackageRuleEditResponse, err error) {
 	var env WAFPackageRuleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -108,6 +114,8 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env WAFPackageRuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

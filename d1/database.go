@@ -1351,38 +1351,97 @@ func (r DatabaseImportParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r DatabaseImportParamsBody) implementsDatabaseImportParamsBodyUnion() {}
 
-// Satisfied by [d1.DatabaseImportParamsBodyObject],
-// [d1.DatabaseImportParamsBodyObject], [d1.DatabaseImportParamsBodyObject],
+// Satisfied by [d1.DatabaseImportParamsBodyInit],
+// [d1.DatabaseImportParamsBodyIngest], [d1.DatabaseImportParamsBodyPoll],
 // [DatabaseImportParamsBody].
 type DatabaseImportParamsBodyUnion interface {
 	implementsDatabaseImportParamsBodyUnion()
 }
 
-type DatabaseImportParamsBodyObject struct {
+type DatabaseImportParamsBodyInit struct {
 	// Indicates you have a new SQL file to upload.
-	Action param.Field[DatabaseImportParamsBodyObjectAction] `json:"action,required"`
+	Action param.Field[DatabaseImportParamsBodyInitAction] `json:"action,required"`
 	// Required when action is 'init' or 'ingest'. An md5 hash of the file you're
 	// uploading. Used to check if it already exists, and validate its contents before
 	// ingesting.
 	Etag param.Field[string] `json:"etag,required"`
 }
 
-func (r DatabaseImportParamsBodyObject) MarshalJSON() (data []byte, err error) {
+func (r DatabaseImportParamsBodyInit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DatabaseImportParamsBodyObject) implementsDatabaseImportParamsBodyUnion() {}
+func (r DatabaseImportParamsBodyInit) implementsDatabaseImportParamsBodyUnion() {}
 
 // Indicates you have a new SQL file to upload.
-type DatabaseImportParamsBodyObjectAction string
+type DatabaseImportParamsBodyInitAction string
 
 const (
-	DatabaseImportParamsBodyObjectActionInit DatabaseImportParamsBodyObjectAction = "init"
+	DatabaseImportParamsBodyInitActionInit DatabaseImportParamsBodyInitAction = "init"
 )
 
-func (r DatabaseImportParamsBodyObjectAction) IsKnown() bool {
+func (r DatabaseImportParamsBodyInitAction) IsKnown() bool {
 	switch r {
-	case DatabaseImportParamsBodyObjectActionInit:
+	case DatabaseImportParamsBodyInitActionInit:
+		return true
+	}
+	return false
+}
+
+type DatabaseImportParamsBodyIngest struct {
+	// Indicates you've finished uploading to tell the D1 to start consuming it
+	Action param.Field[DatabaseImportParamsBodyIngestAction] `json:"action,required"`
+	// An md5 hash of the file you're uploading. Used to check if it already exists,
+	// and validate its contents before ingesting.
+	Etag param.Field[string] `json:"etag,required"`
+	// The filename you have successfully uploaded.
+	Filename param.Field[string] `json:"filename,required"`
+}
+
+func (r DatabaseImportParamsBodyIngest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseImportParamsBodyIngest) implementsDatabaseImportParamsBodyUnion() {}
+
+// Indicates you've finished uploading to tell the D1 to start consuming it
+type DatabaseImportParamsBodyIngestAction string
+
+const (
+	DatabaseImportParamsBodyIngestActionIngest DatabaseImportParamsBodyIngestAction = "ingest"
+)
+
+func (r DatabaseImportParamsBodyIngestAction) IsKnown() bool {
+	switch r {
+	case DatabaseImportParamsBodyIngestActionIngest:
+		return true
+	}
+	return false
+}
+
+type DatabaseImportParamsBodyPoll struct {
+	// Indicates you've finished uploading to tell the D1 to start consuming it
+	Action param.Field[DatabaseImportParamsBodyPollAction] `json:"action,required"`
+	// This identifies the currently-running import, checking its status.
+	CurrentBookmark param.Field[string] `json:"current_bookmark,required"`
+}
+
+func (r DatabaseImportParamsBodyPoll) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseImportParamsBodyPoll) implementsDatabaseImportParamsBodyUnion() {}
+
+// Indicates you've finished uploading to tell the D1 to start consuming it
+type DatabaseImportParamsBodyPollAction string
+
+const (
+	DatabaseImportParamsBodyPollActionPoll DatabaseImportParamsBodyPollAction = "poll"
+)
+
+func (r DatabaseImportParamsBodyPollAction) IsKnown() bool {
+	switch r {
+	case DatabaseImportParamsBodyPollActionPoll:
 		return true
 	}
 	return false

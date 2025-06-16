@@ -36,11 +36,11 @@ func NewThreatEventCountryService(opts ...option.RequestOption) (r *ThreatEventC
 // Retrieves countries information for all countries
 func (r *ThreatEventCountryService) List(ctx context.Context, query ThreatEventCountryListParams, opts ...option.RequestOption) (res *[]ThreatEventCountryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/countries", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/countries", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -93,5 +93,5 @@ func (r threatEventCountryListResponseResultJSON) RawJSON() string {
 
 type ThreatEventCountryListParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }

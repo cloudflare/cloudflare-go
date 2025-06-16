@@ -61,7 +61,7 @@ func (r *InstanceStatusService) Edit(ctx context.Context, workflowName string, i
 
 type InstanceStatusEditResponse struct {
 	Status InstanceStatusEditResponseStatus `json:"status,required"`
-	// In ISO 8601 with no timezone offsets and in UTC.
+	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	Timestamp time.Time                      `json:"timestamp,required" format:"date-time"`
 	JSON      instanceStatusEditResponseJSON `json:"-"`
 }
@@ -106,7 +106,7 @@ func (r InstanceStatusEditResponseStatus) IsKnown() bool {
 
 type InstanceStatusEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Possible actions to apply to instance.
+	// Apply action to instance.
 	Status param.Field[InstanceStatusEditParamsStatus] `json:"status,required"`
 }
 
@@ -114,7 +114,7 @@ func (r InstanceStatusEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Possible actions to apply to instance.
+// Apply action to instance.
 type InstanceStatusEditParamsStatus string
 
 const (

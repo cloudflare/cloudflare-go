@@ -29,7 +29,7 @@ func TestThreatEventCategoryNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.New(context.TODO(), cloudforce_one.ThreatEventCategoryNewParams{
-		AccountID:   cloudflare.F(0.000000),
+		AccountID:   cloudflare.F("account_id"),
 		KillChain:   cloudflare.F(0.000000),
 		Name:        cloudflare.F("name"),
 		MitreAttack: cloudflare.F([]string{"T1234"}),
@@ -59,7 +59,7 @@ func TestThreatEventCategoryList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.List(context.TODO(), cloudforce_one.ThreatEventCategoryListParams{
-		AccountID: cloudflare.F(0.000000),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -86,9 +86,9 @@ func TestThreatEventCategoryDelete(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.Delete(
 		context.TODO(),
-		"category_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventCategoryDeleteParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -116,9 +116,9 @@ func TestThreatEventCategoryEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.Edit(
 		context.TODO(),
-		"category_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventCategoryEditParams{
-			AccountID:   cloudflare.F(0.000000),
+			AccountID:   cloudflare.F("account_id"),
 			KillChain:   cloudflare.F(0.000000),
 			MitreAttack: cloudflare.F([]string{"T1234"}),
 			Name:        cloudflare.F("name"),
@@ -150,9 +150,9 @@ func TestThreatEventCategoryGet(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.Get(
 		context.TODO(),
-		"category_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudforce_one.ThreatEventCategoryGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

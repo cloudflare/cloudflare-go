@@ -15,6 +15,7 @@ import (
 // the [NewDEXService] method instead.
 type DEXService struct {
 	Options               []option.RequestOption
+	WARPChangeEvents      *DEXWARPChangeEventService
 	Commands              *DEXCommandService
 	Colos                 *DEXColoService
 	FleetStatus           *DEXFleetStatusService
@@ -30,6 +31,7 @@ type DEXService struct {
 func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	r = &DEXService{}
 	r.Options = opts
+	r.WARPChangeEvents = NewDEXWARPChangeEventService(opts...)
 	r.Commands = NewDEXCommandService(opts...)
 	r.Colos = NewDEXColoService(opts...)
 	r.FleetStatus = NewDEXFleetStatusService(opts...)

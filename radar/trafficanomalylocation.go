@@ -71,10 +71,11 @@ func (r trafficAnomalyLocationGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyLocationGetResponseTrafficAnomaly struct {
-	ClientCountryAlpha2 string                                              `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                              `json:"clientCountryName,required"`
-	Value               string                                              `json:"value,required"`
-	JSON                trafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string `json:"clientCountryName,required"`
+	// A numeric string.
+	Value string                                              `json:"value,required"`
+	JSON  trafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
 }
 
 // trafficAnomalyLocationGetResponseTrafficAnomalyJSON contains the JSON metadata
