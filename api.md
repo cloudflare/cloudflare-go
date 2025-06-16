@@ -422,6 +422,12 @@ Methods:
 
 ## Subscriptions
 
+Methods:
+
+- <code title="post /zones/{zone_id}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones#SubscriptionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones#SubscriptionNewParams">SubscriptionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Subscription">Subscription</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /zones/{zone_id}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones#SubscriptionService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones#SubscriptionUpdateParams">SubscriptionUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Subscription">Subscription</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones#SubscriptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zones#SubscriptionGetParams">SubscriptionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Subscription">Subscription</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Plans
 
 Response Types:

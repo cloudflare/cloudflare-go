@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.5.1 (2025-06-16)
+
+Full Changelog: [v4.5.0...v4.5.1](https://github.com/cloudflare/cloudflare-go/compare/v4.5.0...v4.5.1)
+
+### Features
+
+* **client:** add debug log helper ([cd7dd39](https://github.com/cloudflare/cloudflare-go/commit/cd7dd39e4a76f4fd22d41bc2e51d7a9ce55ab0fc))
+
+
+### Bug Fixes
+
+* **api:** Update zone subscription paths ([7b78606](https://github.com/cloudflare/cloudflare-go/commit/7b78606a368b157f30833d28198dff453aa1930e))
+
 ## 4.5.0 (2025-06-16)
 
 Full Changelog: [v4.4.0...v4.5.0](https://github.com/cloudflare/cloudflare-go/compare/v4.4.0...v4.5.0)
