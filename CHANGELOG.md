@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.6.0 (2025-06-20)
+
+Full Changelog: [v4.5.1...v4.6.0](https://github.com/cloudflare/cloudflare-go/compare/v4.5.1...v4.6.0)
+
+### Features
+
+* **api:** api update ([730b558](https://github.com/cloudflare/cloudflare-go/commit/730b558a76373b4730fa015927f7548639d710f4))
+* **api:** api update ([e54b6c1](https://github.com/cloudflare/cloudflare-go/commit/e54b6c16eabc2f4e2f5e661f8c1afb152b143652))
+
+
+### Chores
+
+* **api:** TTL is required on DNS records ([c483216](https://github.com/cloudflare/cloudflare-go/commit/c4832164ddc1e7d225b3993edf2194cb73639852))
+* **ci:** enable for pull requests ([dd46ce2](https://github.com/cloudflare/cloudflare-go/commit/dd46ce2f8ba2dc705b75392a675fa2af0a896f44))
+
 ## 4.5.1 (2025-06-16)
 
 Full Changelog: [v4.5.0...v4.5.1](https://github.com/cloudflare/cloudflare-go/compare/v4.5.0...v4.5.1)
