@@ -127,14 +127,12 @@ func TestNamespaceKeyBulkUpdate(t *testing.T) {
 		kv.NamespaceKeyBulkUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: []kv.NamespaceKeyBulkUpdateParamsBody{{
+				Key:           cloudflare.F("My-Key"),
+				Value:         cloudflare.F("Some string"),
 				Base64:        cloudflare.F(true),
 				Expiration:    cloudflare.F(1578435000.000000),
 				ExpirationTTL: cloudflare.F(300.000000),
-				Key:           cloudflare.F("My-Key"),
-				Metadata: cloudflare.F(map[string]interface{}{
-					"someMetadataKey": "bar",
-				}),
-				Value: cloudflare.F("Some string"),
+				Metadata:      cloudflare.F[any](map[string]interface{}{}),
 			}},
 		},
 	)

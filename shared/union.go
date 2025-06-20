@@ -44,20 +44,16 @@ func (UnionString) ImplementsObservabilityTelemetryQueryResponseInvocationsWorke
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryResponsePatternsSeriesDataGroupsValueUnion() {
 }
-func (UnionString) ImplementsObservabilityTelemetryValuesResponseValueUnion()               {}
-func (UnionString) ImplementsObservabilityTelemetryKeysParamsFiltersValueUnion()            {}
-func (UnionString) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion()          {}
-func (UnionString) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()             {}
-func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersValueUnion() {}
-func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion()  {}
-func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()          {}
-func (UnionString) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()           {}
-func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
-func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
+func (UnionString) ImplementsObservabilityTelemetryValuesResponseValueUnion()                      {}
+func (UnionString) ImplementsObservabilityTelemetryKeysParamsFiltersValueUnion()                   {}
+func (UnionString) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion()                 {}
+func (UnionString) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()                    {}
+func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersValueUnion()        {}
+func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion()         {}
+func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()                 {}
+func (UnionString) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                  {}
+func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()           {}
+func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()        {}
 func (UnionString) ImplementsOriginPortUnionParam()                                                {}
 func (UnionString) ImplementsOriginPortUnion()                                                     {}
 func (UnionString) ImplementsHealthCheckTargetUnionParam()                                         {}
@@ -175,33 +171,29 @@ func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValu
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()                   {}
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
 func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
-func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
-func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
-func (UnionBool) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                     {}
-func (UnionBool) ImplementsConfigurationToolsWorkerSettingsUnion()                          {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion() {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()      {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                     {}
-func (UnionBool) ImplementsLogListParamsFiltersValueUnion()                                 {}
-func (UnionBool) ImplementsLogDeleteParamsFiltersValueUnion()                               {}
-func (UnionBool) ImplementsLogEditParamsMetadataUnion()                                     {}
-func (UnionBool) ImplementsDatasetNewResponseFiltersValueUnion()                            {}
-func (UnionBool) ImplementsDatasetUpdateResponseFiltersValueUnion()                         {}
-func (UnionBool) ImplementsDatasetListResponseFiltersValueUnion()                           {}
-func (UnionBool) ImplementsDatasetDeleteResponseFiltersValueUnion()                         {}
-func (UnionBool) ImplementsDatasetGetResponseFiltersValueUnion()                            {}
-func (UnionBool) ImplementsDatasetNewParamsFiltersValueUnion()                              {}
-func (UnionBool) ImplementsDatasetUpdateParamsFiltersValueUnion()                           {}
-func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()                 {}
-func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                {}
-func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()              {}
-func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                 {}
+func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
+func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()             {}
+func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()                  {}
+func (UnionBool) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                            {}
+func (UnionBool) ImplementsConfigurationToolsWorkerSettingsUnion()                                 {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion()        {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()             {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                       {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                            {}
+func (UnionBool) ImplementsLogListParamsFiltersValueUnion()                                        {}
+func (UnionBool) ImplementsLogDeleteParamsFiltersValueUnion()                                      {}
+func (UnionBool) ImplementsLogEditParamsMetadataUnion()                                            {}
+func (UnionBool) ImplementsDatasetNewResponseFiltersValueUnion()                                   {}
+func (UnionBool) ImplementsDatasetUpdateResponseFiltersValueUnion()                                {}
+func (UnionBool) ImplementsDatasetListResponseFiltersValueUnion()                                  {}
+func (UnionBool) ImplementsDatasetDeleteResponseFiltersValueUnion()                                {}
+func (UnionBool) ImplementsDatasetGetResponseFiltersValueUnion()                                   {}
+func (UnionBool) ImplementsDatasetNewParamsFiltersValueUnion()                                     {}
+func (UnionBool) ImplementsDatasetUpdateParamsFiltersValueUnion()                                  {}
+func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()                        {}
+func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                       {}
+func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                     {}
+func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 
 type UnionInt int64
 
@@ -254,29 +246,25 @@ func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersNeedleVal
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()                   {}
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
 func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
-func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                {}
-func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union() {}
-func (UnionFloat) ImplementsSettingValueUnionParam()                                    {}
-func (UnionFloat) ImplementsSettingValueUnion()                                         {}
-func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()                     {}
-func (UnionFloat) ImplementsThreatEventListParamsSearchValueArrayItemUnion()            {}
-func (UnionFloat) ImplementsLogListParamsFiltersValueUnion()                            {}
-func (UnionFloat) ImplementsLogDeleteParamsFiltersValueUnion()                          {}
-func (UnionFloat) ImplementsLogEditParamsMetadataUnion()                                {}
-func (UnionFloat) ImplementsDatasetNewResponseFiltersValueUnion()                       {}
-func (UnionFloat) ImplementsDatasetUpdateResponseFiltersValueUnion()                    {}
-func (UnionFloat) ImplementsDatasetListResponseFiltersValueUnion()                      {}
-func (UnionFloat) ImplementsDatasetDeleteResponseFiltersValueUnion()                    {}
-func (UnionFloat) ImplementsDatasetGetResponseFiltersValueUnion()                       {}
-func (UnionFloat) ImplementsDatasetNewParamsFiltersValueUnion()                         {}
-func (UnionFloat) ImplementsDatasetUpdateParamsFiltersValueUnion()                      {}
-func (UnionFloat) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()            {}
-func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()           {}
-func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()         {}
-func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()            {}
-func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                            {}
+func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
+func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                            {}
+func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()             {}
+func (UnionFloat) ImplementsSettingValueUnionParam()                                                {}
+func (UnionFloat) ImplementsSettingValueUnion()                                                     {}
+func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()                                 {}
+func (UnionFloat) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                        {}
+func (UnionFloat) ImplementsLogListParamsFiltersValueUnion()                                        {}
+func (UnionFloat) ImplementsLogDeleteParamsFiltersValueUnion()                                      {}
+func (UnionFloat) ImplementsLogEditParamsMetadataUnion()                                            {}
+func (UnionFloat) ImplementsDatasetNewResponseFiltersValueUnion()                                   {}
+func (UnionFloat) ImplementsDatasetUpdateResponseFiltersValueUnion()                                {}
+func (UnionFloat) ImplementsDatasetListResponseFiltersValueUnion()                                  {}
+func (UnionFloat) ImplementsDatasetDeleteResponseFiltersValueUnion()                                {}
+func (UnionFloat) ImplementsDatasetGetResponseFiltersValueUnion()                                   {}
+func (UnionFloat) ImplementsDatasetNewParamsFiltersValueUnion()                                     {}
+func (UnionFloat) ImplementsDatasetUpdateParamsFiltersValueUnion()                                  {}
+func (UnionFloat) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()                        {}
+func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                       {}
+func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                     {}
+func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
+func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}

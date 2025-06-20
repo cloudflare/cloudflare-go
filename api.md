@@ -6136,10 +6136,6 @@ Methods:
 
 ### Lists
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#GatewayItemParam">GatewayItemParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#GatewayItem">GatewayItem</a>
