@@ -113,7 +113,7 @@ func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body Th
 // IDs) in your account, use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint.
-func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *[]ThreatEventBulkNewResponse, err error) {
+func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *float64, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -320,79 +320,6 @@ func (r *ThreatEventDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r threatEventDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventBulkNewResponse struct {
-	ID              float64                        `json:"id,required"`
-	AccountID       float64                        `json:"accountId,required"`
-	Attacker        string                         `json:"attacker,required"`
-	AttackerCountry string                         `json:"attackerCountry,required"`
-	Category        string                         `json:"category,required"`
-	CategoryID      float64                        `json:"categoryId,required"`
-	Date            string                         `json:"date,required"`
-	Event           string                         `json:"event,required"`
-	Indicator       string                         `json:"indicator,required"`
-	IndicatorType   string                         `json:"indicatorType,required"`
-	IndicatorTypeID float64                        `json:"indicatorTypeId,required"`
-	KillChain       float64                        `json:"killChain,required"`
-	MitreAttack     []string                       `json:"mitreAttack,required"`
-	NumReferenced   float64                        `json:"numReferenced,required"`
-	NumReferences   float64                        `json:"numReferences,required"`
-	RawID           string                         `json:"rawId,required"`
-	Referenced      []string                       `json:"referenced,required"`
-	ReferencedIDs   []float64                      `json:"referencedIds,required"`
-	References      []string                       `json:"references,required"`
-	ReferencesIDs   []float64                      `json:"referencesIds,required"`
-	Tags            []string                       `json:"tags,required"`
-	TargetCountry   string                         `json:"targetCountry,required"`
-	TargetIndustry  string                         `json:"targetIndustry,required"`
-	TLP             string                         `json:"tlp,required"`
-	UUID            string                         `json:"uuid,required"`
-	Insight         string                         `json:"insight"`
-	ReleasabilityID string                         `json:"releasabilityId"`
-	JSON            threatEventBulkNewResponseJSON `json:"-"`
-}
-
-// threatEventBulkNewResponseJSON contains the JSON metadata for the struct
-// [ThreatEventBulkNewResponse]
-type threatEventBulkNewResponseJSON struct {
-	ID              apijson.Field
-	AccountID       apijson.Field
-	Attacker        apijson.Field
-	AttackerCountry apijson.Field
-	Category        apijson.Field
-	CategoryID      apijson.Field
-	Date            apijson.Field
-	Event           apijson.Field
-	Indicator       apijson.Field
-	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
-	KillChain       apijson.Field
-	MitreAttack     apijson.Field
-	NumReferenced   apijson.Field
-	NumReferences   apijson.Field
-	RawID           apijson.Field
-	Referenced      apijson.Field
-	ReferencedIDs   apijson.Field
-	References      apijson.Field
-	ReferencesIDs   apijson.Field
-	Tags            apijson.Field
-	TargetCountry   apijson.Field
-	TargetIndustry  apijson.Field
-	TLP             apijson.Field
-	UUID            apijson.Field
-	Insight         apijson.Field
-	ReleasabilityID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ThreatEventBulkNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventBulkNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
