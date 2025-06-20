@@ -545,8 +545,6 @@ func (r threatEventGetResponseJSON) RawJSON() string {
 type ThreatEventNewParams struct {
 	// Account ID.
 	PathAccountID   param.Field[string]                  `path:"account_id,required"`
-	Attacker        param.Field[string]                  `json:"attacker,required"`
-	AttackerCountry param.Field[string]                  `json:"attackerCountry,required"`
 	Category        param.Field[string]                  `json:"category,required"`
 	Date            param.Field[time.Time]               `json:"date,required" format:"date-time"`
 	Event           param.Field[string]                  `json:"event,required"`
@@ -554,6 +552,8 @@ type ThreatEventNewParams struct {
 	Raw             param.Field[ThreatEventNewParamsRaw] `json:"raw,required"`
 	TLP             param.Field[string]                  `json:"tlp,required"`
 	BodyAccountID   param.Field[float64]                 `json:"accountId"`
+	Attacker        param.Field[string]                  `json:"attacker"`
+	AttackerCountry param.Field[string]                  `json:"attackerCountry"`
 	DatasetID       param.Field[string]                  `json:"datasetId"`
 	Indicator       param.Field[string]                  `json:"indicator"`
 	Tags            param.Field[[]string]                `json:"tags"`
@@ -682,8 +682,6 @@ func (r ThreatEventBulkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventBulkNewParamsData struct {
-	Attacker        param.Field[string]                          `json:"attacker,required"`
-	AttackerCountry param.Field[string]                          `json:"attackerCountry,required"`
 	Category        param.Field[string]                          `json:"category,required"`
 	Date            param.Field[time.Time]                       `json:"date,required" format:"date-time"`
 	Event           param.Field[string]                          `json:"event,required"`
@@ -691,6 +689,8 @@ type ThreatEventBulkNewParamsData struct {
 	Raw             param.Field[ThreatEventBulkNewParamsDataRaw] `json:"raw,required"`
 	TLP             param.Field[string]                          `json:"tlp,required"`
 	AccountID       param.Field[float64]                         `json:"accountId"`
+	Attacker        param.Field[string]                          `json:"attacker"`
+	AttackerCountry param.Field[string]                          `json:"attackerCountry"`
 	DatasetID       param.Field[string]                          `json:"datasetId"`
 	Indicator       param.Field[string]                          `json:"indicator"`
 	Tags            param.Field[[]string]                        `json:"tags"`

@@ -247,6 +247,7 @@ func (r DLPProfileCustomNewParamsSharedEntry) implementsDLPProfileCustomNewParam
 // [zero_trust.DLPProfileCustomNewParamsSharedEntriesPredefined],
 // [zero_trust.DLPProfileCustomNewParamsSharedEntriesIntegration],
 // [zero_trust.DLPProfileCustomNewParamsSharedEntriesExactData],
+// [zero_trust.DLPProfileCustomNewParamsSharedEntriesObject],
 // [DLPProfileCustomNewParamsSharedEntry].
 type DLPProfileCustomNewParamsSharedEntryUnion interface {
 	implementsDLPProfileCustomNewParamsSharedEntryUnion()
@@ -360,18 +361,46 @@ func (r DLPProfileCustomNewParamsSharedEntriesExactDataEntryType) IsKnown() bool
 	return false
 }
 
+type DLPProfileCustomNewParamsSharedEntriesObject struct {
+	Enabled   param.Field[bool]                                                  `json:"enabled,required"`
+	EntryID   param.Field[string]                                                `json:"entry_id,required" format:"uuid"`
+	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesObjectEntryType] `json:"entry_type,required"`
+}
+
+func (r DLPProfileCustomNewParamsSharedEntriesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPProfileCustomNewParamsSharedEntriesObject) implementsDLPProfileCustomNewParamsSharedEntryUnion() {
+}
+
+type DLPProfileCustomNewParamsSharedEntriesObjectEntryType string
+
+const (
+	DLPProfileCustomNewParamsSharedEntriesObjectEntryTypeDocumentFingerprint DLPProfileCustomNewParamsSharedEntriesObjectEntryType = "document_fingerprint"
+)
+
+func (r DLPProfileCustomNewParamsSharedEntriesObjectEntryType) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomNewParamsSharedEntriesObjectEntryTypeDocumentFingerprint:
+		return true
+	}
+	return false
+}
+
 type DLPProfileCustomNewParamsSharedEntriesEntryType string
 
 const (
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeCustom      DLPProfileCustomNewParamsSharedEntriesEntryType = "custom"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypePredefined  DLPProfileCustomNewParamsSharedEntriesEntryType = "predefined"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeIntegration DLPProfileCustomNewParamsSharedEntriesEntryType = "integration"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeExactData   DLPProfileCustomNewParamsSharedEntriesEntryType = "exact_data"
+	DLPProfileCustomNewParamsSharedEntriesEntryTypeCustom              DLPProfileCustomNewParamsSharedEntriesEntryType = "custom"
+	DLPProfileCustomNewParamsSharedEntriesEntryTypePredefined          DLPProfileCustomNewParamsSharedEntriesEntryType = "predefined"
+	DLPProfileCustomNewParamsSharedEntriesEntryTypeIntegration         DLPProfileCustomNewParamsSharedEntriesEntryType = "integration"
+	DLPProfileCustomNewParamsSharedEntriesEntryTypeExactData           DLPProfileCustomNewParamsSharedEntriesEntryType = "exact_data"
+	DLPProfileCustomNewParamsSharedEntriesEntryTypeDocumentFingerprint DLPProfileCustomNewParamsSharedEntriesEntryType = "document_fingerprint"
 )
 
 func (r DLPProfileCustomNewParamsSharedEntriesEntryType) IsKnown() bool {
 	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesEntryTypeCustom, DLPProfileCustomNewParamsSharedEntriesEntryTypePredefined, DLPProfileCustomNewParamsSharedEntriesEntryTypeIntegration, DLPProfileCustomNewParamsSharedEntriesEntryTypeExactData:
+	case DLPProfileCustomNewParamsSharedEntriesEntryTypeCustom, DLPProfileCustomNewParamsSharedEntriesEntryTypePredefined, DLPProfileCustomNewParamsSharedEntriesEntryTypeIntegration, DLPProfileCustomNewParamsSharedEntriesEntryTypeExactData, DLPProfileCustomNewParamsSharedEntriesEntryTypeDocumentFingerprint:
 		return true
 	}
 	return false
@@ -603,6 +632,7 @@ func (r DLPProfileCustomUpdateParamsSharedEntry) implementsDLPProfileCustomUpdat
 // Satisfied by [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefined],
 // [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesIntegration],
 // [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesExactData],
+// [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesObject],
 // [DLPProfileCustomUpdateParamsSharedEntry].
 type DLPProfileCustomUpdateParamsSharedEntryUnion interface {
 	implementsDLPProfileCustomUpdateParamsSharedEntryUnion()
@@ -689,17 +719,45 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryType) IsKnown() b
 	return false
 }
 
+type DLPProfileCustomUpdateParamsSharedEntriesObject struct {
+	Enabled   param.Field[bool]                                                     `json:"enabled,required"`
+	EntryID   param.Field[string]                                                   `json:"entry_id,required" format:"uuid"`
+	EntryType param.Field[DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType] `json:"entry_type,required"`
+}
+
+func (r DLPProfileCustomUpdateParamsSharedEntriesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPProfileCustomUpdateParamsSharedEntriesObject) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
+}
+
+type DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType string
+
+const (
+	DLPProfileCustomUpdateParamsSharedEntriesObjectEntryTypeDocumentFingerprint DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType = "document_fingerprint"
+)
+
+func (r DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomUpdateParamsSharedEntriesObjectEntryTypeDocumentFingerprint:
+		return true
+	}
+	return false
+}
+
 type DLPProfileCustomUpdateParamsSharedEntriesEntryType string
 
 const (
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypePredefined  DLPProfileCustomUpdateParamsSharedEntriesEntryType = "predefined"
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeIntegration DLPProfileCustomUpdateParamsSharedEntriesEntryType = "integration"
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeExactData   DLPProfileCustomUpdateParamsSharedEntriesEntryType = "exact_data"
+	DLPProfileCustomUpdateParamsSharedEntriesEntryTypePredefined          DLPProfileCustomUpdateParamsSharedEntriesEntryType = "predefined"
+	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeIntegration         DLPProfileCustomUpdateParamsSharedEntriesEntryType = "integration"
+	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeExactData           DLPProfileCustomUpdateParamsSharedEntriesEntryType = "exact_data"
+	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeDocumentFingerprint DLPProfileCustomUpdateParamsSharedEntriesEntryType = "document_fingerprint"
 )
 
 func (r DLPProfileCustomUpdateParamsSharedEntriesEntryType) IsKnown() bool {
 	switch r {
-	case DLPProfileCustomUpdateParamsSharedEntriesEntryTypePredefined, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeIntegration, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeExactData:
+	case DLPProfileCustomUpdateParamsSharedEntriesEntryTypePredefined, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeIntegration, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeExactData, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeDocumentFingerprint:
 		return true
 	}
 	return false

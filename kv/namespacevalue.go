@@ -158,18 +158,16 @@ func (r namespaceValueDeleteResponseJSON) RawJSON() string {
 }
 
 type NamespaceValueUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Arbitrary JSON to be associated with a key/value pair.
-	Metadata param.Field[string] `json:"metadata,required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
 	Value param.Field[string] `json:"value,required"`
-	// The time, measured in number of seconds since the UNIX epoch, at which the key
-	// should expire.
+	// Expires the key at a certain time, measured in number of seconds since the UNIX
+	// epoch.
 	Expiration param.Field[float64] `query:"expiration"`
-	// The number of seconds for which the key should be visible before it expires. At
-	// least 60.
-	ExpirationTTL param.Field[float64] `query:"expiration_ttl"`
+	// Expires the key after a number of seconds. Must be at least 60.
+	ExpirationTTL param.Field[float64]     `query:"expiration_ttl"`
+	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceValueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -188,7 +186,7 @@ func (r NamespaceValueUpdateParams) URLQuery() (v url.Values) {
 type NamespaceValueUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceValueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceValueUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceValueUpdateResponseEnvelopeJSON    `json:"-"`
@@ -213,7 +211,7 @@ func (r namespaceValueUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceValueUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -229,14 +227,14 @@ func (r NamespaceValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceValueDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type NamespaceValueDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceValueDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceValueDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceValueDeleteResponseEnvelopeJSON    `json:"-"`
@@ -261,7 +259,7 @@ func (r namespaceValueDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceValueDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -277,6 +275,6 @@ func (r NamespaceValueDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceValueGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

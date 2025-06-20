@@ -72,7 +72,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 	return
 }
 
-// Fetch all DEX tests.
+// Fetch all DEX tests
 func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceDEXTestListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -94,7 +94,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 	return res, nil
 }
 
-// Fetch all DEX tests.
+// Fetch all DEX tests
 func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceDEXTestListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }

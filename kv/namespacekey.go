@@ -94,10 +94,9 @@ func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string
 	return
 }
 
-// Get multiple KV pairs from the namespace. Body should contain keys to retrieve
-// at most 100. Keys must contain text-based values. If value is json, it can be
-// requested to return in JSON, instead of string. Metadata can be return if
-// withMetadata is true.
+// Retrieve up to 100 KV pairs from the namespace. Keys must contain text-based
+// values. JSON values can optionally be parsed instead of being returned as a
+// string value. Metadata can be included if `withMetadata` is true.
 //
 // Deprecated: Please use kv.namespaces.bulk_get instead
 func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, params NamespaceKeyBulkGetParams, opts ...option.RequestOption) (res *NamespaceKeyBulkGetResponse, err error) {
@@ -156,10 +155,9 @@ type Key struct {
 	Name string `json:"name,required"`
 	// The time, measured in number of seconds since the UNIX epoch, at which the key
 	// will expire. This property is omitted for keys that will not expire.
-	Expiration float64 `json:"expiration"`
-	// Arbitrary JSON that is associated with a key.
-	Metadata map[string]interface{} `json:"metadata"`
-	JSON     keyJSON                `json:"-"`
+	Expiration float64     `json:"expiration"`
+	Metadata   interface{} `json:"metadata"`
+	JSON       keyJSON     `json:"-"`
 }
 
 // keyJSON contains the JSON metadata for the struct [Key]
@@ -180,7 +178,7 @@ func (r keyJSON) RawJSON() string {
 }
 
 type NamespaceKeyBulkDeleteResponse struct {
-	// Number of keys successfully updated
+	// Number of keys successfully updated.
 	SuccessfulKeyCount float64 `json:"successful_key_count"`
 	// Name of the keys that failed to be fully updated. They should be retried.
 	UnsuccessfulKeys []string                           `json:"unsuccessful_keys"`
@@ -266,7 +264,7 @@ func init() {
 }
 
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResult struct {
-	// Requested keys are paired with their values in an object
+	// Requested keys are paired with their values in an object.
 	Values map[string]NamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion `json:"values"`
 	JSON   namespaceKeyBulkGetResponseWorkersKVBulkGetResultJSON                   `json:"-"`
 }
@@ -289,7 +287,7 @@ func (r namespaceKeyBulkGetResponseWorkersKVBulkGetResultJSON) RawJSON() string 
 
 func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResult) implementsNamespaceKeyBulkGetResponse() {}
 
-// The value associated with the key
+// The value associated with the key.
 //
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
 // or [NamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesMap].
@@ -330,7 +328,7 @@ func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesMap) ImplementsNa
 }
 
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata struct {
-	// Requested keys are paired with their values and metadata in an object
+	// Requested keys are paired with their values and metadata in an object.
 	Values map[string]NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValue `json:"values"`
 	JSON   namespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataJSON             `json:"-"`
 }
@@ -356,12 +354,10 @@ func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata) implement
 }
 
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValue struct {
-	// The metadata associated with the key
-	Metadata map[string]interface{} `json:"metadata,required,nullable"`
-	// The value associated with the key
-	Value NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion `json:"value,required"`
-	// The time, measured in number of seconds since the UNIX epoch, at which the key
-	// should expire.
+	Metadata interface{} `json:"metadata,required"`
+	Value    interface{} `json:"value,required"`
+	// Expires the key at a certain time, measured in number of seconds since the UNIX
+	// epoch.
 	Expiration float64                                                                `json:"expiration"`
 	JSON       namespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON `json:"-"`
 }
@@ -385,49 +381,8 @@ func (r namespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON) 
 	return r.raw
 }
 
-// The value associated with the key
-//
-// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or
-// [NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap].
-type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion interface {
-	ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap{}),
-		},
-	)
-}
-
-type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap map[string]interface{}
-
-func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-
 type NamespaceKeyBulkUpdateResponse struct {
-	// Number of keys successfully updated
+	// Number of keys successfully updated.
 	SuccessfulKeyCount float64 `json:"successful_key_count"`
 	// Name of the keys that failed to be fully updated. They should be retried.
 	UnsuccessfulKeys []string                           `json:"unsuccessful_keys"`
@@ -452,18 +407,18 @@ func (r namespaceKeyBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type NamespaceKeyListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records if the amount of list results was limited by the limit
 	// parameter. A valid value for the cursor can be obtained from the `cursors`
 	// object in the `result_info` structure.
 	Cursor param.Field[string] `query:"cursor"`
-	// The number of keys to return. The cursor attribute may be used to iterate over
-	// the next batch of keys if there are more than the limit.
+	// Limits the number of keys returned in the response. The cursor attribute may be
+	// used to iterate over the next batch of keys if there are more than the limit.
 	Limit param.Field[float64] `query:"limit"`
-	// A string prefix used to filter down which keys will be returned. Exact matches
-	// and any key names that begin with the prefix will be returned.
+	// Filters returned keys by a name prefix. Exact matches and any key names that
+	// begin with the prefix will be returned.
 	Prefix param.Field[string] `query:"prefix"`
 }
 
@@ -476,7 +431,7 @@ func (r NamespaceKeyListParams) URLQuery() (v url.Values) {
 }
 
 type NamespaceKeyBulkDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      []string            `json:"body,required"`
 }
@@ -488,7 +443,7 @@ func (r NamespaceKeyBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 type NamespaceKeyBulkDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceKeyBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceKeyBulkDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceKeyBulkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -513,7 +468,7 @@ func (r namespaceKeyBulkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceKeyBulkDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -529,13 +484,13 @@ func (r NamespaceKeyBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceKeyBulkGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Array of keys to retrieve (maximum 100)
+	// Array of keys to retrieve (maximum of 100).
 	Keys param.Field[[]string] `json:"keys,required"`
-	// Whether to parse JSON values in the response
+	// Whether to parse JSON values in the response.
 	Type param.Field[NamespaceKeyBulkGetParamsType] `json:"type"`
-	// Whether to include metadata in the response
+	// Whether to include metadata in the response.
 	WithMetadata param.Field[bool] `json:"withMetadata"`
 }
 
@@ -543,7 +498,7 @@ func (r NamespaceKeyBulkGetParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Whether to parse JSON values in the response
+// Whether to parse JSON values in the response.
 type NamespaceKeyBulkGetParamsType string
 
 const (
@@ -562,7 +517,7 @@ func (r NamespaceKeyBulkGetParamsType) IsKnown() bool {
 type NamespaceKeyBulkGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceKeyBulkGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceKeyBulkGetResponse                `json:"result,nullable"`
 	JSON    namespaceKeyBulkGetResponseEnvelopeJSON    `json:"-"`
@@ -587,7 +542,7 @@ func (r namespaceKeyBulkGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceKeyBulkGetResponseEnvelopeSuccess bool
 
 const (
@@ -603,7 +558,7 @@ func (r NamespaceKeyBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceKeyBulkUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]                `path:"account_id,required"`
 	Body      []NamespaceKeyBulkUpdateParamsBody `json:"body,required"`
 }
@@ -613,23 +568,21 @@ func (r NamespaceKeyBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceKeyBulkUpdateParamsBody struct {
-	// Whether or not the server should base64 decode the value before storing it.
-	// Useful for writing values that wouldn't otherwise be valid JSON strings, such as
-	// images.
-	Base64 param.Field[bool] `json:"base64"`
-	// The time, measured in number of seconds since the UNIX epoch, at which the key
-	// should expire.
-	Expiration param.Field[float64] `json:"expiration"`
-	// The number of seconds for which the key should be visible before it expires. At
-	// least 60.
-	ExpirationTTL param.Field[float64] `json:"expiration_ttl"`
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid.
-	Key param.Field[string] `json:"key"`
-	// Arbitrary JSON that is associated with a key.
-	Metadata param.Field[map[string]interface{}] `json:"metadata"`
+	Key param.Field[string] `json:"key,required"`
 	// A UTF-8 encoded string to be stored, up to 25 MiB in length.
-	Value param.Field[string] `json:"value"`
+	Value param.Field[string] `json:"value,required"`
+	// Indicates whether or not the server should base64 decode the value before
+	// storing it. Useful for writing values that wouldn't otherwise be valid JSON
+	// strings, such as images.
+	Base64 param.Field[bool] `json:"base64"`
+	// Expires the key at a certain time, measured in number of seconds since the UNIX
+	// epoch.
+	Expiration param.Field[float64] `json:"expiration"`
+	// Expires the key after a number of seconds. Must be at least 60.
+	ExpirationTTL param.Field[float64]     `json:"expiration_ttl"`
+	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceKeyBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -639,7 +592,7 @@ func (r NamespaceKeyBulkUpdateParamsBody) MarshalJSON() (data []byte, err error)
 type NamespaceKeyBulkUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceKeyBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceKeyBulkUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceKeyBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -664,7 +617,7 @@ func (r namespaceKeyBulkUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceKeyBulkUpdateResponseEnvelopeSuccess bool
 
 const (
