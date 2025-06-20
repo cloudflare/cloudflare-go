@@ -30,6 +30,7 @@ func TestV1NewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V1.New(context.TODO(), images.V1NewParams{
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ID:                cloudflare.F[any](map[string]interface{}{}),
 		File:              cloudflare.F[any](map[string]interface{}{}),
 		Metadata:          cloudflare.F[any](map[string]interface{}{}),
 		RequireSignedURLs: cloudflare.F(true),

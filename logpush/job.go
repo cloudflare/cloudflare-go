@@ -225,8 +225,7 @@ type LogpushJob struct {
 	// Deprecated: deprecated
 	Frequency LogpushJobFrequency `json:"frequency,nullable"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
-	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-	// `http_requests` dataset.
+	// Log Delivery jobs (when supported by the dataset).
 	Kind LogpushJobKind `json:"kind"`
 	// Records the last time for which logs have been successfully pushed. If the last
 	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
@@ -360,17 +359,17 @@ func (r LogpushJobFrequency) IsKnown() bool {
 }
 
 // The kind parameter (optional) is used to differentiate between Logpush and Edge
-// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-// `http_requests` dataset.
+// Log Delivery jobs (when supported by the dataset).
 type LogpushJobKind string
 
 const (
-	LogpushJobKindEdge LogpushJobKind = "edge"
+	LogpushJobKindEmpty LogpushJobKind = ""
+	LogpushJobKindEdge  LogpushJobKind = "edge"
 )
 
 func (r LogpushJobKind) IsKnown() bool {
 	switch r {
-	case LogpushJobKindEdge:
+	case LogpushJobKindEmpty, LogpushJobKindEdge:
 		return true
 	}
 	return false
@@ -567,8 +566,7 @@ type JobNewParams struct {
 	// frequency to low sends logs in smaller quantities of larger files.
 	Frequency param.Field[JobNewParamsFrequency] `json:"frequency"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
-	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-	// `http_requests` dataset.
+	// Log Delivery jobs (when supported by the dataset).
 	Kind param.Field[JobNewParamsKind] `json:"kind"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
@@ -667,17 +665,17 @@ func (r JobNewParamsFrequency) IsKnown() bool {
 }
 
 // The kind parameter (optional) is used to differentiate between Logpush and Edge
-// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-// `http_requests` dataset.
+// Log Delivery jobs (when supported by the dataset).
 type JobNewParamsKind string
 
 const (
-	JobNewParamsKindEdge JobNewParamsKind = "edge"
+	JobNewParamsKindEmpty JobNewParamsKind = ""
+	JobNewParamsKindEdge  JobNewParamsKind = "edge"
 )
 
 func (r JobNewParamsKind) IsKnown() bool {
 	switch r {
-	case JobNewParamsKindEdge:
+	case JobNewParamsKindEmpty, JobNewParamsKindEdge:
 		return true
 	}
 	return false
@@ -843,8 +841,7 @@ type JobUpdateParams struct {
 	// frequency to low sends logs in smaller quantities of larger files.
 	Frequency param.Field[JobUpdateParamsFrequency] `json:"frequency"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
-	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-	// `http_requests` dataset.
+	// Log Delivery jobs (when supported by the dataset).
 	Kind param.Field[JobUpdateParamsKind] `json:"kind"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
@@ -904,17 +901,17 @@ func (r JobUpdateParamsFrequency) IsKnown() bool {
 }
 
 // The kind parameter (optional) is used to differentiate between Logpush and Edge
-// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-// `http_requests` dataset.
+// Log Delivery jobs (when supported by the dataset).
 type JobUpdateParamsKind string
 
 const (
-	JobUpdateParamsKindEdge JobUpdateParamsKind = "edge"
+	JobUpdateParamsKindEmpty JobUpdateParamsKind = ""
+	JobUpdateParamsKindEdge  JobUpdateParamsKind = "edge"
 )
 
 func (r JobUpdateParamsKind) IsKnown() bool {
 	switch r {
-	case JobUpdateParamsKindEdge:
+	case JobUpdateParamsKindEmpty, JobUpdateParamsKindEdge:
 		return true
 	}
 	return false

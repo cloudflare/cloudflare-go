@@ -293,6 +293,10 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 type ARecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type ARecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -307,23 +311,19 @@ type ARecord struct {
 	Settings ARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL         `json:"ttl"`
-	JSON aRecordJSON `json:"-"`
+	JSON aRecordJSON  `json:"-"`
 }
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
 type aRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -385,6 +385,10 @@ func (r aRecordSettingsJSON) RawJSON() string {
 type ARecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[ARecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -399,10 +403,6 @@ type ARecordParam struct {
 	Settings param.Field[ARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r ARecordParam) MarshalJSON() (data []byte, err error) {
@@ -438,6 +438,10 @@ func (r ARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type AAAARecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type AAAARecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -451,24 +455,20 @@ type AAAARecord struct {
 	// Settings for the DNS record.
 	Settings AAAARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
+	Tags []RecordTags   `json:"tags"`
 	JSON aaaaRecordJSON `json:"-"`
 }
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
 type aaaaRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -531,6 +531,10 @@ func (r aaaaRecordSettingsJSON) RawJSON() string {
 type AAAARecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[AAAARecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -545,10 +549,6 @@ type AAAARecordParam struct {
 	Settings param.Field[AAAARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -661,6 +661,10 @@ type BatchPatchOpenpgpkeyRecordParam struct {
 	ID param.Field[string] `json:"id,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[BatchPatchOpenpgpkeyRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -675,10 +679,6 @@ type BatchPatchOpenpgpkeyRecordParam struct {
 	Settings param.Field[BatchPatchOpenpgpkeyRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r BatchPatchOpenpgpkeyRecordParam) MarshalJSON() (data []byte, err error) {
@@ -980,6 +980,10 @@ type BatchPutOpenpgpkeyRecordParam struct {
 	ID param.Field[string] `json:"id,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[BatchPutOpenpgpkeyRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -994,10 +998,6 @@ type BatchPutOpenpgpkeyRecordParam struct {
 	Settings param.Field[BatchPutOpenpgpkeyRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r BatchPutOpenpgpkeyRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1222,6 +1222,10 @@ func (r BatchPutURIRecordParam) implementsBatchPutUnionParam() {}
 type CAARecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type CAARecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1237,17 +1241,14 @@ type CAARecord struct {
 	// Settings for the DNS record.
 	Settings CAARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
+	Tags []RecordTags  `json:"tags"`
 	JSON caaRecordJSON `json:"-"`
 }
 
 // caaRecordJSON contains the JSON metadata for the struct [CAARecord]
 type caaRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -1255,7 +1256,6 @@ type caaRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1346,6 +1346,10 @@ func (r caaRecordSettingsJSON) RawJSON() string {
 type CAARecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[CAARecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1360,10 +1364,6 @@ type CAARecordParam struct {
 	Settings param.Field[CAARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -1413,6 +1413,10 @@ func (r CAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type CERTRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type CERTRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1428,17 +1432,14 @@ type CERTRecord struct {
 	// Settings for the DNS record.
 	Settings CERTRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
+	Tags []RecordTags   `json:"tags"`
 	JSON certRecordJSON `json:"-"`
 }
 
 // certRecordJSON contains the JSON metadata for the struct [CERTRecord]
 type certRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -1446,7 +1447,6 @@ type certRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1540,6 +1540,10 @@ func (r certRecordSettingsJSON) RawJSON() string {
 type CERTRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[CERTRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1554,10 +1558,6 @@ type CERTRecordParam struct {
 	Settings param.Field[CERTRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1609,6 +1609,10 @@ func (r CERTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type CNAMERecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type CNAMERecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1622,24 +1626,20 @@ type CNAMERecord struct {
 	// Settings for the DNS record.
 	Settings CNAMERecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
+	Tags []RecordTags    `json:"tags"`
 	JSON cnameRecordJSON `json:"-"`
 }
 
 // cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
 type cnameRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1708,6 +1708,10 @@ func (r cnameRecordSettingsJSON) RawJSON() string {
 type CNAMERecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1722,10 +1726,6 @@ type CNAMERecordParam struct {
 	Settings param.Field[CNAMERecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
@@ -1766,6 +1766,10 @@ func (r CNAMERecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type DNSKEYRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type DNSKEYRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1781,17 +1785,14 @@ type DNSKEYRecord struct {
 	// Settings for the DNS record.
 	Settings DNSKEYRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL              `json:"ttl"`
+	Tags []RecordTags     `json:"tags"`
 	JSON dnskeyRecordJSON `json:"-"`
 }
 
 // dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
 type dnskeyRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -1799,7 +1800,6 @@ type dnskeyRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1894,6 +1894,10 @@ func (r dnskeyRecordSettingsJSON) RawJSON() string {
 type DNSKEYRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[DNSKEYRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1908,10 +1912,6 @@ type DNSKEYRecordParam struct {
 	Settings param.Field[DNSKEYRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1963,6 +1963,10 @@ func (r DNSKEYRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type DSRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type DSRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1979,16 +1983,13 @@ type DSRecord struct {
 	Settings DSRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL          `json:"ttl"`
 	JSON dsRecordJSON `json:"-"`
 }
 
 // dsRecordJSON contains the JSON metadata for the struct [DSRecord]
 type dsRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -1996,7 +1997,6 @@ type dsRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2090,6 +2090,10 @@ func (r dsRecordSettingsJSON) RawJSON() string {
 type DSRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[DSRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2104,10 +2108,6 @@ type DSRecordParam struct {
 	Settings param.Field[DSRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2159,6 +2159,10 @@ func (r DSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type HTTPSRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type HTTPSRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2174,17 +2178,14 @@ type HTTPSRecord struct {
 	// Settings for the DNS record.
 	Settings HTTPSRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
+	Tags []RecordTags    `json:"tags"`
 	JSON httpsRecordJSON `json:"-"`
 }
 
 // httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
 type httpsRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -2192,7 +2193,6 @@ type httpsRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2283,6 +2283,10 @@ func (r httpsRecordSettingsJSON) RawJSON() string {
 type HTTPSRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[HTTPSRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2297,10 +2301,6 @@ type HTTPSRecordParam struct {
 	Settings param.Field[HTTPSRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2350,6 +2350,10 @@ func (r HTTPSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type LOCRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type LOCRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2365,17 +2369,14 @@ type LOCRecord struct {
 	// Settings for the DNS record.
 	Settings LOCRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
+	Tags []RecordTags  `json:"tags"`
 	JSON locRecordJSON `json:"-"`
 }
 
 // locRecordJSON contains the JSON metadata for the struct [LOCRecord]
 type locRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -2383,7 +2384,6 @@ type locRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2533,6 +2533,10 @@ func (r locRecordSettingsJSON) RawJSON() string {
 type LOCRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[LOCRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2547,10 +2551,6 @@ type LOCRecordParam struct {
 	Settings param.Field[LOCRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2618,6 +2618,10 @@ func (r LOCRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type MXRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type MXRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2635,16 +2639,13 @@ type MXRecord struct {
 	Settings MXRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL          `json:"ttl"`
 	JSON mxRecordJSON `json:"-"`
 }
 
 // mxRecordJSON contains the JSON metadata for the struct [MXRecord]
 type mxRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -2652,7 +2653,6 @@ type mxRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2715,6 +2715,10 @@ func (r mxRecordSettingsJSON) RawJSON() string {
 type MXRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[MXRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2732,10 +2736,6 @@ type MXRecordParam struct {
 	Settings param.Field[MXRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2771,6 +2771,10 @@ func (r MXRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type NAPTRRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type NAPTRRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2786,17 +2790,14 @@ type NAPTRRecord struct {
 	// Settings for the DNS record.
 	Settings NAPTRRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
+	Tags []RecordTags    `json:"tags"`
 	JSON naptrRecordJSON `json:"-"`
 }
 
 // naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
 type naptrRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -2804,7 +2805,6 @@ type naptrRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2904,6 +2904,10 @@ func (r naptrRecordSettingsJSON) RawJSON() string {
 type NAPTRRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[NAPTRRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2918,10 +2922,6 @@ type NAPTRRecordParam struct {
 	Settings param.Field[NAPTRRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2977,6 +2977,10 @@ func (r NAPTRRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type NSRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type NSRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2991,23 +2995,19 @@ type NSRecord struct {
 	Settings NSRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL          `json:"ttl"`
 	JSON nsRecordJSON `json:"-"`
 }
 
 // nsRecordJSON contains the JSON metadata for the struct [NSRecord]
 type nsRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3070,6 +3070,10 @@ func (r nsRecordSettingsJSON) RawJSON() string {
 type NSRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[NSRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3084,10 +3088,6 @@ type NSRecordParam struct {
 	Settings param.Field[NSRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3123,6 +3123,10 @@ func (r NSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type PTRRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type PTRRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3136,24 +3140,20 @@ type PTRRecord struct {
 	// Settings for the DNS record.
 	Settings PTRRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
+	Tags []RecordTags  `json:"tags"`
 	JSON ptrRecordJSON `json:"-"`
 }
 
 // ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
 type ptrRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3216,6 +3216,10 @@ func (r ptrRecordSettingsJSON) RawJSON() string {
 type PTRRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[PTRRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3230,10 +3234,6 @@ type PTRRecordParam struct {
 	Settings param.Field[PTRRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -4498,6 +4498,10 @@ type RecordTagsParam = string
 type SMIMEARecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type SMIMEARecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4513,17 +4517,14 @@ type SMIMEARecord struct {
 	// Settings for the DNS record.
 	Settings SMIMEARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL              `json:"ttl"`
+	Tags []RecordTags     `json:"tags"`
 	JSON smimeaRecordJSON `json:"-"`
 }
 
 // smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
 type smimeaRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -4531,7 +4532,6 @@ type smimeaRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4626,6 +4626,10 @@ func (r smimeaRecordSettingsJSON) RawJSON() string {
 type SMIMEARecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[SMIMEARecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4640,10 +4644,6 @@ type SMIMEARecordParam struct {
 	Settings param.Field[SMIMEARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
@@ -4695,6 +4695,10 @@ func (r SMIMEARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type SRVRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type SRVRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4711,17 +4715,14 @@ type SRVRecord struct {
 	// Settings for the DNS record.
 	Settings SRVRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
+	Tags []RecordTags  `json:"tags"`
 	JSON srvRecordJSON `json:"-"`
 }
 
 // srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
 type srvRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -4729,7 +4730,6 @@ type srvRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4824,6 +4824,10 @@ func (r srvRecordSettingsJSON) RawJSON() string {
 type SRVRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[SRVRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4838,10 +4842,6 @@ type SRVRecordParam struct {
 	Settings param.Field[SRVRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
@@ -4894,6 +4894,10 @@ func (r SRVRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type SSHFPRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type SSHFPRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4909,17 +4913,14 @@ type SSHFPRecord struct {
 	// Settings for the DNS record.
 	Settings SSHFPRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
+	Tags []RecordTags    `json:"tags"`
 	JSON sshfpRecordJSON `json:"-"`
 }
 
 // sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
 type sshfpRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -4927,7 +4928,6 @@ type sshfpRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5018,6 +5018,10 @@ func (r sshfpRecordSettingsJSON) RawJSON() string {
 type SSHFPRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[SSHFPRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5032,10 +5036,6 @@ type SSHFPRecordParam struct {
 	Settings param.Field[SSHFPRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
@@ -5085,6 +5085,10 @@ func (r SSHFPRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type SVCBRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type SVCBRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5100,17 +5104,14 @@ type SVCBRecord struct {
 	// Settings for the DNS record.
 	Settings SVCBRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
+	Tags []RecordTags   `json:"tags"`
 	JSON svcbRecordJSON `json:"-"`
 }
 
 // svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
 type svcbRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -5118,7 +5119,6 @@ type svcbRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5209,6 +5209,10 @@ func (r svcbRecordSettingsJSON) RawJSON() string {
 type SVCBRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[SVCBRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5223,10 +5227,6 @@ type SVCBRecordParam struct {
 	Settings param.Field[SVCBRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
@@ -5276,6 +5276,10 @@ func (r SVCBRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type TLSARecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type TLSARecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5291,17 +5295,14 @@ type TLSARecord struct {
 	// Settings for the DNS record.
 	Settings TLSARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
+	Tags []RecordTags   `json:"tags"`
 	JSON tlsaRecordJSON `json:"-"`
 }
 
 // tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
 type tlsaRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -5309,7 +5310,6 @@ type tlsaRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5403,6 +5403,10 @@ func (r tlsaRecordSettingsJSON) RawJSON() string {
 type TLSARecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[TLSARecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5417,10 +5421,6 @@ type TLSARecordParam struct {
 	Settings param.Field[TLSARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
@@ -5489,6 +5489,10 @@ func (r TTL) IsKnown() bool {
 type TXTRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type TXTRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5507,24 +5511,20 @@ type TXTRecord struct {
 	// Settings for the DNS record.
 	Settings TXTRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
+	Tags []RecordTags  `json:"tags"`
 	JSON txtRecordJSON `json:"-"`
 }
 
 // txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
 type txtRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5587,6 +5587,10 @@ func (r txtRecordSettingsJSON) RawJSON() string {
 type TXTRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[TXTRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5606,10 +5610,6 @@ type TXTRecordParam struct {
 	Settings param.Field[TXTRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -5645,6 +5645,10 @@ func (r TXTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 type URIRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL TTL `json:"ttl,required"`
 	// Record type.
 	Type URIRecordType `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5663,17 +5667,14 @@ type URIRecord struct {
 	// Settings for the DNS record.
 	Settings URIRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
+	Tags []RecordTags  `json:"tags"`
 	JSON uriRecordJSON `json:"-"`
 }
 
 // uriRecordJSON contains the JSON metadata for the struct [URIRecord]
 type uriRecordJSON struct {
 	Name        apijson.Field
+	TTL         apijson.Field
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
@@ -5682,7 +5683,6 @@ type uriRecordJSON struct {
 	Proxied     apijson.Field
 	Settings    apijson.Field
 	Tags        apijson.Field
-	TTL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5770,6 +5770,10 @@ func (r uriRecordSettingsJSON) RawJSON() string {
 type URIRecordParam struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[URIRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5787,10 +5791,6 @@ type URIRecordParam struct {
 	Settings param.Field[URIRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r URIRecordParam) MarshalJSON() (data []byte, err error) {
@@ -5947,6 +5947,10 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 type RecordNewParamsBody struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordNewParamsBodyType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5963,10 +5967,6 @@ type RecordNewParamsBody struct {
 	Proxied  param.Field[bool]        `json:"proxied"`
 	Settings param.Field[interface{}] `json:"settings"`
 	Tags     param.Field[interface{}] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -5990,6 +5990,10 @@ type RecordNewParamsBodyUnion interface {
 type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6004,10 +6008,6 @@ type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	Settings param.Field[RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
@@ -6236,6 +6236,10 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 type RecordUpdateParamsBody struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordUpdateParamsBodyType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6252,10 +6256,6 @@ type RecordUpdateParamsBody struct {
 	Proxied  param.Field[bool]        `json:"proxied"`
 	Settings param.Field[interface{}] `json:"settings"`
 	Tags     param.Field[interface{}] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -6279,6 +6279,10 @@ type RecordUpdateParamsBodyUnion interface {
 type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6293,10 +6297,6 @@ type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	Settings param.Field[RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
@@ -6797,6 +6797,10 @@ func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 type RecordBatchParamsPost struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordBatchParamsPostsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6813,10 +6817,6 @@ type RecordBatchParamsPost struct {
 	Proxied  param.Field[bool]        `json:"proxied"`
 	Settings param.Field[interface{}] `json:"settings"`
 	Tags     param.Field[interface{}] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordBatchParamsPost) MarshalJSON() (data []byte, err error) {
@@ -6840,6 +6840,10 @@ type RecordBatchParamsPostUnion interface {
 type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6854,10 +6858,6 @@ type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord struct {
 	Settings param.Field[RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
@@ -7086,6 +7086,10 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 type RecordEditParamsBody struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordEditParamsBodyType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7102,10 +7106,6 @@ type RecordEditParamsBody struct {
 	Proxied  param.Field[bool]        `json:"proxied"`
 	Settings param.Field[interface{}] `json:"settings"`
 	Tags     param.Field[interface{}] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordEditParamsBody) MarshalJSON() (data []byte, err error) {
@@ -7129,6 +7129,10 @@ type RecordEditParamsBodyUnion interface {
 type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
 	// Record type.
 	Type param.Field[RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7143,10 +7147,6 @@ type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	Settings param.Field[RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {

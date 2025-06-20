@@ -165,6 +165,8 @@ func (r investigateListResponseJSON) RawJSON() string {
 }
 
 type InvestigateListResponseProperties struct {
+	AllowlistedPatternType string `json:"allowlisted_pattern_type"`
+	// Deprecated: deprecated
 	WhitelistedPatternType string                                `json:"whitelisted_pattern_type"`
 	JSON                   investigateListResponsePropertiesJSON `json:"-"`
 }
@@ -172,6 +174,7 @@ type InvestigateListResponseProperties struct {
 // investigateListResponsePropertiesJSON contains the JSON metadata for the struct
 // [InvestigateListResponseProperties]
 type investigateListResponsePropertiesJSON struct {
+	AllowlistedPatternType apijson.Field
 	WhitelistedPatternType apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
@@ -378,6 +381,8 @@ func (r investigateGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateGetResponseProperties struct {
+	AllowlistedPatternType string `json:"allowlisted_pattern_type"`
+	// Deprecated: deprecated
 	WhitelistedPatternType string                               `json:"whitelisted_pattern_type"`
 	JSON                   investigateGetResponsePropertiesJSON `json:"-"`
 }
@@ -385,6 +390,7 @@ type InvestigateGetResponseProperties struct {
 // investigateGetResponsePropertiesJSON contains the JSON metadata for the struct
 // [InvestigateGetResponseProperties]
 type investigateGetResponsePropertiesJSON struct {
+	AllowlistedPatternType apijson.Field
 	WhitelistedPatternType apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
