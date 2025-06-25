@@ -162,7 +162,6 @@ type ThreatEventNewResponse struct {
 	Attacker        string                     `json:"attacker,required"`
 	AttackerCountry string                     `json:"attackerCountry,required"`
 	Category        string                     `json:"category,required"`
-	CategoryID      float64                    `json:"categoryId,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
 	Indicator       string                     `json:"indicator,required"`
@@ -195,7 +194,6 @@ type threatEventNewResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
-	CategoryID      apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	Indicator       apijson.Field
@@ -235,7 +233,6 @@ type ThreatEventListResponse struct {
 	Attacker        string                      `json:"attacker,required"`
 	AttackerCountry string                      `json:"attackerCountry,required"`
 	Category        string                      `json:"category,required"`
-	CategoryID      float64                     `json:"categoryId,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
 	Indicator       string                      `json:"indicator,required"`
@@ -268,7 +265,6 @@ type threatEventListResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
-	CategoryID      apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	Indicator       apijson.Field
@@ -329,7 +325,6 @@ type ThreatEventEditResponse struct {
 	Attacker        string                      `json:"attacker,required"`
 	AttackerCountry string                      `json:"attackerCountry,required"`
 	Category        string                      `json:"category,required"`
-	CategoryID      float64                     `json:"categoryId,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
 	Indicator       string                      `json:"indicator,required"`
@@ -362,7 +357,6 @@ type threatEventEditResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
-	CategoryID      apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	Indicator       apijson.Field
@@ -402,7 +396,6 @@ type ThreatEventGetResponse struct {
 	Attacker        string                     `json:"attacker,required"`
 	AttackerCountry string                     `json:"attackerCountry,required"`
 	Category        string                     `json:"category,required"`
-	CategoryID      float64                    `json:"categoryId,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
 	Indicator       string                     `json:"indicator,required"`
@@ -435,7 +428,6 @@ type threatEventGetResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
-	CategoryID      apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	Indicator       apijson.Field
