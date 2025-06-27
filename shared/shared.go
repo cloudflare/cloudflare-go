@@ -3,10 +3,12 @@
 package shared
 
 import (
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/tidwall/gjson"
 )
 
 type ASN = int64
@@ -1265,8 +1267,8 @@ type TokenPolicy struct {
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups []TokenPolicyPermissionGroup `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources map[string]map[string]string `json:"resources,required"`
-	JSON      tokenPolicyJSON              `json:"-"`
+	Resources TokenPolicyResourcesUnion `json:"resources,required"`
+	JSON      tokenPolicyJSON           `json:"-"`
 }
 
 // tokenPolicyJSON contains the JSON metadata for the struct [TokenPolicy]
@@ -1357,13 +1359,44 @@ func (r tokenPolicyPermissionGroupsMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+// A list of resource names that the policy applies to.
+//
+// Union satisfied by [TokenPolicyResourcesIAMStringResource] or
+// [TokenPolicyResourcesIAMNestedResource].
+type TokenPolicyResourcesUnion interface {
+	implementsTokenPolicyResourcesUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TokenPolicyResourcesUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TokenPolicyResourcesIAMStringResource{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TokenPolicyResourcesIAMNestedResource{}),
+		},
+	)
+}
+
+type TokenPolicyResourcesIAMStringResource map[string]string
+
+func (r TokenPolicyResourcesIAMStringResource) implementsTokenPolicyResourcesUnion() {}
+
+type TokenPolicyResourcesIAMNestedResource map[string]map[string]string
+
+func (r TokenPolicyResourcesIAMNestedResource) implementsTokenPolicyResourcesUnion() {}
+
 type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
 	Effect param.Field[TokenPolicyEffect] `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources param.Field[map[string]map[string]string] `json:"resources,required"`
+	Resources param.Field[TokenPolicyResourcesUnionParam] `json:"resources,required"`
 }
 
 func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -1392,5 +1425,21 @@ type TokenPolicyPermissionGroupsMetaParam struct {
 func (r TokenPolicyPermissionGroupsMetaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// A list of resource names that the policy applies to.
+//
+// Satisfied by [shared.TokenPolicyResourcesIAMStringResourceParam],
+// [shared.TokenPolicyResourcesIAMNestedResourceParam].
+type TokenPolicyResourcesUnionParam interface {
+	implementsTokenPolicyResourcesUnionParam()
+}
+
+type TokenPolicyResourcesIAMStringResourceParam map[string]string
+
+func (r TokenPolicyResourcesIAMStringResourceParam) implementsTokenPolicyResourcesUnionParam() {}
+
+type TokenPolicyResourcesIAMNestedResourceParam map[string]map[string]string
+
+func (r TokenPolicyResourcesIAMNestedResourceParam) implementsTokenPolicyResourcesUnionParam() {}
 
 type TokenValue = string
