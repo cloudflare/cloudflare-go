@@ -47,8 +47,10 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(map[string]shared.TokenPolicyResourcesUnionParam{
-				"foo": shared.UnionString("string"),
+			Resources: cloudflare.F(map[string]map[string]string{
+				"foo": {
+					"foo": "string",
+				},
 			}),
 		}}),
 		Condition: cloudflare.F(user.TokenNewParamsCondition{
@@ -112,8 +114,10 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(map[string]shared.TokenPolicyResourcesUnionParam{
-						"foo": shared.UnionString("string"),
+					Resources: cloudflare.F(map[string]map[string]string{
+						"foo": {
+							"foo": "string",
+						},
 					}),
 				}}),
 				Status: cloudflare.F(shared.TokenStatusActive),
