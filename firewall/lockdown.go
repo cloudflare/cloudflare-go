@@ -449,8 +449,8 @@ type LockdownNewParams struct {
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
 	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
-	// An informative summary of the rate limit. This value is sanitized and any tags
-	// will be removed.
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
 	Description param.Field[string] `json:"description"`
 	// When true, indicates that the rule is currently paused.
 	Paused param.Field[bool] `json:"paused"`
