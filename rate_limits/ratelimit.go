@@ -211,8 +211,8 @@ type RateLimit struct {
 	// Criteria specifying when the current rate limit should be bypassed. You can
 	// specify that the rate limit should not apply to one or more URLs.
 	Bypass []RateLimitBypass `json:"bypass"`
-	// An informative summary of the rate limit. This value is sanitized and any tags
-	// will be removed.
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
 	Description string `json:"description"`
 	// When true, indicates that the rate limit is currently disabled.
 	Disabled bool `json:"disabled"`
@@ -536,8 +536,8 @@ type RateLimitDeleteResponse struct {
 	// Criteria specifying when the current rate limit should be bypassed. You can
 	// specify that the rate limit should not apply to one or more URLs.
 	Bypass []RateLimitDeleteResponseBypass `json:"bypass"`
-	// An informative summary of the rate limit. This value is sanitized and any tags
-	// will be removed.
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
 	Description string `json:"description"`
 	// When true, indicates that the rate limit is currently disabled.
 	Disabled bool `json:"disabled"`
