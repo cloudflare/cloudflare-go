@@ -17,6 +17,7 @@ type RadarService struct {
 	AI                *AIService
 	Annotations       *AnnotationService
 	BGP               *BGPService
+	Bots              *BotService
 	Datasets          *DatasetService
 	DNS               *DNSService
 	Netflows          *NetflowService
@@ -44,6 +45,7 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.AI = NewAIService(opts...)
 	r.Annotations = NewAnnotationService(opts...)
 	r.BGP = NewBGPService(opts...)
+	r.Bots = NewBotService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.DNS = NewDNSService(opts...)
 	r.Netflows = NewNetflowService(opts...)
