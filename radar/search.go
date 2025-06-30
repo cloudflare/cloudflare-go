@@ -33,7 +33,7 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Searches for locations, autonomous systems, and reports.
+// Searches for locations, autonomous systems, reports, and bots.
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -119,6 +119,7 @@ type SearchGlobalParamsExclude string
 
 const (
 	SearchGlobalParamsExcludeASNs          SearchGlobalParamsExclude = "ASNS"
+	SearchGlobalParamsExcludeBots          SearchGlobalParamsExclude = "BOTS"
 	SearchGlobalParamsExcludeLocations     SearchGlobalParamsExclude = "LOCATIONS"
 	SearchGlobalParamsExcludeNotebooks     SearchGlobalParamsExclude = "NOTEBOOKS"
 	SearchGlobalParamsExcludeSpecialEvents SearchGlobalParamsExclude = "SPECIAL_EVENTS"
@@ -126,7 +127,7 @@ const (
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeSpecialEvents:
+	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeSpecialEvents:
 		return true
 	}
 	return false
@@ -152,6 +153,7 @@ type SearchGlobalParamsInclude string
 
 const (
 	SearchGlobalParamsIncludeASNs          SearchGlobalParamsInclude = "ASNS"
+	SearchGlobalParamsIncludeBots          SearchGlobalParamsInclude = "BOTS"
 	SearchGlobalParamsIncludeLocations     SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeNotebooks     SearchGlobalParamsInclude = "NOTEBOOKS"
 	SearchGlobalParamsIncludeSpecialEvents SearchGlobalParamsInclude = "SPECIAL_EVENTS"
@@ -159,7 +161,7 @@ const (
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeSpecialEvents:
+	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeSpecialEvents:
 		return true
 	}
 	return false
