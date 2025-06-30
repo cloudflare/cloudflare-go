@@ -35,6 +35,10 @@ func NewVerifiedBotTopService(opts ...option.RequestOption) (r *VerifiedBotTopSe
 }
 
 // Retrieves the top verified bots by HTTP requests, with owner and category.
+//
+// Deprecated: Use
+// [Radar Bots API](https://developers.cloudflare.com/api/resources/radar/subresources/bots/)
+// instead.
 func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBotsParams, opts ...option.RequestOption) (res *VerifiedBotTopBotsResponse, err error) {
 	var env VerifiedBotTopBotsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -49,6 +53,10 @@ func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBo
 
 // Retrieves the top verified bot categories by HTTP requests, along with their
 // corresponding percentage, over the total verified bot HTTP requests.
+//
+// Deprecated: Use
+// [Radar Bots API](https://developers.cloudflare.com/api/resources/radar/subresources/bots/)
+// instead.
 func (r *VerifiedBotTopService) Categories(ctx context.Context, query VerifiedBotTopCategoriesParams, opts ...option.RequestOption) (res *VerifiedBotTopCategoriesResponse, err error) {
 	var env VerifiedBotTopCategoriesResponseEnvelope
 	opts = append(r.Options[:], opts...)
