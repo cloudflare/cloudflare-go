@@ -185,13 +185,14 @@ func (r BotFightModeConfiguration) implementsBotManagementGetResponse() {}
 type BotFightModeConfigurationAIBotsProtection string
 
 const (
-	BotFightModeConfigurationAIBotsProtectionBlock    BotFightModeConfigurationAIBotsProtection = "block"
-	BotFightModeConfigurationAIBotsProtectionDisabled BotFightModeConfigurationAIBotsProtection = "disabled"
+	BotFightModeConfigurationAIBotsProtectionBlock         BotFightModeConfigurationAIBotsProtection = "block"
+	BotFightModeConfigurationAIBotsProtectionDisabled      BotFightModeConfigurationAIBotsProtection = "disabled"
+	BotFightModeConfigurationAIBotsProtectionOnlyOnADPages BotFightModeConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled:
+	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled, BotFightModeConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -349,13 +350,14 @@ func (r SubscriptionConfiguration) implementsBotManagementGetResponse() {}
 type SubscriptionConfigurationAIBotsProtection string
 
 const (
-	SubscriptionConfigurationAIBotsProtectionBlock    SubscriptionConfigurationAIBotsProtection = "block"
-	SubscriptionConfigurationAIBotsProtectionDisabled SubscriptionConfigurationAIBotsProtection = "disabled"
+	SubscriptionConfigurationAIBotsProtectionBlock         SubscriptionConfigurationAIBotsProtection = "block"
+	SubscriptionConfigurationAIBotsProtectionDisabled      SubscriptionConfigurationAIBotsProtection = "disabled"
+	SubscriptionConfigurationAIBotsProtectionOnlyOnADPages SubscriptionConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled:
+	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled, SubscriptionConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -523,13 +525,14 @@ func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementGetResp
 type SuperBotFightModeDefinitelyConfigurationAIBotsProtection string
 
 const (
-	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock    SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "block"
-	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock         SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "block"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled      SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r SuperBotFightModeDefinitelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled:
+	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -716,13 +719,14 @@ func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementGetResponse
 type SuperBotFightModeLikelyConfigurationAIBotsProtection string
 
 const (
-	SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock    SuperBotFightModeLikelyConfigurationAIBotsProtection = "block"
-	SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled SuperBotFightModeLikelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock         SuperBotFightModeLikelyConfigurationAIBotsProtection = "block"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled      SuperBotFightModeLikelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionOnlyOnADPages SuperBotFightModeLikelyConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r SuperBotFightModeLikelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled:
+	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeLikelyConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -977,13 +981,14 @@ func init() {
 type BotManagementUpdateResponseAIBotsProtection string
 
 const (
-	BotManagementUpdateResponseAIBotsProtectionBlock    BotManagementUpdateResponseAIBotsProtection = "block"
-	BotManagementUpdateResponseAIBotsProtectionDisabled BotManagementUpdateResponseAIBotsProtection = "disabled"
+	BotManagementUpdateResponseAIBotsProtectionBlock         BotManagementUpdateResponseAIBotsProtection = "block"
+	BotManagementUpdateResponseAIBotsProtectionDisabled      BotManagementUpdateResponseAIBotsProtection = "disabled"
+	BotManagementUpdateResponseAIBotsProtectionOnlyOnADPages BotManagementUpdateResponseAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotManagementUpdateResponseAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateResponseAIBotsProtectionBlock, BotManagementUpdateResponseAIBotsProtectionDisabled:
+	case BotManagementUpdateResponseAIBotsProtectionBlock, BotManagementUpdateResponseAIBotsProtectionDisabled, BotManagementUpdateResponseAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1174,13 +1179,14 @@ func init() {
 type BotManagementGetResponseAIBotsProtection string
 
 const (
-	BotManagementGetResponseAIBotsProtectionBlock    BotManagementGetResponseAIBotsProtection = "block"
-	BotManagementGetResponseAIBotsProtectionDisabled BotManagementGetResponseAIBotsProtection = "disabled"
+	BotManagementGetResponseAIBotsProtectionBlock         BotManagementGetResponseAIBotsProtection = "block"
+	BotManagementGetResponseAIBotsProtectionDisabled      BotManagementGetResponseAIBotsProtection = "disabled"
+	BotManagementGetResponseAIBotsProtectionOnlyOnADPages BotManagementGetResponseAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotManagementGetResponseAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled:
+	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled, BotManagementGetResponseAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1313,13 +1319,14 @@ type BotManagementUpdateParamsBodyUnion interface {
 type BotManagementUpdateParamsBodyAIBotsProtection string
 
 const (
-	BotManagementUpdateParamsBodyAIBotsProtectionBlock    BotManagementUpdateParamsBodyAIBotsProtection = "block"
-	BotManagementUpdateParamsBodyAIBotsProtectionDisabled BotManagementUpdateParamsBodyAIBotsProtection = "disabled"
+	BotManagementUpdateParamsBodyAIBotsProtectionBlock         BotManagementUpdateParamsBodyAIBotsProtection = "block"
+	BotManagementUpdateParamsBodyAIBotsProtectionDisabled      BotManagementUpdateParamsBodyAIBotsProtection = "disabled"
+	BotManagementUpdateParamsBodyAIBotsProtectionOnlyOnADPages BotManagementUpdateParamsBodyAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotManagementUpdateParamsBodyAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled:
+	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled, BotManagementUpdateParamsBodyAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
