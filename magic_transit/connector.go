@@ -38,6 +38,23 @@ func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 	return
 }
 
+// Add a connector to your account
+func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, opts ...option.RequestOption) (res *ConnectorNewResponse, err error) {
+	var env ConnectorNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/connectors", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Replace Connector
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	var env ConnectorUpdateResponseEnvelope
@@ -86,6 +103,27 @@ func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorLi
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
+// Remove a connector from your account
+func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body ConnectorDeleteParams, opts ...option.RequestOption) (res *ConnectorDeleteResponse, err error) {
+	var env ConnectorDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if connectorID == "" {
+		err = errors.New("missing required connector_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/connectors/%s", body.AccountID, connectorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Edit Connector to update specific properties
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
@@ -126,6 +164,68 @@ func (r *ConnectorService) Get(ctx context.Context, connectorID string, query Co
 	}
 	res = &env.Result
 	return
+}
+
+type ConnectorNewResponse struct {
+	ID                           string                     `json:"id,required"`
+	Activated                    bool                       `json:"activated,required"`
+	InterruptWindowDurationHours float64                    `json:"interrupt_window_duration_hours,required"`
+	InterruptWindowHourOfDay     float64                    `json:"interrupt_window_hour_of_day,required"`
+	LastUpdated                  string                     `json:"last_updated,required"`
+	Notes                        string                     `json:"notes,required"`
+	Timezone                     string                     `json:"timezone,required"`
+	Device                       ConnectorNewResponseDevice `json:"device"`
+	LastHeartbeat                string                     `json:"last_heartbeat"`
+	LastSeenVersion              string                     `json:"last_seen_version"`
+	JSON                         connectorNewResponseJSON   `json:"-"`
+}
+
+// connectorNewResponseJSON contains the JSON metadata for the struct
+// [ConnectorNewResponse]
+type connectorNewResponseJSON struct {
+	ID                           apijson.Field
+	Activated                    apijson.Field
+	InterruptWindowDurationHours apijson.Field
+	InterruptWindowHourOfDay     apijson.Field
+	LastUpdated                  apijson.Field
+	Notes                        apijson.Field
+	Timezone                     apijson.Field
+	Device                       apijson.Field
+	LastHeartbeat                apijson.Field
+	LastSeenVersion              apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *ConnectorNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorNewResponseDevice struct {
+	ID           string                         `json:"id,required"`
+	SerialNumber string                         `json:"serial_number"`
+	JSON         connectorNewResponseDeviceJSON `json:"-"`
+}
+
+// connectorNewResponseDeviceJSON contains the JSON metadata for the struct
+// [ConnectorNewResponseDevice]
+type connectorNewResponseDeviceJSON struct {
+	ID           apijson.Field
+	SerialNumber apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ConnectorNewResponseDevice) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorNewResponseDeviceJSON) RawJSON() string {
+	return r.raw
 }
 
 type ConnectorUpdateResponse struct {
@@ -249,6 +349,68 @@ func (r *ConnectorListResponseDevice) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r connectorListResponseDeviceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorDeleteResponse struct {
+	ID                           string                        `json:"id,required"`
+	Activated                    bool                          `json:"activated,required"`
+	InterruptWindowDurationHours float64                       `json:"interrupt_window_duration_hours,required"`
+	InterruptWindowHourOfDay     float64                       `json:"interrupt_window_hour_of_day,required"`
+	LastUpdated                  string                        `json:"last_updated,required"`
+	Notes                        string                        `json:"notes,required"`
+	Timezone                     string                        `json:"timezone,required"`
+	Device                       ConnectorDeleteResponseDevice `json:"device"`
+	LastHeartbeat                string                        `json:"last_heartbeat"`
+	LastSeenVersion              string                        `json:"last_seen_version"`
+	JSON                         connectorDeleteResponseJSON   `json:"-"`
+}
+
+// connectorDeleteResponseJSON contains the JSON metadata for the struct
+// [ConnectorDeleteResponse]
+type connectorDeleteResponseJSON struct {
+	ID                           apijson.Field
+	Activated                    apijson.Field
+	InterruptWindowDurationHours apijson.Field
+	InterruptWindowHourOfDay     apijson.Field
+	LastUpdated                  apijson.Field
+	Notes                        apijson.Field
+	Timezone                     apijson.Field
+	Device                       apijson.Field
+	LastHeartbeat                apijson.Field
+	LastSeenVersion              apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *ConnectorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorDeleteResponseDevice struct {
+	ID           string                            `json:"id,required"`
+	SerialNumber string                            `json:"serial_number"`
+	JSON         connectorDeleteResponseDeviceJSON `json:"-"`
+}
+
+// connectorDeleteResponseDeviceJSON contains the JSON metadata for the struct
+// [ConnectorDeleteResponseDevice]
+type connectorDeleteResponseDeviceJSON struct {
+	ID           apijson.Field
+	SerialNumber apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ConnectorDeleteResponseDevice) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorDeleteResponseDeviceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -376,6 +538,103 @@ func (r connectorGetResponseDeviceJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConnectorNewParams struct {
+	// Account identifier
+	AccountID                    param.Field[string]                   `path:"account_id,required"`
+	Device                       param.Field[ConnectorNewParamsDevice] `json:"device,required"`
+	Activated                    param.Field[bool]                     `json:"activated"`
+	InterruptWindowDurationHours param.Field[float64]                  `json:"interrupt_window_duration_hours"`
+	InterruptWindowHourOfDay     param.Field[float64]                  `json:"interrupt_window_hour_of_day"`
+	Notes                        param.Field[string]                   `json:"notes"`
+	Timezone                     param.Field[string]                   `json:"timezone"`
+}
+
+func (r ConnectorNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConnectorNewParamsDevice struct {
+	ID           param.Field[string] `json:"id"`
+	SerialNumber param.Field[string] `json:"serial_number"`
+}
+
+func (r ConnectorNewParamsDevice) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConnectorNewResponseEnvelope struct {
+	Errors   []ConnectorNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectorNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectorNewResponse                   `json:"result,required"`
+	Success  bool                                   `json:"success,required"`
+	JSON     connectorNewResponseEnvelopeJSON       `json:"-"`
+}
+
+// connectorNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ConnectorNewResponseEnvelope]
+type connectorNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorNewResponseEnvelopeErrors struct {
+	Code    float64                                `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    connectorNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectorNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ConnectorNewResponseEnvelopeErrors]
+type connectorNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorNewResponseEnvelopeMessages struct {
+	Code    float64                                  `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    connectorNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectorNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ConnectorNewResponseEnvelopeMessages]
+type connectorNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConnectorUpdateParams struct {
 	// Account identifier
 	AccountID                    param.Field[string]  `path:"account_id,required"`
@@ -466,6 +725,84 @@ func (r connectorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 type ConnectorListParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ConnectorDeleteParams struct {
+	// Account identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ConnectorDeleteResponseEnvelope struct {
+	Errors   []ConnectorDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectorDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectorDeleteResponse                   `json:"result,required"`
+	Success  bool                                      `json:"success,required"`
+	JSON     connectorDeleteResponseEnvelopeJSON       `json:"-"`
+}
+
+// connectorDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ConnectorDeleteResponseEnvelope]
+type connectorDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorDeleteResponseEnvelopeErrors struct {
+	Code    float64                                   `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    connectorDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectorDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ConnectorDeleteResponseEnvelopeErrors]
+type connectorDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorDeleteResponseEnvelopeMessages struct {
+	Code    float64                                     `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    connectorDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectorDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ConnectorDeleteResponseEnvelopeMessages]
+type connectorDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ConnectorEditParams struct {
