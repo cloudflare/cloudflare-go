@@ -86,7 +86,7 @@ func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorLi
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Update Connector
+// Edit Connector to update specific properties
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
