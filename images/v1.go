@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -228,9 +229,9 @@ type V1NewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// An optional custom unique identifier for your image.
-	ID param.Field[interface{}] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// An image binary data. Only needed when type is uploading a file.
-	File param.Field[interface{}] `json:"file"`
+	File param.Field[io.Reader] `json:"file" format:"binary"`
 	// User modifiable key-value store. Can use used for keeping references to another
 	// system of record for managing images.
 	Metadata param.Field[interface{}] `json:"metadata"`
