@@ -44,20 +44,24 @@ type Hyperdrive struct {
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time      `json:"modified_on" format:"date-time"`
 	MTLS       HyperdriveMTLS `json:"mtls"`
-	JSON       hyperdriveJSON `json:"-"`
+	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
+	// the origin database.
+	OriginConnectionLimit int64          `json:"origin_connection_limit"`
+	JSON                  hyperdriveJSON `json:"-"`
 }
 
 // hyperdriveJSON contains the JSON metadata for the struct [Hyperdrive]
 type hyperdriveJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	Origin      apijson.Field
-	Caching     apijson.Field
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	MTLS        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                    apijson.Field
+	Name                  apijson.Field
+	Origin                apijson.Field
+	Caching               apijson.Field
+	CreatedOn             apijson.Field
+	ModifiedOn            apijson.Field
+	MTLS                  apijson.Field
+	OriginConnectionLimit apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *Hyperdrive) UnmarshalJSON(data []byte) (err error) {
@@ -422,6 +426,9 @@ type HyperdriveParam struct {
 	Origin  param.Field[HyperdriveOriginUnionParam]  `json:"origin,required"`
 	Caching param.Field[HyperdriveCachingUnionParam] `json:"caching"`
 	MTLS    param.Field[HyperdriveMTLSParam]         `json:"mtls"`
+	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
+	// the origin database.
+	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }
 
 func (r HyperdriveParam) MarshalJSON() (data []byte, err error) {
