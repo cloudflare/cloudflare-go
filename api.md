@@ -3178,6 +3178,14 @@ Methods:
 - <code title="post /accounts/{account_id}/brand-protection/submit">client.BrandProtection.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection#BrandProtectionService.Submit">Submit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection#BrandProtectionSubmitParams">BrandProtectionSubmitParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection#Submit">Submit</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/brand-protection/url-info">client.BrandProtection.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection#BrandProtectionService.URLInfo">URLInfo</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection#BrandProtectionURLInfoParams">BrandProtectionURLInfoParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/brand_protection#Info">Info</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Queries
+
+## Matches
+
+## Logos
+
+## LogoMatches
+
 # Diagnostics
 
 ## Traceroutes

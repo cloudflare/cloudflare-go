@@ -23,7 +23,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBrandProtectionService] method instead.
 type BrandProtectionService struct {
-	Options []option.RequestOption
+	Options     []option.RequestOption
+	Queries     *QueryService
+	Matches     *MatchService
+	Logos       *LogoService
+	LogoMatches *LogoMatchService
 }
 
 // NewBrandProtectionService generates a new service that applies the given options
@@ -32,6 +36,10 @@ type BrandProtectionService struct {
 func NewBrandProtectionService(opts ...option.RequestOption) (r *BrandProtectionService) {
 	r = &BrandProtectionService{}
 	r.Options = opts
+	r.Queries = NewQueryService(opts...)
+	r.Matches = NewMatchService(opts...)
+	r.Logos = NewLogoService(opts...)
+	r.LogoMatches = NewLogoMatchService(opts...)
 	return
 }
 
