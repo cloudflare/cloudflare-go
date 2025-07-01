@@ -332,6 +332,9 @@ type ConfigEditParams struct {
 	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
 	Name      param.Field[string]                       `json:"name"`
 	Origin    param.Field[ConfigEditParamsOriginUnion]  `json:"origin"`
+	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
+	// the origin database.
+	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
