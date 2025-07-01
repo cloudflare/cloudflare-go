@@ -200,6 +200,11 @@ type BlockPageSettings struct {
 	Mode BlockPageSettingsMode `json:"mode"`
 	// If mode is customized_block_page: block page title.
 	Name string `json:"name"`
+	// This setting was shared via the Orgs API and cannot be edited by the current
+	// account
+	ReadOnly bool `json:"read_only"`
+	// Account tag of account that shared this setting
+	SourceAccount string `json:"source_account"`
 	// If mode is customized_block_page: suppress detailed info at the bottom of the
 	// block page.
 	SuppressFooter bool `json:"suppress_footer"`
@@ -221,6 +226,8 @@ type blockPageSettingsJSON struct {
 	MailtoSubject   apijson.Field
 	Mode            apijson.Field
 	Name            apijson.Field
+	ReadOnly        apijson.Field
+	SourceAccount   apijson.Field
 	SuppressFooter  apijson.Field
 	TargetURI       apijson.Field
 	raw             string
@@ -412,16 +419,23 @@ func (r CustomCertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 type ExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
-	Enabled bool                      `json:"enabled"`
-	JSON    extendedEmailMatchingJSON `json:"-"`
+	Enabled bool `json:"enabled"`
+	// This setting was shared via the Orgs API and cannot be edited by the current
+	// account
+	ReadOnly bool `json:"read_only"`
+	// Account tag of account that shared this setting
+	SourceAccount string                    `json:"source_account"`
+	JSON          extendedEmailMatchingJSON `json:"-"`
 }
 
 // extendedEmailMatchingJSON contains the JSON metadata for the struct
 // [ExtendedEmailMatching]
 type extendedEmailMatchingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Enabled       apijson.Field
+	ReadOnly      apijson.Field
+	SourceAccount apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
