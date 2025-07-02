@@ -724,9 +724,10 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 }
 
 type InstanceNewParams struct {
-	AccountID  param.Field[string]      `path:"account_id,required"`
-	InstanceID param.Field[string]      `json:"instance_id"`
-	Params     param.Field[interface{}] `json:"params"`
+	AccountID         param.Field[string]      `path:"account_id,required"`
+	InstanceID        param.Field[string]      `json:"instance_id"`
+	InstanceRetention param.Field[interface{}] `json:"instance_retention"`
+	Params            param.Field[interface{}] `json:"params"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -899,8 +900,9 @@ func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceBulkParamsBody struct {
-	InstanceID param.Field[string]      `json:"instance_id"`
-	Params     param.Field[interface{}] `json:"params"`
+	InstanceID        param.Field[string]      `json:"instance_id"`
+	InstanceRetention param.Field[interface{}] `json:"instance_retention"`
+	Params            param.Field[interface{}] `json:"params"`
 }
 
 func (r InstanceBulkParamsBody) MarshalJSON() (data []byte, err error) {

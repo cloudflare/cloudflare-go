@@ -32,9 +32,10 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"x",
 		workflows.InstanceNewParams{
-			AccountID:  cloudflare.F("account_id"),
-			InstanceID: cloudflare.F("instance_id"),
-			Params:     cloudflare.F[any](map[string]interface{}{}),
+			AccountID:         cloudflare.F("account_id"),
+			InstanceID:        cloudflare.F("instance_id"),
+			InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
+			Params:            cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -99,8 +100,9 @@ func TestInstanceBulkWithOptionalParams(t *testing.T) {
 		workflows.InstanceBulkParams{
 			AccountID: cloudflare.F("account_id"),
 			Body: []workflows.InstanceBulkParamsBody{{
-				InstanceID: cloudflare.F("instance_id"),
-				Params:     cloudflare.F[any](map[string]interface{}{}),
+				InstanceID:        cloudflare.F("instance_id"),
+				InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
+				Params:            cloudflare.F[any](map[string]interface{}{}),
 			}},
 		},
 	)
