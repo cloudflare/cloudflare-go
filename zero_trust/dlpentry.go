@@ -25,7 +25,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDLPEntryService] method instead.
 type DLPEntryService struct {
-	Options []option.RequestOption
+	Options     []option.RequestOption
+	Custom      *DLPEntryCustomService
+	Predefined  *DLPEntryPredefinedService
+	Integration *DLPEntryIntegrationService
 }
 
 // NewDLPEntryService generates a new service that applies the given options to
@@ -34,6 +37,9 @@ type DLPEntryService struct {
 func NewDLPEntryService(opts ...option.RequestOption) (r *DLPEntryService) {
 	r = &DLPEntryService{}
 	r.Options = opts
+	r.Custom = NewDLPEntryCustomService(opts...)
+	r.Predefined = NewDLPEntryPredefinedService(opts...)
+	r.Integration = NewDLPEntryIntegrationService(opts...)
 	return
 }
 
