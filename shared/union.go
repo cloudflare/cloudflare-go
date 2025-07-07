@@ -137,6 +137,12 @@ func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()   
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                 {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                           {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                             {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                            {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                              {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                  {}
 
 type UnionBool bool
 
@@ -273,3 +279,9 @@ func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()   
 func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                     {}
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                     {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                               {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                                 {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                                {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                  {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                      {}

@@ -357,7 +357,7 @@ type DeviceDeviceListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// Search by device details.
 	Search param.Field[string] `query:"search"`
-	// Filters by the last_seen timestamp - returns only devices last seen after this
+	// Filter by the last_seen timestamp - returns only devices last seen after this
 	// timestamp.
 	SeenAfter param.Field[string] `query:"seen_after"`
 	// Filter by the last_seen timestamp - returns only devices last seen before this

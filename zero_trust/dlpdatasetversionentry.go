@@ -95,6 +95,7 @@ type DLPDatasetVersionEntryNewResponseUploadStatus string
 const (
 	DLPDatasetVersionEntryNewResponseUploadStatusEmpty      DLPDatasetVersionEntryNewResponseUploadStatus = "empty"
 	DLPDatasetVersionEntryNewResponseUploadStatusUploading  DLPDatasetVersionEntryNewResponseUploadStatus = "uploading"
+	DLPDatasetVersionEntryNewResponseUploadStatusPending    DLPDatasetVersionEntryNewResponseUploadStatus = "pending"
 	DLPDatasetVersionEntryNewResponseUploadStatusProcessing DLPDatasetVersionEntryNewResponseUploadStatus = "processing"
 	DLPDatasetVersionEntryNewResponseUploadStatusFailed     DLPDatasetVersionEntryNewResponseUploadStatus = "failed"
 	DLPDatasetVersionEntryNewResponseUploadStatusComplete   DLPDatasetVersionEntryNewResponseUploadStatus = "complete"
@@ -102,7 +103,7 @@ const (
 
 func (r DLPDatasetVersionEntryNewResponseUploadStatus) IsKnown() bool {
 	switch r {
-	case DLPDatasetVersionEntryNewResponseUploadStatusEmpty, DLPDatasetVersionEntryNewResponseUploadStatusUploading, DLPDatasetVersionEntryNewResponseUploadStatusProcessing, DLPDatasetVersionEntryNewResponseUploadStatusFailed, DLPDatasetVersionEntryNewResponseUploadStatusComplete:
+	case DLPDatasetVersionEntryNewResponseUploadStatusEmpty, DLPDatasetVersionEntryNewResponseUploadStatusUploading, DLPDatasetVersionEntryNewResponseUploadStatusPending, DLPDatasetVersionEntryNewResponseUploadStatusProcessing, DLPDatasetVersionEntryNewResponseUploadStatusFailed, DLPDatasetVersionEntryNewResponseUploadStatusComplete:
 		return true
 	}
 	return false

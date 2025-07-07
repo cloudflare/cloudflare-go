@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 func TestPDFNewWithOptionalParams(t *testing.T) {
@@ -72,7 +73,30 @@ func TestPDFNewWithOptionalParams(t *testing.T) {
 			Timeout:        cloudflare.F(60000.000000),
 			WaitUntil:      cloudflare.F[browser_rendering.PDFNewParamsGotoOptionsWaitUntilUnion](browser_rendering.PDFNewParamsGotoOptionsWaitUntilString(browser_rendering.PDFNewParamsGotoOptionsWaitUntilStringLoad)),
 		}),
-		HTML:                 cloudflare.F("x"),
+		HTML: cloudflare.F("x"),
+		PDFOptions: cloudflare.F(browser_rendering.PDFNewParamsPDFOptions{
+			DisplayHeaderFooter: cloudflare.F(true),
+			FooterTemplate:      cloudflare.F("footerTemplate"),
+			Format:              cloudflare.F(browser_rendering.PDFNewParamsPDFOptionsFormatLetter),
+			HeaderTemplate:      cloudflare.F("headerTemplate"),
+			Height:              cloudflare.F[browser_rendering.PDFNewParamsPDFOptionsHeightUnion](shared.UnionString("string")),
+			Landscape:           cloudflare.F(true),
+			Margin: cloudflare.F(browser_rendering.PDFNewParamsPDFOptionsMargin{
+				Bottom: cloudflare.F[browser_rendering.PDFNewParamsPDFOptionsMarginBottomUnion](shared.UnionString("string")),
+				Left:   cloudflare.F[browser_rendering.PDFNewParamsPDFOptionsMarginLeftUnion](shared.UnionString("string")),
+				Right:  cloudflare.F[browser_rendering.PDFNewParamsPDFOptionsMarginRightUnion](shared.UnionString("string")),
+				Top:    cloudflare.F[browser_rendering.PDFNewParamsPDFOptionsMarginTopUnion](shared.UnionString("string")),
+			}),
+			OmitBackground:    cloudflare.F(true),
+			Outline:           cloudflare.F(true),
+			PageRanges:        cloudflare.F("pageRanges"),
+			PreferCSSPageSize: cloudflare.F(true),
+			PrintBackground:   cloudflare.F(true),
+			Scale:             cloudflare.F(0.100000),
+			Tagged:            cloudflare.F(true),
+			Timeout:           cloudflare.F(0.000000),
+			Width:             cloudflare.F[browser_rendering.PDFNewParamsPDFOptionsWidthUnion](shared.UnionString("string")),
+		}),
 		RejectRequestPattern: cloudflare.F([]string{"string"}),
 		RejectResourceTypes:  cloudflare.F([]browser_rendering.PDFNewParamsRejectResourceType{browser_rendering.PDFNewParamsRejectResourceTypeDocument}),
 		SetExtraHTTPHeaders: cloudflare.F(map[string]string{
