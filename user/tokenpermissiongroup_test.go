@@ -11,9 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/user"
 )
 
-func TestTokenPermissionGroupList(t *testing.T) {
+func TestTokenPermissionGroupListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +28,10 @@ func TestTokenPermissionGroupList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Tokens.PermissionGroups.List(context.TODO())
+	_, err := client.User.Tokens.PermissionGroups.List(context.TODO(), user.TokenPermissionGroupListParams{
+		Name:  cloudflare.F("Account%20Settings%20Write"),
+		Scope: cloudflare.F("com.cloudflare.api.account.zone"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

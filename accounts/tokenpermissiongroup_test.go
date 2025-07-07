@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestTokenPermissionGroupList(t *testing.T) {
+func TestTokenPermissionGroupListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,6 +30,8 @@ func TestTokenPermissionGroupList(t *testing.T) {
 	)
 	_, err := client.Accounts.Tokens.PermissionGroups.List(context.TODO(), accounts.TokenPermissionGroupListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("Account%20Settings%20Write"),
+		Scope:     cloudflare.F("com.cloudflare.api.account.zone"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +42,7 @@ func TestTokenPermissionGroupList(t *testing.T) {
 	}
 }
 
-func TestTokenPermissionGroupGet(t *testing.T) {
+func TestTokenPermissionGroupGetWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -56,6 +58,8 @@ func TestTokenPermissionGroupGet(t *testing.T) {
 	)
 	_, err := client.Accounts.Tokens.PermissionGroups.Get(context.TODO(), accounts.TokenPermissionGroupGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("Account%20Settings%20Write"),
+		Scope:     cloudflare.F("com.cloudflare.api.account.zone"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
