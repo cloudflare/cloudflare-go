@@ -270,6 +270,7 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("account_id"),
 		AUD:       cloudflare.F("aud"),
 		Domain:    cloudflare.F("domain"),
+		Exact:     cloudflare.F(true),
 		Name:      cloudflare.F("name"),
 		Search:    cloudflare.F("search"),
 	})
