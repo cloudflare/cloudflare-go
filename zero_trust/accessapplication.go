@@ -37749,6 +37749,8 @@ type AccessApplicationListParams struct {
 	AUD param.Field[string] `query:"aud"`
 	// The domain of the app.
 	Domain param.Field[string] `query:"domain"`
+	// True for only exact string matches against passed name/domain query parameters.
+	Exact param.Field[bool] `query:"exact"`
 	// The name of the app.
 	Name param.Field[string] `query:"name"`
 	// Search for apps by other listed query parameters.

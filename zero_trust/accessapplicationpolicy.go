@@ -354,6 +354,8 @@ type AccessRule struct {
 	// This field can have the runtime type of
 	// [AccessRuleAccessLoginMethodRuleLoginMethod].
 	LoginMethod interface{} `json:"login_method"`
+	// This field can have the runtime type of [AccessRuleAccessOIDCClaimRuleOIDC].
+	OIDC interface{} `json:"oidc"`
 	// This field can have the runtime type of [OktaGroupRuleOkta].
 	Okta interface{} `json:"okta"`
 	// This field can have the runtime type of [SAMLGroupRuleSAML].
@@ -385,6 +387,7 @@ type accessRuleJSON struct {
 	IP                   apijson.Field
 	IPList               apijson.Field
 	LoginMethod          apijson.Field
+	OIDC                 apijson.Field
 	Okta                 apijson.Field
 	SAML                 apijson.Field
 	ServiceToken         apijson.Field
@@ -414,7 +417,8 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // [AccessDevicePostureRule], [DomainRule], [EmailListRule], [EmailRule],
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
-// [OktaGroupRule], [SAMLGroupRule], [ServiceTokenRule].
+// [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
+// [ServiceTokenRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
@@ -427,7 +431,8 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [AccessDevicePostureRule], [DomainRule], [EmailListRule], [EmailRule],
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
-// [OktaGroupRule], [SAMLGroupRule] or [ServiceTokenRule].
+// [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule] or
+// [ServiceTokenRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
 }
@@ -519,6 +524,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SAMLGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessRuleAccessOIDCClaimRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -671,6 +680,58 @@ func (r accessRuleAccessLoginMethodRuleLoginMethodJSON) RawJSON() string {
 	return r.raw
 }
 
+// Matches an OIDC claim. Requires an OIDC identity provider.
+type AccessRuleAccessOIDCClaimRule struct {
+	OIDC AccessRuleAccessOIDCClaimRuleOIDC `json:"oidc,required"`
+	JSON accessRuleAccessOIDCClaimRuleJSON `json:"-"`
+}
+
+// accessRuleAccessOIDCClaimRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessOIDCClaimRule]
+type accessRuleAccessOIDCClaimRuleJSON struct {
+	OIDC        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessOIDCClaimRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessOIDCClaimRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessOIDCClaimRule) implementsAccessRule() {}
+
+type AccessRuleAccessOIDCClaimRuleOIDC struct {
+	// The name of the OIDC claim.
+	ClaimName string `json:"claim_name,required"`
+	// The OIDC claim value to look for.
+	ClaimValue string `json:"claim_value,required"`
+	// The ID of your OIDC identity provider.
+	IdentityProviderID string                                `json:"identity_provider_id,required"`
+	JSON               accessRuleAccessOIDCClaimRuleOIDCJSON `json:"-"`
+}
+
+// accessRuleAccessOIDCClaimRuleOIDCJSON contains the JSON metadata for the struct
+// [AccessRuleAccessOIDCClaimRuleOIDC]
+type accessRuleAccessOIDCClaimRuleOIDCJSON struct {
+	ClaimName          apijson.Field
+	ClaimValue         apijson.Field
+	IdentityProviderID apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessOIDCClaimRuleOIDC) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessOIDCClaimRuleOIDCJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Access group.
 type AccessRuleParam struct {
 	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
@@ -692,6 +753,7 @@ type AccessRuleParam struct {
 	IP                   param.Field[interface{}] `json:"ip"`
 	IPList               param.Field[interface{}] `json:"ip_list"`
 	LoginMethod          param.Field[interface{}] `json:"login_method"`
+	OIDC                 param.Field[interface{}] `json:"oidc"`
 	Okta                 param.Field[interface{}] `json:"okta"`
 	SAML                 param.Field[interface{}] `json:"saml"`
 	ServiceToken         param.Field[interface{}] `json:"service_token"`
@@ -717,8 +779,9 @@ func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 // [zero_trust.GitHubOrganizationRuleParam], [zero_trust.GSuiteGroupRuleParam],
 // [zero_trust.AccessRuleAccessLoginMethodRuleParam], [zero_trust.IPListRuleParam],
 // [zero_trust.IPRuleParam], [zero_trust.OktaGroupRuleParam],
-// [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
-// [AccessRuleParam].
+// [zero_trust.SAMLGroupRuleParam],
+// [zero_trust.AccessRuleAccessOIDCClaimRuleParam],
+// [zero_trust.ServiceTokenRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
@@ -784,6 +847,30 @@ type AccessRuleAccessLoginMethodRuleLoginMethodParam struct {
 }
 
 func (r AccessRuleAccessLoginMethodRuleLoginMethodParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches an OIDC claim. Requires an OIDC identity provider.
+type AccessRuleAccessOIDCClaimRuleParam struct {
+	OIDC param.Field[AccessRuleAccessOIDCClaimRuleOIDCParam] `json:"oidc,required"`
+}
+
+func (r AccessRuleAccessOIDCClaimRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessOIDCClaimRuleParam) implementsAccessRuleUnionParam() {}
+
+type AccessRuleAccessOIDCClaimRuleOIDCParam struct {
+	// The name of the OIDC claim.
+	ClaimName param.Field[string] `json:"claim_name,required"`
+	// The OIDC claim value to look for.
+	ClaimValue param.Field[string] `json:"claim_value,required"`
+	// The ID of your OIDC identity provider.
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+}
+
+func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
