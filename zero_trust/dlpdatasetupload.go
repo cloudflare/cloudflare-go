@@ -144,6 +144,7 @@ type NewVersionColumnsUploadStatus string
 const (
 	NewVersionColumnsUploadStatusEmpty      NewVersionColumnsUploadStatus = "empty"
 	NewVersionColumnsUploadStatusUploading  NewVersionColumnsUploadStatus = "uploading"
+	NewVersionColumnsUploadStatusPending    NewVersionColumnsUploadStatus = "pending"
 	NewVersionColumnsUploadStatusProcessing NewVersionColumnsUploadStatus = "processing"
 	NewVersionColumnsUploadStatusFailed     NewVersionColumnsUploadStatus = "failed"
 	NewVersionColumnsUploadStatusComplete   NewVersionColumnsUploadStatus = "complete"
@@ -151,7 +152,7 @@ const (
 
 func (r NewVersionColumnsUploadStatus) IsKnown() bool {
 	switch r {
-	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
+	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusPending, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
 		return true
 	}
 	return false

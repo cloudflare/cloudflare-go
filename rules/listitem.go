@@ -440,8 +440,7 @@ type ListItemGetResponse struct {
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
 	Hostname Hostname `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-	// maximum of /64.
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP string `json:"ip"`
 	// The RFC 3339 timestamp of when the item was last modified.
 	ModifiedOn string `json:"modified_on"`
@@ -520,8 +519,7 @@ type ListItemGetResponseObject struct {
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
 	Hostname Hostname `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-	// maximum of /64.
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP string `json:"ip"`
 	// The RFC 3339 timestamp of when the item was last modified.
 	ModifiedOn string `json:"modified_on"`
@@ -573,8 +571,7 @@ type ListItemNewParamsBody struct {
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
 	Hostname param.Field[HostnameParam] `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-	// maximum of /64.
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP param.Field[string] `json:"ip"`
 	// The definition of the redirect.
 	Redirect param.Field[RedirectParam] `json:"redirect"`
@@ -645,8 +642,7 @@ type ListItemUpdateParamsBody struct {
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
 	Hostname param.Field[HostnameParam] `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-	// maximum of /64.
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP param.Field[string] `json:"ip"`
 	// The definition of the redirect.
 	Redirect param.Field[RedirectParam] `json:"redirect"`

@@ -41,6 +41,10 @@ func NewUserSchemaOperationService(opts ...option.RequestOption) (r *UserSchemaO
 
 // Retrieves all operations from the schema. Operations that already exist in API
 // Shield Endpoint Management will be returned as full operations.
+//
+// Deprecated: Use
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// instead.
 func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserSchemaOperationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -68,6 +72,10 @@ func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, 
 
 // Retrieves all operations from the schema. Operations that already exist in API
 // Shield Endpoint Management will be returned as full operations.
+//
+// Deprecated: Use
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// instead.
 func (r *UserSchemaOperationService) ListAutoPaging(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UserSchemaOperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, schemaID, params, opts...))
 }
