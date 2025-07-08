@@ -36,7 +36,7 @@ func NewOperationSchemaValidationService(opts ...option.RequestOption) (r *Opera
 // Updates operation-level schema validation settings on the zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *OperationSchemaValidationService) Update(ctx context.Context, operationID string, params OperationSchemaValidationUpdateParams, opts ...option.RequestOption) (res *OperationSchemaValidationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -56,7 +56,7 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 // Updates multiple operation-level schema validation settings on the zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *OperationSchemaValidationService) Edit(ctx context.Context, params OperationSchemaValidationEditParams, opts ...option.RequestOption) (res *SettingsMultipleRequest, err error) {
 	var env OperationSchemaValidationEditResponseEnvelope
@@ -77,7 +77,7 @@ func (r *OperationSchemaValidationService) Edit(ctx context.Context, params Oper
 // Retrieves operation-level schema validation settings on the zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID string, query OperationSchemaValidationGetParams, opts ...option.RequestOption) (res *OperationSchemaValidationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
