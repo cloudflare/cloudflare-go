@@ -7,14 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
-	"github.com/tidwall/gjson"
 )
 
 // ListService contains methods and other services that help with interacting with
@@ -79,20 +78,30 @@ func (r *ListService) Update(ctx context.Context, listID string, params ListUpda
 }
 
 // Fetches all lists in the account.
-func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *[]interface{}, err error) {
-	var env ListListResponseEnvelope
+func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ListsList], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches all lists in the account.
+func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ListsList] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a specific list and all its items.
@@ -167,6 +176,68 @@ type HostnameParam struct {
 
 func (r HostnameParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ListsList struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on"`
+	// An informative summary of the list.
+	Description string `json:"description"`
+	// The type of the list. Each type supports specific list items (IP addresses,
+	// ASNs, hostnames or redirects).
+	Kind ListsListKind `json:"kind"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// An informative name for the list. Use this name in filter and rule expressions.
+	Name string `json:"name"`
+	// The number of items in the list.
+	NumItems float64 `json:"num_items"`
+	// The number of [filters](/operations/filters-list-filters) referencing the list.
+	NumReferencingFilters float64       `json:"num_referencing_filters"`
+	JSON                  listsListJSON `json:"-"`
+}
+
+// listsListJSON contains the JSON metadata for the struct [ListsList]
+type listsListJSON struct {
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	Kind                  apijson.Field
+	ModifiedOn            apijson.Field
+	Name                  apijson.Field
+	NumItems              apijson.Field
+	NumReferencingFilters apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *ListsList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listsListJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of the list. Each type supports specific list items (IP addresses,
+// ASNs, hostnames or redirects).
+type ListsListKind string
+
+const (
+	ListsListKindIP       ListsListKind = "ip"
+	ListsListKindRedirect ListsListKind = "redirect"
+	ListsListKindHostname ListsListKind = "hostname"
+	ListsListKindASN      ListsListKind = "asn"
+)
+
+func (r ListsListKind) IsKnown() bool {
+	switch r {
+	case ListsListKindIP, ListsListKindRedirect, ListsListKindHostname, ListsListKindASN:
+		return true
+	}
+	return false
 }
 
 // The definition of the redirect.
@@ -253,7 +324,6 @@ type ListNewResponse struct {
 	// The number of [filters](/operations/filters-list-filters) referencing the list.
 	NumReferencingFilters float64             `json:"num_referencing_filters"`
 	JSON                  listNewResponseJSON `json:"-"`
-	union                 ListNewResponseUnion
 }
 
 // listNewResponseJSON contains the JSON metadata for the struct [ListNewResponse]
@@ -270,111 +340,12 @@ type listNewResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r listNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListNewResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListNewResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListNewResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are [ListNewResponseObject],
-// [ListNewResponseObject].
-func (r ListNewResponse) AsUnion() ListNewResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListNewResponseObject] or [ListNewResponseObject].
-type ListNewResponseUnion interface {
-	implementsListNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListNewResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListNewResponseObject{}),
-		},
-	)
-}
-
-type ListNewResponseObject struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
-	// The type of the list. Each type supports specific list items (IP addresses,
-	// ASNs, hostnames or redirects).
-	Kind ListNewResponseObjectKind `json:"kind"`
-	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
-	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64                   `json:"num_referencing_filters"`
-	JSON                  listNewResponseObjectJSON `json:"-"`
-}
-
-// listNewResponseObjectJSON contains the JSON metadata for the struct
-// [ListNewResponseObject]
-type listNewResponseObjectJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	Description           apijson.Field
-	Kind                  apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NumItems              apijson.Field
-	NumReferencingFilters apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *ListNewResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listNewResponseObjectJSON) RawJSON() string {
+func (r listNewResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r ListNewResponseObject) implementsListNewResponse() {}
-
-// The type of the list. Each type supports specific list items (IP addresses,
-// ASNs, hostnames or redirects).
-type ListNewResponseObjectKind string
-
-const (
-	ListNewResponseObjectKindIP       ListNewResponseObjectKind = "ip"
-	ListNewResponseObjectKindRedirect ListNewResponseObjectKind = "redirect"
-	ListNewResponseObjectKindHostname ListNewResponseObjectKind = "hostname"
-	ListNewResponseObjectKindASN      ListNewResponseObjectKind = "asn"
-)
-
-func (r ListNewResponseObjectKind) IsKnown() bool {
-	switch r {
-	case ListNewResponseObjectKindIP, ListNewResponseObjectKindRedirect, ListNewResponseObjectKindHostname, ListNewResponseObjectKindASN:
-		return true
-	}
-	return false
 }
 
 // The type of the list. Each type supports specific list items (IP addresses,
@@ -415,7 +386,6 @@ type ListUpdateResponse struct {
 	// The number of [filters](/operations/filters-list-filters) referencing the list.
 	NumReferencingFilters float64                `json:"num_referencing_filters"`
 	JSON                  listUpdateResponseJSON `json:"-"`
-	union                 ListUpdateResponseUnion
 }
 
 // listUpdateResponseJSON contains the JSON metadata for the struct
@@ -433,111 +403,12 @@ type listUpdateResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r listUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListUpdateResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListUpdateResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are [ListUpdateResponseObject],
-// [ListUpdateResponseObject].
-func (r ListUpdateResponse) AsUnion() ListUpdateResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListUpdateResponseObject] or [ListUpdateResponseObject].
-type ListUpdateResponseUnion interface {
-	implementsListUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListUpdateResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListUpdateResponseObject{}),
-		},
-	)
-}
-
-type ListUpdateResponseObject struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
-	// The type of the list. Each type supports specific list items (IP addresses,
-	// ASNs, hostnames or redirects).
-	Kind ListUpdateResponseObjectKind `json:"kind"`
-	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
-	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64                      `json:"num_referencing_filters"`
-	JSON                  listUpdateResponseObjectJSON `json:"-"`
-}
-
-// listUpdateResponseObjectJSON contains the JSON metadata for the struct
-// [ListUpdateResponseObject]
-type listUpdateResponseObjectJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	Description           apijson.Field
-	Kind                  apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NumItems              apijson.Field
-	NumReferencingFilters apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *ListUpdateResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listUpdateResponseObjectJSON) RawJSON() string {
+func (r listUpdateResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r ListUpdateResponseObject) implementsListUpdateResponse() {}
-
-// The type of the list. Each type supports specific list items (IP addresses,
-// ASNs, hostnames or redirects).
-type ListUpdateResponseObjectKind string
-
-const (
-	ListUpdateResponseObjectKindIP       ListUpdateResponseObjectKind = "ip"
-	ListUpdateResponseObjectKindRedirect ListUpdateResponseObjectKind = "redirect"
-	ListUpdateResponseObjectKindHostname ListUpdateResponseObjectKind = "hostname"
-	ListUpdateResponseObjectKindASN      ListUpdateResponseObjectKind = "asn"
-)
-
-func (r ListUpdateResponseObjectKind) IsKnown() bool {
-	switch r {
-	case ListUpdateResponseObjectKindIP, ListUpdateResponseObjectKindRedirect, ListUpdateResponseObjectKindHostname, ListUpdateResponseObjectKindASN:
-		return true
-	}
-	return false
 }
 
 // The type of the list. Each type supports specific list items (IP addresses,
@@ -561,9 +432,8 @@ func (r ListUpdateResponseKind) IsKnown() bool {
 
 type ListDeleteResponse struct {
 	// Defines the unique ID of the item in the List.
-	ID    string                 `json:"id"`
-	JSON  listDeleteResponseJSON `json:"-"`
-	union ListDeleteResponseUnion
+	ID   string                 `json:"id"`
+	JSON listDeleteResponseJSON `json:"-"`
 }
 
 // listDeleteResponseJSON contains the JSON metadata for the struct
@@ -574,71 +444,13 @@ type listDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r listDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListDeleteResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListDeleteResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are [ListDeleteResponseID],
-// [ListDeleteResponseID].
-func (r ListDeleteResponse) AsUnion() ListDeleteResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListDeleteResponseID] or [ListDeleteResponseID].
-type ListDeleteResponseUnion interface {
-	implementsListDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListDeleteResponseID{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListDeleteResponseID{}),
-		},
-	)
-}
-
-type ListDeleteResponseID struct {
-	// Defines the unique ID of the item in the List.
-	ID   string                   `json:"id"`
-	JSON listDeleteResponseIDJSON `json:"-"`
-}
-
-// listDeleteResponseIDJSON contains the JSON metadata for the struct
-// [ListDeleteResponseID]
-type listDeleteResponseIDJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListDeleteResponseID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listDeleteResponseIDJSON) RawJSON() string {
+func (r listDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r ListDeleteResponseID) implementsListDeleteResponse() {}
 
 type ListGetResponse struct {
 	// The unique ID of the list.
@@ -659,7 +471,6 @@ type ListGetResponse struct {
 	// The number of [filters](/operations/filters-list-filters) referencing the list.
 	NumReferencingFilters float64             `json:"num_referencing_filters"`
 	JSON                  listGetResponseJSON `json:"-"`
-	union                 ListGetResponseUnion
 }
 
 // listGetResponseJSON contains the JSON metadata for the struct [ListGetResponse]
@@ -676,111 +487,12 @@ type listGetResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r listGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListGetResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListGetResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListGetResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are [ListGetResponseObject],
-// [ListGetResponseObject].
-func (r ListGetResponse) AsUnion() ListGetResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListGetResponseObject] or [ListGetResponseObject].
-type ListGetResponseUnion interface {
-	implementsListGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListGetResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListGetResponseObject{}),
-		},
-	)
-}
-
-type ListGetResponseObject struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
-	// The type of the list. Each type supports specific list items (IP addresses,
-	// ASNs, hostnames or redirects).
-	Kind ListGetResponseObjectKind `json:"kind"`
-	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
-	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64                   `json:"num_referencing_filters"`
-	JSON                  listGetResponseObjectJSON `json:"-"`
-}
-
-// listGetResponseObjectJSON contains the JSON metadata for the struct
-// [ListGetResponseObject]
-type listGetResponseObjectJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	Description           apijson.Field
-	Kind                  apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NumItems              apijson.Field
-	NumReferencingFilters apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *ListGetResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listGetResponseObjectJSON) RawJSON() string {
+func (r listGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r ListGetResponseObject) implementsListGetResponse() {}
-
-// The type of the list. Each type supports specific list items (IP addresses,
-// ASNs, hostnames or redirects).
-type ListGetResponseObjectKind string
-
-const (
-	ListGetResponseObjectKindIP       ListGetResponseObjectKind = "ip"
-	ListGetResponseObjectKindRedirect ListGetResponseObjectKind = "redirect"
-	ListGetResponseObjectKindHostname ListGetResponseObjectKind = "hostname"
-	ListGetResponseObjectKindASN      ListGetResponseObjectKind = "asn"
-)
-
-func (r ListGetResponseObjectKind) IsKnown() bool {
-	switch r {
-	case ListGetResponseObjectKindIP, ListGetResponseObjectKindRedirect, ListGetResponseObjectKindHostname, ListGetResponseObjectKindASN:
-		return true
-	}
-	return false
 }
 
 // The type of the list. Each type supports specific list items (IP addresses,
@@ -937,49 +649,6 @@ func (r ListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ListListParams struct {
 	// Defines an identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ListListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []interface{}         `json:"result,required"`
-	// Defines whether the API call was successful.
-	Success ListListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    listListResponseEnvelopeJSON    `json:"-"`
-}
-
-// listListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ListListResponseEnvelope]
-type listListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Defines whether the API call was successful.
-type ListListResponseEnvelopeSuccess bool
-
-const (
-	ListListResponseEnvelopeSuccessTrue ListListResponseEnvelopeSuccess = true
-)
-
-func (r ListListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ListListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type ListDeleteParams struct {
