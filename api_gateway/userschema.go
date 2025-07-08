@@ -48,7 +48,7 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 // Upload a schema to a zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams, opts ...option.RequestOption) (res *SchemaUpload, err error) {
 	var env UserSchemaNewResponseEnvelope
@@ -69,7 +69,7 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 // Retrieve information about all schemas on a zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
 	var raw *http.Response
@@ -95,7 +95,7 @@ func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParam
 // Retrieve information about all schemas on a zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
@@ -104,7 +104,7 @@ func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchem
 // Delete a schema
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body UserSchemaDeleteParams, opts ...option.RequestOption) (res *UserSchemaDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -124,7 +124,7 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 // Enable validation for a schema
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env UserSchemaEditResponseEnvelope
@@ -149,7 +149,7 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 // Retrieve information about a specific schema on a zone
 //
 // Deprecated: Use
-// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation)
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env UserSchemaGetResponseEnvelope
