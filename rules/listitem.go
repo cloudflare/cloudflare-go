@@ -8,15 +8,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
-	"github.com/tidwall/gjson"
 )
 
 // ListItemService contains methods and other services that help with interacting
@@ -41,8 +40,7 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 // Appends new items to the list.
 //
 // This operation is asynchronous. To get current the operation status, invoke the
-// [Get bulk operation status](/operations/lists-get-bulk-operation-status)
-// endpoint with the returned `operation_id`.
+// `Get bulk operation status` endpoint with the returned `operation_id`.
 func (r *ListItemService) New(ctx context.Context, listID string, params ListItemNewParams, opts ...option.RequestOption) (res *ListItemNewResponse, err error) {
 	var env ListItemNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -67,8 +65,7 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 // list.
 //
 // This operation is asynchronous. To get current the operation status, invoke the
-// [Get bulk operation status](/operations/lists-get-bulk-operation-status)
-// endpoint with the returned `operation_id`.
+// `Get bulk operation status` endpoint with the returned `operation_id`.
 func (r *ListItemService) Update(ctx context.Context, listID string, params ListItemUpdateParams, opts ...option.RequestOption) (res *ListItemUpdateResponse, err error) {
 	var env ListItemUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -90,9 +87,10 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *[]interface{}, err error) {
-	var env ListItemListResponseEnvelope
+func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -102,19 +100,27 @@ func (r *ListItemService) List(ctx context.Context, listID string, params ListIt
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches all the items in the list.
+func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[ListItemListResponse] {
+	return pagination.NewCursorPaginationAutoPager(r.List(ctx, listID, params, opts...))
 }
 
 // Removes one or more items from a list.
 //
 // This operation is asynchronous. To get current the operation status, invoke the
-// [Get bulk operation status](/operations/lists-get-bulk-operation-status)
-// endpoint with the returned `operation_id`.
+// `Get bulk operation status` endpoint with the returned `operation_id`.
 func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	var env ListItemDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -186,7 +192,6 @@ type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                  `json:"operation_id"`
 	JSON        listItemNewResponseJSON `json:"-"`
-	union       ListItemNewResponseUnion
 }
 
 // listItemNewResponseJSON contains the JSON metadata for the struct
@@ -197,78 +202,18 @@ type listItemNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r listItemNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListItemNewResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListItemNewResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListItemNewResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are [ListItemNewResponseOperationID],
-// [ListItemNewResponseOperationID].
-func (r ListItemNewResponse) AsUnion() ListItemNewResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListItemNewResponseOperationID] or
-// [ListItemNewResponseOperationID].
-type ListItemNewResponseUnion interface {
-	implementsListItemNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListItemNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemNewResponseOperationID{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemNewResponseOperationID{}),
-		},
-	)
-}
-
-type ListItemNewResponseOperationID struct {
-	// The unique operation ID of the asynchronous action.
-	OperationID string                             `json:"operation_id"`
-	JSON        listItemNewResponseOperationIDJSON `json:"-"`
-}
-
-// listItemNewResponseOperationIDJSON contains the JSON metadata for the struct
-// [ListItemNewResponseOperationID]
-type listItemNewResponseOperationIDJSON struct {
-	OperationID apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemNewResponseOperationID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listItemNewResponseOperationIDJSON) RawJSON() string {
+func (r listItemNewResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r ListItemNewResponseOperationID) implementsListItemNewResponse() {}
 
 type ListItemUpdateResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                     `json:"operation_id"`
 	JSON        listItemUpdateResponseJSON `json:"-"`
-	union       ListItemUpdateResponseUnion
 }
 
 // listItemUpdateResponseJSON contains the JSON metadata for the struct
@@ -279,78 +224,62 @@ type listItemUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
+func (r *ListItemUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 func (r listItemUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ListItemUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListItemUpdateResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
+type ListItemListResponse struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// Defines a non-negative 32 bit integer.
+	ASN int64 `json:"asn"`
+	// Defines an informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                 `json:"redirect"`
+	JSON     listItemListResponseJSON `json:"-"`
 }
 
-// AsUnion returns a [ListItemUpdateResponseUnion] interface which you can cast to
-// the specific types for more type safety.
-//
-// Possible runtime types of the union are [ListItemUpdateResponseOperationID],
-// [ListItemUpdateResponseOperationID].
-func (r ListItemUpdateResponse) AsUnion() ListItemUpdateResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListItemUpdateResponseOperationID] or
-// [ListItemUpdateResponseOperationID].
-type ListItemUpdateResponseUnion interface {
-	implementsListItemUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListItemUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemUpdateResponseOperationID{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemUpdateResponseOperationID{}),
-		},
-	)
-}
-
-type ListItemUpdateResponseOperationID struct {
-	// The unique operation ID of the asynchronous action.
-	OperationID string                                `json:"operation_id"`
-	JSON        listItemUpdateResponseOperationIDJSON `json:"-"`
-}
-
-// listItemUpdateResponseOperationIDJSON contains the JSON metadata for the struct
-// [ListItemUpdateResponseOperationID]
-type listItemUpdateResponseOperationIDJSON struct {
-	OperationID apijson.Field
+// listItemListResponseJSON contains the JSON metadata for the struct
+// [ListItemListResponse]
+type listItemListResponseJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListItemUpdateResponseOperationID) UnmarshalJSON(data []byte) (err error) {
+func (r *ListItemListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listItemUpdateResponseOperationIDJSON) RawJSON() string {
+func (r listItemListResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r ListItemUpdateResponseOperationID) implementsListItemUpdateResponse() {}
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                     `json:"operation_id"`
 	JSON        listItemDeleteResponseJSON `json:"-"`
-	union       ListItemDeleteResponseUnion
 }
 
 // listItemDeleteResponseJSON contains the JSON metadata for the struct
@@ -361,72 +290,13 @@ type listItemDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r listItemDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListItemDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListItemDeleteResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListItemDeleteResponseUnion] interface which you can cast to
-// the specific types for more type safety.
-//
-// Possible runtime types of the union are [ListItemDeleteResponseOperationID],
-// [ListItemDeleteResponseOperationID].
-func (r ListItemDeleteResponse) AsUnion() ListItemDeleteResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListItemDeleteResponseOperationID] or
-// [ListItemDeleteResponseOperationID].
-type ListItemDeleteResponseUnion interface {
-	implementsListItemDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListItemDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemDeleteResponseOperationID{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemDeleteResponseOperationID{}),
-		},
-	)
-}
-
-type ListItemDeleteResponseOperationID struct {
-	// The unique operation ID of the asynchronous action.
-	OperationID string                                `json:"operation_id"`
-	JSON        listItemDeleteResponseOperationIDJSON `json:"-"`
-}
-
-// listItemDeleteResponseOperationIDJSON contains the JSON metadata for the struct
-// [ListItemDeleteResponseOperationID]
-type listItemDeleteResponseOperationIDJSON struct {
-	OperationID apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemDeleteResponseOperationID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listItemDeleteResponseOperationIDJSON) RawJSON() string {
+func (r listItemDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r ListItemDeleteResponseOperationID) implementsListItemDeleteResponse() {}
 
 type ListItemGetResponse struct {
 	// The unique ID of the list.
@@ -447,7 +317,6 @@ type ListItemGetResponse struct {
 	// The definition of the redirect.
 	Redirect Redirect                `json:"redirect"`
 	JSON     listItemGetResponseJSON `json:"-"`
-	union    ListItemGetResponseUnion
 }
 
 // listItemGetResponseJSON contains the JSON metadata for the struct
@@ -465,93 +334,13 @@ type listItemGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r listItemGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *ListItemGetResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = ListItemGetResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [ListItemGetResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are [ListItemGetResponseObject],
-// [ListItemGetResponseObject].
-func (r ListItemGetResponse) AsUnion() ListItemGetResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [ListItemGetResponseObject] or [ListItemGetResponseObject].
-type ListItemGetResponseUnion interface {
-	implementsListItemGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListItemGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemGetResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemGetResponseObject{}),
-		},
-	)
-}
-
-type ListItemGetResponseObject struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// Defines a non-negative 32 bit integer.
-	ASN int64 `json:"asn"`
-	// Defines an informative summary of the list item.
-	Comment string `json:"comment"`
-	// The RFC 3339 timestamp of when the item was created.
-	CreatedOn string `json:"created_on"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname Hostname `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP string `json:"ip"`
-	// The RFC 3339 timestamp of when the item was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// The definition of the redirect.
-	Redirect Redirect                      `json:"redirect"`
-	JSON     listItemGetResponseObjectJSON `json:"-"`
-}
-
-// listItemGetResponseObjectJSON contains the JSON metadata for the struct
-// [ListItemGetResponseObject]
-type listItemGetResponseObjectJSON struct {
-	ID          apijson.Field
-	ASN         apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Hostname    apijson.Field
-	IP          apijson.Field
-	ModifiedOn  apijson.Field
-	Redirect    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemGetResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listItemGetResponseObjectJSON) RawJSON() string {
+func (r listItemGetResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r ListItemGetResponseObject) implementsListItemGetResponse() {}
 
 type ListItemNewParams struct {
 	// Defines an identifier.
@@ -718,72 +507,6 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type ListItemListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []interface{}         `json:"result,required"`
-	// Defines whether the API call was successful.
-	Success    ListItemListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ListItemListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       listItemListResponseEnvelopeJSON       `json:"-"`
-}
-
-// listItemListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ListItemListResponseEnvelope]
-type listItemListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Defines whether the API call was successful.
-type ListItemListResponseEnvelopeSuccess bool
-
-const (
-	ListItemListResponseEnvelopeSuccessTrue ListItemListResponseEnvelopeSuccess = true
-)
-
-func (r ListItemListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ListItemListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ListItemListResponseEnvelopeResultInfo struct {
-	Cursors ListCursor                                 `json:"cursors"`
-	JSON    listItemListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// listItemListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ListItemListResponseEnvelopeResultInfo]
-type listItemListResponseEnvelopeResultInfoJSON struct {
-	Cursors     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ListItemDeleteParams struct {
