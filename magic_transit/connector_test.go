@@ -15,6 +15,7 @@ import (
 )
 
 func TestConnectorNewWithOptionalParams(t *testing.T) {
+	t.Skip("TODO: consider oneOf instead of maxProperties to indicate that this can be either id or serial_number")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
