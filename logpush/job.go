@@ -225,8 +225,7 @@ type LogpushJob struct {
 	// Deprecated: deprecated
 	Frequency LogpushJobFrequency `json:"frequency,nullable"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
-	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-	// `http_requests` dataset.
+	// Log Delivery jobs (when supported by the dataset).
 	Kind LogpushJobKind `json:"kind"`
 	// Records the last time for which logs have been successfully pushed. If the last
 	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
@@ -248,20 +247,18 @@ type LogpushJob struct {
 	// The maximum uncompressed file size of a batch of logs. This setting value must
 	// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
 	// minimum file size; this means that log files may be much smaller than this batch
-	// size. This parameter is not available for jobs with `edge` as its kind.
-	MaxUploadBytes int64 `json:"max_upload_bytes,nullable"`
+	// size.
+	MaxUploadBytes LogpushJobMaxUploadBytes `json:"max_upload_bytes,nullable"`
 	// The maximum interval in seconds for log batches. This setting must be between 30
 	// and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
 	// a minimum interval for log batches; this means that log files may be sent in
-	// shorter intervals than this. This parameter is only used for jobs with `edge` as
-	// its kind.
-	MaxUploadIntervalSeconds int64 `json:"max_upload_interval_seconds,nullable"`
+	// shorter intervals than this.
+	MaxUploadIntervalSeconds LogpushJobMaxUploadIntervalSeconds `json:"max_upload_interval_seconds,nullable"`
 	// The maximum number of log lines per batch. This setting must be between 1000 and
 	// 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
 	// number of log lines per batch; this means that log files may contain many fewer
-	// lines than this. This parameter is not available for jobs with `edge` as its
-	// kind.
-	MaxUploadRecords int64 `json:"max_upload_records,nullable"`
+	// lines than this.
+	MaxUploadRecords LogpushJobMaxUploadRecords `json:"max_upload_records,nullable"`
 	// Optional human readable job name. Not unique. Cloudflare suggests that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
@@ -360,17 +357,71 @@ func (r LogpushJobFrequency) IsKnown() bool {
 }
 
 // The kind parameter (optional) is used to differentiate between Logpush and Edge
-// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-// `http_requests` dataset.
+// Log Delivery jobs (when supported by the dataset).
 type LogpushJobKind string
 
 const (
-	LogpushJobKindEdge LogpushJobKind = "edge"
+	LogpushJobKindEmpty LogpushJobKind = ""
+	LogpushJobKindEdge  LogpushJobKind = "edge"
 )
 
 func (r LogpushJobKind) IsKnown() bool {
 	switch r {
-	case LogpushJobKindEdge:
+	case LogpushJobKindEmpty, LogpushJobKindEdge:
+		return true
+	}
+	return false
+}
+
+// The maximum uncompressed file size of a batch of logs. This setting value must
+// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
+// minimum file size; this means that log files may be much smaller than this batch
+// size.
+type LogpushJobMaxUploadBytes float64
+
+const (
+	LogpushJobMaxUploadBytes0 LogpushJobMaxUploadBytes = 0
+)
+
+func (r LogpushJobMaxUploadBytes) IsKnown() bool {
+	switch r {
+	case LogpushJobMaxUploadBytes0:
+		return true
+	}
+	return false
+}
+
+// The maximum interval in seconds for log batches. This setting must be between 30
+// and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
+// a minimum interval for log batches; this means that log files may be sent in
+// shorter intervals than this.
+type LogpushJobMaxUploadIntervalSeconds float64
+
+const (
+	LogpushJobMaxUploadIntervalSeconds0 LogpushJobMaxUploadIntervalSeconds = 0
+)
+
+func (r LogpushJobMaxUploadIntervalSeconds) IsKnown() bool {
+	switch r {
+	case LogpushJobMaxUploadIntervalSeconds0:
+		return true
+	}
+	return false
+}
+
+// The maximum number of log lines per batch. This setting must be between 1000 and
+// 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
+// number of log lines per batch; this means that log files may contain many fewer
+// lines than this.
+type LogpushJobMaxUploadRecords float64
+
+const (
+	LogpushJobMaxUploadRecords0 LogpushJobMaxUploadRecords = 0
+)
+
+func (r LogpushJobMaxUploadRecords) IsKnown() bool {
+	switch r {
+	case LogpushJobMaxUploadRecords0:
 		return true
 	}
 	return false
@@ -567,8 +618,7 @@ type JobNewParams struct {
 	// frequency to low sends logs in smaller quantities of larger files.
 	Frequency param.Field[JobNewParamsFrequency] `json:"frequency"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
-	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-	// `http_requests` dataset.
+	// Log Delivery jobs (when supported by the dataset).
 	Kind param.Field[JobNewParamsKind] `json:"kind"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
@@ -579,20 +629,18 @@ type JobNewParams struct {
 	// The maximum uncompressed file size of a batch of logs. This setting value must
 	// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
 	// minimum file size; this means that log files may be much smaller than this batch
-	// size. This parameter is not available for jobs with `edge` as its kind.
-	MaxUploadBytes param.Field[int64] `json:"max_upload_bytes"`
+	// size.
+	MaxUploadBytes param.Field[JobNewParamsMaxUploadBytes] `json:"max_upload_bytes"`
 	// The maximum interval in seconds for log batches. This setting must be between 30
 	// and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
 	// a minimum interval for log batches; this means that log files may be sent in
-	// shorter intervals than this. This parameter is only used for jobs with `edge` as
-	// its kind.
-	MaxUploadIntervalSeconds param.Field[int64] `json:"max_upload_interval_seconds"`
+	// shorter intervals than this.
+	MaxUploadIntervalSeconds param.Field[JobNewParamsMaxUploadIntervalSeconds] `json:"max_upload_interval_seconds"`
 	// The maximum number of log lines per batch. This setting must be between 1000 and
 	// 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
 	// number of log lines per batch; this means that log files may contain many fewer
-	// lines than this. This parameter is not available for jobs with `edge` as its
-	// kind.
-	MaxUploadRecords param.Field[int64] `json:"max_upload_records"`
+	// lines than this.
+	MaxUploadRecords param.Field[JobNewParamsMaxUploadRecords] `json:"max_upload_records"`
 	// Optional human readable job name. Not unique. Cloudflare suggests that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
@@ -667,17 +715,71 @@ func (r JobNewParamsFrequency) IsKnown() bool {
 }
 
 // The kind parameter (optional) is used to differentiate between Logpush and Edge
-// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-// `http_requests` dataset.
+// Log Delivery jobs (when supported by the dataset).
 type JobNewParamsKind string
 
 const (
-	JobNewParamsKindEdge JobNewParamsKind = "edge"
+	JobNewParamsKindEmpty JobNewParamsKind = ""
+	JobNewParamsKindEdge  JobNewParamsKind = "edge"
 )
 
 func (r JobNewParamsKind) IsKnown() bool {
 	switch r {
-	case JobNewParamsKindEdge:
+	case JobNewParamsKindEmpty, JobNewParamsKindEdge:
+		return true
+	}
+	return false
+}
+
+// The maximum uncompressed file size of a batch of logs. This setting value must
+// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
+// minimum file size; this means that log files may be much smaller than this batch
+// size.
+type JobNewParamsMaxUploadBytes float64
+
+const (
+	JobNewParamsMaxUploadBytes0 JobNewParamsMaxUploadBytes = 0
+)
+
+func (r JobNewParamsMaxUploadBytes) IsKnown() bool {
+	switch r {
+	case JobNewParamsMaxUploadBytes0:
+		return true
+	}
+	return false
+}
+
+// The maximum interval in seconds for log batches. This setting must be between 30
+// and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
+// a minimum interval for log batches; this means that log files may be sent in
+// shorter intervals than this.
+type JobNewParamsMaxUploadIntervalSeconds float64
+
+const (
+	JobNewParamsMaxUploadIntervalSeconds0 JobNewParamsMaxUploadIntervalSeconds = 0
+)
+
+func (r JobNewParamsMaxUploadIntervalSeconds) IsKnown() bool {
+	switch r {
+	case JobNewParamsMaxUploadIntervalSeconds0:
+		return true
+	}
+	return false
+}
+
+// The maximum number of log lines per batch. This setting must be between 1000 and
+// 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
+// number of log lines per batch; this means that log files may contain many fewer
+// lines than this.
+type JobNewParamsMaxUploadRecords float64
+
+const (
+	JobNewParamsMaxUploadRecords0 JobNewParamsMaxUploadRecords = 0
+)
+
+func (r JobNewParamsMaxUploadRecords) IsKnown() bool {
+	switch r {
+	case JobNewParamsMaxUploadRecords0:
 		return true
 	}
 	return false
@@ -843,8 +945,7 @@ type JobUpdateParams struct {
 	// frequency to low sends logs in smaller quantities of larger files.
 	Frequency param.Field[JobUpdateParamsFrequency] `json:"frequency"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
-	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-	// `http_requests` dataset.
+	// Log Delivery jobs (when supported by the dataset).
 	Kind param.Field[JobUpdateParamsKind] `json:"kind"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
@@ -855,20 +956,18 @@ type JobUpdateParams struct {
 	// The maximum uncompressed file size of a batch of logs. This setting value must
 	// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
 	// minimum file size; this means that log files may be much smaller than this batch
-	// size. This parameter is not available for jobs with `edge` as its kind.
-	MaxUploadBytes param.Field[int64] `json:"max_upload_bytes"`
+	// size.
+	MaxUploadBytes param.Field[JobUpdateParamsMaxUploadBytes] `json:"max_upload_bytes"`
 	// The maximum interval in seconds for log batches. This setting must be between 30
 	// and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
 	// a minimum interval for log batches; this means that log files may be sent in
-	// shorter intervals than this. This parameter is only used for jobs with `edge` as
-	// its kind.
-	MaxUploadIntervalSeconds param.Field[int64] `json:"max_upload_interval_seconds"`
+	// shorter intervals than this.
+	MaxUploadIntervalSeconds param.Field[JobUpdateParamsMaxUploadIntervalSeconds] `json:"max_upload_interval_seconds"`
 	// The maximum number of log lines per batch. This setting must be between 1000 and
 	// 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
 	// number of log lines per batch; this means that log files may contain many fewer
-	// lines than this. This parameter is not available for jobs with `edge` as its
-	// kind.
-	MaxUploadRecords param.Field[int64] `json:"max_upload_records"`
+	// lines than this.
+	MaxUploadRecords param.Field[JobUpdateParamsMaxUploadRecords] `json:"max_upload_records"`
 	// Optional human readable job name. Not unique. Cloudflare suggests that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
@@ -904,17 +1003,71 @@ func (r JobUpdateParamsFrequency) IsKnown() bool {
 }
 
 // The kind parameter (optional) is used to differentiate between Logpush and Edge
-// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
-// `http_requests` dataset.
+// Log Delivery jobs (when supported by the dataset).
 type JobUpdateParamsKind string
 
 const (
-	JobUpdateParamsKindEdge JobUpdateParamsKind = "edge"
+	JobUpdateParamsKindEmpty JobUpdateParamsKind = ""
+	JobUpdateParamsKindEdge  JobUpdateParamsKind = "edge"
 )
 
 func (r JobUpdateParamsKind) IsKnown() bool {
 	switch r {
-	case JobUpdateParamsKindEdge:
+	case JobUpdateParamsKindEmpty, JobUpdateParamsKindEdge:
+		return true
+	}
+	return false
+}
+
+// The maximum uncompressed file size of a batch of logs. This setting value must
+// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
+// minimum file size; this means that log files may be much smaller than this batch
+// size.
+type JobUpdateParamsMaxUploadBytes float64
+
+const (
+	JobUpdateParamsMaxUploadBytes0 JobUpdateParamsMaxUploadBytes = 0
+)
+
+func (r JobUpdateParamsMaxUploadBytes) IsKnown() bool {
+	switch r {
+	case JobUpdateParamsMaxUploadBytes0:
+		return true
+	}
+	return false
+}
+
+// The maximum interval in seconds for log batches. This setting must be between 30
+// and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
+// a minimum interval for log batches; this means that log files may be sent in
+// shorter intervals than this.
+type JobUpdateParamsMaxUploadIntervalSeconds float64
+
+const (
+	JobUpdateParamsMaxUploadIntervalSeconds0 JobUpdateParamsMaxUploadIntervalSeconds = 0
+)
+
+func (r JobUpdateParamsMaxUploadIntervalSeconds) IsKnown() bool {
+	switch r {
+	case JobUpdateParamsMaxUploadIntervalSeconds0:
+		return true
+	}
+	return false
+}
+
+// The maximum number of log lines per batch. This setting must be between 1000 and
+// 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
+// number of log lines per batch; this means that log files may contain many fewer
+// lines than this.
+type JobUpdateParamsMaxUploadRecords float64
+
+const (
+	JobUpdateParamsMaxUploadRecords0 JobUpdateParamsMaxUploadRecords = 0
+)
+
+func (r JobUpdateParamsMaxUploadRecords) IsKnown() bool {
+	switch r {
+	case JobUpdateParamsMaxUploadRecords0:
 		return true
 	}
 	return false

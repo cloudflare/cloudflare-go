@@ -387,7 +387,13 @@ type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig struct {
 	// Glob (\*) and negative (!) rules are supported. Rules must start with either '/'
 	// or '!/'. At least one non-negative rule must be provided, and negative rules
 	// have higher precedence than non-negative rules.
-	RunWorkerFirst param.Field[[]string] `json:"run_worker_first"`
+	RunWorkerFirst param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion] `json:"run_worker_first"`
+	// When true and the incoming request matches an asset, that will be served instead
+	// of invoking the Worker script. When false, requests will always invoke the
+	// Worker script.
+	//
+	// Deprecated: deprecated
+	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
@@ -428,6 +434,23 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling)
 		return true
 	}
 	return false
+}
+
+// Contains a list path rules to control routing to either the Worker or assets.
+// Glob (\*) and negative (!) rules are supported. Rules must start with either '/'
+// or '!/'. At least one non-negative rule must be provided, and negative rules
+// have higher precedence than non-negative rules.
+//
+// Satisfied by
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray],
+// [shared.UnionBool].
+type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion interface {
+	ImplementsDispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion()
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray []string
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray) ImplementsDispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {
 }
 
 // A binding to allow the Worker to communicate with resources.

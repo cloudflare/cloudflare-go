@@ -112,16 +112,14 @@ func (r entityASNListResponseJSON) RawJSON() string {
 }
 
 type EntityASNListResponseASN struct {
-	ASN         int64  `json:"asn,required"`
-	Country     string `json:"country,required"`
-	CountryName string `json:"countryName,required"`
-	Name        string `json:"name,required"`
-	Aka         string `json:"aka"`
-	// Deprecated field. Please use 'aka'.
-	NameLong string                       `json:"nameLong"`
-	OrgName  string                       `json:"orgName"`
-	Website  string                       `json:"website"`
-	JSON     entityASNListResponseASNJSON `json:"-"`
+	ASN         int64                        `json:"asn,required"`
+	Country     string                       `json:"country,required"`
+	CountryName string                       `json:"countryName,required"`
+	Name        string                       `json:"name,required"`
+	Aka         string                       `json:"aka"`
+	OrgName     string                       `json:"orgName"`
+	Website     string                       `json:"website"`
+	JSON        entityASNListResponseASNJSON `json:"-"`
 }
 
 // entityASNListResponseASNJSON contains the JSON metadata for the struct
@@ -132,7 +130,6 @@ type entityASNListResponseASNJSON struct {
 	CountryName apijson.Field
 	Name        apijson.Field
 	Aka         apijson.Field
-	NameLong    apijson.Field
 	OrgName     apijson.Field
 	Website     apijson.Field
 	raw         string
@@ -178,12 +175,10 @@ type EntityASNGetResponseASN struct {
 	OrgName         string                                `json:"orgName,required"`
 	Related         []EntityASNGetResponseASNRelated      `json:"related,required"`
 	// Regional Internet Registry.
-	Source  string `json:"source,required"`
-	Website string `json:"website,required"`
-	Aka     string `json:"aka"`
-	// Deprecated field. Please use 'aka'.
-	NameLong string                      `json:"nameLong"`
-	JSON     entityASNGetResponseASNJSON `json:"-"`
+	Source  string                      `json:"source,required"`
+	Website string                      `json:"website,required"`
+	Aka     string                      `json:"aka"`
+	JSON    entityASNGetResponseASNJSON `json:"-"`
 }
 
 // entityASNGetResponseASNJSON contains the JSON metadata for the struct
@@ -200,7 +195,6 @@ type entityASNGetResponseASNJSON struct {
 	Source          apijson.Field
 	Website         apijson.Field
 	Aka             apijson.Field
-	NameLong        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -321,12 +315,10 @@ type EntityAsnipResponseASN struct {
 	OrgName        string                               `json:"orgName,required"`
 	Related        []EntityAsnipResponseASNRelated      `json:"related,required"`
 	// Regional Internet Registry.
-	Source  string `json:"source,required"`
-	Website string `json:"website,required"`
-	Aka     string `json:"aka"`
-	// Deprecated field. Please use 'aka'.
-	NameLong string                     `json:"nameLong"`
-	JSON     entityAsnipResponseASNJSON `json:"-"`
+	Source  string                     `json:"source,required"`
+	Website string                     `json:"website,required"`
+	Aka     string                     `json:"aka"`
+	JSON    entityAsnipResponseASNJSON `json:"-"`
 }
 
 // entityAsnipResponseASNJSON contains the JSON metadata for the struct
@@ -342,7 +334,6 @@ type entityAsnipResponseASNJSON struct {
 	Source         apijson.Field
 	Website        apijson.Field
 	Aka            apijson.Field
-	NameLong       apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }

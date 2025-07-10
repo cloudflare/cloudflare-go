@@ -155,10 +155,9 @@ func (r *NamespaceService) BulkDelete(ctx context.Context, namespaceID string, p
 	return
 }
 
-// Get multiple KV pairs from the namespace. Body should contain keys to retrieve
-// at most 100. Keys must contain text-based values. If value is json, it can be
-// requested to return in JSON, instead of string. Metadata can be return if
-// withMetadata is true.
+// Retrieve up to 100 KV pairs from the namespace. Keys must contain text-based
+// values. JSON values can optionally be parsed instead of being returned as a
+// string value. Metadata can be included if `withMetadata` is true.
 func (r *NamespaceService) BulkGet(ctx context.Context, namespaceID string, params NamespaceBulkGetParams, opts ...option.RequestOption) (res *NamespaceBulkGetResponse, err error) {
 	var env NamespaceBulkGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -277,7 +276,7 @@ func (r namespaceDeleteResponseJSON) RawJSON() string {
 }
 
 type NamespaceBulkDeleteResponse struct {
-	// Number of keys successfully updated
+	// Number of keys successfully updated.
 	SuccessfulKeyCount float64 `json:"successful_key_count"`
 	// Name of the keys that failed to be fully updated. They should be retried.
 	UnsuccessfulKeys []string                        `json:"unsuccessful_keys"`
@@ -363,7 +362,7 @@ func init() {
 }
 
 type NamespaceBulkGetResponseWorkersKVBulkGetResult struct {
-	// Requested keys are paired with their values in an object
+	// Requested keys are paired with their values in an object.
 	Values map[string]NamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion `json:"values"`
 	JSON   namespaceBulkGetResponseWorkersKVBulkGetResultJSON                   `json:"-"`
 }
@@ -386,7 +385,7 @@ func (r namespaceBulkGetResponseWorkersKVBulkGetResultJSON) RawJSON() string {
 
 func (r NamespaceBulkGetResponseWorkersKVBulkGetResult) implementsNamespaceBulkGetResponse() {}
 
-// The value associated with the key
+// The value associated with the key.
 //
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
 // or [NamespaceBulkGetResponseWorkersKVBulkGetResultValuesMap].
@@ -427,7 +426,7 @@ func (r NamespaceBulkGetResponseWorkersKVBulkGetResultValuesMap) ImplementsNames
 }
 
 type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata struct {
-	// Requested keys are paired with their values and metadata in an object
+	// Requested keys are paired with their values and metadata in an object.
 	Values map[string]NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue `json:"values"`
 	JSON   namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataJSON             `json:"-"`
 }
@@ -453,12 +452,10 @@ func (r NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata) implementsNa
 }
 
 type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue struct {
-	// The metadata associated with the key
-	Metadata map[string]interface{} `json:"metadata,required,nullable"`
-	// The value associated with the key
-	Value NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion `json:"value,required"`
-	// The time, measured in number of seconds since the UNIX epoch, at which the key
-	// should expire.
+	Metadata interface{} `json:"metadata,required"`
+	Value    interface{} `json:"value,required"`
+	// Expires the key at a certain time, measured in number of seconds since the UNIX
+	// epoch.
 	Expiration float64                                                             `json:"expiration"`
 	JSON       namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON `json:"-"`
 }
@@ -482,48 +479,8 @@ func (r namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON) Raw
 	return r.raw
 }
 
-// The value associated with the key
-//
-// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or [NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap].
-type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion interface {
-	ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap{}),
-		},
-	)
-}
-
-type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap map[string]interface{}
-
-func (r NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
-}
-
 type NamespaceBulkUpdateResponse struct {
-	// Number of keys successfully updated
+	// Number of keys successfully updated.
 	SuccessfulKeyCount float64 `json:"successful_key_count"`
 	// Name of the keys that failed to be fully updated. They should be retried.
 	UnsuccessfulKeys []string                        `json:"unsuccessful_keys"`
@@ -548,7 +505,7 @@ func (r namespaceBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type NamespaceNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title,required"`
@@ -561,7 +518,7 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 type NamespaceNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Namespace                           `json:"result"`
 	JSON    namespaceNewResponseEnvelopeJSON    `json:"-"`
@@ -586,7 +543,7 @@ func (r namespaceNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceNewResponseEnvelopeSuccess bool
 
 const (
@@ -602,7 +559,7 @@ func (r NamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title,required"`
@@ -616,7 +573,7 @@ type NamespaceUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Namespace             `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -640,7 +597,7 @@ func (r namespaceUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -656,7 +613,7 @@ func (r NamespaceUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Direction to order namespaces.
 	Direction param.Field[NamespaceListParamsDirection] `query:"direction"`
@@ -709,14 +666,14 @@ func (r NamespaceListParamsOrder) IsKnown() bool {
 }
 
 type NamespaceDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type NamespaceDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceDeleteResponseEnvelopeJSON    `json:"-"`
@@ -741,7 +698,7 @@ func (r namespaceDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -757,7 +714,7 @@ func (r NamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceBulkDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      []string            `json:"body,required"`
 }
@@ -769,7 +726,7 @@ func (r NamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 type NamespaceBulkDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceBulkDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceBulkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -794,7 +751,7 @@ func (r namespaceBulkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceBulkDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -810,13 +767,13 @@ func (r NamespaceBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceBulkGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Array of keys to retrieve (maximum 100)
+	// Array of keys to retrieve (maximum of 100).
 	Keys param.Field[[]string] `json:"keys,required"`
-	// Whether to parse JSON values in the response
+	// Whether to parse JSON values in the response.
 	Type param.Field[NamespaceBulkGetParamsType] `json:"type"`
-	// Whether to include metadata in the response
+	// Whether to include metadata in the response.
 	WithMetadata param.Field[bool] `json:"withMetadata"`
 }
 
@@ -824,7 +781,7 @@ func (r NamespaceBulkGetParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Whether to parse JSON values in the response
+// Whether to parse JSON values in the response.
 type NamespaceBulkGetParamsType string
 
 const (
@@ -843,7 +800,7 @@ func (r NamespaceBulkGetParamsType) IsKnown() bool {
 type NamespaceBulkGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceBulkGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceBulkGetResponse                `json:"result,nullable"`
 	JSON    namespaceBulkGetResponseEnvelopeJSON    `json:"-"`
@@ -868,7 +825,7 @@ func (r namespaceBulkGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceBulkGetResponseEnvelopeSuccess bool
 
 const (
@@ -884,7 +841,7 @@ func (r NamespaceBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceBulkUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]             `path:"account_id,required"`
 	Body      []NamespaceBulkUpdateParamsBody `json:"body,required"`
 }
@@ -894,23 +851,21 @@ func (r NamespaceBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkUpdateParamsBody struct {
-	// Whether or not the server should base64 decode the value before storing it.
-	// Useful for writing values that wouldn't otherwise be valid JSON strings, such as
-	// images.
-	Base64 param.Field[bool] `json:"base64"`
-	// The time, measured in number of seconds since the UNIX epoch, at which the key
-	// should expire.
-	Expiration param.Field[float64] `json:"expiration"`
-	// The number of seconds for which the key should be visible before it expires. At
-	// least 60.
-	ExpirationTTL param.Field[float64] `json:"expiration_ttl"`
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid.
-	Key param.Field[string] `json:"key"`
-	// Arbitrary JSON that is associated with a key.
-	Metadata param.Field[map[string]interface{}] `json:"metadata"`
+	Key param.Field[string] `json:"key,required"`
 	// A UTF-8 encoded string to be stored, up to 25 MiB in length.
-	Value param.Field[string] `json:"value"`
+	Value param.Field[string] `json:"value,required"`
+	// Indicates whether or not the server should base64 decode the value before
+	// storing it. Useful for writing values that wouldn't otherwise be valid JSON
+	// strings, such as images.
+	Base64 param.Field[bool] `json:"base64"`
+	// Expires the key at a certain time, measured in number of seconds since the UNIX
+	// epoch.
+	Expiration param.Field[float64] `json:"expiration"`
+	// Expires the key after a number of seconds. Must be at least 60.
+	ExpirationTTL param.Field[float64]     `json:"expiration_ttl"`
+	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -920,7 +875,7 @@ func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 type NamespaceBulkUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceBulkUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -945,7 +900,7 @@ func (r namespaceBulkUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceBulkUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -961,14 +916,14 @@ func (r NamespaceBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type NamespaceGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success NamespaceGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Namespace                           `json:"result"`
 	JSON    namespaceGetResponseEnvelopeJSON    `json:"-"`
@@ -993,7 +948,7 @@ func (r namespaceGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type NamespaceGetResponseEnvelopeSuccess bool
 
 const (

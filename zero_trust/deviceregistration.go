@@ -400,10 +400,10 @@ type DeviceRegistrationListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// Filter by registration details.
 	Search param.Field[string] `query:"search"`
-	// Filters by the last_seen timestamp - returns only registrations last seen after
+	// Filter by the last_seen timestamp - returns only registrations last seen after
 	// this timestamp.
 	SeenAfter param.Field[string] `query:"seen_after"`
-	// Filters by the last_seen timestamp - returns only registrations last seen before
+	// Filter by the last_seen timestamp - returns only registrations last seen before
 	// this timestamp.
 	SeenBefore param.Field[string] `query:"seen_before"`
 	// The registration field to order results by.

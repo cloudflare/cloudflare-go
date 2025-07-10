@@ -185,7 +185,7 @@ type Override struct {
 	// creating a new URI-based WAF override, you must provide a `groups` object or a
 	// `rules` object.
 	Groups map[string]interface{} `json:"groups"`
-	// When true, indicates that the WAF package is currently paused.
+	// When true, indicates that the rule is currently paused.
 	Paused bool `json:"paused"`
 	// The relative priority of the current URI-based WAF override when multiple
 	// overrides match a single URL. A lower number indicates higher priority. Higher

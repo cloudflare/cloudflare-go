@@ -219,6 +219,7 @@ type DatasetColumnsUploadStatus string
 const (
 	DatasetColumnsUploadStatusEmpty      DatasetColumnsUploadStatus = "empty"
 	DatasetColumnsUploadStatusUploading  DatasetColumnsUploadStatus = "uploading"
+	DatasetColumnsUploadStatusPending    DatasetColumnsUploadStatus = "pending"
 	DatasetColumnsUploadStatusProcessing DatasetColumnsUploadStatus = "processing"
 	DatasetColumnsUploadStatusFailed     DatasetColumnsUploadStatus = "failed"
 	DatasetColumnsUploadStatusComplete   DatasetColumnsUploadStatus = "complete"
@@ -226,7 +227,7 @@ const (
 
 func (r DatasetColumnsUploadStatus) IsKnown() bool {
 	switch r {
-	case DatasetColumnsUploadStatusEmpty, DatasetColumnsUploadStatusUploading, DatasetColumnsUploadStatusProcessing, DatasetColumnsUploadStatusFailed, DatasetColumnsUploadStatusComplete:
+	case DatasetColumnsUploadStatusEmpty, DatasetColumnsUploadStatusUploading, DatasetColumnsUploadStatusPending, DatasetColumnsUploadStatusProcessing, DatasetColumnsUploadStatusFailed, DatasetColumnsUploadStatusComplete:
 		return true
 	}
 	return false
@@ -237,6 +238,7 @@ type DatasetStatus string
 const (
 	DatasetStatusEmpty      DatasetStatus = "empty"
 	DatasetStatusUploading  DatasetStatus = "uploading"
+	DatasetStatusPending    DatasetStatus = "pending"
 	DatasetStatusProcessing DatasetStatus = "processing"
 	DatasetStatusFailed     DatasetStatus = "failed"
 	DatasetStatusComplete   DatasetStatus = "complete"
@@ -244,7 +246,7 @@ const (
 
 func (r DatasetStatus) IsKnown() bool {
 	switch r {
-	case DatasetStatusEmpty, DatasetStatusUploading, DatasetStatusProcessing, DatasetStatusFailed, DatasetStatusComplete:
+	case DatasetStatusEmpty, DatasetStatusUploading, DatasetStatusPending, DatasetStatusProcessing, DatasetStatusFailed, DatasetStatusComplete:
 		return true
 	}
 	return false
@@ -279,6 +281,7 @@ type DatasetUploadsStatus string
 const (
 	DatasetUploadsStatusEmpty      DatasetUploadsStatus = "empty"
 	DatasetUploadsStatusUploading  DatasetUploadsStatus = "uploading"
+	DatasetUploadsStatusPending    DatasetUploadsStatus = "pending"
 	DatasetUploadsStatusProcessing DatasetUploadsStatus = "processing"
 	DatasetUploadsStatusFailed     DatasetUploadsStatus = "failed"
 	DatasetUploadsStatusComplete   DatasetUploadsStatus = "complete"
@@ -286,7 +289,7 @@ const (
 
 func (r DatasetUploadsStatus) IsKnown() bool {
 	switch r {
-	case DatasetUploadsStatusEmpty, DatasetUploadsStatusUploading, DatasetUploadsStatusProcessing, DatasetUploadsStatusFailed, DatasetUploadsStatusComplete:
+	case DatasetUploadsStatusEmpty, DatasetUploadsStatusUploading, DatasetUploadsStatusPending, DatasetUploadsStatusProcessing, DatasetUploadsStatusFailed, DatasetUploadsStatusComplete:
 		return true
 	}
 	return false

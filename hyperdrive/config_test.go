@@ -47,6 +47,7 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 				MTLSCertificateID: cloudflare.F("00000000-0000-0000-0000-0000000000"),
 				Sslmode:           cloudflare.F("verify-full"),
 			}),
+			OriginConnectionLimit: cloudflare.F(int64(60)),
 		},
 	})
 	if err != nil {
@@ -94,6 +95,7 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 					MTLSCertificateID: cloudflare.F("00000000-0000-0000-0000-0000000000"),
 					Sslmode:           cloudflare.F("verify-full"),
 				}),
+				OriginConnectionLimit: cloudflare.F(int64(60)),
 			},
 		},
 	)
@@ -193,6 +195,7 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 				Scheme:   cloudflare.F(hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres),
 				User:     cloudflare.F("postgres"),
 			}),
+			OriginConnectionLimit: cloudflare.F(int64(60)),
 		},
 	)
 	if err != nil {
