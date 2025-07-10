@@ -3,12 +3,15 @@
 package kv
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
@@ -170,8 +173,19 @@ type NamespaceValueUpdateParams struct {
 	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
-func (r NamespaceValueUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r NamespaceValueUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 // URLQuery serializes [NamespaceValueUpdateParams]'s query parameters as
