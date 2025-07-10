@@ -121,10 +121,10 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 //
 // This operation is asynchronous. To get current the operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
-func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
+func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	var env ListItemDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -132,8 +132,8 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, body ListIt
 		err = errors.New("missing required list_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", body.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -511,7 +511,19 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// Defines an identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]                     `path:"account_id,required"`
+	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
+}
+
+func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ListItemDeleteParamsItem struct {
+}
+
+func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ListItemDeleteResponseEnvelope struct {
