@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // BrandProtectionService contains methods and other services that help with
@@ -54,38 +55,45 @@ func (r *BrandProtectionService) Submit(ctx context.Context, body BrandProtectio
 }
 
 // Return submitted URLs based on ID
-func (r *BrandProtectionService) URLInfo(ctx context.Context, query BrandProtectionURLInfoParams, opts ...option.RequestOption) (res *BrandProtectionURLInfoResponse, err error) {
+func (r *BrandProtectionService) URLInfo(ctx context.Context, query BrandProtectionURLInfoParams, opts ...option.RequestOption) (res *pagination.SinglePage[BrandProtectionURLInfoResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/url-info", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Return submitted URLs based on ID
+func (r *BrandProtectionService) URLInfoAutoPaging(ctx context.Context, query BrandProtectionURLInfoParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[BrandProtectionURLInfoResponse] {
+	return pagination.NewSinglePageAutoPager(r.URLInfo(ctx, query, opts...))
 }
 
 type BrandProtectionSubmitResponse struct {
-	// Error code
-	Code int64 `json:"code"`
-	// Errors
-	Errors map[string]interface{} `json:"errors"`
-	// Error message
-	Message string `json:"message"`
-	// Error name
-	Status string                            `json:"status"`
-	JSON   brandProtectionSubmitResponseJSON `json:"-"`
+	SkippedURLs   []map[string]interface{}          `json:"skipped_urls"`
+	SubmittedURLs []map[string]interface{}          `json:"submitted_urls"`
+	JSON          brandProtectionSubmitResponseJSON `json:"-"`
 }
 
 // brandProtectionSubmitResponseJSON contains the JSON metadata for the struct
 // [BrandProtectionSubmitResponse]
 type brandProtectionSubmitResponseJSON struct {
-	Code        apijson.Field
-	Errors      apijson.Field
-	Message     apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	SkippedURLs   apijson.Field
+	SubmittedURLs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *BrandProtectionSubmitResponse) UnmarshalJSON(data []byte) (err error) {
@@ -96,36 +104,7 @@ func (r brandProtectionSubmitResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type BrandProtectionURLInfoResponse struct {
-	// Error code
-	Code int64 `json:"code"`
-	// Errors
-	Errors map[string]interface{} `json:"errors"`
-	// Error message
-	Message string `json:"message"`
-	// Error name
-	Status string                             `json:"status"`
-	JSON   brandProtectionURLInfoResponseJSON `json:"-"`
-}
-
-// brandProtectionURLInfoResponseJSON contains the JSON metadata for the struct
-// [BrandProtectionURLInfoResponse]
-type brandProtectionURLInfoResponseJSON struct {
-	Code        apijson.Field
-	Errors      apijson.Field
-	Message     apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionURLInfoResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionURLInfoResponseJSON) RawJSON() string {
-	return r.raw
-}
+type BrandProtectionURLInfoResponse map[string]interface{}
 
 type BrandProtectionSubmitParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
