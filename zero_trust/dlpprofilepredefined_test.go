@@ -31,7 +31,7 @@ func TestDLPProfilePredefinedNewWithOptionalParams(t *testing.T) {
 		AccountID:           cloudflare.F("account_id"),
 		ProfileID:           cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		AIContextEnabled:    cloudflare.F(true),
-		AllowedMatchCount:   cloudflare.F(int64(0)),
+		AllowedMatchCount:   cloudflare.F(int64(5)),
 		ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 		ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 			Enabled: cloudflare.F(true),
@@ -73,7 +73,7 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.DLPProfilePredefinedUpdateParams{
 			AccountID:           cloudflare.F("account_id"),
 			AIContextEnabled:    cloudflare.F(true),
-			AllowedMatchCount:   cloudflare.F(int64(0)),
+			AllowedMatchCount:   cloudflare.F(int64(5)),
 			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),

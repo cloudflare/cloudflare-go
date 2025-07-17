@@ -43,6 +43,7 @@ func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),
 			}),
+			Files:                  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			CfWorkerBodyPart:       cloudflare.F("CF-WORKER-BODY-PART"),
 			CfWorkerMainModulePart: cloudflare.F("CF-WORKER-MAIN-MODULE-PART"),
 		},

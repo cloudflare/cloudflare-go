@@ -8290,12 +8290,12 @@ func (r accessApplicationNewResponseBrowserRdpApplicationTargetCriterionJSON) Ra
 type AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocol string
 
 const (
-	AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocolSSH AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocol = "SSH"
+	AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocolRdp AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocol = "RDP"
 )
 
 func (r AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocolSSH:
+	case AccessApplicationNewResponseBrowserRdpApplicationTargetCriteriaProtocolRdp:
 		return true
 	}
 	return false
@@ -14820,12 +14820,12 @@ func (r accessApplicationUpdateResponseBrowserRdpApplicationTargetCriterionJSON)
 type AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocol string
 
 const (
-	AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocol = "SSH"
+	AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocolRdp AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocol = "RDP"
 )
 
 func (r AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocolSSH:
+	case AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriteriaProtocolRdp:
 		return true
 	}
 	return false
@@ -21347,12 +21347,12 @@ func (r accessApplicationListResponseBrowserRdpApplicationTargetCriterionJSON) R
 type AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocol string
 
 const (
-	AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocolSSH AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocol = "SSH"
+	AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocolRdp AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocol = "RDP"
 )
 
 func (r AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocolSSH:
+	case AccessApplicationListResponseBrowserRdpApplicationTargetCriteriaProtocolRdp:
 		return true
 	}
 	return false
@@ -27892,12 +27892,12 @@ func (r accessApplicationGetResponseBrowserRdpApplicationTargetCriterionJSON) Ra
 type AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocol string
 
 const (
-	AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocolSSH AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocol = "SSH"
+	AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocolRdp AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocol = "RDP"
 )
 
 func (r AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocolSSH:
+	case AccessApplicationGetResponseBrowserRdpApplicationTargetCriteriaProtocolRdp:
 		return true
 	}
 	return false
@@ -32509,12 +32509,12 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriterion) Mars
 type AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocol string
 
 const (
-	AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocolSSH AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocol = "SSH"
+	AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocolRdp AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocol = "RDP"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocolSSH:
+	case AccessApplicationNewParamsBodyBrowserRdpApplicationTargetCriteriaProtocolRdp:
 		return true
 	}
 	return false
@@ -37114,12 +37114,12 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriterion) M
 type AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocol string
 
 const (
-	AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocol = "SSH"
+	AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocolRdp AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocol = "RDP"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocolSSH:
+	case AccessApplicationUpdateParamsBodyBrowserRdpApplicationTargetCriteriaProtocolRdp:
 		return true
 	}
 	return false

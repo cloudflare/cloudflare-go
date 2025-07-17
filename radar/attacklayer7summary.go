@@ -151,7 +151,7 @@ func (r attackLayer7SummaryHTTPMethodResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryHTTPMethodResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryHTTPMethodResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -341,7 +341,7 @@ func (r attackLayer7SummaryHTTPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryHTTPVersionResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryHTTPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -556,7 +556,7 @@ func (r attackLayer7SummaryIndustryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryIndustryResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryIndustryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryIndustryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryIndustryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -745,7 +745,7 @@ func (r attackLayer7SummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryIPVersionResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -957,7 +957,7 @@ func (r attackLayer7SummaryManagedRulesResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryManagedRulesResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryManagedRulesResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1147,7 +1147,7 @@ func (r attackLayer7SummaryMitigationProductResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryMitigationProductResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryMitigationProductResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryMitigationProductResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryMitigationProductResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1338,7 +1338,7 @@ func (r attackLayer7SummaryVerticalResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer7SummaryVerticalResponseMeta struct {
-	ConfidenceInfo AttackLayer7SummaryVerticalResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AttackLayer7SummaryVerticalResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AttackLayer7SummaryVerticalResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

@@ -541,6 +541,7 @@ type SettingAllowPolicyListParams struct {
 	Order param.Field[SettingAllowPolicyListParamsOrder] `query:"order"`
 	// The page number of paginated results.
 	Page        param.Field[int64]                                   `query:"page"`
+	Pattern     param.Field[string]                                  `query:"pattern"`
 	PatternType param.Field[SettingAllowPolicyListParamsPatternType] `query:"pattern_type"`
 	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`

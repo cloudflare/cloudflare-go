@@ -74,6 +74,7 @@ func TestSettingAllowPolicyListWithOptionalParams(t *testing.T) {
 		IsTrustedSender:    cloudflare.F(true),
 		Order:              cloudflare.F(email_security.SettingAllowPolicyListParamsOrderPattern),
 		Page:               cloudflare.F(int64(1)),
+		Pattern:            cloudflare.F("pattern"),
 		PatternType:        cloudflare.F(email_security.SettingAllowPolicyListParamsPatternTypeEmail),
 		PerPage:            cloudflare.F(int64(1)),
 		Search:             cloudflare.F("search"),

@@ -381,17 +381,18 @@ func (r videoStatusJSON) RawJSON() string {
 type VideoStatusState string
 
 const (
-	VideoStatusStatePendingupload VideoStatusState = "pendingupload"
-	VideoStatusStateDownloading   VideoStatusState = "downloading"
-	VideoStatusStateQueued        VideoStatusState = "queued"
-	VideoStatusStateInprogress    VideoStatusState = "inprogress"
-	VideoStatusStateReady         VideoStatusState = "ready"
-	VideoStatusStateError         VideoStatusState = "error"
+	VideoStatusStatePendingupload  VideoStatusState = "pendingupload"
+	VideoStatusStateDownloading    VideoStatusState = "downloading"
+	VideoStatusStateQueued         VideoStatusState = "queued"
+	VideoStatusStateInprogress     VideoStatusState = "inprogress"
+	VideoStatusStateReady          VideoStatusState = "ready"
+	VideoStatusStateError          VideoStatusState = "error"
+	VideoStatusStateLiveInprogress VideoStatusState = "live-inprogress"
 )
 
 func (r VideoStatusState) IsKnown() bool {
 	switch r {
-	case VideoStatusStatePendingupload, VideoStatusStateDownloading, VideoStatusStateQueued, VideoStatusStateInprogress, VideoStatusStateReady, VideoStatusStateError:
+	case VideoStatusStatePendingupload, VideoStatusStateDownloading, VideoStatusStateQueued, VideoStatusStateInprogress, VideoStatusStateReady, VideoStatusStateError, VideoStatusStateLiveInprogress:
 		return true
 	}
 	return false
@@ -482,17 +483,18 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 type StreamListParamsStatus string
 
 const (
-	StreamListParamsStatusPendingupload StreamListParamsStatus = "pendingupload"
-	StreamListParamsStatusDownloading   StreamListParamsStatus = "downloading"
-	StreamListParamsStatusQueued        StreamListParamsStatus = "queued"
-	StreamListParamsStatusInprogress    StreamListParamsStatus = "inprogress"
-	StreamListParamsStatusReady         StreamListParamsStatus = "ready"
-	StreamListParamsStatusError         StreamListParamsStatus = "error"
+	StreamListParamsStatusPendingupload  StreamListParamsStatus = "pendingupload"
+	StreamListParamsStatusDownloading    StreamListParamsStatus = "downloading"
+	StreamListParamsStatusQueued         StreamListParamsStatus = "queued"
+	StreamListParamsStatusInprogress     StreamListParamsStatus = "inprogress"
+	StreamListParamsStatusReady          StreamListParamsStatus = "ready"
+	StreamListParamsStatusError          StreamListParamsStatus = "error"
+	StreamListParamsStatusLiveInprogress StreamListParamsStatus = "live-inprogress"
 )
 
 func (r StreamListParamsStatus) IsKnown() bool {
 	switch r {
-	case StreamListParamsStatusPendingupload, StreamListParamsStatusDownloading, StreamListParamsStatusQueued, StreamListParamsStatusInprogress, StreamListParamsStatusReady, StreamListParamsStatusError:
+	case StreamListParamsStatusPendingupload, StreamListParamsStatusDownloading, StreamListParamsStatusQueued, StreamListParamsStatusInprogress, StreamListParamsStatusReady, StreamListParamsStatusError, StreamListParamsStatusLiveInprogress:
 		return true
 	}
 	return false

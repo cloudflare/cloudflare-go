@@ -88,7 +88,7 @@ func (r tcpResetsTimeoutSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type TCPResetsTimeoutSummaryResponseMeta struct {
-	ConfidenceInfo TCPResetsTimeoutSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo TCPResetsTimeoutSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []TCPResetsTimeoutSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

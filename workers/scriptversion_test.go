@@ -3,8 +3,10 @@
 package workers_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -49,6 +51,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string"}),
 				UsageModel:         cloudflare.F(workers.ScriptVersionNewParamsMetadataUsageModelStandard),
 			}),
+			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},
 	)
 	if err != nil {

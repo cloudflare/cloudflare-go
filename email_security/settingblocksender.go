@@ -425,6 +425,7 @@ type SettingBlockSenderListParams struct {
 	Order param.Field[SettingBlockSenderListParamsOrder] `query:"order"`
 	// The page number of paginated results.
 	Page        param.Field[int64]                                   `query:"page"`
+	Pattern     param.Field[string]                                  `query:"pattern"`
 	PatternType param.Field[SettingBlockSenderListParamsPatternType] `query:"pattern_type"`
 	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`

@@ -105,8 +105,6 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	Limits DispatchNamespaceScriptSettingEditResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations DispatchNamespaceScriptSettingEditResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability DispatchNamespaceScriptSettingEditResponseObservability `json:"observability"`
 	// Configuration for
@@ -129,7 +127,6 @@ type dispatchNamespaceScriptSettingEditResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
@@ -1965,8 +1962,6 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	Limits DispatchNamespaceScriptSettingGetResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations DispatchNamespaceScriptSettingGetResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability DispatchNamespaceScriptSettingGetResponseObservability `json:"observability"`
 	// Configuration for
@@ -1989,7 +1984,6 @@ type dispatchNamespaceScriptSettingGetResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field

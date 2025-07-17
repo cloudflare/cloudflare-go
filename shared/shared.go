@@ -3,12 +3,10 @@
 package shared
 
 import (
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/tidwall/gjson"
 )
 
 type ASN = int64
@@ -1266,9 +1264,9 @@ type TokenPolicy struct {
 	Effect TokenPolicyEffect `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups []TokenPolicyPermissionGroup `json:"permission_groups,required"`
-	// A list of resource names that the policy applies to.
-	Resources map[string]TokenPolicyResourcesUnion `json:"resources,required"`
-	JSON      tokenPolicyJSON                      `json:"-"`
+	// Resource permissions for the policy. Use either simple or nested permissions.
+	Resources TokenPolicyResources `json:"resources,required"`
+	JSON      tokenPolicyJSON      `json:"-"`
 }
 
 // tokenPolicyJSON contains the JSON metadata for the struct [TokenPolicy]
@@ -1359,39 +1357,39 @@ func (r tokenPolicyPermissionGroupsMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-// A simple wildcard permission, e.g., "\*".
-//
-// Union satisfied by [UnionString] or [TokenPolicyResourcesMap].
-type TokenPolicyResourcesUnion interface {
-	ImplementsTokenPolicyResourcesUnion()
+// Resource permissions for the policy. Use either simple or nested permissions.
+type TokenPolicyResources struct {
+	// Nested resource permissions for hierarchical scoping.
+	Nested map[string]map[string]string `json:"nested"`
+	// Simple resource permissions where each resource maps to a permission string.
+	Simple map[string]string        `json:"simple"`
+	JSON   tokenPolicyResourcesJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TokenPolicyResourcesUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TokenPolicyResourcesMap{}),
-		},
-	)
+// tokenPolicyResourcesJSON contains the JSON metadata for the struct
+// [TokenPolicyResources]
+type tokenPolicyResourcesJSON struct {
+	Nested      apijson.Field
+	Simple      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type TokenPolicyResourcesMap map[string]string
+func (r *TokenPolicyResources) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r TokenPolicyResourcesMap) ImplementsTokenPolicyResourcesUnion() {}
+func (r tokenPolicyResourcesJSON) RawJSON() string {
+	return r.raw
+}
 
 type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
 	Effect param.Field[TokenPolicyEffect] `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups,required"`
-	// A list of resource names that the policy applies to.
-	Resources param.Field[map[string]TokenPolicyResourcesUnionParam] `json:"resources,required"`
+	// Resource permissions for the policy. Use either simple or nested permissions.
+	Resources param.Field[TokenPolicyResourcesParam] `json:"resources,required"`
 }
 
 func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -1421,15 +1419,16 @@ func (r TokenPolicyPermissionGroupsMetaParam) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// A simple wildcard permission, e.g., "\*".
-//
-// Satisfied by [shared.UnionString], [shared.TokenPolicyResourcesMapParam].
-type TokenPolicyResourcesUnionParam interface {
-	ImplementsTokenPolicyResourcesUnionParam()
+// Resource permissions for the policy. Use either simple or nested permissions.
+type TokenPolicyResourcesParam struct {
+	// Nested resource permissions for hierarchical scoping.
+	Nested param.Field[map[string]map[string]string] `json:"nested"`
+	// Simple resource permissions where each resource maps to a permission string.
+	Simple param.Field[map[string]string] `json:"simple"`
 }
 
-type TokenPolicyResourcesMapParam map[string]string
-
-func (r TokenPolicyResourcesMapParam) ImplementsTokenPolicyResourcesUnionParam() {}
+func (r TokenPolicyResourcesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type TokenValue = string

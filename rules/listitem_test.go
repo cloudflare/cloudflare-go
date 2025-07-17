@@ -36,7 +36,8 @@ func TestListItemNew(t *testing.T) {
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(rules.HostnameParam{
-					URLHostname: cloudflare.F("example.com"),
+					URLHostname:          cloudflare.F("example.com"),
+					ExcludeExactHostname: cloudflare.F(true),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
@@ -82,7 +83,8 @@ func TestListItemUpdate(t *testing.T) {
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(rules.HostnameParam{
-					URLHostname: cloudflare.F("example.com"),
+					URLHostname:          cloudflare.F("example.com"),
+					ExcludeExactHostname: cloudflare.F(true),
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{

@@ -990,7 +990,9 @@ type ConnectorEventListParams struct {
 	From      param.Field[float64] `query:"from,required"`
 	To        param.Field[float64] `query:"to,required"`
 	Cursor    param.Field[string]  `query:"cursor"`
-	Limit     param.Field[float64] `query:"limit"`
+	// Filter by event kind
+	K     param.Field[string]  `query:"k"`
+	Limit param.Field[float64] `query:"limit"`
 }
 
 // URLQuery serializes [ConnectorEventListParams]'s query parameters as

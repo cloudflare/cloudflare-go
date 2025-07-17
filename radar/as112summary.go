@@ -140,7 +140,7 @@ func (r as112SummaryDNSSECResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryDNSSECResponseMeta struct {
-	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AS112SummaryDNSSECResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -353,7 +353,7 @@ func (r as112SummaryEdnsResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryEdnsResponseMeta struct {
-	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AS112SummaryEdnsResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -566,7 +566,7 @@ func (r as112SummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryIPVersionResponseMeta struct {
-	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AS112SummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -780,7 +780,7 @@ func (r as112SummaryProtocolResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryProtocolResponseMeta struct {
-	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AS112SummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1000,7 +1000,7 @@ func (r as112SummaryQueryTypeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryQueryTypeResponseMeta struct {
-	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AS112SummaryQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1189,7 +1189,7 @@ func (r as112SummaryResponseCodesResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryResponseCodesResponseMeta struct {
-	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AS112SummaryResponseCodesResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

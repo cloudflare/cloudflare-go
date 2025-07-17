@@ -343,7 +343,7 @@ func (r listItemGetResponseJSON) RawJSON() string {
 }
 
 type ListItemNewParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string]     `path:"account_id,required"`
 	Body      []ListItemNewParamsBody `json:"body,required"`
 }
@@ -414,7 +414,7 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemUpdateParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string]        `path:"account_id,required"`
 	Body      []ListItemUpdateParamsBody `json:"body,required"`
 }
@@ -485,7 +485,7 @@ func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemListParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The pagination cursor. An opaque string token indicating the position from which
 	// to continue when requesting the next/previous set of records. Cursor values are
@@ -510,7 +510,7 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 }
 
 type ListItemDeleteParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string]                     `path:"account_id,required"`
 	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
 }
@@ -570,7 +570,7 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemGetParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

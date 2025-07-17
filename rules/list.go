@@ -39,7 +39,7 @@ func NewListService(opts ...option.RequestOption) (r *ListService) {
 	return
 }
 
-// Creates a new list of the specified type.
+// Creates a new list of the specified kind.
 func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...option.RequestOption) (res *ListNewResponse, err error) {
 	var env ListNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -149,15 +149,20 @@ func (r *ListService) Get(ctx context.Context, listID string, query ListGetParam
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type Hostname struct {
-	URLHostname string       `json:"url_hostname,required"`
-	JSON        hostnameJSON `json:"-"`
+	URLHostname string `json:"url_hostname,required"`
+	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
+	// only subdomains are blocked. When false, both the root domain and subdomains are
+	// blocked.
+	ExcludeExactHostname bool         `json:"exclude_exact_hostname"`
+	JSON                 hostnameJSON `json:"-"`
 }
 
 // hostnameJSON contains the JSON metadata for the struct [Hostname]
 type hostnameJSON struct {
-	URLHostname apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	URLHostname          apijson.Field
+	ExcludeExactHostname apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *Hostname) UnmarshalJSON(data []byte) (err error) {
@@ -172,6 +177,10 @@ func (r hostnameJSON) RawJSON() string {
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type HostnameParam struct {
 	URLHostname param.Field[string] `json:"url_hostname,required"`
+	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
+	// only subdomains are blocked. When false, both the root domain and subdomains are
+	// blocked.
+	ExcludeExactHostname param.Field[bool] `json:"exclude_exact_hostname"`
 }
 
 func (r HostnameParam) MarshalJSON() (data []byte, err error) {
@@ -431,7 +440,7 @@ func (r ListUpdateResponseKind) IsKnown() bool {
 }
 
 type ListDeleteResponse struct {
-	// Defines the unique ID of the item in the List.
+	// The unique ID of the list.
 	ID   string                 `json:"id"`
 	JSON listDeleteResponseJSON `json:"-"`
 }
@@ -515,7 +524,7 @@ func (r ListGetResponseKind) IsKnown() bool {
 }
 
 type ListNewParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
@@ -593,7 +602,7 @@ func (r ListNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListUpdateParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
@@ -647,12 +656,12 @@ func (r ListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListListParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ListDeleteParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -700,7 +709,7 @@ func (r ListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListGetParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

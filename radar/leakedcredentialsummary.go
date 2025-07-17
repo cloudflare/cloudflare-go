@@ -87,7 +87,7 @@ func (r leakedCredentialSummaryBotClassResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type LeakedCredentialSummaryBotClassResponseMeta struct {
-	ConfidenceInfo LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo LeakedCredentialSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []LeakedCredentialSummaryBotClassResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -302,7 +302,7 @@ func (r leakedCredentialSummaryCompromisedResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type LeakedCredentialSummaryCompromisedResponseMeta struct {
-	ConfidenceInfo LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo LeakedCredentialSummaryCompromisedResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []LeakedCredentialSummaryCompromisedResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

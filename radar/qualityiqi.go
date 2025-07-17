@@ -88,7 +88,7 @@ func (r qualityIQISummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type QualityIQISummaryResponseMeta struct {
-	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []QualityIQISummaryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

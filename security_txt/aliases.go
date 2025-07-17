@@ -404,15 +404,10 @@ type TokenPolicyPermissionGroup = shared.TokenPolicyPermissionGroup
 // This is an alias to an internal type.
 type TokenPolicyPermissionGroupsMeta = shared.TokenPolicyPermissionGroupsMeta
 
-// A simple wildcard permission, e.g., "\*".
+// Resource permissions for the policy. Use either simple or nested permissions.
 //
 // This is an alias to an internal type.
-type TokenPolicyResourcesUnion = shared.TokenPolicyResourcesUnion
-
-// A nested permission grant for further scoping.
-//
-// This is an alias to an internal type.
-type TokenPolicyResourcesMap = shared.TokenPolicyResourcesMap
+type TokenPolicyResources = shared.TokenPolicyResources
 
 // This is an alias to an internal type.
 type TokenPolicyParam = shared.TokenPolicyParam
@@ -428,15 +423,10 @@ type TokenPolicyPermissionGroupParam = shared.TokenPolicyPermissionGroupParam
 // This is an alias to an internal type.
 type TokenPolicyPermissionGroupsMetaParam = shared.TokenPolicyPermissionGroupsMetaParam
 
-// A simple wildcard permission, e.g., "\*".
+// Resource permissions for the policy. Use either simple or nested permissions.
 //
 // This is an alias to an internal type.
-type TokenPolicyResourcesUnionParam = shared.TokenPolicyResourcesUnionParam
-
-// A nested permission grant for further scoping.
-//
-// This is an alias to an internal type.
-type TokenPolicyResourcesMapParam = shared.TokenPolicyResourcesMapParam
+type TokenPolicyResourcesParam = shared.TokenPolicyResourcesParam
 
 // The token value.
 //
