@@ -291,7 +291,7 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 }
 
 type ARecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -383,7 +383,7 @@ func (r aRecordSettingsJSON) RawJSON() string {
 }
 
 type ARecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -436,7 +436,7 @@ func (r ARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type AAAARecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -529,7 +529,7 @@ func (r aaaaRecordSettingsJSON) RawJSON() string {
 }
 
 type AAAARecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -659,7 +659,7 @@ func (r BatchPatchNSRecordParam) implementsBatchPatchUnionParam() {}
 type BatchPatchOpenpgpkeyRecordParam struct {
 	// Identifier.
 	ID param.Field[string] `json:"id,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -978,7 +978,7 @@ func (r BatchPutNSRecordParam) implementsBatchPutUnionParam() {}
 type BatchPutOpenpgpkeyRecordParam struct {
 	// Identifier.
 	ID param.Field[string] `json:"id,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1220,7 +1220,7 @@ func (r BatchPutURIRecordParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutURIRecordParam) implementsBatchPutUnionParam() {}
 
 type CAARecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1344,7 +1344,7 @@ func (r caaRecordSettingsJSON) RawJSON() string {
 }
 
 type CAARecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1411,7 +1411,7 @@ func (r CAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type CERTRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1538,7 +1538,7 @@ func (r certRecordSettingsJSON) RawJSON() string {
 }
 
 type CERTRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1607,7 +1607,7 @@ func (r CERTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type CNAMERecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1706,7 +1706,7 @@ func (r cnameRecordSettingsJSON) RawJSON() string {
 }
 
 type CNAMERecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1764,7 +1764,7 @@ func (r CNAMERecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSKEYRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1892,7 +1892,7 @@ func (r dnskeyRecordSettingsJSON) RawJSON() string {
 }
 
 type DNSKEYRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -1961,7 +1961,7 @@ func (r DNSKEYRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DSRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2088,7 +2088,7 @@ func (r dsRecordSettingsJSON) RawJSON() string {
 }
 
 type DSRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2157,7 +2157,7 @@ func (r DSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type HTTPSRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2281,7 +2281,7 @@ func (r httpsRecordSettingsJSON) RawJSON() string {
 }
 
 type HTTPSRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2348,7 +2348,7 @@ func (r HTTPSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type LOCRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2531,7 +2531,7 @@ func (r locRecordSettingsJSON) RawJSON() string {
 }
 
 type LOCRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2616,7 +2616,7 @@ func (r LOCRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type MXRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2713,7 +2713,7 @@ func (r mxRecordSettingsJSON) RawJSON() string {
 }
 
 type MXRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2769,7 +2769,7 @@ func (r MXRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type NAPTRRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2902,7 +2902,7 @@ func (r naptrRecordSettingsJSON) RawJSON() string {
 }
 
 type NAPTRRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -2975,7 +2975,7 @@ func (r NAPTRRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type NSRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -3068,7 +3068,7 @@ func (r nsRecordSettingsJSON) RawJSON() string {
 }
 
 type NSRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -3121,7 +3121,7 @@ func (r NSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type PTRRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -3214,7 +3214,7 @@ func (r ptrRecordSettingsJSON) RawJSON() string {
 }
 
 type PTRRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -3287,7 +3287,7 @@ type RecordResponse struct {
 	Meta interface{} `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
@@ -3708,7 +3708,7 @@ type RecordResponseOpenpgpkeyRecord struct {
 	Meta interface{} `json:"meta,required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable,required"`
@@ -4496,7 +4496,7 @@ type RecordTags = string
 type RecordTagsParam = string
 
 type SMIMEARecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -4624,7 +4624,7 @@ func (r smimeaRecordSettingsJSON) RawJSON() string {
 }
 
 type SMIMEARecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -4693,7 +4693,7 @@ func (r SMIMEARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type SRVRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -4822,7 +4822,7 @@ func (r srvRecordSettingsJSON) RawJSON() string {
 }
 
 type SRVRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -4892,7 +4892,7 @@ func (r SRVRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type SSHFPRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5016,7 +5016,7 @@ func (r sshfpRecordSettingsJSON) RawJSON() string {
 }
 
 type SSHFPRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5083,7 +5083,7 @@ func (r SSHFPRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type SVCBRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5207,7 +5207,7 @@ func (r svcbRecordSettingsJSON) RawJSON() string {
 }
 
 type SVCBRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5274,7 +5274,7 @@ func (r SVCBRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type TLSARecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5401,7 +5401,7 @@ func (r tlsaRecordSettingsJSON) RawJSON() string {
 }
 
 type TLSARecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5487,7 +5487,7 @@ func (r TTL) IsKnown() bool {
 }
 
 type TXTRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5585,7 +5585,7 @@ func (r txtRecordSettingsJSON) RawJSON() string {
 }
 
 type TXTRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5643,7 +5643,7 @@ func (r TXTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type URIRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5768,7 +5768,7 @@ func (r uriRecordSettingsJSON) RawJSON() string {
 }
 
 type URIRecordParam struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5945,7 +5945,7 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordNewParamsBody struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -5988,7 +5988,7 @@ type RecordNewParamsBodyUnion interface {
 }
 
 type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -6234,7 +6234,7 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordUpdateParamsBody struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -6277,7 +6277,7 @@ type RecordUpdateParamsBodyUnion interface {
 }
 
 type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -6795,7 +6795,7 @@ func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordBatchParamsPost struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -6838,7 +6838,7 @@ type RecordBatchParamsPostUnion interface {
 }
 
 type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -7084,7 +7084,7 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordEditParamsBody struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
@@ -7127,7 +7127,7 @@ type RecordEditParamsBodyUnion interface {
 }
 
 type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord struct {
-	// DNS record name (or @ for the zone apex) in Punycode.
+	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for

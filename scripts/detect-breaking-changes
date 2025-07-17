@@ -215,6 +215,10 @@ TEST_PATHS=(
 	audit_logs/auditlog_test.go
 	billing/profile_test.go
 	brand_protection/brandprotection_test.go
+	brand_protection/query_test.go
+	brand_protection/match_test.go
+	brand_protection/logo_test.go
+	brand_protection/logomatch_test.go
 	diagnostics/traceroute_test.go
 	images/v1_test.go
 	images/v1key_test.go

@@ -35,10 +35,10 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 			Strategy:  cloudflare.F(workers.ScriptDeploymentNewParamsStrategyPercentage),
 			Versions: cloudflare.F([]workers.ScriptDeploymentNewParamsVersion{{
 				Percentage: cloudflare.F(100.000000),
-				VersionID:  cloudflare.F("bcf48806-b317-4351-9ee7-36e7d557d4de"),
+				VersionID:  cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			}}),
 			Force: cloudflare.F(true),
-			Annotations: cloudflare.F(workers.DeploymentParam{
+			Annotations: cloudflare.F(workers.ScriptDeploymentNewParamsAnnotations{
 				WorkersMessage: cloudflare.F("Deploy bug fix."),
 			}),
 		},

@@ -33,7 +33,8 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Searches for locations, autonomous systems, reports, and bots.
+// Searches for locations, autonomous systems, reports, bots, certificate logs, and
+// certificate authorities.
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -93,7 +94,7 @@ func (r searchGlobalResponseSearchJSON) RawJSON() string {
 }
 
 type SearchGlobalParams struct {
-	// Search for locations, autonomous systems and reports.
+	// String used to perform the search operation.
 	Query param.Field[string] `query:"query,required"`
 	// Search types excluded from results.
 	Exclude param.Field[[]SearchGlobalParamsExclude] `query:"exclude"`
@@ -118,16 +119,17 @@ func (r SearchGlobalParams) URLQuery() (v url.Values) {
 type SearchGlobalParamsExclude string
 
 const (
-	SearchGlobalParamsExcludeASNs          SearchGlobalParamsExclude = "ASNS"
-	SearchGlobalParamsExcludeBots          SearchGlobalParamsExclude = "BOTS"
-	SearchGlobalParamsExcludeLocations     SearchGlobalParamsExclude = "LOCATIONS"
-	SearchGlobalParamsExcludeNotebooks     SearchGlobalParamsExclude = "NOTEBOOKS"
-	SearchGlobalParamsExcludeSpecialEvents SearchGlobalParamsExclude = "SPECIAL_EVENTS"
+	SearchGlobalParamsExcludeASNs                   SearchGlobalParamsExclude = "ASNS"
+	SearchGlobalParamsExcludeBots                   SearchGlobalParamsExclude = "BOTS"
+	SearchGlobalParamsExcludeCertificateAuthorities SearchGlobalParamsExclude = "CERTIFICATE_AUTHORITIES"
+	SearchGlobalParamsExcludeCertificateLogs        SearchGlobalParamsExclude = "CERTIFICATE_LOGS"
+	SearchGlobalParamsExcludeLocations              SearchGlobalParamsExclude = "LOCATIONS"
+	SearchGlobalParamsExcludeNotebooks              SearchGlobalParamsExclude = "NOTEBOOKS"
 )
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeSpecialEvents:
+	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks:
 		return true
 	}
 	return false
@@ -152,16 +154,17 @@ func (r SearchGlobalParamsFormat) IsKnown() bool {
 type SearchGlobalParamsInclude string
 
 const (
-	SearchGlobalParamsIncludeASNs          SearchGlobalParamsInclude = "ASNS"
-	SearchGlobalParamsIncludeBots          SearchGlobalParamsInclude = "BOTS"
-	SearchGlobalParamsIncludeLocations     SearchGlobalParamsInclude = "LOCATIONS"
-	SearchGlobalParamsIncludeNotebooks     SearchGlobalParamsInclude = "NOTEBOOKS"
-	SearchGlobalParamsIncludeSpecialEvents SearchGlobalParamsInclude = "SPECIAL_EVENTS"
+	SearchGlobalParamsIncludeASNs                   SearchGlobalParamsInclude = "ASNS"
+	SearchGlobalParamsIncludeBots                   SearchGlobalParamsInclude = "BOTS"
+	SearchGlobalParamsIncludeCertificateAuthorities SearchGlobalParamsInclude = "CERTIFICATE_AUTHORITIES"
+	SearchGlobalParamsIncludeCertificateLogs        SearchGlobalParamsInclude = "CERTIFICATE_LOGS"
+	SearchGlobalParamsIncludeLocations              SearchGlobalParamsInclude = "LOCATIONS"
+	SearchGlobalParamsIncludeNotebooks              SearchGlobalParamsInclude = "NOTEBOOKS"
 )
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeSpecialEvents:
+	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks:
 		return true
 	}
 	return false

@@ -89,7 +89,7 @@ func (r netflowSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type NetflowSummaryResponseMeta struct {
-	ConfidenceInfo NetflowSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo NetflowSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []NetflowSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

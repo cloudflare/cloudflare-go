@@ -182,7 +182,7 @@ func (r emailSecuritySummaryARCResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummaryARCResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummaryARCResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -371,7 +371,7 @@ func (r emailSecuritySummaryDKIMResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummaryDKIMResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummaryDKIMResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -560,7 +560,7 @@ func (r emailSecuritySummaryDMARCResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummaryDMARCResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummaryDMARCResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -749,7 +749,7 @@ func (r emailSecuritySummaryMaliciousResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummaryMaliciousResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummaryMaliciousResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummaryMaliciousResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummaryMaliciousResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -964,7 +964,7 @@ func (r emailSecuritySummarySpamResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummarySpamResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummarySpamResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummarySpamResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummarySpamResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1178,7 +1178,7 @@ func (r emailSecuritySummarySPFResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummarySPFResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummarySPFResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1367,7 +1367,7 @@ func (r emailSecuritySummarySpoofResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummarySpoofResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummarySpoofResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummarySpoofResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummarySpoofResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1581,7 +1581,7 @@ func (r emailSecuritySummaryThreatCategoryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummaryThreatCategoryResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummaryThreatCategoryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1803,7 +1803,7 @@ func (r emailSecuritySummaryTLSVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecuritySummaryTLSVersionResponseMeta struct {
-	ConfidenceInfo EmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo EmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []EmailSecuritySummaryTLSVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

@@ -314,17 +314,23 @@ type GatewayRule struct {
 	Identity string `json:"identity"`
 	// The name of the rule.
 	Name string `json:"name"`
+	// The rule cannot be shared via the Orgs API
+	NotSharable bool `json:"not_sharable"`
 	// Precedence sets the order of your rules. Lower values indicate higher
 	// precedence. At each processing phase, applicable rules are evaluated in
 	// ascending order of this value. Refer to
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
 	// docs on how to manage precedence via Terraform.
 	Precedence int64 `json:"precedence"`
+	// The rule was shared via the Orgs API and cannot be edited by the current account
+	ReadOnly bool `json:"read_only"`
 	// Additional settings that modify the rule's action.
 	RuleSettings RuleSetting `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule Schedule `json:"schedule,nullable"`
+	// account tag of account that created the rule
+	SourceAccount string `json:"source_account"`
 	// The wirefilter expression used for traffic matching.
 	Traffic   string    `json:"traffic"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
@@ -348,9 +354,12 @@ type gatewayRuleJSON struct {
 	Filters       apijson.Field
 	Identity      apijson.Field
 	Name          apijson.Field
+	NotSharable   apijson.Field
 	Precedence    apijson.Field
+	ReadOnly      apijson.Field
 	RuleSettings  apijson.Field
 	Schedule      apijson.Field
+	SourceAccount apijson.Field
 	Traffic       apijson.Field
 	UpdatedAt     apijson.Field
 	Version       apijson.Field

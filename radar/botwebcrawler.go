@@ -89,7 +89,7 @@ func (r botWebCrawlerSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type BotWebCrawlerSummaryResponseMeta struct {
-	ConfidenceInfo BotWebCrawlerSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo BotWebCrawlerSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []BotWebCrawlerSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

@@ -45,6 +45,7 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 		Recipient:        cloudflare.F("recipient"),
 		Sender:           cloudflare.F("sender"),
 		Start:            cloudflare.F(time.Now()),
+		Subject:          cloudflare.F("subject"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

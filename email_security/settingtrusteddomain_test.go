@@ -67,6 +67,7 @@ func TestSettingTrustedDomainListWithOptionalParams(t *testing.T) {
 		IsSimilarity: cloudflare.F(true),
 		Order:        cloudflare.F(email_security.SettingTrustedDomainListParamsOrderPattern),
 		Page:         cloudflare.F(int64(1)),
+		Pattern:      cloudflare.F("pattern"),
 		PerPage:      cloudflare.F(int64(1)),
 		Search:       cloudflare.F("search"),
 	})

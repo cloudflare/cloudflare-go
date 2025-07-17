@@ -96,8 +96,6 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	Limits ScriptScriptAndVersionSettingEditResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations ScriptScriptAndVersionSettingEditResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability ScriptScriptAndVersionSettingEditResponseObservability `json:"observability"`
 	// Configuration for
@@ -120,7 +118,6 @@ type scriptScriptAndVersionSettingEditResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
@@ -1953,8 +1950,6 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	Limits ScriptScriptAndVersionSettingGetResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations ScriptScriptAndVersionSettingGetResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability ScriptScriptAndVersionSettingGetResponseObservability `json:"observability"`
 	// Configuration for
@@ -1977,7 +1972,6 @@ type scriptScriptAndVersionSettingGetResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field

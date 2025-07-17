@@ -47,8 +47,15 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(map[string]shared.TokenPolicyResourcesUnionParam{
-				"foo": shared.UnionString("string"),
+			Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
+				Nested: cloudflare.F(map[string]map[string]string{
+					"com.cloudflare.api.account.472e41d66440f10635de39c7ffaf6080": {
+						"com.cloudflare.api.account.zone.*": "*",
+					},
+				}),
+				Simple: cloudflare.F(map[string]string{
+					"com.cloudflare.api.account.472e41d66440f10635de39c7ffaf6080": "*",
+				}),
 			}),
 		}}),
 		Condition: cloudflare.F(user.TokenNewParamsCondition{
@@ -112,8 +119,15 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(map[string]shared.TokenPolicyResourcesUnionParam{
-						"foo": shared.UnionString("string"),
+					Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
+						Nested: cloudflare.F(map[string]map[string]string{
+							"com.cloudflare.api.account.472e41d66440f10635de39c7ffaf6080": {
+								"com.cloudflare.api.account.zone.*": "*",
+							},
+						}),
+						Simple: cloudflare.F(map[string]string{
+							"com.cloudflare.api.account.472e41d66440f10635de39c7ffaf6080": "*",
+						}),
 					}),
 				}}),
 				Status: cloudflare.F(shared.TokenStatusActive),

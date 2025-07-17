@@ -193,7 +193,7 @@ func (r dnsSummaryCacheHitResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryCacheHitResponseMeta struct {
-	ConfidenceInfo DNSSummaryCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryCacheHitResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -406,7 +406,7 @@ func (r dnsSummaryDNSSECResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryDNSSECResponseMeta struct {
-	ConfidenceInfo DNSSummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryDNSSECResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -625,7 +625,7 @@ func (r dnsSummaryDNSSECAwareResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryDNSSECAwareResponseMeta struct {
-	ConfidenceInfo DNSSummaryDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryDNSSECAwareResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -839,7 +839,7 @@ func (r dnsSummaryDnssece2EResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryDnssece2EResponseMeta struct {
-	ConfidenceInfo DNSSummaryDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryDnssece2EResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1053,7 +1053,7 @@ func (r dnsSummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryIPVersionResponseMeta struct {
-	ConfidenceInfo DNSSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1267,7 +1267,7 @@ func (r dnsSummaryMatchingAnswerResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryMatchingAnswerResponseMeta struct {
-	ConfidenceInfo DNSSummaryMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryMatchingAnswerResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1481,7 +1481,7 @@ func (r dnsSummaryProtocolResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryProtocolResponseMeta struct {
-	ConfidenceInfo DNSSummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1700,7 +1700,7 @@ func (r dnsSummaryQueryTypeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryQueryTypeResponseMeta struct {
-	ConfidenceInfo DNSSummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1889,7 +1889,7 @@ func (r dnsSummaryResponseCodeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryResponseCodeResponseMeta struct {
-	ConfidenceInfo DNSSummaryResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryResponseCodeResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -2078,7 +2078,7 @@ func (r dnsSummaryResponseTTLResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryResponseTTLResponseMeta struct {
-	ConfidenceInfo DNSSummaryResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo DNSSummaryResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []DNSSummaryResponseTTLResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

@@ -73,7 +73,7 @@ func (r aiBotSummaryUserAgentResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AIBotSummaryUserAgentResponseMeta struct {
-	ConfidenceInfo AIBotSummaryUserAgentResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo AIBotSummaryUserAgentResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []AIBotSummaryUserAgentResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

@@ -479,7 +479,8 @@ type SettingTrustedDomainListParams struct {
 	// The field to sort by.
 	Order param.Field[SettingTrustedDomainListParamsOrder] `query:"order"`
 	// The page number of paginated results.
-	Page param.Field[int64] `query:"page"`
+	Page    param.Field[int64]  `query:"page"`
+	Pattern param.Field[string] `query:"pattern"`
 	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This

@@ -34,7 +34,8 @@ func NewDLPEntryIntegrationService(opts ...option.RequestOption) (r *DLPEntryInt
 	return
 }
 
-// This will update an existing integration entry
+// Integration entries can't be created, this will update an existing integration
+// entry This is needed for our generated terraform API
 func (r *DLPEntryIntegrationService) New(ctx context.Context, params DLPEntryIntegrationNewParams, opts ...option.RequestOption) (res *DLPEntryIntegrationNewResponse, err error) {
 	var env DLPEntryIntegrationNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

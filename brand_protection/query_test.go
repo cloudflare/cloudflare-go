@@ -1,20 +1,21 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package magic_transit_test
+package brand_protection_test
 
 import (
 	"context"
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/brand_protection"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestConnectorEventListWithOptionalParams(t *testing.T) {
+func TestQueryNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,18 +28,17 @@ func TestConnectorEventListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Connectors.Events.List(
-		context.TODO(),
-		"connector_id",
-		magic_transit.ConnectorEventListParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			From:      cloudflare.F(0.000000),
-			To:        cloudflare.F(0.000000),
-			Cursor:    cloudflare.F("cursor"),
-			K:         cloudflare.F("k"),
-			Limit:     cloudflare.F(0.000000),
-		},
-	)
+	err := client.BrandProtection.Queries.New(context.TODO(), brand_protection.QueryNewParams{
+		AccountID:     cloudflare.F("x"),
+		ID:            cloudflare.F("id"),
+		QueryScan:     cloudflare.F(true),
+		QueryTag:      cloudflare.F("tag"),
+		MaxTime:       cloudflare.F(time.Now()),
+		MinTime:       cloudflare.F(time.Now()),
+		BodyScan:      cloudflare.F(true),
+		StringMatches: cloudflare.F[any](map[string]interface{}{}),
+		BodyTag:       cloudflare.F("tag"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -48,7 +48,7 @@ func TestConnectorEventListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConnectorEventGet(t *testing.T) {
+func TestQueryDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -61,15 +61,12 @@ func TestConnectorEventGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Connectors.Events.Get(
-		context.TODO(),
-		"connector_id",
-		0.000000,
-		0.000000,
-		magic_transit.ConnectorEventGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
-	)
+	err := client.BrandProtection.Queries.Delete(context.TODO(), brand_protection.QueryDeleteParams{
+		AccountID: cloudflare.F("x"),
+		ID:        cloudflare.F("id"),
+		Scan:      cloudflare.F(true),
+		Tag:       cloudflare.F("tag"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -61,6 +61,7 @@ func TestSettingBlockSenderListWithOptionalParams(t *testing.T) {
 		Direction:   cloudflare.F(email_security.SettingBlockSenderListParamsDirectionAsc),
 		Order:       cloudflare.F(email_security.SettingBlockSenderListParamsOrderPattern),
 		Page:        cloudflare.F(int64(1)),
+		Pattern:     cloudflare.F("pattern"),
 		PatternType: cloudflare.F(email_security.SettingBlockSenderListParamsPatternTypeEmail),
 		PerPage:     cloudflare.F(int64(1)),
 		Search:      cloudflare.F("search"),

@@ -3,8 +3,10 @@
 package workers_for_platforms_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -95,6 +97,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard),
 			}),
+			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},
 	)
 	if err != nil {

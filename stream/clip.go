@@ -150,17 +150,18 @@ func (r clipPlaybackJSON) RawJSON() string {
 type ClipStatus string
 
 const (
-	ClipStatusPendingupload ClipStatus = "pendingupload"
-	ClipStatusDownloading   ClipStatus = "downloading"
-	ClipStatusQueued        ClipStatus = "queued"
-	ClipStatusInprogress    ClipStatus = "inprogress"
-	ClipStatusReady         ClipStatus = "ready"
-	ClipStatusError         ClipStatus = "error"
+	ClipStatusPendingupload  ClipStatus = "pendingupload"
+	ClipStatusDownloading    ClipStatus = "downloading"
+	ClipStatusQueued         ClipStatus = "queued"
+	ClipStatusInprogress     ClipStatus = "inprogress"
+	ClipStatusReady          ClipStatus = "ready"
+	ClipStatusError          ClipStatus = "error"
+	ClipStatusLiveInprogress ClipStatus = "live-inprogress"
 )
 
 func (r ClipStatus) IsKnown() bool {
 	switch r {
-	case ClipStatusPendingupload, ClipStatusDownloading, ClipStatusQueued, ClipStatusInprogress, ClipStatusReady, ClipStatusError:
+	case ClipStatusPendingupload, ClipStatusDownloading, ClipStatusQueued, ClipStatusInprogress, ClipStatusReady, ClipStatusError, ClipStatusLiveInprogress:
 		return true
 	}
 	return false

@@ -109,7 +109,7 @@ func (r ListBulkOperationGetResponseStatus) IsKnown() bool {
 }
 
 type ListBulkOperationGetParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
