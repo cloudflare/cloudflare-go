@@ -10,7 +10,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
@@ -40,7 +39,6 @@ func NewFinetuneAssetService(opts ...option.RequestOption) (r *FinetuneAssetServ
 
 // Upload a Finetune Asset
 func (r *FinetuneAssetService) New(ctx context.Context, finetuneID string, params FinetuneAssetNewParams, opts ...option.RequestOption) (res *FinetuneAssetNewResponse, err error) {
-	var env FinetuneAssetNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -51,33 +49,19 @@ func (r *FinetuneAssetService) New(ctx context.Context, finetuneID string, param
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/ai/finetunes/%s/finetune-assets", params.AccountID, finetuneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
 type FinetuneAssetNewResponse struct {
-	ID         string                       `json:"id,required" format:"uuid"`
-	BucketName string                       `json:"bucket_name,required"`
-	CreatedAt  time.Time                    `json:"created_at,required" format:"date-time"`
-	FileName   string                       `json:"file_name,required"`
-	FinetuneID string                       `json:"finetune_id,required"`
-	ModifiedAt time.Time                    `json:"modified_at,required" format:"date-time"`
-	JSON       finetuneAssetNewResponseJSON `json:"-"`
+	Success bool                         `json:"success,required"`
+	JSON    finetuneAssetNewResponseJSON `json:"-"`
 }
 
 // finetuneAssetNewResponseJSON contains the JSON metadata for the struct
 // [FinetuneAssetNewResponse]
 type finetuneAssetNewResponseJSON struct {
-	ID          apijson.Field
-	BucketName  apijson.Field
-	CreatedAt   apijson.Field
-	FileName    apijson.Field
-	FinetuneID  apijson.Field
-	ModifiedAt  apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -109,27 +93,4 @@ func (r FinetuneAssetNewParams) MarshalMultipart() (data []byte, contentType str
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
-}
-
-type FinetuneAssetNewResponseEnvelope struct {
-	Result  FinetuneAssetNewResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
-	JSON    finetuneAssetNewResponseEnvelopeJSON `json:"-"`
-}
-
-// finetuneAssetNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FinetuneAssetNewResponseEnvelope]
-type finetuneAssetNewResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FinetuneAssetNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r finetuneAssetNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
