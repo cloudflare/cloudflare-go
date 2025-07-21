@@ -190,7 +190,7 @@ func (r listCursorJSON) RawJSON() string {
 
 type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                  `json:"operation_id"`
+	OperationID string                  `json:"operation_id,required"`
 	JSON        listItemNewResponseJSON `json:"-"`
 }
 
@@ -212,7 +212,7 @@ func (r listItemNewResponseJSON) RawJSON() string {
 
 type ListItemUpdateResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                     `json:"operation_id"`
+	OperationID string                     `json:"operation_id,required"`
 	JSON        listItemUpdateResponseJSON `json:"-"`
 }
 
@@ -278,7 +278,7 @@ func (r listItemListResponseJSON) RawJSON() string {
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                     `json:"operation_id"`
+	OperationID string                     `json:"operation_id,required"`
 	JSON        listItemDeleteResponseJSON `json:"-"`
 }
 
@@ -344,8 +344,8 @@ func (r listItemGetResponseJSON) RawJSON() string {
 
 type ListItemNewParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string]     `path:"account_id,required"`
-	Body      []ListItemNewParamsBody `json:"body,required"`
+	AccountID param.Field[string]          `path:"account_id,required"`
+	Body      []ListItemNewParamsBodyUnion `json:"body,required"`
 }
 
 func (r ListItemNewParams) MarshalJSON() (data []byte, err error) {
@@ -369,6 +369,28 @@ type ListItemNewParamsBody struct {
 func (r ListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r ListItemNewParamsBody) implementsListItemNewParamsBodyUnion() {}
+
+// Satisfied by [rules.ListItemNewParamsBodyObject],
+// [rules.ListItemNewParamsBodyObject], [rules.ListItemNewParamsBodyObject],
+// [rules.ListItemNewParamsBodyObject], [ListItemNewParamsBody].
+type ListItemNewParamsBodyUnion interface {
+	implementsListItemNewParamsBodyUnion()
+}
+
+type ListItemNewParamsBodyObject struct {
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP param.Field[string] `json:"ip,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemNewParamsBodyObject) implementsListItemNewParamsBodyUnion() {}
 
 type ListItemNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
@@ -415,8 +437,8 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemUpdateParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string]        `path:"account_id,required"`
-	Body      []ListItemUpdateParamsBody `json:"body,required"`
+	AccountID param.Field[string]             `path:"account_id,required"`
+	Body      []ListItemUpdateParamsBodyUnion `json:"body,required"`
 }
 
 func (r ListItemUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -440,6 +462,28 @@ type ListItemUpdateParamsBody struct {
 func (r ListItemUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r ListItemUpdateParamsBody) implementsListItemUpdateParamsBodyUnion() {}
+
+// Satisfied by [rules.ListItemUpdateParamsBodyObject],
+// [rules.ListItemUpdateParamsBodyObject], [rules.ListItemUpdateParamsBodyObject],
+// [rules.ListItemUpdateParamsBodyObject], [ListItemUpdateParamsBody].
+type ListItemUpdateParamsBodyUnion interface {
+	implementsListItemUpdateParamsBodyUnion()
+}
+
+type ListItemUpdateParamsBodyObject struct {
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP param.Field[string] `json:"ip,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemUpdateParamsBodyObject) implementsListItemUpdateParamsBodyUnion() {}
 
 type ListItemUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
