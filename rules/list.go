@@ -189,35 +189,35 @@ func (r HostnameParam) MarshalJSON() (data []byte, err error) {
 
 type ListsList struct {
 	// The unique ID of the list.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
+	CreatedOn string `json:"created_on,required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListsListKind `json:"kind"`
+	Kind ListsListKind `json:"kind,required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
+	ModifiedOn string `json:"modified_on,required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64       `json:"num_referencing_filters"`
-	JSON                  listsListJSON `json:"-"`
+	NumItems float64 `json:"num_items,required"`
+	// The number of [filters](/api/resources/filters/) referencing the list.
+	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	// An informative summary of the list.
+	Description string        `json:"description"`
+	JSON        listsListJSON `json:"-"`
 }
 
 // listsListJSON contains the JSON metadata for the struct [ListsList]
 type listsListJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
-	Description           apijson.Field
 	Kind                  apijson.Field
 	ModifiedOn            apijson.Field
 	Name                  apijson.Field
 	NumItems              apijson.Field
 	NumReferencingFilters apijson.Field
+	Description           apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -316,35 +316,35 @@ func (r RedirectParam) MarshalJSON() (data []byte, err error) {
 
 type ListNewResponse struct {
 	// The unique ID of the list.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
+	CreatedOn string `json:"created_on,required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListNewResponseKind `json:"kind"`
+	Kind ListNewResponseKind `json:"kind,required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
+	ModifiedOn string `json:"modified_on,required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64             `json:"num_referencing_filters"`
-	JSON                  listNewResponseJSON `json:"-"`
+	NumItems float64 `json:"num_items,required"`
+	// The number of [filters](/api/resources/filters/) referencing the list.
+	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	// An informative summary of the list.
+	Description string              `json:"description"`
+	JSON        listNewResponseJSON `json:"-"`
 }
 
 // listNewResponseJSON contains the JSON metadata for the struct [ListNewResponse]
 type listNewResponseJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
-	Description           apijson.Field
 	Kind                  apijson.Field
 	ModifiedOn            apijson.Field
 	Name                  apijson.Field
 	NumItems              apijson.Field
 	NumReferencingFilters apijson.Field
+	Description           apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -378,23 +378,23 @@ func (r ListNewResponseKind) IsKnown() bool {
 
 type ListUpdateResponse struct {
 	// The unique ID of the list.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
+	CreatedOn string `json:"created_on,required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListUpdateResponseKind `json:"kind"`
+	Kind ListUpdateResponseKind `json:"kind,required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
+	ModifiedOn string `json:"modified_on,required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64                `json:"num_referencing_filters"`
-	JSON                  listUpdateResponseJSON `json:"-"`
+	NumItems float64 `json:"num_items,required"`
+	// The number of [filters](/api/resources/filters/) referencing the list.
+	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	// An informative summary of the list.
+	Description string                 `json:"description"`
+	JSON        listUpdateResponseJSON `json:"-"`
 }
 
 // listUpdateResponseJSON contains the JSON metadata for the struct
@@ -402,12 +402,12 @@ type ListUpdateResponse struct {
 type listUpdateResponseJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
-	Description           apijson.Field
 	Kind                  apijson.Field
 	ModifiedOn            apijson.Field
 	Name                  apijson.Field
 	NumItems              apijson.Field
 	NumReferencingFilters apijson.Field
+	Description           apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -441,7 +441,7 @@ func (r ListUpdateResponseKind) IsKnown() bool {
 
 type ListDeleteResponse struct {
 	// The unique ID of the list.
-	ID   string                 `json:"id"`
+	ID   string                 `json:"id,required"`
 	JSON listDeleteResponseJSON `json:"-"`
 }
 
@@ -463,35 +463,35 @@ func (r listDeleteResponseJSON) RawJSON() string {
 
 type ListGetResponse struct {
 	// The unique ID of the list.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on"`
-	// An informative summary of the list.
-	Description string `json:"description"`
+	CreatedOn string `json:"created_on,required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListGetResponseKind `json:"kind"`
+	Kind ListGetResponseKind `json:"kind,required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on"`
+	ModifiedOn string `json:"modified_on,required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64             `json:"num_referencing_filters"`
-	JSON                  listGetResponseJSON `json:"-"`
+	NumItems float64 `json:"num_items,required"`
+	// The number of [filters](/api/resources/filters/) referencing the list.
+	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	// An informative summary of the list.
+	Description string              `json:"description"`
+	JSON        listGetResponseJSON `json:"-"`
 }
 
 // listGetResponseJSON contains the JSON metadata for the struct [ListGetResponse]
 type listGetResponseJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
-	Description           apijson.Field
 	Kind                  apijson.Field
 	ModifiedOn            apijson.Field
 	Name                  apijson.Field
 	NumItems              apijson.Field
 	NumReferencingFilters apijson.Field
+	Description           apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
