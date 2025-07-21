@@ -204,9 +204,17 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			Indicator:       cloudflare.F("domain2.com"),
 			IndicatorType:   cloudflare.F("sha256"),
-			TargetCountry:   cloudflare.F("US"),
-			TargetIndustry:  cloudflare.F("Insurance"),
-			TLP:             cloudflare.F("amber"),
+			Insight:         cloudflare.F("new insight"),
+			Raw: cloudflare.F(cloudforce_one.ThreatEventEditParamsRaw{
+				Data: cloudflare.F(map[string]interface{}{
+					"foo": "bar",
+				}),
+				Source: cloudflare.F("example.com"),
+				TLP:    cloudflare.F("amber"),
+			}),
+			TargetCountry:  cloudflare.F("US"),
+			TargetIndustry: cloudflare.F("Insurance"),
+			TLP:            cloudflare.F("amber"),
 		},
 	)
 	if err != nil {

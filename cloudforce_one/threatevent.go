@@ -633,20 +633,32 @@ func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) 
 
 type ThreatEventEditParams struct {
 	// Account ID.
-	AccountID       param.Field[string]    `path:"account_id,required"`
-	Attacker        param.Field[string]    `json:"attacker"`
-	AttackerCountry param.Field[string]    `json:"attackerCountry"`
-	Category        param.Field[string]    `json:"category"`
-	Date            param.Field[time.Time] `json:"date" format:"date-time"`
-	Event           param.Field[string]    `json:"event"`
-	Indicator       param.Field[string]    `json:"indicator"`
-	IndicatorType   param.Field[string]    `json:"indicatorType"`
-	TargetCountry   param.Field[string]    `json:"targetCountry"`
-	TargetIndustry  param.Field[string]    `json:"targetIndustry"`
-	TLP             param.Field[string]    `json:"tlp"`
+	AccountID       param.Field[string]                   `path:"account_id,required"`
+	Attacker        param.Field[string]                   `json:"attacker"`
+	AttackerCountry param.Field[string]                   `json:"attackerCountry"`
+	Category        param.Field[string]                   `json:"category"`
+	Date            param.Field[time.Time]                `json:"date" format:"date-time"`
+	Event           param.Field[string]                   `json:"event"`
+	Indicator       param.Field[string]                   `json:"indicator"`
+	IndicatorType   param.Field[string]                   `json:"indicatorType"`
+	Insight         param.Field[string]                   `json:"insight"`
+	Raw             param.Field[ThreatEventEditParamsRaw] `json:"raw"`
+	TargetCountry   param.Field[string]                   `json:"targetCountry"`
+	TargetIndustry  param.Field[string]                   `json:"targetIndustry"`
+	TLP             param.Field[string]                   `json:"tlp"`
 }
 
 func (r ThreatEventEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventEditParamsRaw struct {
+	Data   param.Field[map[string]interface{}] `json:"data"`
+	Source param.Field[string]                 `json:"source"`
+	TLP    param.Field[string]                 `json:"tlp"`
+}
+
+func (r ThreatEventEditParamsRaw) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
