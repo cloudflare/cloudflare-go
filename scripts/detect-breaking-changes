@@ -582,7 +582,6 @@ TEST_PATHS=(
 	cloudforce_one/threateventtag_test.go
 	cloudforce_one/threateventeventtag_test.go
 	cloudforce_one/threateventtargetindustry_test.go
-	cloudforce_one/threateventinsight_test.go
 	ai_gateway/aigateway_test.go
 	ai_gateway/evaluationtype_test.go
 	ai_gateway/log_test.go
