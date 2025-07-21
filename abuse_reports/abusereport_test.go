@@ -30,22 +30,22 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AbuseReports.New(
 		context.TODO(),
-		abuse_reports.AbuseReportNewParamsReportTypeAbuseGeneral,
+		"report_type",
 		abuse_reports.AbuseReportNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: abuse_reports.AbuseReportNewParamsBodyObject{
-				Act:               cloudflare.F(abuse_reports.AbuseReportNewParamsBodyObjectActAbuseDmca),
+			Body: abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReport{
+				Act:               cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca),
 				Address1:          cloudflare.F("x"),
 				AgentName:         cloudflare.F("x"),
-				Agree:             cloudflare.F(abuse_reports.AbuseReportNewParamsBodyObjectAgree1),
+				Agree:             cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportAgree1),
 				City:              cloudflare.F("x"),
 				Country:           cloudflare.F("x"),
 				Email:             cloudflare.F("email"),
 				Email2:            cloudflare.F("email2"),
-				HostNotification:  cloudflare.F(abuse_reports.AbuseReportNewParamsBodyObjectHostNotificationSend),
+				HostNotification:  cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportHostNotificationSend),
 				Name:              cloudflare.F("x"),
 				OriginalWork:      cloudflare.F("x"),
-				OwnerNotification: cloudflare.F(abuse_reports.AbuseReportNewParamsBodyObjectOwnerNotificationSend),
+				OwnerNotification: cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend),
 				Signature:         cloudflare.F("signature"),
 				State:             cloudflare.F("x"),
 				URLs:              cloudflare.F("urls"),
