@@ -1361,7 +1361,8 @@ func (r tokenPolicyPermissionGroupsMetaJSON) RawJSON() string {
 
 // A list of resource names that the policy applies to.
 //
-// Union satisfied by [TokenPolicyResourcesMap] or [TokenPolicyResourcesMap].
+// Union satisfied by [TokenPolicyResourcesIAMResourcesTypeObjectString] or
+// [TokenPolicyResourcesIAMResourcesTypeObjectNested].
 type TokenPolicyResourcesUnion interface {
 	implementsTokenPolicyResourcesUnion()
 }
@@ -1372,18 +1373,22 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TokenPolicyResourcesMap{}),
+			Type:       reflect.TypeOf(TokenPolicyResourcesIAMResourcesTypeObjectString{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TokenPolicyResourcesMap{}),
+			Type:       reflect.TypeOf(TokenPolicyResourcesIAMResourcesTypeObjectNested{}),
 		},
 	)
 }
 
-type TokenPolicyResourcesMap map[string]string
+type TokenPolicyResourcesIAMResourcesTypeObjectString map[string]string
 
-func (r TokenPolicyResourcesMap) implementsTokenPolicyResourcesUnion() {}
+func (r TokenPolicyResourcesIAMResourcesTypeObjectString) implementsTokenPolicyResourcesUnion() {}
+
+type TokenPolicyResourcesIAMResourcesTypeObjectNested map[string]map[string]string
+
+func (r TokenPolicyResourcesIAMResourcesTypeObjectNested) implementsTokenPolicyResourcesUnion() {}
 
 type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
@@ -1423,14 +1428,20 @@ func (r TokenPolicyPermissionGroupsMetaParam) MarshalJSON() (data []byte, err er
 
 // A list of resource names that the policy applies to.
 //
-// Satisfied by [shared.TokenPolicyResourcesMapParam],
-// [shared.TokenPolicyResourcesMapParam].
+// Satisfied by [shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam],
+// [shared.TokenPolicyResourcesIAMResourcesTypeObjectNestedParam].
 type TokenPolicyResourcesUnionParam interface {
 	implementsTokenPolicyResourcesUnionParam()
 }
 
-type TokenPolicyResourcesMapParam map[string]string
+type TokenPolicyResourcesIAMResourcesTypeObjectStringParam map[string]string
 
-func (r TokenPolicyResourcesMapParam) implementsTokenPolicyResourcesUnionParam() {}
+func (r TokenPolicyResourcesIAMResourcesTypeObjectStringParam) implementsTokenPolicyResourcesUnionParam() {
+}
+
+type TokenPolicyResourcesIAMResourcesTypeObjectNestedParam map[string]map[string]string
+
+func (r TokenPolicyResourcesIAMResourcesTypeObjectNestedParam) implementsTokenPolicyResourcesUnionParam() {
+}
 
 type TokenValue = string
