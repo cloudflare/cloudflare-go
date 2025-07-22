@@ -86,6 +86,9 @@ type V2ListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Continuation token for a next page. List images V2 returns continuation_token
 	ContinuationToken param.Field[string] `query:"continuation_token"`
+	// Internal user ID set within the creator field. Setting to empty string "" will
+	// return images where creator field is not set
+	Creator param.Field[string] `query:"creator"`
 	// Number of items per page.
 	PerPage param.Field[float64] `query:"per_page"`
 	// Sorting order by upload time.
