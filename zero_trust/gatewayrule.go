@@ -458,7 +458,7 @@ type RuleSetting struct {
 	// Settings for the Audit SSH action.
 	AuditSSH RuleSettingAuditSSH `json:"audit_ssh,nullable"`
 	// Configure how browser isolation behaves.
-	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls,nullable"`
+	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
 	// Custom block page settings. If missing/null, blocking will use the the account
 	// settings.
 	BlockPage RuleSettingBlockPage `json:"block_page,nullable"`
