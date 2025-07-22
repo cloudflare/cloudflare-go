@@ -290,7 +290,7 @@ func (r GatewayFilter) IsKnown() bool {
 type GatewayRule struct {
 	// The API resource UUID.
 	ID string `json:"id"`
-	// The action to preform when the associated traffic, identity, and device posture
+	// The action to perform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
 	Action    GatewayRuleAction `json:"action"`
 	CreatedAt time.Time         `json:"created_at" format:"date-time"`
@@ -376,7 +376,7 @@ func (r gatewayRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action to preform when the associated traffic, identity, and device posture
+// The action to perform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
 type GatewayRuleAction string
 
@@ -452,7 +452,7 @@ func (r gatewayRuleExpirationJSON) RawJSON() string {
 type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders map[string]string `json:"add_headers,nullable"`
+	AddHeaders map[string][]string `json:"add_headers,nullable"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass,nullable"`
 	// Settings for the Audit SSH action.
@@ -1141,7 +1141,7 @@ func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 type RuleSettingParam struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders param.Field[map[string]string] `json:"add_headers"`
+	AddHeaders param.Field[map[string][]string] `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
@@ -1526,7 +1526,7 @@ type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The action to preform when the associated traffic, identity, and device posture
+	// The action to perform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
 	Action param.Field[GatewayRuleNewParamsAction] `json:"action,required"`
 	// The name of the rule.
@@ -1566,7 +1566,7 @@ func (r GatewayRuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action to preform when the associated traffic, identity, and device posture
+// The action to perform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
 type GatewayRuleNewParamsAction string
 
@@ -1666,7 +1666,7 @@ func (r GatewayRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayRuleUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The action to preform when the associated traffic, identity, and device posture
+	// The action to perform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
 	Action param.Field[GatewayRuleUpdateParamsAction] `json:"action,required"`
 	// The name of the rule.
@@ -1706,7 +1706,7 @@ func (r GatewayRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action to preform when the associated traffic, identity, and device posture
+// The action to perform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
 type GatewayRuleUpdateParamsAction string
 

@@ -43,8 +43,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Identity:   cloudflare.F(`any(identity.groups.name[*] in {"finance"})`),
 		Precedence: cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
-			AddHeaders: cloudflare.F(map[string]string{
-				"foo": "string",
+			AddHeaders: cloudflare.F(map[string][]string{
+				"My-Next-Header":       {"foo", "bar"},
+				"X-Custom-Header-Name": {"somecustomvalue"},
 			}),
 			AllowChildBypass: cloudflare.F(false),
 			AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
@@ -182,8 +183,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Identity:   cloudflare.F(`any(identity.groups.name[*] in {"finance"})`),
 			Precedence: cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
-				AddHeaders: cloudflare.F(map[string]string{
-					"foo": "string",
+				AddHeaders: cloudflare.F(map[string][]string{
+					"My-Next-Header":       {"foo", "bar"},
+					"X-Custom-Header-Name": {"somecustomvalue"},
 				}),
 				AllowChildBypass: cloudflare.F(false),
 				AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
