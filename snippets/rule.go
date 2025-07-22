@@ -7,13 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -35,7 +35,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 	return
 }
 
-// Put Rules
+// Updates all snippet rules belonging to the zone.
 func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleUpdateResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -57,12 +57,12 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 	return res, nil
 }
 
-// Put Rules
+// Updates all snippet rules belonging to the zone.
 func (r *RuleService) UpdateAutoPaging(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleUpdateResponse] {
 	return pagination.NewSinglePageAutoPager(r.Update(ctx, params, opts...))
 }
 
-// Rules
+// Fetches all snippet rules belonging to the zone.
 func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -84,39 +84,64 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 	return res, nil
 }
 
-// Rules
+// Fetches all snippet rules belonging to the zone.
 func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete All Rules
-func (r *RuleService) Delete(ctx context.Context, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
+// Deletes all snippet rules belonging to the zone.
+func (r *RuleService) Delete(ctx context.Context, body RuleDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleDeleteResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
+// Deletes all snippet rules belonging to the zone.
+func (r *RuleService) DeleteAutoPaging(ctx context.Context, body RuleDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleDeleteResponse] {
+	return pagination.NewSinglePageAutoPager(r.Delete(ctx, body, opts...))
+}
+
+// A snippet rule.
 type RuleUpdateResponse struct {
+	// The unique ID of the rule.
+	ID string `json:"id,required"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression,required"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The identifying name of the snippet.
+	SnippetName string `json:"snippet_name,required"`
+	// An informative description of the rule.
 	Description string `json:"description"`
-	Enabled     bool   `json:"enabled"`
-	Expression  string `json:"expression"`
-	// Snippet identifying name
-	SnippetName string                 `json:"snippet_name"`
-	JSON        ruleUpdateResponseJSON `json:"-"`
+	// Whether the rule should be executed.
+	Enabled bool                   `json:"enabled"`
+	JSON    ruleUpdateResponseJSON `json:"-"`
 }
 
 // ruleUpdateResponseJSON contains the JSON metadata for the struct
 // [RuleUpdateResponse]
 type ruleUpdateResponseJSON struct {
+	ID          apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	SnippetName apijson.Field
 	Description apijson.Field
 	Enabled     apijson.Field
-	Expression  apijson.Field
-	SnippetName apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -129,22 +154,32 @@ func (r ruleUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// A snippet rule.
 type RuleListResponse struct {
+	// The unique ID of the rule.
+	ID string `json:"id,required"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression,required"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The identifying name of the snippet.
+	SnippetName string `json:"snippet_name,required"`
+	// An informative description of the rule.
 	Description string `json:"description"`
-	Enabled     bool   `json:"enabled"`
-	Expression  string `json:"expression"`
-	// Snippet identifying name
-	SnippetName string               `json:"snippet_name"`
-	JSON        ruleListResponseJSON `json:"-"`
+	// Whether the rule should be executed.
+	Enabled bool                 `json:"enabled"`
+	JSON    ruleListResponseJSON `json:"-"`
 }
 
 // ruleListResponseJSON contains the JSON metadata for the struct
 // [RuleListResponse]
 type ruleListResponseJSON struct {
+	ID          apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	SnippetName apijson.Field
 	Description apijson.Field
 	Enabled     apijson.Field
-	Expression  apijson.Field
-	SnippetName apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -157,20 +192,32 @@ func (r ruleListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// A snippet rule.
 type RuleDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success RuleDeleteResponseSuccess `json:"success,required"`
-	JSON    ruleDeleteResponseJSON    `json:"-"`
+	// The unique ID of the rule.
+	ID string `json:"id,required"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression,required"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The identifying name of the snippet.
+	SnippetName string `json:"snippet_name,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool                   `json:"enabled"`
+	JSON    ruleDeleteResponseJSON `json:"-"`
 }
 
 // ruleDeleteResponseJSON contains the JSON metadata for the struct
 // [RuleDeleteResponse]
 type ruleDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
+	ID          apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	SnippetName apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -183,50 +230,39 @@ func (r ruleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type RuleDeleteResponseSuccess bool
-
-const (
-	RuleDeleteResponseSuccessTrue RuleDeleteResponseSuccess = true
-)
-
-func (r RuleDeleteResponseSuccess) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type RuleUpdateParams struct {
-	// Identifier
+	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// List of snippet rules
-	Rules param.Field[[]RuleUpdateParamsRule] `json:"rules"`
+	// A list of snippet rules.
+	Body []RuleUpdateParamsBody `json:"body,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
-type RuleUpdateParamsRule struct {
+// A snippet rule.
+type RuleUpdateParamsBody struct {
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression,required"`
+	// The identifying name of the snippet.
+	SnippetName param.Field[string] `json:"snippet_name,required"`
+	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
-	Enabled     param.Field[bool]   `json:"enabled"`
-	Expression  param.Field[string] `json:"expression"`
-	// Snippet identifying name
-	SnippetName param.Field[string] `json:"snippet_name"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type RuleListParams struct {
-	// Identifier
+	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RuleDeleteParams struct {
-	// Identifier
+	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

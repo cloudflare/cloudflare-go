@@ -31,9 +31,9 @@ func TestContentGet(t *testing.T) {
 	)
 	resp, err := client.Snippets.Content.Get(
 		context.TODO(),
-		"snippet_name_01",
+		"my_snippet",
 		snippets.ContentGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
 		},
 	)
 	if err != nil {
