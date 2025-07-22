@@ -94,6 +94,8 @@ type V2DirectUploadNewParams struct {
 	// and utf8 characters. Cannot start nor end with a / (forward slash). Cannot be a
 	// UUID.
 	ID param.Field[string] `json:"id"`
+	// Can set the creator field with an internal user ID.
+	Creator param.Field[string] `json:"creator"`
 	// The date after which the upload will not be accepted. Minimum: Now + 2 minutes.
 	// Maximum: Now + 6 hours.
 	Expiry param.Field[time.Time] `json:"expiry" format:"date-time"`
