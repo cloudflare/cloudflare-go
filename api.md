@@ -3233,6 +3233,22 @@ Methods:
 
 - <code title="post /accounts/{account_id}/diagnostics/traceroute">client.Diagnostics.Traceroutes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#TracerouteService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#TracerouteNewParams">TracerouteNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#Traceroute">Traceroute</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## EndpointHealthchecks
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckParam">EndpointHealthcheckParam</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckNewResponse">EndpointHealthcheckNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckListResponse">EndpointHealthcheckListResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/diagnostics/endpoint-healthchecks">client.Diagnostics.EndpointHealthchecks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckNewParams">EndpointHealthcheckNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckNewResponse">EndpointHealthcheckNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/diagnostics/endpoint-healthchecks">client.Diagnostics.EndpointHealthchecks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckListParams">EndpointHealthcheckListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics">diagnostics</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/diagnostics#EndpointHealthcheckListResponse">EndpointHealthcheckListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # Images
 
 ## V1

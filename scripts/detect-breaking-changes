@@ -220,6 +220,7 @@ TEST_PATHS=(
 	brand_protection/logo_test.go
 	brand_protection/logomatch_test.go
 	diagnostics/traceroute_test.go
+	diagnostics/endpointhealthcheck_test.go
 	images/v1_test.go
 	images/v1key_test.go
 	images/v1stat_test.go
