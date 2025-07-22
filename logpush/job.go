@@ -377,7 +377,7 @@ func (r LogpushJobKind) IsKnown() bool {
 // be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
 // minimum file size; this means that log files may be much smaller than this batch
 // size.
-type LogpushJobMaxUploadBytes float64
+type LogpushJobMaxUploadBytes int64
 
 const (
 	LogpushJobMaxUploadBytes0 LogpushJobMaxUploadBytes = 0
@@ -395,7 +395,7 @@ func (r LogpushJobMaxUploadBytes) IsKnown() bool {
 // and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
 // a minimum interval for log batches; this means that log files may be sent in
 // shorter intervals than this.
-type LogpushJobMaxUploadIntervalSeconds float64
+type LogpushJobMaxUploadIntervalSeconds int64
 
 const (
 	LogpushJobMaxUploadIntervalSeconds0 LogpushJobMaxUploadIntervalSeconds = 0
@@ -413,7 +413,7 @@ func (r LogpushJobMaxUploadIntervalSeconds) IsKnown() bool {
 // 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
 // number of log lines per batch; this means that log files may contain many fewer
 // lines than this.
-type LogpushJobMaxUploadRecords float64
+type LogpushJobMaxUploadRecords int64
 
 const (
 	LogpushJobMaxUploadRecords0 LogpushJobMaxUploadRecords = 0
@@ -735,7 +735,7 @@ func (r JobNewParamsKind) IsKnown() bool {
 // be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
 // minimum file size; this means that log files may be much smaller than this batch
 // size.
-type JobNewParamsMaxUploadBytes float64
+type JobNewParamsMaxUploadBytes int64
 
 const (
 	JobNewParamsMaxUploadBytes0 JobNewParamsMaxUploadBytes = 0
@@ -753,7 +753,7 @@ func (r JobNewParamsMaxUploadBytes) IsKnown() bool {
 // and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
 // a minimum interval for log batches; this means that log files may be sent in
 // shorter intervals than this.
-type JobNewParamsMaxUploadIntervalSeconds float64
+type JobNewParamsMaxUploadIntervalSeconds int64
 
 const (
 	JobNewParamsMaxUploadIntervalSeconds0 JobNewParamsMaxUploadIntervalSeconds = 0
@@ -771,7 +771,7 @@ func (r JobNewParamsMaxUploadIntervalSeconds) IsKnown() bool {
 // 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
 // number of log lines per batch; this means that log files may contain many fewer
 // lines than this.
-type JobNewParamsMaxUploadRecords float64
+type JobNewParamsMaxUploadRecords int64
 
 const (
 	JobNewParamsMaxUploadRecords0 JobNewParamsMaxUploadRecords = 0
@@ -1023,7 +1023,7 @@ func (r JobUpdateParamsKind) IsKnown() bool {
 // be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a
 // minimum file size; this means that log files may be much smaller than this batch
 // size.
-type JobUpdateParamsMaxUploadBytes float64
+type JobUpdateParamsMaxUploadBytes int64
 
 const (
 	JobUpdateParamsMaxUploadBytes0 JobUpdateParamsMaxUploadBytes = 0
@@ -1041,7 +1041,7 @@ func (r JobUpdateParamsMaxUploadBytes) IsKnown() bool {
 // and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify
 // a minimum interval for log batches; this means that log files may be sent in
 // shorter intervals than this.
-type JobUpdateParamsMaxUploadIntervalSeconds float64
+type JobUpdateParamsMaxUploadIntervalSeconds int64
 
 const (
 	JobUpdateParamsMaxUploadIntervalSeconds0 JobUpdateParamsMaxUploadIntervalSeconds = 0
@@ -1059,7 +1059,7 @@ func (r JobUpdateParamsMaxUploadIntervalSeconds) IsKnown() bool {
 // 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum
 // number of log lines per batch; this means that log files may contain many fewer
 // lines than this.
-type JobUpdateParamsMaxUploadRecords float64
+type JobUpdateParamsMaxUploadRecords int64
 
 const (
 	JobUpdateParamsMaxUploadRecords0 JobUpdateParamsMaxUploadRecords = 0
