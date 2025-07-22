@@ -411,7 +411,7 @@ type Location struct {
 	DNSDestinationIPsID string `json:"dns_destination_ips_id"`
 	// The uuid identifier of the IPv6 block brought to the gateway, so that this
 	// location's IPv6 address is allocated from the Bring Your Own Ipv6(BYOIPv6) block
-	// and not from the standard CloudFlare IPv6 block.
+	// and not from the standard Cloudflare IPv6 block.
 	DNSDestinationIPV6BlockID string `json:"dns_destination_ipv6_block_id,nullable"`
 	// The DNS over HTTPS domain to send DNS requests to. This field is auto-generated
 	// by Gateway.
