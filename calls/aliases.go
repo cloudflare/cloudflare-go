@@ -409,10 +409,15 @@ type TokenPolicyPermissionGroupsMeta = shared.TokenPolicyPermissionGroupsMeta
 // This is an alias to an internal type.
 type TokenPolicyResourcesUnion = shared.TokenPolicyResourcesUnion
 
+// Map of simple string resource permissions
+//
+// This is an alias to an internal type.
+type TokenPolicyResourcesIAMResourcesTypeObjectString = shared.TokenPolicyResourcesIAMResourcesTypeObjectString
+
 // Map of nested resource permissions
 //
 // This is an alias to an internal type.
-type TokenPolicyResourcesMap = shared.TokenPolicyResourcesMap
+type TokenPolicyResourcesIAMResourcesTypeObjectNested = shared.TokenPolicyResourcesIAMResourcesTypeObjectNested
 
 // This is an alias to an internal type.
 type TokenPolicyParam = shared.TokenPolicyParam
@@ -433,10 +438,15 @@ type TokenPolicyPermissionGroupsMetaParam = shared.TokenPolicyPermissionGroupsMe
 // This is an alias to an internal type.
 type TokenPolicyResourcesUnionParam = shared.TokenPolicyResourcesUnionParam
 
+// Map of simple string resource permissions
+//
+// This is an alias to an internal type.
+type TokenPolicyResourcesIAMResourcesTypeObjectStringParam = shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam
+
 // Map of nested resource permissions
 //
 // This is an alias to an internal type.
-type TokenPolicyResourcesMapParam = shared.TokenPolicyResourcesMapParam
+type TokenPolicyResourcesIAMResourcesTypeObjectNestedParam = shared.TokenPolicyResourcesIAMResourcesTypeObjectNestedParam
 
 // The token value.
 //
