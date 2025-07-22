@@ -3,8 +3,10 @@
 package snippets_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -14,7 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/snippets"
 )
 
-func TestSnippetUpdateWithOptionalParams(t *testing.T) {
+func TestSnippetUpdate(t *testing.T) {
 	t.Skip("throwing HTTP 415")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +32,10 @@ func TestSnippetUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Snippets.Update(
 		context.TODO(),
-		"snippet_name_01",
+		"my_snippet",
 		snippets.SnippetUpdateParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Files:  cloudflare.F("export { async function fetch(request, env) {return new Response('some_response') } }"),
+			ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+			Files:  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(snippets.SnippetUpdateParamsMetadata{
 				MainModule: cloudflare.F("main.js"),
 			}),
@@ -48,7 +50,7 @@ func TestSnippetUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSnippetList(t *testing.T) {
+func TestSnippetListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -62,7 +64,9 @@ func TestSnippetList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Snippets.List(context.TODO(), snippets.SnippetListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:  cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+		Page:    cloudflare.F(int64(1)),
+		PerPage: cloudflare.F(int64(25)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -88,9 +92,9 @@ func TestSnippetDelete(t *testing.T) {
 	)
 	_, err := client.Snippets.Delete(
 		context.TODO(),
-		"snippet_name_01",
+		"my_snippet",
 		snippets.SnippetDeleteParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
 		},
 	)
 	if err != nil {
@@ -117,9 +121,9 @@ func TestSnippetGet(t *testing.T) {
 	)
 	_, err := client.Snippets.Get(
 		context.TODO(),
-		"snippet_name_01",
+		"my_snippet",
 		snippets.SnippetGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
 		},
 	)
 	if err != nil {
