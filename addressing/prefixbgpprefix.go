@@ -152,33 +152,34 @@ type BGPPrefix struct {
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN int64 `json:"asn,nullable"`
 	// Number of times to prepend the Cloudflare ASN to the BGP AS-Path attribute
-	ASNPrependCount int64                  `json:"asn_prepend_count"`
-	BGPSignalOpts   BGPPrefixBGPSignalOpts `json:"bgp_signal_opts"`
+	ASNPrependCount int64 `json:"asn_prepend_count"`
+	// Determines if Cloudflare advertises a BYOIP BGP prefix even when there is no
+	// matching BGP prefix in the Magic routing table. When true, Cloudflare will
+	// automatically withdraw the BGP prefix when there are no matching BGP routes, and
+	// will resume advertising when there is at least one matching BGP route.
+	AutoAdvertiseWithdraw bool                   `json:"auto_advertise_withdraw"`
+	BGPSignalOpts         BGPPrefixBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR       string            `json:"cidr"`
 	CreatedAt  time.Time         `json:"created_at" format:"date-time"`
 	ModifiedAt time.Time         `json:"modified_at" format:"date-time"`
 	OnDemand   BGPPrefixOnDemand `json:"on_demand"`
-	// Controls whether the BGP prefix is automatically withdrawn when prefix is
-	// withdrawn from Magic routing table (for Magic Transit customers using Direct
-	// CNI)
-	WithdrawIfNoRoute bool          `json:"withdraw_if_no_route"`
-	JSON              bgpPrefixJSON `json:"-"`
+	JSON       bgpPrefixJSON     `json:"-"`
 }
 
 // bgpPrefixJSON contains the JSON metadata for the struct [BGPPrefix]
 type bgpPrefixJSON struct {
-	ID                apijson.Field
-	ASN               apijson.Field
-	ASNPrependCount   apijson.Field
-	BGPSignalOpts     apijson.Field
-	CIDR              apijson.Field
-	CreatedAt         apijson.Field
-	ModifiedAt        apijson.Field
-	OnDemand          apijson.Field
-	WithdrawIfNoRoute apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                    apijson.Field
+	ASN                   apijson.Field
+	ASNPrependCount       apijson.Field
+	AutoAdvertiseWithdraw apijson.Field
+	BGPSignalOpts         apijson.Field
+	CIDR                  apijson.Field
+	CreatedAt             apijson.Field
+	ModifiedAt            apijson.Field
+	OnDemand              apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *BGPPrefix) UnmarshalJSON(data []byte) (err error) {
@@ -410,12 +411,13 @@ type PrefixBGPPrefixEditParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Number of times to prepend the Cloudflare ASN to the BGP AS-Path attribute
-	ASNPrependCount param.Field[int64]                             `json:"asn_prepend_count"`
-	OnDemand        param.Field[PrefixBGPPrefixEditParamsOnDemand] `json:"on_demand"`
-	// Controls whether the BGP prefix is automatically withdrawn when prefix is
-	// withdrawn from Magic routing table (for Magic Transit customers using Direct
-	// CNI)
-	WithdrawIfNoRoute param.Field[bool] `json:"withdraw_if_no_route"`
+	ASNPrependCount param.Field[int64] `json:"asn_prepend_count"`
+	// Determines if Cloudflare advertises a BYOIP BGP prefix even when there is no
+	// matching BGP prefix in the Magic routing table. When true, Cloudflare will
+	// automatically withdraw the BGP prefix when there are no matching BGP routes, and
+	// will resume advertising when there is at least one matching BGP route.
+	AutoAdvertiseWithdraw param.Field[bool]                              `json:"auto_advertise_withdraw"`
+	OnDemand              param.Field[PrefixBGPPrefixEditParamsOnDemand] `json:"on_demand"`
 }
 
 func (r PrefixBGPPrefixEditParams) MarshalJSON() (data []byte, err error) {
