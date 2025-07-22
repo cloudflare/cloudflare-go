@@ -149,7 +149,7 @@ type DOHEndpoint struct {
 	// A list of allowed source IP network ranges for this endpoint. When empty, all
 	// source IPs are allowed. A non-empty list is only effective if the endpoint is
 	// enabled for this location.
-	Networks []IPNetwork `json:"networks"`
+	Networks []IPNetwork `json:"networks,nullable"`
 	// True if the endpoint requires
 	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
 	// authentication.
@@ -197,7 +197,7 @@ type DOTEndpoint struct {
 	// A list of allowed source IP network ranges for this endpoint. When empty, all
 	// source IPs are allowed. A non-empty list is only effective if the endpoint is
 	// enabled for this location.
-	Networks []IPNetwork     `json:"networks"`
+	Networks []IPNetwork     `json:"networks,nullable"`
 	JSON     dotEndpointJSON `json:"-"`
 }
 
@@ -339,7 +339,7 @@ type IPV6Endpoint struct {
 	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
 	// source IPs are allowed. A non-empty list is only effective if the endpoint is
 	// enabled for this location.
-	Networks []IPV6Network    `json:"networks"`
+	Networks []IPV6Network    `json:"networks,nullable"`
 	JSON     ipv6EndpointJSON `json:"-"`
 }
 
@@ -437,7 +437,7 @@ type Location struct {
 	// A list of network ranges that requests from this location would originate from.
 	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
 	// location.
-	Networks  []LocationNetwork `json:"networks"`
+	Networks  []LocationNetwork `json:"networks,nullable"`
 	UpdatedAt time.Time         `json:"updated_at" format:"date-time"`
 	JSON      locationJSON      `json:"-"`
 }
