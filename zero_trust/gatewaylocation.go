@@ -234,10 +234,10 @@ func (r DOTEndpointParam) MarshalJSON() (data []byte, err error) {
 // location, if this field is absent or set with null, the endpoints configuration
 // remains unchanged.
 type Endpoint struct {
-	DOH  DOHEndpoint  `json:"doh"`
-	DOT  DOTEndpoint  `json:"dot"`
-	IPV4 IPV4Endpoint `json:"ipv4"`
-	IPV6 IPV6Endpoint `json:"ipv6"`
+	DOH  DOHEndpoint  `json:"doh,required"`
+	DOT  DOTEndpoint  `json:"dot,required"`
+	IPV4 IPV4Endpoint `json:"ipv4,required"`
+	IPV6 IPV6Endpoint `json:"ipv6,required"`
 	JSON endpointJSON `json:"-"`
 }
 
@@ -263,10 +263,10 @@ func (r endpointJSON) RawJSON() string {
 // location, if this field is absent or set with null, the endpoints configuration
 // remains unchanged.
 type EndpointParam struct {
-	DOH  param.Field[DOHEndpointParam]  `json:"doh"`
-	DOT  param.Field[DOTEndpointParam]  `json:"dot"`
-	IPV4 param.Field[IPV4EndpointParam] `json:"ipv4"`
-	IPV6 param.Field[IPV6EndpointParam] `json:"ipv6"`
+	DOH  param.Field[DOHEndpointParam]  `json:"doh,required"`
+	DOT  param.Field[DOTEndpointParam]  `json:"dot,required"`
+	IPV4 param.Field[IPV4EndpointParam] `json:"ipv4,required"`
+	IPV6 param.Field[IPV6EndpointParam] `json:"ipv6,required"`
 }
 
 func (r EndpointParam) MarshalJSON() (data []byte, err error) {
