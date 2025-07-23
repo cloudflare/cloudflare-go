@@ -13,10 +13,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCloudforceOneService] method instead.
 type CloudforceOneService struct {
-	Options      []option.RequestOption
-	Scans        *ScanService
-	Requests     *RequestService
-	ThreatEvents *ThreatEventService
+	Options       []option.RequestOption
+	Scans         *ScanService
+	BinaryStorage *BinaryStorageService
+	Requests      *RequestService
+	ThreatEvents  *ThreatEventService
 }
 
 // NewCloudforceOneService generates a new service that applies the given options
@@ -26,6 +27,7 @@ func NewCloudforceOneService(opts ...option.RequestOption) (r *CloudforceOneServ
 	r = &CloudforceOneService{}
 	r.Options = opts
 	r.Scans = NewScanService(opts...)
+	r.BinaryStorage = NewBinaryStorageService(opts...)
 	r.Requests = NewRequestService(opts...)
 	r.ThreatEvents = NewThreatEventService(opts...)
 	return
