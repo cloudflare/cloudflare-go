@@ -288,40 +288,42 @@ func (r GatewayFilter) IsKnown() bool {
 }
 
 type GatewayRule struct {
-	// The API resource UUID.
-	ID string `json:"id"`
 	// The action to perform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
-	Action    GatewayRuleAction `json:"action"`
-	CreatedAt time.Time         `json:"created_at" format:"date-time"`
+	Action GatewayRuleAction `json:"action,required"`
+	// True if the rule is enabled.
+	Enabled bool `json:"enabled,required"`
+	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// expressions.
+	Filters []GatewayFilter `json:"filters,required"`
+	// The name of the rule.
+	Name string `json:"name,required"`
+	// Precedence sets the order of your rules. Lower values indicate higher
+	// precedence. At each processing phase, applicable rules are evaluated in
+	// ascending order of this value. Refer to
+	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
+	// docs on how to manage precedence via Terraform.
+	Precedence int64 `json:"precedence,required"`
+	// The wirefilter expression used for traffic matching.
+	Traffic string `json:"traffic,required"`
+	// The API resource UUID.
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Date of deletion, if any.
 	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
 	// The description of the rule.
 	Description string `json:"description"`
 	// The wirefilter expression used for device posture check matching.
 	DevicePosture string `json:"device_posture"`
-	// True if the rule is enabled.
-	Enabled bool `json:"enabled"`
 	// The expiration time stamp and default duration of a DNS policy. Takes precedence
 	// over the policy's `schedule` configuration, if any.
 	//
 	// This does not apply to HTTP or network policies.
 	Expiration GatewayRuleExpiration `json:"expiration,nullable"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
-	// expressions.
-	Filters []GatewayFilter `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity string `json:"identity"`
-	// The name of the rule.
-	Name string `json:"name"`
 	// The rule cannot be shared via the Orgs API
 	NotSharable bool `json:"not_sharable"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value. Refer to
-	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
-	// docs on how to manage precedence via Terraform.
-	Precedence int64 `json:"precedence"`
 	// The rule was shared via the Orgs API and cannot be edited by the current account
 	ReadOnly bool `json:"read_only"`
 	// Additional settings that modify the rule's action.
@@ -330,10 +332,8 @@ type GatewayRule struct {
 	// policies.
 	Schedule Schedule `json:"schedule,nullable"`
 	// account tag of account that created the rule
-	SourceAccount string `json:"source_account"`
-	// The wirefilter expression used for traffic matching.
-	Traffic   string    `json:"traffic"`
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	SourceAccount string    `json:"source_account"`
+	UpdatedAt     time.Time `json:"updated_at" format:"date-time"`
 	// version number of the rule
 	Version int64 `json:"version"`
 	// Warning for a misconfigured rule, if any.
@@ -343,24 +343,24 @@ type GatewayRule struct {
 
 // gatewayRuleJSON contains the JSON metadata for the struct [GatewayRule]
 type gatewayRuleJSON struct {
-	ID            apijson.Field
 	Action        apijson.Field
+	Enabled       apijson.Field
+	Filters       apijson.Field
+	Name          apijson.Field
+	Precedence    apijson.Field
+	Traffic       apijson.Field
+	ID            apijson.Field
 	CreatedAt     apijson.Field
 	DeletedAt     apijson.Field
 	Description   apijson.Field
 	DevicePosture apijson.Field
-	Enabled       apijson.Field
 	Expiration    apijson.Field
-	Filters       apijson.Field
 	Identity      apijson.Field
-	Name          apijson.Field
 	NotSharable   apijson.Field
-	Precedence    apijson.Field
 	ReadOnly      apijson.Field
 	RuleSettings  apijson.Field
 	Schedule      apijson.Field
 	SourceAccount apijson.Field
-	Traffic       apijson.Field
 	UpdatedAt     apijson.Field
 	Version       apijson.Field
 	WarningStatus apijson.Field
