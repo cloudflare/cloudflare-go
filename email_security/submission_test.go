@@ -38,6 +38,7 @@ func TestSubmissionListWithOptionalParams(t *testing.T) {
 		Query:                cloudflare.F("query"),
 		RequestedDisposition: cloudflare.F(email_security.SubmissionListParamsRequestedDispositionMalicious),
 		Start:                cloudflare.F(time.Now()),
+		Status:               cloudflare.F("status"),
 		SubmissionID:         cloudflare.F("submission_id"),
 		Type:                 cloudflare.F(email_security.SubmissionListParamsTypeTeam),
 	})
