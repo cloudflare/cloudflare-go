@@ -209,8 +209,10 @@ type BlockPageSettings struct {
 	// block page.
 	SuppressFooter bool `json:"suppress_footer"`
 	// If mode is redirect_uri: URI to which the user should be redirected.
-	TargetURI string                `json:"target_uri" format:"uri"`
-	JSON      blockPageSettingsJSON `json:"-"`
+	TargetURI string `json:"target_uri" format:"uri"`
+	// Version number of the setting
+	Version int64                 `json:"version"`
+	JSON    blockPageSettingsJSON `json:"-"`
 }
 
 // blockPageSettingsJSON contains the JSON metadata for the struct
@@ -230,6 +232,7 @@ type blockPageSettingsJSON struct {
 	SourceAccount   apijson.Field
 	SuppressFooter  apijson.Field
 	TargetURI       apijson.Field
+	Version         apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -424,8 +427,10 @@ type ExtendedEmailMatching struct {
 	// account
 	ReadOnly bool `json:"read_only"`
 	// Account tag of account that shared this setting
-	SourceAccount string                    `json:"source_account"`
-	JSON          extendedEmailMatchingJSON `json:"-"`
+	SourceAccount string `json:"source_account"`
+	// Version number of the setting
+	Version int64                     `json:"version"`
+	JSON    extendedEmailMatchingJSON `json:"-"`
 }
 
 // extendedEmailMatchingJSON contains the JSON metadata for the struct
@@ -434,6 +439,7 @@ type extendedEmailMatchingJSON struct {
 	Enabled       apijson.Field
 	ReadOnly      apijson.Field
 	SourceAccount apijson.Field
+	Version       apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
