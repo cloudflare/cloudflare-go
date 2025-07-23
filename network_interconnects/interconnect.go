@@ -267,12 +267,14 @@ func (r interconnectNewResponseNscInterconnectPhysicalBodyFacilityJSON) RawJSON(
 }
 
 type InterconnectNewResponseNscInterconnectGcpPartnerBody struct {
-	Account string                                                   `json:"account,required"`
-	Name    string                                                   `json:"name,required"`
-	Region  string                                                   `json:"region,required"`
-	Type    string                                                   `json:"type,required"`
-	Owner   string                                                   `json:"owner"`
-	JSON    interconnectNewResponseNscInterconnectGcpPartnerBodyJSON `json:"-"`
+	Account string `json:"account,required"`
+	Name    string `json:"name,required"`
+	Region  string `json:"region,required"`
+	Type    string `json:"type,required"`
+	Owner   string `json:"owner"`
+	// Bandwidth structure as visible through the customer-facing API.
+	Speed InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed `json:"speed"`
+	JSON  interconnectNewResponseNscInterconnectGcpPartnerBodyJSON  `json:"-"`
 }
 
 // interconnectNewResponseNscInterconnectGcpPartnerBodyJSON contains the JSON
@@ -283,6 +285,7 @@ type interconnectNewResponseNscInterconnectGcpPartnerBodyJSON struct {
 	Region      apijson.Field
 	Type        apijson.Field
 	Owner       apijson.Field
+	Speed       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -296,6 +299,32 @@ func (r interconnectNewResponseNscInterconnectGcpPartnerBodyJSON) RawJSON() stri
 }
 
 func (r InterconnectNewResponseNscInterconnectGcpPartnerBody) implementsInterconnectNewResponse() {}
+
+// Bandwidth structure as visible through the customer-facing API.
+type InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed string
+
+const (
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed50M  InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "50M"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed100M InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "100M"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed200M InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "200M"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed300M InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "300M"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed400M InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "400M"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed500M InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "500M"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed1G   InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "1G"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed2G   InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "2G"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed5G   InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "5G"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed10G  InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "10G"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed20G  InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "20G"
+	InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed50G  InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed = "50G"
+)
+
+func (r InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed) IsKnown() bool {
+	switch r {
+	case InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed50M, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed100M, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed200M, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed300M, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed400M, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed500M, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed1G, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed2G, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed5G, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed10G, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed20G, InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed50G:
+		return true
+	}
+	return false
+}
 
 type InterconnectListResponse struct {
 	Items []InterconnectListResponseItem `json:"items,required"`
@@ -462,12 +491,14 @@ func (r interconnectListResponseItemsNscInterconnectPhysicalBodyFacilityJSON) Ra
 }
 
 type InterconnectListResponseItemsNscInterconnectGcpPartnerBody struct {
-	Account string                                                         `json:"account,required"`
-	Name    string                                                         `json:"name,required"`
-	Region  string                                                         `json:"region,required"`
-	Type    string                                                         `json:"type,required"`
-	Owner   string                                                         `json:"owner"`
-	JSON    interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON `json:"-"`
+	Account string `json:"account,required"`
+	Name    string `json:"name,required"`
+	Region  string `json:"region,required"`
+	Type    string `json:"type,required"`
+	Owner   string `json:"owner"`
+	// Bandwidth structure as visible through the customer-facing API.
+	Speed InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed `json:"speed"`
+	JSON  interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON  `json:"-"`
 }
 
 // interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON contains the JSON
@@ -479,6 +510,7 @@ type interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON struct {
 	Region      apijson.Field
 	Type        apijson.Field
 	Owner       apijson.Field
+	Speed       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -492,6 +524,32 @@ func (r interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON) RawJSON(
 }
 
 func (r InterconnectListResponseItemsNscInterconnectGcpPartnerBody) implementsInterconnectListResponseItem() {
+}
+
+// Bandwidth structure as visible through the customer-facing API.
+type InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed string
+
+const (
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed50M  InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "50M"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed100M InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "100M"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed200M InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "200M"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed300M InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "300M"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed400M InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "400M"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed500M InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "500M"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed1G   InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "1G"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed2G   InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "2G"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed5G   InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "5G"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed10G  InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "10G"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed20G  InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "20G"
+	InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed50G  InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed = "50G"
+)
+
+func (r InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed) IsKnown() bool {
+	switch r {
+	case InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed50M, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed100M, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed200M, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed300M, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed400M, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed500M, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed1G, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed2G, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed5G, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed10G, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed20G, InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed50G:
+		return true
+	}
+	return false
 }
 
 type InterconnectGetResponse struct {
@@ -634,12 +692,14 @@ func (r interconnectGetResponseNscInterconnectPhysicalBodyFacilityJSON) RawJSON(
 }
 
 type InterconnectGetResponseNscInterconnectGcpPartnerBody struct {
-	Account string                                                   `json:"account,required"`
-	Name    string                                                   `json:"name,required"`
-	Region  string                                                   `json:"region,required"`
-	Type    string                                                   `json:"type,required"`
-	Owner   string                                                   `json:"owner"`
-	JSON    interconnectGetResponseNscInterconnectGcpPartnerBodyJSON `json:"-"`
+	Account string `json:"account,required"`
+	Name    string `json:"name,required"`
+	Region  string `json:"region,required"`
+	Type    string `json:"type,required"`
+	Owner   string `json:"owner"`
+	// Bandwidth structure as visible through the customer-facing API.
+	Speed InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed `json:"speed"`
+	JSON  interconnectGetResponseNscInterconnectGcpPartnerBodyJSON  `json:"-"`
 }
 
 // interconnectGetResponseNscInterconnectGcpPartnerBodyJSON contains the JSON
@@ -650,6 +710,7 @@ type interconnectGetResponseNscInterconnectGcpPartnerBodyJSON struct {
 	Region      apijson.Field
 	Type        apijson.Field
 	Owner       apijson.Field
+	Speed       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -663,6 +724,32 @@ func (r interconnectGetResponseNscInterconnectGcpPartnerBodyJSON) RawJSON() stri
 }
 
 func (r InterconnectGetResponseNscInterconnectGcpPartnerBody) implementsInterconnectGetResponse() {}
+
+// Bandwidth structure as visible through the customer-facing API.
+type InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed string
+
+const (
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed50M  InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "50M"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed100M InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "100M"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed200M InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "200M"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed300M InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "300M"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed400M InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "400M"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed500M InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "500M"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed1G   InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "1G"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed2G   InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "2G"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed5G   InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "5G"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed10G  InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "10G"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed20G  InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "20G"
+	InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed50G  InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed = "50G"
+)
+
+func (r InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed) IsKnown() bool {
+	switch r {
+	case InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed50M, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed100M, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed200M, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed300M, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed400M, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed500M, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed1G, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed2G, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed5G, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed10G, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed20G, InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed50G:
+		return true
+	}
+	return false
+}
 
 type InterconnectStatusResponse struct {
 	State InterconnectStatusResponseState `json:"state,required"`
