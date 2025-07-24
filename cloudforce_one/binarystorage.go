@@ -37,7 +37,7 @@ func NewBinaryStorageService(opts ...option.RequestOption) (r *BinaryStorageServ
 	return
 }
 
-// Posts a file to BinDB
+// Posts a file to Binary Storage
 func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewParams, opts ...option.RequestOption) (res *BinaryStorageNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -49,7 +49,7 @@ func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewP
 	return
 }
 
-// Posts a file to BinDB
+// Retrieves a file from Binary Storage
 func (r *BinaryStorageService) Get(ctx context.Context, hash string, query BinaryStorageGetParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
