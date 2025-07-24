@@ -566,6 +566,7 @@ TEST_PATHS=(
 	calls/turn_test.go
 	cloudforce_one/scanresult_test.go
 	cloudforce_one/scanconfig_test.go
+	cloudforce_one/binarystorage_test.go
 	cloudforce_one/request_test.go
 	cloudforce_one/requestmessage_test.go
 	cloudforce_one/requestpriority_test.go

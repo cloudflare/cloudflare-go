@@ -3,6 +3,18 @@
 package cloudforce_one
 
 import (
+	"bytes"
+	"context"
+	"errors"
+	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -23,4 +35,95 @@ func NewBinaryStorageService(opts ...option.RequestOption) (r *BinaryStorageServ
 	r = &BinaryStorageService{}
 	r.Options = opts
 	return
+}
+
+// Posts a file to BinDB
+func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewParams, opts ...option.RequestOption) (res *BinaryStorageNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/binary", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return
+}
+
+// Posts a file to BinDB
+func (r *BinaryStorageService) Get(ctx context.Context, hash string, query BinaryStorageGetParams, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if hash == "" {
+		err = errors.New("missing required hash parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/binary/%s", query.AccountID, hash)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
+	return
+}
+
+type BinaryStorageNewResponse struct {
+	AccountIDs  []string                     `json:"accountIds,required"`
+	ContentType string                       `json:"content_type,required"`
+	Filenames   []string                     `json:"filenames,required"`
+	FirstSeen   float64                      `json:"first_seen,required"`
+	IsPrivate   bool                         `json:"is_private,required"`
+	Md5         string                       `json:"md5,required"`
+	Sha1        string                       `json:"sha1,required"`
+	Sha256      string                       `json:"sha256,required"`
+	JSON        binaryStorageNewResponseJSON `json:"-"`
+}
+
+// binaryStorageNewResponseJSON contains the JSON metadata for the struct
+// [BinaryStorageNewResponse]
+type binaryStorageNewResponseJSON struct {
+	AccountIDs  apijson.Field
+	ContentType apijson.Field
+	Filenames   apijson.Field
+	FirstSeen   apijson.Field
+	IsPrivate   apijson.Field
+	Md5         apijson.Field
+	Sha1        apijson.Field
+	Sha256      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BinaryStorageNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r binaryStorageNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type BinaryStorageNewParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The binary file content to upload.
+	File param.Field[io.Reader] `json:"file,required" format:"binary"`
+}
+
+func (r BinaryStorageNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+type BinaryStorageGetParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
