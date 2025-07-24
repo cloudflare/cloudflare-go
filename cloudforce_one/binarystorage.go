@@ -67,11 +67,7 @@ func (r *BinaryStorageService) Get(ctx context.Context, hash string, query Binar
 }
 
 type BinaryStorageNewResponse struct {
-	AccountIDs  []string                     `json:"accountIds,required"`
 	ContentType string                       `json:"content_type,required"`
-	Filenames   []string                     `json:"filenames,required"`
-	FirstSeen   float64                      `json:"first_seen,required"`
-	IsPrivate   bool                         `json:"is_private,required"`
 	Md5         string                       `json:"md5,required"`
 	Sha1        string                       `json:"sha1,required"`
 	Sha256      string                       `json:"sha256,required"`
@@ -81,11 +77,7 @@ type BinaryStorageNewResponse struct {
 // binaryStorageNewResponseJSON contains the JSON metadata for the struct
 // [BinaryStorageNewResponse]
 type binaryStorageNewResponseJSON struct {
-	AccountIDs  apijson.Field
 	ContentType apijson.Field
-	Filenames   apijson.Field
-	FirstSeen   apijson.Field
-	IsPrivate   apijson.Field
 	Md5         apijson.Field
 	Sha1        apijson.Field
 	Sha256      apijson.Field
