@@ -166,6 +166,11 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress string `json:"interface_address"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
@@ -179,18 +184,19 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 // cfInterconnectUpdateResponseModifiedInterconnectJSON contains the JSON metadata
 // for the struct [CfInterconnectUpdateResponseModifiedInterconnect]
 type cfInterconnectUpdateResponseModifiedInterconnectJSON struct {
-	ID               apijson.Field
-	ColoName         apijson.Field
-	CreatedOn        apijson.Field
-	Description      apijson.Field
-	GRE              apijson.Field
-	HealthCheck      apijson.Field
-	InterfaceAddress apijson.Field
-	ModifiedOn       apijson.Field
-	Mtu              apijson.Field
-	Name             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -262,6 +268,11 @@ type CfInterconnectListResponseInterconnect struct {
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress string `json:"interface_address"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
@@ -275,18 +286,19 @@ type CfInterconnectListResponseInterconnect struct {
 // cfInterconnectListResponseInterconnectJSON contains the JSON metadata for the
 // struct [CfInterconnectListResponseInterconnect]
 type cfInterconnectListResponseInterconnectJSON struct {
-	ID               apijson.Field
-	ColoName         apijson.Field
-	CreatedOn        apijson.Field
-	Description      apijson.Field
-	GRE              apijson.Field
-	HealthCheck      apijson.Field
-	InterfaceAddress apijson.Field
-	ModifiedOn       apijson.Field
-	Mtu              apijson.Field
-	Name             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectListResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -360,6 +372,11 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress string `json:"interface_address"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
@@ -373,18 +390,19 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 // cfInterconnectBulkUpdateResponseModifiedInterconnectJSON contains the JSON
 // metadata for the struct [CfInterconnectBulkUpdateResponseModifiedInterconnect]
 type cfInterconnectBulkUpdateResponseModifiedInterconnectJSON struct {
-	ID               apijson.Field
-	ColoName         apijson.Field
-	CreatedOn        apijson.Field
-	Description      apijson.Field
-	GRE              apijson.Field
-	HealthCheck      apijson.Field
-	InterfaceAddress apijson.Field
-	ModifiedOn       apijson.Field
-	Mtu              apijson.Field
-	Name             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectBulkUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -457,6 +475,11 @@ type CfInterconnectGetResponseInterconnect struct {
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress string `json:"interface_address"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
@@ -470,18 +493,19 @@ type CfInterconnectGetResponseInterconnect struct {
 // cfInterconnectGetResponseInterconnectJSON contains the JSON metadata for the
 // struct [CfInterconnectGetResponseInterconnect]
 type cfInterconnectGetResponseInterconnectJSON struct {
-	ID               apijson.Field
-	ColoName         apijson.Field
-	CreatedOn        apijson.Field
-	Description      apijson.Field
-	GRE              apijson.Field
-	HealthCheck      apijson.Field
-	InterfaceAddress apijson.Field
-	ModifiedOn       apijson.Field
-	Mtu              apijson.Field
-	Name             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectGetResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -528,6 +552,11 @@ type CfInterconnectUpdateParams struct {
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress param.Field[string] `json:"interface_address"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 param.Field[string] `json:"interface_address6"`
 	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
 	// value is 576.
 	Mtu               param.Field[int64] `json:"mtu"`

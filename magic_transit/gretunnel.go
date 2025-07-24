@@ -192,6 +192,11 @@ type GRETunnelNewResponse struct {
 	// An optional description of the GRE tunnel.
 	Description string                          `json:"description"`
 	HealthCheck GRETunnelNewResponseHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -213,6 +218,7 @@ type greTunnelNewResponseJSON struct {
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
 	ModifiedOn            apijson.Field
 	Mtu                   apijson.Field
 	TTL                   apijson.Field
@@ -398,6 +404,11 @@ type GRETunnelUpdateResponseModifiedGRETunnel struct {
 	// An optional description of the GRE tunnel.
 	Description string                                              `json:"description"`
 	HealthCheck GRETunnelUpdateResponseModifiedGRETunnelHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -419,6 +430,7 @@ type greTunnelUpdateResponseModifiedGRETunnelJSON struct {
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
 	ModifiedOn            apijson.Field
 	Mtu                   apijson.Field
 	TTL                   apijson.Field
@@ -603,6 +615,11 @@ type GRETunnelListResponseGRETunnel struct {
 	// An optional description of the GRE tunnel.
 	Description string                                     `json:"description"`
 	HealthCheck GRETunnelListResponseGRETunnelsHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -624,6 +641,7 @@ type greTunnelListResponseGRETunnelJSON struct {
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
 	ModifiedOn            apijson.Field
 	Mtu                   apijson.Field
 	TTL                   apijson.Field
@@ -810,6 +828,11 @@ type GRETunnelDeleteResponseDeletedGRETunnel struct {
 	// An optional description of the GRE tunnel.
 	Description string                                             `json:"description"`
 	HealthCheck GRETunnelDeleteResponseDeletedGRETunnelHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -831,6 +854,7 @@ type greTunnelDeleteResponseDeletedGRETunnelJSON struct {
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
 	ModifiedOn            apijson.Field
 	Mtu                   apijson.Field
 	TTL                   apijson.Field
@@ -1017,6 +1041,11 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
 	// An optional description of the GRE tunnel.
 	Description string                                                   `json:"description"`
 	HealthCheck GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -1038,6 +1067,7 @@ type greTunnelBulkUpdateResponseModifiedGRETunnelJSON struct {
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
 	ModifiedOn            apijson.Field
 	Mtu                   apijson.Field
 	TTL                   apijson.Field
@@ -1223,6 +1253,11 @@ type GRETunnelGetResponseGRETunnel struct {
 	// An optional description of the GRE tunnel.
 	Description string                                   `json:"description"`
 	HealthCheck GRETunnelGetResponseGRETunnelHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -1244,6 +1279,7 @@ type greTunnelGetResponseGRETunnelJSON struct {
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
 	ModifiedOn            apijson.Field
 	Mtu                   apijson.Field
 	TTL                   apijson.Field
@@ -1405,6 +1441,11 @@ type GRETunnelNewParams struct {
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                        `json:"description"`
 	HealthCheck param.Field[GRETunnelNewParamsHealthCheck] `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 param.Field[string] `json:"interface_address6"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
 	// is 576.
 	Mtu param.Field[int64] `json:"mtu"`
@@ -1555,6 +1596,11 @@ type GRETunnelUpdateParams struct {
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                           `json:"description"`
 	HealthCheck param.Field[GRETunnelUpdateParamsHealthCheck] `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 param.Field[string] `json:"interface_address6"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
 	// is 576.
 	Mtu param.Field[int64] `json:"mtu"`
