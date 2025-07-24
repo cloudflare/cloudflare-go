@@ -45,21 +45,21 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
-				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
+				Mode:            cloudflare.F(zero_trust.BlockPageSettingsModeCustomizedBlockPage),
+				BackgroundColor: cloudflare.F("background_color"),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
 				IncludeContext:  cloudflare.F(true),
 				LogoPath:        cloudflare.F("https://logos.com/a.png"),
 				MailtoAddress:   cloudflare.F("admin@example.com"),
 				MailtoSubject:   cloudflare.F("Blocked User Inquiry"),
-				Mode:            cloudflare.F(zero_trust.BlockPageSettingsModeCustomizedBlockPage),
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
 				TargetURI:       cloudflare.F("https://example.com"),
 			}),
 			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
-				InspectionMode: cloudflare.F("deep"),
+				InspectionMode: cloudflare.F(zero_trust.BodyScanningSettingsInspectionModeDeep),
 			}),
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
@@ -80,6 +80,9 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			}),
 			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
 				Enabled: cloudflare.F(false),
+			}),
+			Inspection: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionParam{
+				Mode: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionModeStatic),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
@@ -133,21 +136,21 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
-				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
+				Mode:            cloudflare.F(zero_trust.BlockPageSettingsModeCustomizedBlockPage),
+				BackgroundColor: cloudflare.F("background_color"),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
 				IncludeContext:  cloudflare.F(true),
 				LogoPath:        cloudflare.F("https://logos.com/a.png"),
 				MailtoAddress:   cloudflare.F("admin@example.com"),
 				MailtoSubject:   cloudflare.F("Blocked User Inquiry"),
-				Mode:            cloudflare.F(zero_trust.BlockPageSettingsModeCustomizedBlockPage),
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
 				TargetURI:       cloudflare.F("https://example.com"),
 			}),
 			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
-				InspectionMode: cloudflare.F("deep"),
+				InspectionMode: cloudflare.F(zero_trust.BodyScanningSettingsInspectionModeDeep),
 			}),
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
@@ -168,6 +171,9 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			}),
 			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
 				Enabled: cloudflare.F(false),
+			}),
+			Inspection: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionParam{
+				Mode: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionModeStatic),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),

@@ -95,7 +95,7 @@ func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConf
 // Activity log settings.
 type ActivityLogSettings struct {
 	// Enable activity logging.
-	Enabled bool                    `json:"enabled"`
+	Enabled bool                    `json:"enabled,nullable"`
 	JSON    activityLogSettingsJSON `json:"-"`
 }
 
@@ -128,11 +128,11 @@ func (r ActivityLogSettingsParam) MarshalJSON() (data []byte, err error) {
 // Anti-virus settings.
 type AntiVirusSettings struct {
 	// Enable anti-virus scanning on downloads.
-	EnabledDownloadPhase bool `json:"enabled_download_phase"`
+	EnabledDownloadPhase bool `json:"enabled_download_phase,nullable"`
 	// Enable anti-virus scanning on uploads.
-	EnabledUploadPhase bool `json:"enabled_upload_phase"`
+	EnabledUploadPhase bool `json:"enabled_upload_phase,nullable"`
 	// Block requests for files that cannot be scanned.
-	FailClosed bool `json:"fail_closed"`
+	FailClosed bool `json:"fail_closed,nullable"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
 	NotificationSettings NotificationSettings  `json:"notification_settings,nullable"`
@@ -177,10 +177,13 @@ func (r AntiVirusSettingsParam) MarshalJSON() (data []byte, err error) {
 
 // Block page layout settings.
 type BlockPageSettings struct {
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	Enabled bool `json:"enabled,required,nullable"`
+	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+	// a customer-provided URI.
+	Mode BlockPageSettingsMode `json:"mode,required"`
 	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	Enabled bool `json:"enabled"`
 	// If mode is customized_block_page: block page footer text.
 	FooterText string `json:"footer_text"`
 	// If mode is customized_block_page: block page header text.
@@ -195,38 +198,35 @@ type BlockPageSettings struct {
 	// If mode is customized_block_page: subject line for emails created from block
 	// page.
 	MailtoSubject string `json:"mailto_subject"`
-	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-	// a customer-provided URI.
-	Mode BlockPageSettingsMode `json:"mode"`
 	// If mode is customized_block_page: block page title.
 	Name string `json:"name"`
 	// This setting was shared via the Orgs API and cannot be edited by the current
 	// account
-	ReadOnly bool `json:"read_only"`
+	ReadOnly bool `json:"read_only,nullable"`
 	// Account tag of account that shared this setting
-	SourceAccount string `json:"source_account"`
+	SourceAccount string `json:"source_account,nullable"`
 	// If mode is customized_block_page: suppress detailed info at the bottom of the
 	// block page.
 	SuppressFooter bool `json:"suppress_footer"`
 	// If mode is redirect_uri: URI to which the user should be redirected.
 	TargetURI string `json:"target_uri" format:"uri"`
 	// Version number of the setting
-	Version int64                 `json:"version"`
+	Version int64                 `json:"version,nullable"`
 	JSON    blockPageSettingsJSON `json:"-"`
 }
 
 // blockPageSettingsJSON contains the JSON metadata for the struct
 // [BlockPageSettings]
 type blockPageSettingsJSON struct {
-	BackgroundColor apijson.Field
 	Enabled         apijson.Field
+	Mode            apijson.Field
+	BackgroundColor apijson.Field
 	FooterText      apijson.Field
 	HeaderText      apijson.Field
 	IncludeContext  apijson.Field
 	LogoPath        apijson.Field
 	MailtoAddress   apijson.Field
 	MailtoSubject   apijson.Field
-	Mode            apijson.Field
 	Name            apijson.Field
 	ReadOnly        apijson.Field
 	SourceAccount   apijson.Field
@@ -264,10 +264,13 @@ func (r BlockPageSettingsMode) IsKnown() bool {
 
 // Block page layout settings.
 type BlockPageSettingsParam struct {
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+	// a customer-provided URI.
+	Mode param.Field[BlockPageSettingsMode] `json:"mode,required"`
 	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor param.Field[string] `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	Enabled param.Field[bool] `json:"enabled"`
 	// If mode is customized_block_page: block page footer text.
 	FooterText param.Field[string] `json:"footer_text"`
 	// If mode is customized_block_page: block page header text.
@@ -282,9 +285,6 @@ type BlockPageSettingsParam struct {
 	// If mode is customized_block_page: subject line for emails created from block
 	// page.
 	MailtoSubject param.Field[string] `json:"mailto_subject"`
-	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-	// a customer-provided URI.
-	Mode param.Field[BlockPageSettingsMode] `json:"mode"`
 	// If mode is customized_block_page: block page title.
 	Name param.Field[string] `json:"name"`
 	// If mode is customized_block_page: suppress detailed info at the bottom of the
@@ -301,8 +301,8 @@ func (r BlockPageSettingsParam) MarshalJSON() (data []byte, err error) {
 // DLP body scanning settings.
 type BodyScanningSettings struct {
 	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode string                   `json:"inspection_mode"`
-	JSON           bodyScanningSettingsJSON `json:"-"`
+	InspectionMode BodyScanningSettingsInspectionMode `json:"inspection_mode"`
+	JSON           bodyScanningSettingsJSON           `json:"-"`
 }
 
 // bodyScanningSettingsJSON contains the JSON metadata for the struct
@@ -321,10 +321,26 @@ func (r bodyScanningSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Set the inspection mode to either `deep` or `shallow`.
+type BodyScanningSettingsInspectionMode string
+
+const (
+	BodyScanningSettingsInspectionModeDeep    BodyScanningSettingsInspectionMode = "deep"
+	BodyScanningSettingsInspectionModeShallow BodyScanningSettingsInspectionMode = "shallow"
+)
+
+func (r BodyScanningSettingsInspectionMode) IsKnown() bool {
+	switch r {
+	case BodyScanningSettingsInspectionModeDeep, BodyScanningSettingsInspectionModeShallow:
+		return true
+	}
+	return false
+}
+
 // DLP body scanning settings.
 type BodyScanningSettingsParam struct {
 	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode param.Field[string] `json:"inspection_mode"`
+	InspectionMode param.Field[BodyScanningSettingsInspectionMode] `json:"inspection_mode"`
 }
 
 func (r BodyScanningSettingsParam) MarshalJSON() (data []byte, err error) {
@@ -375,7 +391,7 @@ func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
 // Deprecated: deprecated
 type CustomCertificateSettings struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled,required,nullable"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
 	// Certificate status (internal).
@@ -422,14 +438,14 @@ func (r CustomCertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 type ExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled,nullable"`
 	// This setting was shared via the Orgs API and cannot be edited by the current
 	// account
-	ReadOnly bool `json:"read_only"`
+	ReadOnly bool `json:"read_only,nullable"`
 	// Account tag of account that shared this setting
-	SourceAccount string `json:"source_account"`
+	SourceAccount string `json:"source_account,nullable"`
 	// Version number of the setting
-	Version int64                     `json:"version"`
+	Version int64                     `json:"version,nullable"`
 	JSON    extendedEmailMatchingJSON `json:"-"`
 }
 
@@ -521,6 +537,8 @@ type GatewayConfigurationSettings struct {
 	Fips FipsSettings `json:"fips,nullable"`
 	// Setting to enable host selector in egress policies.
 	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
+	// Setting to define inspection settings
+	Inspection GatewayConfigurationSettingsInspection `json:"inspection,nullable"`
 	// Protocol Detection settings.
 	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
 	// Sandbox settings.
@@ -543,6 +561,7 @@ type gatewayConfigurationSettingsJSON struct {
 	ExtendedEmailMatching apijson.Field
 	Fips                  apijson.Field
 	HostSelector          apijson.Field
+	Inspection            apijson.Field
 	ProtocolDetection     apijson.Field
 	Sandbox               apijson.Field
 	TLSDecrypt            apijson.Field
@@ -587,7 +606,7 @@ func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
 // Setting to enable host selector in egress policies.
 type GatewayConfigurationSettingsHostSelector struct {
 	// Enable filtering via hosts for egress policies.
-	Enabled bool                                         `json:"enabled"`
+	Enabled bool                                         `json:"enabled,nullable"`
 	JSON    gatewayConfigurationSettingsHostSelectorJSON `json:"-"`
 }
 
@@ -607,10 +626,59 @@ func (r gatewayConfigurationSettingsHostSelectorJSON) RawJSON() string {
 	return r.raw
 }
 
+// Setting to define inspection settings
+type GatewayConfigurationSettingsInspection struct {
+	// Defines the mode of inspection the proxy will use.
+	//
+	//   - static: Gateway will use static inspection to inspect HTTP on TCP(80). If TLS
+	//     decryption is on, Gateway will inspect HTTPS traffic on TCP(443) & UDP(443).
+	//   - dynamic: Gateway will use protocol detection to dynamically inspect HTTP and
+	//     HTTPS traffic on any port. TLS decryption must be on to inspect HTTPS traffic.
+	Mode GatewayConfigurationSettingsInspectionMode `json:"mode"`
+	JSON gatewayConfigurationSettingsInspectionJSON `json:"-"`
+}
+
+// gatewayConfigurationSettingsInspectionJSON contains the JSON metadata for the
+// struct [GatewayConfigurationSettingsInspection]
+type gatewayConfigurationSettingsInspectionJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettingsInspection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsInspectionJSON) RawJSON() string {
+	return r.raw
+}
+
+// Defines the mode of inspection the proxy will use.
+//
+//   - static: Gateway will use static inspection to inspect HTTP on TCP(80). If TLS
+//     decryption is on, Gateway will inspect HTTPS traffic on TCP(443) & UDP(443).
+//   - dynamic: Gateway will use protocol detection to dynamically inspect HTTP and
+//     HTTPS traffic on any port. TLS decryption must be on to inspect HTTPS traffic.
+type GatewayConfigurationSettingsInspectionMode string
+
+const (
+	GatewayConfigurationSettingsInspectionModeStatic  GatewayConfigurationSettingsInspectionMode = "static"
+	GatewayConfigurationSettingsInspectionModeDynamic GatewayConfigurationSettingsInspectionMode = "dynamic"
+)
+
+func (r GatewayConfigurationSettingsInspectionMode) IsKnown() bool {
+	switch r {
+	case GatewayConfigurationSettingsInspectionModeStatic, GatewayConfigurationSettingsInspectionModeDynamic:
+		return true
+	}
+	return false
+}
+
 // Sandbox settings.
 type GatewayConfigurationSettingsSandbox struct {
 	// Enable sandbox.
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled,nullable"`
 	// Action to take when the file cannot be scanned.
 	FallbackAction GatewayConfigurationSettingsSandboxFallbackAction `json:"fallback_action"`
 	JSON           gatewayConfigurationSettingsSandboxJSON           `json:"-"`
@@ -675,6 +743,8 @@ type GatewayConfigurationSettingsParam struct {
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
 	// Setting to enable host selector in egress policies.
 	HostSelector param.Field[GatewayConfigurationSettingsHostSelectorParam] `json:"host_selector"`
+	// Setting to define inspection settings
+	Inspection param.Field[GatewayConfigurationSettingsInspectionParam] `json:"inspection"`
 	// Protocol Detection settings.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
 	// Sandbox settings.
@@ -707,6 +777,21 @@ type GatewayConfigurationSettingsHostSelectorParam struct {
 }
 
 func (r GatewayConfigurationSettingsHostSelectorParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Setting to define inspection settings
+type GatewayConfigurationSettingsInspectionParam struct {
+	// Defines the mode of inspection the proxy will use.
+	//
+	//   - static: Gateway will use static inspection to inspect HTTP on TCP(80). If TLS
+	//     decryption is on, Gateway will inspect HTTPS traffic on TCP(443) & UDP(443).
+	//   - dynamic: Gateway will use protocol detection to dynamically inspect HTTP and
+	//     HTTPS traffic on any port. TLS decryption must be on to inspect HTTPS traffic.
+	Mode param.Field[GatewayConfigurationSettingsInspectionMode] `json:"mode"`
+}
+
+func (r GatewayConfigurationSettingsInspectionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -777,7 +862,7 @@ func (r NotificationSettingsParam) MarshalJSON() (data []byte, err error) {
 // Protocol Detection settings.
 type ProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
-	Enabled bool                  `json:"enabled"`
+	Enabled bool                  `json:"enabled,nullable"`
 	JSON    protocolDetectionJSON `json:"-"`
 }
 
