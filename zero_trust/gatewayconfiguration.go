@@ -177,13 +177,10 @@ func (r AntiVirusSettingsParam) MarshalJSON() (data []byte, err error) {
 
 // Block page layout settings.
 type BlockPageSettings struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	Enabled bool `json:"enabled,required,nullable"`
-	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-	// a customer-provided URI.
-	Mode BlockPageSettingsMode `json:"mode,required"`
 	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	Enabled bool `json:"enabled,nullable"`
 	// If mode is customized_block_page: block page footer text.
 	FooterText string `json:"footer_text"`
 	// If mode is customized_block_page: block page header text.
@@ -198,6 +195,9 @@ type BlockPageSettings struct {
 	// If mode is customized_block_page: subject line for emails created from block
 	// page.
 	MailtoSubject string `json:"mailto_subject"`
+	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+	// a customer-provided URI.
+	Mode BlockPageSettingsMode `json:"mode"`
 	// If mode is customized_block_page: block page title.
 	Name string `json:"name"`
 	// This setting was shared via the Orgs API and cannot be edited by the current
@@ -218,15 +218,15 @@ type BlockPageSettings struct {
 // blockPageSettingsJSON contains the JSON metadata for the struct
 // [BlockPageSettings]
 type blockPageSettingsJSON struct {
-	Enabled         apijson.Field
-	Mode            apijson.Field
 	BackgroundColor apijson.Field
+	Enabled         apijson.Field
 	FooterText      apijson.Field
 	HeaderText      apijson.Field
 	IncludeContext  apijson.Field
 	LogoPath        apijson.Field
 	MailtoAddress   apijson.Field
 	MailtoSubject   apijson.Field
+	Mode            apijson.Field
 	Name            apijson.Field
 	ReadOnly        apijson.Field
 	SourceAccount   apijson.Field
@@ -264,13 +264,10 @@ func (r BlockPageSettingsMode) IsKnown() bool {
 
 // Block page layout settings.
 type BlockPageSettingsParam struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-	// a customer-provided URI.
-	Mode param.Field[BlockPageSettingsMode] `json:"mode,required"`
 	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor param.Field[string] `json:"background_color"`
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	Enabled param.Field[bool] `json:"enabled"`
 	// If mode is customized_block_page: block page footer text.
 	FooterText param.Field[string] `json:"footer_text"`
 	// If mode is customized_block_page: block page header text.
@@ -285,6 +282,9 @@ type BlockPageSettingsParam struct {
 	// If mode is customized_block_page: subject line for emails created from block
 	// page.
 	MailtoSubject param.Field[string] `json:"mailto_subject"`
+	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+	// a customer-provided URI.
+	Mode param.Field[BlockPageSettingsMode] `json:"mode"`
 	// If mode is customized_block_page: block page title.
 	Name param.Field[string] `json:"name"`
 	// If mode is customized_block_page: suppress detailed info at the bottom of the

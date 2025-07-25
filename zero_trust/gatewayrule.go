@@ -466,7 +466,7 @@ type RuleSetting struct {
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
 	// (if enabled).
-	BlockReason string `json:"block_reason"`
+	BlockReason string `json:"block_reason,nullable"`
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule bool `json:"bypass_parent_rule,nullable"`
 	// Configure how session check behaves.
