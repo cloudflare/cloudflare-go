@@ -1717,11 +1717,6 @@ type DispatchNamespaceScriptSettingEditResponseMigrations struct {
 	NewClasses interface{} `json:"new_classes"`
 	// This field can have the runtime type of [[]string].
 	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes"`
@@ -1740,8 +1735,6 @@ type dispatchNamespaceScriptSettingEditResponseMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
 	Steps              apijson.Field
 	TransferredClasses apijson.Field
@@ -1795,23 +1788,13 @@ func init() {
 }
 
 type DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []workers.MigrationStep                                                               `json:"steps"`
-	JSON  dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+	JSON dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations]
 type dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3574,11 +3557,6 @@ type DispatchNamespaceScriptSettingGetResponseMigrations struct {
 	NewClasses interface{} `json:"new_classes"`
 	// This field can have the runtime type of [[]string].
 	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes"`
@@ -3597,8 +3575,6 @@ type dispatchNamespaceScriptSettingGetResponseMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
 	Steps              apijson.Field
 	TransferredClasses apijson.Field
@@ -3652,23 +3628,13 @@ func init() {
 }
 
 type DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []workers.MigrationStep                                                              `json:"steps"`
-	JSON  dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+	JSON dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations]
 type dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

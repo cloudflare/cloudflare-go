@@ -42,29 +42,13 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 }
 
 type MigrationStep struct {
-	// A list of classes to delete Durable Object namespaces from.
-	DeletedClasses []string `json:"deleted_classes"`
-	// A list of classes to create Durable Object namespaces from.
-	NewClasses []string `json:"new_classes"`
-	// A list of classes to create Durable Object namespaces with SQLite from.
-	NewSqliteClasses []string `json:"new_sqlite_classes"`
-	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses []MigrationStepRenamedClass `json:"renamed_classes"`
-	// A list of transfers for Durable Object namespaces from a different Worker and
-	// class to a class defined in this Worker.
-	TransferredClasses []MigrationStepTransferredClass `json:"transferred_classes"`
-	JSON               migrationStepJSON               `json:"-"`
+	JSON migrationStepJSON `json:"-"`
 }
 
 // migrationStepJSON contains the JSON metadata for the struct [MigrationStep]
 type migrationStepJSON struct {
-	DeletedClasses     apijson.Field
-	NewClasses         apijson.Field
-	NewSqliteClasses   apijson.Field
-	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *MigrationStep) UnmarshalJSON(data []byte) (err error) {
@@ -76,16 +60,12 @@ func (r migrationStepJSON) RawJSON() string {
 }
 
 type MigrationStepRenamedClass struct {
-	From string                        `json:"from"`
-	To   string                        `json:"to"`
 	JSON migrationStepRenamedClassJSON `json:"-"`
 }
 
 // migrationStepRenamedClassJSON contains the JSON metadata for the struct
 // [MigrationStepRenamedClass]
 type migrationStepRenamedClassJSON struct {
-	From        apijson.Field
-	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -99,18 +79,12 @@ func (r migrationStepRenamedClassJSON) RawJSON() string {
 }
 
 type MigrationStepTransferredClass struct {
-	From       string                            `json:"from"`
-	FromScript string                            `json:"from_script"`
-	To         string                            `json:"to"`
-	JSON       migrationStepTransferredClassJSON `json:"-"`
+	JSON migrationStepTransferredClassJSON `json:"-"`
 }
 
 // migrationStepTransferredClassJSON contains the JSON metadata for the struct
 // [MigrationStepTransferredClass]
 type migrationStepTransferredClassJSON struct {
-	From        apijson.Field
-	FromScript  apijson.Field
-	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -162,37 +136,14 @@ func (r MigrationStepTransferredClassParam) MarshalJSON() (data []byte, err erro
 
 // A single set of migrations to apply.
 type SingleStepMigration struct {
-	// A list of classes to delete Durable Object namespaces from.
-	DeletedClasses []string `json:"deleted_classes"`
-	// A list of classes to create Durable Object namespaces from.
-	NewClasses []string `json:"new_classes"`
-	// A list of classes to create Durable Object namespaces with SQLite from.
-	NewSqliteClasses []string `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses []SingleStepMigrationRenamedClass `json:"renamed_classes"`
-	// A list of transfers for Durable Object namespaces from a different Worker and
-	// class to a class defined in this Worker.
-	TransferredClasses []SingleStepMigrationTransferredClass `json:"transferred_classes"`
-	JSON               singleStepMigrationJSON               `json:"-"`
+	JSON singleStepMigrationJSON `json:"-"`
 }
 
 // singleStepMigrationJSON contains the JSON metadata for the struct
 // [SingleStepMigration]
 type singleStepMigrationJSON struct {
-	DeletedClasses     apijson.Field
-	NewClasses         apijson.Field
-	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
-	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *SingleStepMigration) UnmarshalJSON(data []byte) (err error) {
@@ -212,16 +163,12 @@ func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingEditRespons
 func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingGetResponseMigrations() {}
 
 type SingleStepMigrationRenamedClass struct {
-	From string                              `json:"from"`
-	To   string                              `json:"to"`
 	JSON singleStepMigrationRenamedClassJSON `json:"-"`
 }
 
 // singleStepMigrationRenamedClassJSON contains the JSON metadata for the struct
 // [SingleStepMigrationRenamedClass]
 type singleStepMigrationRenamedClassJSON struct {
-	From        apijson.Field
-	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -235,18 +182,12 @@ func (r singleStepMigrationRenamedClassJSON) RawJSON() string {
 }
 
 type SingleStepMigrationTransferredClass struct {
-	From       string                                  `json:"from"`
-	FromScript string                                  `json:"from_script"`
-	To         string                                  `json:"to"`
-	JSON       singleStepMigrationTransferredClassJSON `json:"-"`
+	JSON singleStepMigrationTransferredClassJSON `json:"-"`
 }
 
 // singleStepMigrationTransferredClassJSON contains the JSON metadata for the
 // struct [SingleStepMigrationTransferredClass]
 type singleStepMigrationTransferredClassJSON struct {
-	From        apijson.Field
-	FromScript  apijson.Field
-	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
