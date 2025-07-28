@@ -101,14 +101,18 @@ func (r *ListBulkOperationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListBulkOperationGetResponseUnion] interface which you can
 // cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [ListBulkOperationGetResponseObject],
-// [ListBulkOperationGetResponseObject], [ListBulkOperationGetResponseObject].
+// Possible runtime types of the union are
+// [ListBulkOperationGetResponseListsPendingOrRunningBulkOperation],
+// [ListBulkOperationGetResponseListsCompletedBulkOperation],
+// [ListBulkOperationGetResponseListsFailedBulkOperation].
 func (r ListBulkOperationGetResponse) AsUnion() ListBulkOperationGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [ListBulkOperationGetResponseObject],
-// [ListBulkOperationGetResponseObject] or [ListBulkOperationGetResponseObject].
+// Union satisfied by
+// [ListBulkOperationGetResponseListsPendingOrRunningBulkOperation],
+// [ListBulkOperationGetResponseListsCompletedBulkOperation] or
+// [ListBulkOperationGetResponseListsFailedBulkOperation].
 type ListBulkOperationGetResponseUnion interface {
 	implementsListBulkOperationGetResponse()
 }
@@ -119,20 +123,112 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListBulkOperationGetResponseObject{}),
+			Type:       reflect.TypeOf(ListBulkOperationGetResponseListsPendingOrRunningBulkOperation{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListBulkOperationGetResponseObject{}),
+			Type:       reflect.TypeOf(ListBulkOperationGetResponseListsCompletedBulkOperation{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListBulkOperationGetResponseObject{}),
+			Type:       reflect.TypeOf(ListBulkOperationGetResponseListsFailedBulkOperation{}),
 		},
 	)
 }
 
-type ListBulkOperationGetResponseObject struct {
+type ListBulkOperationGetResponseListsPendingOrRunningBulkOperation struct {
+	// The unique operation ID of the asynchronous action.
+	ID string `json:"id,required"`
+	// The current status of the asynchronous operation.
+	Status ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatus `json:"status,required"`
+	JSON   listBulkOperationGetResponseListsPendingOrRunningBulkOperationJSON   `json:"-"`
+}
+
+// listBulkOperationGetResponseListsPendingOrRunningBulkOperationJSON contains the
+// JSON metadata for the struct
+// [ListBulkOperationGetResponseListsPendingOrRunningBulkOperation]
+type listBulkOperationGetResponseListsPendingOrRunningBulkOperationJSON struct {
+	ID          apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListBulkOperationGetResponseListsPendingOrRunningBulkOperation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listBulkOperationGetResponseListsPendingOrRunningBulkOperationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListBulkOperationGetResponseListsPendingOrRunningBulkOperation) implementsListBulkOperationGetResponse() {
+}
+
+// The current status of the asynchronous operation.
+type ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatus string
+
+const (
+	ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatusPending ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatus = "pending"
+	ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatusRunning ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatus = "running"
+)
+
+func (r ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatus) IsKnown() bool {
+	switch r {
+	case ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatusPending, ListBulkOperationGetResponseListsPendingOrRunningBulkOperationStatusRunning:
+		return true
+	}
+	return false
+}
+
+type ListBulkOperationGetResponseListsCompletedBulkOperation struct {
+	// The unique operation ID of the asynchronous action.
+	ID string `json:"id,required"`
+	// The RFC 3339 timestamp of when the operation was completed.
+	Completed string `json:"completed,required"`
+	// The current status of the asynchronous operation.
+	Status ListBulkOperationGetResponseListsCompletedBulkOperationStatus `json:"status,required"`
+	JSON   listBulkOperationGetResponseListsCompletedBulkOperationJSON   `json:"-"`
+}
+
+// listBulkOperationGetResponseListsCompletedBulkOperationJSON contains the JSON
+// metadata for the struct
+// [ListBulkOperationGetResponseListsCompletedBulkOperation]
+type listBulkOperationGetResponseListsCompletedBulkOperationJSON struct {
+	ID          apijson.Field
+	Completed   apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListBulkOperationGetResponseListsCompletedBulkOperation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listBulkOperationGetResponseListsCompletedBulkOperationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListBulkOperationGetResponseListsCompletedBulkOperation) implementsListBulkOperationGetResponse() {
+}
+
+// The current status of the asynchronous operation.
+type ListBulkOperationGetResponseListsCompletedBulkOperationStatus string
+
+const (
+	ListBulkOperationGetResponseListsCompletedBulkOperationStatusCompleted ListBulkOperationGetResponseListsCompletedBulkOperationStatus = "completed"
+)
+
+func (r ListBulkOperationGetResponseListsCompletedBulkOperationStatus) IsKnown() bool {
+	switch r {
+	case ListBulkOperationGetResponseListsCompletedBulkOperationStatusCompleted:
+		return true
+	}
+	return false
+}
+
+type ListBulkOperationGetResponseListsFailedBulkOperation struct {
 	// The unique operation ID of the asynchronous action.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the operation was completed.
@@ -140,13 +236,13 @@ type ListBulkOperationGetResponseObject struct {
 	// A message describing the error when the status is `failed`.
 	Error string `json:"error,required"`
 	// The current status of the asynchronous operation.
-	Status ListBulkOperationGetResponseObjectStatus `json:"status,required"`
-	JSON   listBulkOperationGetResponseObjectJSON   `json:"-"`
+	Status ListBulkOperationGetResponseListsFailedBulkOperationStatus `json:"status,required"`
+	JSON   listBulkOperationGetResponseListsFailedBulkOperationJSON   `json:"-"`
 }
 
-// listBulkOperationGetResponseObjectJSON contains the JSON metadata for the struct
-// [ListBulkOperationGetResponseObject]
-type listBulkOperationGetResponseObjectJSON struct {
+// listBulkOperationGetResponseListsFailedBulkOperationJSON contains the JSON
+// metadata for the struct [ListBulkOperationGetResponseListsFailedBulkOperation]
+type listBulkOperationGetResponseListsFailedBulkOperationJSON struct {
 	ID          apijson.Field
 	Completed   apijson.Field
 	Error       apijson.Field
@@ -155,26 +251,27 @@ type listBulkOperationGetResponseObjectJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListBulkOperationGetResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *ListBulkOperationGetResponseListsFailedBulkOperation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listBulkOperationGetResponseObjectJSON) RawJSON() string {
+func (r listBulkOperationGetResponseListsFailedBulkOperationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ListBulkOperationGetResponseObject) implementsListBulkOperationGetResponse() {}
+func (r ListBulkOperationGetResponseListsFailedBulkOperation) implementsListBulkOperationGetResponse() {
+}
 
 // The current status of the asynchronous operation.
-type ListBulkOperationGetResponseObjectStatus string
+type ListBulkOperationGetResponseListsFailedBulkOperationStatus string
 
 const (
-	ListBulkOperationGetResponseObjectStatusFailed ListBulkOperationGetResponseObjectStatus = "failed"
+	ListBulkOperationGetResponseListsFailedBulkOperationStatusFailed ListBulkOperationGetResponseListsFailedBulkOperationStatus = "failed"
 )
 
-func (r ListBulkOperationGetResponseObjectStatus) IsKnown() bool {
+func (r ListBulkOperationGetResponseListsFailedBulkOperationStatus) IsKnown() bool {
 	switch r {
-	case ListBulkOperationGetResponseObjectStatusFailed:
+	case ListBulkOperationGetResponseListsFailedBulkOperationStatusFailed:
 		return true
 	}
 	return false
@@ -184,15 +281,15 @@ func (r ListBulkOperationGetResponseObjectStatus) IsKnown() bool {
 type ListBulkOperationGetResponseStatus string
 
 const (
-	ListBulkOperationGetResponseStatusFailed    ListBulkOperationGetResponseStatus = "failed"
 	ListBulkOperationGetResponseStatusPending   ListBulkOperationGetResponseStatus = "pending"
 	ListBulkOperationGetResponseStatusRunning   ListBulkOperationGetResponseStatus = "running"
 	ListBulkOperationGetResponseStatusCompleted ListBulkOperationGetResponseStatus = "completed"
+	ListBulkOperationGetResponseStatusFailed    ListBulkOperationGetResponseStatus = "failed"
 )
 
 func (r ListBulkOperationGetResponseStatus) IsKnown() bool {
 	switch r {
-	case ListBulkOperationGetResponseStatusFailed, ListBulkOperationGetResponseStatusPending, ListBulkOperationGetResponseStatusRunning, ListBulkOperationGetResponseStatusCompleted:
+	case ListBulkOperationGetResponseStatusPending, ListBulkOperationGetResponseStatusRunning, ListBulkOperationGetResponseStatusCompleted, ListBulkOperationGetResponseStatusFailed:
 		return true
 	}
 	return false

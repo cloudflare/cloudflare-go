@@ -4210,9 +4210,7 @@ Params Types:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules#Hostname">Hostname</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules#ListsList">ListsList</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules#Redirect">Redirect</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules#ListNewResponse">ListNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules#ListUpdateResponse">ListUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rules#ListDeleteResponse">ListDeleteResponse</a>
