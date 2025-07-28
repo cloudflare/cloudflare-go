@@ -32,7 +32,7 @@ func TestListItemNew(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: []rules.ListItemNewParamsBodyUnion{rules.ListItemNewParamsBodyObject{
+			Body: []rules.ListItemNewParamsBodyUnion{rules.ListItemNewParamsBodyListsListItemIPComment{
 				IP:      cloudflare.F("10.0.0.1"),
 				Comment: cloudflare.F("Private IP address"),
 			}},
@@ -65,7 +65,7 @@ func TestListItemUpdate(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		rules.ListItemUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: []rules.ListItemUpdateParamsBodyUnion{rules.ListItemUpdateParamsBodyObject{
+			Body: []rules.ListItemUpdateParamsBodyUnion{rules.ListItemUpdateParamsBodyListsListItemIPComment{
 				IP:      cloudflare.F("10.0.0.1"),
 				Comment: cloudflare.F("Private IP address"),
 			}},
