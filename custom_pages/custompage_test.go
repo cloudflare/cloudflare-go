@@ -29,7 +29,7 @@ func TestCustomPageUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomPages.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		custom_pages.CustomPageUpdateParamsIdentifierRatelimitBlock,
 		custom_pages.CustomPageUpdateParams{
 			State:     cloudflare.F(custom_pages.CustomPageUpdateParamsStateDefault),
 			URL:       cloudflare.F("http://www.example.com"),
@@ -85,7 +85,7 @@ func TestCustomPageGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomPages.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		custom_pages.CustomPageGetParamsIdentifierRatelimitBlock,
 		custom_pages.CustomPageGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
