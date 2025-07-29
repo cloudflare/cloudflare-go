@@ -441,11 +441,11 @@ type ExtendedEmailMatching struct {
 	Enabled bool `json:"enabled,nullable"`
 	// This setting was shared via the Orgs API and cannot be edited by the current
 	// account
-	ReadOnly bool `json:"read_only,nullable"`
+	ReadOnly bool `json:"read_only"`
 	// Account tag of account that shared this setting
-	SourceAccount string `json:"source_account,nullable"`
+	SourceAccount string `json:"source_account"`
 	// Version number of the setting
-	Version int64                     `json:"version,nullable"`
+	Version int64                     `json:"version"`
 	JSON    extendedEmailMatchingJSON `json:"-"`
 }
 
