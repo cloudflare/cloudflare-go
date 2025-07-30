@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package snippets_test
+package logs_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/logs"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/snippets"
 )
 
-func TestRuleUpdate(t *testing.T) {
+func TestControlCmbConfigNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,14 +27,12 @@ func TestRuleUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Snippets.Rules.Update(context.TODO(), snippets.RuleUpdateParams{
-		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
-		Body: []snippets.RuleUpdateParamsBody{{
-			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			SnippetName: cloudflare.F("my_snippet"),
-			Description: cloudflare.F("Execute my_snippet when IP address is 1.1.1.1."),
-			Enabled:     cloudflare.F(true),
-		}},
+	_, err := client.Logs.Control.Cmb.Config.New(context.TODO(), logs.ControlCmbConfigNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CmbConfig: logs.CmbConfigParam{
+			AllowOutOfRegionAccess: cloudflare.F(false),
+			Regions:                cloudflare.F("eu"),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -45,7 +43,7 @@ func TestRuleUpdate(t *testing.T) {
 	}
 }
 
-func TestRuleList(t *testing.T) {
+func TestControlCmbConfigDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,8 +56,8 @@ func TestRuleList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Snippets.Rules.List(context.TODO(), snippets.RuleListParams{
-		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+	_, err := client.Logs.Control.Cmb.Config.Delete(context.TODO(), logs.ControlCmbConfigDeleteParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,7 +68,7 @@ func TestRuleList(t *testing.T) {
 	}
 }
 
-func TestRuleDelete(t *testing.T) {
+func TestControlCmbConfigGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,8 +81,8 @@ func TestRuleDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Snippets.Rules.Delete(context.TODO(), snippets.RuleDeleteParams{
-		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+	_, err := client.Logs.Control.Cmb.Config.Get(context.TODO(), logs.ControlCmbConfigGetParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

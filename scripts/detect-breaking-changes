@@ -124,6 +124,11 @@ TEST_PATHS=(
 	logpush/job_test.go
 	logpush/ownership_test.go
 	logpush/validate_test.go
+	logs/controlretention_test.go
+	logs/controlcmbconfig_test.go
+	logs/rayid_test.go
+	logs/received_test.go
+	logs/receivedfield_test.go
 	origin_tls_client_auth/origintlsclientauth_test.go
 	origin_tls_client_auth/hostname_test.go
 	origin_tls_client_auth/hostnamecertificate_test.go
@@ -156,6 +161,7 @@ TEST_PATHS=(
 	workers/accountsetting_test.go
 	workers/domain_test.go
 	workers/subdomain_test.go
+	workers/observabilitytelemetry_test.go
 	kv/namespace_test.go
 	kv/namespacekey_test.go
 	kv/namespacemetadata_test.go
@@ -454,6 +460,8 @@ TEST_PATHS=(
 	radar/aitomarkdown_test.go
 	radar/aiinferencesummary_test.go
 	radar/aiinferencetimeseriesgroupsummary_test.go
+	radar/aibotsummary_test.go
+	radar/aitimeseriesgroup_test.go
 	radar/annotation_test.go
 	radar/annotationoutage_test.go
 	radar/bgp_test.go
@@ -590,6 +598,11 @@ TEST_PATHS=(
 	botnet_feed/asn_test.go
 	botnet_feed/configasn_test.go
 	security_txt/securitytxt_test.go
+	workflows/workflow_test.go
+	workflows/instance_test.go
+	workflows/instancestatus_test.go
+	workflows/instanceevent_test.go
+	workflows/version_test.go
 	resource_sharing/resourcesharing_test.go
 	resource_sharing/recipient_test.go
 	resource_sharing/resource_test.go

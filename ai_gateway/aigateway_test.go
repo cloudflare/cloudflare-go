@@ -80,7 +80,6 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
 			Logpush:                 cloudflare.F(true),
 			LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
-			StoreID:                 cloudflare.F("store_id"),
 		},
 	)
 	if err != nil {

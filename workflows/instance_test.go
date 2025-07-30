@@ -1,20 +1,21 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package queues_test
+package workflows_test
 
 import (
 	"context"
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/queues"
+	"github.com/cloudflare/cloudflare-go/v4/workflows"
 )
 
-func TestMessageAckWithOptionalParams(t *testing.T) {
+func TestInstanceNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,18 +28,14 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Ack(
+	_, err := client.Workflows.Instances.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessageAckParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Acks: cloudflare.F([]queues.MessageAckParamsAck{{
-				LeaseID: cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}}),
-			Retries: cloudflare.F([]queues.MessageAckParamsRetry{{
-				DelaySeconds: cloudflare.F(10.000000),
-				LeaseID:      cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}}),
+		"x",
+		workflows.InstanceNewParams{
+			AccountID:         cloudflare.F("account_id"),
+			InstanceID:        cloudflare.F("instance_id"),
+			InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
+			Params:            cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -50,7 +47,7 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessageBulkPushWithOptionalParams(t *testing.T) {
+func TestInstanceListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -63,17 +60,16 @@ func TestMessageBulkPushWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.BulkPush(
+	_, err := client.Workflows.Instances.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessageBulkPushParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			DelaySeconds: cloudflare.F(0.000000),
-			Messages: cloudflare.F([]queues.MessageBulkPushParamsMessageUnion{queues.MessageBulkPushParamsMessagesMqQueueMessageText{
-				Body:         cloudflare.F("body"),
-				ContentType:  cloudflare.F(queues.MessageBulkPushParamsMessagesMqQueueMessageTextContentTypeText),
-				DelaySeconds: cloudflare.F(0.000000),
-			}}),
+		"x",
+		workflows.InstanceListParams{
+			AccountID: cloudflare.F("account_id"),
+			DateEnd:   cloudflare.F(time.Now()),
+			DateStart: cloudflare.F(time.Now()),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(1.000000),
+			Status:    cloudflare.F(workflows.InstanceListParamsStatusQueued),
 		},
 	)
 	if err != nil {
@@ -85,7 +81,7 @@ func TestMessageBulkPushWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessagePullWithOptionalParams(t *testing.T) {
+func TestInstanceBulkWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,13 +94,16 @@ func TestMessagePullWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Pull(
+	_, err := client.Workflows.Instances.Bulk(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessagePullParams{
-			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BatchSize:           cloudflare.F(50.000000),
-			VisibilityTimeoutMs: cloudflare.F(6000.000000),
+		"x",
+		workflows.InstanceBulkParams{
+			AccountID: cloudflare.F("account_id"),
+			Body: []workflows.InstanceBulkParamsBody{{
+				InstanceID:        cloudflare.F("instance_id"),
+				InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
+				Params:            cloudflare.F[any](map[string]interface{}{}),
+			}},
 		},
 	)
 	if err != nil {
@@ -116,7 +115,7 @@ func TestMessagePullWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessagePushWithOptionalParams(t *testing.T) {
+func TestInstanceGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -129,16 +128,12 @@ func TestMessagePushWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Push(
+	_, err := client.Workflows.Instances.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessagePushParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.MessagePushParamsBodyMqQueueMessageText{
-				Body:         cloudflare.F("body"),
-				ContentType:  cloudflare.F(queues.MessagePushParamsBodyMqQueueMessageTextContentTypeText),
-				DelaySeconds: cloudflare.F(0.000000),
-			},
+		"x",
+		"x",
+		workflows.InstanceGetParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
