@@ -29,12 +29,12 @@ func TestRuleUpdate(t *testing.T) {
 	)
 	_, err := client.Snippets.Rules.Update(context.TODO(), snippets.RuleUpdateParams{
 		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
-		Body: []snippets.RuleUpdateParamsBody{{
-			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
+		Rules: cloudflare.F([]snippets.RuleUpdateParamsRule{{
+			Expression:  cloudflare.F("ip.src eq 1.1.1.1"),
 			SnippetName: cloudflare.F("my_snippet"),
 			Description: cloudflare.F("Execute my_snippet when IP address is 1.1.1.1."),
 			Enabled:     cloudflare.F(true),
-		}},
+		}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
