@@ -24,8 +24,7 @@ func TestLogoMatchDownloadWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.LogoMatches.Download(context.TODO(), brand_protection.LogoMatchDownloadParams{
 		AccountID: cloudflare.F("x"),
@@ -52,8 +51,7 @@ func TestLogoMatchGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.LogoMatches.Get(context.TODO(), brand_protection.LogoMatchGetParams{
 		AccountID: cloudflare.F("x"),
