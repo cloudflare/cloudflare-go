@@ -35,9 +35,9 @@ func TestDLPDatasetVersionEntryNew(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		int64(0),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		zero_trust.DLPDatasetVersionEntryNewParams{
 			AccountID: cloudflare.F("account_id"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {

@@ -63,9 +63,9 @@ func TestDLPDatasetUploadEdit(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		int64(0),
+		io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		zero_trust.DLPDatasetUploadEditParams{
 			AccountID: cloudflare.F("account_id"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {
