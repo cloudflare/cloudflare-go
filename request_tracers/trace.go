@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TraceService contains methods and other services that help with interacting with
@@ -127,7 +126,7 @@ func (r traceNewResponseJSON) RawJSON() string {
 }
 
 type TraceNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// HTTP Method of tracing request
 	Method param.Field[string] `json:"method,required"`
@@ -198,9 +197,9 @@ func (r TraceNewParamsContextGeoloc) MarshalJSON() (data []byte, err error) {
 }
 
 type TraceNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []TraceNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TraceNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success TraceNewResponseEnvelopeSuccess `json:"success,required"`
 	// Trace result with an origin status code
 	Result TraceNewResponse             `json:"result"`
@@ -226,7 +225,103 @@ func (r traceNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type TraceNewResponseEnvelopeErrors struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           TraceNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             traceNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// traceNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [TraceNewResponseEnvelopeErrors]
+type traceNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TraceNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r traceNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TraceNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    traceNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// traceNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [TraceNewResponseEnvelopeErrorsSource]
+type traceNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TraceNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r traceNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type TraceNewResponseEnvelopeMessages struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           TraceNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             traceNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// traceNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [TraceNewResponseEnvelopeMessages]
+type traceNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TraceNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r traceNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type TraceNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    traceNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// traceNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [TraceNewResponseEnvelopeMessagesSource]
+type traceNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TraceNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r traceNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type TraceNewResponseEnvelopeSuccess bool
 
 const (

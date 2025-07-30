@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestNamespaceList(t *testing.T) {
+func TestNamespaceListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,6 +29,8 @@ func TestNamespaceList(t *testing.T) {
 	)
 	_, err := client.DurableObjects.Namespaces.List(context.TODO(), durable_objects.NamespaceListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
