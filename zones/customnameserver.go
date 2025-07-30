@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -105,9 +106,9 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 }
 
 type CustomNameserverGetResponse struct {
-	Errors   []CustomNameserverGetResponseError   `json:"errors,required"`
-	Messages []CustomNameserverGetResponseMessage `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success CustomNameserverGetResponseSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.
 	Enabled bool `json:"enabled"`
@@ -138,103 +139,7 @@ func (r customNameserverGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomNameserverGetResponseError struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
-	DocumentationURL string                                  `json:"documentation_url"`
-	Source           CustomNameserverGetResponseErrorsSource `json:"source"`
-	JSON             customNameserverGetResponseErrorJSON    `json:"-"`
-}
-
-// customNameserverGetResponseErrorJSON contains the JSON metadata for the struct
-// [CustomNameserverGetResponseError]
-type customNameserverGetResponseErrorJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseErrorsSource struct {
-	Pointer string                                      `json:"pointer"`
-	JSON    customNameserverGetResponseErrorsSourceJSON `json:"-"`
-}
-
-// customNameserverGetResponseErrorsSourceJSON contains the JSON metadata for the
-// struct [CustomNameserverGetResponseErrorsSource]
-type customNameserverGetResponseErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseMessage struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
-	DocumentationURL string                                    `json:"documentation_url"`
-	Source           CustomNameserverGetResponseMessagesSource `json:"source"`
-	JSON             customNameserverGetResponseMessageJSON    `json:"-"`
-}
-
-// customNameserverGetResponseMessageJSON contains the JSON metadata for the struct
-// [CustomNameserverGetResponseMessage]
-type customNameserverGetResponseMessageJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseMessagesSource struct {
-	Pointer string                                        `json:"pointer"`
-	JSON    customNameserverGetResponseMessagesSourceJSON `json:"-"`
-}
-
-// customNameserverGetResponseMessagesSourceJSON contains the JSON metadata for the
-// struct [CustomNameserverGetResponseMessagesSource]
-type customNameserverGetResponseMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type CustomNameserverGetResponseSuccess bool
 
 const (
@@ -250,13 +155,13 @@ func (r CustomNameserverGetResponseSuccess) IsKnown() bool {
 }
 
 type CustomNameserverGetResponseResultInfo struct {
-	// Total number of results for the requested service.
+	// Total number of results for the requested service
 	Count float64 `json:"count"`
-	// Current page within paginated list of results.
+	// Current page within paginated list of results
 	Page float64 `json:"page"`
-	// Number of results per page of results.
+	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
+	// Total results available without any search parameters
 	TotalCount float64                                   `json:"total_count"`
 	JSON       customNameserverGetResponseResultInfoJSON `json:"-"`
 }
@@ -281,7 +186,7 @@ func (r customNameserverGetResponseResultInfoJSON) RawJSON() string {
 }
 
 type CustomNameserverUpdateParams struct {
-	// Identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether zone uses account-level custom nameservers.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -294,6 +199,6 @@ func (r CustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverGetParams struct {
-	// Identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

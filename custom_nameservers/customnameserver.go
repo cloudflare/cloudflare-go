@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -119,7 +120,7 @@ type CustomNameserver struct {
 	//
 	// Deprecated: deprecated
 	Status CustomNameserverStatus `json:"status,required"`
-	// Identifier.
+	// Identifier
 	ZoneTag string `json:"zone_tag,required"`
 	// The number of the set that this name server belongs to.
 	NSSet float64              `json:"ns_set"`
@@ -218,9 +219,9 @@ func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverNewResponseEnvelope struct {
-	Errors   []CustomNameserverNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverNewResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success CustomNameserverNewResponseEnvelopeSuccess `json:"success,required"`
 	// A single account custom nameserver.
 	Result CustomNameserver                        `json:"result"`
@@ -246,103 +247,7 @@ func (r customNameserverNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomNameserverNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
-	DocumentationURL string                                          `json:"documentation_url"`
-	Source           CustomNameserverNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             customNameserverNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// customNameserverNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CustomNameserverNewResponseEnvelopeErrors]
-type customNameserverNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CustomNameserverNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                              `json:"pointer"`
-	JSON    customNameserverNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// customNameserverNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [CustomNameserverNewResponseEnvelopeErrorsSource]
-type customNameserverNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
-	DocumentationURL string                                            `json:"documentation_url"`
-	Source           CustomNameserverNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             customNameserverNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// customNameserverNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomNameserverNewResponseEnvelopeMessages]
-type customNameserverNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CustomNameserverNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                                `json:"pointer"`
-	JSON    customNameserverNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// customNameserverNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [CustomNameserverNewResponseEnvelopeMessagesSource]
-type customNameserverNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type CustomNameserverNewResponseEnvelopeSuccess bool
 
 const (

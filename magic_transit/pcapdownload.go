@@ -50,6 +50,6 @@ func (r *PCAPDownloadService) Get(ctx context.Context, pcapID string, query PCAP
 }
 
 type PCAPDownloadGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }

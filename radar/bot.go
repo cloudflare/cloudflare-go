@@ -139,22 +139,20 @@ type BotListResponseBot struct {
 	// The organization that owns and operates the bot.
 	Operator string `json:"operator,required"`
 	// A kebab-case identifier derived from the bot name.
-	Slug              string                 `json:"slug,required"`
-	UserAgentPatterns []string               `json:"userAgentPatterns,required"`
-	JSON              botListResponseBotJSON `json:"-"`
+	Slug string                 `json:"slug,required"`
+	JSON botListResponseBotJSON `json:"-"`
 }
 
 // botListResponseBotJSON contains the JSON metadata for the struct
 // [BotListResponseBot]
 type botListResponseBotJSON struct {
-	Category          apijson.Field
-	Description       apijson.Field
-	Name              apijson.Field
-	Operator          apijson.Field
-	Slug              apijson.Field
-	UserAgentPatterns apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	Category    apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Operator    apijson.Field
+	Slug        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *BotListResponseBot) UnmarshalJSON(data []byte) (err error) {

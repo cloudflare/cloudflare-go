@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
@@ -67,33 +66,7 @@ func (r *DEXColoService) ListAutoPaging(ctx context.Context, params DEXColoListP
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-type DEXColoListResponse struct {
-	// Airport code
-	AirportCode string `json:"airportCode,required"`
-	// City
-	City string `json:"city,required"`
-	// Country code
-	CountryCode string                  `json:"countryCode,required"`
-	JSON        dexColoListResponseJSON `json:"-"`
-}
-
-// dexColoListResponseJSON contains the JSON metadata for the struct
-// [DEXColoListResponse]
-type dexColoListResponseJSON struct {
-	AirportCode apijson.Field
-	City        apijson.Field
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXColoListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexColoListResponseJSON) RawJSON() string {
-	return r.raw
-}
+type DEXColoListResponse = interface{}
 
 type DEXColoListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
