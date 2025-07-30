@@ -173,6 +173,7 @@ type AIGatewayNewResponse struct {
 	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
+	StoreID                 string                                    `json:"store_id,nullable"`
 	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
 }
 
@@ -196,6 +197,7 @@ type aiGatewayNewResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	StoreID                 apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -257,6 +259,7 @@ type AIGatewayUpdateResponse struct {
 	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
+	StoreID                 string                                       `json:"store_id,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
@@ -280,6 +283,7 @@ type aiGatewayUpdateResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	StoreID                 apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -341,6 +345,7 @@ type AIGatewayListResponse struct {
 	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                       `json:"logpush"`
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
+	StoreID                 string                                     `json:"store_id,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
@@ -364,6 +369,7 @@ type aiGatewayListResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	StoreID                 apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -425,6 +431,7 @@ type AIGatewayDeleteResponse struct {
 	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
+	StoreID                 string                                       `json:"store_id,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
@@ -448,6 +455,7 @@ type aiGatewayDeleteResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	StoreID                 apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -509,6 +517,7 @@ type AIGatewayGetResponse struct {
 	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
+	StoreID                 string                                    `json:"store_id,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 
@@ -532,6 +541,7 @@ type aiGatewayGetResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	StoreID                 apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -661,6 +671,7 @@ type AIGatewayUpdateParams struct {
 	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
+	StoreID                 param.Field[string]                                     `json:"store_id"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
