@@ -234,15 +234,15 @@ type RuleUpdateParams struct {
 	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of snippet rules.
-	Body []RuleUpdateParamsBody `json:"body,required"`
+	Rules param.Field[[]RuleUpdateParamsRule] `json:"rules,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 // A snippet rule.
-type RuleUpdateParamsBody struct {
+type RuleUpdateParamsRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression,required"`
 	// The identifying name of the snippet.
@@ -253,7 +253,7 @@ type RuleUpdateParamsBody struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r RuleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

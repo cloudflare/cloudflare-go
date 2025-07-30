@@ -825,9 +825,10 @@ func (r InstanceNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type InstanceNewResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
-	Page       float64                                   `json:"page,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
+	NextCursor string                                    `json:"next_cursor"`
+	Page       float64                                   `json:"page"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -835,9 +836,10 @@ type InstanceNewResponseEnvelopeResultInfo struct {
 // struct [InstanceNewResponseEnvelopeResultInfo]
 type instanceNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -852,13 +854,16 @@ func (r instanceNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// `page` and `cursor` are mutually exclusive, use one or the other.
+	Cursor param.Field[string] `query:"cursor"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
-	DateStart param.Field[time.Time]                `query:"date_start" format:"date-time"`
-	Page      param.Field[float64]                  `query:"page"`
-	PerPage   param.Field[float64]                  `query:"per_page"`
-	Status    param.Field[InstanceListParamsStatus] `query:"status"`
+	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
+	// `page` and `cursor` are mutually exclusive, use one or the other.
+	Page    param.Field[float64]                  `query:"page"`
+	PerPage param.Field[float64]                  `query:"per_page"`
+	Status  param.Field[InstanceListParamsStatus] `query:"status"`
 }
 
 // URLQuery serializes [InstanceListParams]'s query parameters as `url.Values`.
@@ -1004,9 +1009,10 @@ func (r InstanceGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type InstanceGetResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
-	Page       float64                                   `json:"page,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
+	NextCursor string                                    `json:"next_cursor"`
+	Page       float64                                   `json:"page"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1014,9 +1020,10 @@ type InstanceGetResponseEnvelopeResultInfo struct {
 // struct [InstanceGetResponseEnvelopeResultInfo]
 type instanceGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

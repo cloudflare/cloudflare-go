@@ -65,6 +65,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 		"x",
 		workflows.InstanceListParams{
 			AccountID: cloudflare.F("account_id"),
+			Cursor:    cloudflare.F("cursor"),
 			DateEnd:   cloudflare.F(time.Now()),
 			DateStart: cloudflare.F(time.Now()),
 			Page:      cloudflare.F(1.000000),
