@@ -200,16 +200,19 @@ func (r scriptDeploymentNewResponseVersionJSON) RawJSON() string {
 
 type ScriptDeploymentNewResponseAnnotations struct {
 	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage string                                     `json:"workers/message"`
-	JSON           scriptDeploymentNewResponseAnnotationsJSON `json:"-"`
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                     `json:"workers/triggered_by"`
+	JSON               scriptDeploymentNewResponseAnnotationsJSON `json:"-"`
 }
 
 // scriptDeploymentNewResponseAnnotationsJSON contains the JSON metadata for the
 // struct [ScriptDeploymentNewResponseAnnotations]
 type scriptDeploymentNewResponseAnnotationsJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ScriptDeploymentNewResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
@@ -313,16 +316,19 @@ func (r scriptDeploymentListResponseDeploymentsVersionJSON) RawJSON() string {
 
 type ScriptDeploymentListResponseDeploymentsAnnotations struct {
 	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage string                                                 `json:"workers/message"`
-	JSON           scriptDeploymentListResponseDeploymentsAnnotationsJSON `json:"-"`
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                                 `json:"workers/triggered_by"`
+	JSON               scriptDeploymentListResponseDeploymentsAnnotationsJSON `json:"-"`
 }
 
 // scriptDeploymentListResponseDeploymentsAnnotationsJSON contains the JSON
 // metadata for the struct [ScriptDeploymentListResponseDeploymentsAnnotations]
 type scriptDeploymentListResponseDeploymentsAnnotationsJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ScriptDeploymentListResponseDeploymentsAnnotations) UnmarshalJSON(data []byte) (err error) {
@@ -542,16 +548,19 @@ func (r scriptDeploymentGetResponseVersionJSON) RawJSON() string {
 
 type ScriptDeploymentGetResponseAnnotations struct {
 	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage string                                     `json:"workers/message"`
-	JSON           scriptDeploymentGetResponseAnnotationsJSON `json:"-"`
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                     `json:"workers/triggered_by"`
+	JSON               scriptDeploymentGetResponseAnnotationsJSON `json:"-"`
 }
 
 // scriptDeploymentGetResponseAnnotationsJSON contains the JSON metadata for the
 // struct [ScriptDeploymentGetResponseAnnotations]
 type scriptDeploymentGetResponseAnnotationsJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ScriptDeploymentGetResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
