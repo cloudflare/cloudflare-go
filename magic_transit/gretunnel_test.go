@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestGRETunnelNewWithOptionalParams(t *testing.T) {
@@ -44,6 +44,7 @@ func TestGRETunnelNewWithOptionalParams(t *testing.T) {
 			}),
 			Type: cloudflare.F(magic_transit.HealthCheckTypeRequest),
 		}),
+		InterfaceAddress6: cloudflare.F("2606:54c1:7:0:a9fe:12d2:1:200/127"),
 		Mtu:               cloudflare.F(int64(0)),
 		TTL:               cloudflare.F(int64(0)),
 		XMagicNewHcTarget: cloudflare.F(true),
@@ -90,6 +91,7 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Type: cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),
+			InterfaceAddress6: cloudflare.F("2606:54c1:7:0:a9fe:12d2:1:200/127"),
 			Mtu:               cloudflare.F(int64(0)),
 			TTL:               cloudflare.F(int64(0)),
 			XMagicNewHcTarget: cloudflare.F(true),

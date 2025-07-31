@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -93,6 +93,8 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
+//
+// Deprecated: deprecated
 type ContextAwareness struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
@@ -121,6 +123,8 @@ func (r contextAwarenessJSON) RawJSON() string {
 
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
+//
+// Deprecated: deprecated
 type ContextAwarenessParam struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
@@ -148,6 +152,8 @@ type Profile struct {
 	ConfidenceThreshold ProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
+	//
+	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// When the profile was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -233,9 +239,6 @@ type ProfileCustomProfile struct {
 	ID string `json:"id,required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness `json:"context_awareness,required"`
 	// When the profile was created.
 	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
 	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
@@ -247,6 +250,11 @@ type ProfileCustomProfile struct {
 	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
 	AIContextEnabled    bool                                    `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	//
+	// Deprecated: deprecated
+	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// The description of the profile.
 	Description string                   `json:"description,nullable"`
 	JSON        profileCustomProfileJSON `json:"-"`
@@ -257,7 +265,6 @@ type ProfileCustomProfile struct {
 type profileCustomProfileJSON struct {
 	ID                  apijson.Field
 	AllowedMatchCount   apijson.Field
-	ContextAwareness    apijson.Field
 	CreatedAt           apijson.Field
 	Entries             apijson.Field
 	Name                apijson.Field
@@ -266,6 +273,7 @@ type profileCustomProfileJSON struct {
 	UpdatedAt           apijson.Field
 	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
+	ContextAwareness    apijson.Field
 	Description         apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -776,6 +784,8 @@ type ProfilePredefinedProfile struct {
 	ConfidenceThreshold ProfilePredefinedProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
+	//
+	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	OCREnabled       bool             `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.

@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -352,6 +352,9 @@ type AccessRule struct {
 	// This field can have the runtime type of [IPListRuleIPList].
 	IPList interface{} `json:"ip_list"`
 	// This field can have the runtime type of
+	// [AccessRuleAccessLinkedAppTokenRuleLinkedAppToken].
+	LinkedAppToken interface{} `json:"linked_app_token"`
+	// This field can have the runtime type of
 	// [AccessRuleAccessLoginMethodRuleLoginMethod].
 	LoginMethod interface{} `json:"login_method"`
 	// This field can have the runtime type of [AccessRuleAccessOIDCClaimRuleOIDC].
@@ -386,6 +389,7 @@ type accessRuleJSON struct {
 	GSuite               apijson.Field
 	IP                   apijson.Field
 	IPList               apijson.Field
+	LinkedAppToken       apijson.Field
 	LoginMethod          apijson.Field
 	OIDC                 apijson.Field
 	Okta                 apijson.Field
@@ -418,7 +422,7 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
-// [ServiceTokenRule].
+// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
@@ -431,8 +435,8 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [AccessDevicePostureRule], [DomainRule], [EmailListRule], [EmailRule],
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
-// [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule] or
-// [ServiceTokenRule].
+// [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
+// [ServiceTokenRule] or [AccessRuleAccessLinkedAppTokenRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
 }
@@ -532,6 +536,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessRuleAccessLinkedAppTokenRule{}),
 		},
 	)
 }
@@ -732,6 +740,53 @@ func (r accessRuleAccessOIDCClaimRuleOIDCJSON) RawJSON() string {
 	return r.raw
 }
 
+// Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
+// application. Only compatible with non_identity and bypass decisions.
+type AccessRuleAccessLinkedAppTokenRule struct {
+	LinkedAppToken AccessRuleAccessLinkedAppTokenRuleLinkedAppToken `json:"linked_app_token,required"`
+	JSON           accessRuleAccessLinkedAppTokenRuleJSON           `json:"-"`
+}
+
+// accessRuleAccessLinkedAppTokenRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessLinkedAppTokenRule]
+type accessRuleAccessLinkedAppTokenRuleJSON struct {
+	LinkedAppToken apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessLinkedAppTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessLinkedAppTokenRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessLinkedAppTokenRule) implementsAccessRule() {}
+
+type AccessRuleAccessLinkedAppTokenRuleLinkedAppToken struct {
+	// The ID of an Access OIDC SaaS application
+	AppUID string                                               `json:"app_uid,required"`
+	JSON   accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON `json:"-"`
+}
+
+// accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON contains the JSON metadata
+// for the struct [AccessRuleAccessLinkedAppTokenRuleLinkedAppToken]
+type accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON struct {
+	AppUID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessLinkedAppTokenRuleLinkedAppToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Access group.
 type AccessRuleParam struct {
 	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
@@ -752,6 +807,7 @@ type AccessRuleParam struct {
 	GSuite               param.Field[interface{}] `json:"gsuite"`
 	IP                   param.Field[interface{}] `json:"ip"`
 	IPList               param.Field[interface{}] `json:"ip_list"`
+	LinkedAppToken       param.Field[interface{}] `json:"linked_app_token"`
 	LoginMethod          param.Field[interface{}] `json:"login_method"`
 	OIDC                 param.Field[interface{}] `json:"oidc"`
 	Okta                 param.Field[interface{}] `json:"okta"`
@@ -781,7 +837,8 @@ func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 // [zero_trust.IPRuleParam], [zero_trust.OktaGroupRuleParam],
 // [zero_trust.SAMLGroupRuleParam],
 // [zero_trust.AccessRuleAccessOIDCClaimRuleParam],
-// [zero_trust.ServiceTokenRuleParam], [AccessRuleParam].
+// [zero_trust.ServiceTokenRuleParam],
+// [zero_trust.AccessRuleAccessLinkedAppTokenRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
@@ -871,6 +928,27 @@ type AccessRuleAccessOIDCClaimRuleOIDCParam struct {
 }
 
 func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
+// application. Only compatible with non_identity and bypass decisions.
+type AccessRuleAccessLinkedAppTokenRuleParam struct {
+	LinkedAppToken param.Field[AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam] `json:"linked_app_token,required"`
+}
+
+func (r AccessRuleAccessLinkedAppTokenRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessLinkedAppTokenRuleParam) implementsAccessRuleUnionParam() {}
+
+type AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam struct {
+	// The ID of an Access OIDC SaaS application
+	AppUID param.Field[string] `json:"app_uid,required"`
+}
+
+func (r AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

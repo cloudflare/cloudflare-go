@@ -3,16 +3,18 @@
 package workers_for_platforms_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/workers"
-	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/workers"
+	"github.com/cloudflare/cloudflare-go/v5/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
@@ -95,6 +97,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard),
 			}),
+			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},
 	)
 	if err != nil {

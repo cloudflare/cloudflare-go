@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 	"github.com/tidwall/gjson"
 )
 
@@ -1267,8 +1267,8 @@ type TokenPolicy struct {
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups []TokenPolicyPermissionGroup `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources map[string]TokenPolicyResourcesUnion `json:"resources,required"`
-	JSON      tokenPolicyJSON                      `json:"-"`
+	Resources TokenPolicyResourcesUnion `json:"resources,required"`
+	JSON      tokenPolicyJSON           `json:"-"`
 }
 
 // tokenPolicyJSON contains the JSON metadata for the struct [TokenPolicy]
@@ -1359,11 +1359,12 @@ func (r tokenPolicyPermissionGroupsMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-// A simple wildcard permission, e.g., "\*".
+// A list of resource names that the policy applies to.
 //
-// Union satisfied by [UnionString] or [TokenPolicyResourcesMap].
+// Union satisfied by [TokenPolicyResourcesIAMResourcesTypeObjectString] or
+// [TokenPolicyResourcesIAMResourcesTypeObjectNested].
 type TokenPolicyResourcesUnion interface {
-	ImplementsTokenPolicyResourcesUnion()
+	implementsTokenPolicyResourcesUnion()
 }
 
 func init() {
@@ -1371,19 +1372,23 @@ func init() {
 		reflect.TypeOf((*TokenPolicyResourcesUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(UnionString("")),
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TokenPolicyResourcesIAMResourcesTypeObjectString{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TokenPolicyResourcesMap{}),
+			Type:       reflect.TypeOf(TokenPolicyResourcesIAMResourcesTypeObjectNested{}),
 		},
 	)
 }
 
-type TokenPolicyResourcesMap map[string]string
+type TokenPolicyResourcesIAMResourcesTypeObjectString map[string]string
 
-func (r TokenPolicyResourcesMap) ImplementsTokenPolicyResourcesUnion() {}
+func (r TokenPolicyResourcesIAMResourcesTypeObjectString) implementsTokenPolicyResourcesUnion() {}
+
+type TokenPolicyResourcesIAMResourcesTypeObjectNested map[string]map[string]string
+
+func (r TokenPolicyResourcesIAMResourcesTypeObjectNested) implementsTokenPolicyResourcesUnion() {}
 
 type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
@@ -1391,7 +1396,7 @@ type TokenPolicyParam struct {
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources param.Field[map[string]TokenPolicyResourcesUnionParam] `json:"resources,required"`
+	Resources param.Field[TokenPolicyResourcesUnionParam] `json:"resources,required"`
 }
 
 func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -1421,15 +1426,22 @@ func (r TokenPolicyPermissionGroupsMetaParam) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// A simple wildcard permission, e.g., "\*".
+// A list of resource names that the policy applies to.
 //
-// Satisfied by [shared.UnionString], [shared.TokenPolicyResourcesMapParam].
+// Satisfied by [shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam],
+// [shared.TokenPolicyResourcesIAMResourcesTypeObjectNestedParam].
 type TokenPolicyResourcesUnionParam interface {
-	ImplementsTokenPolicyResourcesUnionParam()
+	implementsTokenPolicyResourcesUnionParam()
 }
 
-type TokenPolicyResourcesMapParam map[string]string
+type TokenPolicyResourcesIAMResourcesTypeObjectStringParam map[string]string
 
-func (r TokenPolicyResourcesMapParam) ImplementsTokenPolicyResourcesUnionParam() {}
+func (r TokenPolicyResourcesIAMResourcesTypeObjectStringParam) implementsTokenPolicyResourcesUnionParam() {
+}
+
+type TokenPolicyResourcesIAMResourcesTypeObjectNestedParam map[string]map[string]string
+
+func (r TokenPolicyResourcesIAMResourcesTypeObjectNestedParam) implementsTokenPolicyResourcesUnionParam() {
+}
 
 type TokenValue = string

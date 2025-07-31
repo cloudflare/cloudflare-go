@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/addressing"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/addressing"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestRegionalHostnameNewWithOptionalParams(t *testing.T) {
@@ -31,7 +31,7 @@ func TestRegionalHostnameNewWithOptionalParams(t *testing.T) {
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hostname:  cloudflare.F("foo.example.com"),
 		RegionKey: cloudflare.F("ca"),
-		Routing:   cloudflare.F("routing"),
+		Routing:   cloudflare.F("dns"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -11,11 +11,11 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DLPDatasetVersionEntryService contains methods and other services that help with
@@ -39,10 +39,11 @@ func NewDLPDatasetVersionEntryService(opts ...option.RequestOption) (r *DLPDatas
 
 // This is used for multi-column EDMv2 datasets. The EDMv2 format can only be
 // created in the Cloudflare dashboard.
-func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID string, version int64, entryID string, params DLPDatasetVersionEntryNewParams, opts ...option.RequestOption) (res *DLPDatasetVersionEntryNewResponse, err error) {
+func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID string, version int64, entryID string, datasetVersionEntry io.Reader, body DLPDatasetVersionEntryNewParams, opts ...option.RequestOption) (res *DLPDatasetVersionEntryNewResponse, err error) {
 	var env DLPDatasetVersionEntryNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", datasetVersionEntry)}, opts...)
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -54,8 +55,8 @@ func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID strin
 		err = errors.New("missing required entry_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/versions/%v/entries/%s", params.AccountID, datasetID, version, entryID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/versions/%v/entries/%s", body.AccountID, datasetID, version, entryID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -111,7 +112,6 @@ func (r DLPDatasetVersionEntryNewResponseUploadStatus) IsKnown() bool {
 
 type DLPDatasetVersionEntryNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      io.Reader           `json:"body,required" format:"binary"`
 }
 
 func (r DLPDatasetVersionEntryNewParams) MarshalMultipart() (data []byte, contentType string, err error) {

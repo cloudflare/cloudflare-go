@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
 func TestDLPProfilePredefinedNewWithOptionalParams(t *testing.T) {
@@ -31,7 +31,7 @@ func TestDLPProfilePredefinedNewWithOptionalParams(t *testing.T) {
 		AccountID:           cloudflare.F("account_id"),
 		ProfileID:           cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		AIContextEnabled:    cloudflare.F(true),
-		AllowedMatchCount:   cloudflare.F(int64(0)),
+		AllowedMatchCount:   cloudflare.F(int64(5)),
 		ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 		ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 			Enabled: cloudflare.F(true),
@@ -73,7 +73,7 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.DLPProfilePredefinedUpdateParams{
 			AccountID:           cloudflare.F("account_id"),
 			AIContextEnabled:    cloudflare.F(true),
-			AllowedMatchCount:   cloudflare.F(int64(0)),
+			AllowedMatchCount:   cloudflare.F(int64(5)),
 			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),

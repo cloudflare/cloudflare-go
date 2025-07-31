@@ -10,11 +10,11 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -990,7 +990,9 @@ type ConnectorEventListParams struct {
 	From      param.Field[float64] `query:"from,required"`
 	To        param.Field[float64] `query:"to,required"`
 	Cursor    param.Field[string]  `query:"cursor"`
-	Limit     param.Field[float64] `query:"limit"`
+	// Filter by event kind
+	K     param.Field[string]  `query:"k"`
+	Limit param.Field[float64] `query:"limit"`
 }
 
 // URLQuery serializes [ConnectorEventListParams]'s query parameters as

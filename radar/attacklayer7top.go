@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // AttackLayer7TopService contains methods and other services that help with
@@ -761,9 +761,6 @@ type AttackLayer7TopAttacksParams struct {
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Deprecated parameter. Future support includes only attack magnitude defined by
-	// total mitigated requests (MITIGATED_REQUESTS).
-	Magnitude param.Field[AttackLayer7TopAttacksParamsMagnitude] `query:"magnitude"`
 	// Filters the results by layer 7 mitigation product.
 	MitigationProduct param.Field[[]AttackLayer7TopAttacksParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names used to label the series in the response.
@@ -810,23 +807,6 @@ const (
 func (r AttackLayer7TopAttacksParamsLimitDirection) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopAttacksParamsLimitDirectionOrigin, AttackLayer7TopAttacksParamsLimitDirectionTarget:
-		return true
-	}
-	return false
-}
-
-// Deprecated parameter. Future support includes only attack magnitude defined by
-// total mitigated requests (MITIGATED_REQUESTS).
-type AttackLayer7TopAttacksParamsMagnitude string
-
-const (
-	AttackLayer7TopAttacksParamsMagnitudeAffectedZones     AttackLayer7TopAttacksParamsMagnitude = "AFFECTED_ZONES"
-	AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests AttackLayer7TopAttacksParamsMagnitude = "MITIGATED_REQUESTS"
-)
-
-func (r AttackLayer7TopAttacksParamsMagnitude) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopAttacksParamsMagnitudeAffectedZones, AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests:
 		return true
 	}
 	return false

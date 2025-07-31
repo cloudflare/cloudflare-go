@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
 func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
@@ -59,7 +59,7 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				TargetURI:       cloudflare.F("https://example.com"),
 			}),
 			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
-				InspectionMode: cloudflare.F("deep"),
+				InspectionMode: cloudflare.F(zero_trust.BodyScanningSettingsInspectionModeDeep),
 			}),
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
@@ -80,6 +80,9 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			}),
 			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
 				Enabled: cloudflare.F(false),
+			}),
+			Inspection: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionParam{
+				Mode: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionModeStatic),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
@@ -147,7 +150,7 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				TargetURI:       cloudflare.F("https://example.com"),
 			}),
 			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
-				InspectionMode: cloudflare.F("deep"),
+				InspectionMode: cloudflare.F(zero_trust.BodyScanningSettingsInspectionModeDeep),
 			}),
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
@@ -168,6 +171,9 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			}),
 			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
 				Enabled: cloudflare.F(false),
+			}),
+			Inspection: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionParam{
+				Mode: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionModeStatic),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),

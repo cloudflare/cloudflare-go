@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // WorkflowService contains methods and other services that help with interacting
@@ -449,9 +449,10 @@ func (r WorkflowUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WorkflowUpdateResponseEnvelopeResultInfo struct {
 	Count      float64                                      `json:"count,required"`
-	Page       float64                                      `json:"page,required"`
 	PerPage    float64                                      `json:"per_page,required"`
 	TotalCount float64                                      `json:"total_count,required"`
+	NextCursor string                                       `json:"next_cursor"`
+	Page       float64                                      `json:"page"`
 	JSON       workflowUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -459,9 +460,10 @@ type WorkflowUpdateResponseEnvelopeResultInfo struct {
 // struct [WorkflowUpdateResponseEnvelopeResultInfo]
 type workflowUpdateResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -585,9 +587,10 @@ func (r WorkflowDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type WorkflowDeleteResponseEnvelopeResultInfo struct {
 	Count      float64                                      `json:"count,required"`
-	Page       float64                                      `json:"page,required"`
 	PerPage    float64                                      `json:"per_page,required"`
 	TotalCount float64                                      `json:"total_count,required"`
+	NextCursor string                                       `json:"next_cursor"`
+	Page       float64                                      `json:"page"`
 	JSON       workflowDeleteResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -595,9 +598,10 @@ type WorkflowDeleteResponseEnvelopeResultInfo struct {
 // struct [WorkflowDeleteResponseEnvelopeResultInfo]
 type workflowDeleteResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -705,9 +709,10 @@ func (r WorkflowGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type WorkflowGetResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
-	Page       float64                                   `json:"page,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
+	NextCursor string                                    `json:"next_cursor"`
+	Page       float64                                   `json:"page"`
 	JSON       workflowGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -715,9 +720,10 @@ type WorkflowGetResponseEnvelopeResultInfo struct {
 // struct [WorkflowGetResponseEnvelopeResultInfo]
 type workflowGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

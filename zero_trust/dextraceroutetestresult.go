@@ -3,7 +3,7 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DEXTracerouteTestResultService contains methods and other services that help

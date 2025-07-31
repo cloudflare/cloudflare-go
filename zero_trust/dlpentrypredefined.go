@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DLPEntryPredefinedService contains methods and other services that help with
@@ -33,7 +33,8 @@ func NewDLPEntryPredefinedService(opts ...option.RequestOption) (r *DLPEntryPred
 	return
 }
 
-// This will update an existing predefined entry
+// Predefined entries can't be created, this will update an existing predefined
+// entry This is needed for our generated terraform API
 func (r *DLPEntryPredefinedService) New(ctx context.Context, params DLPEntryPredefinedNewParams, opts ...option.RequestOption) (res *DLPEntryPredefinedNewResponse, err error) {
 	var env DLPEntryPredefinedNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/custom_pages"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/custom_pages"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestCustomPageUpdateWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestCustomPageUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomPages.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		custom_pages.CustomPageUpdateParamsIdentifierRatelimitBlock,
 		custom_pages.CustomPageUpdateParams{
 			State:     cloudflare.F(custom_pages.CustomPageUpdateParamsStateDefault),
 			URL:       cloudflare.F("http://www.example.com"),
@@ -85,7 +85,7 @@ func TestCustomPageGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomPages.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		custom_pages.CustomPageGetParamsIdentifierRatelimitBlock,
 		custom_pages.CustomPageGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},

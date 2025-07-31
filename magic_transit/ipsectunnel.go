@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -246,6 +246,11 @@ type IPSECTunnelNewResponse struct {
 	// An optional description forthe IPsec tunnel.
 	Description string                            `json:"description"`
 	HealthCheck IPSECTunnelNewResponseHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
@@ -268,6 +273,7 @@ type ipsecTunnelNewResponseJSON struct {
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
 	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
 	ModifiedOn         apijson.Field
 	PSKMetadata        apijson.Field
 	ReplayProtection   apijson.Field
@@ -457,6 +463,11 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 	// An optional description forthe IPsec tunnel.
 	Description string                                                  `json:"description"`
 	HealthCheck IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
@@ -479,6 +490,7 @@ type ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON struct {
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
 	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
 	ModifiedOn         apijson.Field
 	PSKMetadata        apijson.Field
 	ReplayProtection   apijson.Field
@@ -667,6 +679,11 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	// An optional description forthe IPsec tunnel.
 	Description string                                         `json:"description"`
 	HealthCheck IPSECTunnelListResponseIPSECTunnelsHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
@@ -689,6 +706,7 @@ type ipsecTunnelListResponseIPSECTunnelJSON struct {
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
 	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
 	ModifiedOn         apijson.Field
 	PSKMetadata        apijson.Field
 	ReplayProtection   apijson.Field
@@ -878,6 +896,11 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 	// An optional description forthe IPsec tunnel.
 	Description string                                                 `json:"description"`
 	HealthCheck IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
@@ -900,6 +923,7 @@ type ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON struct {
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
 	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
 	ModifiedOn         apijson.Field
 	PSKMetadata        apijson.Field
 	ReplayProtection   apijson.Field
@@ -1089,6 +1113,11 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 	// An optional description forthe IPsec tunnel.
 	Description string                                                       `json:"description"`
 	HealthCheck IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
@@ -1111,6 +1140,7 @@ type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON struct {
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
 	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
 	ModifiedOn         apijson.Field
 	PSKMetadata        apijson.Field
 	ReplayProtection   apijson.Field
@@ -1299,6 +1329,11 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 	// An optional description forthe IPsec tunnel.
 	Description string                                       `json:"description"`
 	HealthCheck IPSECTunnelGetResponseIPSECTunnelHealthCheck `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 string `json:"interface_address6"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
@@ -1321,6 +1356,7 @@ type ipsecTunnelGetResponseIPSECTunnelJSON struct {
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
 	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
 	ModifiedOn         apijson.Field
 	PSKMetadata        apijson.Field
 	ReplayProtection   apijson.Field
@@ -1510,6 +1546,11 @@ type IPSECTunnelNewParams struct {
 	// An optional description forthe IPsec tunnel.
 	Description param.Field[string]                          `json:"description"`
 	HealthCheck param.Field[IPSECTunnelNewParamsHealthCheck] `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 param.Field[string] `json:"interface_address6"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	PSK param.Field[string] `json:"psk"`
 	// If `true`, then IPsec replay protection will be supported in the
@@ -1660,6 +1701,11 @@ type IPSECTunnelUpdateParams struct {
 	// An optional description forthe IPsec tunnel.
 	Description param.Field[string]                             `json:"description"`
 	HealthCheck param.Field[IPSECTunnelUpdateParamsHealthCheck] `json:"health_check"`
+	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
+	// address being the first IP of the subnet and not same as the address of
+	// virtual_subnet6. Eg if virtual_subnet6 is 2606:54c1:7:0:a9fe:12d2::/127 ,
+	// interface_address6 could be 2606:54c1:7:0:a9fe:12d2:1:200/127
+	InterfaceAddress6 param.Field[string] `json:"interface_address6"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	PSK param.Field[string] `json:"psk"`
 	// If `true`, then IPsec replay protection will be supported in the

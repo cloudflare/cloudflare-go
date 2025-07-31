@@ -3,7 +3,7 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // AIInferenceTimeseriesGroupService contains methods and other services that help

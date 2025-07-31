@@ -10,11 +10,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ThreatEventService contains methods and other services that help with
@@ -60,10 +60,10 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	return
 }
 
-// Events must be created in a client-specific dataset, which means the `datasetId`
-// parameter must be defined. To create a dataset, see the
+// To create a dataset, see the
 // [`Create Dataset`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/create/)
-// endpoint.
+// endpoint. When `datasetId` parameter is unspecified, it will be created in a
+// default dataset named `Cloudforce One Threat Events`.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.PathAccountID.Value == "" {
@@ -75,8 +75,9 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return
 }
 
-// The `datasetId` must be defined (to list existing datasets (and their IDs), use
-// the
+// When `datasetId` is unspecified, events will be listed from the
+// `Cloudforce One Threat Events` dataset. To list existing datasets (and their
+// IDs), use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint). Also, must provide query parameters.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
@@ -633,20 +634,32 @@ func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) 
 
 type ThreatEventEditParams struct {
 	// Account ID.
-	AccountID       param.Field[string]    `path:"account_id,required"`
-	Attacker        param.Field[string]    `json:"attacker"`
-	AttackerCountry param.Field[string]    `json:"attackerCountry"`
-	Category        param.Field[string]    `json:"category"`
-	Date            param.Field[time.Time] `json:"date" format:"date-time"`
-	Event           param.Field[string]    `json:"event"`
-	Indicator       param.Field[string]    `json:"indicator"`
-	IndicatorType   param.Field[string]    `json:"indicatorType"`
-	TargetCountry   param.Field[string]    `json:"targetCountry"`
-	TargetIndustry  param.Field[string]    `json:"targetIndustry"`
-	TLP             param.Field[string]    `json:"tlp"`
+	AccountID       param.Field[string]                   `path:"account_id,required"`
+	Attacker        param.Field[string]                   `json:"attacker"`
+	AttackerCountry param.Field[string]                   `json:"attackerCountry"`
+	Category        param.Field[string]                   `json:"category"`
+	Date            param.Field[time.Time]                `json:"date" format:"date-time"`
+	Event           param.Field[string]                   `json:"event"`
+	Indicator       param.Field[string]                   `json:"indicator"`
+	IndicatorType   param.Field[string]                   `json:"indicatorType"`
+	Insight         param.Field[string]                   `json:"insight"`
+	Raw             param.Field[ThreatEventEditParamsRaw] `json:"raw"`
+	TargetCountry   param.Field[string]                   `json:"targetCountry"`
+	TargetIndustry  param.Field[string]                   `json:"targetIndustry"`
+	TLP             param.Field[string]                   `json:"tlp"`
 }
 
 func (r ThreatEventEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventEditParamsRaw struct {
+	Data   param.Field[map[string]interface{}] `json:"data"`
+	Source param.Field[string]                 `json:"source"`
+	TLP    param.Field[string]                 `json:"tlp"`
+}
+
+func (r ThreatEventEditParamsRaw) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

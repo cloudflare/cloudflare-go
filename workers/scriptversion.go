@@ -7,18 +7,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -150,7 +151,10 @@ func (r scriptVersionNewResponseJSON) RawJSON() string {
 }
 
 type ScriptVersionNewResponseResources struct {
-	Bindings      ScriptVersionNewResponseResourcesBindings      `json:"bindings"`
+	// List of bindings attached to a Worker. You can find more about bindings on our
+	// docs:
+	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
+	Bindings      []ScriptVersionNewResponseResourcesBinding     `json:"bindings"`
 	Script        ScriptVersionNewResponseResourcesScript        `json:"script"`
 	ScriptRuntime ScriptVersionNewResponseResourcesScriptRuntime `json:"script_runtime"`
 	JSON          scriptVersionNewResponseResourcesJSON          `json:"-"`
@@ -174,36 +178,12 @@ func (r scriptVersionNewResponseResourcesJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptVersionNewResponseResourcesBindings struct {
-	// List of bindings attached to a Worker. You can find more about bindings on our
-	// docs:
-	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Result []ScriptVersionNewResponseResourcesBindingsResult `json:"result"`
-	JSON   scriptVersionNewResponseResourcesBindingsJSON     `json:"-"`
-}
-
-// scriptVersionNewResponseResourcesBindingsJSON contains the JSON metadata for the
-// struct [ScriptVersionNewResponseResourcesBindings]
-type scriptVersionNewResponseResourcesBindingsJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptVersionNewResponseResourcesBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptVersionNewResponseResourcesBindingsJSON) RawJSON() string {
-	return r.raw
-}
-
 // A binding to allow the Worker to communicate with resources.
-type ScriptVersionNewResponseResourcesBindingsResult struct {
+type ScriptVersionNewResponseResourcesBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultType `json:"type,required"`
+	Type ScriptVersionNewResponseResourcesBindingsType `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
@@ -220,7 +200,7 @@ type ScriptVersionNewResponseResourcesBindingsResult struct {
 	Environment string `json:"environment"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptVersionNewResponseResourcesBindingsResultFormat `json:"format"`
+	Format ScriptVersionNewResponseResourcesBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
@@ -232,7 +212,7 @@ type ScriptVersionNewResponseResourcesBindingsResult struct {
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
 	// This field can have the runtime type of
-	// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound].
+	// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline"`
@@ -250,17 +230,17 @@ type ScriptVersionNewResponseResourcesBindingsResult struct {
 	// The text value to use.
 	Text string `json:"text"`
 	// This field can have the runtime type of
-	// [[]ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage].
+	// [[]ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
 	// Name of the Workflow to bind to.
-	WorkflowName string                                              `json:"workflow_name"`
-	JSON         scriptVersionNewResponseResourcesBindingsResultJSON `json:"-"`
-	union        ScriptVersionNewResponseResourcesBindingsResultUnion
+	WorkflowName string                                       `json:"workflow_name"`
+	JSON         scriptVersionNewResponseResourcesBindingJSON `json:"-"`
+	union        ScriptVersionNewResponseResourcesBindingsUnion
 }
 
-// scriptVersionNewResponseResourcesBindingsResultJSON contains the JSON metadata
-// for the struct [ScriptVersionNewResponseResourcesBindingsResult]
-type scriptVersionNewResponseResourcesBindingsResultJSON struct {
+// scriptVersionNewResponseResourcesBindingJSON contains the JSON metadata for the
+// struct [ScriptVersionNewResponseResourcesBinding]
+type scriptVersionNewResponseResourcesBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	ID            apijson.Field
@@ -290,12 +270,12 @@ type scriptVersionNewResponseResourcesBindingsResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResult) UnmarshalJSON(data []byte) (err error) {
-	*r = ScriptVersionNewResponseResourcesBindingsResult{}
+func (r *ScriptVersionNewResponseResourcesBinding) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptVersionNewResponseResourcesBinding{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -303,247 +283,247 @@ func (r *ScriptVersionNewResponseResourcesBindingsResult) UnmarshalJSON(data []b
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [ScriptVersionNewResponseResourcesBindingsResultUnion]
-// interface which you can cast to the specific types for more type safety.
+// AsUnion returns a [ScriptVersionNewResponseResourcesBindingsUnion] interface
+// which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow].
-func (r ScriptVersionNewResponseResourcesBindingsResult) AsUnion() ScriptVersionNewResponseResourcesBindingsResultUnion {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow].
+func (r ScriptVersionNewResponseResourcesBinding) AsUnion() ScriptVersionNewResponseResourcesBindingsUnion {
 	return r.union
 }
 
 // A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey] or
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow].
-type ScriptVersionNewResponseResourcesBindingsResultUnion interface {
-	implementsScriptVersionNewResponseResourcesBindingsResult()
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey] or
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow].
+type ScriptVersionNewResponseResourcesBindingsUnion interface {
+	implementsScriptVersionNewResponseResourcesBinding()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptVersionNewResponseResourcesBindingsResultUnion)(nil)).Elem(),
+		reflect.TypeOf((*ScriptVersionNewResponseResourcesBindingsUnion)(nil)).Elem(),
 		"type",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI{}),
 			DiscriminatorValue: "ai",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine{}),
 			DiscriminatorValue: "analytics_engine",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets{}),
 			DiscriminatorValue: "assets",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser{}),
 			DiscriminatorValue: "browser",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1{}),
 			DiscriminatorValue: "d1",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace{}),
 			DiscriminatorValue: "durable_object_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive{}),
 			DiscriminatorValue: "hyperdrive",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson{}),
 			DiscriminatorValue: "json",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace{}),
 			DiscriminatorValue: "kv_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate{}),
 			DiscriminatorValue: "mtls_certificate",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText{}),
 			DiscriminatorValue: "plain_text",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines{}),
 			DiscriminatorValue: "pipelines",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue{}),
 			DiscriminatorValue: "queue",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket{}),
 			DiscriminatorValue: "r2_bucket",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText{}),
 			DiscriminatorValue: "secret_text",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "tail_consumer",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize{}),
 			DiscriminatorValue: "vectorize",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "version_metadata",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret{}),
 			DiscriminatorValue: "secrets_store_secret",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow{}),
+			Type:               reflect.TypeOf(ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow{}),
 			DiscriminatorValue: "workflow",
 		},
 	)
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAIType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindAIJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIJSON contains
-// the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindAIJSON contains the
+// JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindAIJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindAIJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAI) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAI) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAITypeAI ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIType = "ai"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAITypeAI ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAIType = "ai"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAIType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAITypeAI:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
 	Dataset string `json:"dataset,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON struct {
 	Dataset     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -551,134 +531,134 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngine) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType = "analytics_engine"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssets) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssets) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsTypeAssets ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsType = "assets"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsTypeAssets ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsType = "assets"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindAssetsTypeAssets:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowser) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowser) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserTypeBrowser ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserType = "browser"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserTypeBrowser ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindBrowserTypeBrowser:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1 struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1Type `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1JSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1Type `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindD1JSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1JSON contains
-// the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1JSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindD1JSON contains the
+// JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindD1JSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -686,48 +666,48 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1JSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1JSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindD1JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1Type string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1TypeD1 ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1Type = "d1"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1TypeD1 ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1Type = "d1"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1Type) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindD1TypeD1:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType `json:"type,required"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
 	// Outbound worker.
-	Outbound ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
-	JSON     scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
+	Outbound ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
+	JSON     scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON struct {
 	Name        apijson.Field
 	Namespace   apijson.Field
 	Type        apijson.Field
@@ -736,92 +716,92 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNa
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
 }
 
 // Outbound worker.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters.
 	Params []string `json:"params"`
 	// Outbound worker.
-	Worker ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker `json:"worker"`
-	JSON   scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON   `json:"-"`
+	Worker ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker `json:"worker"`
+	JSON   scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON   `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON struct {
 	Params      apijson.Field
 	Worker      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON) RawJSON() string {
 	return r.raw
 }
 
 // Outbound worker.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
 	// Environment of the outbound worker.
 	Environment string `json:"environment"`
 	// Name of the outbound worker.
-	Service string                                                                                               `json:"service"`
-	JSON    scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON `json:"-"`
+	Service string                                                                                         `json:"service"`
+	JSON    scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON struct {
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
@@ -830,14 +810,14 @@ type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObj
 	NamespaceID string `json:"namespace_id"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
-	ScriptName string                                                                                      `json:"script_name"`
-	JSON       scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON `json:"-"`
+	ScriptName string                                                                                `json:"script_name"`
+	JSON       scriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ClassName   apijson.Field
@@ -848,46 +828,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObj
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
 	ID string `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -895,46 +875,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdrive) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdrive) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveTypeHyperdrive ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveType = "hyperdrive"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindHyperdriveTypeHyperdrive:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
 	Json string `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonJSON contains the
+// JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonJSON struct {
 	Json        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -942,46 +922,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJson) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJson) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonTypeJson ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonType = "json"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonTypeJson ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonType = "json"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindJsonTypeJson:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -989,46 +969,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespac
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespace) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespace) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceTypeKVNamespace ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType = "kv_namespace"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindKVNamespaceTypeKVNamespace:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
 	CertificateID string `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON struct {
 	CertificateID apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
@@ -1036,46 +1016,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertif
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificate) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType = "mtls_certificate"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The text value to use.
 	Text string `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextJSON struct {
 	Name        apijson.Field
 	Text        apijson.Field
 	Type        apijson.Field
@@ -1083,46 +1063,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainText) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainText) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextTypePlainText ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextType = "plain_text"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextTypePlainText ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPlainTextTypePlainText:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesJSON struct {
 	Name        apijson.Field
 	Pipeline    apijson.Field
 	Type        apijson.Field
@@ -1130,46 +1110,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelines) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelines) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesTypePipelines ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesType = "pipelines"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesTypePipelines ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesType = "pipelines"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindPipelinesTypePipelines:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindPipelinesTypePipelines:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueJSON struct {
 	Name        apijson.Field
 	QueueName   apijson.Field
 	Type        apijson.Field
@@ -1177,46 +1157,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueJSON 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueue) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueue) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueTypeQueue ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueType = "queue"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueTypeQueue ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueType = "queue"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindQueueTypeQueue:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketJSON struct {
 	BucketName  apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1224,77 +1204,77 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2Bucket) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2Bucket) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketTypeR2Bucket ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketType = "r2_bucket"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindR2BucketTypeR2Bucket:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretText) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretText) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextTypeSecretText ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextType = "secret_text"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextTypeSecretText ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretTextTypeSecretText:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
 	// A JavaScript variable name for the binding.
@@ -1302,14 +1282,14 @@ type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService st
 	// Name of Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceJSON struct {
 	Environment apijson.Field
 	Name        apijson.Field
 	Service     apijson.Field
@@ -1318,46 +1298,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindService) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindService) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceTypeService ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceType = "service"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceTypeService ScriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceType = "service"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindServiceTypeService:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of Tail Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerJSON struct {
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
@@ -1365,46 +1345,46 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsum
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumer) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumer) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerTypeTailConsumer ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerType = "tail_consumer"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindTailConsumerTypeTailConsumer:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeJSON struct {
 	IndexName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1412,77 +1392,77 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorize) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorize) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeTypeVectorize ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeType = "vectorize"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeTypeVectorize ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVectorizeTypeVectorize:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadata) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadata) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the secret in the store.
@@ -1490,14 +1470,14 @@ type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsSto
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
-	JSON scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	JSON scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON struct {
 	Name        apijson.Field
 	SecretName  apijson.Field
 	StoreID     apijson.Field
@@ -1506,53 +1486,53 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsSto
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage `json:"usages,required"`
-	JSON   scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON    `json:"-"`
+	Usages []ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	JSON   scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON struct {
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyJSON struct {
 	Algorithm   apijson.Field
 	Format      apijson.Field
 	Name        apijson.Field
@@ -1562,77 +1542,77 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKey) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKey) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // Data format of the key.
 // [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatRaw   ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "raw"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatPkcs8 ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "pkcs8"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatSpki  ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "spki"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatJwk   ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "jwk"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "jwk"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatRaw, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatPkcs8, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatSpki, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatJwk:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyFormatJwk:
 		return true
 	}
 	return false
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyTypeSecretKey ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyType = "secret_key"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyType = "secret_key"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyTypeSecretKey:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyTypeSecretKey:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageEncrypt    ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "encrypt"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDecrypt    ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "decrypt"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageSign       ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "sign"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageVerify     ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "verify"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveKey  ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "deriveKey"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveBits ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "deriveBits"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageWrapKey    ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "wrapKey"
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "unwrapKey"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageSign       ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageEncrypt, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDecrypt, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageSign, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageVerify, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveKey, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveBits, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageWrapKey, ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageUnwrapKey:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageSign, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptVersionNewResponseResourcesBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow struct {
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType `json:"type,required"`
+	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowType `json:"type,required"`
 	// Name of the Workflow to bind to.
 	WorkflowName string `json:"workflow_name,required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
@@ -1640,14 +1620,14 @@ type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow s
 	ClassName string `json:"class_name"`
 	// Script name that contains the Workflow. If not provided, defaults to this script
 	// name.
-	ScriptName string                                                                        `json:"script_name"`
-	JSON       scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON `json:"-"`
+	ScriptName string                                                                  `json:"script_name"`
+	JSON       scriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowJSON `json:"-"`
 }
 
-// scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow]
-type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON struct {
+// scriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow]
+type scriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowJSON struct {
 	Name         apijson.Field
 	Type         apijson.Field
 	WorkflowName apijson.Field
@@ -1657,64 +1637,64 @@ type scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJS
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON) RawJSON() string {
+func (r scriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflow) implementsScriptVersionNewResponseResourcesBindingsResult() {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflow) implementsScriptVersionNewResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType string
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType = "workflow"
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowType = "workflow"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow:
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindWorkflowTypeWorkflow:
 		return true
 	}
 	return false
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewResponseResourcesBindingsResultType string
+type ScriptVersionNewResponseResourcesBindingsType string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultTypeAI                     ScriptVersionNewResponseResourcesBindingsResultType = "ai"
-	ScriptVersionNewResponseResourcesBindingsResultTypeAnalyticsEngine        ScriptVersionNewResponseResourcesBindingsResultType = "analytics_engine"
-	ScriptVersionNewResponseResourcesBindingsResultTypeAssets                 ScriptVersionNewResponseResourcesBindingsResultType = "assets"
-	ScriptVersionNewResponseResourcesBindingsResultTypeBrowser                ScriptVersionNewResponseResourcesBindingsResultType = "browser"
-	ScriptVersionNewResponseResourcesBindingsResultTypeD1                     ScriptVersionNewResponseResourcesBindingsResultType = "d1"
-	ScriptVersionNewResponseResourcesBindingsResultTypeDispatchNamespace      ScriptVersionNewResponseResourcesBindingsResultType = "dispatch_namespace"
-	ScriptVersionNewResponseResourcesBindingsResultTypeDurableObjectNamespace ScriptVersionNewResponseResourcesBindingsResultType = "durable_object_namespace"
-	ScriptVersionNewResponseResourcesBindingsResultTypeHyperdrive             ScriptVersionNewResponseResourcesBindingsResultType = "hyperdrive"
-	ScriptVersionNewResponseResourcesBindingsResultTypeJson                   ScriptVersionNewResponseResourcesBindingsResultType = "json"
-	ScriptVersionNewResponseResourcesBindingsResultTypeKVNamespace            ScriptVersionNewResponseResourcesBindingsResultType = "kv_namespace"
-	ScriptVersionNewResponseResourcesBindingsResultTypeMTLSCertificate        ScriptVersionNewResponseResourcesBindingsResultType = "mtls_certificate"
-	ScriptVersionNewResponseResourcesBindingsResultTypePlainText              ScriptVersionNewResponseResourcesBindingsResultType = "plain_text"
-	ScriptVersionNewResponseResourcesBindingsResultTypePipelines              ScriptVersionNewResponseResourcesBindingsResultType = "pipelines"
-	ScriptVersionNewResponseResourcesBindingsResultTypeQueue                  ScriptVersionNewResponseResourcesBindingsResultType = "queue"
-	ScriptVersionNewResponseResourcesBindingsResultTypeR2Bucket               ScriptVersionNewResponseResourcesBindingsResultType = "r2_bucket"
-	ScriptVersionNewResponseResourcesBindingsResultTypeSecretText             ScriptVersionNewResponseResourcesBindingsResultType = "secret_text"
-	ScriptVersionNewResponseResourcesBindingsResultTypeService                ScriptVersionNewResponseResourcesBindingsResultType = "service"
-	ScriptVersionNewResponseResourcesBindingsResultTypeTailConsumer           ScriptVersionNewResponseResourcesBindingsResultType = "tail_consumer"
-	ScriptVersionNewResponseResourcesBindingsResultTypeVectorize              ScriptVersionNewResponseResourcesBindingsResultType = "vectorize"
-	ScriptVersionNewResponseResourcesBindingsResultTypeVersionMetadata        ScriptVersionNewResponseResourcesBindingsResultType = "version_metadata"
-	ScriptVersionNewResponseResourcesBindingsResultTypeSecretsStoreSecret     ScriptVersionNewResponseResourcesBindingsResultType = "secrets_store_secret"
-	ScriptVersionNewResponseResourcesBindingsResultTypeSecretKey              ScriptVersionNewResponseResourcesBindingsResultType = "secret_key"
-	ScriptVersionNewResponseResourcesBindingsResultTypeWorkflow               ScriptVersionNewResponseResourcesBindingsResultType = "workflow"
+	ScriptVersionNewResponseResourcesBindingsTypeAI                     ScriptVersionNewResponseResourcesBindingsType = "ai"
+	ScriptVersionNewResponseResourcesBindingsTypeAnalyticsEngine        ScriptVersionNewResponseResourcesBindingsType = "analytics_engine"
+	ScriptVersionNewResponseResourcesBindingsTypeAssets                 ScriptVersionNewResponseResourcesBindingsType = "assets"
+	ScriptVersionNewResponseResourcesBindingsTypeBrowser                ScriptVersionNewResponseResourcesBindingsType = "browser"
+	ScriptVersionNewResponseResourcesBindingsTypeD1                     ScriptVersionNewResponseResourcesBindingsType = "d1"
+	ScriptVersionNewResponseResourcesBindingsTypeDispatchNamespace      ScriptVersionNewResponseResourcesBindingsType = "dispatch_namespace"
+	ScriptVersionNewResponseResourcesBindingsTypeDurableObjectNamespace ScriptVersionNewResponseResourcesBindingsType = "durable_object_namespace"
+	ScriptVersionNewResponseResourcesBindingsTypeHyperdrive             ScriptVersionNewResponseResourcesBindingsType = "hyperdrive"
+	ScriptVersionNewResponseResourcesBindingsTypeJson                   ScriptVersionNewResponseResourcesBindingsType = "json"
+	ScriptVersionNewResponseResourcesBindingsTypeKVNamespace            ScriptVersionNewResponseResourcesBindingsType = "kv_namespace"
+	ScriptVersionNewResponseResourcesBindingsTypeMTLSCertificate        ScriptVersionNewResponseResourcesBindingsType = "mtls_certificate"
+	ScriptVersionNewResponseResourcesBindingsTypePlainText              ScriptVersionNewResponseResourcesBindingsType = "plain_text"
+	ScriptVersionNewResponseResourcesBindingsTypePipelines              ScriptVersionNewResponseResourcesBindingsType = "pipelines"
+	ScriptVersionNewResponseResourcesBindingsTypeQueue                  ScriptVersionNewResponseResourcesBindingsType = "queue"
+	ScriptVersionNewResponseResourcesBindingsTypeR2Bucket               ScriptVersionNewResponseResourcesBindingsType = "r2_bucket"
+	ScriptVersionNewResponseResourcesBindingsTypeSecretText             ScriptVersionNewResponseResourcesBindingsType = "secret_text"
+	ScriptVersionNewResponseResourcesBindingsTypeService                ScriptVersionNewResponseResourcesBindingsType = "service"
+	ScriptVersionNewResponseResourcesBindingsTypeTailConsumer           ScriptVersionNewResponseResourcesBindingsType = "tail_consumer"
+	ScriptVersionNewResponseResourcesBindingsTypeVectorize              ScriptVersionNewResponseResourcesBindingsType = "vectorize"
+	ScriptVersionNewResponseResourcesBindingsTypeVersionMetadata        ScriptVersionNewResponseResourcesBindingsType = "version_metadata"
+	ScriptVersionNewResponseResourcesBindingsTypeSecretsStoreSecret     ScriptVersionNewResponseResourcesBindingsType = "secrets_store_secret"
+	ScriptVersionNewResponseResourcesBindingsTypeSecretKey              ScriptVersionNewResponseResourcesBindingsType = "secret_key"
+	ScriptVersionNewResponseResourcesBindingsTypeWorkflow               ScriptVersionNewResponseResourcesBindingsType = "workflow"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultType) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultTypeAI, ScriptVersionNewResponseResourcesBindingsResultTypeAnalyticsEngine, ScriptVersionNewResponseResourcesBindingsResultTypeAssets, ScriptVersionNewResponseResourcesBindingsResultTypeBrowser, ScriptVersionNewResponseResourcesBindingsResultTypeD1, ScriptVersionNewResponseResourcesBindingsResultTypeDispatchNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeDurableObjectNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeHyperdrive, ScriptVersionNewResponseResourcesBindingsResultTypeJson, ScriptVersionNewResponseResourcesBindingsResultTypeKVNamespace, ScriptVersionNewResponseResourcesBindingsResultTypeMTLSCertificate, ScriptVersionNewResponseResourcesBindingsResultTypePlainText, ScriptVersionNewResponseResourcesBindingsResultTypePipelines, ScriptVersionNewResponseResourcesBindingsResultTypeQueue, ScriptVersionNewResponseResourcesBindingsResultTypeR2Bucket, ScriptVersionNewResponseResourcesBindingsResultTypeSecretText, ScriptVersionNewResponseResourcesBindingsResultTypeService, ScriptVersionNewResponseResourcesBindingsResultTypeTailConsumer, ScriptVersionNewResponseResourcesBindingsResultTypeVectorize, ScriptVersionNewResponseResourcesBindingsResultTypeVersionMetadata, ScriptVersionNewResponseResourcesBindingsResultTypeSecretsStoreSecret, ScriptVersionNewResponseResourcesBindingsResultTypeSecretKey, ScriptVersionNewResponseResourcesBindingsResultTypeWorkflow:
+	case ScriptVersionNewResponseResourcesBindingsTypeAI, ScriptVersionNewResponseResourcesBindingsTypeAnalyticsEngine, ScriptVersionNewResponseResourcesBindingsTypeAssets, ScriptVersionNewResponseResourcesBindingsTypeBrowser, ScriptVersionNewResponseResourcesBindingsTypeD1, ScriptVersionNewResponseResourcesBindingsTypeDispatchNamespace, ScriptVersionNewResponseResourcesBindingsTypeDurableObjectNamespace, ScriptVersionNewResponseResourcesBindingsTypeHyperdrive, ScriptVersionNewResponseResourcesBindingsTypeJson, ScriptVersionNewResponseResourcesBindingsTypeKVNamespace, ScriptVersionNewResponseResourcesBindingsTypeMTLSCertificate, ScriptVersionNewResponseResourcesBindingsTypePlainText, ScriptVersionNewResponseResourcesBindingsTypePipelines, ScriptVersionNewResponseResourcesBindingsTypeQueue, ScriptVersionNewResponseResourcesBindingsTypeR2Bucket, ScriptVersionNewResponseResourcesBindingsTypeSecretText, ScriptVersionNewResponseResourcesBindingsTypeService, ScriptVersionNewResponseResourcesBindingsTypeTailConsumer, ScriptVersionNewResponseResourcesBindingsTypeVectorize, ScriptVersionNewResponseResourcesBindingsTypeVersionMetadata, ScriptVersionNewResponseResourcesBindingsTypeSecretsStoreSecret, ScriptVersionNewResponseResourcesBindingsTypeSecretKey, ScriptVersionNewResponseResourcesBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -1722,18 +1702,18 @@ func (r ScriptVersionNewResponseResourcesBindingsResultType) IsKnown() bool {
 
 // Data format of the key.
 // [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-type ScriptVersionNewResponseResourcesBindingsResultFormat string
+type ScriptVersionNewResponseResourcesBindingsFormat string
 
 const (
-	ScriptVersionNewResponseResourcesBindingsResultFormatRaw   ScriptVersionNewResponseResourcesBindingsResultFormat = "raw"
-	ScriptVersionNewResponseResourcesBindingsResultFormatPkcs8 ScriptVersionNewResponseResourcesBindingsResultFormat = "pkcs8"
-	ScriptVersionNewResponseResourcesBindingsResultFormatSpki  ScriptVersionNewResponseResourcesBindingsResultFormat = "spki"
-	ScriptVersionNewResponseResourcesBindingsResultFormatJwk   ScriptVersionNewResponseResourcesBindingsResultFormat = "jwk"
+	ScriptVersionNewResponseResourcesBindingsFormatRaw   ScriptVersionNewResponseResourcesBindingsFormat = "raw"
+	ScriptVersionNewResponseResourcesBindingsFormatPkcs8 ScriptVersionNewResponseResourcesBindingsFormat = "pkcs8"
+	ScriptVersionNewResponseResourcesBindingsFormatSpki  ScriptVersionNewResponseResourcesBindingsFormat = "spki"
+	ScriptVersionNewResponseResourcesBindingsFormatJwk   ScriptVersionNewResponseResourcesBindingsFormat = "jwk"
 )
 
-func (r ScriptVersionNewResponseResourcesBindingsResultFormat) IsKnown() bool {
+func (r ScriptVersionNewResponseResourcesBindingsFormat) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseResourcesBindingsResultFormatRaw, ScriptVersionNewResponseResourcesBindingsResultFormatPkcs8, ScriptVersionNewResponseResourcesBindingsResultFormatSpki, ScriptVersionNewResponseResourcesBindingsResultFormatJwk:
+	case ScriptVersionNewResponseResourcesBindingsFormatRaw, ScriptVersionNewResponseResourcesBindingsFormatPkcs8, ScriptVersionNewResponseResourcesBindingsFormatSpki, ScriptVersionNewResponseResourcesBindingsFormatJwk:
 		return true
 	}
 	return false
@@ -2016,7 +1996,10 @@ func (r scriptVersionGetResponseJSON) RawJSON() string {
 }
 
 type ScriptVersionGetResponseResources struct {
-	Bindings      ScriptVersionGetResponseResourcesBindings      `json:"bindings"`
+	// List of bindings attached to a Worker. You can find more about bindings on our
+	// docs:
+	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
+	Bindings      []ScriptVersionGetResponseResourcesBinding     `json:"bindings"`
 	Script        ScriptVersionGetResponseResourcesScript        `json:"script"`
 	ScriptRuntime ScriptVersionGetResponseResourcesScriptRuntime `json:"script_runtime"`
 	JSON          scriptVersionGetResponseResourcesJSON          `json:"-"`
@@ -2040,36 +2023,12 @@ func (r scriptVersionGetResponseResourcesJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptVersionGetResponseResourcesBindings struct {
-	// List of bindings attached to a Worker. You can find more about bindings on our
-	// docs:
-	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Result []ScriptVersionGetResponseResourcesBindingsResult `json:"result"`
-	JSON   scriptVersionGetResponseResourcesBindingsJSON     `json:"-"`
-}
-
-// scriptVersionGetResponseResourcesBindingsJSON contains the JSON metadata for the
-// struct [ScriptVersionGetResponseResourcesBindings]
-type scriptVersionGetResponseResourcesBindingsJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptVersionGetResponseResourcesBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptVersionGetResponseResourcesBindingsJSON) RawJSON() string {
-	return r.raw
-}
-
 // A binding to allow the Worker to communicate with resources.
-type ScriptVersionGetResponseResourcesBindingsResult struct {
+type ScriptVersionGetResponseResourcesBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultType `json:"type,required"`
+	Type ScriptVersionGetResponseResourcesBindingsType `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
@@ -2086,7 +2045,7 @@ type ScriptVersionGetResponseResourcesBindingsResult struct {
 	Environment string `json:"environment"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptVersionGetResponseResourcesBindingsResultFormat `json:"format"`
+	Format ScriptVersionGetResponseResourcesBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
@@ -2098,7 +2057,7 @@ type ScriptVersionGetResponseResourcesBindingsResult struct {
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
 	// This field can have the runtime type of
-	// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound].
+	// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline"`
@@ -2116,17 +2075,17 @@ type ScriptVersionGetResponseResourcesBindingsResult struct {
 	// The text value to use.
 	Text string `json:"text"`
 	// This field can have the runtime type of
-	// [[]ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage].
+	// [[]ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
 	// Name of the Workflow to bind to.
-	WorkflowName string                                              `json:"workflow_name"`
-	JSON         scriptVersionGetResponseResourcesBindingsResultJSON `json:"-"`
-	union        ScriptVersionGetResponseResourcesBindingsResultUnion
+	WorkflowName string                                       `json:"workflow_name"`
+	JSON         scriptVersionGetResponseResourcesBindingJSON `json:"-"`
+	union        ScriptVersionGetResponseResourcesBindingsUnion
 }
 
-// scriptVersionGetResponseResourcesBindingsResultJSON contains the JSON metadata
-// for the struct [ScriptVersionGetResponseResourcesBindingsResult]
-type scriptVersionGetResponseResourcesBindingsResultJSON struct {
+// scriptVersionGetResponseResourcesBindingJSON contains the JSON metadata for the
+// struct [ScriptVersionGetResponseResourcesBinding]
+type scriptVersionGetResponseResourcesBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	ID            apijson.Field
@@ -2156,12 +2115,12 @@ type scriptVersionGetResponseResourcesBindingsResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResult) UnmarshalJSON(data []byte) (err error) {
-	*r = ScriptVersionGetResponseResourcesBindingsResult{}
+func (r *ScriptVersionGetResponseResourcesBinding) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptVersionGetResponseResourcesBinding{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2169,247 +2128,247 @@ func (r *ScriptVersionGetResponseResourcesBindingsResult) UnmarshalJSON(data []b
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [ScriptVersionGetResponseResourcesBindingsResultUnion]
-// interface which you can cast to the specific types for more type safety.
+// AsUnion returns a [ScriptVersionGetResponseResourcesBindingsUnion] interface
+// which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow].
-func (r ScriptVersionGetResponseResourcesBindingsResult) AsUnion() ScriptVersionGetResponseResourcesBindingsResultUnion {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow].
+func (r ScriptVersionGetResponseResourcesBinding) AsUnion() ScriptVersionGetResponseResourcesBindingsUnion {
 	return r.union
 }
 
 // A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret],
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey] or
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow].
-type ScriptVersionGetResponseResourcesBindingsResultUnion interface {
-	implementsScriptVersionGetResponseResourcesBindingsResult()
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey] or
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow].
+type ScriptVersionGetResponseResourcesBindingsUnion interface {
+	implementsScriptVersionGetResponseResourcesBinding()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptVersionGetResponseResourcesBindingsResultUnion)(nil)).Elem(),
+		reflect.TypeOf((*ScriptVersionGetResponseResourcesBindingsUnion)(nil)).Elem(),
 		"type",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI{}),
 			DiscriminatorValue: "ai",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine{}),
 			DiscriminatorValue: "analytics_engine",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets{}),
 			DiscriminatorValue: "assets",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser{}),
 			DiscriminatorValue: "browser",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1{}),
 			DiscriminatorValue: "d1",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace{}),
 			DiscriminatorValue: "durable_object_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive{}),
 			DiscriminatorValue: "hyperdrive",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson{}),
 			DiscriminatorValue: "json",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace{}),
 			DiscriminatorValue: "kv_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate{}),
 			DiscriminatorValue: "mtls_certificate",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText{}),
 			DiscriminatorValue: "plain_text",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines{}),
 			DiscriminatorValue: "pipelines",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue{}),
 			DiscriminatorValue: "queue",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket{}),
 			DiscriminatorValue: "r2_bucket",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText{}),
 			DiscriminatorValue: "secret_text",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "tail_consumer",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize{}),
 			DiscriminatorValue: "vectorize",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "version_metadata",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret{}),
 			DiscriminatorValue: "secrets_store_secret",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow{}),
+			Type:               reflect.TypeOf(ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow{}),
 			DiscriminatorValue: "workflow",
 		},
 	)
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAIType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindAIJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIJSON contains
-// the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindAIJSON contains the
+// JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindAIJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindAIJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAI) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAI) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAITypeAI ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIType = "ai"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAITypeAI ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAIType = "ai"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAIType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAITypeAI:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
 	Dataset string `json:"dataset,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON struct {
 	Dataset     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2417,134 +2376,134 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngine) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngine) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType = "analytics_engine"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssets) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssets) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsTypeAssets ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsType = "assets"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsTypeAssets ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsType = "assets"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindAssetsTypeAssets:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowser) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowser) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserTypeBrowser ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserType = "browser"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserTypeBrowser ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindBrowserTypeBrowser:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1 struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1Type `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1JSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1Type `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindD1JSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1JSON contains
-// the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1JSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindD1JSON contains the
+// JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindD1JSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2552,48 +2511,48 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1JSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1JSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindD1JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1Type string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1TypeD1 ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1Type = "d1"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1TypeD1 ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1Type = "d1"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1Type) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindD1TypeD1:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType `json:"type,required"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
 	// Outbound worker.
-	Outbound ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
-	JSON     scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
+	Outbound ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
+	JSON     scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON struct {
 	Name        apijson.Field
 	Namespace   apijson.Field
 	Type        apijson.Field
@@ -2602,92 +2561,92 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNa
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespace) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
 }
 
 // Outbound worker.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters.
 	Params []string `json:"params"`
 	// Outbound worker.
-	Worker ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker `json:"worker"`
-	JSON   scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON   `json:"-"`
+	Worker ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker `json:"worker"`
+	JSON   scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON   `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON struct {
 	Params      apijson.Field
 	Worker      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutbound) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutbound) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundJSON) RawJSON() string {
 	return r.raw
 }
 
 // Outbound worker.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
 	// Environment of the outbound worker.
 	Environment string `json:"environment"`
 	// Name of the outbound worker.
-	Service string                                                                                               `json:"service"`
-	JSON    scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON `json:"-"`
+	Service string                                                                                         `json:"service"`
+	JSON    scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON struct {
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorker) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDispatchNamespaceOutboundWorkerJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
@@ -2696,14 +2655,14 @@ type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObj
 	NamespaceID string `json:"namespace_id"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
-	ScriptName string                                                                                      `json:"script_name"`
-	JSON       scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON `json:"-"`
+	ScriptName string                                                                                `json:"script_name"`
+	JSON       scriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ClassName   apijson.Field
@@ -2714,46 +2673,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObj
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespace) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespace) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
 	ID string `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2761,46 +2720,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdrive) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdrive) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveTypeHyperdrive ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveType = "hyperdrive"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindHyperdriveTypeHyperdrive:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
 	Json string `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonJSON contains the
+// JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonJSON struct {
 	Json        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2808,46 +2767,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJson) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJson) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonTypeJson ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonType = "json"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonTypeJson ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonType = "json"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindJsonTypeJson:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -2855,46 +2814,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespac
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespace) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespace) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceTypeKVNamespace ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType = "kv_namespace"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindKVNamespaceTypeKVNamespace:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
 	CertificateID string `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON struct {
 	CertificateID apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
@@ -2902,46 +2861,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertif
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificate) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificate) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType = "mtls_certificate"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The text value to use.
 	Text string `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextJSON struct {
 	Name        apijson.Field
 	Text        apijson.Field
 	Type        apijson.Field
@@ -2949,46 +2908,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainText) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainText) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextTypePlainText ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextType = "plain_text"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextTypePlainText ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPlainTextTypePlainText:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesJSON struct {
 	Name        apijson.Field
 	Pipeline    apijson.Field
 	Type        apijson.Field
@@ -2996,46 +2955,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelines) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelines) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesTypePipelines ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesType = "pipelines"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesTypePipelines ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesType = "pipelines"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindPipelinesTypePipelines:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindPipelinesTypePipelines:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueJSON struct {
 	Name        apijson.Field
 	QueueName   apijson.Field
 	Type        apijson.Field
@@ -3043,46 +3002,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueJSON 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueue) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueue) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueTypeQueue ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueType = "queue"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueTypeQueue ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueType = "queue"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindQueueTypeQueue:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketJSON struct {
 	BucketName  apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3090,77 +3049,77 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2Bucket) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2Bucket) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketTypeR2Bucket ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketType = "r2_bucket"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindR2BucketTypeR2Bucket:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretText) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretText) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextTypeSecretText ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextType = "secret_text"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextTypeSecretText ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretTextTypeSecretText:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
 	// A JavaScript variable name for the binding.
@@ -3168,14 +3127,14 @@ type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService st
 	// Name of Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceJSON struct {
 	Environment apijson.Field
 	Name        apijson.Field
 	Service     apijson.Field
@@ -3184,46 +3143,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindService) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindService) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceTypeService ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceType = "service"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceTypeService ScriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceType = "service"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindServiceTypeService:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of Tail Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerJSON struct {
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
@@ -3231,46 +3190,46 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsum
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumer) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumer) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerTypeTailConsumer ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerType = "tail_consumer"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindTailConsumerTypeTailConsumer:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeJSON struct {
 	IndexName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3278,77 +3237,77 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorize) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorize) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeTypeVectorize ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeType = "vectorize"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeTypeVectorize ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVectorizeTypeVectorize:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadata) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadata) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the secret in the store.
@@ -3356,14 +3315,14 @@ type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsSto
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
-	JSON scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	JSON scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON struct {
 	Name        apijson.Field
 	SecretName  apijson.Field
 	StoreID     apijson.Field
@@ -3372,53 +3331,53 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsSto
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecret) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage `json:"usages,required"`
-	JSON   scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON    `json:"-"`
+	Usages []ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	JSON   scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyJSON
 // contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON struct {
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyJSON struct {
 	Algorithm   apijson.Field
 	Format      apijson.Field
 	Name        apijson.Field
@@ -3428,77 +3387,77 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKey) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKey) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // Data format of the key.
 // [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatRaw   ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "raw"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatPkcs8 ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "pkcs8"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatSpki  ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "spki"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatJwk   ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat = "jwk"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat = "jwk"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatRaw, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatPkcs8, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatSpki, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyFormatJwk:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyFormatJwk:
 		return true
 	}
 	return false
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyTypeSecretKey ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyType = "secret_key"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyType = "secret_key"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyTypeSecretKey:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyTypeSecretKey:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageEncrypt    ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "encrypt"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDecrypt    ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "decrypt"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageSign       ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "sign"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageVerify     ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "verify"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveKey  ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "deriveKey"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveBits ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "deriveBits"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageWrapKey    ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "wrapKey"
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage = "unwrapKey"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageSign       ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageEncrypt, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDecrypt, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageSign, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageVerify, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveKey, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageDeriveBits, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageWrapKey, ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindSecretKeyUsageUnwrapKey:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageSign, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptVersionGetResponseResourcesBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow struct {
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType `json:"type,required"`
+	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowType `json:"type,required"`
 	// Name of the Workflow to bind to.
 	WorkflowName string `json:"workflow_name,required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
@@ -3506,14 +3465,14 @@ type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow s
 	ClassName string `json:"class_name"`
 	// Script name that contains the Workflow. If not provided, defaults to this script
 	// name.
-	ScriptName string                                                                        `json:"script_name"`
-	JSON       scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON `json:"-"`
+	ScriptName string                                                                  `json:"script_name"`
+	JSON       scriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowJSON `json:"-"`
 }
 
-// scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON
-// contains the JSON metadata for the struct
-// [ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow]
-type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON struct {
+// scriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowJSON contains
+// the JSON metadata for the struct
+// [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow]
+type scriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowJSON struct {
 	Name         apijson.Field
 	Type         apijson.Field
 	WorkflowName apijson.Field
@@ -3523,64 +3482,64 @@ type scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJS
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowJSON) RawJSON() string {
+func (r scriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflow) implementsScriptVersionGetResponseResourcesBindingsResult() {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflow) implementsScriptVersionGetResponseResourcesBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType string
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType = "workflow"
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowType = "workflow"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultWorkersBindingKindWorkflowTypeWorkflow:
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindWorkflowTypeWorkflow:
 		return true
 	}
 	return false
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionGetResponseResourcesBindingsResultType string
+type ScriptVersionGetResponseResourcesBindingsType string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultTypeAI                     ScriptVersionGetResponseResourcesBindingsResultType = "ai"
-	ScriptVersionGetResponseResourcesBindingsResultTypeAnalyticsEngine        ScriptVersionGetResponseResourcesBindingsResultType = "analytics_engine"
-	ScriptVersionGetResponseResourcesBindingsResultTypeAssets                 ScriptVersionGetResponseResourcesBindingsResultType = "assets"
-	ScriptVersionGetResponseResourcesBindingsResultTypeBrowser                ScriptVersionGetResponseResourcesBindingsResultType = "browser"
-	ScriptVersionGetResponseResourcesBindingsResultTypeD1                     ScriptVersionGetResponseResourcesBindingsResultType = "d1"
-	ScriptVersionGetResponseResourcesBindingsResultTypeDispatchNamespace      ScriptVersionGetResponseResourcesBindingsResultType = "dispatch_namespace"
-	ScriptVersionGetResponseResourcesBindingsResultTypeDurableObjectNamespace ScriptVersionGetResponseResourcesBindingsResultType = "durable_object_namespace"
-	ScriptVersionGetResponseResourcesBindingsResultTypeHyperdrive             ScriptVersionGetResponseResourcesBindingsResultType = "hyperdrive"
-	ScriptVersionGetResponseResourcesBindingsResultTypeJson                   ScriptVersionGetResponseResourcesBindingsResultType = "json"
-	ScriptVersionGetResponseResourcesBindingsResultTypeKVNamespace            ScriptVersionGetResponseResourcesBindingsResultType = "kv_namespace"
-	ScriptVersionGetResponseResourcesBindingsResultTypeMTLSCertificate        ScriptVersionGetResponseResourcesBindingsResultType = "mtls_certificate"
-	ScriptVersionGetResponseResourcesBindingsResultTypePlainText              ScriptVersionGetResponseResourcesBindingsResultType = "plain_text"
-	ScriptVersionGetResponseResourcesBindingsResultTypePipelines              ScriptVersionGetResponseResourcesBindingsResultType = "pipelines"
-	ScriptVersionGetResponseResourcesBindingsResultTypeQueue                  ScriptVersionGetResponseResourcesBindingsResultType = "queue"
-	ScriptVersionGetResponseResourcesBindingsResultTypeR2Bucket               ScriptVersionGetResponseResourcesBindingsResultType = "r2_bucket"
-	ScriptVersionGetResponseResourcesBindingsResultTypeSecretText             ScriptVersionGetResponseResourcesBindingsResultType = "secret_text"
-	ScriptVersionGetResponseResourcesBindingsResultTypeService                ScriptVersionGetResponseResourcesBindingsResultType = "service"
-	ScriptVersionGetResponseResourcesBindingsResultTypeTailConsumer           ScriptVersionGetResponseResourcesBindingsResultType = "tail_consumer"
-	ScriptVersionGetResponseResourcesBindingsResultTypeVectorize              ScriptVersionGetResponseResourcesBindingsResultType = "vectorize"
-	ScriptVersionGetResponseResourcesBindingsResultTypeVersionMetadata        ScriptVersionGetResponseResourcesBindingsResultType = "version_metadata"
-	ScriptVersionGetResponseResourcesBindingsResultTypeSecretsStoreSecret     ScriptVersionGetResponseResourcesBindingsResultType = "secrets_store_secret"
-	ScriptVersionGetResponseResourcesBindingsResultTypeSecretKey              ScriptVersionGetResponseResourcesBindingsResultType = "secret_key"
-	ScriptVersionGetResponseResourcesBindingsResultTypeWorkflow               ScriptVersionGetResponseResourcesBindingsResultType = "workflow"
+	ScriptVersionGetResponseResourcesBindingsTypeAI                     ScriptVersionGetResponseResourcesBindingsType = "ai"
+	ScriptVersionGetResponseResourcesBindingsTypeAnalyticsEngine        ScriptVersionGetResponseResourcesBindingsType = "analytics_engine"
+	ScriptVersionGetResponseResourcesBindingsTypeAssets                 ScriptVersionGetResponseResourcesBindingsType = "assets"
+	ScriptVersionGetResponseResourcesBindingsTypeBrowser                ScriptVersionGetResponseResourcesBindingsType = "browser"
+	ScriptVersionGetResponseResourcesBindingsTypeD1                     ScriptVersionGetResponseResourcesBindingsType = "d1"
+	ScriptVersionGetResponseResourcesBindingsTypeDispatchNamespace      ScriptVersionGetResponseResourcesBindingsType = "dispatch_namespace"
+	ScriptVersionGetResponseResourcesBindingsTypeDurableObjectNamespace ScriptVersionGetResponseResourcesBindingsType = "durable_object_namespace"
+	ScriptVersionGetResponseResourcesBindingsTypeHyperdrive             ScriptVersionGetResponseResourcesBindingsType = "hyperdrive"
+	ScriptVersionGetResponseResourcesBindingsTypeJson                   ScriptVersionGetResponseResourcesBindingsType = "json"
+	ScriptVersionGetResponseResourcesBindingsTypeKVNamespace            ScriptVersionGetResponseResourcesBindingsType = "kv_namespace"
+	ScriptVersionGetResponseResourcesBindingsTypeMTLSCertificate        ScriptVersionGetResponseResourcesBindingsType = "mtls_certificate"
+	ScriptVersionGetResponseResourcesBindingsTypePlainText              ScriptVersionGetResponseResourcesBindingsType = "plain_text"
+	ScriptVersionGetResponseResourcesBindingsTypePipelines              ScriptVersionGetResponseResourcesBindingsType = "pipelines"
+	ScriptVersionGetResponseResourcesBindingsTypeQueue                  ScriptVersionGetResponseResourcesBindingsType = "queue"
+	ScriptVersionGetResponseResourcesBindingsTypeR2Bucket               ScriptVersionGetResponseResourcesBindingsType = "r2_bucket"
+	ScriptVersionGetResponseResourcesBindingsTypeSecretText             ScriptVersionGetResponseResourcesBindingsType = "secret_text"
+	ScriptVersionGetResponseResourcesBindingsTypeService                ScriptVersionGetResponseResourcesBindingsType = "service"
+	ScriptVersionGetResponseResourcesBindingsTypeTailConsumer           ScriptVersionGetResponseResourcesBindingsType = "tail_consumer"
+	ScriptVersionGetResponseResourcesBindingsTypeVectorize              ScriptVersionGetResponseResourcesBindingsType = "vectorize"
+	ScriptVersionGetResponseResourcesBindingsTypeVersionMetadata        ScriptVersionGetResponseResourcesBindingsType = "version_metadata"
+	ScriptVersionGetResponseResourcesBindingsTypeSecretsStoreSecret     ScriptVersionGetResponseResourcesBindingsType = "secrets_store_secret"
+	ScriptVersionGetResponseResourcesBindingsTypeSecretKey              ScriptVersionGetResponseResourcesBindingsType = "secret_key"
+	ScriptVersionGetResponseResourcesBindingsTypeWorkflow               ScriptVersionGetResponseResourcesBindingsType = "workflow"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultType) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultTypeAI, ScriptVersionGetResponseResourcesBindingsResultTypeAnalyticsEngine, ScriptVersionGetResponseResourcesBindingsResultTypeAssets, ScriptVersionGetResponseResourcesBindingsResultTypeBrowser, ScriptVersionGetResponseResourcesBindingsResultTypeD1, ScriptVersionGetResponseResourcesBindingsResultTypeDispatchNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeDurableObjectNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeHyperdrive, ScriptVersionGetResponseResourcesBindingsResultTypeJson, ScriptVersionGetResponseResourcesBindingsResultTypeKVNamespace, ScriptVersionGetResponseResourcesBindingsResultTypeMTLSCertificate, ScriptVersionGetResponseResourcesBindingsResultTypePlainText, ScriptVersionGetResponseResourcesBindingsResultTypePipelines, ScriptVersionGetResponseResourcesBindingsResultTypeQueue, ScriptVersionGetResponseResourcesBindingsResultTypeR2Bucket, ScriptVersionGetResponseResourcesBindingsResultTypeSecretText, ScriptVersionGetResponseResourcesBindingsResultTypeService, ScriptVersionGetResponseResourcesBindingsResultTypeTailConsumer, ScriptVersionGetResponseResourcesBindingsResultTypeVectorize, ScriptVersionGetResponseResourcesBindingsResultTypeVersionMetadata, ScriptVersionGetResponseResourcesBindingsResultTypeSecretsStoreSecret, ScriptVersionGetResponseResourcesBindingsResultTypeSecretKey, ScriptVersionGetResponseResourcesBindingsResultTypeWorkflow:
+	case ScriptVersionGetResponseResourcesBindingsTypeAI, ScriptVersionGetResponseResourcesBindingsTypeAnalyticsEngine, ScriptVersionGetResponseResourcesBindingsTypeAssets, ScriptVersionGetResponseResourcesBindingsTypeBrowser, ScriptVersionGetResponseResourcesBindingsTypeD1, ScriptVersionGetResponseResourcesBindingsTypeDispatchNamespace, ScriptVersionGetResponseResourcesBindingsTypeDurableObjectNamespace, ScriptVersionGetResponseResourcesBindingsTypeHyperdrive, ScriptVersionGetResponseResourcesBindingsTypeJson, ScriptVersionGetResponseResourcesBindingsTypeKVNamespace, ScriptVersionGetResponseResourcesBindingsTypeMTLSCertificate, ScriptVersionGetResponseResourcesBindingsTypePlainText, ScriptVersionGetResponseResourcesBindingsTypePipelines, ScriptVersionGetResponseResourcesBindingsTypeQueue, ScriptVersionGetResponseResourcesBindingsTypeR2Bucket, ScriptVersionGetResponseResourcesBindingsTypeSecretText, ScriptVersionGetResponseResourcesBindingsTypeService, ScriptVersionGetResponseResourcesBindingsTypeTailConsumer, ScriptVersionGetResponseResourcesBindingsTypeVectorize, ScriptVersionGetResponseResourcesBindingsTypeVersionMetadata, ScriptVersionGetResponseResourcesBindingsTypeSecretsStoreSecret, ScriptVersionGetResponseResourcesBindingsTypeSecretKey, ScriptVersionGetResponseResourcesBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -3588,18 +3547,18 @@ func (r ScriptVersionGetResponseResourcesBindingsResultType) IsKnown() bool {
 
 // Data format of the key.
 // [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-type ScriptVersionGetResponseResourcesBindingsResultFormat string
+type ScriptVersionGetResponseResourcesBindingsFormat string
 
 const (
-	ScriptVersionGetResponseResourcesBindingsResultFormatRaw   ScriptVersionGetResponseResourcesBindingsResultFormat = "raw"
-	ScriptVersionGetResponseResourcesBindingsResultFormatPkcs8 ScriptVersionGetResponseResourcesBindingsResultFormat = "pkcs8"
-	ScriptVersionGetResponseResourcesBindingsResultFormatSpki  ScriptVersionGetResponseResourcesBindingsResultFormat = "spki"
-	ScriptVersionGetResponseResourcesBindingsResultFormatJwk   ScriptVersionGetResponseResourcesBindingsResultFormat = "jwk"
+	ScriptVersionGetResponseResourcesBindingsFormatRaw   ScriptVersionGetResponseResourcesBindingsFormat = "raw"
+	ScriptVersionGetResponseResourcesBindingsFormatPkcs8 ScriptVersionGetResponseResourcesBindingsFormat = "pkcs8"
+	ScriptVersionGetResponseResourcesBindingsFormatSpki  ScriptVersionGetResponseResourcesBindingsFormat = "spki"
+	ScriptVersionGetResponseResourcesBindingsFormatJwk   ScriptVersionGetResponseResourcesBindingsFormat = "jwk"
 )
 
-func (r ScriptVersionGetResponseResourcesBindingsResultFormat) IsKnown() bool {
+func (r ScriptVersionGetResponseResourcesBindingsFormat) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseResourcesBindingsResultFormatRaw, ScriptVersionGetResponseResourcesBindingsResultFormatPkcs8, ScriptVersionGetResponseResourcesBindingsResultFormatSpki, ScriptVersionGetResponseResourcesBindingsResultFormatJwk:
+	case ScriptVersionGetResponseResourcesBindingsFormatRaw, ScriptVersionGetResponseResourcesBindingsFormatPkcs8, ScriptVersionGetResponseResourcesBindingsFormatSpki, ScriptVersionGetResponseResourcesBindingsFormatJwk:
 		return true
 	}
 	return false
@@ -3780,6 +3739,14 @@ type ScriptVersionNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptVersionNewParamsMetadata] `json:"metadata,required"`
+	// An array of modules (often JavaScript files) comprising a Worker script. At
+	// least one module must be present and referenced in the metadata as `main_module`
+	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
+	// `application/javascript+module`, `text/javascript+module`,
+	// `application/javascript`, `text/javascript`, `text/x-python`,
+	// `text/x-python-requirement`, `application/wasm`, `text/plain`,
+	// `application/octet-stream`, `application/source-map`.
+	Files param.Field[[]io.Reader] `json:"files" format:"binary"`
 }
 
 func (r ScriptVersionNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -3799,9 +3766,9 @@ func (r ScriptVersionNewParams) MarshalMultipart() (data []byte, contentType str
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 type ScriptVersionNewParamsMetadata struct {
-	// Name of the part in the multipart request that contains the main module (e.g.
-	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker, which
-	// is required for Version Upload.
+	// Name of the uploaded file that contains the main module (e.g. the file exporting
+	// a `fetch` handler). Indicates a `module syntax` Worker, which is required for
+	// Version Upload.
 	MainModule  param.Field[string]                                    `json:"main_module,required"`
 	Annotations param.Field[ScriptVersionNewParamsMetadataAnnotations] `json:"annotations"`
 	// List of bindings attached to a Worker. You can find more about bindings on our

@@ -10,10 +10,10 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -5368,11 +5368,12 @@ const (
 	SetCacheSettingsRuleActionParametersBrowserTTLModeRespectOrigin   SetCacheSettingsRuleActionParametersBrowserTTLMode = "respect_origin"
 	SetCacheSettingsRuleActionParametersBrowserTTLModeBypassByDefault SetCacheSettingsRuleActionParametersBrowserTTLMode = "bypass_by_default"
 	SetCacheSettingsRuleActionParametersBrowserTTLModeOverrideOrigin  SetCacheSettingsRuleActionParametersBrowserTTLMode = "override_origin"
+	SetCacheSettingsRuleActionParametersBrowserTTLModeBypass          SetCacheSettingsRuleActionParametersBrowserTTLMode = "bypass"
 )
 
 func (r SetCacheSettingsRuleActionParametersBrowserTTLMode) IsKnown() bool {
 	switch r {
-	case SetCacheSettingsRuleActionParametersBrowserTTLModeRespectOrigin, SetCacheSettingsRuleActionParametersBrowserTTLModeBypassByDefault, SetCacheSettingsRuleActionParametersBrowserTTLModeOverrideOrigin:
+	case SetCacheSettingsRuleActionParametersBrowserTTLModeRespectOrigin, SetCacheSettingsRuleActionParametersBrowserTTLModeBypassByDefault, SetCacheSettingsRuleActionParametersBrowserTTLModeOverrideOrigin, SetCacheSettingsRuleActionParametersBrowserTTLModeBypass:
 		return true
 	}
 	return false
@@ -7242,6 +7243,9 @@ func (r SkipRuleAction) IsKnown() bool {
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParameters struct {
+	// A phase to skip the execution of. This property is only compatible with
+	// products.
+	Phase SkipRuleActionParametersPhase `json:"phase"`
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// rulesets option.
 	Phases []Phase `json:"phases"`
@@ -7262,6 +7266,7 @@ type SkipRuleActionParameters struct {
 // skipRuleActionParametersJSON contains the JSON metadata for the struct
 // [SkipRuleActionParameters]
 type skipRuleActionParametersJSON struct {
+	Phase       apijson.Field
 	Phases      apijson.Field
 	Products    apijson.Field
 	Rules       apijson.Field
@@ -7277,6 +7282,22 @@ func (r *SkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 
 func (r skipRuleActionParametersJSON) RawJSON() string {
 	return r.raw
+}
+
+// A phase to skip the execution of. This property is only compatible with
+// products.
+type SkipRuleActionParametersPhase string
+
+const (
+	SkipRuleActionParametersPhaseCurrent SkipRuleActionParametersPhase = "current"
+)
+
+func (r SkipRuleActionParametersPhase) IsKnown() bool {
+	switch r {
+	case SkipRuleActionParametersPhaseCurrent:
+		return true
+	}
+	return false
 }
 
 // The name of a legacy security product to skip the execution of.
@@ -7427,6 +7448,9 @@ func (r SkipRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
+	// A phase to skip the execution of. This property is only compatible with
+	// products.
+	Phase param.Field[SkipRuleActionParametersPhase] `json:"phase"`
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// rulesets option.
 	Phases param.Field[[]Phase] `json:"phases"`

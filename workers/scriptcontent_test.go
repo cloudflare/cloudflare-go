@@ -12,10 +12,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/workers"
 )
 
 func TestScriptContentUpdateWithOptionalParams(t *testing.T) {
@@ -37,10 +37,11 @@ func TestScriptContentUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptContentUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata: cloudflare.F(workers.WorkerMetadataParam{
+			Metadata: cloudflare.F(workers.ScriptContentUpdateParamsMetadata{
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),
 			}),
+			Files:                  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			CfWorkerBodyPart:       cloudflare.F("CF-WORKER-BODY-PART"),
 			CfWorkerMainModulePart: cloudflare.F("CF-WORKER-MAIN-MODULE-PART"),
 		},

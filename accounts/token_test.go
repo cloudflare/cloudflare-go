@@ -9,11 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/accounts"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 func TestTokenNewWithOptionalParams(t *testing.T) {
@@ -48,9 +48,9 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(map[string]shared.TokenPolicyResourcesUnionParam{
-				"foo": shared.UnionString("string"),
-			}),
+			Resources: cloudflare.F[shared.TokenPolicyResourcesUnionParam](shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam(map[string]string{
+				"foo": "string",
+			})),
 		}}),
 		Condition: cloudflare.F(accounts.TokenNewParamsCondition{
 			RequestIP: cloudflare.F(accounts.TokenNewParamsConditionRequestIP{
@@ -114,9 +114,9 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(map[string]shared.TokenPolicyResourcesUnionParam{
-						"foo": shared.UnionString("string"),
-					}),
+					Resources: cloudflare.F[shared.TokenPolicyResourcesUnionParam](shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam(map[string]string{
+						"foo": "string",
+					})),
 				}}),
 				Status: cloudflare.F(shared.TokenStatusActive),
 			},

@@ -3,8 +3,8 @@
 package content_scanning
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 type Error = apierror.Error
@@ -404,15 +404,20 @@ type TokenPolicyPermissionGroup = shared.TokenPolicyPermissionGroup
 // This is an alias to an internal type.
 type TokenPolicyPermissionGroupsMeta = shared.TokenPolicyPermissionGroupsMeta
 
-// A simple wildcard permission, e.g., "\*".
+// A list of resource names that the policy applies to.
 //
 // This is an alias to an internal type.
 type TokenPolicyResourcesUnion = shared.TokenPolicyResourcesUnion
 
-// A nested permission grant for further scoping.
+// Map of simple string resource permissions
 //
 // This is an alias to an internal type.
-type TokenPolicyResourcesMap = shared.TokenPolicyResourcesMap
+type TokenPolicyResourcesIAMResourcesTypeObjectString = shared.TokenPolicyResourcesIAMResourcesTypeObjectString
+
+// Map of nested resource permissions
+//
+// This is an alias to an internal type.
+type TokenPolicyResourcesIAMResourcesTypeObjectNested = shared.TokenPolicyResourcesIAMResourcesTypeObjectNested
 
 // This is an alias to an internal type.
 type TokenPolicyParam = shared.TokenPolicyParam
@@ -428,15 +433,20 @@ type TokenPolicyPermissionGroupParam = shared.TokenPolicyPermissionGroupParam
 // This is an alias to an internal type.
 type TokenPolicyPermissionGroupsMetaParam = shared.TokenPolicyPermissionGroupsMetaParam
 
-// A simple wildcard permission, e.g., "\*".
+// A list of resource names that the policy applies to.
 //
 // This is an alias to an internal type.
 type TokenPolicyResourcesUnionParam = shared.TokenPolicyResourcesUnionParam
 
-// A nested permission grant for further scoping.
+// Map of simple string resource permissions
 //
 // This is an alias to an internal type.
-type TokenPolicyResourcesMapParam = shared.TokenPolicyResourcesMapParam
+type TokenPolicyResourcesIAMResourcesTypeObjectStringParam = shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam
+
+// Map of nested resource permissions
+//
+// This is an alias to an internal type.
+type TokenPolicyResourcesIAMResourcesTypeObjectNestedParam = shared.TokenPolicyResourcesIAMResourcesTypeObjectNestedParam
 
 // The token value.
 //

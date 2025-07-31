@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // InvestigateTraceService contains methods and other services that help with
@@ -80,14 +80,16 @@ func (r investigateTraceGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseInbound struct {
-	Lines []InvestigateTraceGetResponseInboundLine `json:"lines,nullable"`
-	JSON  investigateTraceGetResponseInboundJSON   `json:"-"`
+	Lines   []InvestigateTraceGetResponseInboundLine `json:"lines,nullable"`
+	Pending bool                                     `json:"pending,nullable"`
+	JSON    investigateTraceGetResponseInboundJSON   `json:"-"`
 }
 
 // investigateTraceGetResponseInboundJSON contains the JSON metadata for the struct
 // [InvestigateTraceGetResponseInbound]
 type investigateTraceGetResponseInboundJSON struct {
 	Lines       apijson.Field
+	Pending     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -126,14 +128,16 @@ func (r investigateTraceGetResponseInboundLineJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseOutbound struct {
-	Lines []InvestigateTraceGetResponseOutboundLine `json:"lines,nullable"`
-	JSON  investigateTraceGetResponseOutboundJSON   `json:"-"`
+	Lines   []InvestigateTraceGetResponseOutboundLine `json:"lines,nullable"`
+	Pending bool                                      `json:"pending,nullable"`
+	JSON    investigateTraceGetResponseOutboundJSON   `json:"-"`
 }
 
 // investigateTraceGetResponseOutboundJSON contains the JSON metadata for the
 // struct [InvestigateTraceGetResponseOutbound]
 type investigateTraceGetResponseOutboundJSON struct {
 	Lines       apijson.Field
+	Pending     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

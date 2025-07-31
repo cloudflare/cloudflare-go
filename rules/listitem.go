@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // ListItemService contains methods and other services that help with interacting
@@ -121,10 +121,10 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 //
 // This operation is asynchronous. To get current the operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
-func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
+func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	var env ListItemDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -132,8 +132,8 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, body ListIt
 		err = errors.New("missing required list_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", body.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -190,7 +190,7 @@ func (r listCursorJSON) RawJSON() string {
 
 type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                  `json:"operation_id"`
+	OperationID string                  `json:"operation_id,required"`
 	JSON        listItemNewResponseJSON `json:"-"`
 }
 
@@ -212,7 +212,7 @@ func (r listItemNewResponseJSON) RawJSON() string {
 
 type ListItemUpdateResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                     `json:"operation_id"`
+	OperationID string                     `json:"operation_id,required"`
 	JSON        listItemUpdateResponseJSON `json:"-"`
 }
 
@@ -232,53 +232,11 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemListResponse struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// Defines a non-negative 32 bit integer.
-	ASN int64 `json:"asn"`
-	// Defines an informative summary of the list item.
-	Comment string `json:"comment"`
-	// The RFC 3339 timestamp of when the item was created.
-	CreatedOn string `json:"created_on"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname Hostname `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP string `json:"ip"`
-	// The RFC 3339 timestamp of when the item was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// The definition of the redirect.
-	Redirect Redirect                 `json:"redirect"`
-	JSON     listItemListResponseJSON `json:"-"`
-}
-
-// listItemListResponseJSON contains the JSON metadata for the struct
-// [ListItemListResponse]
-type listItemListResponseJSON struct {
-	ID          apijson.Field
-	ASN         apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Hostname    apijson.Field
-	IP          apijson.Field
-	ModifiedOn  apijson.Field
-	Redirect    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseJSON) RawJSON() string {
-	return r.raw
-}
+type ListItemListResponse = interface{}
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                     `json:"operation_id"`
+	OperationID string                     `json:"operation_id,required"`
 	JSON        listItemDeleteResponseJSON `json:"-"`
 }
 
@@ -298,54 +256,12 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemGetResponse struct {
-	// The unique ID of the list.
-	ID string `json:"id"`
-	// Defines a non-negative 32 bit integer.
-	ASN int64 `json:"asn"`
-	// Defines an informative summary of the list item.
-	Comment string `json:"comment"`
-	// The RFC 3339 timestamp of when the item was created.
-	CreatedOn string `json:"created_on"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname Hostname `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP string `json:"ip"`
-	// The RFC 3339 timestamp of when the item was last modified.
-	ModifiedOn string `json:"modified_on"`
-	// The definition of the redirect.
-	Redirect Redirect                `json:"redirect"`
-	JSON     listItemGetResponseJSON `json:"-"`
-}
-
-// listItemGetResponseJSON contains the JSON metadata for the struct
-// [ListItemGetResponse]
-type listItemGetResponseJSON struct {
-	ID          apijson.Field
-	ASN         apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Hostname    apijson.Field
-	IP          apijson.Field
-	ModifiedOn  apijson.Field
-	Redirect    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemGetResponseJSON) RawJSON() string {
-	return r.raw
-}
+type ListItemGetResponse = interface{}
 
 type ListItemNewParams struct {
-	// Defines an identifier.
-	AccountID param.Field[string]     `path:"account_id,required"`
-	Body      []ListItemNewParamsBody `json:"body,required"`
+	// The Account ID for this resource.
+	AccountID param.Field[string]          `path:"account_id,required"`
+	Body      []ListItemNewParamsBodyUnion `json:"body,required"`
 }
 
 func (r ListItemNewParams) MarshalJSON() (data []byte, err error) {
@@ -369,6 +285,69 @@ type ListItemNewParamsBody struct {
 func (r ListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r ListItemNewParamsBody) implementsListItemNewParamsBodyUnion() {}
+
+// Satisfied by [rules.ListItemNewParamsBodyListsListItemIPComment],
+// [rules.ListItemNewParamsBodyListsListItemRedirectComment],
+// [rules.ListItemNewParamsBodyListsListItemHostnameComment],
+// [rules.ListItemNewParamsBodyListsListItemASNComment], [ListItemNewParamsBody].
+type ListItemNewParamsBodyUnion interface {
+	implementsListItemNewParamsBodyUnion()
+}
+
+type ListItemNewParamsBodyListsListItemIPComment struct {
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP param.Field[string] `json:"ip,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemNewParamsBodyListsListItemIPComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemNewParamsBodyListsListItemIPComment) implementsListItemNewParamsBodyUnion() {}
+
+type ListItemNewParamsBodyListsListItemRedirectComment struct {
+	// The definition of the redirect.
+	Redirect param.Field[RedirectParam] `json:"redirect,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemNewParamsBodyListsListItemRedirectComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemNewParamsBodyListsListItemRedirectComment) implementsListItemNewParamsBodyUnion() {}
+
+type ListItemNewParamsBodyListsListItemHostnameComment struct {
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname param.Field[HostnameParam] `json:"hostname,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemNewParamsBodyListsListItemHostnameComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemNewParamsBodyListsListItemHostnameComment) implementsListItemNewParamsBodyUnion() {}
+
+type ListItemNewParamsBodyListsListItemASNComment struct {
+	// Defines a non-negative 32 bit integer.
+	ASN param.Field[int64] `json:"asn,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemNewParamsBodyListsListItemASNComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemNewParamsBodyListsListItemASNComment) implementsListItemNewParamsBodyUnion() {}
 
 type ListItemNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
@@ -414,9 +393,9 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemUpdateParams struct {
-	// Defines an identifier.
-	AccountID param.Field[string]        `path:"account_id,required"`
-	Body      []ListItemUpdateParamsBody `json:"body,required"`
+	// The Account ID for this resource.
+	AccountID param.Field[string]             `path:"account_id,required"`
+	Body      []ListItemUpdateParamsBodyUnion `json:"body,required"`
 }
 
 func (r ListItemUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -440,6 +419,72 @@ type ListItemUpdateParamsBody struct {
 func (r ListItemUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r ListItemUpdateParamsBody) implementsListItemUpdateParamsBodyUnion() {}
+
+// Satisfied by [rules.ListItemUpdateParamsBodyListsListItemIPComment],
+// [rules.ListItemUpdateParamsBodyListsListItemRedirectComment],
+// [rules.ListItemUpdateParamsBodyListsListItemHostnameComment],
+// [rules.ListItemUpdateParamsBodyListsListItemASNComment],
+// [ListItemUpdateParamsBody].
+type ListItemUpdateParamsBodyUnion interface {
+	implementsListItemUpdateParamsBodyUnion()
+}
+
+type ListItemUpdateParamsBodyListsListItemIPComment struct {
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP param.Field[string] `json:"ip,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemUpdateParamsBodyListsListItemIPComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemUpdateParamsBodyListsListItemIPComment) implementsListItemUpdateParamsBodyUnion() {}
+
+type ListItemUpdateParamsBodyListsListItemRedirectComment struct {
+	// The definition of the redirect.
+	Redirect param.Field[RedirectParam] `json:"redirect,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemUpdateParamsBodyListsListItemRedirectComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemUpdateParamsBodyListsListItemRedirectComment) implementsListItemUpdateParamsBodyUnion() {
+}
+
+type ListItemUpdateParamsBodyListsListItemHostnameComment struct {
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname param.Field[HostnameParam] `json:"hostname,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemUpdateParamsBodyListsListItemHostnameComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemUpdateParamsBodyListsListItemHostnameComment) implementsListItemUpdateParamsBodyUnion() {
+}
+
+type ListItemUpdateParamsBodyListsListItemASNComment struct {
+	// Defines a non-negative 32 bit integer.
+	ASN param.Field[int64] `json:"asn,required"`
+	// Defines an informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+}
+
+func (r ListItemUpdateParamsBodyListsListItemASNComment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ListItemUpdateParamsBodyListsListItemASNComment) implementsListItemUpdateParamsBodyUnion() {}
 
 type ListItemUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
@@ -485,7 +530,7 @@ func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemListParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The pagination cursor. An opaque string token indicating the position from which
 	// to continue when requesting the next/previous set of records. Cursor values are
@@ -510,8 +555,20 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 }
 
 type ListItemDeleteParams struct {
-	// Defines an identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	// The Account ID for this resource.
+	AccountID param.Field[string]                     `path:"account_id,required"`
+	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
+}
+
+func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ListItemDeleteParamsItem struct {
+}
+
+func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ListItemDeleteResponseEnvelope struct {
@@ -558,7 +615,7 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemGetParams struct {
-	// Defines an identifier.
+	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

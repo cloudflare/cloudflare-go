@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // HTTPSummaryService contains methods and other services that help with
@@ -169,7 +169,7 @@ func (r httpSummaryBotClassResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryBotClassResponseMeta struct {
-	ConfidenceInfo HTTPSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryBotClassResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -383,7 +383,7 @@ func (r httpSummaryDeviceTypeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryDeviceTypeResponseMeta struct {
-	ConfidenceInfo HTTPSummaryDeviceTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryDeviceTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryDeviceTypeResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -600,7 +600,7 @@ func (r httpSummaryHTTPProtocolResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryHTTPProtocolResponseMeta struct {
-	ConfidenceInfo HTTPSummaryHTTPProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryHTTPProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryHTTPProtocolResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -814,7 +814,7 @@ func (r httpSummaryHTTPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryHTTPVersionResponseMeta struct {
-	ConfidenceInfo HTTPSummaryHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryHTTPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1031,7 +1031,7 @@ func (r httpSummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryIPVersionResponseMeta struct {
-	ConfidenceInfo HTTPSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1245,7 +1245,7 @@ func (r httpSummaryOSResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryOSResponseMeta struct {
-	ConfidenceInfo HTTPSummaryOSResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryOSResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryOSResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1458,7 +1458,7 @@ func (r httpSummaryPostQuantumResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryPostQuantumResponseMeta struct {
-	ConfidenceInfo HTTPSummaryPostQuantumResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryPostQuantumResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryPostQuantumResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -1672,7 +1672,7 @@ func (r httpSummaryTLSVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPSummaryTLSVersionResponseMeta struct {
-	ConfidenceInfo HTTPSummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo HTTPSummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []HTTPSummaryTLSVersionResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

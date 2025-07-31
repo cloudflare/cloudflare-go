@@ -13,14 +13,14 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // V1Service contains methods and other services that help with interacting with
@@ -170,6 +170,8 @@ func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, 
 type Image struct {
 	// Image unique identifier.
 	ID string `json:"id"`
+	// Can set the creator field with an internal user ID.
+	Creator string `json:"creator,nullable"`
 	// Image file name.
 	Filename string `json:"filename"`
 	// User modifiable key-value store. Can be used for keeping references to another
@@ -188,6 +190,7 @@ type Image struct {
 // imageJSON contains the JSON metadata for the struct [Image]
 type imageJSON struct {
 	ID                apijson.Field
+	Creator           apijson.Field
 	Filename          apijson.Field
 	Meta              apijson.Field
 	RequireSignedURLs apijson.Field
@@ -230,6 +233,8 @@ type V1NewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// An optional custom unique identifier for your image.
 	ID param.Field[string] `json:"id"`
+	// Can set the creator field with an internal user ID.
+	Creator param.Field[string] `json:"creator"`
 	// An image binary data. Only needed when type is uploading a file.
 	File param.Field[io.Reader] `json:"file" format:"binary"`
 	// User modifiable key-value store. Can use used for keeping references to another
@@ -303,6 +308,9 @@ func (r V1NewResponseEnvelopeSuccess) IsKnown() bool {
 type V1ListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Internal user ID set within the creator field. Setting to empty string "" will
+	// return images where creator field is not set
+	Creator param.Field[string] `query:"creator"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page.
@@ -368,6 +376,8 @@ func (r V1DeleteResponseEnvelopeSuccess) IsKnown() bool {
 type V1EditParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Can set the creator field with an internal user ID.
+	Creator param.Field[string] `json:"creator"`
 	// User modifiable key-value store. Can be used for keeping references to another
 	// system of record for managing images. No change if not specified.
 	Metadata param.Field[interface{}] `json:"metadata"`

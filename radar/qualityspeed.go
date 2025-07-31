@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // QualitySpeedService contains methods and other services that help with
@@ -117,7 +117,7 @@ func (r qualitySpeedHistogramResponseHistogram0JSON) RawJSON() string {
 type QualitySpeedHistogramResponseMeta struct {
 	// The width for every bucket in the histogram.
 	BucketSize     int64                                           `json:"bucketSize,required"`
-	ConfidenceInfo QualitySpeedHistogramResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo QualitySpeedHistogramResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []QualitySpeedHistogramResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
@@ -309,7 +309,7 @@ func (r qualitySpeedSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type QualitySpeedSummaryResponseMeta struct {
-	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
+	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
 	DateRange      []QualitySpeedSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`

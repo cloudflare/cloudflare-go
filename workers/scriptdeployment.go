@@ -8,12 +8,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ScriptDeploymentService contains methods and other services that help with
@@ -61,8 +62,8 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 
 // List of Worker Deployments. The first deployment in the list is the latest
 // deployment actively serving traffic.
-func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, query ScriptDeploymentGetParams, opts ...option.RequestOption) (res *ScriptDeploymentGetResponse, err error) {
-	var env ScriptDeploymentGetResponseEnvelope
+func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, query ScriptDeploymentListParams, opts ...option.RequestOption) (res *ScriptDeploymentListResponse, err error) {
+	var env ScriptDeploymentListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -81,57 +82,73 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, qu
 	return
 }
 
-type Deployment struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage string         `json:"workers/message"`
-	JSON           deploymentJSON `json:"-"`
+// Delete a Worker Deployment. The latest deployment, which is actively serving
+// traffic, cannot be deleted. All other deployments can be deleted.
+func (r *ScriptDeploymentService) Delete(ctx context.Context, scriptName string, deploymentID string, body ScriptDeploymentDeleteParams, opts ...option.RequestOption) (res *ScriptDeploymentDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments/%s", body.AccountID, scriptName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
 }
 
-// deploymentJSON contains the JSON metadata for the struct [Deployment]
-type deploymentJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *Deployment) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deploymentJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeploymentParam struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage param.Field[string] `json:"workers/message"`
-}
-
-func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// Get information about a Worker Deployment.
+func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, deploymentID string, query ScriptDeploymentGetParams, opts ...option.RequestOption) (res *ScriptDeploymentGetResponse, err error) {
+	var env ScriptDeploymentGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	if deploymentID == "" {
+		err = errors.New("missing required deployment_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments/%s", query.AccountID, scriptName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type ScriptDeploymentNewResponse struct {
-	Strategy    ScriptDeploymentNewResponseStrategy  `json:"strategy,required"`
-	Versions    []ScriptDeploymentNewResponseVersion `json:"versions,required"`
-	ID          string                               `json:"id"`
-	Annotations Deployment                           `json:"annotations"`
-	AuthorEmail string                               `json:"author_email"`
-	CreatedOn   string                               `json:"created_on"`
-	Source      string                               `json:"source"`
-	JSON        scriptDeploymentNewResponseJSON      `json:"-"`
+	ID          string                                 `json:"id,required" format:"uuid"`
+	CreatedOn   time.Time                              `json:"created_on,required" format:"date-time"`
+	Source      string                                 `json:"source,required"`
+	Strategy    ScriptDeploymentNewResponseStrategy    `json:"strategy,required"`
+	Versions    []ScriptDeploymentNewResponseVersion   `json:"versions,required"`
+	Annotations ScriptDeploymentNewResponseAnnotations `json:"annotations"`
+	AuthorEmail string                                 `json:"author_email" format:"email"`
+	JSON        scriptDeploymentNewResponseJSON        `json:"-"`
 }
 
 // scriptDeploymentNewResponseJSON contains the JSON metadata for the struct
 // [ScriptDeploymentNewResponse]
 type scriptDeploymentNewResponseJSON struct {
-	Strategy    apijson.Field
-	Versions    apijson.Field
 	ID          apijson.Field
-	Annotations apijson.Field
-	AuthorEmail apijson.Field
 	CreatedOn   apijson.Field
 	Source      apijson.Field
+	Strategy    apijson.Field
+	Versions    apijson.Field
+	Annotations apijson.Field
+	AuthorEmail apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -160,7 +177,7 @@ func (r ScriptDeploymentNewResponseStrategy) IsKnown() bool {
 
 type ScriptDeploymentNewResponseVersion struct {
 	Percentage float64                                `json:"percentage,required"`
-	VersionID  string                                 `json:"version_id,required"`
+	VersionID  string                                 `json:"version_id,required" format:"uuid"`
 	JSON       scriptDeploymentNewResponseVersionJSON `json:"-"`
 }
 
@@ -181,15 +198,305 @@ func (r scriptDeploymentNewResponseVersionJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScriptDeploymentNewResponseAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 100 bytes.
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                     `json:"workers/triggered_by"`
+	JSON               scriptDeploymentNewResponseAnnotationsJSON `json:"-"`
+}
+
+// scriptDeploymentNewResponseAnnotationsJSON contains the JSON metadata for the
+// struct [ScriptDeploymentNewResponseAnnotations]
+type scriptDeploymentNewResponseAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentNewResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentNewResponseAnnotationsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponse struct {
+	Deployments []ScriptDeploymentListResponseDeployment `json:"deployments,required"`
+	JSON        scriptDeploymentListResponseJSON         `json:"-"`
+}
+
+// scriptDeploymentListResponseJSON contains the JSON metadata for the struct
+// [ScriptDeploymentListResponse]
+type scriptDeploymentListResponseJSON struct {
+	Deployments apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseDeployment struct {
+	ID          string                                             `json:"id,required" format:"uuid"`
+	CreatedOn   time.Time                                          `json:"created_on,required" format:"date-time"`
+	Source      string                                             `json:"source,required"`
+	Strategy    ScriptDeploymentListResponseDeploymentsStrategy    `json:"strategy,required"`
+	Versions    []ScriptDeploymentListResponseDeploymentsVersion   `json:"versions,required"`
+	Annotations ScriptDeploymentListResponseDeploymentsAnnotations `json:"annotations"`
+	AuthorEmail string                                             `json:"author_email" format:"email"`
+	JSON        scriptDeploymentListResponseDeploymentJSON         `json:"-"`
+}
+
+// scriptDeploymentListResponseDeploymentJSON contains the JSON metadata for the
+// struct [ScriptDeploymentListResponseDeployment]
+type scriptDeploymentListResponseDeploymentJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Source      apijson.Field
+	Strategy    apijson.Field
+	Versions    apijson.Field
+	Annotations apijson.Field
+	AuthorEmail apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseDeployment) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseDeploymentJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseDeploymentsStrategy string
+
+const (
+	ScriptDeploymentListResponseDeploymentsStrategyPercentage ScriptDeploymentListResponseDeploymentsStrategy = "percentage"
+)
+
+func (r ScriptDeploymentListResponseDeploymentsStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentListResponseDeploymentsStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentListResponseDeploymentsVersion struct {
+	Percentage float64                                            `json:"percentage,required"`
+	VersionID  string                                             `json:"version_id,required" format:"uuid"`
+	JSON       scriptDeploymentListResponseDeploymentsVersionJSON `json:"-"`
+}
+
+// scriptDeploymentListResponseDeploymentsVersionJSON contains the JSON metadata
+// for the struct [ScriptDeploymentListResponseDeploymentsVersion]
+type scriptDeploymentListResponseDeploymentsVersionJSON struct {
+	Percentage  apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseDeploymentsVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseDeploymentsVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseDeploymentsAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 100 bytes.
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                                 `json:"workers/triggered_by"`
+	JSON               scriptDeploymentListResponseDeploymentsAnnotationsJSON `json:"-"`
+}
+
+// scriptDeploymentListResponseDeploymentsAnnotationsJSON contains the JSON
+// metadata for the struct [ScriptDeploymentListResponseDeploymentsAnnotations]
+type scriptDeploymentListResponseDeploymentsAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseDeploymentsAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseDeploymentsAnnotationsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentDeleteResponse struct {
+	Errors   []ScriptDeploymentDeleteResponseError   `json:"errors,required"`
+	Messages []ScriptDeploymentDeleteResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
+	Success ScriptDeploymentDeleteResponseSuccess `json:"success,required"`
+	JSON    scriptDeploymentDeleteResponseJSON    `json:"-"`
+}
+
+// scriptDeploymentDeleteResponseJSON contains the JSON metadata for the struct
+// [ScriptDeploymentDeleteResponse]
+type scriptDeploymentDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentDeleteResponseError struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           ScriptDeploymentDeleteResponseErrorsSource `json:"source"`
+	JSON             scriptDeploymentDeleteResponseErrorJSON    `json:"-"`
+}
+
+// scriptDeploymentDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ScriptDeploymentDeleteResponseError]
+type scriptDeploymentDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentDeleteResponseErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    scriptDeploymentDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// scriptDeploymentDeleteResponseErrorsSourceJSON contains the JSON metadata for
+// the struct [ScriptDeploymentDeleteResponseErrorsSource]
+type scriptDeploymentDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentDeleteResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentDeleteResponseMessage struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ScriptDeploymentDeleteResponseMessagesSource `json:"source"`
+	JSON             scriptDeploymentDeleteResponseMessageJSON    `json:"-"`
+}
+
+// scriptDeploymentDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [ScriptDeploymentDeleteResponseMessage]
+type scriptDeploymentDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentDeleteResponseMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    scriptDeploymentDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// scriptDeploymentDeleteResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [ScriptDeploymentDeleteResponseMessagesSource]
+type scriptDeploymentDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptDeploymentDeleteResponseSuccess bool
+
+const (
+	ScriptDeploymentDeleteResponseSuccessTrue ScriptDeploymentDeleteResponseSuccess = true
+)
+
+func (r ScriptDeploymentDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ScriptDeploymentGetResponse struct {
-	Deployments []ScriptDeploymentGetResponseDeployment `json:"deployments"`
-	JSON        scriptDeploymentGetResponseJSON         `json:"-"`
+	ID          string                                 `json:"id,required" format:"uuid"`
+	CreatedOn   time.Time                              `json:"created_on,required" format:"date-time"`
+	Source      string                                 `json:"source,required"`
+	Strategy    ScriptDeploymentGetResponseStrategy    `json:"strategy,required"`
+	Versions    []ScriptDeploymentGetResponseVersion   `json:"versions,required"`
+	Annotations ScriptDeploymentGetResponseAnnotations `json:"annotations"`
+	AuthorEmail string                                 `json:"author_email" format:"email"`
+	JSON        scriptDeploymentGetResponseJSON        `json:"-"`
 }
 
 // scriptDeploymentGetResponseJSON contains the JSON metadata for the struct
 // [ScriptDeploymentGetResponse]
 type scriptDeploymentGetResponseJSON struct {
-	Deployments apijson.Field
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Source      apijson.Field
+	Strategy    apijson.Field
+	Versions    apijson.Field
+	Annotations apijson.Field
+	AuthorEmail apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,73 +509,65 @@ func (r scriptDeploymentGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptDeploymentGetResponseDeployment struct {
-	Strategy    ScriptDeploymentGetResponseDeploymentsStrategy  `json:"strategy,required"`
-	Versions    []ScriptDeploymentGetResponseDeploymentsVersion `json:"versions,required"`
-	ID          string                                          `json:"id"`
-	Annotations Deployment                                      `json:"annotations"`
-	AuthorEmail string                                          `json:"author_email"`
-	CreatedOn   string                                          `json:"created_on"`
-	Source      string                                          `json:"source"`
-	JSON        scriptDeploymentGetResponseDeploymentJSON       `json:"-"`
-}
-
-// scriptDeploymentGetResponseDeploymentJSON contains the JSON metadata for the
-// struct [ScriptDeploymentGetResponseDeployment]
-type scriptDeploymentGetResponseDeploymentJSON struct {
-	Strategy    apijson.Field
-	Versions    apijson.Field
-	ID          apijson.Field
-	Annotations apijson.Field
-	AuthorEmail apijson.Field
-	CreatedOn   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentGetResponseDeployment) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentGetResponseDeploymentJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptDeploymentGetResponseDeploymentsStrategy string
+type ScriptDeploymentGetResponseStrategy string
 
 const (
-	ScriptDeploymentGetResponseDeploymentsStrategyPercentage ScriptDeploymentGetResponseDeploymentsStrategy = "percentage"
+	ScriptDeploymentGetResponseStrategyPercentage ScriptDeploymentGetResponseStrategy = "percentage"
 )
 
-func (r ScriptDeploymentGetResponseDeploymentsStrategy) IsKnown() bool {
+func (r ScriptDeploymentGetResponseStrategy) IsKnown() bool {
 	switch r {
-	case ScriptDeploymentGetResponseDeploymentsStrategyPercentage:
+	case ScriptDeploymentGetResponseStrategyPercentage:
 		return true
 	}
 	return false
 }
 
-type ScriptDeploymentGetResponseDeploymentsVersion struct {
-	Percentage float64                                           `json:"percentage,required"`
-	VersionID  string                                            `json:"version_id,required"`
-	JSON       scriptDeploymentGetResponseDeploymentsVersionJSON `json:"-"`
+type ScriptDeploymentGetResponseVersion struct {
+	Percentage float64                                `json:"percentage,required"`
+	VersionID  string                                 `json:"version_id,required" format:"uuid"`
+	JSON       scriptDeploymentGetResponseVersionJSON `json:"-"`
 }
 
-// scriptDeploymentGetResponseDeploymentsVersionJSON contains the JSON metadata for
-// the struct [ScriptDeploymentGetResponseDeploymentsVersion]
-type scriptDeploymentGetResponseDeploymentsVersionJSON struct {
+// scriptDeploymentGetResponseVersionJSON contains the JSON metadata for the struct
+// [ScriptDeploymentGetResponseVersion]
+type scriptDeploymentGetResponseVersionJSON struct {
 	Percentage  apijson.Field
 	VersionID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptDeploymentGetResponseDeploymentsVersion) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptDeploymentGetResponseVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptDeploymentGetResponseDeploymentsVersionJSON) RawJSON() string {
+func (r scriptDeploymentGetResponseVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentGetResponseAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 100 bytes.
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                     `json:"workers/triggered_by"`
+	JSON               scriptDeploymentGetResponseAnnotationsJSON `json:"-"`
+}
+
+// scriptDeploymentGetResponseAnnotationsJSON contains the JSON metadata for the
+// struct [ScriptDeploymentGetResponseAnnotations]
+type scriptDeploymentGetResponseAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentGetResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentGetResponseAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -279,8 +578,8 @@ type ScriptDeploymentNewParams struct {
 	Versions  param.Field[[]ScriptDeploymentNewParamsVersion] `json:"versions,required"`
 	// If set to true, the deployment will be created even if normally blocked by
 	// something such rolling back to an older version when a secret has changed.
-	Force       param.Field[bool]            `query:"force"`
-	Annotations param.Field[DeploymentParam] `json:"annotations"`
+	Force       param.Field[bool]                                 `query:"force"`
+	Annotations param.Field[ScriptDeploymentNewParamsAnnotations] `json:"annotations"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
@@ -312,19 +611,28 @@ func (r ScriptDeploymentNewParamsStrategy) IsKnown() bool {
 
 type ScriptDeploymentNewParamsVersion struct {
 	Percentage param.Field[float64] `json:"percentage,required"`
-	VersionID  param.Field[string]  `json:"version_id,required"`
+	VersionID  param.Field[string]  `json:"version_id,required" format:"uuid"`
 }
 
 func (r ScriptDeploymentNewParamsVersion) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type ScriptDeploymentNewParamsAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 100 bytes.
+	WorkersMessage param.Field[string] `json:"workers/message"`
+}
+
+func (r ScriptDeploymentNewParamsAnnotations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptDeploymentNewResponseEnvelope struct {
 	Errors   []ScriptDeploymentNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptDeploymentNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptDeploymentNewResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptDeploymentNewResponse                `json:"result"`
 	JSON    scriptDeploymentNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -333,8 +641,8 @@ type ScriptDeploymentNewResponseEnvelope struct {
 type scriptDeploymentNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -458,6 +766,155 @@ func (r ScriptDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type ScriptDeploymentListParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScriptDeploymentListResponseEnvelope struct {
+	Errors   []ScriptDeploymentListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptDeploymentListResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptDeploymentListResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success ScriptDeploymentListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    scriptDeploymentListResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptDeploymentListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ScriptDeploymentListResponseEnvelope]
+type scriptDeploymentListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseEnvelopeErrors struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           ScriptDeploymentListResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptDeploymentListResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptDeploymentListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ScriptDeploymentListResponseEnvelopeErrors]
+type scriptDeploymentListResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseEnvelopeErrorsSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    scriptDeploymentListResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptDeploymentListResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ScriptDeploymentListResponseEnvelopeErrorsSource]
+type scriptDeploymentListResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseEnvelopeMessages struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           ScriptDeploymentListResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptDeploymentListResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptDeploymentListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ScriptDeploymentListResponseEnvelopeMessages]
+type scriptDeploymentListResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseEnvelopeMessagesSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    scriptDeploymentListResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptDeploymentListResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [ScriptDeploymentListResponseEnvelopeMessagesSource]
+type scriptDeploymentListResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptDeploymentListResponseEnvelopeSuccess bool
+
+const (
+	ScriptDeploymentListResponseEnvelopeSuccessTrue ScriptDeploymentListResponseEnvelopeSuccess = true
+)
+
+func (r ScriptDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentDeleteParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type ScriptDeploymentGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -466,9 +923,9 @@ type ScriptDeploymentGetParams struct {
 type ScriptDeploymentGetResponseEnvelope struct {
 	Errors   []ScriptDeploymentGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptDeploymentGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptDeploymentGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptDeploymentGetResponse                `json:"result"`
 	JSON    scriptDeploymentGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -477,8 +934,8 @@ type ScriptDeploymentGetResponseEnvelope struct {
 type scriptDeploymentGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

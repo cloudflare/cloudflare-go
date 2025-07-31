@@ -11,11 +11,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -96,8 +96,6 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	Limits ScriptScriptAndVersionSettingEditResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations ScriptScriptAndVersionSettingEditResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability ScriptScriptAndVersionSettingEditResponseObservability `json:"observability"`
 	// Configuration for
@@ -120,7 +118,6 @@ type scriptScriptAndVersionSettingEditResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
@@ -1711,11 +1708,6 @@ type ScriptScriptAndVersionSettingEditResponseMigrations struct {
 	NewClasses interface{} `json:"new_classes"`
 	// This field can have the runtime type of [[]string].
 	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of [[]SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes"`
 	// This field can have the runtime type of [[]MigrationStep].
@@ -1732,8 +1724,6 @@ type scriptScriptAndVersionSettingEditResponseMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
 	Steps              apijson.Field
 	TransferredClasses apijson.Field
@@ -1787,23 +1777,13 @@ func init() {
 }
 
 type ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []MigrationStep                                                                      `json:"steps"`
-	JSON  scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+	JSON scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations]
 type scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1953,8 +1933,6 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	Limits ScriptScriptAndVersionSettingGetResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations ScriptScriptAndVersionSettingGetResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability ScriptScriptAndVersionSettingGetResponseObservability `json:"observability"`
 	// Configuration for
@@ -1977,7 +1955,6 @@ type scriptScriptAndVersionSettingGetResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
@@ -3567,11 +3544,6 @@ type ScriptScriptAndVersionSettingGetResponseMigrations struct {
 	NewClasses interface{} `json:"new_classes"`
 	// This field can have the runtime type of [[]string].
 	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of [[]SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes"`
 	// This field can have the runtime type of [[]MigrationStep].
@@ -3588,8 +3560,6 @@ type scriptScriptAndVersionSettingGetResponseMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
 	Steps              apijson.Field
 	TransferredClasses apijson.Field
@@ -3643,23 +3613,13 @@ func init() {
 }
 
 type ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []MigrationStep                                                                     `json:"steps"`
-	JSON  scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+	JSON scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations]
 type scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

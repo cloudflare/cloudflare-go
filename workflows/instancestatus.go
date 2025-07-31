@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // InstanceStatusService contains methods and other services that help with
@@ -222,9 +222,10 @@ func (r InstanceStatusEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type InstanceStatusEditResponseEnvelopeResultInfo struct {
 	Count      float64                                          `json:"count,required"`
-	Page       float64                                          `json:"page,required"`
 	PerPage    float64                                          `json:"per_page,required"`
 	TotalCount float64                                          `json:"total_count,required"`
+	NextCursor string                                           `json:"next_cursor"`
+	Page       float64                                          `json:"page"`
 	JSON       instanceStatusEditResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -232,9 +233,10 @@ type InstanceStatusEditResponseEnvelopeResultInfo struct {
 // the struct [InstanceStatusEditResponseEnvelopeResultInfo]
 type instanceStatusEditResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
