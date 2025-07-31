@@ -31,7 +31,7 @@ func TestRegionalHostnameNewWithOptionalParams(t *testing.T) {
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hostname:  cloudflare.F("foo.example.com"),
 		RegionKey: cloudflare.F("ca"),
-		Routing:   cloudflare.F("routing"),
+		Routing:   cloudflare.F("dns"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
