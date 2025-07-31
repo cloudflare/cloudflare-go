@@ -39,10 +39,10 @@ func NewDLPDatasetVersionEntryService(opts ...option.RequestOption) (r *DLPDatas
 
 // This is used for multi-column EDMv2 datasets. The EDMv2 format can only be
 // created in the Cloudflare dashboard.
-func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID string, version int64, entryID string, body io.Reader, body DLPDatasetVersionEntryNewParams, opts ...option.RequestOption) (res *DLPDatasetVersionEntryNewResponse, err error) {
+func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID string, version int64, entryID string, datasetVersionEntry io.Reader, body DLPDatasetVersionEntryNewParams, opts ...option.RequestOption) (res *DLPDatasetVersionEntryNewResponse, err error) {
 	var env DLPDatasetVersionEntryNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", body)}, opts...)
+	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", datasetVersionEntry)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
