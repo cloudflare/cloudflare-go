@@ -83,28 +83,8 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 	return
 }
 
-// Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if queueID == "" {
-		err = errors.New("missing required queue_id parameter")
-		return
-	}
-	if consumerID == "" {
-		err = errors.New("missing required consumer_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
-}
-
 // Returns the consumers for a Queue
-func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Consumer], err error) {
+func (r *ConsumerService) List(ctx context.Context, queueID string, query ConsumerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Consumer], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -130,8 +110,53 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 }
 
 // Returns the consumers for a Queue
-func (r *ConsumerService) GetAutoPaging(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Consumer] {
-	return pagination.NewSinglePageAutoPager(r.Get(ctx, queueID, query, opts...))
+func (r *ConsumerService) ListAutoPaging(ctx context.Context, queueID string, query ConsumerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Consumer] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, queueID, query, opts...))
+}
+
+// Deletes the consumer for a queue.
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	if consumerID == "" {
+		err = errors.New("missing required consumer_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Fetches the consumer for a queue by consumer id
+func (r *ConsumerService) Get(ctx context.Context, queueID string, consumerID string, query ConsumerGetParams, opts ...option.RequestOption) (res *Consumer, err error) {
+	var env ConsumerGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	if consumerID == "" {
+		err = errors.New("missing required consumer_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", query.AccountID, queueID, consumerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type Consumer struct {
@@ -865,6 +890,11 @@ func (r ConsumerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type ConsumerListParams struct {
+	// A Resource identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type ConsumerDeleteParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -873,4 +903,47 @@ type ConsumerDeleteParams struct {
 type ConsumerGetParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ConsumerGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Consumer              `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success ConsumerGetResponseEnvelopeSuccess `json:"success"`
+	JSON    consumerGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// consumerGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ConsumerGetResponseEnvelope]
+type consumerGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type ConsumerGetResponseEnvelopeSuccess bool
+
+const (
+	ConsumerGetResponseEnvelopeSuccessTrue ConsumerGetResponseEnvelopeSuccess = true
+)
+
+func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
