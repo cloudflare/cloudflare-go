@@ -3,8 +3,8 @@
 package billing
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 type Error = apierror.Error

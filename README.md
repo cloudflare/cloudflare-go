@@ -1,6 +1,6 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v4.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v5.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to the [Cloudflare REST API](https://developers.cloudflare.com/api)
 from applications written in Go.
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ```go
 import (
-	"github.com/cloudflare/cloudflare-go/v4" // imported as cloudflare
+	"github.com/cloudflare/cloudflare-go/v5" // imported as cloudflare
 )
 ```
 
@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.6.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v5@v5.0.0'
 ```
 
 <!-- x-release-please-end -->
@@ -44,9 +44,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zones"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zones"
 )
 
 func main() {
@@ -160,7 +160,7 @@ client.Zones.New(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/option).
+See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/option).
 
 ### Pagination
 
