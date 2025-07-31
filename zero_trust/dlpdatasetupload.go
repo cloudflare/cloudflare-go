@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 
@@ -62,7 +61,7 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 // only be created in the Cloudflare dashboard. For other clients, this operation
 // can only be used for non-secret Custom Word Lists. The body must be a UTF-8
 // encoded, newline (NL or CRNL) separated list of words to be matched.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, body io.Reader, body DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, body DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetUploadEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", body)}, opts...)
