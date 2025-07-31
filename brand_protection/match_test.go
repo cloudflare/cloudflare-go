@@ -24,8 +24,7 @@ func TestMatchDownloadWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.Matches.Download(context.TODO(), brand_protection.MatchDownloadParams{
 		AccountID:       cloudflare.F("x"),
@@ -53,8 +52,7 @@ func TestMatchGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.Matches.Get(context.TODO(), brand_protection.MatchGetParams{
 		AccountID:       cloudflare.F("x"),

@@ -24,8 +24,7 @@ func TestBrandProtectionSubmit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.Submit(context.TODO(), brand_protection.BrandProtectionSubmitParams{
 		AccountID: cloudflare.F("x"),
@@ -49,8 +48,7 @@ func TestBrandProtectionURLInfo(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.URLInfo(context.TODO(), brand_protection.BrandProtectionURLInfoParams{
 		AccountID: cloudflare.F("x"),

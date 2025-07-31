@@ -25,8 +25,7 @@ func TestQueryNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	err := client.BrandProtection.Queries.New(context.TODO(), brand_protection.QueryNewParams{
 		AccountID:     cloudflare.F("x"),
@@ -58,8 +57,7 @@ func TestQueryDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	err := client.BrandProtection.Queries.Delete(context.TODO(), brand_protection.QueryDeleteParams{
 		AccountID: cloudflare.F("x"),

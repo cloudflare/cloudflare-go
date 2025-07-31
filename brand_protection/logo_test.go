@@ -26,8 +26,7 @@ func TestLogoNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	_, err := client.BrandProtection.Logos.New(context.TODO(), brand_protection.LogoNewParams{
 		AccountID: cloudflare.F("x"),
@@ -55,8 +54,7 @@ func TestLogoDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("144c9defac04969c7bfad8efaa8ea194"),
 	)
 	err := client.BrandProtection.Logos.Delete(
 		context.TODO(),
