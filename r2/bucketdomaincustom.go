@@ -171,9 +171,6 @@ type BucketDomainCustomNewResponse struct {
 	Domain string `json:"domain,required"`
 	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool `json:"enabled,required"`
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS BucketDomainCustomNewResponseMinTLS `json:"minTLS"`
@@ -185,7 +182,6 @@ type BucketDomainCustomNewResponse struct {
 type bucketDomainCustomNewResponseJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
-	Ciphers     apijson.Field
 	MinTLS      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -221,9 +217,6 @@ func (r BucketDomainCustomNewResponseMinTLS) IsKnown() bool {
 type BucketDomainCustomUpdateResponse struct {
 	// Domain name of the affected custom domain.
 	Domain string `json:"domain,required"`
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
 	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool `json:"enabled"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
@@ -236,7 +229,6 @@ type BucketDomainCustomUpdateResponse struct {
 // [BucketDomainCustomUpdateResponse]
 type bucketDomainCustomUpdateResponseJSON struct {
 	Domain      apijson.Field
-	Ciphers     apijson.Field
 	Enabled     apijson.Field
 	MinTLS      apijson.Field
 	raw         string
@@ -297,9 +289,6 @@ type BucketDomainCustomListResponseDomain struct {
 	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool                                        `json:"enabled,required"`
 	Status  BucketDomainCustomListResponseDomainsStatus `json:"status,required"`
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS BucketDomainCustomListResponseDomainsMinTLS `json:"minTLS"`
@@ -316,7 +305,6 @@ type bucketDomainCustomListResponseDomainJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
 	Status      apijson.Field
-	Ciphers     apijson.Field
 	MinTLS      apijson.Field
 	ZoneID      apijson.Field
 	ZoneName    apijson.Field
@@ -444,9 +432,6 @@ type BucketDomainCustomGetResponse struct {
 	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool                                `json:"enabled,required"`
 	Status  BucketDomainCustomGetResponseStatus `json:"status,required"`
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS BucketDomainCustomGetResponseMinTLS `json:"minTLS"`
@@ -463,7 +448,6 @@ type bucketDomainCustomGetResponseJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
 	Status      apijson.Field
-	Ciphers     apijson.Field
 	MinTLS      apijson.Field
 	ZoneID      apijson.Field
 	ZoneName    apijson.Field
@@ -573,9 +557,6 @@ type BucketDomainCustomNewParams struct {
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// Zone ID of the custom domain.
 	ZoneID param.Field[string] `json:"zoneId,required"`
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers param.Field[[]string] `json:"ciphers"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS param.Field[BucketDomainCustomNewParamsMinTLS] `json:"minTLS"`
@@ -669,9 +650,6 @@ func (r BucketDomainCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 type BucketDomainCustomUpdateParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers param.Field[[]string] `json:"ciphers"`
 	// Whether to enable public bucket access at the specified custom domain.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
