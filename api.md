@@ -6724,23 +6724,7 @@ Methods:
 
 #### Summary
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryUserAgentResponse">AIBotSummaryUserAgentResponse</a>
-
-Methods:
-
-- <code title="get /radar/ai/bots/summary/user_agent">client.Radar.AI.Bots.Summary.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryService.UserAgent">UserAgent</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryUserAgentParams">AIBotSummaryUserAgentParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryUserAgentResponse">AIBotSummaryUserAgentResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### TimeseriesGroups
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AITimeseriesGroupUserAgentResponse">AITimeseriesGroupUserAgentResponse</a>
-
-Methods:
-
-- <code title="get /radar/ai/bots/timeseries_groups/user_agent">client.Radar.AI.TimeseriesGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AITimeseriesGroupService.UserAgent">UserAgent</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AITimeseriesGroupUserAgentParams">AITimeseriesGroupUserAgentParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AITimeseriesGroupUserAgentResponse">AITimeseriesGroupUserAgentResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Annotations
 
