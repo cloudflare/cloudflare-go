@@ -250,13 +250,14 @@ func (r blockPageSettingsJSON) RawJSON() string {
 type BlockPageSettingsMode string
 
 const (
+	BlockPageSettingsModeEmpty               BlockPageSettingsMode = ""
 	BlockPageSettingsModeCustomizedBlockPage BlockPageSettingsMode = "customized_block_page"
 	BlockPageSettingsModeRedirectURI         BlockPageSettingsMode = "redirect_uri"
 )
 
 func (r BlockPageSettingsMode) IsKnown() bool {
 	switch r {
-	case BlockPageSettingsModeCustomizedBlockPage, BlockPageSettingsModeRedirectURI:
+	case BlockPageSettingsModeEmpty, BlockPageSettingsModeCustomizedBlockPage, BlockPageSettingsModeRedirectURI:
 		return true
 	}
 	return false
