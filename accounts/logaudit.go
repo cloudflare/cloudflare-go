@@ -42,7 +42,7 @@ func NewLogAuditService(opts ...option.RequestOption) (r *LogAuditService) {
 // missing entries in the available audit logs. Be aware of the following
 // limitations. <br /> <ul> <li>Audit logs are available only for the past 30 days.
 // <br /></li> <li>Error handling is not yet implemented. <br /> </li> </ul>
-func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[LogAuditListResponse], err error) {
+func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[LogAuditListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,8 +68,8 @@ func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, o
 // missing entries in the available audit logs. Be aware of the following
 // limitations. <br /> <ul> <li>Audit logs are available only for the past 30 days.
 // <br /></li> <li>Error handling is not yet implemented. <br /> </li> </ul>
-func (r *LogAuditService) ListAutoPaging(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[LogAuditListResponse] {
-	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, params, opts...))
+func (r *LogAuditService) ListAutoPaging(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[LogAuditListResponse] {
+	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 type LogAuditListResponse struct {
