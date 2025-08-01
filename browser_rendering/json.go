@@ -79,12 +79,8 @@ type JsonNewParams struct {
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies param.Field[[]JsonNewParamsCookie] `json:"cookies"`
-	// Optional list of custom AI models to use for the request. The models will be
-	// tried in the order provided, and in case a model returns an error, the next one
-	// will be used as fallback.
-	CustomAI         param.Field[[]JsonNewParamsCustomAI] `json:"custom_ai"`
-	EmulateMediaType param.Field[string]                  `json:"emulateMediaType"`
+	Cookies          param.Field[[]JsonNewParamsCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]                `json:"emulateMediaType"`
 	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
 	GotoOptions param.Field[JsonNewParamsGotoOptions] `json:"gotoOptions"`
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
@@ -252,18 +248,6 @@ func (r JsonNewParamsCookiesSourceScheme) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type JsonNewParamsCustomAI struct {
-	// Authorization token for the AI model: `Bearer <token>`.
-	Authorization param.Field[string] `json:"authorization,required"`
-	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
-	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`
-	Model param.Field[string] `json:"model,required"`
-}
-
-func (r JsonNewParamsCustomAI) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).

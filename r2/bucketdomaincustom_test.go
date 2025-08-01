@@ -36,7 +36,6 @@ func TestBucketDomainCustomNewWithOptionalParams(t *testing.T) {
 			Domain:       cloudflare.F("prefix.example-domain.com"),
 			Enabled:      cloudflare.F(true),
 			ZoneID:       cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
-			Ciphers:      cloudflare.F([]string{"string"}),
 			MinTLS:       cloudflare.F(r2.BucketDomainCustomNewParamsMinTLS1_0),
 			Jurisdiction: cloudflare.F(r2.BucketDomainCustomNewParamsCfR2JurisdictionDefault),
 		},
@@ -70,7 +69,6 @@ func TestBucketDomainCustomUpdateWithOptionalParams(t *testing.T) {
 		"example-domain/custom-domain.com",
 		r2.BucketDomainCustomUpdateParams{
 			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Ciphers:      cloudflare.F([]string{"string"}),
 			Enabled:      cloudflare.F(true),
 			MinTLS:       cloudflare.F(r2.BucketDomainCustomUpdateParamsMinTLS1_2),
 			Jurisdiction: cloudflare.F(r2.BucketDomainCustomUpdateParamsCfR2JurisdictionDefault),
