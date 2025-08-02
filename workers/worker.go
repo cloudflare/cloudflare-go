@@ -18,6 +18,7 @@ type WorkerService struct {
 	Options         []option.RequestOption
 	Routes          *RouteService
 	Assets          *AssetService
+	Versions        *VersionService
 	Scripts         *ScriptService
 	AccountSettings *AccountSettingService
 	Domains         *DomainService
@@ -33,6 +34,7 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r.Options = opts
 	r.Routes = NewRouteService(opts...)
 	r.Assets = NewAssetService(opts...)
+	r.Versions = NewVersionService(opts...)
 	r.Scripts = NewScriptService(opts...)
 	r.AccountSettings = NewAccountSettingService(opts...)
 	r.Domains = NewDomainService(opts...)

@@ -1,5 +1,20 @@
 # Changelog
 
+## 5.1.0 (2025-08-02)
+
+Full Changelog: [v5.0.0...v5.1.0](https://github.com/cloudflare/cloudflare-go/compare/v5.0.0...v5.1.0)
+
+### Features
+
+* **api:** api update ([c3712db](https://github.com/cloudflare/cloudflare-go/commit/c3712dbc6cf44a8221e14783f547079690c838ef))
+* **api:** api update ([c0918fa](https://github.com/cloudflare/cloudflare-go/commit/c0918fa268ba44a7c55bb355b1afa5438da537b9))
+
+
+### Chores
+
+* **api:** upload stainless config from cloudflare-config ([a2e1eaf](https://github.com/cloudflare/cloudflare-go/commit/a2e1eaf61a9b7b44da848f2e8e7402a6e3745567))
+* **api:** upload stainless config from cloudflare-config ([a69833c](https://github.com/cloudflare/cloudflare-go/commit/a69833cf63af8923971cc9ae9264e0e2218d00c7))
+
 ## 5.0.0 (2025-07-31)
 
 Full Changelog: [v4.6.0...v5.0.0](https://github.com/cloudflare/cloudflare-go/compare/v4.6.0...v5.0.0)
