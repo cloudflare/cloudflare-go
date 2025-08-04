@@ -2183,8 +2183,6 @@ Methods:
 
 - <code title="post /accounts/{account_id}/workers/assets/upload">client.Workers.Assets.Upload.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#AssetUploadService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#AssetUploadNewParams">AssetUploadNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#AssetUploadNewResponse">AssetUploadNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## Versions
-
 ## Scripts
 
 Params Types:
