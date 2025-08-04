@@ -64,6 +64,10 @@ func TestJsonNewWithOptionalParams(t *testing.T) {
 			SourceScheme: cloudflare.F(browser_rendering.JsonNewParamsCookiesSourceSchemeUnset),
 			URL:          cloudflare.F("url"),
 		}}),
+		CustomAI: cloudflare.F([]browser_rendering.JsonNewParamsCustomAI{{
+			Authorization: cloudflare.F("authorization"),
+			Model:         cloudflare.F("model"),
+		}}),
 		EmulateMediaType: cloudflare.F("emulateMediaType"),
 		GotoOptions: cloudflare.F(browser_rendering.JsonNewParamsGotoOptions{
 			Referer:        cloudflare.F("referer"),
