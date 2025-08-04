@@ -70,7 +70,7 @@ func TestAccessTagUpdate(t *testing.T) {
 	}
 }
 
-func TestAccessTagList(t *testing.T) {
+func TestAccessTagListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -85,6 +85,8 @@ func TestAccessTagList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Tags.List(context.TODO(), zero_trust.AccessTagListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

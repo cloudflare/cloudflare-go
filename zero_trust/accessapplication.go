@@ -116,7 +116,7 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam,
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) List(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationListResponse], err error) {
+func (r *AccessApplicationService) List(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessApplicationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -152,8 +152,8 @@ func (r *AccessApplicationService) List(ctx context.Context, params AccessApplic
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessApplicationListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an application from Access.
@@ -1081,36 +1081,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewRespons
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1139,36 +1109,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResp
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -1201,36 +1141,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListRespon
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1259,36 +1169,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetRespons
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsAccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -1351,30 +1231,6 @@ func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewPa
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationNewParamsBodyBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1403,30 +1259,6 @@ func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdat
 }
 
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -1486,36 +1318,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNew
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1544,36 +1346,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpd
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -1606,36 +1378,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationLis
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1664,36 +1406,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGet
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsAccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -1754,30 +1466,6 @@ func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicati
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationNewParamsBodyBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1806,30 +1494,6 @@ func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicati
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -1905,36 +1569,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBr
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -1963,36 +1597,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateRespons
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -2025,36 +1629,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseB
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -2083,36 +1657,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBr
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsAccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -2185,30 +1729,6 @@ func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParam
 func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
 }
 
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
 func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationNewParamsBodyBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
 }
 
@@ -2237,30 +1757,6 @@ func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdatePa
 }
 
 func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
 }
 
 func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationSCIMConfigAuthenticationUnion() {
@@ -2453,9 +1949,7 @@ type AccessApplicationNewResponse struct {
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationNewResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink].
+	// [[]AccessApplicationNewResponseAppLauncherApplicationFooterLink].
 	FooterLinks interface{} `json:"footer_links"`
 	// The background color of the App Launcher header.
 	HeaderBgColor string `json:"header_bg_color"`
@@ -2463,9 +1957,7 @@ type AccessApplicationNewResponse struct {
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
 	// This field can have the runtime type of
-	// [AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	// [AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
@@ -2507,11 +1999,6 @@ type AccessApplicationNewResponse struct {
 	// [AccessApplicationNewResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig],
 	// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig],
 	// [AccessApplicationNewResponseBrowserRdpApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
@@ -5656,6 +5143,14 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
@@ -5668,9 +5163,6 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The name of the application.
 	Name     string                                                     `json:"name"`
 	Policies []AccessApplicationNewResponseAppLauncherApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
@@ -5692,13 +5184,15 @@ type accessApplicationNewResponseAppLauncherApplicationJSON struct {
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
 	FooterLinks              apijson.Field
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
@@ -5877,317 +5371,6 @@ func (r accessApplicationNewResponseAppLauncherApplicationPolicyJSON) RawJSON() 
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                              `json:"mappings"`
-	JSON     accessApplicationNewResponseAppLauncherApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationNewResponseAppLauncherApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig]
-type accessApplicationNewResponseAppLauncherApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                `json:"user"`
-	JSON  accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -6196,39 +5379,32 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                     `json:"name"`
 	Policies []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON contains
@@ -6238,20 +5414,16 @@ type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON stru
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -6266,68 +5438,6 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) implementsAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                           `json:"url,required"`
-	JSON accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink]
-type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                  `json:"title"`
-	JSON  accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
-type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
@@ -6403,317 +5513,6 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                              `json:"mappings"`
-	JSON     accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig]
-type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                `json:"user"`
-	JSON  accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -6722,39 +5521,32 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                     `json:"name"`
 	Policies []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON contains
@@ -6764,20 +5556,16 @@ type accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON stru
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -6792,68 +5580,6 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplication) implementsAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                           `json:"url,required"`
-	JSON accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink]
-type accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                  `json:"title"`
-	JSON  accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
-type accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy struct {
@@ -6929,317 +5655,6 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                              `json:"mappings"`
-	JSON     accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig]
-type accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                `json:"user"`
-	JSON  accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewResponseBookmarkApplication struct {
 	// UUID.
 	ID string `json:"id"`
@@ -7254,9 +5669,6 @@ type AccessApplicationNewResponseBookmarkApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseBookmarkApplicationSCIMConfig `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -7276,7 +5688,6 @@ type accessApplicationNewResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
-	SCIMConfig         apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	UpdatedAt          apijson.Field
@@ -7294,317 +5705,6 @@ func (r accessApplicationNewResponseBookmarkApplicationJSON) RawJSON() string {
 
 func (r AccessApplicationNewResponseBookmarkApplication) implementsAccessApplicationNewResponse() {}
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                           `json:"mappings"`
-	JSON     accessApplicationNewResponseBookmarkApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBookmarkApplicationSCIMConfigJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig]
-type accessApplicationNewResponseBookmarkApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                             `json:"user"`
-	JSON  accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
@@ -7615,13 +5715,10 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                        `json:"name"`
-	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationNewResponseInfrastructureApplicationJSON       `json:"-"`
+	Name      string                                                        `json:"name"`
+	Policies  []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
@@ -7634,7 +5731,6 @@ type accessApplicationNewResponseInfrastructureApplicationJSON struct {
 	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
-	SCIMConfig     apijson.Field
 	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -7798,317 +5894,6 @@ func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesConnection
 
 func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
-	JSON     accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                   `json:"user"`
-	JSON  accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationNewResponseBrowserRdpApplication struct {
@@ -8976,9 +6761,7 @@ type AccessApplicationUpdateResponse struct {
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationUpdateResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink].
+	// [[]AccessApplicationUpdateResponseAppLauncherApplicationFooterLink].
 	FooterLinks interface{} `json:"footer_links"`
 	// The background color of the App Launcher header.
 	HeaderBgColor string `json:"header_bg_color"`
@@ -8986,9 +6769,7 @@ type AccessApplicationUpdateResponse struct {
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
 	// This field can have the runtime type of
-	// [AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	// [AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
@@ -9030,11 +6811,6 @@ type AccessApplicationUpdateResponse struct {
 	// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
@@ -12183,6 +9959,14 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
@@ -12195,9 +9979,6 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationUpdateResponseAppLauncherApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
@@ -12219,13 +10000,15 @@ type accessApplicationUpdateResponseAppLauncherApplicationJSON struct {
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
 	FooterLinks              apijson.Field
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
@@ -12404,317 +10187,6 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON) RawJSON
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
-	JSON     accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig]
-type accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                   `json:"user"`
-	JSON  accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -12723,39 +10195,32 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                        `json:"name"`
 	Policies []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                      `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                                 `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                                                 `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON
@@ -12765,20 +10230,16 @@ type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON s
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -12793,68 +10254,6 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSO
 }
 
 func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) implementsAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                              `json:"url,required"`
-	JSON accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink]
-type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                     `json:"title"`
-	JSON  accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
-type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
@@ -12930,317 +10329,6 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPol
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                                 `json:"mappings"`
-	JSON     accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig]
-type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                   `json:"user"`
-	JSON  accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -13249,39 +10337,32 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                        `json:"name"`
 	Policies []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                      `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                                 `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                                                 `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON
@@ -13291,20 +10372,16 @@ type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON s
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -13319,68 +10396,6 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSO
 }
 
 func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) implementsAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                              `json:"url,required"`
-	JSON accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink]
-type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                     `json:"title"`
-	JSON  accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
-type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy struct {
@@ -13456,317 +10471,6 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPol
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                                 `json:"mappings"`
-	JSON     accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig]
-type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                   `json:"user"`
-	JSON  accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateResponseBookmarkApplication struct {
 	// UUID.
 	ID string `json:"id"`
@@ -13781,9 +10485,6 @@ type AccessApplicationUpdateResponseBookmarkApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -13803,7 +10504,6 @@ type accessApplicationUpdateResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
-	SCIMConfig         apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	UpdatedAt          apijson.Field
@@ -13822,317 +10522,6 @@ func (r accessApplicationUpdateResponseBookmarkApplicationJSON) RawJSON() string
 func (r AccessApplicationUpdateResponseBookmarkApplication) implementsAccessApplicationUpdateResponse() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                              `json:"mappings"`
-	JSON     accessApplicationUpdateResponseBookmarkApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBookmarkApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig]
-type accessApplicationUpdateResponseBookmarkApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                `json:"user"`
-	JSON  accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
@@ -14143,13 +10532,10 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                           `json:"name"`
-	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                          `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationUpdateResponseInfrastructureApplicationJSON       `json:"-"`
+	Name      string                                                           `json:"name"`
+	Policies  []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
@@ -14163,7 +10549,6 @@ type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
 	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
-	SCIMConfig     apijson.Field
 	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -14327,317 +10712,6 @@ func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnect
 
 func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                    `json:"mappings"`
-	JSON     accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                      `json:"user"`
-	JSON  accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationUpdateResponseBrowserRdpApplication struct {
@@ -15506,9 +11580,7 @@ type AccessApplicationListResponse struct {
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationListResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink].
+	// [[]AccessApplicationListResponseAppLauncherApplicationFooterLink].
 	FooterLinks interface{} `json:"footer_links"`
 	// The background color of the App Launcher header.
 	HeaderBgColor string `json:"header_bg_color"`
@@ -15516,9 +11588,7 @@ type AccessApplicationListResponse struct {
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
 	// This field can have the runtime type of
-	// [AccessApplicationListResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	// [AccessApplicationListResponseAppLauncherApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
@@ -15560,11 +11630,6 @@ type AccessApplicationListResponse struct {
 	// [AccessApplicationListResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfig],
 	// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationListResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig],
 	// [AccessApplicationListResponseBrowserRdpApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
@@ -18712,6 +14777,14 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
@@ -18724,9 +14797,6 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The name of the application.
 	Name     string                                                      `json:"name"`
 	Policies []AccessApplicationListResponseAppLauncherApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationListResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
@@ -18748,13 +14818,15 @@ type accessApplicationListResponseAppLauncherApplicationJSON struct {
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
 	FooterLinks              apijson.Field
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
@@ -18933,317 +15005,6 @@ func (r accessApplicationListResponseAppLauncherApplicationPolicyJSON) RawJSON()
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                               `json:"mappings"`
-	JSON     accessApplicationListResponseAppLauncherApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationListResponseAppLauncherApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig]
-type accessApplicationListResponseAppLauncherApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                 `json:"user"`
-	JSON  accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -19252,39 +15013,32 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                      `json:"name"`
 	Policies []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                    `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                               `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                  `json:"session_duration"`
+	UpdatedAt       time.Time                                                               `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON contains
@@ -19294,20 +15048,16 @@ type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON str
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -19322,68 +15072,6 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON)
 }
 
 func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplication) implementsAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                            `json:"url,required"`
-	JSON accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink]
-type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                   `json:"title"`
-	JSON  accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
-type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
@@ -19459,317 +15147,6 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolic
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                               `json:"mappings"`
-	JSON     accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig]
-type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                 `json:"user"`
-	JSON  accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -19778,39 +15155,32 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                      `json:"name"`
 	Policies []AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                    `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                               `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                  `json:"session_duration"`
+	UpdatedAt       time.Time                                                               `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON contains
@@ -19820,20 +15190,16 @@ type accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON str
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -19848,68 +15214,6 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON)
 }
 
 func (r AccessApplicationListResponseBrowserIsolationPermissionsApplication) implementsAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                            `json:"url,required"`
-	JSON accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink]
-type accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                   `json:"title"`
-	JSON  accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
-type accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy struct {
@@ -19985,317 +15289,6 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationPolic
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                               `json:"mappings"`
-	JSON     accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig]
-type accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                 `json:"user"`
-	JSON  accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationListResponseBookmarkApplication struct {
 	// UUID.
 	ID string `json:"id"`
@@ -20310,9 +15303,6 @@ type AccessApplicationListResponseBookmarkApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationListResponseBookmarkApplicationSCIMConfig `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -20332,7 +15322,6 @@ type accessApplicationListResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
-	SCIMConfig         apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	UpdatedAt          apijson.Field
@@ -20350,317 +15339,6 @@ func (r accessApplicationListResponseBookmarkApplicationJSON) RawJSON() string {
 
 func (r AccessApplicationListResponseBookmarkApplication) implementsAccessApplicationListResponse() {}
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                            `json:"mappings"`
-	JSON     accessApplicationListResponseBookmarkApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationListResponseBookmarkApplicationSCIMConfigJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfig]
-type accessApplicationListResponseBookmarkApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBookmarkApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                              `json:"user"`
-	JSON  accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationListResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
@@ -20671,13 +15349,10 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                         `json:"name"`
-	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationListResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                        `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationListResponseInfrastructureApplicationJSON       `json:"-"`
+	Name      string                                                         `json:"name"`
+	Policies  []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                      `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
@@ -20690,7 +15365,6 @@ type accessApplicationListResponseInfrastructureApplicationJSON struct {
 	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
-	SCIMConfig     apijson.Field
 	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -20854,317 +15528,6 @@ func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesConnectio
 
 func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                  `json:"mappings"`
-	JSON     accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                    `json:"user"`
-	JSON  accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationListResponseBrowserRdpApplication struct {
@@ -22055,9 +16418,7 @@ type AccessApplicationGetResponse struct {
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationGetResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink].
+	// [[]AccessApplicationGetResponseAppLauncherApplicationFooterLink].
 	FooterLinks interface{} `json:"footer_links"`
 	// The background color of the App Launcher header.
 	HeaderBgColor string `json:"header_bg_color"`
@@ -22065,9 +16426,7 @@ type AccessApplicationGetResponse struct {
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
 	// This field can have the runtime type of
-	// [AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	// [AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
@@ -22109,11 +16468,6 @@ type AccessApplicationGetResponse struct {
 	// [AccessApplicationGetResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig],
 	// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig],
 	// [AccessApplicationGetResponseBrowserRdpApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
@@ -25258,6 +19612,14 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
@@ -25270,9 +19632,6 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The name of the application.
 	Name     string                                                     `json:"name"`
 	Policies []AccessApplicationGetResponseAppLauncherApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
@@ -25294,13 +19653,15 @@ type accessApplicationGetResponseAppLauncherApplicationJSON struct {
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
 	FooterLinks              apijson.Field
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
@@ -25479,317 +19840,6 @@ func (r accessApplicationGetResponseAppLauncherApplicationPolicyJSON) RawJSON() 
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                              `json:"mappings"`
-	JSON     accessApplicationGetResponseAppLauncherApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationGetResponseAppLauncherApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig]
-type accessApplicationGetResponseAppLauncherApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                `json:"user"`
-	JSON  accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -25798,39 +19848,32 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                     `json:"name"`
 	Policies []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON contains
@@ -25840,20 +19883,16 @@ type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON stru
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -25868,68 +19907,6 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) implementsAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                           `json:"url,required"`
-	JSON accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink]
-type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                  `json:"title"`
-	JSON  accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
-type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
@@ -26005,317 +19982,6 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                              `json:"mappings"`
-	JSON     accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig]
-type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                `json:"user"`
-	JSON  accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
@@ -26324,39 +19990,32 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor   string    `json:"bg_color"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
-	// The links in the App Launcher footer.
-	FooterLinks []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string                                                                     `json:"name"`
 	Policies []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
-	SessionDuration string `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
-	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON                     accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON contains
@@ -26366,20 +20025,16 @@ type accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON stru
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
 	CreatedAt                apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
 	Domain                   apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
 	Name                     apijson.Field
 	Policies                 apijson.Field
-	SCIMConfig               apijson.Field
 	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -26394,68 +20049,6 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplication) implementsAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name string `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL  string                                                                           `json:"url,required"`
-	JSON accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink]
-type accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
-	Name        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor string `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor string `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL string `json:"image_url"`
-	// The message shown on the landing page.
-	Message string `json:"message"`
-	// The title shown on the landing page.
-	Title string                                                                                  `json:"title"`
-	JSON  accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
-type accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
-	ButtonColor     apijson.Field
-	ButtonTextColor apijson.Field
-	ImageURL        apijson.Field
-	Message         apijson.Field
-	Title           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy struct {
@@ -26531,317 +20124,6 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy
 	return r.raw
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                              `json:"mappings"`
-	JSON     accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig]
-type accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                                `json:"user"`
-	JSON  accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationGetResponseBookmarkApplication struct {
 	// UUID.
 	ID string `json:"id"`
@@ -26856,9 +20138,6 @@ type AccessApplicationGetResponseBookmarkApplication struct {
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
 	Name string `json:"name"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseBookmarkApplicationSCIMConfig `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -26878,7 +20157,6 @@ type accessApplicationGetResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
-	SCIMConfig         apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	UpdatedAt          apijson.Field
@@ -26896,317 +20174,6 @@ func (r accessApplicationGetResponseBookmarkApplicationJSON) RawJSON() string {
 
 func (r AccessApplicationGetResponseBookmarkApplication) implementsAccessApplicationGetResponse() {}
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                           `json:"mappings"`
-	JSON     accessApplicationGetResponseBookmarkApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBookmarkApplicationSCIMConfigJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig]
-type accessApplicationGetResponseBookmarkApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                             `json:"user"`
-	JSON  accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationGetResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
@@ -27217,13 +20184,10 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                        `json:"name"`
-	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationGetResponseInfrastructureApplicationJSON       `json:"-"`
+	Name      string                                                        `json:"name"`
+	Policies  []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
@@ -27236,7 +20200,6 @@ type accessApplicationGetResponseInfrastructureApplicationJSON struct {
 	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
-	SCIMConfig     apijson.Field
 	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -27400,317 +20363,6 @@ func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesConnection
 
 func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
-	JSON     accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-// or
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User  string                                                                                                                   `json:"user"`
-	JSON  accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON `json:"-"`
-	union AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem
-}
-
-// accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem]
-type accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON struct {
-	Scheme           apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Password         apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	User             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
-// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
-	implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken{}),
-		},
-	)
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID string `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret string `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
-	JSON   accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
-}
-
-// accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
-type accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	Scheme       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationGetResponseBrowserRdpApplication struct {
@@ -28644,7 +21296,7 @@ func (r AccessApplicationNewParamsBody) implementsAccessApplicationNewParamsBody
 // [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplication],
+// [zero_trust.AccessApplicationNewParamsBodyAccessBookmarkProps],
 // [zero_trust.AccessApplicationNewParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplication],
 // [AccessApplicationNewParamsBody].
@@ -30872,6 +23524,14 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// The background color of the App Launcher page.
 	BgColor param.Field[string] `json:"bg_color"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The links in the App Launcher footer.
 	FooterLinks param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink] `json:"footer_links"`
 	// The background color of the App Launcher header.
@@ -30882,9 +23542,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
@@ -31045,264 +23702,31 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) Mars
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthentication) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthentication].
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor param.Field[string] `json:"bg_color"`
-	// The links in the App Launcher footer.
-	FooterLinks param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink] `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor param.Field[string] `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -31310,35 +23734,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) Ma
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) implementsAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name param.Field[string] `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor param.Field[string] `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor param.Field[string] `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL param.Field[string] `json:"image_url"`
-	// The message shown on the landing page.
-	Message param.Field[string] `json:"message"`
-	// The title shown on the landing page.
-	Title param.Field[string] `json:"title"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -31432,264 +23827,31 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication].
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor param.Field[string] `json:"bg_color"`
-	// The links in the App Launcher footer.
-	FooterLinks param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationFooterLink] `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor param.Field[string] `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -31697,35 +23859,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) Ma
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) implementsAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name param.Field[string] `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor param.Field[string] `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor param.Field[string] `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL param.Field[string] `json:"image_url"`
-	// The message shown on the landing page.
-	Message param.Field[string] `json:"message"`
-	// The title shown on the landing page.
-	Title param.Field[string] `json:"title"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -31819,233 +23952,7 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication].
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyBookmarkApplication struct {
+type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
@@ -32054,9 +23961,6 @@ type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfig] `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -32064,237 +23968,11 @@ type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	Type param.Field[ApplicationType] `json:"type"`
 }
 
-func (r AccessApplicationNewParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyAccessBookmarkProps) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyBookmarkApplication) implementsAccessApplicationNewParamsBodyUnion() {
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication].
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
+func (r AccessApplicationNewParamsBodyAccessBookmarkProps) implementsAccessApplicationNewParamsBodyUnion() {
 }
 
 type AccessApplicationNewParamsBodyInfrastructureApplication struct {
@@ -33249,7 +24927,7 @@ func (r AccessApplicationUpdateParamsBody) implementsAccessApplicationUpdatePara
 // [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplication],
+// [zero_trust.AccessApplicationUpdateParamsBodyAccessBookmarkProps],
 // [zero_trust.AccessApplicationUpdateParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplication],
 // [AccessApplicationUpdateParamsBody].
@@ -35477,6 +27155,14 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// The background color of the App Launcher page.
 	BgColor param.Field[string] `json:"bg_color"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The links in the App Launcher footer.
 	FooterLinks param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink] `json:"footer_links"`
 	// The background color of the App Launcher header.
@@ -35487,9 +27173,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
@@ -35650,264 +27333,31 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) M
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentication) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentication].
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor param.Field[string] `json:"bg_color"`
-	// The links in the App Launcher footer.
-	FooterLinks param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink] `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor param.Field[string] `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -35915,35 +27365,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication)
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name param.Field[string] `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor param.Field[string] `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor param.Field[string] `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL param.Field[string] `json:"image_url"`
-	// The message shown on the landing page.
-	Message param.Field[string] `json:"message"`
-	// The title shown on the landing page.
-	Title param.Field[string] `json:"title"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -36037,264 +27458,31 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication].
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The background color of the App Launcher page.
-	BgColor param.Field[string] `json:"bg_color"`
-	// The links in the App Launcher footer.
-	FooterLinks param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationFooterLink] `json:"footer_links"`
-	// The background color of the App Launcher header.
-	HeaderBgColor param.Field[string] `json:"header_bg_color"`
-	// The design of the App Launcher landing page shown to users when they log in.
-	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -36302,35 +27490,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication)
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationFooterLink struct {
-	// The hypertext in the footer link.
-	Name param.Field[string] `json:"name,required"`
-	// the hyperlink in the footer link.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The design of the App Launcher landing page shown to users when they log in.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign struct {
-	// The background color of the log in button on the landing page.
-	ButtonColor param.Field[string] `json:"button_color"`
-	// The color of the text in the log in button on the landing page.
-	ButtonTextColor param.Field[string] `json:"button_text_color"`
-	// The URL of the image shown on the landing page.
-	ImageURL param.Field[string] `json:"image_url"`
-	// The message shown on the landing page.
-	Message param.Field[string] `json:"message"`
-	// The title shown on the landing page.
-	Title param.Field[string] `json:"title"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -36424,233 +27583,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication].
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
+type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
@@ -36659,9 +27592,6 @@ type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfig] `json:"scim_config"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -36669,237 +27599,11 @@ type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	Type param.Field[ApplicationType] `json:"type"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyAccessBookmarkProps) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyBookmarkApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete param.Field[bool] `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentication struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentication) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication],
-// [AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentication].
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion interface {
-	implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication []AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
-	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string]      `json:"password"`
-	Scopes   param.Field[interface{}] `json:"scopes"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL param.Field[string] `json:"token_url"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
-// [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken],
-// [AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem].
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion interface {
-	implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion()
-}
-
-// Attributes for configuring Access Service Token authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
-	// Client ID of the Access service token used to authenticate with the remote
-	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// Client secret of the Access service token used to authenticate with the remote
-	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) implementsAccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItemUnion() {
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeHttpbasic          AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauthbearertoken   AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauth2             AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "oauth2"
-	AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeAccessServiceToken AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme = "access_service_token"
-)
-
-func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
+func (r AccessApplicationUpdateParamsBodyAccessBookmarkProps) implementsAccessApplicationUpdateParamsBodyUnion() {
 }
 
 type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
@@ -37753,6 +28457,10 @@ type AccessApplicationListParams struct {
 	Exact param.Field[bool] `query:"exact"`
 	// The name of the app.
 	Name param.Field[string] `query:"name"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// Search for apps by other listed query parameters.
 	Search param.Field[string] `query:"search"`
 }

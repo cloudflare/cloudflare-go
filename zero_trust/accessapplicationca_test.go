@@ -60,6 +60,8 @@ func TestAccessApplicationCAListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.CAs.List(context.TODO(), zero_trust.AccessApplicationCAListParams{
 		AccountID: cloudflare.F("account_id"),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

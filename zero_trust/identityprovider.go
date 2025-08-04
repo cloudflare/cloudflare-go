@@ -107,7 +107,7 @@ func (r *IdentityProviderService) Update(ctx context.Context, identityProviderID
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) List(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IdentityProviderListResponse], err error) {
+func (r *IdentityProviderService) List(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[IdentityProviderListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -143,8 +143,8 @@ func (r *IdentityProviderService) List(ctx context.Context, params IdentityProvi
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IdentityProviderListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[IdentityProviderListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an identity provider from Access.
@@ -3428,6 +3428,10 @@ type IdentityProviderListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// Indicates to Access to only retrieve identity providers that have the System for
 	// Cross-Domain Identity Management (SCIM) enabled.
 	SCIMEnabled param.Field[string] `query:"scim_enabled"`
