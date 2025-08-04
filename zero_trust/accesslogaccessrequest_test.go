@@ -32,6 +32,8 @@ func TestAccessLogAccessRequestListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction: cloudflare.F(zero_trust.AccessLogAccessRequestListParamsDirectionDesc),
 		Limit:     cloudflare.F(int64(0)),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
 		Since:     cloudflare.F(time.Now()),
 		Until:     cloudflare.F(time.Now()),
 	})

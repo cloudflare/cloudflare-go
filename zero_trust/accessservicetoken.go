@@ -106,7 +106,7 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, serviceTokenID s
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) List(ctx context.Context, params AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceToken], err error) {
+func (r *AccessServiceTokenService) List(ctx context.Context, params AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ServiceToken], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -142,8 +142,8 @@ func (r *AccessServiceTokenService) List(ctx context.Context, params AccessServi
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, params AccessServiceTokenListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ServiceToken] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, params AccessServiceTokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ServiceToken] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a service token.
@@ -702,6 +702,10 @@ type AccessServiceTokenListParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The name of the service token.
 	Name param.Field[string] `query:"name"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// Search for service tokens by other listed query parameters.
 	Search param.Field[string] `query:"search"`
 }

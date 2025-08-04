@@ -37,7 +37,7 @@ func NewIdentityProviderSCIMUserService(opts ...option.RequestOption) (r *Identi
 
 // Lists SCIM User resources synced to Cloudflare via the System for Cross-domain
 // Identity Management (SCIM).
-func (r *IdentityProviderSCIMUserService) List(ctx context.Context, identityProviderID string, params IdentityProviderSCIMUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
+func (r *IdentityProviderSCIMUserService) List(ctx context.Context, identityProviderID string, params IdentityProviderSCIMUserListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessUser], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -64,8 +64,8 @@ func (r *IdentityProviderSCIMUserService) List(ctx context.Context, identityProv
 
 // Lists SCIM User resources synced to Cloudflare via the System for Cross-domain
 // Identity Management (SCIM).
-func (r *IdentityProviderSCIMUserService) ListAutoPaging(ctx context.Context, identityProviderID string, params IdentityProviderSCIMUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identityProviderID, params, opts...))
+func (r *IdentityProviderSCIMUserService) ListAutoPaging(ctx context.Context, identityProviderID string, params IdentityProviderSCIMUserListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessUser] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, identityProviderID, params, opts...))
 }
 
 type IdentityProviderSCIMUserListParams struct {
@@ -80,6 +80,10 @@ type IdentityProviderSCIMUserListParams struct {
 	IdPResourceID param.Field[string] `query:"idp_resource_id"`
 	// The name of the SCIM User resource.
 	Name param.Field[string] `query:"name"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// The username of the SCIM User resource.
 	Username param.Field[string] `query:"username"`
 }

@@ -37,7 +37,7 @@ func NewIdentityProviderSCIMGroupService(opts ...option.RequestOption) (r *Ident
 
 // Lists SCIM Group resources synced to Cloudflare via the System for Cross-domain
 // Identity Management (SCIM).
-func (r *IdentityProviderSCIMGroupService) List(ctx context.Context, identityProviderID string, params IdentityProviderSCIMGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGroup], err error) {
+func (r *IdentityProviderSCIMGroupService) List(ctx context.Context, identityProviderID string, params IdentityProviderSCIMGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ZeroTrustGroup], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -64,8 +64,8 @@ func (r *IdentityProviderSCIMGroupService) List(ctx context.Context, identityPro
 
 // Lists SCIM Group resources synced to Cloudflare via the System for Cross-domain
 // Identity Management (SCIM).
-func (r *IdentityProviderSCIMGroupService) ListAutoPaging(ctx context.Context, identityProviderID string, params IdentityProviderSCIMGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGroup] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, identityProviderID, params, opts...))
+func (r *IdentityProviderSCIMGroupService) ListAutoPaging(ctx context.Context, identityProviderID string, params IdentityProviderSCIMGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ZeroTrustGroup] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, identityProviderID, params, opts...))
 }
 
 type IdentityProviderSCIMGroupListParams struct {
@@ -79,6 +79,10 @@ type IdentityProviderSCIMGroupListParams struct {
 	IdPResourceID param.Field[string] `query:"idp_resource_id"`
 	// The display name of the SCIM Group resource.
 	Name param.Field[string] `query:"name"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 }
 
 // URLQuery serializes [IdentityProviderSCIMGroupListParams]'s query parameters as
