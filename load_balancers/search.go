@@ -153,7 +153,7 @@ func (r SearchListResponseResourcesResourceType) IsKnown() bool {
 }
 
 type SearchListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]  `path:"account_id,required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`

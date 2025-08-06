@@ -299,7 +299,7 @@ func (r monitorDeleteResponseJSON) RawJSON() string {
 }
 
 type MonitorNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -381,7 +381,7 @@ type MonitorNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Monitor               `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -405,7 +405,7 @@ func (r monitorNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MonitorNewResponseEnvelopeSuccess bool
 
 const (
@@ -421,7 +421,7 @@ func (r MonitorNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MonitorUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -503,7 +503,7 @@ type MonitorUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Monitor               `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -527,7 +527,7 @@ func (r monitorUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MonitorUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -543,12 +543,12 @@ func (r MonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MonitorListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type MonitorDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -556,7 +556,7 @@ type MonitorDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   MonitorDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success MonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -580,7 +580,7 @@ func (r monitorDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MonitorDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -596,7 +596,7 @@ func (r MonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MonitorEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -678,7 +678,7 @@ type MonitorEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Monitor               `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -702,7 +702,7 @@ func (r monitorEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MonitorEditResponseEnvelopeSuccess bool
 
 const (
@@ -718,7 +718,7 @@ func (r MonitorEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MonitorGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -726,7 +726,7 @@ type MonitorGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Monitor               `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -750,7 +750,7 @@ func (r monitorGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MonitorGetResponseEnvelopeSuccess bool
 
 const (

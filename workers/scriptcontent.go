@@ -84,7 +84,7 @@ func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query
 type ScriptContentUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
+	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptContentUpdateParamsMetadata] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
@@ -113,7 +113,7 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
+// JSON-encoded metadata about the uploaded parts and Worker configuration.
 type ScriptContentUpdateParamsMetadata struct {
 	// Name of the uploaded file that contains the Worker script (e.g. the file adding
 	// a listener to the `fetch` event). Indicates a `service worker syntax` Worker.

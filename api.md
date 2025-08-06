@@ -2278,19 +2278,22 @@ Methods:
 
 ### Deployments
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#DeploymentParam">DeploymentParam</a>
+
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentNewResponse">ScriptDeploymentNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#Deployment">Deployment</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentListResponse">ScriptDeploymentListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentDeleteResponse">ScriptDeploymentDeleteResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentGetResponse">ScriptDeploymentGetResponse</a>
 
 Methods:
 
-- <code title="post /accounts/{account_id}/workers/scripts/{script_name}/deployments">client.Workers.Scripts.Deployments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentNewParams">ScriptDeploymentNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentNewResponse">ScriptDeploymentNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/workers/scripts/{script_name}/deployments">client.Workers.Scripts.Deployments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentNewParams">ScriptDeploymentNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#Deployment">Deployment</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/workers/scripts/{script_name}/deployments">client.Workers.Scripts.Deployments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentListParams">ScriptDeploymentListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentListResponse">ScriptDeploymentListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}">client.Workers.Scripts.Deployments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, deploymentID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentDeleteParams">ScriptDeploymentDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentDeleteResponse">ScriptDeploymentDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}">client.Workers.Scripts.Deployments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, deploymentID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentGetParams">ScriptDeploymentGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentGetResponse">ScriptDeploymentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}">client.Workers.Scripts.Deployments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, deploymentID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#ScriptDeploymentGetParams">ScriptDeploymentGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#Deployment">Deployment</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Versions
 
@@ -2391,8 +2394,13 @@ Methods:
 
 ## Namespaces
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#AnyParam">AnyParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#Any">Any</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#Namespace">Namespace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceDeleteResponse">NamespaceDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceBulkDeleteResponse">NamespaceBulkDeleteResponse</a>
@@ -2428,13 +2436,9 @@ Methods:
 
 ### Metadata
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetResponse">NamespaceMetadataGetResponse</a>
-
 Methods:
 
-- <code title="get /accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}">client.KV.Namespaces.Metadata.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, namespaceID <a href="https://pkg.go.dev/builtin#string">string</a>, keyName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetParams">NamespaceMetadataGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetResponse">NamespaceMetadataGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}">client.KV.Namespaces.Metadata.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, namespaceID <a href="https://pkg.go.dev/builtin#string">string</a>, keyName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetParams">NamespaceMetadataGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#Any">Any</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Values
 
@@ -6684,16 +6688,6 @@ Methods:
 
 ## AI
 
-### ToMarkdown
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIToMarkdownNewResponse">AIToMarkdownNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/ai/tomarkdown">client.Radar.AI.ToMarkdown.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIToMarkdownService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, Body <a href="https://pkg.go.dev/builtin#io.Reader">io.Reader</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIToMarkdownNewParams">AIToMarkdownNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIToMarkdownNewResponse">AIToMarkdownNewResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Inference
 
 #### Summary
@@ -6724,9 +6718,17 @@ Methods:
 
 ### Bots
 
-#### Summary
+Response Types:
 
-### TimeseriesGroups
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryResponse">AIBotSummaryResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesResponse">AIBotTimeseriesResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesGroupsResponse">AIBotTimeseriesGroupsResponse</a>
+
+Methods:
+
+- <code title="get /radar/ai/bots/summary/{dimension}">client.Radar.AI.Bots.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryParamsDimension">AIBotSummaryParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryParams">AIBotSummaryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotSummaryResponse">AIBotSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ai/bots/timeseries">client.Radar.AI.Bots.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesParams">AIBotTimeseriesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesResponse">AIBotTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ai/bots/timeseries_groups/{dimension}">client.Radar.AI.Bots.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesGroupsParamsDimension">AIBotTimeseriesGroupsParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesGroupsParams">AIBotTimeseriesGroupsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#AIBotTimeseriesGroupsResponse">AIBotTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Annotations
 
@@ -6863,6 +6865,44 @@ Methods:
 
 - <code title="get /radar/bots/crawlers/summary/{dimension}">client.Radar.Bots.WebCrawlers.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerSummaryParamsDimension">BotWebCrawlerSummaryParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerSummaryParams">BotWebCrawlerSummaryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerSummaryResponse">BotWebCrawlerSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bots/crawlers/timeseries_groups/{dimension}">client.Radar.Bots.WebCrawlers.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerTimeseriesGroupsParamsDimension">BotWebCrawlerTimeseriesGroupsParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerTimeseriesGroupsParams">BotWebCrawlerTimeseriesGroupsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#BotWebCrawlerTimeseriesGroupsResponse">BotWebCrawlerTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Ct
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtSummaryResponse">CtSummaryResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesResponse">CtTimeseriesResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesGroupsResponse">CtTimeseriesGroupsResponse</a>
+
+Methods:
+
+- <code title="get /radar/ct/summary/{dimension}">client.Radar.Ct.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtSummaryParamsDimension">CtSummaryParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtSummaryParams">CtSummaryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtSummaryResponse">CtSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ct/timeseries">client.Radar.Ct.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesParams">CtTimeseriesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesResponse">CtTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ct/timeseries_groups/{dimension}">client.Radar.Ct.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesGroupsParamsDimension">CtTimeseriesGroupsParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesGroupsParams">CtTimeseriesGroupsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtTimeseriesGroupsResponse">CtTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Authorities
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityListResponse">CtAuthorityListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityGetResponse">CtAuthorityGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/ct/authorities">client.Radar.Ct.Authorities.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityListParams">CtAuthorityListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityListResponse">CtAuthorityListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ct/authorities/{ca_slug}">client.Radar.Ct.Authorities.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, caSlug <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityGetParams">CtAuthorityGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtAuthorityGetResponse">CtAuthorityGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Logs
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogListResponse">CtLogListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogGetResponse">CtLogGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/ct/logs">client.Radar.Ct.Logs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogListParams">CtLogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogListResponse">CtLogListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ct/logs/{log_slug}">client.Radar.Ct.Logs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, logSlug <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogGetParams">CtLogGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/radar#CtLogGetResponse">CtLogGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Datasets
 

@@ -94,7 +94,7 @@ func (r *DispatchNamespaceScriptContentService) Get(ctx context.Context, dispatc
 type DispatchNamespaceScriptContentUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
+	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
