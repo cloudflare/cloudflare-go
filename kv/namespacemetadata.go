@@ -37,7 +37,7 @@ func NewNamespaceMetadataService(opts ...option.RequestOption) (r *NamespaceMeta
 // Returns the metadata associated with the given key in the given namespace. Use
 // URL-encoding to use special characters (for example, `:`, `!`, `%`) in the key
 // name.
-func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceMetadataGetParams, opts ...option.RequestOption) (res *NamespaceMetadataGetResponse, err error) {
+func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceMetadataGetParams, opts ...option.RequestOption) (res *Any, err error) {
 	var env NamespaceMetadataGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -61,8 +61,6 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 	return
 }
 
-type NamespaceMetadataGetResponse = interface{}
-
 type NamespaceMetadataGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -73,9 +71,8 @@ type NamespaceMetadataGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
-	// Arbitrary JSON that is associated with a key.
-	Result NamespaceMetadataGetResponse             `json:"result"`
-	JSON   namespaceMetadataGetResponseEnvelopeJSON `json:"-"`
+	Result  Any                                         `json:"result"`
+	JSON    namespaceMetadataGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // namespaceMetadataGetResponseEnvelopeJSON contains the JSON metadata for the

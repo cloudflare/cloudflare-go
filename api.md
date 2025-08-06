@@ -2394,8 +2394,13 @@ Methods:
 
 ## Namespaces
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#AnyParam">AnyParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#Any">Any</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#Namespace">Namespace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceDeleteResponse">NamespaceDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceBulkDeleteResponse">NamespaceBulkDeleteResponse</a>
@@ -2431,13 +2436,9 @@ Methods:
 
 ### Metadata
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetResponse">NamespaceMetadataGetResponse</a>
-
 Methods:
 
-- <code title="get /accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}">client.KV.Namespaces.Metadata.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, namespaceID <a href="https://pkg.go.dev/builtin#string">string</a>, keyName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetParams">NamespaceMetadataGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetResponse">NamespaceMetadataGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}">client.KV.Namespaces.Metadata.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, namespaceID <a href="https://pkg.go.dev/builtin#string">string</a>, keyName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#NamespaceMetadataGetParams">NamespaceMetadataGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/kv#Any">Any</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Values
 
