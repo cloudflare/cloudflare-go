@@ -254,7 +254,7 @@ func (r SingleStepMigrationTransferredClassParam) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
+// JSON-encoded metadata about the uploaded parts and Worker configuration.
 type WorkerMetadataParam struct {
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a

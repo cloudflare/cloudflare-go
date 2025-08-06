@@ -457,9 +457,9 @@ TEST_PATHS=(
 	vectorize/indexmetadataindex_test.go
 	url_scanner/response_test.go
 	url_scanner/scan_test.go
-	radar/aitomarkdown_test.go
 	radar/aiinferencesummary_test.go
 	radar/aiinferencetimeseriesgroupsummary_test.go
+	radar/aibot_test.go
 	radar/annotation_test.go
 	radar/annotationoutage_test.go
 	radar/bgp_test.go
@@ -471,6 +471,9 @@ TEST_PATHS=(
 	radar/bgpip_test.go
 	radar/bot_test.go
 	radar/botwebcrawler_test.go
+	radar/ct_test.go
+	radar/ctauthority_test.go
+	radar/ctlog_test.go
 	radar/dataset_test.go
 	radar/dns_test.go
 	radar/dnstop_test.go

@@ -569,7 +569,7 @@ type ScriptDeleteResponse = interface{}
 type ScriptUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
+	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
@@ -596,7 +596,7 @@ func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string,
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
+// JSON-encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsMetadata struct {
 	// Configuration for assets within a Worker.
 	Assets param.Field[ScriptUpdateParamsMetadataAssets] `json:"assets"`
