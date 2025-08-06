@@ -15,10 +15,10 @@ import (
 type RadarService struct {
 	Options           []option.RequestOption
 	AI                *AIService
+	Ct                *CtService
 	Annotations       *AnnotationService
 	BGP               *BGPService
 	Bots              *BotService
-	Ct                *CtService
 	Datasets          *DatasetService
 	DNS               *DNSService
 	Netflows          *NetflowService
@@ -44,10 +44,10 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r = &RadarService{}
 	r.Options = opts
 	r.AI = NewAIService(opts...)
+	r.Ct = NewCtService(opts...)
 	r.Annotations = NewAnnotationService(opts...)
 	r.BGP = NewBGPService(opts...)
 	r.Bots = NewBotService(opts...)
-	r.Ct = NewCtService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.DNS = NewDNSService(opts...)
 	r.Netflows = NewNetflowService(opts...)

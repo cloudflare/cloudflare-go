@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
-func TestAIBotSummaryWithOptionalParams(t *testing.T) {
+func TestAIBotSummarySummaryWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,17 +28,17 @@ func TestAIBotSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.AI.Bots.Summary(
+	_, err := client.Radar.AI.Bots.Summary.Summary(
 		context.TODO(),
-		radar.AIBotSummaryParamsDimensionUserAgent,
-		radar.AIBotSummaryParams{
+		radar.AIBotSummarySummaryParamsDimensionUserAgent,
+		radar.AIBotSummarySummaryParams{
 			ASN:           cloudflare.F([]string{"string"}),
 			Continent:     cloudflare.F([]string{"string"}),
 			CrawlPurpose:  cloudflare.F([]string{"string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
-			Format:        cloudflare.F(radar.AIBotSummaryParamsFormatJson),
+			Format:        cloudflare.F(radar.AIBotSummarySummaryParamsFormatJson),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
@@ -53,7 +53,7 @@ func TestAIBotSummaryWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAIBotTimeseriesWithOptionalParams(t *testing.T) {
+func TestAIBotSummaryTimeseriesWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -66,15 +66,15 @@ func TestAIBotTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.AI.Bots.Timeseries(context.TODO(), radar.AIBotTimeseriesParams{
-		AggInterval:   cloudflare.F(radar.AIBotTimeseriesParamsAggInterval1h),
+	_, err := client.Radar.AI.Bots.Summary.Timeseries(context.TODO(), radar.AIBotSummaryTimeseriesParams{
+		AggInterval:   cloudflare.F(radar.AIBotSummaryTimeseriesParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		CrawlPurpose:  cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.AIBotTimeseriesParamsFormatJson),
+		Format:        cloudflare.F(radar.AIBotSummaryTimeseriesParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
@@ -89,7 +89,7 @@ func TestAIBotTimeseriesWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAIBotTimeseriesGroupsWithOptionalParams(t *testing.T) {
+func TestAIBotSummaryTimeseriesGroupsWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -102,22 +102,22 @@ func TestAIBotTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.AI.Bots.TimeseriesGroups(
+	_, err := client.Radar.AI.Bots.Summary.TimeseriesGroups(
 		context.TODO(),
-		radar.AIBotTimeseriesGroupsParamsDimensionUserAgent,
-		radar.AIBotTimeseriesGroupsParams{
-			AggInterval:   cloudflare.F(radar.AIBotTimeseriesGroupsParamsAggInterval1h),
+		radar.AIBotSummaryTimeseriesGroupsParamsDimensionUserAgent,
+		radar.AIBotSummaryTimeseriesGroupsParams{
+			AggInterval:   cloudflare.F(radar.AIBotSummaryTimeseriesGroupsParamsAggInterval1h),
 			ASN:           cloudflare.F([]string{"string"}),
 			Continent:     cloudflare.F([]string{"string"}),
 			CrawlPurpose:  cloudflare.F([]string{"string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
-			Format:        cloudflare.F(radar.AIBotTimeseriesGroupsParamsFormatJson),
+			Format:        cloudflare.F(radar.AIBotSummaryTimeseriesGroupsParamsFormatJson),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Normalization: cloudflare.F(radar.AIBotTimeseriesGroupsParamsNormalizationMin0Max),
+			Normalization: cloudflare.F(radar.AIBotSummaryTimeseriesGroupsParamsNormalizationMin0Max),
 		},
 	)
 	if err != nil {
