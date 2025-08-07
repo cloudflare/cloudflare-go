@@ -460,6 +460,10 @@ TEST_PATHS=(
 	radar/aitomarkdown_test.go
 	radar/aiinferencesummary_test.go
 	radar/aiinferencetimeseriesgroupsummary_test.go
+	radar/aitimeseriesgroup_test.go
+	radar/ct_test.go
+	radar/ctauthority_test.go
+	radar/ctlog_test.go
 	radar/annotation_test.go
 	radar/annotationoutage_test.go
 	radar/bgp_test.go
