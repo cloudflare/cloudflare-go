@@ -73,9 +73,8 @@ type NamespaceMetadataGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
-	// Arbitrary JSON that is associated with a key.
-	Result NamespaceMetadataGetResponse             `json:"result"`
-	JSON   namespaceMetadataGetResponseEnvelopeJSON `json:"-"`
+	Result  NamespaceMetadataGetResponse                `json:"result"`
+	JSON    namespaceMetadataGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // namespaceMetadataGetResponseEnvelopeJSON contains the JSON metadata for the
