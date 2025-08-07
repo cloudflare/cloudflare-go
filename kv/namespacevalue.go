@@ -169,9 +169,8 @@ type NamespaceValueUpdateParams struct {
 	// epoch.
 	Expiration param.Field[float64] `query:"expiration"`
 	// Expires the key after a number of seconds. Must be at least 60.
-	ExpirationTTL param.Field[float64] `query:"expiration_ttl"`
-	// Associates arbitrary JSON data with a key/value pair.
-	Metadata param.Field[interface{}] `json:"metadata"`
+	ExpirationTTL param.Field[float64]     `query:"expiration_ttl"`
+	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceValueUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {

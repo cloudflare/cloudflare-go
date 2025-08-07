@@ -155,10 +155,9 @@ type Key struct {
 	Name string `json:"name,required"`
 	// The time, measured in number of seconds since the UNIX epoch, at which the key
 	// will expire. This property is omitted for keys that will not expire.
-	Expiration float64 `json:"expiration"`
-	// Arbitrary JSON that is associated with a key.
-	Metadata interface{} `json:"metadata"`
-	JSON     keyJSON     `json:"-"`
+	Expiration float64     `json:"expiration"`
+	Metadata   interface{} `json:"metadata"`
+	JSON       keyJSON     `json:"-"`
 }
 
 // keyJSON contains the JSON metadata for the struct [Key]
@@ -355,10 +354,8 @@ func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata) implement
 }
 
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValue struct {
-	// The metadata associated with the key.
 	Metadata interface{} `json:"metadata,required"`
-	// The value associated with the key.
-	Value interface{} `json:"value,required"`
+	Value    interface{} `json:"value,required"`
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration float64                                                                `json:"expiration"`
@@ -584,9 +581,8 @@ type NamespaceKeyBulkUpdateParamsBody struct {
 	// epoch.
 	Expiration param.Field[float64] `json:"expiration"`
 	// Expires the key after a number of seconds. Must be at least 60.
-	ExpirationTTL param.Field[float64] `json:"expiration_ttl"`
-	// Arbitrary JSON that is associated with a key.
-	Metadata param.Field[interface{}] `json:"metadata"`
+	ExpirationTTL param.Field[float64]     `json:"expiration_ttl"`
+	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceKeyBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {

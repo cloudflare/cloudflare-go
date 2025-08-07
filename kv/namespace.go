@@ -452,10 +452,8 @@ func (r NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata) implementsNa
 }
 
 type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue struct {
-	// The metadata associated with the key.
 	Metadata interface{} `json:"metadata,required"`
-	// The value associated with the key.
-	Value interface{} `json:"value,required"`
+	Value    interface{} `json:"value,required"`
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration float64                                                             `json:"expiration"`
@@ -866,9 +864,8 @@ type NamespaceBulkUpdateParamsBody struct {
 	// epoch.
 	Expiration param.Field[float64] `json:"expiration"`
 	// Expires the key after a number of seconds. Must be at least 60.
-	ExpirationTTL param.Field[float64] `json:"expiration_ttl"`
-	// Arbitrary JSON that is associated with a key.
-	Metadata param.Field[interface{}] `json:"metadata"`
+	ExpirationTTL param.Field[float64]     `json:"expiration_ttl"`
+	Metadata      param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
