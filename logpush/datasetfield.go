@@ -33,7 +33,7 @@ func NewDatasetFieldService(opts ...option.RequestOption) (r *DatasetFieldServic
 	return
 }
 
-// Lists all fields available for a dataset. The response result is an object with
+// Lists all fields available for a dataset. The response result is. an object with
 // key-value pairs, where keys are field names, and values are descriptions.
 func (r *DatasetFieldService) Get(ctx context.Context, datasetID DatasetFieldGetParamsDatasetID, query DatasetFieldGetParams, opts ...option.RequestOption) (res *DatasetFieldGetResponse, err error) {
 	var env DatasetFieldGetResponseEnvelope
