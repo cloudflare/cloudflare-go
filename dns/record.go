@@ -2222,11 +2222,11 @@ func (r HTTPSRecordType) IsKnown() bool {
 
 // Components of a HTTPS record.
 type HTTPSRecordData struct {
-	// priority.
+	// Priority.
 	Priority float64 `json:"priority"`
-	// target.
+	// Target.
 	Target string `json:"target"`
-	// value.
+	// Value.
 	Value string              `json:"value"`
 	JSON  httpsRecordDataJSON `json:"-"`
 }
@@ -2317,11 +2317,11 @@ func (r HTTPSRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a HTTPS record.
 type HTTPSRecordDataParam struct {
-	// priority.
+	// Priority.
 	Priority param.Field[float64] `json:"priority"`
-	// target.
+	// Target.
 	Target param.Field[string] `json:"target"`
-	// value.
+	// Value.
 	Value param.Field[string] `json:"value"`
 }
 
@@ -4957,11 +4957,11 @@ func (r SSHFPRecordType) IsKnown() bool {
 
 // Components of a SSHFP record.
 type SSHFPRecordData struct {
-	// algorithm.
+	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
-	// fingerprint.
+	// Fingerprint.
 	Fingerprint string `json:"fingerprint"`
-	// type.
+	// Type.
 	Type float64             `json:"type"`
 	JSON sshfpRecordDataJSON `json:"-"`
 }
@@ -5052,11 +5052,11 @@ func (r SSHFPRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a SSHFP record.
 type SSHFPRecordDataParam struct {
-	// algorithm.
+	// Algorithm.
 	Algorithm param.Field[float64] `json:"algorithm"`
-	// fingerprint.
+	// Fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
-	// type.
+	// Type.
 	Type param.Field[float64] `json:"type"`
 }
 
@@ -5148,11 +5148,11 @@ func (r SVCBRecordType) IsKnown() bool {
 
 // Components of a SVCB record.
 type SVCBRecordData struct {
-	// priority.
+	// Priority.
 	Priority float64 `json:"priority"`
-	// target.
+	// Target.
 	Target string `json:"target"`
-	// value.
+	// Value.
 	Value string             `json:"value"`
 	JSON  svcbRecordDataJSON `json:"-"`
 }
@@ -5243,11 +5243,11 @@ func (r SVCBRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a SVCB record.
 type SVCBRecordDataParam struct {
-	// priority.
+	// Priority.
 	Priority param.Field[float64] `json:"priority"`
-	// target.
+	// Target.
 	Target param.Field[string] `json:"target"`
-	// value.
+	// Value.
 	Value param.Field[string] `json:"value"`
 }
 
@@ -5339,7 +5339,7 @@ func (r TLSARecordType) IsKnown() bool {
 
 // Components of a TLSA record.
 type TLSARecordData struct {
-	// certificate.
+	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
 	MatchingType float64 `json:"matching_type"`
@@ -5437,7 +5437,7 @@ func (r TLSARecordParam) implementsRecordEditParamsBodyUnion() {}
 
 // Components of a TLSA record.
 type TLSARecordDataParam struct {
-	// certificate.
+	// Certificate.
 	Certificate param.Field[string] `json:"certificate"`
 	// Matching Type.
 	MatchingType param.Field[float64] `json:"matching_type"`
