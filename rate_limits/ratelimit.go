@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // RateLimitService contains methods and other services that help with interacting
@@ -211,8 +211,8 @@ type RateLimit struct {
 	// Criteria specifying when the current rate limit should be bypassed. You can
 	// specify that the rate limit should not apply to one or more URLs.
 	Bypass []RateLimitBypass `json:"bypass"`
-	// An informative summary of the rate limit. This value is sanitized and any tags
-	// will be removed.
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
 	Description string `json:"description"`
 	// When true, indicates that the rate limit is currently disabled.
 	Disabled bool `json:"disabled"`
@@ -536,8 +536,8 @@ type RateLimitDeleteResponse struct {
 	// Criteria specifying when the current rate limit should be bypassed. You can
 	// specify that the rate limit should not apply to one or more URLs.
 	Bypass []RateLimitDeleteResponseBypass `json:"bypass"`
-	// An informative summary of the rate limit. This value is sanitized and any tags
-	// will be removed.
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
 	Description string `json:"description"`
 	// When true, indicates that the rate limit is currently disabled.
 	Disabled bool `json:"disabled"`

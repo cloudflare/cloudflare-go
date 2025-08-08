@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // CatalogSyncPrebuiltPolicyService contains methods and other services that help
@@ -36,7 +36,7 @@ func NewCatalogSyncPrebuiltPolicyService(opts ...option.RequestOption) (r *Catal
 	return
 }
 
-// List prebuilt catalog sync policies (Closed Beta)
+// List prebuilt catalog sync policies (Closed Beta).
 func (r *CatalogSyncPrebuiltPolicyService) List(ctx context.Context, params CatalogSyncPrebuiltPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CatalogSyncPrebuiltPolicyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -58,7 +58,7 @@ func (r *CatalogSyncPrebuiltPolicyService) List(ctx context.Context, params Cata
 	return res, nil
 }
 
-// List prebuilt catalog sync policies (Closed Beta)
+// List prebuilt catalog sync policies (Closed Beta).
 func (r *CatalogSyncPrebuiltPolicyService) ListAutoPaging(ctx context.Context, params CatalogSyncPrebuiltPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CatalogSyncPrebuiltPolicyListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
@@ -107,7 +107,7 @@ func (r CatalogSyncPrebuiltPolicyListResponseApplicableDestination) IsKnown() bo
 
 type CatalogSyncPrebuiltPolicyListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// specify type of destination, omit to return all
+	// Specify type of destination, omit to return all.
 	DestinationType param.Field[CatalogSyncPrebuiltPolicyListParamsDestinationType] `query:"destination_type"`
 }
 
@@ -120,7 +120,7 @@ func (r CatalogSyncPrebuiltPolicyListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// specify type of destination, omit to return all
+// Specify type of destination, omit to return all.
 type CatalogSyncPrebuiltPolicyListParamsDestinationType string
 
 const (

@@ -3,8 +3,8 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DEXService contains methods and other services that help with interacting with
@@ -15,6 +15,7 @@ import (
 // the [NewDEXService] method instead.
 type DEXService struct {
 	Options               []option.RequestOption
+	WARPChangeEvents      *DEXWARPChangeEventService
 	Commands              *DEXCommandService
 	Colos                 *DEXColoService
 	FleetStatus           *DEXFleetStatusService
@@ -30,6 +31,7 @@ type DEXService struct {
 func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	r = &DEXService{}
 	r.Options = opts
+	r.WARPChangeEvents = NewDEXWARPChangeEventService(opts...)
 	r.Commands = NewDEXCommandService(opts...)
 	r.Colos = NewDEXColoService(opts...)
 	r.FleetStatus = NewDEXFleetStatusService(opts...)

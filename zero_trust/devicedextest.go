@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // DeviceDEXTestService contains methods and other services that help with
@@ -42,7 +42,7 @@ func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewP
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -63,7 +63,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 		err = errors.New("missing required dex_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", params.AccountID, dexTestID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", params.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -72,7 +72,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 	return
 }
 
-// Fetch all DEX tests.
+// Fetch all DEX tests
 func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceDEXTestListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -81,7 +81,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 	return res, nil
 }
 
-// Fetch all DEX tests.
+// Fetch all DEX tests
 func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceDEXTestListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
@@ -112,7 +112,7 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 		err = errors.New("missing required dex_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", body.AccountID, dexTestID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", body.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -133,7 +133,7 @@ func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query 
 		err = errors.New("missing required dex_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", query.AccountID, dexTestID)
+	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", query.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

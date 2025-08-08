@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/accounts"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestRoleListWithOptionalParams(t *testing.T) {
@@ -28,7 +28,7 @@ func TestRoleListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Roles.List(context.TODO(), accounts.RoleListParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})
@@ -58,7 +58,7 @@ func TestRoleGet(t *testing.T) {
 		context.TODO(),
 		"3536bcfad5faccb999b47003c79917fb",
 		accounts.RoleGetParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

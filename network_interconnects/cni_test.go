@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/network_interconnects"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/network_interconnects"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestCNINewWithOptionalParams(t *testing.T) {
@@ -113,6 +113,7 @@ func TestCNIListWithOptionalParams(t *testing.T) {
 		Cursor:    cloudflare.F(int64(0)),
 		Limit:     cloudflare.F(int64(0)),
 		Slot:      cloudflare.F("slot"),
+		TunnelID:  cloudflare.F("tunnel_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

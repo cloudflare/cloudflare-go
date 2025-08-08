@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // ConfigService contains methods and other services that help with interacting
@@ -332,6 +332,9 @@ type ConfigEditParams struct {
 	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
 	Name      param.Field[string]                       `json:"name"`
 	Origin    param.Field[ConfigEditParamsOriginUnion]  `json:"origin"`
+	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
+	// the origin database.
+	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {

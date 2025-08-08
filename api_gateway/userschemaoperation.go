@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -41,6 +41,10 @@ func NewUserSchemaOperationService(opts ...option.RequestOption) (r *UserSchemaO
 
 // Retrieves all operations from the schema. Operations that already exist in API
 // Shield Endpoint Management will be returned as full operations.
+//
+// Deprecated: Use
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
+// instead.
 func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserSchemaOperationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -68,6 +72,10 @@ func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, 
 
 // Retrieves all operations from the schema. Operations that already exist in API
 // Shield Endpoint Management will be returned as full operations.
+//
+// Deprecated: Use
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
+// instead.
 func (r *UserSchemaOperationService) ListAutoPaging(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UserSchemaOperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, schemaID, params, opts...))
 }

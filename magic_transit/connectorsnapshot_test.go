@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestConnectorSnapshotListWithOptionalParams(t *testing.T) {
@@ -31,7 +31,7 @@ func TestConnectorSnapshotListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"connector_id",
 		magic_transit.ConnectorSnapshotListParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			From:      cloudflare.F(0.000000),
 			To:        cloudflare.F(0.000000),
 			Cursor:    cloudflare.F("cursor"),
@@ -65,7 +65,7 @@ func TestConnectorSnapshotGet(t *testing.T) {
 		"connector_id",
 		0.000000,
 		magic_transit.ConnectorSnapshotGetParams{
-			AccountID: cloudflare.F(0.000000),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

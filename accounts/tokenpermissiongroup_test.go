@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/accounts"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
-func TestTokenPermissionGroupList(t *testing.T) {
+func TestTokenPermissionGroupListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,9 @@ func TestTokenPermissionGroupList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Tokens.PermissionGroups.List(context.TODO(), accounts.TokenPermissionGroupListParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("Account%20Settings%20Write"),
+		Scope:     cloudflare.F("com.cloudflare.api.account.zone"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +42,7 @@ func TestTokenPermissionGroupList(t *testing.T) {
 	}
 }
 
-func TestTokenPermissionGroupGet(t *testing.T) {
+func TestTokenPermissionGroupGetWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,7 +57,9 @@ func TestTokenPermissionGroupGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Tokens.PermissionGroups.Get(context.TODO(), accounts.TokenPermissionGroupGetParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("Account%20Settings%20Write"),
+		Scope:     cloudflare.F("com.cloudflare.api.account.zone"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

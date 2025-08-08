@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // VersionService contains methods and other services that help with interacting
@@ -260,9 +260,10 @@ func (r VersionGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type VersionGetResponseEnvelopeResultInfo struct {
 	Count      float64                                  `json:"count,required"`
-	Page       float64                                  `json:"page,required"`
 	PerPage    float64                                  `json:"per_page,required"`
 	TotalCount float64                                  `json:"total_count,required"`
+	NextCursor string                                   `json:"next_cursor"`
+	Page       float64                                  `json:"page"`
 	JSON       versionGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -270,9 +271,10 @@ type VersionGetResponseEnvelopeResultInfo struct {
 // struct [VersionGetResponseEnvelopeResultInfo]
 type versionGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

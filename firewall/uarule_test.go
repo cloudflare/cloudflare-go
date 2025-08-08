@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/firewall"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/firewall"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestUARuleNewWithOptionalParams(t *testing.T) {
@@ -30,11 +30,13 @@ func TestUARuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.UARules.New(context.TODO(), firewall.UARuleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Configuration: cloudflare.F[firewall.UARuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
-			Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
-			Value:  cloudflare.F("198.51.100.4"),
+		Configuration: cloudflare.F(firewall.UARuleNewParamsConfiguration{
+			Target: cloudflare.F(firewall.UARuleNewParamsConfigurationTargetUA),
+			Value:  cloudflare.F("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"),
 		}),
-		Mode: cloudflare.F(firewall.UARuleNewParamsModeChallenge),
+		Mode:        cloudflare.F(firewall.UARuleNewParamsModeChallenge),
+		Description: cloudflare.F("Prevent multiple login failures to mitigate brute force attacks"),
+		Paused:      cloudflare.F(false),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -68,7 +70,9 @@ func TestUARuleUpdateWithOptionalParams(t *testing.T) {
 				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
 			}),
-			Mode: cloudflare.F(firewall.UARuleUpdateParamsModeChallenge),
+			Mode:        cloudflare.F(firewall.UARuleUpdateParamsModeChallenge),
+			Description: cloudflare.F("Prevent multiple login failures to mitigate brute force attacks"),
+			Paused:      cloudflare.F(false),
 		},
 	)
 	if err != nil {
@@ -94,12 +98,12 @@ func TestUARuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.UARules.List(context.TODO(), firewall.UARuleListParams{
-		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Description:       cloudflare.F("abusive"),
-		DescriptionSearch: cloudflare.F("abusive"),
-		Page:              cloudflare.F(1.000000),
-		PerPage:           cloudflare.F(1.000000),
-		UASearch:          cloudflare.F("Safari"),
+		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Description: cloudflare.F("abusive"),
+		Page:        cloudflare.F(1.000000),
+		Paused:      cloudflare.F(false),
+		PerPage:     cloudflare.F(1.000000),
+		UserAgent:   cloudflare.F("Safari"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

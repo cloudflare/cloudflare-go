@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // GatewayListService contains methods and other services that help with
@@ -195,17 +195,6 @@ func (r gatewayItemJSON) RawJSON() string {
 	return r.raw
 }
 
-type GatewayItemParam struct {
-	// The description of the list item, if present
-	Description param.Field[string] `json:"description"`
-	// The value of the item in a list.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r GatewayItemParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type GatewayList struct {
 	// API Resource UUID tag.
 	ID string `json:"id"`
@@ -332,8 +321,8 @@ type GatewayListNewParams struct {
 	Type param.Field[GatewayListNewParamsType] `json:"type,required"`
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
-	// The items in the list.
-	Items param.Field[[]GatewayItemParam] `json:"items"`
+	// items to add to the list.
+	Items param.Field[[]GatewayListNewParamsItem] `json:"items"`
 }
 
 func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
@@ -357,6 +346,17 @@ func (r GatewayListNewParamsType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type GatewayListNewParamsItem struct {
+	// The description of the list item, if present
+	Description param.Field[string] `json:"description"`
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r GatewayListNewParamsItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GatewayListNewResponseEnvelope struct {
@@ -408,11 +408,22 @@ type GatewayListUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
-	// The items in the list.
-	Items param.Field[[]GatewayItemParam] `json:"items"`
+	// items to add to the list.
+	Items param.Field[[]GatewayListUpdateParamsItem] `json:"items"`
 }
 
 func (r GatewayListUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type GatewayListUpdateParamsItem struct {
+	// The description of the list item, if present
+	Description param.Field[string] `json:"description"`
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r GatewayListUpdateParamsItem) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -541,13 +552,24 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayListEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The items in the list.
-	Append param.Field[[]GatewayItemParam] `json:"append"`
+	// items to add to the list.
+	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
 	// A list of the item values you want to remove.
 	Remove param.Field[[]string] `json:"remove"`
 }
 
 func (r GatewayListEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type GatewayListEditParamsAppend struct {
+	// The description of the list item, if present
+	Description param.Field[string] `json:"description"`
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r GatewayListEditParamsAppend) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestAttackLayer7TopAttacksWithOptionalParams(t *testing.T) {
@@ -39,7 +39,6 @@ func TestAttackLayer7TopAttacksWithOptionalParams(t *testing.T) {
 		LimitDirection:    cloudflare.F(radar.AttackLayer7TopAttacksParamsLimitDirectionOrigin),
 		LimitPerLocation:  cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
-		Magnitude:         cloudflare.F(radar.AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopAttacksParamsMitigationProduct{radar.AttackLayer7TopAttacksParamsMitigationProductDDoS}),
 		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TopAttacksParamsNormalizationPercentage),

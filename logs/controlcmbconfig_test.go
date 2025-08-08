@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/logs"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/logs"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestControlCmbConfigNewWithOptionalParams(t *testing.T) {
@@ -30,7 +30,8 @@ func TestControlCmbConfigNewWithOptionalParams(t *testing.T) {
 	_, err := client.Logs.Control.Cmb.Config.New(context.TODO(), logs.ControlCmbConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		CmbConfig: logs.CmbConfigParam{
-			Regions: cloudflare.F("eu"),
+			AllowOutOfRegionAccess: cloudflare.F(false),
+			Regions:                cloudflare.F("eu"),
 		},
 	})
 	if err != nil {

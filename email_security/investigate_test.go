@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/email_security"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/email_security"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestInvestigateListWithOptionalParams(t *testing.T) {
@@ -45,6 +45,7 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 		Recipient:        cloudflare.F("recipient"),
 		Sender:           cloudflare.F("sender"),
 		Start:            cloudflare.F(time.Now()),
+		Subject:          cloudflare.F("subject"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

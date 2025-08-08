@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // DeviceSettingService contains methods and other services that help with
@@ -44,6 +44,23 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 	}
 	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Resets the current device settings for a Zero Trust account.
+func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDeleteParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
+	var env DeviceSettingDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/devices/settings", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -184,6 +201,53 @@ const (
 func (r DeviceSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DeviceSettingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DeviceSettingDeleteParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DeviceSettingDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceSettings        `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DeviceSettingDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceSettingDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// deviceSettingDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DeviceSettingDeleteResponseEnvelope]
+type deviceSettingDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DeviceSettingDeleteResponseEnvelopeSuccess bool
+
+const (
+	DeviceSettingDeleteResponseEnvelopeSuccessTrue DeviceSettingDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DeviceSettingDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceSettingDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -449,6 +449,15 @@ type LockdownNewParams struct {
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
 	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
+	Description param.Field[string] `json:"description"`
+	// When true, indicates that the rule is currently paused.
+	Paused param.Field[bool] `json:"paused"`
+	// The priority of the rule to control the processing order. A lower number
+	// indicates higher priority. If not provided, any rules with a configured priority
+	// will be processed before rules without a priority.
+	Priority param.Field[float64] `json:"priority"`
 }
 
 func (r LockdownNewParams) MarshalJSON() (data []byte, err error) {

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // DeviceRegistrationService contains methods and other services that help with
@@ -36,7 +36,7 @@ func NewDeviceRegistrationService(opts ...option.RequestOption) (r *DeviceRegist
 	return
 }
 
-// List WARP registrations.
+// Lists WARP registrations.
 func (r *DeviceRegistrationService) List(ctx context.Context, params DeviceRegistrationListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[DeviceRegistrationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -58,7 +58,7 @@ func (r *DeviceRegistrationService) List(ctx context.Context, params DeviceRegis
 	return res, nil
 }
 
-// List WARP registrations.
+// Lists WARP registrations.
 func (r *DeviceRegistrationService) ListAutoPaging(ctx context.Context, params DeviceRegistrationListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[DeviceRegistrationListResponse] {
 	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
@@ -400,10 +400,10 @@ type DeviceRegistrationListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// Filter by registration details.
 	Search param.Field[string] `query:"search"`
-	// Filters by the last_seen timestamp - returns only registrations last seen after
+	// Filter by the last_seen timestamp - returns only registrations last seen after
 	// this timestamp.
 	SeenAfter param.Field[string] `query:"seen_after"`
-	// Filters by the last_seen timestamp - returns only registrations last seen before
+	// Filter by the last_seen timestamp - returns only registrations last seen before
 	// this timestamp.
 	SeenBefore param.Field[string] `query:"seen_before"`
 	// The registration field to order results by.
@@ -491,7 +491,7 @@ func (r DeviceRegistrationListParamsStatus) IsKnown() bool {
 }
 
 type DeviceRegistrationListParamsUser struct {
-	// Filter by Access user ID.
+	// Filter by user ID.
 	ID param.Field[[]string] `query:"id"`
 }
 

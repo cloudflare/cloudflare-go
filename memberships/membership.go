@@ -9,14 +9,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/accounts"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // MembershipService contains methods and other services that help with interacting
@@ -343,11 +343,11 @@ func (r MembershipUpdateResponsePoliciesAccess) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type MembershipUpdateResponsePoliciesPermissionGroup struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta MembershipUpdateResponsePoliciesPermissionGroupsMeta `json:"meta"`
-	// Name of the group.
+	// Name of the permission group.
 	Name string                                              `json:"name"`
 	JSON membershipUpdateResponsePoliciesPermissionGroupJSON `json:"-"`
 }
@@ -396,7 +396,7 @@ func (r membershipUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() stri
 
 // A group of scoped resources.
 type MembershipUpdateResponsePoliciesResourceGroup struct {
-	// Identifier of the group.
+	// Identifier of the resource group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
 	Scope []MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope,required"`
@@ -676,11 +676,11 @@ func (r MembershipGetResponsePoliciesAccess) IsKnown() bool {
 // A named group of permissions that map to a group of operations against
 // resources.
 type MembershipGetResponsePoliciesPermissionGroup struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta MembershipGetResponsePoliciesPermissionGroupsMeta `json:"meta"`
-	// Name of the group.
+	// Name of the permission group.
 	Name string                                           `json:"name"`
 	JSON membershipGetResponsePoliciesPermissionGroupJSON `json:"-"`
 }
@@ -729,7 +729,7 @@ func (r membershipGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string 
 
 // A group of scoped resources.
 type MembershipGetResponsePoliciesResourceGroup struct {
-	// Identifier of the group.
+	// Identifier of the resource group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
 	Scope []MembershipGetResponsePoliciesResourceGroupsScope `json:"scope,required"`

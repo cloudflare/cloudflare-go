@@ -11,11 +11,11 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DLPDatasetUploadService contains methods and other services that help with
@@ -62,10 +62,11 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 // only be created in the Cloudflare dashboard. For other clients, this operation
 // can only be used for non-secret Custom Word Lists. The body must be a UTF-8
 // encoded, newline (NL or CRNL) separated list of words to be matched.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, dataset io.Reader, body DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetUploadEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", dataset)}, opts...)
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -73,8 +74,8 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 		err = errors.New("missing required dataset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", params.AccountID, datasetID, version)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", body.AccountID, datasetID, version)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -144,6 +145,7 @@ type NewVersionColumnsUploadStatus string
 const (
 	NewVersionColumnsUploadStatusEmpty      NewVersionColumnsUploadStatus = "empty"
 	NewVersionColumnsUploadStatusUploading  NewVersionColumnsUploadStatus = "uploading"
+	NewVersionColumnsUploadStatusPending    NewVersionColumnsUploadStatus = "pending"
 	NewVersionColumnsUploadStatusProcessing NewVersionColumnsUploadStatus = "processing"
 	NewVersionColumnsUploadStatusFailed     NewVersionColumnsUploadStatus = "failed"
 	NewVersionColumnsUploadStatusComplete   NewVersionColumnsUploadStatus = "complete"
@@ -151,7 +153,7 @@ const (
 
 func (r NewVersionColumnsUploadStatus) IsKnown() bool {
 	switch r {
-	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
+	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusPending, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
 		return true
 	}
 	return false
@@ -302,7 +304,6 @@ func (r DLPDatasetUploadNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DLPDatasetUploadEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      io.Reader           `json:"body,required" format:"binary"`
 }
 
 func (r DLPDatasetUploadEditParams) MarshalMultipart() (data []byte, contentType string, err error) {

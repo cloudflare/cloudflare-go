@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // RouteService contains methods and other services that help with interacting with
@@ -148,7 +148,7 @@ type RouteNewResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string               `json:"script,required"`
+	Script string               `json:"script"`
 	JSON   routeNewResponseJSON `json:"-"`
 }
 
@@ -177,7 +177,7 @@ type RouteUpdateResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string                  `json:"script,required"`
+	Script string                  `json:"script"`
 	JSON   routeUpdateResponseJSON `json:"-"`
 }
 
@@ -206,7 +206,7 @@ type RouteListResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string                `json:"script,required"`
+	Script string                `json:"script"`
 	JSON   routeListResponseJSON `json:"-"`
 }
 
@@ -257,7 +257,7 @@ type RouteGetResponse struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern string `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string               `json:"script,required"`
+	Script string               `json:"script"`
 	JSON   routeGetResponseJSON `json:"-"`
 }
 
@@ -282,13 +282,11 @@ func (r routeGetResponseJSON) RawJSON() string {
 type RouteNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script param.Field[string] `json:"script,required"`
+	Script param.Field[string] `json:"script"`
 }
 
 func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
@@ -298,9 +296,9 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 type RouteNewResponseEnvelope struct {
 	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   RouteNewResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  RouteNewResponse                `json:"result"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -443,7 +441,7 @@ type RouteUpdateParams struct {
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script param.Field[string] `json:"script,required"`
+	Script param.Field[string] `json:"script"`
 }
 
 func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {

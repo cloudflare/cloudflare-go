@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // UserSchemaHostService contains methods and other services that help with
@@ -38,6 +38,10 @@ func NewUserSchemaHostService(opts ...option.RequestOption) (r *UserSchemaHostSe
 }
 
 // Retrieve schema hosts in a zone
+//
+// Deprecated: Use
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
+// instead.
 func (r *UserSchemaHostService) List(ctx context.Context, params UserSchemaHostListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserSchemaHostListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -60,6 +64,10 @@ func (r *UserSchemaHostService) List(ctx context.Context, params UserSchemaHostL
 }
 
 // Retrieve schema hosts in a zone
+//
+// Deprecated: Use
+// [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
+// instead.
 func (r *UserSchemaHostService) ListAutoPaging(ctx context.Context, params UserSchemaHostListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UserSchemaHostListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }

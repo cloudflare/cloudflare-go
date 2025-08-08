@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // DLPDatasetVersionService contains methods and other services that help with
@@ -103,6 +103,7 @@ type DLPDatasetVersionNewResponseUploadStatus string
 const (
 	DLPDatasetVersionNewResponseUploadStatusEmpty      DLPDatasetVersionNewResponseUploadStatus = "empty"
 	DLPDatasetVersionNewResponseUploadStatusUploading  DLPDatasetVersionNewResponseUploadStatus = "uploading"
+	DLPDatasetVersionNewResponseUploadStatusPending    DLPDatasetVersionNewResponseUploadStatus = "pending"
 	DLPDatasetVersionNewResponseUploadStatusProcessing DLPDatasetVersionNewResponseUploadStatus = "processing"
 	DLPDatasetVersionNewResponseUploadStatusFailed     DLPDatasetVersionNewResponseUploadStatus = "failed"
 	DLPDatasetVersionNewResponseUploadStatusComplete   DLPDatasetVersionNewResponseUploadStatus = "complete"
@@ -110,7 +111,7 @@ const (
 
 func (r DLPDatasetVersionNewResponseUploadStatus) IsKnown() bool {
 	switch r {
-	case DLPDatasetVersionNewResponseUploadStatusEmpty, DLPDatasetVersionNewResponseUploadStatusUploading, DLPDatasetVersionNewResponseUploadStatusProcessing, DLPDatasetVersionNewResponseUploadStatusFailed, DLPDatasetVersionNewResponseUploadStatusComplete:
+	case DLPDatasetVersionNewResponseUploadStatusEmpty, DLPDatasetVersionNewResponseUploadStatusUploading, DLPDatasetVersionNewResponseUploadStatusPending, DLPDatasetVersionNewResponseUploadStatusProcessing, DLPDatasetVersionNewResponseUploadStatusFailed, DLPDatasetVersionNewResponseUploadStatusComplete:
 		return true
 	}
 	return false

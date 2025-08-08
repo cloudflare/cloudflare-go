@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -138,7 +138,8 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 }
 
 type BotFightModeConfiguration struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotFightModeConfigurationCrawlerProtection `json:"crawler_protection"`
@@ -181,17 +182,19 @@ func (r BotFightModeConfiguration) implementsBotManagementUpdateResponse() {}
 
 func (r BotFightModeConfiguration) implementsBotManagementGetResponse() {}
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type BotFightModeConfigurationAIBotsProtection string
 
 const (
-	BotFightModeConfigurationAIBotsProtectionBlock    BotFightModeConfigurationAIBotsProtection = "block"
-	BotFightModeConfigurationAIBotsProtectionDisabled BotFightModeConfigurationAIBotsProtection = "disabled"
+	BotFightModeConfigurationAIBotsProtectionBlock         BotFightModeConfigurationAIBotsProtection = "block"
+	BotFightModeConfigurationAIBotsProtectionDisabled      BotFightModeConfigurationAIBotsProtection = "disabled"
+	BotFightModeConfigurationAIBotsProtectionOnlyOnADPages BotFightModeConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled:
+	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled, BotFightModeConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -255,7 +258,8 @@ func (r botFightModeConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 }
 
 type BotFightModeConfigurationParam struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[BotFightModeConfigurationCrawlerProtection] `json:"crawler_protection"`
@@ -296,7 +300,8 @@ func (r BotFightModeConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 }
 
 type SubscriptionConfiguration struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection SubscriptionConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
@@ -345,17 +350,19 @@ func (r SubscriptionConfiguration) implementsBotManagementUpdateResponse() {}
 
 func (r SubscriptionConfiguration) implementsBotManagementGetResponse() {}
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type SubscriptionConfigurationAIBotsProtection string
 
 const (
-	SubscriptionConfigurationAIBotsProtectionBlock    SubscriptionConfigurationAIBotsProtection = "block"
-	SubscriptionConfigurationAIBotsProtectionDisabled SubscriptionConfigurationAIBotsProtection = "disabled"
+	SubscriptionConfigurationAIBotsProtectionBlock         SubscriptionConfigurationAIBotsProtection = "block"
+	SubscriptionConfigurationAIBotsProtectionDisabled      SubscriptionConfigurationAIBotsProtection = "disabled"
+	SubscriptionConfigurationAIBotsProtectionOnlyOnADPages SubscriptionConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled:
+	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled, SubscriptionConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -419,7 +426,8 @@ func (r subscriptionConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 }
 
 type SubscriptionConfigurationParam struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[SubscriptionConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
@@ -465,7 +473,8 @@ func (r SubscriptionConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 }
 
 type SuperBotFightModeDefinitelyConfiguration struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SuperBotFightModeDefinitelyConfigurationCrawlerProtection `json:"crawler_protection"`
@@ -519,17 +528,19 @@ func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementUpdateR
 
 func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementGetResponse() {}
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type SuperBotFightModeDefinitelyConfigurationAIBotsProtection string
 
 const (
-	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock    SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "block"
-	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock         SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "block"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled      SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r SuperBotFightModeDefinitelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled:
+	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -614,7 +625,8 @@ func (r superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON) RawJ
 }
 
 type SuperBotFightModeDefinitelyConfigurationParam struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SuperBotFightModeDefinitelyConfigurationCrawlerProtection] `json:"crawler_protection"`
@@ -655,7 +667,8 @@ func (r SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam) Mar
 }
 
 type SuperBotFightModeLikelyConfiguration struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SuperBotFightModeLikelyConfigurationCrawlerProtection `json:"crawler_protection"`
@@ -712,17 +725,19 @@ func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementUpdateRespo
 
 func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementGetResponse() {}
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type SuperBotFightModeLikelyConfigurationAIBotsProtection string
 
 const (
-	SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock    SuperBotFightModeLikelyConfigurationAIBotsProtection = "block"
-	SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled SuperBotFightModeLikelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock         SuperBotFightModeLikelyConfigurationAIBotsProtection = "block"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled      SuperBotFightModeLikelyConfigurationAIBotsProtection = "disabled"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionOnlyOnADPages SuperBotFightModeLikelyConfigurationAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r SuperBotFightModeLikelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
-	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled:
+	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeLikelyConfigurationAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -820,7 +835,8 @@ func (r superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON) RawJSON(
 }
 
 type SuperBotFightModeLikelyConfigurationParam struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SuperBotFightModeLikelyConfigurationCrawlerProtection] `json:"crawler_protection"`
@@ -859,7 +875,8 @@ func (r SuperBotFightModeLikelyConfigurationStaleZoneConfigurationParam) Marshal
 }
 
 type BotManagementUpdateResponse struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection BotManagementUpdateResponseAIBotsProtection `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
@@ -973,17 +990,19 @@ func init() {
 	)
 }
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type BotManagementUpdateResponseAIBotsProtection string
 
 const (
-	BotManagementUpdateResponseAIBotsProtectionBlock    BotManagementUpdateResponseAIBotsProtection = "block"
-	BotManagementUpdateResponseAIBotsProtectionDisabled BotManagementUpdateResponseAIBotsProtection = "disabled"
+	BotManagementUpdateResponseAIBotsProtectionBlock         BotManagementUpdateResponseAIBotsProtection = "block"
+	BotManagementUpdateResponseAIBotsProtectionDisabled      BotManagementUpdateResponseAIBotsProtection = "disabled"
+	BotManagementUpdateResponseAIBotsProtectionOnlyOnADPages BotManagementUpdateResponseAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotManagementUpdateResponseAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateResponseAIBotsProtectionBlock, BotManagementUpdateResponseAIBotsProtectionDisabled:
+	case BotManagementUpdateResponseAIBotsProtectionBlock, BotManagementUpdateResponseAIBotsProtectionDisabled, BotManagementUpdateResponseAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1056,7 +1075,8 @@ func (r BotManagementUpdateResponseSBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementGetResponse struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection BotManagementGetResponseAIBotsProtection `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
@@ -1170,17 +1190,19 @@ func init() {
 	)
 }
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type BotManagementGetResponseAIBotsProtection string
 
 const (
-	BotManagementGetResponseAIBotsProtectionBlock    BotManagementGetResponseAIBotsProtection = "block"
-	BotManagementGetResponseAIBotsProtectionDisabled BotManagementGetResponseAIBotsProtection = "disabled"
+	BotManagementGetResponseAIBotsProtectionBlock         BotManagementGetResponseAIBotsProtection = "block"
+	BotManagementGetResponseAIBotsProtectionDisabled      BotManagementGetResponseAIBotsProtection = "disabled"
+	BotManagementGetResponseAIBotsProtectionOnlyOnADPages BotManagementGetResponseAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotManagementGetResponseAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled:
+	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled, BotManagementGetResponseAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1263,7 +1285,8 @@ func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BotManagementUpdateParamsBody struct {
-	// Enable rule to block AI Scrapers and Crawlers.
+	// Enable rule to block AI Scrapers and Crawlers. Please note the value
+	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[BotManagementUpdateParamsBodyAIBotsProtection] `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
@@ -1309,17 +1332,19 @@ type BotManagementUpdateParamsBodyUnion interface {
 	implementsBotManagementUpdateParamsBodyUnion()
 }
 
-// Enable rule to block AI Scrapers and Crawlers.
+// Enable rule to block AI Scrapers and Crawlers. Please note the value
+// `only_on_ad_pages` is currently not available for Enterprise customers.
 type BotManagementUpdateParamsBodyAIBotsProtection string
 
 const (
-	BotManagementUpdateParamsBodyAIBotsProtectionBlock    BotManagementUpdateParamsBodyAIBotsProtection = "block"
-	BotManagementUpdateParamsBodyAIBotsProtectionDisabled BotManagementUpdateParamsBodyAIBotsProtection = "disabled"
+	BotManagementUpdateParamsBodyAIBotsProtectionBlock         BotManagementUpdateParamsBodyAIBotsProtection = "block"
+	BotManagementUpdateParamsBodyAIBotsProtectionDisabled      BotManagementUpdateParamsBodyAIBotsProtection = "disabled"
+	BotManagementUpdateParamsBodyAIBotsProtectionOnlyOnADPages BotManagementUpdateParamsBodyAIBotsProtection = "only_on_ad_pages"
 )
 
 func (r BotManagementUpdateParamsBodyAIBotsProtection) IsKnown() bool {
 	switch r {
-	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled:
+	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled, BotManagementUpdateParamsBodyAIBotsProtectionOnlyOnADPages:
 		return true
 	}
 	return false

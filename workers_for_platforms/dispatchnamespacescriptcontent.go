@@ -7,15 +7,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/workers"
 )
 
 // DispatchNamespaceScriptContentService contains methods and other services that
@@ -94,9 +95,17 @@ type DispatchNamespaceScriptContentUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
-	CfWorkerBodyPart       param.Field[string]                      `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                      `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
+	// An array of modules (often JavaScript files) comprising a Worker script. At
+	// least one module must be present and referenced in the metadata as `main_module`
+	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
+	// `application/javascript+module`, `text/javascript+module`,
+	// `application/javascript`, `text/javascript`, `text/x-python`,
+	// `text/x-python-requirement`, `application/wasm`, `text/plain`,
+	// `application/octet-stream`, `application/source-map`.
+	Files                  param.Field[[]io.Reader] `json:"files" format:"binary"`
+	CfWorkerBodyPart       param.Field[string]      `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]      `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ContentService contains methods and other services that help with interacting
@@ -393,6 +393,7 @@ func (r ContentNewParamsWaitForSelectorVisible) IsKnown() bool {
 }
 
 type ContentNewResponseEnvelope struct {
+	Meta ContentNewResponseEnvelopeMeta `json:"meta,required"`
 	// Response status
 	Status bool                               `json:"status,required"`
 	Errors []ContentNewResponseEnvelopeErrors `json:"errors"`
@@ -404,6 +405,7 @@ type ContentNewResponseEnvelope struct {
 // contentNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ContentNewResponseEnvelope]
 type contentNewResponseEnvelopeJSON struct {
+	Meta        apijson.Field
 	Status      apijson.Field
 	Errors      apijson.Field
 	Result      apijson.Field
@@ -416,6 +418,29 @@ func (r *ContentNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r contentNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ContentNewResponseEnvelopeMeta struct {
+	Status float64                            `json:"status,required"`
+	Title  string                             `json:"title,required"`
+	JSON   contentNewResponseEnvelopeMetaJSON `json:"-"`
+}
+
+// contentNewResponseEnvelopeMetaJSON contains the JSON metadata for the struct
+// [ContentNewResponseEnvelopeMeta]
+type contentNewResponseEnvelopeMetaJSON struct {
+	Status      apijson.Field
+	Title       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ContentNewResponseEnvelopeMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r contentNewResponseEnvelopeMetaJSON) RawJSON() string {
 	return r.raw
 }
 

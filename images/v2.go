@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // V2Service contains methods and other services that help with interacting with
@@ -86,6 +86,9 @@ type V2ListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Continuation token for a next page. List images V2 returns continuation_token
 	ContinuationToken param.Field[string] `query:"continuation_token"`
+	// Internal user ID set within the creator field. Setting to empty string "" will
+	// return images where creator field is not set
+	Creator param.Field[string] `query:"creator"`
 	// Number of items per page.
 	PerPage param.Field[float64] `query:"per_page"`
 	// Sorting order by upload time.

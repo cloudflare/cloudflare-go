@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // AccessInfrastructureTargetService contains methods and other services that help
@@ -122,6 +122,8 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 }
 
 // Removes one or more targets.
+//
+// Deprecated: deprecated
 func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
@@ -131,6 +133,19 @@ func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
+// Removes one or more targets.
+func (r *AccessInfrastructureTargetService) BulkDeleteV2(ctx context.Context, params AccessInfrastructureTargetBulkDeleteV2Params, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch_delete", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
 	return
 }
 
@@ -1242,6 +1257,17 @@ type AccessInfrastructureTargetDeleteParams struct {
 type AccessInfrastructureTargetBulkDeleteParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessInfrastructureTargetBulkDeleteV2Params struct {
+	// Account identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// List of target IDs to bulk delete
+	TargetIDs param.Field[[]string] `json:"target_ids,required" format:"uuid"`
+}
+
+func (r AccessInfrastructureTargetBulkDeleteV2Params) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessInfrastructureTargetBulkUpdateParams struct {

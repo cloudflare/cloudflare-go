@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // BillingProfileService contains methods and other services that help with
@@ -33,6 +33,8 @@ func NewBillingProfileService(opts ...option.RequestOption) (r *BillingProfileSe
 }
 
 // Accesses your billing profile object.
+//
+// Deprecated: deprecated
 func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestOption) (res *BillingProfileGetResponse, err error) {
 	var env BillingProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

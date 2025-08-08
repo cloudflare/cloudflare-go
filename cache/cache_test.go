@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/cache"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/cache"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestCachePurgeWithOptionalParams(t *testing.T) {
@@ -28,7 +28,7 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Cache.Purge(context.TODO(), cache.CachePurgeParams{
-		ZoneID: cloudflare.F("zone_id"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: cache.CachePurgeParamsBodyCachePurgeFlexPurgeByTags{
 			Tags: cloudflare.F([]string{"a-cache-tag", "another-cache-tag"}),
 		},

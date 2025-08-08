@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // PDFService contains methods and other services that help with interacting with
@@ -80,6 +80,8 @@ type PDFNewParams struct {
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
 	// `url` must be set.
 	HTML param.Field[string] `json:"html"`
+	// Check [options](https://pptr.dev/api/puppeteer.pdfoptions).
+	PDFOptions param.Field[PDFNewParamsPDFOptions] `json:"pdfOptions"`
 	// Block undesired requests that match the provided regex patterns, eg.
 	// '/^.\*\.(css)'.
 	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
@@ -298,6 +300,117 @@ func (r PDFNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Check [options](https://pptr.dev/api/puppeteer.pdfoptions).
+type PDFNewParamsPDFOptions struct {
+	// Whether to show the header and footer.
+	DisplayHeaderFooter param.Field[bool] `json:"displayHeaderFooter"`
+	// HTML template for the print footer.
+	FooterTemplate param.Field[string] `json:"footerTemplate"`
+	// Paper format. Takes priority over width and height if set.
+	Format param.Field[PDFNewParamsPDFOptionsFormat] `json:"format"`
+	// HTML template for the print header.
+	HeaderTemplate param.Field[string] `json:"headerTemplate"`
+	// Sets the height of paper. Can be a number or string with unit.
+	Height param.Field[PDFNewParamsPDFOptionsHeightUnion] `json:"height"`
+	// Whether to print in landscape orientation.
+	Landscape param.Field[bool] `json:"landscape"`
+	// Set the PDF margins. Useful when setting header and footer.
+	Margin param.Field[PDFNewParamsPDFOptionsMargin] `json:"margin"`
+	// Hides default white background and allows generating pdfs with transparency.
+	OmitBackground param.Field[bool] `json:"omitBackground"`
+	// Generate document outline.
+	Outline param.Field[bool] `json:"outline"`
+	// Paper ranges to print, e.g. '1-5, 8, 11-13'.
+	PageRanges param.Field[string] `json:"pageRanges"`
+	// Give CSS @page size priority over other size declarations.
+	PreferCSSPageSize param.Field[bool] `json:"preferCSSPageSize"`
+	// Set to true to print background graphics.
+	PrintBackground param.Field[bool] `json:"printBackground"`
+	// Scales the rendering of the web page. Amount must be between 0.1 and 2.
+	Scale param.Field[float64] `json:"scale"`
+	// Generate tagged (accessible) PDF.
+	Tagged param.Field[bool] `json:"tagged"`
+	// Timeout in milliseconds.
+	Timeout param.Field[float64] `json:"timeout"`
+	// Sets the width of paper. Can be a number or string with unit.
+	Width param.Field[PDFNewParamsPDFOptionsWidthUnion] `json:"width"`
+}
+
+func (r PDFNewParamsPDFOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Paper format. Takes priority over width and height if set.
+type PDFNewParamsPDFOptionsFormat string
+
+const (
+	PDFNewParamsPDFOptionsFormatLetter  PDFNewParamsPDFOptionsFormat = "letter"
+	PDFNewParamsPDFOptionsFormatLegal   PDFNewParamsPDFOptionsFormat = "legal"
+	PDFNewParamsPDFOptionsFormatTabloid PDFNewParamsPDFOptionsFormat = "tabloid"
+	PDFNewParamsPDFOptionsFormatLedger  PDFNewParamsPDFOptionsFormat = "ledger"
+	PDFNewParamsPDFOptionsFormatA0      PDFNewParamsPDFOptionsFormat = "a0"
+	PDFNewParamsPDFOptionsFormatA1      PDFNewParamsPDFOptionsFormat = "a1"
+	PDFNewParamsPDFOptionsFormatA2      PDFNewParamsPDFOptionsFormat = "a2"
+	PDFNewParamsPDFOptionsFormatA3      PDFNewParamsPDFOptionsFormat = "a3"
+	PDFNewParamsPDFOptionsFormatA4      PDFNewParamsPDFOptionsFormat = "a4"
+	PDFNewParamsPDFOptionsFormatA5      PDFNewParamsPDFOptionsFormat = "a5"
+	PDFNewParamsPDFOptionsFormatA6      PDFNewParamsPDFOptionsFormat = "a6"
+)
+
+func (r PDFNewParamsPDFOptionsFormat) IsKnown() bool {
+	switch r {
+	case PDFNewParamsPDFOptionsFormatLetter, PDFNewParamsPDFOptionsFormatLegal, PDFNewParamsPDFOptionsFormatTabloid, PDFNewParamsPDFOptionsFormatLedger, PDFNewParamsPDFOptionsFormatA0, PDFNewParamsPDFOptionsFormatA1, PDFNewParamsPDFOptionsFormatA2, PDFNewParamsPDFOptionsFormatA3, PDFNewParamsPDFOptionsFormatA4, PDFNewParamsPDFOptionsFormatA5, PDFNewParamsPDFOptionsFormatA6:
+		return true
+	}
+	return false
+}
+
+// Sets the height of paper. Can be a number or string with unit.
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type PDFNewParamsPDFOptionsHeightUnion interface {
+	ImplementsPDFNewParamsPDFOptionsHeightUnion()
+}
+
+// Set the PDF margins. Useful when setting header and footer.
+type PDFNewParamsPDFOptionsMargin struct {
+	Bottom param.Field[PDFNewParamsPDFOptionsMarginBottomUnion] `json:"bottom"`
+	Left   param.Field[PDFNewParamsPDFOptionsMarginLeftUnion]   `json:"left"`
+	Right  param.Field[PDFNewParamsPDFOptionsMarginRightUnion]  `json:"right"`
+	Top    param.Field[PDFNewParamsPDFOptionsMarginTopUnion]    `json:"top"`
+}
+
+func (r PDFNewParamsPDFOptionsMargin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type PDFNewParamsPDFOptionsMarginBottomUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type PDFNewParamsPDFOptionsMarginLeftUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type PDFNewParamsPDFOptionsMarginRightUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginRightUnion()
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type PDFNewParamsPDFOptionsMarginTopUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginTopUnion()
+}
+
+// Sets the width of paper. Can be a number or string with unit.
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type PDFNewParamsPDFOptionsWidthUnion interface {
+	ImplementsPDFNewParamsPDFOptionsWidthUnion()
 }
 
 type PDFNewParamsRejectResourceType string

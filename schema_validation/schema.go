@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/api_gateway"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/api_gateway"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // SchemaService contains methods and other services that help with interacting
@@ -385,7 +385,7 @@ type SchemaNewParams struct {
 	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
 	Source param.Field[string] `json:"source,required"`
 	// An indicator if this schema is enabled
-	ValidationEnabled param.Field[bool] `json:"validation_enabled"`
+	ValidationEnabled param.Field[bool] `json:"validation_enabled,required"`
 }
 
 func (r SchemaNewParams) MarshalJSON() (data []byte, err error) {

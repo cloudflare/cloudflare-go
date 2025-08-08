@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // GatewayConfigurationCustomCertificateService contains methods and other services
@@ -34,6 +34,8 @@ func NewGatewayConfigurationCustomCertificateService(opts ...option.RequestOptio
 }
 
 // Fetches the current Zero Trust certificate configuration.
+//
+// Deprecated: deprecated
 func (r *GatewayConfigurationCustomCertificateService) Get(ctx context.Context, query GatewayConfigurationCustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {

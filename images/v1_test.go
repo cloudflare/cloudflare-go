@@ -3,15 +3,17 @@
 package images_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/images"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/images"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestV1NewWithOptionalParams(t *testing.T) {
@@ -30,7 +32,9 @@ func TestV1NewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V1.New(context.TODO(), images.V1NewParams{
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		File:              cloudflare.F[any](map[string]interface{}{}),
+		ID:                cloudflare.F("id"),
+		Creator:           cloudflare.F("creator"),
+		File:              cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
 		Metadata:          cloudflare.F[any](map[string]interface{}{}),
 		RequireSignedURLs: cloudflare.F(true),
 		URL:               cloudflare.F("https://example.com/path/to/logo.png"),
@@ -59,6 +63,7 @@ func TestV1ListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Images.V1.List(context.TODO(), images.V1ListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Creator:   cloudflare.F("creator"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(10.000000),
 	})
@@ -118,6 +123,7 @@ func TestV1EditWithOptionalParams(t *testing.T) {
 		"image_id",
 		images.V1EditParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Creator:           cloudflare.F("creator"),
 			Metadata:          cloudflare.F[any](map[string]interface{}{}),
 			RequireSignedURLs: cloudflare.F(true),
 		},

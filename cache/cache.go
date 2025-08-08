@@ -8,10 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // CacheService contains methods and other services that help with interacting with
@@ -119,7 +120,6 @@ func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts 
 }
 
 type CachePurgeResponse struct {
-	// Identifier.
 	ID   string                 `json:"id,required"`
 	JSON cachePurgeResponseJSON `json:"-"`
 }
@@ -259,12 +259,12 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJS
 }
 
 type CachePurgeResponseEnvelope struct {
-	Errors   []CachePurgeResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CachePurgeResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
-	Success CachePurgeResponseEnvelopeSuccess `json:"success,required"`
-	Result  CachePurgeResponse                `json:"result,nullable"`
-	JSON    cachePurgeResponseEnvelopeJSON    `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Indicates the API call's success or failure.
+	Success bool                           `json:"success,required"`
+	Result  CachePurgeResponse             `json:"result,nullable"`
+	JSON    cachePurgeResponseEnvelopeJSON `json:"-"`
 }
 
 // cachePurgeResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -284,115 +284,4 @@ func (r *CachePurgeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r cachePurgeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-type CachePurgeResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
-	DocumentationURL string                                 `json:"documentation_url"`
-	Source           CachePurgeResponseEnvelopeErrorsSource `json:"source"`
-	JSON             cachePurgeResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// cachePurgeResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [CachePurgeResponseEnvelopeErrors]
-type cachePurgeResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CachePurgeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cachePurgeResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CachePurgeResponseEnvelopeErrorsSource struct {
-	Pointer string                                     `json:"pointer"`
-	JSON    cachePurgeResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// cachePurgeResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [CachePurgeResponseEnvelopeErrorsSource]
-type cachePurgeResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CachePurgeResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cachePurgeResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type CachePurgeResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
-	DocumentationURL string                                   `json:"documentation_url"`
-	Source           CachePurgeResponseEnvelopeMessagesSource `json:"source"`
-	JSON             cachePurgeResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// cachePurgeResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [CachePurgeResponseEnvelopeMessages]
-type cachePurgeResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CachePurgeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cachePurgeResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type CachePurgeResponseEnvelopeMessagesSource struct {
-	Pointer string                                       `json:"pointer"`
-	JSON    cachePurgeResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// cachePurgeResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [CachePurgeResponseEnvelopeMessagesSource]
-type cachePurgeResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CachePurgeResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cachePurgeResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type CachePurgeResponseEnvelopeSuccess bool
-
-const (
-	CachePurgeResponseEnvelopeSuccessTrue CachePurgeResponseEnvelopeSuccess = true
-)
-
-func (r CachePurgeResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CachePurgeResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // BGPTopService contains methods and other services that help with interacting
@@ -119,9 +119,10 @@ func (r bgpTopPrefixesResponseMetaDateRangeJSON) RawJSON() string {
 }
 
 type BGPTopPrefixesResponseTop0 struct {
-	Prefix string                         `json:"prefix,required"`
-	Value  string                         `json:"value,required"`
-	JSON   bgpTopPrefixesResponseTop0JSON `json:"-"`
+	Prefix string `json:"prefix,required"`
+	// A numeric string.
+	Value string                         `json:"value,required"`
+	JSON  bgpTopPrefixesResponseTop0JSON `json:"-"`
 }
 
 // bgpTopPrefixesResponseTop0JSON contains the JSON metadata for the struct

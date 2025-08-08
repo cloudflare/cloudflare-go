@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // NetworkVirtualNetworkService contains methods and other services that help with
@@ -191,6 +191,8 @@ type NetworkVirtualNetworkNewParams struct {
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this virtual network is the default for the account.
 	IsDefault param.Field[bool] `json:"is_default"`
+	// If `true`, this virtual network is the default for the account.
+	IsDefaultNetwork param.Field[bool] `json:"is_default_network"`
 }
 
 func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {

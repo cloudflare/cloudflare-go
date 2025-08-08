@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/firewall"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/firewall"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
-func TestLockdownNew(t *testing.T) {
+func TestLockdownNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -35,7 +35,10 @@ func TestLockdownNew(t *testing.T) {
 			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
 		}}),
-		URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
+		URLs:        cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
+		Description: cloudflare.F("Prevent multiple login failures to mitigate brute force attacks"),
+		Paused:      cloudflare.F(false),
+		Priority:    cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

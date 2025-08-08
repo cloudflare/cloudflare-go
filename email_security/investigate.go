@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // InvestigateService contains methods and other services that help with
@@ -109,11 +109,13 @@ type InvestigateListResponse struct {
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
 	PostfixID        string                                  `json:"postfix_id,required"`
+	Properties       InvestigateListResponseProperties       `json:"properties,required"`
 	Ts               string                                  `json:"ts,required"`
 	AlertID          string                                  `json:"alert_id,nullable"`
 	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
 	EdfHash          string                                  `json:"edf_hash,nullable"`
 	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
+	Findings         []InvestigateListResponseFinding        `json:"findings,nullable"`
 	From             string                                  `json:"from,nullable"`
 	FromName         string                                  `json:"from_name,nullable"`
 	MessageID        string                                  `json:"message_id,nullable"`
@@ -136,11 +138,13 @@ type investigateListResponseJSON struct {
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
 	PostfixID         apijson.Field
+	Properties        apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
 	DeliveryMode      apijson.Field
 	EdfHash           apijson.Field
 	FinalDisposition  apijson.Field
+	Findings          apijson.Field
 	From              apijson.Field
 	FromName          apijson.Field
 	MessageID         apijson.Field
@@ -160,6 +164,75 @@ func (r *InvestigateListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r investigateListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateListResponseProperties struct {
+	AllowlistedPattern     string                                                  `json:"allowlisted_pattern"`
+	AllowlistedPatternType InvestigateListResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type"`
+	BlocklistedMessage     bool                                                    `json:"blocklisted_message"`
+	BlocklistedPattern     string                                                  `json:"blocklisted_pattern"`
+	WhitelistedPatternType InvestigateListResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type"`
+	JSON                   investigateListResponsePropertiesJSON                   `json:"-"`
+}
+
+// investigateListResponsePropertiesJSON contains the JSON metadata for the struct
+// [InvestigateListResponseProperties]
+type investigateListResponsePropertiesJSON struct {
+	AllowlistedPattern     apijson.Field
+	AllowlistedPatternType apijson.Field
+	BlocklistedMessage     apijson.Field
+	BlocklistedPattern     apijson.Field
+	WhitelistedPatternType apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *InvestigateListResponseProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateListResponsePropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateListResponsePropertiesAllowlistedPatternType string
+
+const (
+	InvestigateListResponsePropertiesAllowlistedPatternTypeQuarantineRelease       InvestigateListResponsePropertiesAllowlistedPatternType = "quarantine_release"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeAcceptableSender        InvestigateListResponsePropertiesAllowlistedPatternType = "acceptable_sender"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedSender           InvestigateListResponsePropertiesAllowlistedPatternType = "allowed_sender"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedRecipient        InvestigateListResponsePropertiesAllowlistedPatternType = "allowed_recipient"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity        InvestigateListResponsePropertiesAllowlistedPatternType = "domain_similarity"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency           InvestigateListResponsePropertiesAllowlistedPatternType = "domain_recency"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender InvestigateListResponsePropertiesAllowlistedPatternType = "managed_acceptable_sender"
+)
+
+func (r InvestigateListResponsePropertiesAllowlistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateListResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
+		return true
+	}
+	return false
+}
+
+type InvestigateListResponsePropertiesWhitelistedPatternType string
+
+const (
+	InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateListResponsePropertiesWhitelistedPatternType = "quarantine_release"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateListResponsePropertiesWhitelistedPatternType = "acceptable_sender"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateListResponsePropertiesWhitelistedPatternType = "allowed_sender"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateListResponsePropertiesWhitelistedPatternType = "allowed_recipient"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateListResponsePropertiesWhitelistedPatternType = "domain_similarity"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateListResponsePropertiesWhitelistedPatternType = "domain_recency"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateListResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+)
+
+func (r InvestigateListResponsePropertiesWhitelistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
+		return true
+	}
+	return false
 }
 
 type InvestigateListResponseDeliveryMode string
@@ -207,6 +280,31 @@ func (r InvestigateListResponseFinalDisposition) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type InvestigateListResponseFinding struct {
+	Detail string                             `json:"detail,nullable"`
+	Name   string                             `json:"name,nullable"`
+	Value  string                             `json:"value,nullable"`
+	JSON   investigateListResponseFindingJSON `json:"-"`
+}
+
+// investigateListResponseFindingJSON contains the JSON metadata for the struct
+// [InvestigateListResponseFinding]
+type investigateListResponseFindingJSON struct {
+	Detail      apijson.Field
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateListResponseFinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateListResponseFindingJSON) RawJSON() string {
+	return r.raw
 }
 
 type InvestigateListResponseValidation struct {
@@ -299,11 +397,13 @@ type InvestigateGetResponse struct {
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
 	PostfixID        string                                 `json:"postfix_id,required"`
+	Properties       InvestigateGetResponseProperties       `json:"properties,required"`
 	Ts               string                                 `json:"ts,required"`
 	AlertID          string                                 `json:"alert_id,nullable"`
 	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
 	EdfHash          string                                 `json:"edf_hash,nullable"`
 	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
+	Findings         []InvestigateGetResponseFinding        `json:"findings,nullable"`
 	From             string                                 `json:"from,nullable"`
 	FromName         string                                 `json:"from_name,nullable"`
 	MessageID        string                                 `json:"message_id,nullable"`
@@ -326,11 +426,13 @@ type investigateGetResponseJSON struct {
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
 	PostfixID         apijson.Field
+	Properties        apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
 	DeliveryMode      apijson.Field
 	EdfHash           apijson.Field
 	FinalDisposition  apijson.Field
+	Findings          apijson.Field
 	From              apijson.Field
 	FromName          apijson.Field
 	MessageID         apijson.Field
@@ -350,6 +452,75 @@ func (r *InvestigateGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r investigateGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateGetResponseProperties struct {
+	AllowlistedPattern     string                                                 `json:"allowlisted_pattern"`
+	AllowlistedPatternType InvestigateGetResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type"`
+	BlocklistedMessage     bool                                                   `json:"blocklisted_message"`
+	BlocklistedPattern     string                                                 `json:"blocklisted_pattern"`
+	WhitelistedPatternType InvestigateGetResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type"`
+	JSON                   investigateGetResponsePropertiesJSON                   `json:"-"`
+}
+
+// investigateGetResponsePropertiesJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseProperties]
+type investigateGetResponsePropertiesJSON struct {
+	AllowlistedPattern     apijson.Field
+	AllowlistedPatternType apijson.Field
+	BlocklistedMessage     apijson.Field
+	BlocklistedPattern     apijson.Field
+	WhitelistedPatternType apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponsePropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponsePropertiesAllowlistedPatternType string
+
+const (
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease       InvestigateGetResponsePropertiesAllowlistedPatternType = "quarantine_release"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender        InvestigateGetResponsePropertiesAllowlistedPatternType = "acceptable_sender"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender           InvestigateGetResponsePropertiesAllowlistedPatternType = "allowed_sender"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient        InvestigateGetResponsePropertiesAllowlistedPatternType = "allowed_recipient"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesAllowlistedPatternType = "domain_similarity"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesAllowlistedPatternType = "domain_recency"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesAllowlistedPatternType = "managed_acceptable_sender"
+)
+
+func (r InvestigateGetResponsePropertiesAllowlistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponsePropertiesWhitelistedPatternType string
+
+const (
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateGetResponsePropertiesWhitelistedPatternType = "quarantine_release"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateGetResponsePropertiesWhitelistedPatternType = "acceptable_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_recipient"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_similarity"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_recency"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+)
+
+func (r InvestigateGetResponsePropertiesWhitelistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
+		return true
+	}
+	return false
 }
 
 type InvestigateGetResponseDeliveryMode string
@@ -397,6 +568,31 @@ func (r InvestigateGetResponseFinalDisposition) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type InvestigateGetResponseFinding struct {
+	Detail string                            `json:"detail,nullable"`
+	Name   string                            `json:"name,nullable"`
+	Value  string                            `json:"value,nullable"`
+	JSON   investigateGetResponseFindingJSON `json:"-"`
+}
+
+// investigateGetResponseFindingJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseFinding]
+type investigateGetResponseFindingJSON struct {
+	Detail      apijson.Field
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseFinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseFindingJSON) RawJSON() string {
+	return r.raw
 }
 
 type InvestigateGetResponseValidation struct {
@@ -530,7 +726,8 @@ type InvestigateListParams struct {
 	Recipient param.Field[string] `query:"recipient"`
 	Sender    param.Field[string] `query:"sender"`
 	// The beginning of the search date range. Defaults to `now - 30 days`.
-	Start param.Field[time.Time] `query:"start" format:"date-time"`
+	Start   param.Field[time.Time] `query:"start" format:"date-time"`
+	Subject param.Field[string]    `query:"subject"`
 }
 
 // URLQuery serializes [InvestigateListParams]'s query parameters as `url.Values`.

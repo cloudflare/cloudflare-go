@@ -8,10 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -34,15 +35,15 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Create a zone subscription, either plan or add-ons.
-func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/subscription", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,15 +52,15 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 }
 
 // Updates zone subscriptions, either plan or add-ons.
-func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/subscription", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -68,14 +69,14 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 }
 
 // Lists zone subscription details.
-func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
+	path := fmt.Sprintf("zones/%s/subscription", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -85,6 +86,8 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 }
 
 type SubscriptionNewParams struct {
+	// Subscription identifier tag.
+	ZoneID       param.Field[string]      `path:"zone_id,required"`
 	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
@@ -95,7 +98,7 @@ func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
 type SubscriptionNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   shared.Subscription   `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
@@ -136,6 +139,8 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionUpdateParams struct {
+	// Subscription identifier tag.
+	ZoneID       param.Field[string]      `path:"zone_id,required"`
 	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
@@ -146,7 +151,7 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 type SubscriptionUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   shared.Subscription   `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -186,10 +191,15 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type SubscriptionGetParams struct {
+	// Subscription identifier tag.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type SubscriptionGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   shared.Subscription   `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`

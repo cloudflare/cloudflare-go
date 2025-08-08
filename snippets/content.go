@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ContentService contains methods and other services that help with interacting
@@ -32,7 +32,7 @@ func NewContentService(opts ...option.RequestOption) (r *ContentService) {
 	return
 }
 
-// Snippet Content
+// Fetches the content of a snippet belonging to the zone.
 func (r *ContentService) Get(ctx context.Context, snippetName string, query ContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "multipart/form-data")}, opts...)
@@ -50,6 +50,6 @@ func (r *ContentService) Get(ctx context.Context, snippetName string, query Cont
 }
 
 type ContentGetParams struct {
-	// Identifier
+	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

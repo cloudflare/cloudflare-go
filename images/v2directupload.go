@@ -11,12 +11,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // V2DirectUploadService contains methods and other services that help with
@@ -94,6 +94,8 @@ type V2DirectUploadNewParams struct {
 	// and utf8 characters. Cannot start nor end with a / (forward slash). Cannot be a
 	// UUID.
 	ID param.Field[string] `json:"id"`
+	// Can set the creator field with an internal user ID.
+	Creator param.Field[string] `json:"creator"`
 	// The date after which the upload will not be accepted. Minimum: Now + 2 minutes.
 	// Maximum: Now + 6 hours.
 	Expiry param.Field[time.Time] `json:"expiry" format:"date-time"`

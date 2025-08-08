@@ -3,8 +3,8 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // EmailService contains methods and other services that help with interacting with
@@ -56,8 +56,11 @@ func (r radarEmailSeriesJSON) RawJSON() string {
 }
 
 type RadarEmailSummary struct {
-	Fail string                `json:"FAIL,required"`
-	None string                `json:"NONE,required"`
+	// A numeric string.
+	Fail string `json:"FAIL,required"`
+	// A numeric string.
+	None string `json:"NONE,required"`
+	// A numeric string.
 	Pass string                `json:"PASS,required"`
 	JSON radarEmailSummaryJSON `json:"-"`
 }

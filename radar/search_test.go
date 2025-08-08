@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestSearchGlobalWithOptionalParams(t *testing.T) {
@@ -29,9 +29,9 @@ func TestSearchGlobalWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Search.Global(context.TODO(), radar.SearchGlobalParams{
 		Query:         cloudflare.F("United"),
-		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeSpecialEvents}),
+		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeASNs}),
 		Format:        cloudflare.F(radar.SearchGlobalParamsFormatJson),
-		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeSpecialEvents}),
+		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeASNs}),
 		Limit:         cloudflare.F(int64(5)),
 		LimitPerGroup: cloudflare.F(0.000000),
 	})

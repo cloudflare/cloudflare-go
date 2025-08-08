@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // VerifiedBotTopService contains methods and other services that help with
@@ -35,6 +35,10 @@ func NewVerifiedBotTopService(opts ...option.RequestOption) (r *VerifiedBotTopSe
 }
 
 // Retrieves the top verified bots by HTTP requests, with owner and category.
+//
+// Deprecated: Use
+// [Radar Bots API](https://developers.cloudflare.com/api/resources/radar/subresources/bots/)
+// instead.
 func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBotsParams, opts ...option.RequestOption) (res *VerifiedBotTopBotsResponse, err error) {
 	var env VerifiedBotTopBotsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -49,6 +53,10 @@ func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBo
 
 // Retrieves the top verified bot categories by HTTP requests, along with their
 // corresponding percentage, over the total verified bot HTTP requests.
+//
+// Deprecated: Use
+// [Radar Bots API](https://developers.cloudflare.com/api/resources/radar/subresources/bots/)
+// instead.
 func (r *VerifiedBotTopService) Categories(ctx context.Context, query VerifiedBotTopCategoriesParams, opts ...option.RequestOption) (res *VerifiedBotTopCategoriesResponse, err error) {
 	var env VerifiedBotTopCategoriesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -62,6 +70,7 @@ func (r *VerifiedBotTopService) Categories(ctx context.Context, query VerifiedBo
 }
 
 type VerifiedBotTopBotsResponse struct {
+	// Metadata for the results.
 	Meta VerifiedBotTopBotsResponseMeta   `json:"meta,required"`
 	Top0 []VerifiedBotTopBotsResponseTop0 `json:"top_0,required"`
 	JSON verifiedBotTopBotsResponseJSON   `json:"-"`
@@ -84,17 +93,28 @@ func (r verifiedBotTopBotsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type VerifiedBotTopBotsResponseMeta struct {
+	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []VerifiedBotTopBotsResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           verifiedBotTopBotsResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization VerifiedBotTopBotsResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []VerifiedBotTopBotsResponseMetaUnit `json:"units,required"`
+	JSON  verifiedBotTopBotsResponseMetaJSON   `json:"-"`
 }
 
 // verifiedBotTopBotsResponseMetaJSON contains the JSON metadata for the struct
 // [VerifiedBotTopBotsResponseMeta]
 type verifiedBotTopBotsResponseMetaJSON struct {
-	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -104,6 +124,65 @@ func (r *VerifiedBotTopBotsResponseMeta) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r verifiedBotTopBotsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type VerifiedBotTopBotsResponseMetaConfidenceInfo struct {
+	Annotations []VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                            `json:"level,required"`
+	JSON  verifiedBotTopBotsResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// verifiedBotTopBotsResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [VerifiedBotTopBotsResponseMetaConfidenceInfo]
+type verifiedBotTopBotsResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VerifiedBotTopBotsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
+	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	JSON            verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation]
+type verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndDate         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartDate       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -132,68 +211,59 @@ func (r verifiedBotTopBotsResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type VerifiedBotTopBotsResponseMetaConfidenceInfo struct {
-	Annotations []VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                    `json:"level"`
-	JSON        verifiedBotTopBotsResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type VerifiedBotTopBotsResponseMetaNormalization string
+
+const (
+	VerifiedBotTopBotsResponseMetaNormalizationPercentage           VerifiedBotTopBotsResponseMetaNormalization = "PERCENTAGE"
+	VerifiedBotTopBotsResponseMetaNormalizationMin0Max              VerifiedBotTopBotsResponseMetaNormalization = "MIN0_MAX"
+	VerifiedBotTopBotsResponseMetaNormalizationMinMax               VerifiedBotTopBotsResponseMetaNormalization = "MIN_MAX"
+	VerifiedBotTopBotsResponseMetaNormalizationRawValues            VerifiedBotTopBotsResponseMetaNormalization = "RAW_VALUES"
+	VerifiedBotTopBotsResponseMetaNormalizationPercentageChange     VerifiedBotTopBotsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	VerifiedBotTopBotsResponseMetaNormalizationRollingAverage       VerifiedBotTopBotsResponseMetaNormalization = "ROLLING_AVERAGE"
+	VerifiedBotTopBotsResponseMetaNormalizationOverlappedPercentage VerifiedBotTopBotsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	VerifiedBotTopBotsResponseMetaNormalizationRatio                VerifiedBotTopBotsResponseMetaNormalization = "RATIO"
+)
+
+func (r VerifiedBotTopBotsResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopBotsResponseMetaNormalizationPercentage, VerifiedBotTopBotsResponseMetaNormalizationMin0Max, VerifiedBotTopBotsResponseMetaNormalizationMinMax, VerifiedBotTopBotsResponseMetaNormalizationRawValues, VerifiedBotTopBotsResponseMetaNormalizationPercentageChange, VerifiedBotTopBotsResponseMetaNormalizationRollingAverage, VerifiedBotTopBotsResponseMetaNormalizationOverlappedPercentage, VerifiedBotTopBotsResponseMetaNormalizationRatio:
+		return true
+	}
+	return false
 }
 
-// verifiedBotTopBotsResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [VerifiedBotTopBotsResponseMetaConfidenceInfo]
-type verifiedBotTopBotsResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type VerifiedBotTopBotsResponseMetaUnit struct {
+	Name  string                                 `json:"name,required"`
+	Value string                                 `json:"value,required"`
+	JSON  verifiedBotTopBotsResponseMetaUnitJSON `json:"-"`
+}
+
+// verifiedBotTopBotsResponseMetaUnitJSON contains the JSON metadata for the struct
+// [VerifiedBotTopBotsResponseMetaUnit]
+type verifiedBotTopBotsResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VerifiedBotTopBotsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *VerifiedBotTopBotsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r verifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                     `json:"dataSource,required"`
-	Description     string                                                     `json:"description,required"`
-	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                     `json:"linkedUrl"`
-	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
-	JSON            verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation]
-type verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r verifiedBotTopBotsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type VerifiedBotTopBotsResponseTop0 struct {
-	BotCategory string                             `json:"botCategory,required"`
-	BotName     string                             `json:"botName,required"`
-	BotOwner    string                             `json:"botOwner,required"`
-	Value       string                             `json:"value,required"`
-	JSON        verifiedBotTopBotsResponseTop0JSON `json:"-"`
+	BotCategory string `json:"botCategory,required"`
+	BotName     string `json:"botName,required"`
+	BotOwner    string `json:"botOwner,required"`
+	// A numeric string.
+	Value string                             `json:"value,required"`
+	JSON  verifiedBotTopBotsResponseTop0JSON `json:"-"`
 }
 
 // verifiedBotTopBotsResponseTop0JSON contains the JSON metadata for the struct
@@ -216,6 +286,7 @@ func (r verifiedBotTopBotsResponseTop0JSON) RawJSON() string {
 }
 
 type VerifiedBotTopCategoriesResponse struct {
+	// Metadata for the results.
 	Meta VerifiedBotTopCategoriesResponseMeta   `json:"meta,required"`
 	Top0 []VerifiedBotTopCategoriesResponseTop0 `json:"top_0,required"`
 	JSON verifiedBotTopCategoriesResponseJSON   `json:"-"`
@@ -238,17 +309,28 @@ func (r verifiedBotTopCategoriesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata for the results.
 type VerifiedBotTopCategoriesResponseMeta struct {
+	ConfidenceInfo VerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
 	DateRange      []VerifiedBotTopCategoriesResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo VerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           verifiedBotTopCategoriesResponseMetaJSON           `json:"-"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization VerifiedBotTopCategoriesResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []VerifiedBotTopCategoriesResponseMetaUnit `json:"units,required"`
+	JSON  verifiedBotTopCategoriesResponseMetaJSON   `json:"-"`
 }
 
 // verifiedBotTopCategoriesResponseMetaJSON contains the JSON metadata for the
 // struct [VerifiedBotTopCategoriesResponseMeta]
 type verifiedBotTopCategoriesResponseMetaJSON struct {
-	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -258,6 +340,66 @@ func (r *VerifiedBotTopCategoriesResponseMeta) UnmarshalJSON(data []byte) (err e
 }
 
 func (r verifiedBotTopCategoriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type VerifiedBotTopCategoriesResponseMetaConfidenceInfo struct {
+	Annotations []VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                  `json:"level,required"`
+	JSON  verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [VerifiedBotTopCategoriesResponseMetaConfidenceInfo]
+type verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
+	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	JSON            verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation]
+type verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndDate         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartDate       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -286,67 +428,57 @@ func (r verifiedBotTopCategoriesResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
-type VerifiedBotTopCategoriesResponseMetaConfidenceInfo struct {
-	Annotations []VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                          `json:"level"`
-	JSON        verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON         `json:"-"`
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type VerifiedBotTopCategoriesResponseMetaNormalization string
+
+const (
+	VerifiedBotTopCategoriesResponseMetaNormalizationPercentage           VerifiedBotTopCategoriesResponseMetaNormalization = "PERCENTAGE"
+	VerifiedBotTopCategoriesResponseMetaNormalizationMin0Max              VerifiedBotTopCategoriesResponseMetaNormalization = "MIN0_MAX"
+	VerifiedBotTopCategoriesResponseMetaNormalizationMinMax               VerifiedBotTopCategoriesResponseMetaNormalization = "MIN_MAX"
+	VerifiedBotTopCategoriesResponseMetaNormalizationRawValues            VerifiedBotTopCategoriesResponseMetaNormalization = "RAW_VALUES"
+	VerifiedBotTopCategoriesResponseMetaNormalizationPercentageChange     VerifiedBotTopCategoriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	VerifiedBotTopCategoriesResponseMetaNormalizationRollingAverage       VerifiedBotTopCategoriesResponseMetaNormalization = "ROLLING_AVERAGE"
+	VerifiedBotTopCategoriesResponseMetaNormalizationOverlappedPercentage VerifiedBotTopCategoriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	VerifiedBotTopCategoriesResponseMetaNormalizationRatio                VerifiedBotTopCategoriesResponseMetaNormalization = "RATIO"
+)
+
+func (r VerifiedBotTopCategoriesResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopCategoriesResponseMetaNormalizationPercentage, VerifiedBotTopCategoriesResponseMetaNormalizationMin0Max, VerifiedBotTopCategoriesResponseMetaNormalizationMinMax, VerifiedBotTopCategoriesResponseMetaNormalizationRawValues, VerifiedBotTopCategoriesResponseMetaNormalizationPercentageChange, VerifiedBotTopCategoriesResponseMetaNormalizationRollingAverage, VerifiedBotTopCategoriesResponseMetaNormalizationOverlappedPercentage, VerifiedBotTopCategoriesResponseMetaNormalizationRatio:
+		return true
+	}
+	return false
 }
 
-// verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [VerifiedBotTopCategoriesResponseMetaConfidenceInfo]
-type verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
+type VerifiedBotTopCategoriesResponseMetaUnit struct {
+	Name  string                                       `json:"name,required"`
+	Value string                                       `json:"value,required"`
+	JSON  verifiedBotTopCategoriesResponseMetaUnitJSON `json:"-"`
+}
+
+// verifiedBotTopCategoriesResponseMetaUnitJSON contains the JSON metadata for the
+// struct [VerifiedBotTopCategoriesResponseMetaUnit]
+type verifiedBotTopCategoriesResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *VerifiedBotTopCategoriesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                           `json:"dataSource,required"`
-	Description     string                                                           `json:"description,required"`
-	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                           `json:"linkedUrl"`
-	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
-	JSON            verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation]
-type verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r verifiedBotTopCategoriesResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
 type VerifiedBotTopCategoriesResponseTop0 struct {
-	BotCategory string                                   `json:"botCategory,required"`
-	Value       string                                   `json:"value,required"`
-	JSON        verifiedBotTopCategoriesResponseTop0JSON `json:"-"`
+	BotCategory string `json:"botCategory,required"`
+	// A numeric string.
+	Value string                                   `json:"value,required"`
+	JSON  verifiedBotTopCategoriesResponseTop0JSON `json:"-"`
 }
 
 // verifiedBotTopCategoriesResponseTop0JSON contains the JSON metadata for the

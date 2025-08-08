@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/images"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/images"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestV2ListWithOptionalParams(t *testing.T) {
@@ -30,6 +30,7 @@ func TestV2ListWithOptionalParams(t *testing.T) {
 	_, err := client.Images.V2.List(context.TODO(), images.V2ListParams{
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ContinuationToken: cloudflare.F("continuation_token"),
+		Creator:           cloudflare.F("creator"),
 		PerPage:           cloudflare.F(10.000000),
 		SortOrder:         cloudflare.F(images.V2ListParamsSortOrderAsc),
 	})

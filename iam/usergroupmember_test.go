@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudforce_one_test
+package iam_test
 
 import (
 	"context"
@@ -8,14 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/cloudforce_one"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/iam"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
-func TestThreatEventInsightNew(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestUserGroupMemberNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,12 +27,14 @@ func TestThreatEventInsightNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Insights.New(
+	_, err := client.IAM.UserGroups.Members.New(
 		context.TODO(),
-		"event_id",
-		cloudforce_one.ThreatEventInsightNewParams{
-			AccountID: cloudflare.F(0.000000),
-			Content:   cloudflare.F("Here is some additional context _in markdown_"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		iam.UserGroupMemberNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body: []iam.UserGroupMemberNewParamsBody{{
+				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			}},
 		},
 	)
 	if err != nil {
@@ -45,8 +46,7 @@ func TestThreatEventInsightNew(t *testing.T) {
 	}
 }
 
-func TestThreatEventInsightDelete(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestUserGroupMemberUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,12 +59,14 @@ func TestThreatEventInsightDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Insights.Delete(
+	_, err := client.IAM.UserGroups.Members.Update(
 		context.TODO(),
-		"event_id",
-		"insight_id",
-		cloudforce_one.ThreatEventInsightDeleteParams{
-			AccountID: cloudflare.F(0.000000),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		iam.UserGroupMemberUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body: []iam.UserGroupMemberUpdateParamsBody{{
+				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			}},
 		},
 	)
 	if err != nil {
@@ -76,8 +78,7 @@ func TestThreatEventInsightDelete(t *testing.T) {
 	}
 }
 
-func TestThreatEventInsightEdit(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestUserGroupMemberListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,13 +91,13 @@ func TestThreatEventInsightEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Insights.Edit(
+	_, err := client.IAM.UserGroups.Members.List(
 		context.TODO(),
-		"event_id",
-		"insight_id",
-		cloudforce_one.ThreatEventInsightEditParams{
-			AccountID: cloudflare.F(0.000000),
-			Content:   cloudflare.F("Updated: Here is some additional context _in markdown_"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		iam.UserGroupMemberListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(1.000000),
 		},
 	)
 	if err != nil {
@@ -108,8 +109,7 @@ func TestThreatEventInsightEdit(t *testing.T) {
 	}
 }
 
-func TestThreatEventInsightGet(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestUserGroupMemberDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -122,12 +122,12 @@ func TestThreatEventInsightGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Insights.Get(
+	_, err := client.IAM.UserGroups.Members.Delete(
 		context.TODO(),
-		"event_id",
-		"insight_id",
-		cloudforce_one.ThreatEventInsightGetParams{
-			AccountID: cloudflare.F(0.000000),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		iam.UserGroupMemberDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // ProfileService contains methods and other services that help with interacting
@@ -36,6 +36,8 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 }
 
 // Gets the current billing profile for the account.
+//
+// Deprecated: deprecated
 func (r *ProfileService) Get(ctx context.Context, query ProfileGetParams, opts ...option.RequestOption) (res *ProfileGetResponse, err error) {
 	var env ProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

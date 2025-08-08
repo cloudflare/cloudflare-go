@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // StoreSecretService contains methods and other services that help with
@@ -633,6 +633,8 @@ type StoreSecretNewParamsBody struct {
 	// The value of the secret. Note that this is 'write only' - no API reponse will
 	// provide this value, it is only used to create/modify secrets.
 	Value param.Field[string] `json:"value,required"`
+	// Freeform text describing the secret
+	Comment param.Field[string] `json:"comment"`
 }
 
 func (r StoreSecretNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -650,6 +652,8 @@ type StoreSecretListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Number of objects to return per page
 	PerPage param.Field[int64] `query:"per_page"`
+	// Only secrets with the given scopes will be returned
+	Scopes param.Field[[][]string] `query:"scopes"`
 	// Search secrets using a filter string, filtering across name and comment
 	Search param.Field[string] `query:"search"`
 }
@@ -884,6 +888,10 @@ type StoreSecretDuplicateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the secret
 	Name param.Field[string] `json:"name,required"`
+	// The list of services that can use this secret.
+	Scopes param.Field[[]string] `json:"scopes,required"`
+	// Freeform text describing the secret
+	Comment param.Field[string] `json:"comment"`
 }
 
 func (r StoreSecretDuplicateParams) MarshalJSON() (data []byte, err error) {
@@ -1065,13 +1073,10 @@ func (r storeSecretDuplicateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type StoreSecretEditParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The name of the secret
-	Name param.Field[string] `json:"name,required"`
+	// Freeform text describing the secret
+	Comment param.Field[string] `json:"comment"`
 	// The list of services that can use this secret.
 	Scopes param.Field[[]string] `json:"scopes"`
-	// The value of the secret. Note that this is 'write only' - no API reponse will
-	// provide this value, it is only used to create/modify secrets.
-	Value param.Field[string] `json:"value"`
 }
 
 func (r StoreSecretEditParams) MarshalJSON() (data []byte, err error) {

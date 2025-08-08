@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -93,6 +93,8 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
+//
+// Deprecated: deprecated
 type ContextAwareness struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
@@ -121,6 +123,8 @@ func (r contextAwarenessJSON) RawJSON() string {
 
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
+//
+// Deprecated: deprecated
 type ContextAwarenessParam struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
@@ -148,6 +152,8 @@ type Profile struct {
 	ConfidenceThreshold ProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
+	//
+	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// When the profile was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -233,9 +239,6 @@ type ProfileCustomProfile struct {
 	ID string `json:"id,required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness `json:"context_awareness,required"`
 	// When the profile was created.
 	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
 	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
@@ -247,6 +250,11 @@ type ProfileCustomProfile struct {
 	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
 	AIContextEnabled    bool                                    `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	//
+	// Deprecated: deprecated
+	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// The description of the profile.
 	Description string                   `json:"description,nullable"`
 	JSON        profileCustomProfileJSON `json:"-"`
@@ -257,7 +265,6 @@ type ProfileCustomProfile struct {
 type profileCustomProfileJSON struct {
 	ID                  apijson.Field
 	AllowedMatchCount   apijson.Field
-	ContextAwareness    apijson.Field
 	CreatedAt           apijson.Field
 	Entries             apijson.Field
 	Name                apijson.Field
@@ -266,6 +273,7 @@ type profileCustomProfileJSON struct {
 	UpdatedAt           apijson.Field
 	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
+	ContextAwareness    apijson.Field
 	Description         apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -343,6 +351,7 @@ func (r *ProfileCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
 // [ProfileCustomProfileEntriesExactDataEntry],
+// [ProfileCustomProfileEntriesDocumentFingerprintEntry],
 // [ProfileCustomProfileEntriesWordListEntry].
 func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 	return r.union
@@ -351,7 +360,8 @@ func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 // Union satisfied by [ProfileCustomProfileEntriesCustomEntry],
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
-// [ProfileCustomProfileEntriesExactDataEntry] or
+// [ProfileCustomProfileEntriesExactDataEntry],
+// [ProfileCustomProfileEntriesDocumentFingerprintEntry] or
 // [ProfileCustomProfileEntriesWordListEntry].
 type ProfileCustomProfileEntriesUnion interface {
 	implementsProfileCustomProfileEntry()
@@ -376,6 +386,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileCustomProfileEntriesExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesDocumentFingerprintEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -610,6 +624,53 @@ func (r ProfileCustomProfileEntriesExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type ProfileCustomProfileEntriesDocumentFingerprintEntry struct {
+	ID        string                                                  `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                               `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                    `json:"enabled,required"`
+	Name      string                                                  `json:"name,required"`
+	Type      ProfileCustomProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
+	UpdatedAt time.Time                                               `json:"updated_at,required" format:"date-time"`
+	JSON      profileCustomProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
+}
+
+// profileCustomProfileEntriesDocumentFingerprintEntryJSON contains the JSON
+// metadata for the struct [ProfileCustomProfileEntriesDocumentFingerprintEntry]
+type profileCustomProfileEntriesDocumentFingerprintEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomProfileEntriesDocumentFingerprintEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomProfileEntriesDocumentFingerprintEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomProfileEntriesDocumentFingerprintEntry) implementsProfileCustomProfileEntry() {}
+
+type ProfileCustomProfileEntriesDocumentFingerprintEntryType string
+
+const (
+	ProfileCustomProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint ProfileCustomProfileEntriesDocumentFingerprintEntryType = "document_fingerprint"
+)
+
+func (r ProfileCustomProfileEntriesDocumentFingerprintEntryType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint:
+		return true
+	}
+	return false
+}
+
 type ProfileCustomProfileEntriesWordListEntry struct {
 	ID        string                                       `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
@@ -664,16 +725,17 @@ func (r ProfileCustomProfileEntriesWordListEntryType) IsKnown() bool {
 type ProfileCustomProfileEntriesType string
 
 const (
-	ProfileCustomProfileEntriesTypeCustom      ProfileCustomProfileEntriesType = "custom"
-	ProfileCustomProfileEntriesTypePredefined  ProfileCustomProfileEntriesType = "predefined"
-	ProfileCustomProfileEntriesTypeIntegration ProfileCustomProfileEntriesType = "integration"
-	ProfileCustomProfileEntriesTypeExactData   ProfileCustomProfileEntriesType = "exact_data"
-	ProfileCustomProfileEntriesTypeWordList    ProfileCustomProfileEntriesType = "word_list"
+	ProfileCustomProfileEntriesTypeCustom              ProfileCustomProfileEntriesType = "custom"
+	ProfileCustomProfileEntriesTypePredefined          ProfileCustomProfileEntriesType = "predefined"
+	ProfileCustomProfileEntriesTypeIntegration         ProfileCustomProfileEntriesType = "integration"
+	ProfileCustomProfileEntriesTypeExactData           ProfileCustomProfileEntriesType = "exact_data"
+	ProfileCustomProfileEntriesTypeDocumentFingerprint ProfileCustomProfileEntriesType = "document_fingerprint"
+	ProfileCustomProfileEntriesTypeWordList            ProfileCustomProfileEntriesType = "word_list"
 )
 
 func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeWordList:
+	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeDocumentFingerprint, ProfileCustomProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -722,6 +784,8 @@ type ProfilePredefinedProfile struct {
 	ConfidenceThreshold ProfilePredefinedProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
+	//
+	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	OCREnabled       bool             `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
@@ -818,6 +882,7 @@ func (r *ProfilePredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
 // [ProfilePredefinedProfileEntriesExactDataEntry],
+// [ProfilePredefinedProfileEntriesDocumentFingerprintEntry],
 // [ProfilePredefinedProfileEntriesWordListEntry].
 func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntriesUnion {
 	return r.union
@@ -826,7 +891,8 @@ func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntries
 // Union satisfied by [ProfilePredefinedProfileEntriesCustomEntry],
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
-// [ProfilePredefinedProfileEntriesExactDataEntry] or
+// [ProfilePredefinedProfileEntriesExactDataEntry],
+// [ProfilePredefinedProfileEntriesDocumentFingerprintEntry] or
 // [ProfilePredefinedProfileEntriesWordListEntry].
 type ProfilePredefinedProfileEntriesUnion interface {
 	implementsProfilePredefinedProfileEntry()
@@ -851,6 +917,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesDocumentFingerprintEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1086,6 +1156,55 @@ func (r ProfilePredefinedProfileEntriesExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type ProfilePredefinedProfileEntriesDocumentFingerprintEntry struct {
+	ID        string                                                      `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                                   `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                        `json:"enabled,required"`
+	Name      string                                                      `json:"name,required"`
+	Type      ProfilePredefinedProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
+	UpdatedAt time.Time                                                   `json:"updated_at,required" format:"date-time"`
+	JSON      profilePredefinedProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
+}
+
+// profilePredefinedProfileEntriesDocumentFingerprintEntryJSON contains the JSON
+// metadata for the struct
+// [ProfilePredefinedProfileEntriesDocumentFingerprintEntry]
+type profilePredefinedProfileEntriesDocumentFingerprintEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedProfileEntriesDocumentFingerprintEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedProfileEntriesDocumentFingerprintEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedProfileEntriesDocumentFingerprintEntry) implementsProfilePredefinedProfileEntry() {
+}
+
+type ProfilePredefinedProfileEntriesDocumentFingerprintEntryType string
+
+const (
+	ProfilePredefinedProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint ProfilePredefinedProfileEntriesDocumentFingerprintEntryType = "document_fingerprint"
+)
+
+func (r ProfilePredefinedProfileEntriesDocumentFingerprintEntryType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint:
+		return true
+	}
+	return false
+}
+
 type ProfilePredefinedProfileEntriesWordListEntry struct {
 	ID        string                                           `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                                        `json:"created_at,required" format:"date-time"`
@@ -1140,16 +1259,17 @@ func (r ProfilePredefinedProfileEntriesWordListEntryType) IsKnown() bool {
 type ProfilePredefinedProfileEntriesType string
 
 const (
-	ProfilePredefinedProfileEntriesTypeCustom      ProfilePredefinedProfileEntriesType = "custom"
-	ProfilePredefinedProfileEntriesTypePredefined  ProfilePredefinedProfileEntriesType = "predefined"
-	ProfilePredefinedProfileEntriesTypeIntegration ProfilePredefinedProfileEntriesType = "integration"
-	ProfilePredefinedProfileEntriesTypeExactData   ProfilePredefinedProfileEntriesType = "exact_data"
-	ProfilePredefinedProfileEntriesTypeWordList    ProfilePredefinedProfileEntriesType = "word_list"
+	ProfilePredefinedProfileEntriesTypeCustom              ProfilePredefinedProfileEntriesType = "custom"
+	ProfilePredefinedProfileEntriesTypePredefined          ProfilePredefinedProfileEntriesType = "predefined"
+	ProfilePredefinedProfileEntriesTypeIntegration         ProfilePredefinedProfileEntriesType = "integration"
+	ProfilePredefinedProfileEntriesTypeExactData           ProfilePredefinedProfileEntriesType = "exact_data"
+	ProfilePredefinedProfileEntriesTypeDocumentFingerprint ProfilePredefinedProfileEntriesType = "document_fingerprint"
+	ProfilePredefinedProfileEntriesTypeWordList            ProfilePredefinedProfileEntriesType = "word_list"
 )
 
 func (r ProfilePredefinedProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeWordList:
+	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeDocumentFingerprint, ProfilePredefinedProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -1284,6 +1404,7 @@ func (r *ProfileIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) 
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
 // [ProfileIntegrationProfileEntriesExactDataEntry],
+// [ProfileIntegrationProfileEntriesDocumentFingerprintEntry],
 // [ProfileIntegrationProfileEntriesWordListEntry].
 func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntriesUnion {
 	return r.union
@@ -1292,7 +1413,8 @@ func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntri
 // Union satisfied by [ProfileIntegrationProfileEntriesCustomEntry],
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
-// [ProfileIntegrationProfileEntriesExactDataEntry] or
+// [ProfileIntegrationProfileEntriesExactDataEntry],
+// [ProfileIntegrationProfileEntriesDocumentFingerprintEntry] or
 // [ProfileIntegrationProfileEntriesWordListEntry].
 type ProfileIntegrationProfileEntriesUnion interface {
 	implementsProfileIntegrationProfileEntry()
@@ -1317,6 +1439,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesExactDataEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesDocumentFingerprintEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1553,6 +1679,55 @@ func (r ProfileIntegrationProfileEntriesExactDataEntryType) IsKnown() bool {
 	return false
 }
 
+type ProfileIntegrationProfileEntriesDocumentFingerprintEntry struct {
+	ID        string                                                       `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                                    `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                         `json:"enabled,required"`
+	Name      string                                                       `json:"name,required"`
+	Type      ProfileIntegrationProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
+	UpdatedAt time.Time                                                    `json:"updated_at,required" format:"date-time"`
+	JSON      profileIntegrationProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
+}
+
+// profileIntegrationProfileEntriesDocumentFingerprintEntryJSON contains the JSON
+// metadata for the struct
+// [ProfileIntegrationProfileEntriesDocumentFingerprintEntry]
+type profileIntegrationProfileEntriesDocumentFingerprintEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationProfileEntriesDocumentFingerprintEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationProfileEntriesDocumentFingerprintEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationProfileEntriesDocumentFingerprintEntry) implementsProfileIntegrationProfileEntry() {
+}
+
+type ProfileIntegrationProfileEntriesDocumentFingerprintEntryType string
+
+const (
+	ProfileIntegrationProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint ProfileIntegrationProfileEntriesDocumentFingerprintEntryType = "document_fingerprint"
+)
+
+func (r ProfileIntegrationProfileEntriesDocumentFingerprintEntryType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint:
+		return true
+	}
+	return false
+}
+
 type ProfileIntegrationProfileEntriesWordListEntry struct {
 	ID        string                                            `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
@@ -1607,16 +1782,17 @@ func (r ProfileIntegrationProfileEntriesWordListEntryType) IsKnown() bool {
 type ProfileIntegrationProfileEntriesType string
 
 const (
-	ProfileIntegrationProfileEntriesTypeCustom      ProfileIntegrationProfileEntriesType = "custom"
-	ProfileIntegrationProfileEntriesTypePredefined  ProfileIntegrationProfileEntriesType = "predefined"
-	ProfileIntegrationProfileEntriesTypeIntegration ProfileIntegrationProfileEntriesType = "integration"
-	ProfileIntegrationProfileEntriesTypeExactData   ProfileIntegrationProfileEntriesType = "exact_data"
-	ProfileIntegrationProfileEntriesTypeWordList    ProfileIntegrationProfileEntriesType = "word_list"
+	ProfileIntegrationProfileEntriesTypeCustom              ProfileIntegrationProfileEntriesType = "custom"
+	ProfileIntegrationProfileEntriesTypePredefined          ProfileIntegrationProfileEntriesType = "predefined"
+	ProfileIntegrationProfileEntriesTypeIntegration         ProfileIntegrationProfileEntriesType = "integration"
+	ProfileIntegrationProfileEntriesTypeExactData           ProfileIntegrationProfileEntriesType = "exact_data"
+	ProfileIntegrationProfileEntriesTypeDocumentFingerprint ProfileIntegrationProfileEntriesType = "document_fingerprint"
+	ProfileIntegrationProfileEntriesTypeWordList            ProfileIntegrationProfileEntriesType = "word_list"
 )
 
 func (r ProfileIntegrationProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeWordList:
+	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeDocumentFingerprint, ProfileIntegrationProfileEntriesTypeWordList:
 		return true
 	}
 	return false

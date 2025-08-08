@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // ResourceGroupService contains methods and other services that help with
@@ -212,7 +212,7 @@ func (r resourceGroupNewResponseScopeObjectJSON) RawJSON() string {
 
 // A group of scoped resources.
 type ResourceGroupUpdateResponse struct {
-	// Identifier of the group.
+	// Identifier of the resource group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
 	Scope []ResourceGroupUpdateResponseScope `json:"scope,required"`
@@ -320,7 +320,7 @@ func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
 
 // A group of scoped resources.
 type ResourceGroupListResponse struct {
-	// Identifier of the group.
+	// Identifier of the resource group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
 	Scope []ResourceGroupListResponseScope `json:"scope,required"`
@@ -450,7 +450,7 @@ func (r resourceGroupDeleteResponseJSON) RawJSON() string {
 
 // A group of scoped resources.
 type ResourceGroupGetResponse struct {
-	// Identifier of the group.
+	// Identifier of the resource group.
 	ID string `json:"id,required"`
 	// The scope associated to the resource group
 	Scope []ResourceGroupGetResponseScope `json:"scope,required"`

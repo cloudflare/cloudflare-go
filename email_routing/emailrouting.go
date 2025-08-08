@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // EmailRoutingService contains methods and other services that help with
@@ -42,6 +42,8 @@ func NewEmailRoutingService(opts ...option.RequestOption) (r *EmailRoutingServic
 
 // Disable your Email Routing zone. Also removes additional MX records previously
 // required for Email Routing to work.
+//
+// Deprecated: deprecated
 func (r *EmailRoutingService) Disable(ctx context.Context, params EmailRoutingDisableParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env EmailRoutingDisableResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -59,6 +61,8 @@ func (r *EmailRoutingService) Disable(ctx context.Context, params EmailRoutingDi
 }
 
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
+//
+// Deprecated: deprecated
 func (r *EmailRoutingService) Enable(ctx context.Context, params EmailRoutingEnableParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env EmailRoutingEnableResponseEnvelope
 	opts = append(r.Options[:], opts...)

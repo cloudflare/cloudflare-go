@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // MemberService contains methods and other services that help with interacting
@@ -534,6 +534,8 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithRolesStatus) IsKnown() bool {
 type MemberUpdateParamsBodyIAMUpdateMemberWithRolesUser struct {
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// User's first name
 	FirstName param.Field[string] `json:"first_name"`
 	// User's last name

@@ -12,10 +12,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/kv"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/kv"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestNamespaceValueUpdateWithOptionalParams(t *testing.T) {
@@ -38,10 +38,12 @@ func TestNamespaceValueUpdateWithOptionalParams(t *testing.T) {
 		"My-Key",
 		kv.NamespaceValueUpdateParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata:      cloudflare.F(`{"someMetadataKey": "someMetadataValue"}`),
 			Value:         cloudflare.F("Some Value"),
 			Expiration:    cloudflare.F(1578435000.000000),
 			ExpirationTTL: cloudflare.F(300.000000),
+			Metadata: cloudflare.F[any](map[string]interface{}{
+				"someMetadataKey": "someMetadataValue",
+			}),
 		},
 	)
 	if err != nil {

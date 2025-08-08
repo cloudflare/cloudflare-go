@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 type V4PagePaginationResult[T any] struct {
@@ -86,6 +86,9 @@ func (r v4PagePaginationJSON) RawJSON() string {
 // there is no next page, this function will return a 'nil' for the page value, but
 // will not return an error
 func (r *V4PagePagination[T]) GetNextPage() (res *V4PagePagination[T], err error) {
+	if len(r.Result.Items) == 0 {
+		return nil, nil
+	}
 	u := r.cfg.Request.URL
 	currentPage, err := strconv.ParseInt(u.Query().Get("page"), 10, 64)
 	if err != nil {
@@ -210,6 +213,9 @@ func (r v4PagePaginationArrayJSON) RawJSON() string {
 // there is no next page, this function will return a 'nil' for the page value, but
 // will not return an error
 func (r *V4PagePaginationArray[T]) GetNextPage() (res *V4PagePaginationArray[T], err error) {
+	if len(r.Result) == 0 {
+		return nil, nil
+	}
 	u := r.cfg.Request.URL
 	currentPage, err := strconv.ParseInt(u.Query().Get("page"), 10, 64)
 	if err != nil {
@@ -336,6 +342,9 @@ func (r cursorPaginationJSON) RawJSON() string {
 // there is no next page, this function will return a 'nil' for the page value, but
 // will not return an error
 func (r *CursorPagination[T]) GetNextPage() (res *CursorPagination[T], err error) {
+	if len(r.Result) == 0 {
+		return nil, nil
+	}
 	next := r.ResultInfo.Cursor
 	if len(next) == 0 {
 		return nil, nil
@@ -462,6 +471,9 @@ func (r cursorLimitPaginationJSON) RawJSON() string {
 // there is no next page, this function will return a 'nil' for the page value, but
 // will not return an error
 func (r *CursorLimitPagination[T]) GetNextPage() (res *CursorLimitPagination[T], err error) {
+	if len(r.Result) == 0 {
+		return nil, nil
+	}
 	next := r.ResultInfo.Cursor
 	if len(next) == 0 {
 		return nil, nil
@@ -560,6 +572,9 @@ func (r singlePageJSON) RawJSON() string {
 // there is no next page, this function will return a 'nil' for the page value, but
 // will not return an error
 func (r *SinglePage[T]) GetNextPage() (res *SinglePage[T], err error) {
+	if len(r.Result) == 0 {
+		return nil, nil
+	}
 	// This page represents a response that isn't actually paginated at the API level
 	// so there will never be a next page.
 	cfg := (*requestconfig.RequestConfig)(nil)

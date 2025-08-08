@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // WAFOverrideService contains methods and other services that help with
@@ -41,6 +41,8 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -61,6 +63,8 @@ func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParam
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, params WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -85,6 +89,8 @@ func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, par
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Override], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -110,6 +116,8 @@ func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListPar
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Override] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -118,6 +126,8 @@ func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, params WAFOverr
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
 	var env WAFOverrideDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -142,6 +152,8 @@ func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, bod
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+//
+// Deprecated: deprecated
 func (r *WAFOverrideService) Get(ctx context.Context, overridesID string, query WAFOverrideGetParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -173,7 +185,7 @@ type Override struct {
 	// creating a new URI-based WAF override, you must provide a `groups` object or a
 	// `rules` object.
 	Groups map[string]interface{} `json:"groups"`
-	// When true, indicates that the WAF package is currently paused.
+	// When true, indicates that the rule is currently paused.
 	Paused bool `json:"paused"`
 	// The relative priority of the current URI-based WAF override when multiple
 	// overrides match a single URL. A lower number indicates higher priority. Higher

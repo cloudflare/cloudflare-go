@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // UARuleService contains methods and other services that help with interacting
@@ -38,7 +38,7 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 }
 
 // Creates a new User Agent Blocking rule in a zone.
-func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponse, err error) {
 	var env UARuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -55,7 +55,7 @@ func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ..
 }
 
 // Updates an existing User Agent Blocking rule.
-func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARuleUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponse, err error) {
 	var env UARuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -126,7 +126,7 @@ func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARule
 }
 
 // Fetches the details of a User Agent Blocking rule.
-func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGetParams, opts ...option.RequestOption) (res *UARuleGetResponse, err error) {
 	var env UARuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -144,6 +144,166 @@ func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGe
 	}
 	res = &env.Result
 	return
+}
+
+type UARuleNewResponse struct {
+	// The unique identifier of the User Agent Blocking rule.
+	ID string `json:"id"`
+	// The configuration object for the current rule.
+	Configuration UARuleNewResponseConfiguration `json:"configuration"`
+	// An informative summary of the rule.
+	Description string `json:"description"`
+	// The action to apply to a matched request.
+	Mode UARuleNewResponseMode `json:"mode"`
+	// When true, indicates that the rule is currently paused.
+	Paused bool                  `json:"paused"`
+	JSON   uaRuleNewResponseJSON `json:"-"`
+}
+
+// uaRuleNewResponseJSON contains the JSON metadata for the struct
+// [UARuleNewResponse]
+type uaRuleNewResponseJSON struct {
+	ID            apijson.Field
+	Configuration apijson.Field
+	Description   apijson.Field
+	Mode          apijson.Field
+	Paused        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UARuleNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration object for the current rule.
+type UARuleNewResponseConfiguration struct {
+	// The configuration target for this rule. You must set the target to `ua` for User
+	// Agent Blocking rules.
+	Target string `json:"target"`
+	// The exact user agent string to match. This value will be compared to the
+	// received `User-Agent` HTTP header value.
+	Value string                             `json:"value"`
+	JSON  uaRuleNewResponseConfigurationJSON `json:"-"`
+}
+
+// uaRuleNewResponseConfigurationJSON contains the JSON metadata for the struct
+// [UARuleNewResponseConfiguration]
+type uaRuleNewResponseConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UARuleNewResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleNewResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to apply to a matched request.
+type UARuleNewResponseMode string
+
+const (
+	UARuleNewResponseModeBlock            UARuleNewResponseMode = "block"
+	UARuleNewResponseModeChallenge        UARuleNewResponseMode = "challenge"
+	UARuleNewResponseModeJSChallenge      UARuleNewResponseMode = "js_challenge"
+	UARuleNewResponseModeManagedChallenge UARuleNewResponseMode = "managed_challenge"
+)
+
+func (r UARuleNewResponseMode) IsKnown() bool {
+	switch r {
+	case UARuleNewResponseModeBlock, UARuleNewResponseModeChallenge, UARuleNewResponseModeJSChallenge, UARuleNewResponseModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
+type UARuleUpdateResponse struct {
+	// The unique identifier of the User Agent Blocking rule.
+	ID string `json:"id"`
+	// The configuration object for the current rule.
+	Configuration UARuleUpdateResponseConfiguration `json:"configuration"`
+	// An informative summary of the rule.
+	Description string `json:"description"`
+	// The action to apply to a matched request.
+	Mode UARuleUpdateResponseMode `json:"mode"`
+	// When true, indicates that the rule is currently paused.
+	Paused bool                     `json:"paused"`
+	JSON   uaRuleUpdateResponseJSON `json:"-"`
+}
+
+// uaRuleUpdateResponseJSON contains the JSON metadata for the struct
+// [UARuleUpdateResponse]
+type uaRuleUpdateResponseJSON struct {
+	ID            apijson.Field
+	Configuration apijson.Field
+	Description   apijson.Field
+	Mode          apijson.Field
+	Paused        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UARuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration object for the current rule.
+type UARuleUpdateResponseConfiguration struct {
+	// The configuration target for this rule. You must set the target to `ua` for User
+	// Agent Blocking rules.
+	Target string `json:"target"`
+	// The exact user agent string to match. This value will be compared to the
+	// received `User-Agent` HTTP header value.
+	Value string                                `json:"value"`
+	JSON  uaRuleUpdateResponseConfigurationJSON `json:"-"`
+}
+
+// uaRuleUpdateResponseConfigurationJSON contains the JSON metadata for the struct
+// [UARuleUpdateResponseConfiguration]
+type uaRuleUpdateResponseConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UARuleUpdateResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleUpdateResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to apply to a matched request.
+type UARuleUpdateResponseMode string
+
+const (
+	UARuleUpdateResponseModeBlock            UARuleUpdateResponseMode = "block"
+	UARuleUpdateResponseModeChallenge        UARuleUpdateResponseMode = "challenge"
+	UARuleUpdateResponseModeJSChallenge      UARuleUpdateResponseMode = "js_challenge"
+	UARuleUpdateResponseModeManagedChallenge UARuleUpdateResponseMode = "managed_challenge"
+)
+
+func (r UARuleUpdateResponseMode) IsKnown() bool {
+	switch r {
+	case UARuleUpdateResponseModeBlock, UARuleUpdateResponseModeChallenge, UARuleUpdateResponseModeJSChallenge, UARuleUpdateResponseModeManagedChallenge:
+		return true
+	}
+	return false
 }
 
 type UARuleListResponse struct {
@@ -228,16 +388,28 @@ func (r UARuleListResponseMode) IsKnown() bool {
 
 type UARuleDeleteResponse struct {
 	// The unique identifier of the User Agent Blocking rule.
-	ID   string                   `json:"id"`
-	JSON uaRuleDeleteResponseJSON `json:"-"`
+	ID string `json:"id"`
+	// The configuration object for the current rule.
+	Configuration UARuleDeleteResponseConfiguration `json:"configuration"`
+	// An informative summary of the rule.
+	Description string `json:"description"`
+	// The action to apply to a matched request.
+	Mode UARuleDeleteResponseMode `json:"mode"`
+	// When true, indicates that the rule is currently paused.
+	Paused bool                     `json:"paused"`
+	JSON   uaRuleDeleteResponseJSON `json:"-"`
 }
 
 // uaRuleDeleteResponseJSON contains the JSON metadata for the struct
 // [UARuleDeleteResponse]
 type uaRuleDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Configuration apijson.Field
+	Description   apijson.Field
+	Mode          apijson.Field
+	Paused        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *UARuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
@@ -248,26 +420,154 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The configuration object for the current rule.
+type UARuleDeleteResponseConfiguration struct {
+	// The configuration target for this rule. You must set the target to `ua` for User
+	// Agent Blocking rules.
+	Target string `json:"target"`
+	// The exact user agent string to match. This value will be compared to the
+	// received `User-Agent` HTTP header value.
+	Value string                                `json:"value"`
+	JSON  uaRuleDeleteResponseConfigurationJSON `json:"-"`
+}
+
+// uaRuleDeleteResponseConfigurationJSON contains the JSON metadata for the struct
+// [UARuleDeleteResponseConfiguration]
+type uaRuleDeleteResponseConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UARuleDeleteResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleDeleteResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to apply to a matched request.
+type UARuleDeleteResponseMode string
+
+const (
+	UARuleDeleteResponseModeBlock            UARuleDeleteResponseMode = "block"
+	UARuleDeleteResponseModeChallenge        UARuleDeleteResponseMode = "challenge"
+	UARuleDeleteResponseModeJSChallenge      UARuleDeleteResponseMode = "js_challenge"
+	UARuleDeleteResponseModeManagedChallenge UARuleDeleteResponseMode = "managed_challenge"
+)
+
+func (r UARuleDeleteResponseMode) IsKnown() bool {
+	switch r {
+	case UARuleDeleteResponseModeBlock, UARuleDeleteResponseModeChallenge, UARuleDeleteResponseModeJSChallenge, UARuleDeleteResponseModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
+type UARuleGetResponse struct {
+	// The unique identifier of the User Agent Blocking rule.
+	ID string `json:"id"`
+	// The configuration object for the current rule.
+	Configuration UARuleGetResponseConfiguration `json:"configuration"`
+	// An informative summary of the rule.
+	Description string `json:"description"`
+	// The action to apply to a matched request.
+	Mode UARuleGetResponseMode `json:"mode"`
+	// When true, indicates that the rule is currently paused.
+	Paused bool                  `json:"paused"`
+	JSON   uaRuleGetResponseJSON `json:"-"`
+}
+
+// uaRuleGetResponseJSON contains the JSON metadata for the struct
+// [UARuleGetResponse]
+type uaRuleGetResponseJSON struct {
+	ID            apijson.Field
+	Configuration apijson.Field
+	Description   apijson.Field
+	Mode          apijson.Field
+	Paused        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UARuleGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration object for the current rule.
+type UARuleGetResponseConfiguration struct {
+	// The configuration target for this rule. You must set the target to `ua` for User
+	// Agent Blocking rules.
+	Target string `json:"target"`
+	// The exact user agent string to match. This value will be compared to the
+	// received `User-Agent` HTTP header value.
+	Value string                             `json:"value"`
+	JSON  uaRuleGetResponseConfigurationJSON `json:"-"`
+}
+
+// uaRuleGetResponseConfigurationJSON contains the JSON metadata for the struct
+// [UARuleGetResponseConfiguration]
+type uaRuleGetResponseConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UARuleGetResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uaRuleGetResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to apply to a matched request.
+type UARuleGetResponseMode string
+
+const (
+	UARuleGetResponseModeBlock            UARuleGetResponseMode = "block"
+	UARuleGetResponseModeChallenge        UARuleGetResponseMode = "challenge"
+	UARuleGetResponseModeJSChallenge      UARuleGetResponseMode = "js_challenge"
+	UARuleGetResponseModeManagedChallenge UARuleGetResponseMode = "managed_challenge"
+)
+
+func (r UARuleGetResponseMode) IsKnown() bool {
+	switch r {
+	case UARuleGetResponseModeBlock, UARuleGetResponseModeChallenge, UARuleGetResponseModeJSChallenge, UARuleGetResponseModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
 type UARuleNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The rule configuration.
-	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
+	ZoneID        param.Field[string]                       `path:"zone_id,required"`
+	Configuration param.Field[UARuleNewParamsConfiguration] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[UARuleNewParamsMode] `json:"mode,required"`
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
+	Description param.Field[string] `json:"description"`
+	// When true, indicates that the rule is currently paused.
+	Paused param.Field[bool] `json:"paused"`
 }
 
 func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The rule configuration.
 type UARuleNewParamsConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
+	// The configuration target. You must set the target to `ua` when specifying a user
+	// agent in the rule.
 	Target param.Field[UARuleNewParamsConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
+	// the user agent to exactly match
 	Value param.Field[string] `json:"value"`
 }
 
@@ -275,33 +575,17 @@ func (r UARuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UARuleNewParamsConfiguration) implementsUARuleNewParamsConfigurationUnion() {}
-
-// The rule configuration.
-//
-// Satisfied by [firewall.AccessRuleIPConfigurationParam],
-// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
-// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
-// [UARuleNewParamsConfiguration].
-type UARuleNewParamsConfigurationUnion interface {
-	implementsUARuleNewParamsConfigurationUnion()
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the rule.
+// The configuration target. You must set the target to `ua` when specifying a user
+// agent in the rule.
 type UARuleNewParamsConfigurationTarget string
 
 const (
-	UARuleNewParamsConfigurationTargetIP      UARuleNewParamsConfigurationTarget = "ip"
-	UARuleNewParamsConfigurationTargetIp6     UARuleNewParamsConfigurationTarget = "ip6"
-	UARuleNewParamsConfigurationTargetIPRange UARuleNewParamsConfigurationTarget = "ip_range"
-	UARuleNewParamsConfigurationTargetASN     UARuleNewParamsConfigurationTarget = "asn"
-	UARuleNewParamsConfigurationTargetCountry UARuleNewParamsConfigurationTarget = "country"
+	UARuleNewParamsConfigurationTargetUA UARuleNewParamsConfigurationTarget = "ua"
 )
 
 func (r UARuleNewParamsConfigurationTarget) IsKnown() bool {
 	switch r {
-	case UARuleNewParamsConfigurationTargetIP, UARuleNewParamsConfigurationTargetIp6, UARuleNewParamsConfigurationTargetIPRange, UARuleNewParamsConfigurationTargetASN, UARuleNewParamsConfigurationTargetCountry:
+	case UARuleNewParamsConfigurationTargetUA:
 		return true
 	}
 	return false
@@ -329,7 +613,7 @@ func (r UARuleNewParamsMode) IsKnown() bool {
 type UARuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   UARuleNewResponse     `json:"result,required"`
 	// Defines whether the API call was successful.
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -376,6 +660,11 @@ type UARuleUpdateParams struct {
 	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[UARuleUpdateParamsMode] `json:"mode,required"`
+	// An informative summary of the rule. This value is sanitized and any tags will be
+	// removed.
+	Description param.Field[string] `json:"description"`
+	// When true, indicates that the rule is currently paused.
+	Paused param.Field[bool] `json:"paused"`
 }
 
 func (r UARuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -450,7 +739,7 @@ func (r UARuleUpdateParamsMode) IsKnown() bool {
 type UARuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   UARuleUpdateResponse  `json:"result,required"`
 	// Defines whether the API call was successful.
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -495,15 +784,15 @@ type UARuleListParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A string to search for in the description of existing rules.
 	Description param.Field[string] `query:"description"`
-	// A string to search for in the description of existing rules.
-	DescriptionSearch param.Field[string] `query:"description_search"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
+	// When true, indicates that the rule is currently paused.
+	Paused param.Field[bool] `query:"paused"`
 	// The maximum number of results per page. You can only set the value to `1` or to
 	// a multiple of 5 such as `5`, `10`, `15`, or `20`.
 	PerPage param.Field[float64] `query:"per_page"`
 	// A string to search for in the user agent values of existing rules.
-	UASearch param.Field[string] `query:"ua_search"`
+	UserAgent param.Field[string] `query:"user_agent"`
 }
 
 // URLQuery serializes [UARuleListParams]'s query parameters as `url.Values`.
@@ -570,7 +859,7 @@ type UARuleGetParams struct {
 type UARuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   UARuleGetResponse     `json:"result,required"`
 	// Defines whether the API call was successful.
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`

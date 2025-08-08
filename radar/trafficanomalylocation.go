@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // TrafficAnomalyLocationService contains methods and other services that help with
@@ -71,10 +71,11 @@ func (r trafficAnomalyLocationGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyLocationGetResponseTrafficAnomaly struct {
-	ClientCountryAlpha2 string                                              `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                              `json:"clientCountryName,required"`
-	Value               string                                              `json:"value,required"`
-	JSON                trafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string `json:"clientCountryName,required"`
+	// A numeric string.
+	Value string                                              `json:"value,required"`
+	JSON  trafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
 }
 
 // trafficAnomalyLocationGetResponseTrafficAnomalyJSON contains the JSON metadata

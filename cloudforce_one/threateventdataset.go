@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ThreatEventDatasetService contains methods and other services that help with
@@ -22,6 +22,7 @@ import (
 // the [NewThreatEventDatasetService] method instead.
 type ThreatEventDatasetService struct {
 	Options []option.RequestOption
+	Health  *ThreatEventDatasetHealthService
 }
 
 // NewThreatEventDatasetService generates a new service that applies the given
@@ -30,17 +31,18 @@ type ThreatEventDatasetService struct {
 func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventDatasetService) {
 	r = &ThreatEventDatasetService{}
 	r.Options = opts
+	r.Health = NewThreatEventDatasetHealthService(opts...)
 	return
 }
 
 // Creates a dataset
 func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventDatasetNewParams, opts ...option.RequestOption) (res *ThreatEventDatasetNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset/create", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
@@ -48,11 +50,11 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 // Lists all datasets in an account
 func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -60,7 +62,7 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventD
 // Updates an existing dataset
 func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, params ThreatEventDatasetEditParams, opts ...option.RequestOption) (res *ThreatEventDatasetEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -68,7 +70,7 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 		err = errors.New("missing required dataset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset/%s", params.AccountID, datasetID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/%s", params.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return
 }
@@ -76,7 +78,7 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 // Reads a dataset
 func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -84,7 +86,7 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 		err = errors.New("missing required dataset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset/%s", query.AccountID, datasetID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/%s", query.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -92,7 +94,7 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 // Reads data for a raw event
 func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, eventID string, query ThreatEventDatasetRawParams, opts ...option.RequestOption) (res *ThreatEventDatasetRawResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -104,7 +106,7 @@ func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, e
 		err = errors.New("missing required event_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/raw/%s/%s", query.AccountID, datasetID, eventID)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/raw/%s/%s", query.AccountID, datasetID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -242,7 +244,7 @@ func (r threatEventDatasetRawResponseJSON) RawJSON() string {
 
 type ThreatEventDatasetNewParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
 	IsPublic param.Field[bool] `json:"isPublic,required"`
@@ -256,12 +258,12 @@ func (r ThreatEventDatasetNewParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventDatasetListParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventDatasetEditParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
 	IsPublic param.Field[bool] `json:"isPublic,required"`
@@ -275,10 +277,10 @@ func (r ThreatEventDatasetEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventDatasetGetParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventDatasetRawParams struct {
 	// Account ID.
-	AccountID param.Field[float64] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }

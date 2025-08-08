@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/email_security"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/email_security"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestSettingBlockSenderNewWithOptionalParams(t *testing.T) {
@@ -61,6 +61,7 @@ func TestSettingBlockSenderListWithOptionalParams(t *testing.T) {
 		Direction:   cloudflare.F(email_security.SettingBlockSenderListParamsDirectionAsc),
 		Order:       cloudflare.F(email_security.SettingBlockSenderListParamsOrderPattern),
 		Page:        cloudflare.F(int64(1)),
+		Pattern:     cloudflare.F("pattern"),
 		PatternType: cloudflare.F(email_security.SettingBlockSenderListParamsPatternTypeEmail),
 		PerPage:     cloudflare.F(int64(1)),
 		Search:      cloudflare.F("search"),

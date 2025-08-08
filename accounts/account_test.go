@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/accounts"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestAccountNewWithOptionalParams(t *testing.T) {
@@ -57,8 +57,9 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Update(context.TODO(), accounts.AccountUpdateParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Account: accounts.AccountParam{
+			ID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name: cloudflare.F("Demo Account"),
 			Settings: cloudflare.F(accounts.AccountSettingsParam{
 				AbuseContactEmail: cloudflare.F("abuse_contact_email"),
@@ -142,7 +143,7 @@ func TestAccountGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Get(context.TODO(), accounts.AccountGetParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -3,7 +3,7 @@
 package iam
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // IAMService contains methods and other services that help with interacting with
@@ -16,6 +16,7 @@ type IAMService struct {
 	Options          []option.RequestOption
 	PermissionGroups *PermissionGroupService
 	ResourceGroups   *ResourceGroupService
+	UserGroups       *UserGroupService
 }
 
 // NewIAMService generates a new service that applies the given options to each
@@ -26,5 +27,6 @@ func NewIAMService(opts ...option.RequestOption) (r *IAMService) {
 	r.Options = opts
 	r.PermissionGroups = NewPermissionGroupService(opts...)
 	r.ResourceGroups = NewResourceGroupService(opts...)
+	r.UserGroups = NewUserGroupService(opts...)
 	return
 }

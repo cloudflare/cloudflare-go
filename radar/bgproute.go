@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // BGPRouteService contains methods and other services that help with interacting
@@ -72,8 +72,8 @@ func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams
 	return
 }
 
-// Retrieves realtime routes for prefixes using public realtime data collectors
-// (RouteViews and RIPE RIS).
+// Retrieves real-time BGP routes for a prefix, using public real-time data
+// collectors (RouteViews and RIPE RIS).
 func (r *BGPRouteService) Realtime(ctx context.Context, query BGPRouteRealtimeParams, opts ...option.RequestOption) (res *BGPRouteRealtimeResponse, err error) {
 	var env BGPRouteRealtimeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -460,7 +460,7 @@ func (r bgpRouteRealtimeResponseMetaASNInfoJSON) RawJSON() string {
 type BGPRouteRealtimeResponseMetaCollector struct {
 	// Public route collector ID.
 	Collector string `json:"collector,required"`
-	// Latest realtime stream timestamp for this collector.
+	// Latest real-time stream timestamp for this collector.
 	LatestRealtimeTs string `json:"latest_realtime_ts,required"`
 	// Latest RIB dump MRT file timestamp for this collector.
 	LatestRibTs string `json:"latest_rib_ts,required"`

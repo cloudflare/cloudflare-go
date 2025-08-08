@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // DeviceRevokeService contains methods and other services that help with
@@ -34,10 +34,14 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 	return
 }
 
-// Revokes a list of registrations.
+// Revokes a list of devices. Not supported when
+// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
+// is enabled.
 //
 // **Deprecated**: please use POST
 // /accounts/{account_id}/devices/registrations/revoke instead.
+//
+// Deprecated: deprecated
 func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DeviceRevokeNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

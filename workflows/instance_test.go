@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/workflows"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/workflows"
 )
 
 func TestInstanceNewWithOptionalParams(t *testing.T) {
@@ -32,9 +32,10 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"x",
 		workflows.InstanceNewParams{
-			AccountID:  cloudflare.F("account_id"),
-			InstanceID: cloudflare.F("instance_id"),
-			Params:     cloudflare.F[any](map[string]interface{}{}),
+			AccountID:         cloudflare.F("account_id"),
+			InstanceID:        cloudflare.F("instance_id"),
+			InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
+			Params:            cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -64,6 +65,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 		"x",
 		workflows.InstanceListParams{
 			AccountID: cloudflare.F("account_id"),
+			Cursor:    cloudflare.F("cursor"),
 			DateEnd:   cloudflare.F(time.Now()),
 			DateStart: cloudflare.F(time.Now()),
 			Page:      cloudflare.F(1.000000),
@@ -99,8 +101,9 @@ func TestInstanceBulkWithOptionalParams(t *testing.T) {
 		workflows.InstanceBulkParams{
 			AccountID: cloudflare.F("account_id"),
 			Body: []workflows.InstanceBulkParamsBody{{
-				InstanceID: cloudflare.F("instance_id"),
-				Params:     cloudflare.F[any](map[string]interface{}{}),
+				InstanceID:        cloudflare.F("instance_id"),
+				InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
+				Params:            cloudflare.F[any](map[string]interface{}{}),
 			}},
 		},
 	)

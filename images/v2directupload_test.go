@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/images"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/images"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestV2DirectUploadNewWithOptionalParams(t *testing.T) {
@@ -32,6 +32,7 @@ func TestV2DirectUploadNewWithOptionalParams(t *testing.T) {
 	_, err := client.Images.V2.DirectUploads.New(context.TODO(), images.V2DirectUploadNewParams{
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:                cloudflare.F("this/is/my-customid"),
+		Creator:           cloudflare.F("creator"),
 		Expiry:            cloudflare.F(time.Now()),
 		Metadata:          cloudflare.F[any](map[string]interface{}{}),
 		RequireSignedURLs: cloudflare.F(true),

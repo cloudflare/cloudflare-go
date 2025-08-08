@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/iam"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/iam"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestPermissionGroupListWithOptionalParams(t *testing.T) {
@@ -28,7 +28,7 @@ func TestPermissionGroupListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.IAM.PermissionGroups.List(context.TODO(), iam.PermissionGroupListParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:        cloudflare.F("6d7f2f5f5b1d4a0e9081fdc98d432fd1"),
 		Label:     cloudflare.F("labelOfThePermissionGroup"),
 		Name:      cloudflare.F("NameOfThePermissionGroup"),
@@ -59,9 +59,9 @@ func TestPermissionGroupGet(t *testing.T) {
 	)
 	_, err := client.IAM.PermissionGroups.Get(
 		context.TODO(),
-		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.PermissionGroupGetParams{
-			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/abuse_reports"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/abuse_reports"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestAbuseReportNewWithOptionalParams(t *testing.T) {
@@ -30,40 +30,31 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AbuseReports.New(
 		context.TODO(),
-		abuse_reports.AbuseReportNewParamsReportTypeAbuseGeneral,
+		"report_type",
 		abuse_reports.AbuseReportNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReport{
-				Act:                        cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseGeneral),
-				Email:                      cloudflare.F("email"),
-				Email2:                     cloudflare.F("email2"),
-				Name:                       cloudflare.F("x"),
-				URLs:                       cloudflare.F("urls"),
-				Address1:                   cloudflare.F("x"),
-				AgentName:                  cloudflare.F("x"),
-				Agree:                      cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportAgree0),
-				City:                       cloudflare.F("x"),
-				Comments:                   cloudflare.F("x"),
-				Company:                    cloudflare.F("x"),
-				Country:                    cloudflare.F("x"),
-				DestinationIPs:             cloudflare.F("destination_ips"),
-				HostNotification:           cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportHostNotificationSend),
-				Justification:              cloudflare.F("x"),
-				NcmecNotification:          cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportNcmecNotificationSend),
-				NcseiSubjectRepresentation: cloudflare.F(true),
-				OriginalWork:               cloudflare.F("x"),
-				OwnerNotification:          cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend),
-				PortsProtocols:             cloudflare.F("ports_protocols"),
-				ReportedCountry:            cloudflare.F("xx"),
-				ReportedUserAgent:          cloudflare.F("x"),
-				Signature:                  cloudflare.F("signature"),
-				SourceIPs:                  cloudflare.F("source_ips"),
-				State:                      cloudflare.F("x"),
-				Tele:                       cloudflare.F("x"),
-				Title:                      cloudflare.F("x"),
-				TrademarkNumber:            cloudflare.F("x"),
-				TrademarkOffice:            cloudflare.F("x"),
-				TrademarkSymbol:            cloudflare.F("x"),
+				Act:               cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca),
+				Address1:          cloudflare.F("x"),
+				AgentName:         cloudflare.F("x"),
+				Agree:             cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportAgree1),
+				City:              cloudflare.F("x"),
+				Country:           cloudflare.F("x"),
+				Email:             cloudflare.F("email"),
+				Email2:            cloudflare.F("email2"),
+				HostNotification:  cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportHostNotificationSend),
+				Name:              cloudflare.F("x"),
+				OriginalWork:      cloudflare.F("x"),
+				OwnerNotification: cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend),
+				Signature:         cloudflare.F("signature"),
+				State:             cloudflare.F("x"),
+				URLs:              cloudflare.F("urls"),
+				Comments:          cloudflare.F("x"),
+				Company:           cloudflare.F("x"),
+				ReportedCountry:   cloudflare.F("xx"),
+				ReportedUserAgent: cloudflare.F("x"),
+				Tele:              cloudflare.F("x"),
+				Title:             cloudflare.F("x"),
 			},
 		},
 	)

@@ -10,10 +10,10 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -1225,7 +1225,7 @@ func (r executeRuleActionParametersOverridesJSON) RawJSON() string {
 	return r.raw
 }
 
-// A category-level override
+// A category-level override.
 type ExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
 	Category string `json:"category,required"`
@@ -1275,7 +1275,7 @@ func (r ExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown(
 	return false
 }
 
-// A rule-level override
+// A rule-level override.
 type ExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
 	ID string `json:"id,required"`
@@ -1502,7 +1502,7 @@ func (r ExecuteRuleActionParametersOverridesParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// A category-level override
+// A category-level override.
 type ExecuteRuleActionParametersOverridesCategoryParam struct {
 	// The name of the category to override.
 	Category param.Field[string] `json:"category,required"`
@@ -1518,7 +1518,7 @@ func (r ExecuteRuleActionParametersOverridesCategoryParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// A rule-level override
+// A rule-level override.
 type ExecuteRuleActionParametersOverridesRuleParam struct {
 	// The ID of the rule to override.
 	ID param.Field[string] `json:"id,required"`
@@ -5289,7 +5289,7 @@ type SetCacheSettingsRuleActionParameters struct {
 	// When enabled, Cloudflare will aim to strictly adhere to RFC 7234.
 	OriginCacheControl bool `json:"origin_cache_control"`
 	// Generate Cloudflare error pages from issues sent from the origin server. When
-	// on, error pages will trigger for issues from the origin
+	// on, error pages will trigger for issues from the origin.
 	OriginErrorPagePassthru bool `json:"origin_error_page_passthru"`
 	// Define a timeout value between two successive read operations to your origin
 	// server. Historically, the timeout value between two read options from Cloudflare
@@ -5368,11 +5368,12 @@ const (
 	SetCacheSettingsRuleActionParametersBrowserTTLModeRespectOrigin   SetCacheSettingsRuleActionParametersBrowserTTLMode = "respect_origin"
 	SetCacheSettingsRuleActionParametersBrowserTTLModeBypassByDefault SetCacheSettingsRuleActionParametersBrowserTTLMode = "bypass_by_default"
 	SetCacheSettingsRuleActionParametersBrowserTTLModeOverrideOrigin  SetCacheSettingsRuleActionParametersBrowserTTLMode = "override_origin"
+	SetCacheSettingsRuleActionParametersBrowserTTLModeBypass          SetCacheSettingsRuleActionParametersBrowserTTLMode = "bypass"
 )
 
 func (r SetCacheSettingsRuleActionParametersBrowserTTLMode) IsKnown() bool {
 	switch r {
-	case SetCacheSettingsRuleActionParametersBrowserTTLModeRespectOrigin, SetCacheSettingsRuleActionParametersBrowserTTLModeBypassByDefault, SetCacheSettingsRuleActionParametersBrowserTTLModeOverrideOrigin:
+	case SetCacheSettingsRuleActionParametersBrowserTTLModeRespectOrigin, SetCacheSettingsRuleActionParametersBrowserTTLModeBypassByDefault, SetCacheSettingsRuleActionParametersBrowserTTLModeOverrideOrigin, SetCacheSettingsRuleActionParametersBrowserTTLModeBypass:
 		return true
 	}
 	return false
@@ -5381,10 +5382,10 @@ func (r SetCacheSettingsRuleActionParametersBrowserTTLMode) IsKnown() bool {
 // Define which components of the request are included or excluded from the cache
 // key Cloudflare uses to store the response in cache.
 type SetCacheSettingsRuleActionParametersCacheKey struct {
-	// Separate cached content based on the visitor’s device type
+	// Separate cached content based on the visitor’s device type.
 	CacheByDeviceType bool `json:"cache_by_device_type"`
 	// Protect from web cache deception attacks while allowing static assets to be
-	// cached
+	// cached.
 	CacheDeceptionArmor bool `json:"cache_deception_armor"`
 	// Customize which components of the request are included or excluded from the
 	// cache key.
@@ -5982,9 +5983,9 @@ func (r setCacheSettingsRuleActionParametersCacheReserveJSON) RawJSON() string {
 type SetCacheSettingsRuleActionParametersEdgeTTL struct {
 	// The TTL (in seconds) if you choose override_origin mode.
 	Default int64 `json:"default,required"`
-	// edge ttl options
+	// Edge TTL options.
 	Mode SetCacheSettingsRuleActionParametersEdgeTTLMode `json:"mode,required"`
-	// List of single status codes, or status code ranges to apply the selected mode
+	// List of single status codes, or status code ranges to apply the selected mode.
 	StatusCodeTTL []SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTL `json:"status_code_ttl,required"`
 	JSON          setCacheSettingsRuleActionParametersEdgeTTLJSON            `json:"-"`
 }
@@ -6007,7 +6008,7 @@ func (r setCacheSettingsRuleActionParametersEdgeTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-// edge ttl options
+// Edge TTL options.
 type SetCacheSettingsRuleActionParametersEdgeTTLMode string
 
 const (
@@ -6025,7 +6026,7 @@ func (r SetCacheSettingsRuleActionParametersEdgeTTLMode) IsKnown() bool {
 }
 
 // Specify how long Cloudflare should cache the response based on the status code
-// from the origin. Can be a single status code or a range or status codes
+// from the origin. Can be a single status code or a range or status codes.
 type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTL struct {
 	// Time to cache a response (in seconds). A value of 0 is equivalent to setting the
 	// Cache-Control header with the value "no-cache". A value of -1 is equivalent to
@@ -6033,7 +6034,7 @@ type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTL struct {
 	Value int64 `json:"value,required"`
 	// The range of status codes used to apply the selected mode.
 	StatusCodeRange SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRange `json:"status_code_range"`
-	// Set the ttl for responses with this specific status code
+	// Set the TTL for responses with this specific status code.
 	StatusCodeValue int64                                                        `json:"status_code_value"`
 	JSON            setCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLJSON `json:"-"`
 }
@@ -6059,9 +6060,9 @@ func (r setCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLJSON) RawJSON() 
 
 // The range of status codes used to apply the selected mode.
 type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRange struct {
-	// response status code lower bound
+	// Response status code lower bound.
 	From int64 `json:"from,required"`
-	// response status code upper bound
+	// Response status code upper bound.
 	To   int64                                                                       `json:"to,required"`
 	JSON setCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRangeJSON `json:"-"`
 }
@@ -6244,7 +6245,7 @@ type SetCacheSettingsRuleActionParametersParam struct {
 	// When enabled, Cloudflare will aim to strictly adhere to RFC 7234.
 	OriginCacheControl param.Field[bool] `json:"origin_cache_control"`
 	// Generate Cloudflare error pages from issues sent from the origin server. When
-	// on, error pages will trigger for issues from the origin
+	// on, error pages will trigger for issues from the origin.
 	OriginErrorPagePassthru param.Field[bool] `json:"origin_error_page_passthru"`
 	// Define a timeout value between two successive read operations to your origin
 	// server. Historically, the timeout value between two read options from Cloudflare
@@ -6282,10 +6283,10 @@ func (r SetCacheSettingsRuleActionParametersBrowserTTLParam) MarshalJSON() (data
 // Define which components of the request are included or excluded from the cache
 // key Cloudflare uses to store the response in cache.
 type SetCacheSettingsRuleActionParametersCacheKeyParam struct {
-	// Separate cached content based on the visitor’s device type
+	// Separate cached content based on the visitor’s device type.
 	CacheByDeviceType param.Field[bool] `json:"cache_by_device_type"`
 	// Protect from web cache deception attacks while allowing static assets to be
-	// cached
+	// cached.
 	CacheDeceptionArmor param.Field[bool] `json:"cache_deception_armor"`
 	// Customize which components of the request are included or excluded from the
 	// cache key.
@@ -6552,9 +6553,9 @@ func (r SetCacheSettingsRuleActionParametersCacheReserveParam) MarshalJSON() (da
 type SetCacheSettingsRuleActionParametersEdgeTTLParam struct {
 	// The TTL (in seconds) if you choose override_origin mode.
 	Default param.Field[int64] `json:"default,required"`
-	// edge ttl options
+	// Edge TTL options.
 	Mode param.Field[SetCacheSettingsRuleActionParametersEdgeTTLMode] `json:"mode,required"`
-	// List of single status codes, or status code ranges to apply the selected mode
+	// List of single status codes, or status code ranges to apply the selected mode.
 	StatusCodeTTL param.Field[[]SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLParam] `json:"status_code_ttl,required"`
 }
 
@@ -6563,7 +6564,7 @@ func (r SetCacheSettingsRuleActionParametersEdgeTTLParam) MarshalJSON() (data []
 }
 
 // Specify how long Cloudflare should cache the response based on the status code
-// from the origin. Can be a single status code or a range or status codes
+// from the origin. Can be a single status code or a range or status codes.
 type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLParam struct {
 	// Time to cache a response (in seconds). A value of 0 is equivalent to setting the
 	// Cache-Control header with the value "no-cache". A value of -1 is equivalent to
@@ -6571,7 +6572,7 @@ type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLParam struct {
 	Value param.Field[int64] `json:"value,required"`
 	// The range of status codes used to apply the selected mode.
 	StatusCodeRange param.Field[SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRangeParam] `json:"status_code_range"`
-	// Set the ttl for responses with this specific status code
+	// Set the TTL for responses with this specific status code.
 	StatusCodeValue param.Field[int64] `json:"status_code_value"`
 }
 
@@ -6581,9 +6582,9 @@ func (r SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLParam) MarshalJS
 
 // The range of status codes used to apply the selected mode.
 type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRangeParam struct {
-	// response status code lower bound
+	// Response status code lower bound.
 	From param.Field[int64] `json:"from,required"`
-	// response status code upper bound
+	// Response status code upper bound.
 	To param.Field[int64] `json:"to,required"`
 }
 
@@ -6765,7 +6766,7 @@ type SetConfigRuleActionParameters struct {
 	OpportunisticEncryption bool `json:"opportunistic_encryption"`
 	// Configure the Polish level.
 	Polish SetConfigRuleActionParametersPolish `json:"polish"`
-	// Turn on or off Rocket Loader
+	// Turn on or off Rocket Loader.
 	RocketLoader bool `json:"rocket_loader"`
 	// Configure the Security Level.
 	SecurityLevel SetConfigRuleActionParametersSecurityLevel `json:"security_level"`
@@ -6891,11 +6892,12 @@ const (
 	SetConfigRuleActionParametersPolishOff      SetConfigRuleActionParametersPolish = "off"
 	SetConfigRuleActionParametersPolishLossless SetConfigRuleActionParametersPolish = "lossless"
 	SetConfigRuleActionParametersPolishLossy    SetConfigRuleActionParametersPolish = "lossy"
+	SetConfigRuleActionParametersPolishWebP     SetConfigRuleActionParametersPolish = "webp"
 )
 
 func (r SetConfigRuleActionParametersPolish) IsKnown() bool {
 	switch r {
-	case SetConfigRuleActionParametersPolishOff, SetConfigRuleActionParametersPolishLossless, SetConfigRuleActionParametersPolishLossy:
+	case SetConfigRuleActionParametersPolishOff, SetConfigRuleActionParametersPolishLossless, SetConfigRuleActionParametersPolishLossy, SetConfigRuleActionParametersPolishWebP:
 		return true
 	}
 	return false
@@ -7075,7 +7077,7 @@ type SetConfigRuleActionParametersParam struct {
 	OpportunisticEncryption param.Field[bool] `json:"opportunistic_encryption"`
 	// Configure the Polish level.
 	Polish param.Field[SetConfigRuleActionParametersPolish] `json:"polish"`
-	// Turn on or off Rocket Loader
+	// Turn on or off Rocket Loader.
 	RocketLoader param.Field[bool] `json:"rocket_loader"`
 	// Configure the Security Level.
 	SecurityLevel param.Field[SetConfigRuleActionParametersSecurityLevel] `json:"security_level"`
@@ -7241,6 +7243,9 @@ func (r SkipRuleAction) IsKnown() bool {
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParameters struct {
+	// A phase to skip the execution of. This property is only compatible with
+	// products.
+	Phase SkipRuleActionParametersPhase `json:"phase"`
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// rulesets option.
 	Phases []Phase `json:"phases"`
@@ -7261,6 +7266,7 @@ type SkipRuleActionParameters struct {
 // skipRuleActionParametersJSON contains the JSON metadata for the struct
 // [SkipRuleActionParameters]
 type skipRuleActionParametersJSON struct {
+	Phase       apijson.Field
 	Phases      apijson.Field
 	Products    apijson.Field
 	Rules       apijson.Field
@@ -7276,6 +7282,22 @@ func (r *SkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 
 func (r skipRuleActionParametersJSON) RawJSON() string {
 	return r.raw
+}
+
+// A phase to skip the execution of. This property is only compatible with
+// products.
+type SkipRuleActionParametersPhase string
+
+const (
+	SkipRuleActionParametersPhaseCurrent SkipRuleActionParametersPhase = "current"
+)
+
+func (r SkipRuleActionParametersPhase) IsKnown() bool {
+	switch r {
+	case SkipRuleActionParametersPhaseCurrent:
+		return true
+	}
+	return false
 }
 
 // The name of a legacy security product to skip the execution of.
@@ -7426,6 +7448,9 @@ func (r SkipRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
+	// A phase to skip the execution of. This property is only compatible with
+	// products.
+	Phase param.Field[SkipRuleActionParametersPhase] `json:"phase"`
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// rulesets option.
 	Phases param.Field[[]Phase] `json:"phases"`

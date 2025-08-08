@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
 func TestGatewayListNewWithOptionalParams(t *testing.T) {
@@ -32,7 +32,7 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		Name:        cloudflare.F("Admin Serial Numbers"),
 		Type:        cloudflare.F(zero_trust.GatewayListNewParamsTypeSerial),
 		Description: cloudflare.F("The serial numbers for administrators"),
-		Items: cloudflare.F([]zero_trust.GatewayItemParam{{
+		Items: cloudflare.F([]zero_trust.GatewayListNewParamsItem{{
 			Description: cloudflare.F("Austin office IP"),
 			Value:       cloudflare.F("8GE8721REF"),
 		}}),
@@ -66,7 +66,7 @@ func TestGatewayListUpdateWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Name:        cloudflare.F("Admin Serial Numbers"),
 			Description: cloudflare.F("The serial numbers for administrators"),
-			Items: cloudflare.F([]zero_trust.GatewayItemParam{{
+			Items: cloudflare.F([]zero_trust.GatewayListUpdateParamsItem{{
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
 			}}),
@@ -154,7 +154,7 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Append: cloudflare.F([]zero_trust.GatewayItemParam{{
+			Append: cloudflare.F([]zero_trust.GatewayListEditParamsAppend{{
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
 			}}),

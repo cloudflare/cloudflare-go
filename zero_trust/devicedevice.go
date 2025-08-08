@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // DeviceDeviceService contains methods and other services that help with
@@ -105,7 +105,7 @@ func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, query De
 	return
 }
 
-// Revokes all registrations associated with the specified device.
+// Revokes all WARP registrations associated with the specified device.
 func (r *DeviceDeviceService) Revoke(ctx context.Context, deviceID string, body DeviceDeviceRevokeParams, opts ...option.RequestOption) (res *DeviceDeviceRevokeResponse, err error) {
 	var env DeviceDeviceRevokeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -149,7 +149,7 @@ type DeviceDeviceListResponse struct {
 	DeviceType string `json:"device_type,nullable"`
 	// A string that uniquely identifies the hardware or virtual machine (VM).
 	HardwareID string `json:"hardware_id,nullable"`
-	// The last Access user to use the WARP device.
+	// The last user to use the WARP device.
 	LastSeenUser DeviceDeviceListResponseLastSeenUser `json:"last_seen_user,nullable"`
 	// The device MAC address.
 	MacAddress string `json:"mac_address,nullable"`
@@ -202,7 +202,7 @@ func (r deviceDeviceListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The last Access user to use the WARP device.
+// The last user to use the WARP device.
 type DeviceDeviceListResponseLastSeenUser struct {
 	// UUID.
 	ID string `json:"id"`
@@ -256,7 +256,7 @@ type DeviceDeviceGetResponse struct {
 	DeviceType string `json:"device_type,nullable"`
 	// A string that uniquely identifies the hardware or virtual machine (VM).
 	HardwareID string `json:"hardware_id,nullable"`
-	// The last Access user to use the WARP device.
+	// The last user to use the WARP device.
 	LastSeenUser DeviceDeviceGetResponseLastSeenUser `json:"last_seen_user,nullable"`
 	// The device MAC address.
 	MacAddress string `json:"mac_address,nullable"`
@@ -309,7 +309,7 @@ func (r deviceDeviceGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The last Access user to use the WARP device.
+// The last user to use the WARP device.
 type DeviceDeviceGetResponseLastSeenUser struct {
 	// UUID.
 	ID string `json:"id"`
@@ -357,7 +357,7 @@ type DeviceDeviceListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// Search by device details.
 	Search param.Field[string] `query:"search"`
-	// Filters by the last_seen timestamp - returns only devices last seen after this
+	// Filter by the last_seen timestamp - returns only devices last seen after this
 	// timestamp.
 	SeenAfter param.Field[string] `query:"seen_after"`
 	// Filter by the last_seen timestamp - returns only devices last seen before this

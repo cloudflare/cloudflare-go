@@ -7,14 +7,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ScriptContentService contains methods and other services that help with
@@ -84,9 +85,17 @@ type ScriptContentUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[WorkerMetadataParam] `json:"metadata,required"`
-	CfWorkerBodyPart       param.Field[string]              `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]              `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata param.Field[ScriptContentUpdateParamsMetadata] `json:"metadata,required"`
+	// An array of modules (often JavaScript files) comprising a Worker script. At
+	// least one module must be present and referenced in the metadata as `main_module`
+	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
+	// `application/javascript+module`, `text/javascript+module`,
+	// `application/javascript`, `text/javascript`, `text/x-python`,
+	// `text/x-python-requirement`, `application/wasm`, `text/plain`,
+	// `application/octet-stream`, `application/source-map`.
+	Files                  param.Field[[]io.Reader] `json:"files" format:"binary"`
+	CfWorkerBodyPart       param.Field[string]      `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]      `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -102,6 +111,20 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+// JSON encoded metadata about the uploaded parts and Worker configuration.
+type ScriptContentUpdateParamsMetadata struct {
+	// Name of the uploaded file that contains the Worker script (e.g. the file adding
+	// a listener to the `fetch` event). Indicates a `service worker syntax` Worker.
+	BodyPart param.Field[string] `json:"body_part"`
+	// Name of the uploaded file that contains the main module (e.g. the file exporting
+	// a `fetch` handler). Indicates a `module syntax` Worker.
+	MainModule param.Field[string] `json:"main_module"`
+}
+
+func (r ScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ScriptContentUpdateResponseEnvelope struct {

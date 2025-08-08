@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // CNIService contains methods and other services that help with interacting with
@@ -687,6 +687,8 @@ type CNIListParams struct {
 	Limit     param.Field[int64]  `query:"limit"`
 	// If specified, only show CNIs associated with the specified slot
 	Slot param.Field[string] `query:"slot"`
+	// If specified, only show cnis associated with the specified tunnel id
+	TunnelID param.Field[string] `query:"tunnel_id"`
 }
 
 // URLQuery serializes [CNIListParams]'s query parameters as `url.Values`.

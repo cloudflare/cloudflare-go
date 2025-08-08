@@ -11,11 +11,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -96,8 +96,6 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	Limits ScriptScriptAndVersionSettingEditResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations ScriptScriptAndVersionSettingEditResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability ScriptScriptAndVersionSettingEditResponseObservability `json:"observability"`
 	// Configuration for
@@ -120,7 +118,6 @@ type scriptScriptAndVersionSettingEditResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
@@ -191,9 +188,11 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                          `json:"usages"`
-	JSON   scriptScriptAndVersionSettingEditResponseBindingJSON `json:"-"`
-	union  ScriptScriptAndVersionSettingEditResponseBindingsUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                               `json:"workflow_name"`
+	JSON         scriptScriptAndVersionSettingEditResponseBindingJSON `json:"-"`
+	union        ScriptScriptAndVersionSettingEditResponseBindingsUnion
 }
 
 // scriptScriptAndVersionSettingEditResponseBindingJSON contains the JSON metadata
@@ -223,6 +222,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -265,7 +265,8 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -293,9 +294,10 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey]
 // or
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -413,6 +415,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -1559,6 +1566,61 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecre
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName string `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName string                                                                          `json:"script_name"`
+	JSON       scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	ClassName    apijson.Field
+	ScriptName   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditResponseBindingsType string
 
@@ -1585,11 +1647,12 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsType = "version_metadata"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingEditResponseBindingsType = "secrets_store_secret"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditResponseBindingsType = "secret_key"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditResponseBindingsType = "workflow"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -1645,11 +1708,6 @@ type ScriptScriptAndVersionSettingEditResponseMigrations struct {
 	NewClasses interface{} `json:"new_classes"`
 	// This field can have the runtime type of [[]string].
 	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of [[]SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes"`
 	// This field can have the runtime type of [[]MigrationStep].
@@ -1666,8 +1724,6 @@ type scriptScriptAndVersionSettingEditResponseMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
 	Steps              apijson.Field
 	TransferredClasses apijson.Field
@@ -1721,23 +1777,13 @@ func init() {
 }
 
 type ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []MigrationStep                                                                      `json:"steps"`
-	JSON  scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+	JSON scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations]
 type scriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1887,8 +1933,6 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	Limits ScriptScriptAndVersionSettingGetResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations ScriptScriptAndVersionSettingGetResponseMigrations `json:"migrations"`
 	// Observability settings for the Worker.
 	Observability ScriptScriptAndVersionSettingGetResponseObservability `json:"observability"`
 	// Configuration for
@@ -1911,7 +1955,6 @@ type scriptScriptAndVersionSettingGetResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	Logpush            apijson.Field
-	Migrations         apijson.Field
 	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
@@ -1982,9 +2025,11 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Text string `json:"text"`
 	// This field can have the runtime type of
 	// [[]ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage].
-	Usages interface{}                                         `json:"usages"`
-	JSON   scriptScriptAndVersionSettingGetResponseBindingJSON `json:"-"`
-	union  ScriptScriptAndVersionSettingGetResponseBindingsUnion
+	Usages interface{} `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName string                                              `json:"workflow_name"`
+	JSON         scriptScriptAndVersionSettingGetResponseBindingJSON `json:"-"`
+	union        ScriptScriptAndVersionSettingGetResponseBindingsUnion
 }
 
 // scriptScriptAndVersionSettingGetResponseBindingJSON contains the JSON metadata
@@ -2014,6 +2059,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	StoreID       apijson.Field
 	Text          apijson.Field
 	Usages        apijson.Field
+	WorkflowName  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -2056,7 +2102,8 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2084,9 +2131,9 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
-// or
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey] or
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -2204,6 +2251,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey{}),
 			DiscriminatorValue: "secret_key",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow{}),
+			DiscriminatorValue: "workflow",
 		},
 	)
 }
@@ -3350,6 +3402,61 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecret
 	return false
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName string `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName string `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName string                                                                         `json:"script_name"`
+	JSON       scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowJSON struct {
+	Name         apijson.Field
+	Type         apijson.Field
+	WorkflowName apijson.Field
+	ClassName    apijson.Field
+	ScriptName   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingGetResponseBindingsType string
 
@@ -3376,11 +3483,12 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsType = "version_metadata"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingGetResponseBindingsType = "secrets_store_secret"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingGetResponseBindingsType = "secret_key"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingGetResponseBindingsType = "workflow"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -3436,11 +3544,6 @@ type ScriptScriptAndVersionSettingGetResponseMigrations struct {
 	NewClasses interface{} `json:"new_classes"`
 	// This field can have the runtime type of [[]string].
 	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of [[]SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes"`
 	// This field can have the runtime type of [[]MigrationStep].
@@ -3457,8 +3560,6 @@ type scriptScriptAndVersionSettingGetResponseMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
 	Steps              apijson.Field
 	TransferredClasses apijson.Field
@@ -3512,23 +3613,13 @@ func init() {
 }
 
 type ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []MigrationStep                                                                     `json:"steps"`
-	JSON  scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+	JSON scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations]
 type scriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3768,6 +3859,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) MarshalJSON() (data []byte, err error) {
@@ -3802,6 +3895,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow],
 // [ScriptScriptAndVersionSettingEditParamsSettingsBinding].
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion interface {
 	implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion()
@@ -4572,6 +4666,43 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	// Name of the Workflow to bind to.
+	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	// Class name of the Workflow. Should only be provided if the Workflow belongs to
+	// this script.
+	ClassName param.Field[string] `json:"class_name"`
+	// Script name that contains the Workflow. If not provided, defaults to this script
+	// name.
+	ScriptName param.Field[string] `json:"script_name"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType = "workflow"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowTypeWorkflow:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsType string
 
@@ -4598,11 +4729,12 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "version_metadata"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secrets_store_secret"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secret_key"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "workflow"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow:
 		return true
 	}
 	return false

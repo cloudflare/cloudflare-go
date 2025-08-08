@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -724,9 +724,10 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 }
 
 type InstanceNewParams struct {
-	AccountID  param.Field[string]      `path:"account_id,required"`
-	InstanceID param.Field[string]      `json:"instance_id"`
-	Params     param.Field[interface{}] `json:"params"`
+	AccountID         param.Field[string]      `path:"account_id,required"`
+	InstanceID        param.Field[string]      `json:"instance_id"`
+	InstanceRetention param.Field[interface{}] `json:"instance_retention"`
+	Params            param.Field[interface{}] `json:"params"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -824,9 +825,10 @@ func (r InstanceNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type InstanceNewResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
-	Page       float64                                   `json:"page,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
+	NextCursor string                                    `json:"next_cursor"`
+	Page       float64                                   `json:"page"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -834,9 +836,10 @@ type InstanceNewResponseEnvelopeResultInfo struct {
 // struct [InstanceNewResponseEnvelopeResultInfo]
 type instanceNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -851,13 +854,16 @@ func (r instanceNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// In ISO 8601 with no timezone offsets and in UTC.
+	// `page` and `cursor` are mutually exclusive, use one or the other.
+	Cursor param.Field[string] `query:"cursor"`
+	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
-	// In ISO 8601 with no timezone offsets and in UTC.
-	DateStart param.Field[time.Time]                `query:"date_start" format:"date-time"`
-	Page      param.Field[float64]                  `query:"page"`
-	PerPage   param.Field[float64]                  `query:"per_page"`
-	Status    param.Field[InstanceListParamsStatus] `query:"status"`
+	// Accepts ISO 8601 with no timezone offsets and in UTC.
+	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
+	// `page` and `cursor` are mutually exclusive, use one or the other.
+	Page    param.Field[float64]                  `query:"page"`
+	PerPage param.Field[float64]                  `query:"per_page"`
+	Status  param.Field[InstanceListParamsStatus] `query:"status"`
 }
 
 // URLQuery serializes [InstanceListParams]'s query parameters as `url.Values`.
@@ -899,8 +905,9 @@ func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceBulkParamsBody struct {
-	InstanceID param.Field[string]      `json:"instance_id"`
-	Params     param.Field[interface{}] `json:"params"`
+	InstanceID        param.Field[string]      `json:"instance_id"`
+	InstanceRetention param.Field[interface{}] `json:"instance_retention"`
+	Params            param.Field[interface{}] `json:"params"`
 }
 
 func (r InstanceBulkParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1002,9 +1009,10 @@ func (r InstanceGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type InstanceGetResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
-	Page       float64                                   `json:"page,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
+	NextCursor string                                    `json:"next_cursor"`
+	Page       float64                                   `json:"page"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1012,9 +1020,10 @@ type InstanceGetResponseEnvelopeResultInfo struct {
 // struct [InstanceGetResponseEnvelopeResultInfo]
 type instanceGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
-	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	NextCursor  apijson.Field
+	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

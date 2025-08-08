@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DLPProfilePredefinedService contains methods and other services that help with
@@ -33,6 +33,23 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 	return
 }
 
+// Creates a DLP predefined profile. Only supports enabling/disabling entries.
+func (r *DLPProfilePredefinedService) New(ctx context.Context, params DLPProfilePredefinedNewParams, opts ...option.RequestOption) (res *Profile, err error) {
+	var env DLPProfilePredefinedNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
 func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfilePredefinedUpdateResponseEnvelope
@@ -47,6 +64,28 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// This is a no-op as predefined profiles can't be deleted but is needed for our
+// generated terraform API
+func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID string, body DLPProfilePredefinedDeleteParams, opts ...option.RequestOption) (res *DLPProfilePredefinedDeleteResponse, err error) {
+	var env DLPProfilePredefinedDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if profileID == "" {
+		err = errors.New("missing required profile_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", body.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,16 +114,183 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 	return
 }
 
-type DLPProfilePredefinedUpdateParams struct {
-	AccountID           param.Field[string]                                  `path:"account_id,required"`
-	Entries             param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries,required"`
-	AIContextEnabled    param.Field[bool]                                    `json:"ai_context_enabled"`
-	AllowedMatchCount   param.Field[int64]                                   `json:"allowed_match_count"`
-	ConfidenceThreshold param.Field[string]                                  `json:"confidence_threshold"`
+type DLPProfilePredefinedDeleteResponse = interface{}
+
+type DLPProfilePredefinedNewParams struct {
+	AccountID           param.Field[string] `path:"account_id,required"`
+	ProfileID           param.Field[string] `json:"profile_id,required" format:"uuid"`
+	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
-	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
-	OCREnabled       param.Field[bool]                  `json:"ocr_enabled"`
+	ContextAwareness param.Field[ContextAwarenessParam]                `json:"context_awareness"`
+	Entries          param.Field[[]DLPProfilePredefinedNewParamsEntry] `json:"entries"`
+	OCREnabled       param.Field[bool]                                 `json:"ocr_enabled"`
+}
+
+func (r DLPProfilePredefinedNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedNewParamsEntry struct {
+	ID      param.Field[string] `json:"id,required" format:"uuid"`
+	Enabled param.Field[bool]   `json:"enabled,required"`
+}
+
+func (r DLPProfilePredefinedNewParamsEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedNewResponseEnvelope struct {
+	Errors   []DLPProfilePredefinedNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfilePredefinedNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success DLPProfilePredefinedNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Profile                                        `json:"result"`
+	JSON    dlpProfilePredefinedNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DLPProfilePredefinedNewResponseEnvelope]
+type dlpProfilePredefinedNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           DLPProfilePredefinedNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpProfilePredefinedNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DLPProfilePredefinedNewResponseEnvelopeErrors]
+type dlpProfilePredefinedNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedNewResponseEnvelopeErrorsSource]
+type dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           DLPProfilePredefinedNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpProfilePredefinedNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DLPProfilePredefinedNewResponseEnvelopeMessages]
+type dlpProfilePredefinedNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedNewResponseEnvelopeMessagesSource]
+type dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DLPProfilePredefinedNewResponseEnvelopeSuccess bool
+
+const (
+	DLPProfilePredefinedNewResponseEnvelopeSuccessTrue DLPProfilePredefinedNewResponseEnvelopeSuccess = true
+)
+
+func (r DLPProfilePredefinedNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfilePredefinedNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DLPProfilePredefinedUpdateParams struct {
+	AccountID           param.Field[string] `path:"account_id,required"`
+	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness param.Field[ContextAwarenessParam]                   `json:"context_awareness"`
+	Entries          param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries"`
+	OCREnabled       param.Field[bool]                                    `json:"ocr_enabled"`
 }
 
 func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -235,6 +441,150 @@ const (
 func (r DLPProfilePredefinedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DLPProfilePredefinedUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DLPProfilePredefinedDeleteParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DLPProfilePredefinedDeleteResponseEnvelope struct {
+	Errors   []DLPProfilePredefinedDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfilePredefinedDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success DLPProfilePredefinedDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DLPProfilePredefinedDeleteResponse                `json:"result,nullable"`
+	JSON    dlpProfilePredefinedDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dlpProfilePredefinedDeleteResponseEnvelopeJSON contains the JSON metadata for
+// the struct [DLPProfilePredefinedDeleteResponseEnvelope]
+type dlpProfilePredefinedDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedDeleteResponseEnvelopeErrors struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           DLPProfilePredefinedDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpProfilePredefinedDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DLPProfilePredefinedDeleteResponseEnvelopeErrors]
+type dlpProfilePredefinedDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    dlpProfilePredefinedDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedDeleteResponseEnvelopeErrorsSource]
+type dlpProfilePredefinedDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           DLPProfilePredefinedDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpProfilePredefinedDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedDeleteResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedDeleteResponseEnvelopeMessages]
+type dlpProfilePredefinedDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    dlpProfilePredefinedDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [DLPProfilePredefinedDeleteResponseEnvelopeMessagesSource]
+type dlpProfilePredefinedDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DLPProfilePredefinedDeleteResponseEnvelopeSuccess bool
+
+const (
+	DLPProfilePredefinedDeleteResponseEnvelopeSuccessTrue DLPProfilePredefinedDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DLPProfilePredefinedDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfilePredefinedDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

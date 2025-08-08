@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // ControlCmbConfigService contains methods and other services that help with
@@ -85,16 +85,19 @@ func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfi
 }
 
 type CmbConfig struct {
-	// Comma-separated list of regions.
+	// Allow out of region access
+	AllowOutOfRegionAccess bool `json:"allow_out_of_region_access"`
+	// Name of the region.
 	Regions string        `json:"regions"`
 	JSON    cmbConfigJSON `json:"-"`
 }
 
 // cmbConfigJSON contains the JSON metadata for the struct [CmbConfig]
 type cmbConfigJSON struct {
-	Regions     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AllowOutOfRegionAccess apijson.Field
+	Regions                apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *CmbConfig) UnmarshalJSON(data []byte) (err error) {
@@ -106,7 +109,9 @@ func (r cmbConfigJSON) RawJSON() string {
 }
 
 type CmbConfigParam struct {
-	// Comma-separated list of regions.
+	// Allow out of region access
+	AllowOutOfRegionAccess param.Field[bool] `json:"allow_out_of_region_access"`
+	// Name of the region.
 	Regions param.Field[string] `json:"regions"`
 }
 

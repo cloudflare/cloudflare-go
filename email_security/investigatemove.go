@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // InvestigateMoveService contains methods and other services that help with
@@ -95,12 +95,12 @@ func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params Inve
 
 type InvestigateMoveNewResponse struct {
 	CompletedTimestamp time.Time                      `json:"completed_timestamp,required" format:"date-time"`
-	Destination        string                         `json:"destination,required"`
 	ItemCount          int64                          `json:"item_count,required"`
-	MessageID          string                         `json:"message_id,required"`
-	Operation          string                         `json:"operation,required"`
-	Recipient          string                         `json:"recipient,required"`
-	Status             string                         `json:"status,required"`
+	Destination        string                         `json:"destination,nullable"`
+	MessageID          string                         `json:"message_id,nullable"`
+	Operation          string                         `json:"operation,nullable"`
+	Recipient          string                         `json:"recipient,nullable"`
+	Status             string                         `json:"status,nullable"`
 	JSON               investigateMoveNewResponseJSON `json:"-"`
 }
 
@@ -108,8 +108,8 @@ type InvestigateMoveNewResponse struct {
 // [InvestigateMoveNewResponse]
 type investigateMoveNewResponseJSON struct {
 	CompletedTimestamp apijson.Field
-	Destination        apijson.Field
 	ItemCount          apijson.Field
+	Destination        apijson.Field
 	MessageID          apijson.Field
 	Operation          apijson.Field
 	Recipient          apijson.Field
@@ -128,12 +128,12 @@ func (r investigateMoveNewResponseJSON) RawJSON() string {
 
 type InvestigateMoveBulkResponse struct {
 	CompletedTimestamp time.Time                       `json:"completed_timestamp,required" format:"date-time"`
-	Destination        string                          `json:"destination,required"`
 	ItemCount          int64                           `json:"item_count,required"`
-	MessageID          string                          `json:"message_id,required"`
-	Operation          string                          `json:"operation,required"`
-	Recipient          string                          `json:"recipient,required"`
-	Status             string                          `json:"status,required"`
+	Destination        string                          `json:"destination,nullable"`
+	MessageID          string                          `json:"message_id,nullable"`
+	Operation          string                          `json:"operation,nullable"`
+	Recipient          string                          `json:"recipient,nullable"`
+	Status             string                          `json:"status,nullable"`
 	JSON               investigateMoveBulkResponseJSON `json:"-"`
 }
 
@@ -141,8 +141,8 @@ type InvestigateMoveBulkResponse struct {
 // [InvestigateMoveBulkResponse]
 type investigateMoveBulkResponseJSON struct {
 	CompletedTimestamp apijson.Field
-	Destination        apijson.Field
 	ItemCount          apijson.Field
+	Destination        apijson.Field
 	MessageID          apijson.Field
 	Operation          apijson.Field
 	Recipient          apijson.Field

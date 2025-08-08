@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestSearchListWithOptionalParams(t *testing.T) {
@@ -29,13 +29,11 @@ func TestSearchListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Searches.List(context.TODO(), load_balancers.SearchListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(1.000000),
-		SearchParams: cloudflare.F(load_balancers.SearchListParamsSearchParams{
-			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(load_balancers.SearchListParamsSearchParamsReferencesStar),
-		}),
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:       cloudflare.F(1.000000),
+		PerPage:    cloudflare.F(1.000000),
+		Query:      cloudflare.F("primary"),
+		References: cloudflare.F(load_balancers.SearchListParamsReferencesStar),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

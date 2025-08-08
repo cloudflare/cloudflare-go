@@ -3,7 +3,7 @@
 package diagnostics
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // DiagnosticService contains methods and other services that help with interacting
@@ -13,8 +13,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDiagnosticService] method instead.
 type DiagnosticService struct {
-	Options     []option.RequestOption
-	Traceroutes *TracerouteService
+	Options              []option.RequestOption
+	Traceroutes          *TracerouteService
+	EndpointHealthchecks *EndpointHealthcheckService
 }
 
 // NewDiagnosticService generates a new service that applies the given options to
@@ -24,5 +25,6 @@ func NewDiagnosticService(opts ...option.RequestOption) (r *DiagnosticService) {
 	r = &DiagnosticService{}
 	r.Options = opts
 	r.Traceroutes = NewTracerouteService(opts...)
+	r.EndpointHealthchecks = NewEndpointHealthcheckService(opts...)
 	return
 }

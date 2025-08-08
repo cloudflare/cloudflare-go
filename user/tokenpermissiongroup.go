@@ -5,11 +5,14 @@ package user
 import (
 	"context"
 	"net/http"
+	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // TokenPermissionGroupService contains methods and other services that help with
@@ -32,12 +35,12 @@ func NewTokenPermissionGroupService(opts ...option.RequestOption) (r *TokenPermi
 }
 
 // Find all available permission groups for API Tokens
-func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupListResponse], err error) {
+func (r *TokenPermissionGroupService) List(ctx context.Context, query TokenPermissionGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/tokens/permission_groups"
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,8 +53,8 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.R
 }
 
 // Find all available permission groups for API Tokens
-func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
+func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, query TokenPermissionGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type TokenPermissionGroupListResponse struct {
@@ -97,4 +100,20 @@ func (r TokenPermissionGroupListResponseScope) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type TokenPermissionGroupListParams struct {
+	// Filter by the name of the permission group. The value must be URL-encoded.
+	Name param.Field[string] `query:"name"`
+	// Filter by the scope of the permission group. The value must be URL-encoded.
+	Scope param.Field[string] `query:"scope"`
+}
+
+// URLQuery serializes [TokenPermissionGroupListParams]'s query parameters as
+// `url.Values`.
+func (r TokenPermissionGroupListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }

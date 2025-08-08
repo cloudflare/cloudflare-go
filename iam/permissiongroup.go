@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
 )
 
 // PermissionGroupService contains methods and other services that help with
@@ -82,11 +82,11 @@ func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID stri
 // A named group of permissions that map to a group of operations against
 // resources.
 type PermissionGroupListResponse struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta PermissionGroupListResponseMeta `json:"meta"`
-	// Name of the group.
+	// Name of the permission group.
 	Name string                          `json:"name"`
 	JSON permissionGroupListResponseJSON `json:"-"`
 }
@@ -136,11 +136,11 @@ func (r permissionGroupListResponseMetaJSON) RawJSON() string {
 // A named group of permissions that map to a group of operations against
 // resources.
 type PermissionGroupGetResponse struct {
-	// Identifier of the group.
+	// Identifier of the permission group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta PermissionGroupGetResponseMeta `json:"meta"`
-	// Name of the group.
+	// Name of the permission group.
 	Name string                         `json:"name"`
 	JSON permissionGroupGetResponseJSON `json:"-"`
 }
