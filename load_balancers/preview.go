@@ -80,7 +80,7 @@ func (r previewGetResponseItemJSON) RawJSON() string {
 	return r.raw
 }
 
-// The origin ipv4/ipv6 address or domain name mapped to it's health data.
+// The origin ipv4/ipv6 address or domain name mapped to its health data.
 type PreviewGetResponseItemOrigin struct {
 	FailureReason string                           `json:"failure_reason"`
 	Healthy       bool                             `json:"healthy"`
@@ -109,7 +109,7 @@ func (r previewGetResponseItemOriginJSON) RawJSON() string {
 }
 
 type PreviewGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -118,7 +118,7 @@ type PreviewGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Resulting health data from a preview operation.
 	Result PreviewGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -142,7 +142,7 @@ func (r previewGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewGetResponseEnvelopeSuccess bool
 
 const (

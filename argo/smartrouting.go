@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v5/internal/param"
@@ -68,14 +69,104 @@ func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetPara
 	return
 }
 
-type SmartRoutingEditResponse = interface{}
+type SmartRoutingEditResponse struct {
+	// Specifies the identifier of the Argo Smart Routing setting.
+	ID string `json:"id,required"`
+	// Specifies if the setting is editable.
+	Editable bool `json:"editable,required"`
+	// Specifies the enablement value of Argo Smart Routing.
+	Value SmartRoutingEditResponseValue `json:"value,required"`
+	// Specifies the time when the setting was last modified.
+	ModifiedOn time.Time                    `json:"modified_on" format:"date-time"`
+	JSON       smartRoutingEditResponseJSON `json:"-"`
+}
 
-type SmartRoutingGetResponse = interface{}
+// smartRoutingEditResponseJSON contains the JSON metadata for the struct
+// [SmartRoutingEditResponse]
+type smartRoutingEditResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	Value       apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SmartRoutingEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smartRoutingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the enablement value of Argo Smart Routing.
+type SmartRoutingEditResponseValue string
+
+const (
+	SmartRoutingEditResponseValueOn  SmartRoutingEditResponseValue = "on"
+	SmartRoutingEditResponseValueOff SmartRoutingEditResponseValue = "off"
+)
+
+func (r SmartRoutingEditResponseValue) IsKnown() bool {
+	switch r {
+	case SmartRoutingEditResponseValueOn, SmartRoutingEditResponseValueOff:
+		return true
+	}
+	return false
+}
+
+type SmartRoutingGetResponse struct {
+	// Specifies the identifier of the Argo Smart Routing setting.
+	ID string `json:"id,required"`
+	// Specifies if the setting is editable.
+	Editable bool `json:"editable,required"`
+	// Specifies the enablement value of Argo Smart Routing.
+	Value SmartRoutingGetResponseValue `json:"value,required"`
+	// Specifies the time when the setting was last modified.
+	ModifiedOn time.Time                   `json:"modified_on" format:"date-time"`
+	JSON       smartRoutingGetResponseJSON `json:"-"`
+}
+
+// smartRoutingGetResponseJSON contains the JSON metadata for the struct
+// [SmartRoutingGetResponse]
+type smartRoutingGetResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	Value       apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SmartRoutingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smartRoutingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the enablement value of Argo Smart Routing.
+type SmartRoutingGetResponseValue string
+
+const (
+	SmartRoutingGetResponseValueOn  SmartRoutingGetResponseValue = "on"
+	SmartRoutingGetResponseValueOff SmartRoutingGetResponseValue = "off"
+)
+
+func (r SmartRoutingGetResponseValue) IsKnown() bool {
+	switch r {
+	case SmartRoutingGetResponseValueOn, SmartRoutingGetResponseValueOff:
+		return true
+	}
+	return false
+}
 
 type SmartRoutingEditParams struct {
 	// Specifies the zone associated with the API call.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Enables Argo Smart Routing.
+	// Specifies the enablement value of Argo Smart Routing.
 	Value param.Field[SmartRoutingEditParamsValue] `json:"value,required"`
 }
 
@@ -83,7 +174,7 @@ func (r SmartRoutingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Enables Argo Smart Routing.
+// Specifies the enablement value of Argo Smart Routing.
 type SmartRoutingEditParamsValue string
 
 const (
@@ -100,11 +191,11 @@ func (r SmartRoutingEditParamsValue) IsKnown() bool {
 }
 
 type SmartRoutingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   SmartRoutingEditResponse `json:"result,required"`
 	// Describes a successful API response.
 	Success SmartRoutingEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartRoutingEditResponse                `json:"result"`
 	JSON    smartRoutingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -113,8 +204,8 @@ type SmartRoutingEditResponseEnvelope struct {
 type smartRoutingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -148,11 +239,11 @@ type SmartRoutingGetParams struct {
 }
 
 type SmartRoutingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SmartRoutingGetResponse `json:"result,required"`
 	// Describes a successful API response.
 	Success SmartRoutingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartRoutingGetResponse                `json:"result"`
 	JSON    smartRoutingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -161,8 +252,8 @@ type SmartRoutingGetResponseEnvelope struct {
 type smartRoutingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

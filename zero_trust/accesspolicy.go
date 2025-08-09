@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v5/option"
@@ -74,16 +76,16 @@ func (r *AccessPolicyService) Update(ctx context.Context, policyID string, param
 }
 
 // Lists Access reusable policies.
-func (r *AccessPolicyService) List(ctx context.Context, query AccessPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessPolicyListResponse], err error) {
+func (r *AccessPolicyService) List(ctx context.Context, params AccessPolicyListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessPolicyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/policies", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/access/policies", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +98,8 @@ func (r *AccessPolicyService) List(ctx context.Context, query AccessPolicyListPa
 }
 
 // Lists Access reusable policies.
-func (r *AccessPolicyService) ListAutoPaging(ctx context.Context, query AccessPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessPolicyListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessPolicyService) ListAutoPaging(ctx context.Context, params AccessPolicyListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessPolicyListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an Access reusable policy.
@@ -915,6 +917,18 @@ func (r AccessPolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccessPolicyListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [AccessPolicyListParams]'s query parameters as `url.Values`.
+func (r AccessPolicyListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessPolicyDeleteParams struct {

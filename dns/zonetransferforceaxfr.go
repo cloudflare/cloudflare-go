@@ -66,7 +66,7 @@ type ZoneTransferForceAXFRNewResponseEnvelope struct {
 	Messages []ZoneTransferForceAXFRNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ZoneTransferForceAXFRNewResponseEnvelopeSuccess `json:"success,required"`
-	// When force_axfr query parameter is set to true, the response is a simple string
+	// When force_axfr query parameter is set to true, the response is a simple string.
 	Result ForceAXFR                                    `json:"result"`
 	JSON   zoneTransferForceAXFRNewResponseEnvelopeJSON `json:"-"`
 }

@@ -206,18 +206,18 @@ type LogpushJob struct {
 	// Name of the dataset. A list of supported datasets can be found on the
 	// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
 	Dataset LogpushJobDataset `json:"dataset,nullable"`
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
+	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
+	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
 	DestinationConf string `json:"destination_conf" format:"uri"`
 	// Flag that indicates if the job is enabled.
 	Enabled bool `json:"enabled"`
-	// If not null, the job is currently failing. Failures are usually repetitive
+	// If not null, the job is currently failing. Failures are usually. repetitive
 	// (example: no permissions to write to destination bucket). Only the last failure
 	// is recorded. On successful execution of a job the error_message and last_error
 	// are set to null.
 	ErrorMessage string `json:"error_message,nullable"`
-	// This field is deprecated. Please use `max_upload_*` parameters instead. The
+	// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
 	// frequency to low sends logs in smaller quantities of larger files.
@@ -232,9 +232,9 @@ type LogpushJob struct {
 	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
 	// run or has just been enabled and hasn't run yet then the field will be empty.
 	LastComplete time.Time `json:"last_complete,nullable" format:"date-time"`
-	// Records the last time the job failed. If not null, the job is currently failing.
-	// If null, the job has either never failed or has run successfully at least once
-	// since last failure. See also the error_message field.
+	// Records the last time the job failed. If not null, the job is currently.
+	// failing. If null, the job has either never failed or has run successfully at
+	// least once since last failure. See also the error_message field.
 	LastError time.Time `json:"last_error,nullable" format:"date-time"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
@@ -259,7 +259,7 @@ type LogpushJob struct {
 	// number of log lines per batch; this means that log files may contain many fewer
 	// lines than this.
 	MaxUploadRecords LogpushJobMaxUploadRecords `json:"max_upload_records,nullable"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
+	// Optional human readable job name. Not unique. Cloudflare suggests. that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
 	Name string `json:"name,nullable"`
@@ -337,7 +337,7 @@ func (r LogpushJobDataset) IsKnown() bool {
 	return false
 }
 
-// This field is deprecated. Please use `max_upload_*` parameters instead. The
+// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 // frequency at which Cloudflare sends batches of logs to your destination. Setting
 // frequency to high sends your logs in larger quantities of smaller files. Setting
 // frequency to low sends logs in smaller quantities of larger files.
@@ -595,8 +595,8 @@ func (r jobDeleteResponseJSON) RawJSON() string {
 }
 
 type JobNewParams struct {
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
+	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
+	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -612,7 +612,7 @@ type JobNewParams struct {
 	// more information, refer to
 	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
 	Filter param.Field[string] `json:"filter"`
-	// This field is deprecated. Please use `max_upload_*` parameters instead. The
+	// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
 	// frequency to low sends logs in smaller quantities of larger files.
@@ -641,7 +641,7 @@ type JobNewParams struct {
 	// number of log lines per batch; this means that log files may contain many fewer
 	// lines than this.
 	MaxUploadRecords param.Field[JobNewParamsMaxUploadRecords] `json:"max_upload_records"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
+	// Optional human readable job name. Not unique. Cloudflare suggests. that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
 	Name param.Field[string] `json:"name"`
@@ -695,7 +695,7 @@ func (r JobNewParamsDataset) IsKnown() bool {
 	return false
 }
 
-// This field is deprecated. Please use `max_upload_*` parameters instead. The
+// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 // frequency at which Cloudflare sends batches of logs to your destination. Setting
 // frequency to high sends your logs in larger quantities of smaller files. Setting
 // frequency to low sends logs in smaller quantities of larger files.
@@ -929,8 +929,8 @@ type JobUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
-	// Additional configuration parameters supported by the destination may be
+	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
+	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf" format:"uri"`
 	// Flag that indicates if the job is enabled.
@@ -939,7 +939,7 @@ type JobUpdateParams struct {
 	// more information, refer to
 	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
 	Filter param.Field[string] `json:"filter"`
-	// This field is deprecated. Please use `max_upload_*` parameters instead. The
+	// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
 	// frequency to low sends logs in smaller quantities of larger files.
@@ -968,7 +968,7 @@ type JobUpdateParams struct {
 	// number of log lines per batch; this means that log files may contain many fewer
 	// lines than this.
 	MaxUploadRecords param.Field[JobUpdateParamsMaxUploadRecords] `json:"max_upload_records"`
-	// Optional human readable job name. Not unique. Cloudflare suggests that you set
+	// Optional human readable job name. Not unique. Cloudflare suggests. that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
 	Name param.Field[string] `json:"name"`
@@ -983,7 +983,7 @@ func (r JobUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// This field is deprecated. Please use `max_upload_*` parameters instead. The
+// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 // frequency at which Cloudflare sends batches of logs to your destination. Setting
 // frequency to high sends your logs in larger quantities of smaller files. Setting
 // frequency to low sends logs in smaller quantities of larger files.

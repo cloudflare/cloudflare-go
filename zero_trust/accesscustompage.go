@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v5/option"
@@ -74,16 +76,16 @@ func (r *AccessCustomPageService) Update(ctx context.Context, customPageID strin
 }
 
 // List custom pages
-func (r *AccessCustomPageService) List(ctx context.Context, query AccessCustomPageListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CustomPageWithoutHTML], err error) {
+func (r *AccessCustomPageService) List(ctx context.Context, params AccessCustomPageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomPageWithoutHTML], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/custom_pages", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/access/custom_pages", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +98,8 @@ func (r *AccessCustomPageService) List(ctx context.Context, query AccessCustomPa
 }
 
 // List custom pages
-func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, query AccessCustomPageListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CustomPageWithoutHTML] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, params AccessCustomPageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CustomPageWithoutHTML] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a custom page
@@ -584,6 +586,19 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccessCustomPageListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [AccessCustomPageListParams]'s query parameters as
+// `url.Values`.
+func (r AccessCustomPageListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessCustomPageDeleteParams struct {

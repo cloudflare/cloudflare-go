@@ -60,6 +60,10 @@ type AccessLogAccessRequestListParams struct {
 	Direction param.Field[AccessLogAccessRequestListParamsDirection] `query:"direction"`
 	// The maximum number of log entries to retrieve.
 	Limit param.Field[int64] `query:"limit"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// The earliest event timestamp to query.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// The latest event timestamp to query.

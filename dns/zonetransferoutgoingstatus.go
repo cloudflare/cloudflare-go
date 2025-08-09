@@ -59,7 +59,7 @@ type ZoneTransferOutgoingStatusGetResponseEnvelope struct {
 	Messages []ZoneTransferOutgoingStatusGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ZoneTransferOutgoingStatusGetResponseEnvelopeSuccess `json:"success,required"`
-	// The zone transfer status of a primary zone
+	// The zone transfer status of a primary zone.
 	Result EnableTransfer                                    `json:"result"`
 	JSON   zoneTransferOutgoingStatusGetResponseEnvelopeJSON `json:"-"`
 }

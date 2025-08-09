@@ -104,7 +104,7 @@ func (r poolHealthNewResponseJSON) RawJSON() string {
 // A list of regions from which to run health checks. Null means every Cloudflare
 // data center.
 type PoolHealthGetResponse struct {
-	// Pool ID
+	// Pool ID.
 	PoolID string `json:"pool_id"`
 	// List of regions and associated health status.
 	POPHealth PoolHealthGetResponsePOPHealth `json:"pop_health"`
@@ -206,7 +206,7 @@ func (r poolHealthGetResponsePOPHealthOriginsIPJSON) RawJSON() string {
 }
 
 type PoolHealthNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -288,7 +288,7 @@ type PoolHealthNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PoolHealthNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolHealthNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolHealthNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -312,7 +312,7 @@ func (r poolHealthNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolHealthNewResponseEnvelopeSuccess bool
 
 const (
@@ -328,7 +328,7 @@ func (r PoolHealthNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PoolHealthGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -338,7 +338,7 @@ type PoolHealthGetResponseEnvelope struct {
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	Result PoolHealthGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolHealthGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolHealthGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -362,7 +362,7 @@ func (r poolHealthGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolHealthGetResponseEnvelopeSuccess bool
 
 const (

@@ -241,8 +241,14 @@ type CertificatePackNewResponse struct {
 	Status Status `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackNewResponseType `json:"type"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors []CertificatePackNewResponseValidationError `json:"validation_errors"`
 	// Validation Method selected for the order.
 	ValidationMethod CertificatePackNewResponseValidationMethod `json:"validation_method"`
+	// Certificates' validation records. Only present when certificate pack is in
+	// "pending_validation" status
+	ValidationRecords []CertificatePackNewResponseValidationRecord `json:"validation_records"`
 	// Validity Days selected for the order.
 	ValidityDays CertificatePackNewResponseValidityDays `json:"validity_days"`
 	JSON         certificatePackNewResponseJSON         `json:"-"`
@@ -257,7 +263,9 @@ type certificatePackNewResponseJSON struct {
 	Hosts                apijson.Field
 	Status               apijson.Field
 	Type                 apijson.Field
+	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
+	ValidationRecords    apijson.Field
 	ValidityDays         apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
@@ -294,15 +302,44 @@ func (r CertificatePackNewResponseCertificateAuthority) IsKnown() bool {
 type CertificatePackNewResponseType string
 
 const (
-	CertificatePackNewResponseTypeAdvanced CertificatePackNewResponseType = "advanced"
+	CertificatePackNewResponseTypeMhCustom        CertificatePackNewResponseType = "mh_custom"
+	CertificatePackNewResponseTypeManagedHostname CertificatePackNewResponseType = "managed_hostname"
+	CertificatePackNewResponseTypeSNICustom       CertificatePackNewResponseType = "sni_custom"
+	CertificatePackNewResponseTypeUniversal       CertificatePackNewResponseType = "universal"
+	CertificatePackNewResponseTypeAdvanced        CertificatePackNewResponseType = "advanced"
+	CertificatePackNewResponseTypeTotalTLS        CertificatePackNewResponseType = "total_tls"
+	CertificatePackNewResponseTypeKeyless         CertificatePackNewResponseType = "keyless"
+	CertificatePackNewResponseTypeLegacyCustom    CertificatePackNewResponseType = "legacy_custom"
 )
 
 func (r CertificatePackNewResponseType) IsKnown() bool {
 	switch r {
-	case CertificatePackNewResponseTypeAdvanced:
+	case CertificatePackNewResponseTypeMhCustom, CertificatePackNewResponseTypeManagedHostname, CertificatePackNewResponseTypeSNICustom, CertificatePackNewResponseTypeUniversal, CertificatePackNewResponseTypeAdvanced, CertificatePackNewResponseTypeTotalTLS, CertificatePackNewResponseTypeKeyless, CertificatePackNewResponseTypeLegacyCustom:
 		return true
 	}
 	return false
+}
+
+type CertificatePackNewResponseValidationError struct {
+	// A domain validation error.
+	Message string                                        `json:"message"`
+	JSON    certificatePackNewResponseValidationErrorJSON `json:"-"`
+}
+
+// certificatePackNewResponseValidationErrorJSON contains the JSON metadata for the
+// struct [CertificatePackNewResponseValidationError]
+type certificatePackNewResponseValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponseValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseValidationErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validation Method selected for the order.
@@ -320,6 +357,45 @@ func (r CertificatePackNewResponseValidationMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Certificate's required validation record.
+type CertificatePackNewResponseValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                         `json:"txt_value"`
+	JSON     certificatePackNewResponseValidationRecordJSON `json:"-"`
+}
+
+// certificatePackNewResponseValidationRecordJSON contains the JSON metadata for
+// the struct [CertificatePackNewResponseValidationRecord]
+type certificatePackNewResponseValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponseValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseValidationRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validity Days selected for the order.
@@ -381,8 +457,14 @@ type CertificatePackEditResponse struct {
 	Status Status `json:"status"`
 	// Type of certificate pack.
 	Type CertificatePackEditResponseType `json:"type"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors []CertificatePackEditResponseValidationError `json:"validation_errors"`
 	// Validation Method selected for the order.
 	ValidationMethod CertificatePackEditResponseValidationMethod `json:"validation_method"`
+	// Certificates' validation records. Only present when certificate pack is in
+	// "pending_validation" status
+	ValidationRecords []CertificatePackEditResponseValidationRecord `json:"validation_records"`
 	// Validity Days selected for the order.
 	ValidityDays CertificatePackEditResponseValidityDays `json:"validity_days"`
 	JSON         certificatePackEditResponseJSON         `json:"-"`
@@ -397,7 +479,9 @@ type certificatePackEditResponseJSON struct {
 	Hosts                apijson.Field
 	Status               apijson.Field
 	Type                 apijson.Field
+	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
+	ValidationRecords    apijson.Field
 	ValidityDays         apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
@@ -434,15 +518,44 @@ func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
 type CertificatePackEditResponseType string
 
 const (
-	CertificatePackEditResponseTypeAdvanced CertificatePackEditResponseType = "advanced"
+	CertificatePackEditResponseTypeMhCustom        CertificatePackEditResponseType = "mh_custom"
+	CertificatePackEditResponseTypeManagedHostname CertificatePackEditResponseType = "managed_hostname"
+	CertificatePackEditResponseTypeSNICustom       CertificatePackEditResponseType = "sni_custom"
+	CertificatePackEditResponseTypeUniversal       CertificatePackEditResponseType = "universal"
+	CertificatePackEditResponseTypeAdvanced        CertificatePackEditResponseType = "advanced"
+	CertificatePackEditResponseTypeTotalTLS        CertificatePackEditResponseType = "total_tls"
+	CertificatePackEditResponseTypeKeyless         CertificatePackEditResponseType = "keyless"
+	CertificatePackEditResponseTypeLegacyCustom    CertificatePackEditResponseType = "legacy_custom"
 )
 
 func (r CertificatePackEditResponseType) IsKnown() bool {
 	switch r {
-	case CertificatePackEditResponseTypeAdvanced:
+	case CertificatePackEditResponseTypeMhCustom, CertificatePackEditResponseTypeManagedHostname, CertificatePackEditResponseTypeSNICustom, CertificatePackEditResponseTypeUniversal, CertificatePackEditResponseTypeAdvanced, CertificatePackEditResponseTypeTotalTLS, CertificatePackEditResponseTypeKeyless, CertificatePackEditResponseTypeLegacyCustom:
 		return true
 	}
 	return false
+}
+
+type CertificatePackEditResponseValidationError struct {
+	// A domain validation error.
+	Message string                                         `json:"message"`
+	JSON    certificatePackEditResponseValidationErrorJSON `json:"-"`
+}
+
+// certificatePackEditResponseValidationErrorJSON contains the JSON metadata for
+// the struct [CertificatePackEditResponseValidationError]
+type certificatePackEditResponseValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackEditResponseValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackEditResponseValidationErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validation Method selected for the order.
@@ -460,6 +573,45 @@ func (r CertificatePackEditResponseValidationMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Certificate's required validation record.
+type CertificatePackEditResponseValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                          `json:"txt_value"`
+	JSON     certificatePackEditResponseValidationRecordJSON `json:"-"`
+}
+
+// certificatePackEditResponseValidationRecordJSON contains the JSON metadata for
+// the struct [CertificatePackEditResponseValidationRecord]
+type certificatePackEditResponseValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackEditResponseValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackEditResponseValidationRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validity Days selected for the order.

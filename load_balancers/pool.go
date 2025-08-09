@@ -311,7 +311,7 @@ func (r poolDeleteResponseJSON) RawJSON() string {
 }
 
 type PoolNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
@@ -362,7 +362,7 @@ type PoolNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Pool                  `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -386,7 +386,7 @@ func (r poolNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolNewResponseEnvelopeSuccess bool
 
 const (
@@ -402,7 +402,7 @@ func (r PoolNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PoolUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
@@ -456,7 +456,7 @@ type PoolUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Pool                  `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -480,7 +480,7 @@ func (r poolUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -496,7 +496,7 @@ func (r PoolUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PoolListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
@@ -512,7 +512,7 @@ func (r PoolListParams) URLQuery() (v url.Values) {
 }
 
 type PoolDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -520,7 +520,7 @@ type PoolDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PoolDeleteResponse    `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -544,7 +544,7 @@ func (r poolDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -560,7 +560,7 @@ func (r PoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PoolBulkEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The email address to send health status notifications to. This field is now
 	// deprecated in favor of Cloudflare Notifications for Load Balancing, so only
@@ -590,7 +590,7 @@ func (r PoolBulkEditParamsNotificationEmail) IsKnown() bool {
 }
 
 type PoolEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
@@ -644,7 +644,7 @@ type PoolEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Pool                  `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -668,7 +668,7 @@ func (r poolEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolEditResponseEnvelopeSuccess bool
 
 const (
@@ -684,7 +684,7 @@ func (r PoolEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PoolGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -692,7 +692,7 @@ type PoolGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Pool                  `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -716,7 +716,7 @@ func (r poolGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PoolGetResponseEnvelopeSuccess bool
 
 const (

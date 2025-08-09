@@ -85,16 +85,16 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Script], err error) {
+func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Script], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/workers/scripts", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,8 +107,8 @@ func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts .
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) ListAutoPaging(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Script] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Script] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete your worker. This call has no response body on a successful delete.
@@ -569,7 +569,7 @@ type ScriptDeleteResponse = interface{}
 type ScriptUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
+	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
@@ -596,7 +596,7 @@ func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string,
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
+// JSON-encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsMetadata struct {
 	// Configuration for assets within a Worker.
 	Assets param.Field[ScriptUpdateParamsMetadataAssets] `json:"assets"`
@@ -1968,6 +1968,17 @@ func (r ScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ScriptListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Filter scripts by tags. Format: comma-separated list of tag:allowed pairs where
+	// allowed is 'yes' or 'no'.
+	Tags param.Field[string] `query:"tags"`
+}
+
+// URLQuery serializes [ScriptListParams]'s query parameters as `url.Values`.
+func (r ScriptListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ScriptDeleteParams struct {

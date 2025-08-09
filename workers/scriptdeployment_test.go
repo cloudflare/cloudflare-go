@@ -32,15 +32,17 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptDeploymentNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Strategy:  cloudflare.F(workers.ScriptDeploymentNewParamsStrategyPercentage),
-			Versions: cloudflare.F([]workers.ScriptDeploymentNewParamsVersion{{
-				Percentage: cloudflare.F(100.000000),
-				VersionID:  cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-			}}),
+			Deployment: workers.DeploymentParam{
+				Strategy: cloudflare.F(workers.DeploymentStrategyPercentage),
+				Versions: cloudflare.F([]workers.DeploymentVersionParam{{
+					Percentage: cloudflare.F(100.000000),
+					VersionID:  cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				}}),
+				Annotations: cloudflare.F(workers.DeploymentAnnotationsParam{
+					WorkersMessage: cloudflare.F("Deploy bug fix."),
+				}),
+			},
 			Force: cloudflare.F(true),
-			Annotations: cloudflare.F(workers.ScriptDeploymentNewParamsAnnotations{
-				WorkersMessage: cloudflare.F("Deploy bug fix."),
-			}),
 		},
 	)
 	if err != nil {

@@ -460,8 +460,8 @@ type StreamListParams struct {
 	// Includes the total number of videos associated with the submitted query
 	// parameters.
 	IncludeCounts param.Field[bool] `query:"include_counts"`
-	// Searches over the `name` key in the `meta` field. This field can be set with or
-	// after the upload request.
+	// Provides a partial word match of the `name` key in the `meta` field. Slow for
+	// medium to large video libraries. May be unavailable for very large libraries.
 	Search param.Field[string] `query:"search"`
 	// Lists videos created after the specified date.
 	Start param.Field[time.Time] `query:"start" format:"date-time"`
@@ -469,6 +469,8 @@ type StreamListParams struct {
 	Status param.Field[StreamListParamsStatus] `query:"status"`
 	// Specifies whether the video is `vod` or `live`.
 	Type param.Field[string] `query:"type"`
+	// Provides a fast, exact string match on the `name` key in the `meta` field.
+	VideoName param.Field[string] `query:"video_name"`
 }
 
 // URLQuery serializes [StreamListParams]'s query parameters as `url.Values`.

@@ -109,6 +109,6 @@ func (r MonitorReferenceGetResponseReferenceType) IsKnown() bool {
 }
 
 type MonitorReferenceGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

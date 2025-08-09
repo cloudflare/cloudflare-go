@@ -137,22 +137,29 @@ type DispatchNamespaceNewResponse struct {
 	// Name of the Workers for Platforms dispatch namespace.
 	NamespaceName string `json:"namespace_name"`
 	// The current number of scripts in this Dispatch Namespace.
-	ScriptCount int64                            `json:"script_count"`
-	JSON        dispatchNamespaceNewResponseJSON `json:"-"`
+	ScriptCount int64 `json:"script_count"`
+	// Whether the Workers in the namespace are executed in a "trusted" manner. When a
+	// Worker is trusted, it has access to the shared caches for the zone in the Cache
+	// API, and has access to the `request.cf` object on incoming Requests. When a
+	// Worker is untrusted, caches are not shared across the zone, and `request.cf` is
+	// undefined. By default, Workers in a namespace are "untrusted".
+	TrustedWorkers bool                             `json:"trusted_workers"`
+	JSON           dispatchNamespaceNewResponseJSON `json:"-"`
 }
 
 // dispatchNamespaceNewResponseJSON contains the JSON metadata for the struct
 // [DispatchNamespaceNewResponse]
 type dispatchNamespaceNewResponseJSON struct {
-	CreatedBy     apijson.Field
-	CreatedOn     apijson.Field
-	ModifiedBy    apijson.Field
-	ModifiedOn    apijson.Field
-	NamespaceID   apijson.Field
-	NamespaceName apijson.Field
-	ScriptCount   apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CreatedBy      apijson.Field
+	CreatedOn      apijson.Field
+	ModifiedBy     apijson.Field
+	ModifiedOn     apijson.Field
+	NamespaceID    apijson.Field
+	NamespaceName  apijson.Field
+	ScriptCount    apijson.Field
+	TrustedWorkers apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -177,22 +184,29 @@ type DispatchNamespaceListResponse struct {
 	// Name of the Workers for Platforms dispatch namespace.
 	NamespaceName string `json:"namespace_name"`
 	// The current number of scripts in this Dispatch Namespace.
-	ScriptCount int64                             `json:"script_count"`
-	JSON        dispatchNamespaceListResponseJSON `json:"-"`
+	ScriptCount int64 `json:"script_count"`
+	// Whether the Workers in the namespace are executed in a "trusted" manner. When a
+	// Worker is trusted, it has access to the shared caches for the zone in the Cache
+	// API, and has access to the `request.cf` object on incoming Requests. When a
+	// Worker is untrusted, caches are not shared across the zone, and `request.cf` is
+	// undefined. By default, Workers in a namespace are "untrusted".
+	TrustedWorkers bool                              `json:"trusted_workers"`
+	JSON           dispatchNamespaceListResponseJSON `json:"-"`
 }
 
 // dispatchNamespaceListResponseJSON contains the JSON metadata for the struct
 // [DispatchNamespaceListResponse]
 type dispatchNamespaceListResponseJSON struct {
-	CreatedBy     apijson.Field
-	CreatedOn     apijson.Field
-	ModifiedBy    apijson.Field
-	ModifiedOn    apijson.Field
-	NamespaceID   apijson.Field
-	NamespaceName apijson.Field
-	ScriptCount   apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CreatedBy      apijson.Field
+	CreatedOn      apijson.Field
+	ModifiedBy     apijson.Field
+	ModifiedOn     apijson.Field
+	NamespaceID    apijson.Field
+	NamespaceName  apijson.Field
+	ScriptCount    apijson.Field
+	TrustedWorkers apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -219,22 +233,29 @@ type DispatchNamespaceGetResponse struct {
 	// Name of the Workers for Platforms dispatch namespace.
 	NamespaceName string `json:"namespace_name"`
 	// The current number of scripts in this Dispatch Namespace.
-	ScriptCount int64                            `json:"script_count"`
-	JSON        dispatchNamespaceGetResponseJSON `json:"-"`
+	ScriptCount int64 `json:"script_count"`
+	// Whether the Workers in the namespace are executed in a "trusted" manner. When a
+	// Worker is trusted, it has access to the shared caches for the zone in the Cache
+	// API, and has access to the `request.cf` object on incoming Requests. When a
+	// Worker is untrusted, caches are not shared across the zone, and `request.cf` is
+	// undefined. By default, Workers in a namespace are "untrusted".
+	TrustedWorkers bool                             `json:"trusted_workers"`
+	JSON           dispatchNamespaceGetResponseJSON `json:"-"`
 }
 
 // dispatchNamespaceGetResponseJSON contains the JSON metadata for the struct
 // [DispatchNamespaceGetResponse]
 type dispatchNamespaceGetResponseJSON struct {
-	CreatedBy     apijson.Field
-	CreatedOn     apijson.Field
-	ModifiedBy    apijson.Field
-	ModifiedOn    apijson.Field
-	NamespaceID   apijson.Field
-	NamespaceName apijson.Field
-	ScriptCount   apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CreatedBy      apijson.Field
+	CreatedOn      apijson.Field
+	ModifiedBy     apijson.Field
+	ModifiedOn     apijson.Field
+	NamespaceID    apijson.Field
+	NamespaceName  apijson.Field
+	ScriptCount    apijson.Field
+	TrustedWorkers apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceGetResponse) UnmarshalJSON(data []byte) (err error) {

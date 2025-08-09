@@ -80,7 +80,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // [AIRunResponseAutomaticSpeechRecognition], [AIRunResponseImageClassification],
 // [AIRunResponseObjectDetection], [AIRunResponseObject],
 // [AIRunResponseTranslation], [AIRunResponseSummarization],
-// [AIRunResponseImageToText] or [AIRunResponseImageTextToText].
+// [AIRunResponseImageToText], [AIRunResponseImageTextToText] or
+// [AIRunResponseMultimodalEmbeddings].
 type AIRunResponseUnion interface {
 	ImplementsAIRunResponseUnion()
 }
@@ -136,6 +137,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseImageTextToText{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIRunResponseMultimodalEmbeddings{}),
 		},
 	)
 }
@@ -549,6 +554,31 @@ func (r aiRunResponseImageTextToTextJSON) RawJSON() string {
 
 func (r AIRunResponseImageTextToText) ImplementsAIRunResponseUnion() {}
 
+type AIRunResponseMultimodalEmbeddings struct {
+	Data  [][]float64                           `json:"data"`
+	Shape []float64                             `json:"shape"`
+	JSON  aiRunResponseMultimodalEmbeddingsJSON `json:"-"`
+}
+
+// aiRunResponseMultimodalEmbeddingsJSON contains the JSON metadata for the struct
+// [AIRunResponseMultimodalEmbeddings]
+type aiRunResponseMultimodalEmbeddingsJSON struct {
+	Data        apijson.Field
+	Shape       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseMultimodalEmbeddings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseMultimodalEmbeddingsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIRunResponseMultimodalEmbeddings) ImplementsAIRunResponseUnion() {}
+
 type AIRunParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
 	Body      AIRunParamsBodyUnion `json:"body"`
@@ -641,7 +671,8 @@ func (r AIRunParamsBody) implementsAIRunParamsBodyUnion() {}
 // [ai.AIRunParamsBodyPrompt], [ai.AIRunParamsBodyTextGeneration],
 // [ai.AIRunParamsBodyTranslation], [ai.AIRunParamsBodySummarization],
 // [ai.AIRunParamsBodyImageToText], [ai.AIRunParamsBodyObject],
-// [ai.AIRunParamsBodyImageTextToText], [AIRunParamsBody].
+// [ai.AIRunParamsBodyImageTextToText], [ai.AIRunParamsBodyMultimodalEmbeddings],
+// [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
 	implementsAIRunParamsBodyUnion()
 }
@@ -1189,6 +1220,18 @@ type AIRunParamsBodyImageTextToTextMessage struct {
 func (r AIRunParamsBodyImageTextToTextMessage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+type AIRunParamsBodyMultimodalEmbeddings struct {
+	// Image in base64 encoded format.
+	Image param.Field[string]   `json:"image"`
+	Text  param.Field[[]string] `json:"text"`
+}
+
+func (r AIRunParamsBodyMultimodalEmbeddings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyMultimodalEmbeddings) implementsAIRunParamsBodyUnion() {}
 
 type AIRunResponseEnvelope struct {
 	// An array of classification results for the input text

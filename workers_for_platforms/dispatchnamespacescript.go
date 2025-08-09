@@ -306,7 +306,7 @@ type DispatchNamespaceScriptDeleteResponse = interface{}
 type DispatchNamespaceScriptUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
+	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[DispatchNamespaceScriptUpdateParamsMetadata] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
@@ -333,7 +333,7 @@ func (r DispatchNamespaceScriptUpdateParams) MarshalMultipart() (data []byte, co
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
+// JSON-encoded metadata about the uploaded parts and Worker configuration.
 type DispatchNamespaceScriptUpdateParamsMetadata struct {
 	// Configuration for assets within a Worker.
 	Assets param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssets] `json:"assets"`

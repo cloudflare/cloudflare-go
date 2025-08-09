@@ -130,7 +130,7 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessPolicyList(t *testing.T) {
+func TestAccessPolicyListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -145,6 +145,8 @@ func TestAccessPolicyList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Policies.List(context.TODO(), zero_trust.AccessPolicyListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v5/option"
@@ -74,16 +76,16 @@ func (r *AccessTagService) Update(ctx context.Context, tagName string, params Ac
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, query AccessTagListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Tag], err error) {
+func (r *AccessTagService) List(ctx context.Context, params AccessTagListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Tag], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/tags", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/access/tags", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +98,8 @@ func (r *AccessTagService) List(ctx context.Context, query AccessTagListParams, 
 }
 
 // List tags
-func (r *AccessTagService) ListAutoPaging(ctx context.Context, query AccessTagListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Tag] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessTagService) ListAutoPaging(ctx context.Context, params AccessTagListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Tag] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a tag
@@ -498,6 +500,18 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccessTagListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [AccessTagListParams]'s query parameters as `url.Values`.
+func (r AccessTagListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessTagDeleteParams struct {

@@ -124,6 +124,8 @@ func TestAccessApplicationPolicyListWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessApplicationPolicyListParams{
 			AccountID: cloudflare.F("account_id"),
+			Page:      cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(0)),
 		},
 	)
 	if err != nil {

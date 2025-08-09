@@ -35,6 +35,8 @@ func TestIdentityProviderSCIMGroupListWithOptionalParams(t *testing.T) {
 			CfResourceID:  cloudflare.F("a2abeb50-59c9-4c01-8c5c-963d3bf5700f"),
 			IdPResourceID: cloudflare.F("all_employees"),
 			Name:          cloudflare.F("ALL_EMPLOYEES"),
+			Page:          cloudflare.F(int64(0)),
+			PerPage:       cloudflare.F(int64(0)),
 		},
 	)
 	if err != nil {

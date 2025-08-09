@@ -29,8 +29,13 @@ func TestFilterNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Filters.New(context.TODO(), filters.FilterNewParams{
-		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Expression: cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body: []filters.FirewallFilterParam{{
+			Description: cloudflare.F("Restrict access from these browsers on this address range."),
+			Expression:  cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
+			Paused:      cloudflare.F(false),
+			Ref:         cloudflare.F("FIL-100"),
+		}},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +46,7 @@ func TestFilterNew(t *testing.T) {
 	}
 }
 
-func TestFilterUpdate(t *testing.T) {
+func TestFilterUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -60,7 +65,12 @@ func TestFilterUpdate(t *testing.T) {
 		"372e67954025e0ba6aaa6d586b9e0b61",
 		filters.FilterUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   map[string]interface{}{},
+			FirewallFilter: filters.FirewallFilterParam{
+				Description: cloudflare.F("Restrict access from these browsers on this address range."),
+				Expression:  cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
+				Paused:      cloudflare.F(false),
+				Ref:         cloudflare.F("FIL-100"),
+			},
 		},
 	)
 	if err != nil {
@@ -148,6 +158,7 @@ func TestFilterBulkDelete(t *testing.T) {
 	)
 	_, err := client.Filters.BulkDelete(context.TODO(), filters.FilterBulkDeleteParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ID:     cloudflare.F([]string{"372e67954025e0ba6aaa6d586b9e0b61"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -174,6 +185,12 @@ func TestFilterBulkUpdate(t *testing.T) {
 	)
 	_, err := client.Filters.BulkUpdate(context.TODO(), filters.FilterBulkUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body: []filters.FilterBulkUpdateParamsBody{{
+			Description: cloudflare.F("Restrict access from these browsers on this address range."),
+			Expression:  cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
+			Paused:      cloudflare.F(false),
+			Ref:         cloudflare.F("FIL-100"),
+		}},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -758,7 +758,7 @@ type ZoneTransferOutgoingDisableResponseEnvelope struct {
 	Messages []ZoneTransferOutgoingDisableResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ZoneTransferOutgoingDisableResponseEnvelopeSuccess `json:"success,required"`
-	// The zone transfer status of a primary zone
+	// The zone transfer status of a primary zone.
 	Result DisableTransfer                                 `json:"result"`
 	JSON   zoneTransferOutgoingDisableResponseEnvelopeJSON `json:"-"`
 }
@@ -909,7 +909,7 @@ type ZoneTransferOutgoingEnableResponseEnvelope struct {
 	Messages []ZoneTransferOutgoingEnableResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ZoneTransferOutgoingEnableResponseEnvelopeSuccess `json:"success,required"`
-	// The zone transfer status of a primary zone
+	// The zone transfer status of a primary zone.
 	Result EnableTransfer                                 `json:"result"`
 	JSON   zoneTransferOutgoingEnableResponseEnvelopeJSON `json:"-"`
 }
@@ -1060,7 +1060,7 @@ type ZoneTransferOutgoingForceNotifyResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success ZoneTransferOutgoingForceNotifyResponseEnvelopeSuccess `json:"success,required"`
 	// When force_notify query parameter is set to true, the response is a simple
-	// string
+	// string.
 	Result string                                              `json:"result"`
 	JSON   zoneTransferOutgoingForceNotifyResponseEnvelopeJSON `json:"-"`
 }

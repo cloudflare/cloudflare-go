@@ -71,7 +71,7 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 }
 
 type RegionListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Two-letter alpha-2 country code followed in ISO 3166-1.
 	CountryCodeA2 param.Field[string] `query:"country_code_a2"`
@@ -93,7 +93,7 @@ type RegionListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionListResponseEnvelopeJSON    `json:"-"`
 }
@@ -117,7 +117,7 @@ func (r regionListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type RegionListResponseEnvelopeSuccess bool
 
 const (
@@ -133,7 +133,7 @@ func (r RegionListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RegionGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -173,7 +173,7 @@ type RegionGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of countries and subdivisions mapped to a region.
 	Result interface{} `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -197,7 +197,7 @@ func (r regionGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type RegionGetResponseEnvelopeSuccess bool
 
 const (

@@ -126,6 +126,8 @@ func TestIdentityProviderListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.IdentityProviders.List(context.TODO(), zero_trust.IdentityProviderListParams{
 		AccountID:   cloudflare.F("account_id"),
+		Page:        cloudflare.F(int64(0)),
+		PerPage:     cloudflare.F(int64(0)),
 		SCIMEnabled: cloudflare.F("scim_enabled"),
 	})
 	if err != nil {

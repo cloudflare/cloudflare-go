@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v5/option"
@@ -70,30 +72,30 @@ func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CA], err error) {
+func (r *AccessApplicationCAService) List(ctx context.Context, params AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CA], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/ca", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +108,8 @@ func (r *AccessApplicationCAService) List(ctx context.Context, query AccessAppli
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CA] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, params AccessApplicationCAListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CA] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a short-lived certificate CA.
@@ -381,6 +383,19 @@ type AccessApplicationCAListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [AccessApplicationCAListParams]'s query parameters as
+// `url.Values`.
+func (r AccessApplicationCAListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessApplicationCADeleteParams struct {

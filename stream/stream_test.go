@@ -70,6 +70,7 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 		Start:         cloudflare.F(time.Now()),
 		Status:        cloudflare.F(stream.StreamListParamsStatusInprogress),
 		Type:          cloudflare.F("live"),
+		VideoName:     cloudflare.F("puppy.mp4"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

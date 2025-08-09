@@ -104,7 +104,7 @@ func (r *AccessGroupService) Update(ctx context.Context, groupID string, params 
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessGroupListResponse], err error) {
+func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -140,8 +140,8 @@ func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListPar
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) ListAutoPaging(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessGroupListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *AccessGroupService) ListAutoPaging(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessGroupListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an Access group.
@@ -808,6 +808,10 @@ type AccessGroupListParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The name of the group.
 	Name param.Field[string] `query:"name"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// Search for groups by other listed query parameters.
 	Search param.Field[string] `query:"search"`
 }
