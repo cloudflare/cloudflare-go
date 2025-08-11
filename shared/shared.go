@@ -220,6 +220,10 @@ type CloudflareTunnel struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc CloudflareTunnelConfigSrc `json:"config_src"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
 	//
 	// Deprecated: This field will start returning an empty array. To fetch the
@@ -243,6 +247,8 @@ type CloudflareTunnel struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -259,6 +265,7 @@ type CloudflareTunnel struct {
 type cloudflareTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -302,6 +309,24 @@ func (r CloudflareTunnel) ImplementsTunnelWARPConnectorDeleteResponse() {}
 func (r CloudflareTunnel) ImplementsTunnelWARPConnectorEditResponse() {}
 
 func (r CloudflareTunnel) ImplementsTunnelWARPConnectorGetResponse() {}
+
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type CloudflareTunnelConfigSrc string
+
+const (
+	CloudflareTunnelConfigSrcLocal      CloudflareTunnelConfigSrc = "local"
+	CloudflareTunnelConfigSrcCloudflare CloudflareTunnelConfigSrc = "cloudflare"
+)
+
+func (r CloudflareTunnelConfigSrc) IsKnown() bool {
+	switch r {
+	case CloudflareTunnelConfigSrcLocal, CloudflareTunnelConfigSrcCloudflare:
+		return true
+	}
+	return false
+}
 
 type CloudflareTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.

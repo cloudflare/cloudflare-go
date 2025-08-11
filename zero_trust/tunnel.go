@@ -77,6 +77,10 @@ type TunnelListResponse struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc TunnelListResponseConfigSrc `json:"config_src"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelListResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections"`
@@ -97,6 +101,8 @@ type TunnelListResponse struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -114,6 +120,7 @@ type TunnelListResponse struct {
 type tunnelListResponseJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -321,6 +328,24 @@ const (
 func (r TunnelListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
 	case TunnelListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelListResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelListResponseTunnelWARPConnectorTunnelTunTypeCNI:
+		return true
+	}
+	return false
+}
+
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type TunnelListResponseConfigSrc string
+
+const (
+	TunnelListResponseConfigSrcLocal      TunnelListResponseConfigSrc = "local"
+	TunnelListResponseConfigSrcCloudflare TunnelListResponseConfigSrc = "cloudflare"
+)
+
+func (r TunnelListResponseConfigSrc) IsKnown() bool {
+	switch r {
+	case TunnelListResponseConfigSrcLocal, TunnelListResponseConfigSrcCloudflare:
 		return true
 	}
 	return false
