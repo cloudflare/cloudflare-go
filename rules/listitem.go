@@ -235,7 +235,7 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 }
 
 type ListItemListResponse struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -328,7 +328,7 @@ func init() {
 }
 
 type ListItemListResponseListsListItemIPFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -364,7 +364,7 @@ func (r listItemListResponseListsListItemIPFullJSON) RawJSON() string {
 func (r ListItemListResponseListsListItemIPFull) implementsListItemListResponse() {}
 
 type ListItemListResponseListsListItemHostnameFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -401,7 +401,7 @@ func (r listItemListResponseListsListItemHostnameFullJSON) RawJSON() string {
 func (r ListItemListResponseListsListItemHostnameFull) implementsListItemListResponse() {}
 
 type ListItemListResponseListsListItemRedirectFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -437,7 +437,7 @@ func (r listItemListResponseListsListItemRedirectFullJSON) RawJSON() string {
 func (r ListItemListResponseListsListItemRedirectFull) implementsListItemListResponse() {}
 
 type ListItemListResponseListsListItemASNFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// Defines a non-negative 32 bit integer.
 	ASN int64 `json:"asn,required"`
@@ -495,7 +495,7 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 }
 
 type ListItemGetResponse struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -588,7 +588,7 @@ func init() {
 }
 
 type ListItemGetResponseListsListItemIPFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -624,7 +624,7 @@ func (r listItemGetResponseListsListItemIPFullJSON) RawJSON() string {
 func (r ListItemGetResponseListsListItemIPFull) implementsListItemGetResponse() {}
 
 type ListItemGetResponseListsListItemHostnameFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -661,7 +661,7 @@ func (r listItemGetResponseListsListItemHostnameFullJSON) RawJSON() string {
 func (r ListItemGetResponseListsListItemHostnameFull) implementsListItemGetResponse() {}
 
 type ListItemGetResponseListsListItemRedirectFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on,required"`
@@ -697,7 +697,7 @@ func (r listItemGetResponseListsListItemRedirectFullJSON) RawJSON() string {
 func (r ListItemGetResponseListsListItemRedirectFull) implementsListItemGetResponse() {}
 
 type ListItemGetResponseListsListItemASNFull struct {
-	// The unique ID of the list.
+	// Defines the unique ID of the item in the List.
 	ID string `json:"id,required"`
 	// Defines a non-negative 32 bit integer.
 	ASN int64 `json:"asn,required"`
