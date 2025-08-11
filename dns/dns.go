@@ -38,7 +38,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-type DNSAnalyticsNominalMetric []interface{}
+type DNSAnalyticsNominalMetric []float64
 
 type DNSAnalyticsQuery struct {
 	// Array of dimension names.
