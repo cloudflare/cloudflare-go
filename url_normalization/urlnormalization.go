@@ -112,11 +112,12 @@ type URLNormalizationUpdateResponseScope string
 const (
 	URLNormalizationUpdateResponseScopeIncoming URLNormalizationUpdateResponseScope = "incoming"
 	URLNormalizationUpdateResponseScopeBoth     URLNormalizationUpdateResponseScope = "both"
+	URLNormalizationUpdateResponseScopeNone     URLNormalizationUpdateResponseScope = "none"
 )
 
 func (r URLNormalizationUpdateResponseScope) IsKnown() bool {
 	switch r {
-	case URLNormalizationUpdateResponseScopeIncoming, URLNormalizationUpdateResponseScopeBoth:
+	case URLNormalizationUpdateResponseScopeIncoming, URLNormalizationUpdateResponseScopeBoth, URLNormalizationUpdateResponseScopeNone:
 		return true
 	}
 	return false
@@ -170,11 +171,12 @@ type URLNormalizationGetResponseScope string
 const (
 	URLNormalizationGetResponseScopeIncoming URLNormalizationGetResponseScope = "incoming"
 	URLNormalizationGetResponseScopeBoth     URLNormalizationGetResponseScope = "both"
+	URLNormalizationGetResponseScopeNone     URLNormalizationGetResponseScope = "none"
 )
 
 func (r URLNormalizationGetResponseScope) IsKnown() bool {
 	switch r {
-	case URLNormalizationGetResponseScopeIncoming, URLNormalizationGetResponseScopeBoth:
+	case URLNormalizationGetResponseScopeIncoming, URLNormalizationGetResponseScopeBoth, URLNormalizationGetResponseScopeNone:
 		return true
 	}
 	return false
@@ -215,11 +217,12 @@ type URLNormalizationUpdateParamsScope string
 const (
 	URLNormalizationUpdateParamsScopeIncoming URLNormalizationUpdateParamsScope = "incoming"
 	URLNormalizationUpdateParamsScopeBoth     URLNormalizationUpdateParamsScope = "both"
+	URLNormalizationUpdateParamsScopeNone     URLNormalizationUpdateParamsScope = "none"
 )
 
 func (r URLNormalizationUpdateParamsScope) IsKnown() bool {
 	switch r {
-	case URLNormalizationUpdateParamsScopeIncoming, URLNormalizationUpdateParamsScopeBoth:
+	case URLNormalizationUpdateParamsScopeIncoming, URLNormalizationUpdateParamsScopeBoth, URLNormalizationUpdateParamsScopeNone:
 		return true
 	}
 	return false
