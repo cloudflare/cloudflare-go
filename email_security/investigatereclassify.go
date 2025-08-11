@@ -62,7 +62,8 @@ type InvestigateReclassifyNewParams struct {
 	AccountID           param.Field[string]                                            `path:"account_id,required"`
 	ExpectedDisposition param.Field[InvestigateReclassifyNewParamsExpectedDisposition] `json:"expected_disposition,required"`
 	// Base64 encoded content of the EML file
-	EmlContent param.Field[string] `json:"eml_content"`
+	EmlContent            param.Field[string] `json:"eml_content"`
+	EscalatedSubmissionID param.Field[string] `json:"escalated_submission_id"`
 }
 
 func (r InvestigateReclassifyNewParams) MarshalJSON() (data []byte, err error) {
