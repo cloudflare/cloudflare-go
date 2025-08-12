@@ -540,8 +540,13 @@ func (r BrotliEditable) IsKnown() bool {
 type BrowserCacheTTL struct {
 	// Control how long resources cached by client browsers remain valid.
 	ID BrowserCacheTTLID `json:"id"`
-	// The number of seconds to cache resources for. The API prohibits setting this to
-	// 0 for non-Enterprise domains.
+	// The number of seconds to cache resources for. Minimum values by plan:
+	//
+	//   - Free: 7200 seconds (2 hours)
+	//   - Pro: 3600 seconds (1 hour)
+	//   - Business: 1 second
+	//   - Enterprise: 1 second Setting this to 0 enables "Respect Existing Headers" and
+	//     is allowed for all plans.
 	Value int64               `json:"value"`
 	JSON  browserCacheTTLJSON `json:"-"`
 }
@@ -582,8 +587,13 @@ func (r BrowserCacheTTLID) IsKnown() bool {
 type BrowserCacheTTLParam struct {
 	// Control how long resources cached by client browsers remain valid.
 	ID param.Field[BrowserCacheTTLID] `json:"id"`
-	// The number of seconds to cache resources for. The API prohibits setting this to
-	// 0 for non-Enterprise domains.
+	// The number of seconds to cache resources for. Minimum values by plan:
+	//
+	//   - Free: 7200 seconds (2 hours)
+	//   - Pro: 3600 seconds (1 hour)
+	//   - Business: 1 second
+	//   - Enterprise: 1 second Setting this to 0 enables "Respect Existing Headers" and
+	//     is allowed for all plans.
 	Value param.Field[int64] `json:"value"`
 }
 
@@ -3954,8 +3964,7 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
 	// [SettingEditResponseZonesSchemasAlwaysUseHTTPSValue],
 	// [SettingEditResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
-	// [SettingEditResponseZonesSchemasBrowserCacheTTLValue],
-	// [SettingEditResponseZonesSchemasBrowserCheckValue],
+	// [int64], [SettingEditResponseZonesSchemasBrowserCheckValue],
 	// [SettingEditResponseZonesSchemasCacheLevelValue], [ChallengeTTLValue],
 	// [SettingEditResponseZonesChinaNetworkEnabledValue], [[]string],
 	// [SettingEditResponseZonesCNAMEFlatteningValue], [DevelopmentModeValue],
@@ -3967,7 +3976,7 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesSchemasMirageValue], [NELValue],
 	// [SettingEditResponseZonesSchemasOpportunisticEncryptionValue],
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
+	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue],
 	// [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingEditResponseZonesSchemasPolishValue], [PrefetchPreloadValue],
 	// [SettingEditResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
@@ -4594,7 +4603,7 @@ type SettingEditResponseZonesSchemasBrowserCacheTTL struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSchemasBrowserCacheTTLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesSchemasBrowserCacheTTLValue `json:"value,required"`
+	Value int64 `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSchemasBrowserCacheTTLEditable `json:"editable"`
@@ -4634,48 +4643,6 @@ const (
 func (r SettingEditResponseZonesSchemasBrowserCacheTTLID) IsKnown() bool {
 	switch r {
 	case SettingEditResponseZonesSchemasBrowserCacheTTLIDBrowserCacheTTL:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditResponseZonesSchemasBrowserCacheTTLValue int64
-
-const (
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue0        SettingEditResponseZonesSchemasBrowserCacheTTLValue = 0
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue30       SettingEditResponseZonesSchemasBrowserCacheTTLValue = 30
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue60       SettingEditResponseZonesSchemasBrowserCacheTTLValue = 60
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue120      SettingEditResponseZonesSchemasBrowserCacheTTLValue = 120
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue300      SettingEditResponseZonesSchemasBrowserCacheTTLValue = 300
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue1200     SettingEditResponseZonesSchemasBrowserCacheTTLValue = 1200
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue1800     SettingEditResponseZonesSchemasBrowserCacheTTLValue = 1800
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue3600     SettingEditResponseZonesSchemasBrowserCacheTTLValue = 3600
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue7200     SettingEditResponseZonesSchemasBrowserCacheTTLValue = 7200
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue10800    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 10800
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue14400    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 14400
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue18000    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 18000
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue28800    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 28800
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue43200    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 43200
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue57600    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 57600
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue72000    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 72000
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue86400    SettingEditResponseZonesSchemasBrowserCacheTTLValue = 86400
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue172800   SettingEditResponseZonesSchemasBrowserCacheTTLValue = 172800
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue259200   SettingEditResponseZonesSchemasBrowserCacheTTLValue = 259200
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue345600   SettingEditResponseZonesSchemasBrowserCacheTTLValue = 345600
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue432000   SettingEditResponseZonesSchemasBrowserCacheTTLValue = 432000
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue691200   SettingEditResponseZonesSchemasBrowserCacheTTLValue = 691200
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue1382400  SettingEditResponseZonesSchemasBrowserCacheTTLValue = 1382400
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue2073600  SettingEditResponseZonesSchemasBrowserCacheTTLValue = 2073600
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue2678400  SettingEditResponseZonesSchemasBrowserCacheTTLValue = 2678400
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue5356800  SettingEditResponseZonesSchemasBrowserCacheTTLValue = 5356800
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue16070400 SettingEditResponseZonesSchemasBrowserCacheTTLValue = 16070400
-	SettingEditResponseZonesSchemasBrowserCacheTTLValue31536000 SettingEditResponseZonesSchemasBrowserCacheTTLValue = 31536000
-)
-
-func (r SettingEditResponseZonesSchemasBrowserCacheTTLValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasBrowserCacheTTLValue0, SettingEditResponseZonesSchemasBrowserCacheTTLValue30, SettingEditResponseZonesSchemasBrowserCacheTTLValue60, SettingEditResponseZonesSchemasBrowserCacheTTLValue120, SettingEditResponseZonesSchemasBrowserCacheTTLValue300, SettingEditResponseZonesSchemasBrowserCacheTTLValue1200, SettingEditResponseZonesSchemasBrowserCacheTTLValue1800, SettingEditResponseZonesSchemasBrowserCacheTTLValue3600, SettingEditResponseZonesSchemasBrowserCacheTTLValue7200, SettingEditResponseZonesSchemasBrowserCacheTTLValue10800, SettingEditResponseZonesSchemasBrowserCacheTTLValue14400, SettingEditResponseZonesSchemasBrowserCacheTTLValue18000, SettingEditResponseZonesSchemasBrowserCacheTTLValue28800, SettingEditResponseZonesSchemasBrowserCacheTTLValue43200, SettingEditResponseZonesSchemasBrowserCacheTTLValue57600, SettingEditResponseZonesSchemasBrowserCacheTTLValue72000, SettingEditResponseZonesSchemasBrowserCacheTTLValue86400, SettingEditResponseZonesSchemasBrowserCacheTTLValue172800, SettingEditResponseZonesSchemasBrowserCacheTTLValue259200, SettingEditResponseZonesSchemasBrowserCacheTTLValue345600, SettingEditResponseZonesSchemasBrowserCacheTTLValue432000, SettingEditResponseZonesSchemasBrowserCacheTTLValue691200, SettingEditResponseZonesSchemasBrowserCacheTTLValue1382400, SettingEditResponseZonesSchemasBrowserCacheTTLValue2073600, SettingEditResponseZonesSchemasBrowserCacheTTLValue2678400, SettingEditResponseZonesSchemasBrowserCacheTTLValue5356800, SettingEditResponseZonesSchemasBrowserCacheTTLValue16070400, SettingEditResponseZonesSchemasBrowserCacheTTLValue31536000:
 		return true
 	}
 	return false
@@ -7199,8 +7166,7 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
 	// [SettingGetResponseZonesSchemasAlwaysUseHTTPSValue],
 	// [SettingGetResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
-	// [SettingGetResponseZonesSchemasBrowserCacheTTLValue],
-	// [SettingGetResponseZonesSchemasBrowserCheckValue],
+	// [int64], [SettingGetResponseZonesSchemasBrowserCheckValue],
 	// [SettingGetResponseZonesSchemasCacheLevelValue], [ChallengeTTLValue],
 	// [SettingGetResponseZonesChinaNetworkEnabledValue], [[]string],
 	// [SettingGetResponseZonesCNAMEFlatteningValue], [DevelopmentModeValue],
@@ -7212,7 +7178,7 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesSchemasMirageValue], [NELValue],
 	// [SettingGetResponseZonesSchemasOpportunisticEncryptionValue],
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
+	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue],
 	// [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingGetResponseZonesSchemasPolishValue], [PrefetchPreloadValue],
 	// [SettingGetResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
@@ -7839,7 +7805,7 @@ type SettingGetResponseZonesSchemasBrowserCacheTTL struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSchemasBrowserCacheTTLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesSchemasBrowserCacheTTLValue `json:"value,required"`
+	Value int64 `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSchemasBrowserCacheTTLEditable `json:"editable"`
@@ -7879,48 +7845,6 @@ const (
 func (r SettingGetResponseZonesSchemasBrowserCacheTTLID) IsKnown() bool {
 	switch r {
 	case SettingGetResponseZonesSchemasBrowserCacheTTLIDBrowserCacheTTL:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingGetResponseZonesSchemasBrowserCacheTTLValue int64
-
-const (
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue0        SettingGetResponseZonesSchemasBrowserCacheTTLValue = 0
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue30       SettingGetResponseZonesSchemasBrowserCacheTTLValue = 30
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue60       SettingGetResponseZonesSchemasBrowserCacheTTLValue = 60
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue120      SettingGetResponseZonesSchemasBrowserCacheTTLValue = 120
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue300      SettingGetResponseZonesSchemasBrowserCacheTTLValue = 300
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue1200     SettingGetResponseZonesSchemasBrowserCacheTTLValue = 1200
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue1800     SettingGetResponseZonesSchemasBrowserCacheTTLValue = 1800
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue3600     SettingGetResponseZonesSchemasBrowserCacheTTLValue = 3600
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue7200     SettingGetResponseZonesSchemasBrowserCacheTTLValue = 7200
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue10800    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 10800
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue14400    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 14400
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue18000    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 18000
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue28800    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 28800
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue43200    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 43200
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue57600    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 57600
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue72000    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 72000
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue86400    SettingGetResponseZonesSchemasBrowserCacheTTLValue = 86400
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue172800   SettingGetResponseZonesSchemasBrowserCacheTTLValue = 172800
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue259200   SettingGetResponseZonesSchemasBrowserCacheTTLValue = 259200
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue345600   SettingGetResponseZonesSchemasBrowserCacheTTLValue = 345600
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue432000   SettingGetResponseZonesSchemasBrowserCacheTTLValue = 432000
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue691200   SettingGetResponseZonesSchemasBrowserCacheTTLValue = 691200
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue1382400  SettingGetResponseZonesSchemasBrowserCacheTTLValue = 1382400
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue2073600  SettingGetResponseZonesSchemasBrowserCacheTTLValue = 2073600
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue2678400  SettingGetResponseZonesSchemasBrowserCacheTTLValue = 2678400
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue5356800  SettingGetResponseZonesSchemasBrowserCacheTTLValue = 5356800
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue16070400 SettingGetResponseZonesSchemasBrowserCacheTTLValue = 16070400
-	SettingGetResponseZonesSchemasBrowserCacheTTLValue31536000 SettingGetResponseZonesSchemasBrowserCacheTTLValue = 31536000
-)
-
-func (r SettingGetResponseZonesSchemasBrowserCacheTTLValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasBrowserCacheTTLValue0, SettingGetResponseZonesSchemasBrowserCacheTTLValue30, SettingGetResponseZonesSchemasBrowserCacheTTLValue60, SettingGetResponseZonesSchemasBrowserCacheTTLValue120, SettingGetResponseZonesSchemasBrowserCacheTTLValue300, SettingGetResponseZonesSchemasBrowserCacheTTLValue1200, SettingGetResponseZonesSchemasBrowserCacheTTLValue1800, SettingGetResponseZonesSchemasBrowserCacheTTLValue3600, SettingGetResponseZonesSchemasBrowserCacheTTLValue7200, SettingGetResponseZonesSchemasBrowserCacheTTLValue10800, SettingGetResponseZonesSchemasBrowserCacheTTLValue14400, SettingGetResponseZonesSchemasBrowserCacheTTLValue18000, SettingGetResponseZonesSchemasBrowserCacheTTLValue28800, SettingGetResponseZonesSchemasBrowserCacheTTLValue43200, SettingGetResponseZonesSchemasBrowserCacheTTLValue57600, SettingGetResponseZonesSchemasBrowserCacheTTLValue72000, SettingGetResponseZonesSchemasBrowserCacheTTLValue86400, SettingGetResponseZonesSchemasBrowserCacheTTLValue172800, SettingGetResponseZonesSchemasBrowserCacheTTLValue259200, SettingGetResponseZonesSchemasBrowserCacheTTLValue345600, SettingGetResponseZonesSchemasBrowserCacheTTLValue432000, SettingGetResponseZonesSchemasBrowserCacheTTLValue691200, SettingGetResponseZonesSchemasBrowserCacheTTLValue1382400, SettingGetResponseZonesSchemasBrowserCacheTTLValue2073600, SettingGetResponseZonesSchemasBrowserCacheTTLValue2678400, SettingGetResponseZonesSchemasBrowserCacheTTLValue5356800, SettingGetResponseZonesSchemasBrowserCacheTTLValue16070400, SettingGetResponseZonesSchemasBrowserCacheTTLValue31536000:
 		return true
 	}
 	return false
