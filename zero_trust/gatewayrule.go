@@ -304,7 +304,9 @@ type GatewayRule struct {
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
 	// docs on how to manage precedence via Terraform.
 	Precedence int64 `json:"precedence,required"`
-	// The wirefilter expression used for traffic matching.
+	// The wirefilter expression used for traffic matching. The API automatically
+	// formats and sanitizes this expression. This returns a normalized version that
+	// may differ from your input and cause Terraform state drift.
 	Traffic string `json:"traffic,required"`
 	// The API resource UUID.
 	ID        string    `json:"id"`
@@ -313,14 +315,18 @@ type GatewayRule struct {
 	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
 	// The description of the rule.
 	Description string `json:"description"`
-	// The wirefilter expression used for device posture check matching.
+	// The wirefilter expression used for device posture check matching. The API
+	// automatically formats and sanitizes this expression. This returns a normalized
+	// version that may differ from your input and cause Terraform state drift.
 	DevicePosture string `json:"device_posture"`
 	// The expiration time stamp and default duration of a DNS policy. Takes precedence
 	// over the policy's `schedule` configuration, if any.
 	//
 	// This does not apply to HTTP or network policies.
 	Expiration GatewayRuleExpiration `json:"expiration,nullable"`
-	// The wirefilter expression used for identity matching.
+	// The wirefilter expression used for identity matching. The API automatically
+	// formats and sanitizes this expression. This returns a normalized version that
+	// may differ from your input and cause Terraform state drift.
 	Identity string `json:"identity"`
 	// The rule cannot be shared via the Orgs API
 	NotSharable bool `json:"not_sharable"`
@@ -800,7 +806,9 @@ func (r ruleSettingBlockPageJSON) RawJSON() string {
 
 // Configure how session check behaves.
 type RuleSettingCheckSession struct {
-	// Configure how fresh the session needs to be to be considered valid.
+	// Configure how fresh the session needs to be to be considered valid. The API
+	// automatically formats and sanitizes this expression. This returns a normalized
+	// version that may differ from your input and cause Terraform state drift.
 	Duration string `json:"duration"`
 	// Set to true to enable session enforcement.
 	Enforce bool                        `json:"enforce"`
@@ -1279,7 +1287,9 @@ func (r RuleSettingBlockPageParam) MarshalJSON() (data []byte, err error) {
 
 // Configure how session check behaves.
 type RuleSettingCheckSessionParam struct {
-	// Configure how fresh the session needs to be to be considered valid.
+	// Configure how fresh the session needs to be to be considered valid. The API
+	// automatically formats and sanitizes this expression. This returns a normalized
+	// version that may differ from your input and cause Terraform state drift.
 	Duration param.Field[string] `json:"duration"`
 	// Set to true to enable session enforcement.
 	Enforce param.Field[bool] `json:"enforce"`
@@ -1533,7 +1543,9 @@ type GatewayRuleNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
-	// The wirefilter expression used for device posture check matching.
+	// The wirefilter expression used for device posture check matching. The API
+	// automatically formats and sanitizes this expression. This returns a normalized
+	// version that may differ from your input and cause Terraform state drift.
 	DevicePosture param.Field[string] `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -1545,7 +1557,9 @@ type GatewayRuleNewParams struct {
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
-	// The wirefilter expression used for identity matching.
+	// The wirefilter expression used for identity matching. The API automatically
+	// formats and sanitizes this expression. This returns a normalized version that
+	// may differ from your input and cause Terraform state drift.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
 	// precedence. At each processing phase, applicable rules are evaluated in
@@ -1558,7 +1572,9 @@ type GatewayRuleNewParams struct {
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule param.Field[ScheduleParam] `json:"schedule"`
-	// The wirefilter expression used for traffic matching.
+	// The wirefilter expression used for traffic matching. The API automatically
+	// formats and sanitizes this expression. This returns a normalized version that
+	// may differ from your input and cause Terraform state drift.
 	Traffic param.Field[string] `json:"traffic"`
 }
 
@@ -1673,7 +1689,9 @@ type GatewayRuleUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
-	// The wirefilter expression used for device posture check matching.
+	// The wirefilter expression used for device posture check matching. The API
+	// automatically formats and sanitizes this expression. This returns a normalized
+	// version that may differ from your input and cause Terraform state drift.
 	DevicePosture param.Field[string] `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -1685,7 +1703,9 @@ type GatewayRuleUpdateParams struct {
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
-	// The wirefilter expression used for identity matching.
+	// The wirefilter expression used for identity matching. The API automatically
+	// formats and sanitizes this expression. This returns a normalized version that
+	// may differ from your input and cause Terraform state drift.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
 	// precedence. At each processing phase, applicable rules are evaluated in
@@ -1698,7 +1718,9 @@ type GatewayRuleUpdateParams struct {
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule param.Field[ScheduleParam] `json:"schedule"`
-	// The wirefilter expression used for traffic matching.
+	// The wirefilter expression used for traffic matching. The API automatically
+	// formats and sanitizes this expression. This returns a normalized version that
+	// may differ from your input and cause Terraform state drift.
 	Traffic param.Field[string] `json:"traffic"`
 }
 
