@@ -1781,6 +1781,15 @@ Methods:
 
 ## Edge
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#InstantLogpushJob">InstantLogpushJob</a>
+
+Methods:
+
+- <code title="post /zones/{zone_id}/logpush/edge">client.Logpush.Edge.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#EdgeService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#EdgeNewParams">EdgeNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#InstantLogpushJob">InstantLogpushJob</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/logpush/edge">client.Logpush.Edge.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#EdgeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#EdgeGetParams">EdgeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/logpush#InstantLogpushJob">InstantLogpushJob</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Jobs
 
 Params Types:

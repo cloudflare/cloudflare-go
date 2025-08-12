@@ -120,6 +120,7 @@ TEST_PATHS=(
 	keyless_certificates/keylesscertificate_test.go
 	logpush/datasetfield_test.go
 	logpush/datasetjob_test.go
+	logpush/edge_test.go
 	logpush/job_test.go
 	logpush/ownership_test.go
 	logpush/validate_test.go
