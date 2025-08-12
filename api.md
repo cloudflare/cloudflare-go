@@ -987,11 +987,6 @@ Methods:
 
 # DNS
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/dns#DNSAnalyticsNominalMetric">DNSAnalyticsNominalMetric</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/dns#DNSAnalyticsQuery">DNSAnalyticsQuery</a>
-
 ## DNSSEC
 
 Response Types:
