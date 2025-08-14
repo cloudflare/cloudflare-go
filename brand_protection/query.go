@@ -62,6 +62,19 @@ func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opt
 	return
 }
 
+// Return a success message after creating new saved string queries in bulk
+func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/brand-protection/queries/bulk", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
+	return
+}
+
 type QueryNewParams struct {
 	AccountID     param.Field[string]      `path:"account_id,required"`
 	ID            param.Field[string]      `query:"id"`
@@ -99,4 +112,13 @@ func (r QueryDeleteParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type QueryBulkParams struct {
+	AccountID param.Field[string]                   `path:"account_id,required"`
+	Queries   param.Field[[]map[string]interface{}] `json:"queries"`
+}
+
+func (r QueryBulkParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
