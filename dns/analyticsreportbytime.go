@@ -68,8 +68,8 @@ type ByTime struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}       `json:"min,required"`
-	Query DNSAnalyticsQuery `json:"query,required"`
+	Min   interface{} `json:"min,required"`
+	Query ByTimeQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Array of time intervals in the response data. Each interval is represented as an
@@ -109,8 +109,8 @@ type ByTimeData struct {
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is an array of values,
 	// broken down by time interval.
-	Metrics []DNSAnalyticsNominalMetric `json:"metrics,required"`
-	JSON    byTimeDataJSON              `json:"-"`
+	Metrics [][]float64    `json:"metrics,required"`
+	JSON    byTimeDataJSON `json:"-"`
 }
 
 // byTimeDataJSON contains the JSON metadata for the struct [ByTimeData]
@@ -127,6 +127,73 @@ func (r *ByTimeData) UnmarshalJSON(data []byte) (err error) {
 
 func (r byTimeDataJSON) RawJSON() string {
 	return r.raw
+}
+
+type ByTimeQuery struct {
+	// Array of dimension names.
+	Dimensions []string `json:"dimensions,required"`
+	// Limit number of returned metrics.
+	Limit int64 `json:"limit,required"`
+	// Array of metric names.
+	Metrics []string `json:"metrics,required"`
+	// Start date and time of requesting data period in ISO 8601 format.
+	Since time.Time `json:"since,required" format:"date-time"`
+	// Unit of time to group data by.
+	TimeDelta ByTimeQueryTimeDelta `json:"time_delta,required"`
+	// End date and time of requesting data period in ISO 8601 format.
+	Until time.Time `json:"until,required" format:"date-time"`
+	// Segmentation filter in 'attribute operator value' format.
+	Filters string `json:"filters"`
+	// Array of dimensions to sort by, where each dimension may be prefixed by -
+	// (descending) or + (ascending).
+	Sort []string        `json:"sort"`
+	JSON byTimeQueryJSON `json:"-"`
+}
+
+// byTimeQueryJSON contains the JSON metadata for the struct [ByTimeQuery]
+type byTimeQueryJSON struct {
+	Dimensions  apijson.Field
+	Limit       apijson.Field
+	Metrics     apijson.Field
+	Since       apijson.Field
+	TimeDelta   apijson.Field
+	Until       apijson.Field
+	Filters     apijson.Field
+	Sort        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ByTimeQuery) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r byTimeQueryJSON) RawJSON() string {
+	return r.raw
+}
+
+// Unit of time to group data by.
+type ByTimeQueryTimeDelta string
+
+const (
+	ByTimeQueryTimeDeltaAll        ByTimeQueryTimeDelta = "all"
+	ByTimeQueryTimeDeltaAuto       ByTimeQueryTimeDelta = "auto"
+	ByTimeQueryTimeDeltaYear       ByTimeQueryTimeDelta = "year"
+	ByTimeQueryTimeDeltaQuarter    ByTimeQueryTimeDelta = "quarter"
+	ByTimeQueryTimeDeltaMonth      ByTimeQueryTimeDelta = "month"
+	ByTimeQueryTimeDeltaWeek       ByTimeQueryTimeDelta = "week"
+	ByTimeQueryTimeDeltaDay        ByTimeQueryTimeDelta = "day"
+	ByTimeQueryTimeDeltaHour       ByTimeQueryTimeDelta = "hour"
+	ByTimeQueryTimeDeltaDekaminute ByTimeQueryTimeDelta = "dekaminute"
+	ByTimeQueryTimeDeltaMinute     ByTimeQueryTimeDelta = "minute"
+)
+
+func (r ByTimeQueryTimeDelta) IsKnown() bool {
+	switch r {
+	case ByTimeQueryTimeDeltaAll, ByTimeQueryTimeDeltaAuto, ByTimeQueryTimeDeltaYear, ByTimeQueryTimeDeltaQuarter, ByTimeQueryTimeDeltaMonth, ByTimeQueryTimeDeltaWeek, ByTimeQueryTimeDeltaDay, ByTimeQueryTimeDeltaHour, ByTimeQueryTimeDeltaDekaminute, ByTimeQueryTimeDeltaMinute:
+		return true
+	}
+	return false
 }
 
 type AnalyticsReportBytimeGetParams struct {

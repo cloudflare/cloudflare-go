@@ -272,6 +272,8 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		Domain:    cloudflare.F("domain"),
 		Exact:     cloudflare.F(true),
 		Name:      cloudflare.F("name"),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
 		Search:    cloudflare.F("search"),
 	})
 	if err != nil {

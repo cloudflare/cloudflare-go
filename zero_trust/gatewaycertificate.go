@@ -168,23 +168,25 @@ func (r *GatewayCertificateService) Get(ctx context.Context, certificateID strin
 type GatewayCertificateNewResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'available' (previously called 'active') state may be used for Gateway TLS
-	// interception.
+	// The read only deployment status of the certificate on Cloudflare's edge.
+	// Certificates in the 'available' (previously called 'active') state may be used
+	// for Gateway TLS interception.
 	BindingStatus GatewayCertificateNewResponseBindingStatus `json:"binding_status"`
-	// The CA certificate
+	// The CA certificate(read only).
 	Certificate string    `json:"certificate"`
 	CreatedAt   time.Time `json:"created_at" format:"date-time"`
 	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
-	// The SHA256 fingerprint of the certificate.
+	// The SHA256 fingerprint of the certificate(read only).
 	Fingerprint string `json:"fingerprint"`
-	// Use this certificate for Gateway TLS interception
+	// Read-only field that shows whether Gateway TLS interception is using this
+	// certificate. This value cannot be set directly. To configure the certificate for
+	// interception, use the Gateway configuration setting named certificate.
 	InUse bool `json:"in_use"`
-	// The organization that issued the certificate.
+	// The organization that issued the certificate(read only).
 	IssuerOrg string `json:"issuer_org"`
-	// The entire issuer field of the certificate.
+	// The entire issuer field of the certificate(read only).
 	IssuerRaw string `json:"issuer_raw"`
-	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 	Type       GatewayCertificateNewResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
 	UploadedOn time.Time                         `json:"uploaded_on" format:"date-time"`
@@ -218,9 +220,9 @@ func (r gatewayCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'available' (previously called 'active') state may be used for Gateway TLS
-// interception.
+// The read only deployment status of the certificate on Cloudflare's edge.
+// Certificates in the 'available' (previously called 'active') state may be used
+// for Gateway TLS interception.
 type GatewayCertificateNewResponseBindingStatus string
 
 const (
@@ -238,7 +240,7 @@ func (r GatewayCertificateNewResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 type GatewayCertificateNewResponseType string
 
 const (
@@ -257,23 +259,25 @@ func (r GatewayCertificateNewResponseType) IsKnown() bool {
 type GatewayCertificateListResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'available' (previously called 'active') state may be used for Gateway TLS
-	// interception.
+	// The read only deployment status of the certificate on Cloudflare's edge.
+	// Certificates in the 'available' (previously called 'active') state may be used
+	// for Gateway TLS interception.
 	BindingStatus GatewayCertificateListResponseBindingStatus `json:"binding_status"`
-	// The CA certificate
+	// The CA certificate(read only).
 	Certificate string    `json:"certificate"`
 	CreatedAt   time.Time `json:"created_at" format:"date-time"`
 	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
-	// The SHA256 fingerprint of the certificate.
+	// The SHA256 fingerprint of the certificate(read only).
 	Fingerprint string `json:"fingerprint"`
-	// Use this certificate for Gateway TLS interception
+	// Read-only field that shows whether Gateway TLS interception is using this
+	// certificate. This value cannot be set directly. To configure the certificate for
+	// interception, use the Gateway configuration setting named certificate.
 	InUse bool `json:"in_use"`
-	// The organization that issued the certificate.
+	// The organization that issued the certificate(read only).
 	IssuerOrg string `json:"issuer_org"`
-	// The entire issuer field of the certificate.
+	// The entire issuer field of the certificate(read only).
 	IssuerRaw string `json:"issuer_raw"`
-	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 	Type       GatewayCertificateListResponseType `json:"type"`
 	UpdatedAt  time.Time                          `json:"updated_at" format:"date-time"`
 	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
@@ -307,9 +311,9 @@ func (r gatewayCertificateListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'available' (previously called 'active') state may be used for Gateway TLS
-// interception.
+// The read only deployment status of the certificate on Cloudflare's edge.
+// Certificates in the 'available' (previously called 'active') state may be used
+// for Gateway TLS interception.
 type GatewayCertificateListResponseBindingStatus string
 
 const (
@@ -327,7 +331,7 @@ func (r GatewayCertificateListResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 type GatewayCertificateListResponseType string
 
 const (
@@ -346,23 +350,25 @@ func (r GatewayCertificateListResponseType) IsKnown() bool {
 type GatewayCertificateDeleteResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'available' (previously called 'active') state may be used for Gateway TLS
-	// interception.
+	// The read only deployment status of the certificate on Cloudflare's edge.
+	// Certificates in the 'available' (previously called 'active') state may be used
+	// for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeleteResponseBindingStatus `json:"binding_status"`
-	// The CA certificate
+	// The CA certificate(read only).
 	Certificate string    `json:"certificate"`
 	CreatedAt   time.Time `json:"created_at" format:"date-time"`
 	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
-	// The SHA256 fingerprint of the certificate.
+	// The SHA256 fingerprint of the certificate(read only).
 	Fingerprint string `json:"fingerprint"`
-	// Use this certificate for Gateway TLS interception
+	// Read-only field that shows whether Gateway TLS interception is using this
+	// certificate. This value cannot be set directly. To configure the certificate for
+	// interception, use the Gateway configuration setting named certificate.
 	InUse bool `json:"in_use"`
-	// The organization that issued the certificate.
+	// The organization that issued the certificate(read only).
 	IssuerOrg string `json:"issuer_org"`
-	// The entire issuer field of the certificate.
+	// The entire issuer field of the certificate(read only).
 	IssuerRaw string `json:"issuer_raw"`
-	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 	Type       GatewayCertificateDeleteResponseType `json:"type"`
 	UpdatedAt  time.Time                            `json:"updated_at" format:"date-time"`
 	UploadedOn time.Time                            `json:"uploaded_on" format:"date-time"`
@@ -396,9 +402,9 @@ func (r gatewayCertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'available' (previously called 'active') state may be used for Gateway TLS
-// interception.
+// The read only deployment status of the certificate on Cloudflare's edge.
+// Certificates in the 'available' (previously called 'active') state may be used
+// for Gateway TLS interception.
 type GatewayCertificateDeleteResponseBindingStatus string
 
 const (
@@ -416,7 +422,7 @@ func (r GatewayCertificateDeleteResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 type GatewayCertificateDeleteResponseType string
 
 const (
@@ -435,23 +441,25 @@ func (r GatewayCertificateDeleteResponseType) IsKnown() bool {
 type GatewayCertificateActivateResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'available' (previously called 'active') state may be used for Gateway TLS
-	// interception.
+	// The read only deployment status of the certificate on Cloudflare's edge.
+	// Certificates in the 'available' (previously called 'active') state may be used
+	// for Gateway TLS interception.
 	BindingStatus GatewayCertificateActivateResponseBindingStatus `json:"binding_status"`
-	// The CA certificate
+	// The CA certificate(read only).
 	Certificate string    `json:"certificate"`
 	CreatedAt   time.Time `json:"created_at" format:"date-time"`
 	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
-	// The SHA256 fingerprint of the certificate.
+	// The SHA256 fingerprint of the certificate(read only).
 	Fingerprint string `json:"fingerprint"`
-	// Use this certificate for Gateway TLS interception
+	// Read-only field that shows whether Gateway TLS interception is using this
+	// certificate. This value cannot be set directly. To configure the certificate for
+	// interception, use the Gateway configuration setting named certificate.
 	InUse bool `json:"in_use"`
-	// The organization that issued the certificate.
+	// The organization that issued the certificate(read only).
 	IssuerOrg string `json:"issuer_org"`
-	// The entire issuer field of the certificate.
+	// The entire issuer field of the certificate(read only).
 	IssuerRaw string `json:"issuer_raw"`
-	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 	Type       GatewayCertificateActivateResponseType `json:"type"`
 	UpdatedAt  time.Time                              `json:"updated_at" format:"date-time"`
 	UploadedOn time.Time                              `json:"uploaded_on" format:"date-time"`
@@ -485,9 +493,9 @@ func (r gatewayCertificateActivateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'available' (previously called 'active') state may be used for Gateway TLS
-// interception.
+// The read only deployment status of the certificate on Cloudflare's edge.
+// Certificates in the 'available' (previously called 'active') state may be used
+// for Gateway TLS interception.
 type GatewayCertificateActivateResponseBindingStatus string
 
 const (
@@ -505,7 +513,7 @@ func (r GatewayCertificateActivateResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 type GatewayCertificateActivateResponseType string
 
 const (
@@ -524,23 +532,25 @@ func (r GatewayCertificateActivateResponseType) IsKnown() bool {
 type GatewayCertificateDeactivateResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'available' (previously called 'active') state may be used for Gateway TLS
-	// interception.
+	// The read only deployment status of the certificate on Cloudflare's edge.
+	// Certificates in the 'available' (previously called 'active') state may be used
+	// for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeactivateResponseBindingStatus `json:"binding_status"`
-	// The CA certificate
+	// The CA certificate(read only).
 	Certificate string    `json:"certificate"`
 	CreatedAt   time.Time `json:"created_at" format:"date-time"`
 	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
-	// The SHA256 fingerprint of the certificate.
+	// The SHA256 fingerprint of the certificate(read only).
 	Fingerprint string `json:"fingerprint"`
-	// Use this certificate for Gateway TLS interception
+	// Read-only field that shows whether Gateway TLS interception is using this
+	// certificate. This value cannot be set directly. To configure the certificate for
+	// interception, use the Gateway configuration setting named certificate.
 	InUse bool `json:"in_use"`
-	// The organization that issued the certificate.
+	// The organization that issued the certificate(read only).
 	IssuerOrg string `json:"issuer_org"`
-	// The entire issuer field of the certificate.
+	// The entire issuer field of the certificate(read only).
 	IssuerRaw string `json:"issuer_raw"`
-	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 	Type       GatewayCertificateDeactivateResponseType `json:"type"`
 	UpdatedAt  time.Time                                `json:"updated_at" format:"date-time"`
 	UploadedOn time.Time                                `json:"uploaded_on" format:"date-time"`
@@ -574,9 +584,9 @@ func (r gatewayCertificateDeactivateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'available' (previously called 'active') state may be used for Gateway TLS
-// interception.
+// The read only deployment status of the certificate on Cloudflare's edge.
+// Certificates in the 'available' (previously called 'active') state may be used
+// for Gateway TLS interception.
 type GatewayCertificateDeactivateResponseBindingStatus string
 
 const (
@@ -594,7 +604,7 @@ func (r GatewayCertificateDeactivateResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 type GatewayCertificateDeactivateResponseType string
 
 const (
@@ -613,23 +623,25 @@ func (r GatewayCertificateDeactivateResponseType) IsKnown() bool {
 type GatewayCertificateGetResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'available' (previously called 'active') state may be used for Gateway TLS
-	// interception.
+	// The read only deployment status of the certificate on Cloudflare's edge.
+	// Certificates in the 'available' (previously called 'active') state may be used
+	// for Gateway TLS interception.
 	BindingStatus GatewayCertificateGetResponseBindingStatus `json:"binding_status"`
-	// The CA certificate
+	// The CA certificate(read only).
 	Certificate string    `json:"certificate"`
 	CreatedAt   time.Time `json:"created_at" format:"date-time"`
 	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
-	// The SHA256 fingerprint of the certificate.
+	// The SHA256 fingerprint of the certificate(read only).
 	Fingerprint string `json:"fingerprint"`
-	// Use this certificate for Gateway TLS interception
+	// Read-only field that shows whether Gateway TLS interception is using this
+	// certificate. This value cannot be set directly. To configure the certificate for
+	// interception, use the Gateway configuration setting named certificate.
 	InUse bool `json:"in_use"`
-	// The organization that issued the certificate.
+	// The organization that issued the certificate(read only).
 	IssuerOrg string `json:"issuer_org"`
-	// The entire issuer field of the certificate.
+	// The entire issuer field of the certificate(read only).
 	IssuerRaw string `json:"issuer_raw"`
-	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 	Type       GatewayCertificateGetResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
 	UploadedOn time.Time                         `json:"uploaded_on" format:"date-time"`
@@ -663,9 +675,9 @@ func (r gatewayCertificateGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'available' (previously called 'active') state may be used for Gateway TLS
-// interception.
+// The read only deployment status of the certificate on Cloudflare's edge.
+// Certificates in the 'available' (previously called 'active') state may be used
+// for Gateway TLS interception.
 type GatewayCertificateGetResponseBindingStatus string
 
 const (
@@ -683,7 +695,7 @@ func (r GatewayCertificateGetResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed(read only).
 type GatewayCertificateGetResponseType string
 
 const (

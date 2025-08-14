@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v5/option"
@@ -117,34 +119,34 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID strin
 
 // Lists Access policies configured for an application. Returns both exclusively
 // scoped and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyListResponse], err error) {
+func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, params AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessApplicationPolicyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
 		return
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, appID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -158,8 +160,8 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string,
 
 // Lists Access policies configured for an application. Returns both exclusively
 // scoped and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, appID, query, opts...))
+func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, appID string, params AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessApplicationPolicyListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, appID, params, opts...))
 }
 
 // Deletes an Access policy specific to an application. To delete a reusable
@@ -2820,6 +2822,19 @@ type AccessApplicationPolicyListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [AccessApplicationPolicyListParams]'s query parameters as
+// `url.Values`.
+func (r AccessApplicationPolicyListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessApplicationPolicyDeleteParams struct {

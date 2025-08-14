@@ -35,6 +35,8 @@ func NewAIBotSummaryService(opts ...option.RequestOption) (r *AIBotSummaryServic
 }
 
 // Retrieves the distribution of traffic by AI user agent.
+//
+// Deprecated: deprecated
 func (r *AIBotSummaryService) UserAgent(ctx context.Context, query AIBotSummaryUserAgentParams, opts ...option.RequestOption) (res *AIBotSummaryUserAgentResponse, err error) {
 	var env AIBotSummaryUserAgentResponseEnvelope
 	opts = append(r.Options[:], opts...)

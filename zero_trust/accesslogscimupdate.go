@@ -40,7 +40,7 @@ func NewAccessLogSCIMUpdateService(opts ...option.RequestOption) (r *AccessLogSC
 // Lists Access SCIM update logs that maintain a record of updates made to User and
 // Group resources synced to Cloudflare via the System for Cross-domain Identity
 // Management (SCIM).
-func (r *AccessLogSCIMUpdateService) List(ctx context.Context, params AccessLogSCIMUpdateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessLogSCIMUpdateListResponse], err error) {
+func (r *AccessLogSCIMUpdateService) List(ctx context.Context, params AccessLogSCIMUpdateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessLogSCIMUpdateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -64,8 +64,8 @@ func (r *AccessLogSCIMUpdateService) List(ctx context.Context, params AccessLogS
 // Lists Access SCIM update logs that maintain a record of updates made to User and
 // Group resources synced to Cloudflare via the System for Cross-domain Identity
 // Management (SCIM).
-func (r *AccessLogSCIMUpdateService) ListAutoPaging(ctx context.Context, params AccessLogSCIMUpdateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessLogSCIMUpdateListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *AccessLogSCIMUpdateService) ListAutoPaging(ctx context.Context, params AccessLogSCIMUpdateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessLogSCIMUpdateListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type AccessLogSCIMUpdateListResponse struct {
@@ -133,6 +133,10 @@ type AccessLogSCIMUpdateListParams struct {
 	IdPResourceID param.Field[string] `query:"idp_resource_id"`
 	// The maximum number of update logs to retrieve.
 	Limit param.Field[int64] `query:"limit"`
+	// Page number of results.
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// The request method of the SCIM request.
 	RequestMethod param.Field[[]AccessLogSCIMUpdateListParamsRequestMethod] `query:"request_method"`
 	// The display name of the SCIM Group resource.

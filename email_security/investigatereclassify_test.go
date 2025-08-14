@@ -31,9 +31,10 @@ func TestInvestigateReclassifyNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"4Njp3P0STMz2c02Q",
 		email_security.InvestigateReclassifyNewParams{
-			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ExpectedDisposition: cloudflare.F(email_security.InvestigateReclassifyNewParamsExpectedDispositionNone),
-			EmlContent:          cloudflare.F("eml_content"),
+			AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ExpectedDisposition:   cloudflare.F(email_security.InvestigateReclassifyNewParamsExpectedDispositionNone),
+			EmlContent:            cloudflare.F("eml_content"),
+			EscalatedSubmissionID: cloudflare.F("escalated_submission_id"),
 		},
 	)
 	if err != nil {
