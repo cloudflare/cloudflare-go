@@ -81,7 +81,7 @@ func (r monitorPreviewNewResponseJSON) RawJSON() string {
 }
 
 type MonitorPreviewNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -163,7 +163,7 @@ type MonitorPreviewNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo     `json:"errors,required"`
 	Messages []shared.ResponseInfo     `json:"messages,required"`
 	Result   MonitorPreviewNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success MonitorPreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorPreviewNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -187,7 +187,7 @@ func (r monitorPreviewNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MonitorPreviewNewResponseEnvelopeSuccess bool
 
 const (

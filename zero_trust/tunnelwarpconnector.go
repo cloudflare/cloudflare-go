@@ -155,6 +155,10 @@ type TunnelWARPConnectorNewResponse struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc TunnelWARPConnectorNewResponseConfigSrc `json:"config_src"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections"`
@@ -175,6 +179,8 @@ type TunnelWARPConnectorNewResponse struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -192,6 +198,7 @@ type TunnelWARPConnectorNewResponse struct {
 type tunnelWARPConnectorNewResponseJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -407,6 +414,24 @@ func (r TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType) IsKnown(
 	return false
 }
 
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type TunnelWARPConnectorNewResponseConfigSrc string
+
+const (
+	TunnelWARPConnectorNewResponseConfigSrcLocal      TunnelWARPConnectorNewResponseConfigSrc = "local"
+	TunnelWARPConnectorNewResponseConfigSrcCloudflare TunnelWARPConnectorNewResponseConfigSrc = "cloudflare"
+)
+
+func (r TunnelWARPConnectorNewResponseConfigSrc) IsKnown() bool {
+	switch r {
+	case TunnelWARPConnectorNewResponseConfigSrcLocal, TunnelWARPConnectorNewResponseConfigSrcCloudflare:
+		return true
+	}
+	return false
+}
+
 // The status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
@@ -455,6 +480,10 @@ type TunnelWARPConnectorListResponse struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc TunnelWARPConnectorListResponseConfigSrc `json:"config_src"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections"`
@@ -475,6 +504,8 @@ type TunnelWARPConnectorListResponse struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -492,6 +523,7 @@ type TunnelWARPConnectorListResponse struct {
 type tunnelWARPConnectorListResponseJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -707,6 +739,24 @@ func (r TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType) IsKnown
 	return false
 }
 
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type TunnelWARPConnectorListResponseConfigSrc string
+
+const (
+	TunnelWARPConnectorListResponseConfigSrcLocal      TunnelWARPConnectorListResponseConfigSrc = "local"
+	TunnelWARPConnectorListResponseConfigSrcCloudflare TunnelWARPConnectorListResponseConfigSrc = "cloudflare"
+)
+
+func (r TunnelWARPConnectorListResponseConfigSrc) IsKnown() bool {
+	switch r {
+	case TunnelWARPConnectorListResponseConfigSrcLocal, TunnelWARPConnectorListResponseConfigSrcCloudflare:
+		return true
+	}
+	return false
+}
+
 // The status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
@@ -755,6 +805,10 @@ type TunnelWARPConnectorDeleteResponse struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc TunnelWARPConnectorDeleteResponseConfigSrc `json:"config_src"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections"`
@@ -775,6 +829,8 @@ type TunnelWARPConnectorDeleteResponse struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -792,6 +848,7 @@ type TunnelWARPConnectorDeleteResponse struct {
 type tunnelWARPConnectorDeleteResponseJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -1007,6 +1064,24 @@ func (r TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType) IsKno
 	return false
 }
 
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type TunnelWARPConnectorDeleteResponseConfigSrc string
+
+const (
+	TunnelWARPConnectorDeleteResponseConfigSrcLocal      TunnelWARPConnectorDeleteResponseConfigSrc = "local"
+	TunnelWARPConnectorDeleteResponseConfigSrcCloudflare TunnelWARPConnectorDeleteResponseConfigSrc = "cloudflare"
+)
+
+func (r TunnelWARPConnectorDeleteResponseConfigSrc) IsKnown() bool {
+	switch r {
+	case TunnelWARPConnectorDeleteResponseConfigSrcLocal, TunnelWARPConnectorDeleteResponseConfigSrcCloudflare:
+		return true
+	}
+	return false
+}
+
 // The status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
@@ -1055,6 +1130,10 @@ type TunnelWARPConnectorEditResponse struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc TunnelWARPConnectorEditResponseConfigSrc `json:"config_src"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections"`
@@ -1075,6 +1154,8 @@ type TunnelWARPConnectorEditResponse struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -1092,6 +1173,7 @@ type TunnelWARPConnectorEditResponse struct {
 type tunnelWARPConnectorEditResponseJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -1307,6 +1389,24 @@ func (r TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType) IsKnown
 	return false
 }
 
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type TunnelWARPConnectorEditResponseConfigSrc string
+
+const (
+	TunnelWARPConnectorEditResponseConfigSrcLocal      TunnelWARPConnectorEditResponseConfigSrc = "local"
+	TunnelWARPConnectorEditResponseConfigSrcCloudflare TunnelWARPConnectorEditResponseConfigSrc = "cloudflare"
+)
+
+func (r TunnelWARPConnectorEditResponseConfigSrc) IsKnown() bool {
+	switch r {
+	case TunnelWARPConnectorEditResponseConfigSrcLocal, TunnelWARPConnectorEditResponseConfigSrcCloudflare:
+		return true
+	}
+	return false
+}
+
 // The status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
@@ -1355,6 +1455,10 @@ type TunnelWARPConnectorGetResponse struct {
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+	// tunnel on the Zero Trust dashboard.
+	ConfigSrc TunnelWARPConnectorGetResponseConfigSrc `json:"config_src"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections"`
@@ -1375,6 +1479,8 @@ type TunnelWARPConnectorGetResponse struct {
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
 	// If `false`, the tunnel must be configured locally on the origin machine.
+	//
+	// Deprecated: Use the config_src field instead.
 	RemoteConfig bool `json:"remote_config"`
 	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
 	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
@@ -1392,6 +1498,7 @@ type TunnelWARPConnectorGetResponse struct {
 type tunnelWARPConnectorGetResponseJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	ConfigSrc       apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
@@ -1602,6 +1709,24 @@ const (
 func (r TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
 	case TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCNI:
+		return true
+	}
+	return false
+}
+
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+type TunnelWARPConnectorGetResponseConfigSrc string
+
+const (
+	TunnelWARPConnectorGetResponseConfigSrcLocal      TunnelWARPConnectorGetResponseConfigSrc = "local"
+	TunnelWARPConnectorGetResponseConfigSrcCloudflare TunnelWARPConnectorGetResponseConfigSrc = "cloudflare"
+)
+
+func (r TunnelWARPConnectorGetResponseConfigSrc) IsKnown() bool {
+	switch r {
+	case TunnelWARPConnectorGetResponseConfigSrcLocal, TunnelWARPConnectorGetResponseConfigSrcCloudflare:
 		return true
 	}
 	return false

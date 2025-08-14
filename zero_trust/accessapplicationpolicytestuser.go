@@ -118,8 +118,9 @@ func (r AccessApplicationPolicyTestUserListResponseStatus) IsKnown() bool {
 type AccessApplicationPolicyTestUserListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Page      param.Field[int64]  `query:"page"`
-	PerPage   param.Field[int64]  `query:"per_page"`
+	// Page number of results.
+	Page    param.Field[int64] `query:"page"`
+	PerPage param.Field[int64] `query:"per_page"`
 	// Filter users by their policy evaluation status.
 	Status param.Field[AccessApplicationPolicyTestUserListParamsStatus] `query:"status"`
 }

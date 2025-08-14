@@ -81,6 +81,19 @@ const CertificateRequestTypeKeylessCertificate = shared.CertificateRequestTypeKe
 // This is an alias to an internal type.
 type CloudflareTunnel = shared.CloudflareTunnel
 
+// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
+// tunnel on the Zero Trust dashboard.
+//
+// This is an alias to an internal type.
+type CloudflareTunnelConfigSrc = shared.CloudflareTunnelConfigSrc
+
+// This is an alias to an internal value.
+const CloudflareTunnelConfigSrcLocal = shared.CloudflareTunnelConfigSrcLocal
+
+// This is an alias to an internal value.
+const CloudflareTunnelConfigSrcCloudflare = shared.CloudflareTunnelConfigSrcCloudflare
+
 // This is an alias to an internal type.
 type CloudflareTunnelConnection = shared.CloudflareTunnelConnection
 

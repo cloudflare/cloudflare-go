@@ -109,6 +109,6 @@ func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
 }
 
 type PoolReferenceGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

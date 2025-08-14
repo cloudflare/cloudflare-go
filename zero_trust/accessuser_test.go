@@ -31,6 +31,8 @@ func TestAccessUserListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Email:     cloudflare.F("email"),
 		Name:      cloudflare.F("name"),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
 		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
