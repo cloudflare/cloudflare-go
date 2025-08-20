@@ -126,6 +126,7 @@ func TestSettingDomainEditWithOptionalParams(t *testing.T) {
 			Folder:               cloudflare.F(email_security.SettingDomainEditParamsFolderAllItems),
 			IntegrationID:        cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			LookbackHops:         cloudflare.F(int64(1)),
+			Regions:              cloudflare.F([]email_security.SettingDomainEditParamsRegion{email_security.SettingDomainEditParamsRegionGlobal}),
 			RequireTLSInbound:    cloudflare.F(true),
 			RequireTLSOutbound:   cloudflare.F(true),
 			Transport:            cloudflare.F("transport"),
