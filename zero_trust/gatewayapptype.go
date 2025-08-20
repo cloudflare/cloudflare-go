@@ -200,6 +200,6 @@ func (r appTypeZeroTrustGatewayApplicationTypeJSON) RawJSON() string {
 func (r AppTypeZeroTrustGatewayApplicationType) implementsAppType() {}
 
 type GatewayAppTypeListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

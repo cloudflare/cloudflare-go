@@ -2143,7 +2143,6 @@ Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#MigrationStepParam">MigrationStepParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#SingleStepMigrationParam">SingleStepMigrationParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#WorkerMetadataParam">WorkerMetadataParam</a>
 
 Response Types:
 
@@ -2832,7 +2831,6 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#ManagedChallengeRuleParam">ManagedChallengeRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RedirectRuleParam">RedirectRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RewriteRuleParam">RewriteRuleParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RewriteURIPartUnionParam">RewriteURIPartUnionParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RouteRuleParam">RouteRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#ScoreRuleParam">ScoreRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#ServeErrorRuleParam">ServeErrorRuleParam</a>
@@ -2853,7 +2851,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#ManagedChallengeRule">ManagedChallengeRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RedirectRule">RedirectRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RewriteRule">RewriteRule</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RewriteURIPart">RewriteURIPart</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#RouteRule">RouteRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#ScoreRule">ScoreRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/rulesets#ServeErrorRule">ServeErrorRule</a>

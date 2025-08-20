@@ -293,7 +293,7 @@ type GatewayRule struct {
 	Action GatewayRuleAction `json:"action,required"`
 	// True if the rule is enabled.
 	Enabled bool `json:"enabled,required"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// The protocol or layer to evaluate the traffic, identity, and device. posture
 	// expressions.
 	Filters []GatewayFilter `json:"filters,required"`
 	// The name of the rule.
@@ -328,19 +328,20 @@ type GatewayRule struct {
 	// formats and sanitizes this expression. This returns a normalized version that
 	// may differ from your input and cause Terraform state drift.
 	Identity string `json:"identity"`
-	// The rule cannot be shared via the Orgs API
+	// The rule cannot be shared via the Orgs API.
 	NotSharable bool `json:"not_sharable"`
-	// The rule was shared via the Orgs API and cannot be edited by the current account
+	// The rule was shared via the Orgs API and cannot be edited by the current
+	// account.
 	ReadOnly bool `json:"read_only"`
 	// Additional settings that modify the rule's action.
 	RuleSettings RuleSetting `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule Schedule `json:"schedule,nullable"`
-	// account tag of account that created the rule
+	// account tag of account that created the rule.
 	SourceAccount string    `json:"source_account"`
 	UpdatedAt     time.Time `json:"updated_at" format:"date-time"`
-	// version number of the rule
+	// version number of the rule.
 	Version int64 `json:"version"`
 	// Warning for a misconfigured rule, if any.
 	WarningStatus string          `json:"warning_status,nullable"`
@@ -498,7 +499,7 @@ type RuleSetting struct {
 	// Set to true to include IPs in DNS resolver indicator feed blocks. By default
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
-	// Send matching traffic to the supplied destination IP address and port.
+	// Send matching traffic to the supplied destination IP address. and port.
 	L4override RuleSettingL4override `json:"l4override,nullable"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
@@ -509,9 +510,9 @@ type RuleSetting struct {
 	OverrideIPs []string `json:"override_ips,nullable"`
 	// Configure DLP payload logging.
 	PayloadLog RuleSettingPayloadLog `json:"payload_log,nullable"`
-	// Settings that apply to quarantine rules
+	// Settings that apply to quarantine rules.
 	Quarantine RuleSettingQuarantine `json:"quarantine,nullable"`
-	// Settings that apply to redirect rules
+	// Settings that apply to redirect rules.
 	Redirect RuleSettingRedirect `json:"redirect,nullable"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
@@ -780,9 +781,9 @@ func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
 // Custom block page settings. If missing/null, blocking will use the the account
 // settings.
 type RuleSettingBlockPage struct {
-	// URI to which the user will be redirected
+	// URI to which the user will be redirected.
 	TargetURI string `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext bool                     `json:"include_context"`
 	JSON           ruleSettingBlockPageJSON `json:"-"`
 }
@@ -892,7 +893,7 @@ func (r ruleSettingEgressJSON) RawJSON() string {
 	return r.raw
 }
 
-// Send matching traffic to the supplied destination IP address and port.
+// Send matching traffic to the supplied destination IP address. and port.
 type RuleSettingL4override struct {
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
@@ -921,9 +922,9 @@ func (r ruleSettingL4overrideJSON) RawJSON() string {
 // Configure a notification to display on the user's device when this rule is
 // matched.
 type RuleSettingNotificationSettings struct {
-	// Set notification on
+	// Set notification on.
 	Enabled bool `json:"enabled"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
@@ -975,7 +976,7 @@ func (r ruleSettingPayloadLogJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings that apply to quarantine rules
+// Settings that apply to quarantine rules.
 type RuleSettingQuarantine struct {
 	// Types of files to sandbox.
 	FileTypes []RuleSettingQuarantineFileType `json:"file_types"`
@@ -1024,14 +1025,14 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	return false
 }
 
-// Settings that apply to redirect rules
+// Settings that apply to redirect rules.
 type RuleSettingRedirect struct {
-	// URI to which the user will be redirected
+	// URI to which the user will be redirected.
 	TargetURI string `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext bool `json:"include_context"`
 	// If true, the path and query parameters from the original request will be
-	// appended to target_uri
+	// appended to target_uri.
 	PreservePathAndQuery bool                    `json:"preserve_path_and_query"`
 	JSON                 ruleSettingRedirectJSON `json:"-"`
 }
@@ -1189,7 +1190,7 @@ type RuleSettingParam struct {
 	// Set to true to include IPs in DNS resolver indicator feed blocks. By default
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds param.Field[bool] `json:"ip_indicator_feeds"`
-	// Send matching traffic to the supplied destination IP address and port.
+	// Send matching traffic to the supplied destination IP address. and port.
 	L4override param.Field[RuleSettingL4overrideParam] `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
@@ -1200,9 +1201,9 @@ type RuleSettingParam struct {
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
-	// Settings that apply to quarantine rules
+	// Settings that apply to quarantine rules.
 	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
-	// Settings that apply to redirect rules
+	// Settings that apply to redirect rules.
 	Redirect param.Field[RuleSettingRedirectParam] `json:"redirect"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
@@ -1275,9 +1276,9 @@ func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error
 // Custom block page settings. If missing/null, blocking will use the the account
 // settings.
 type RuleSettingBlockPageParam struct {
-	// URI to which the user will be redirected
+	// URI to which the user will be redirected.
 	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 }
 
@@ -1330,7 +1331,7 @@ func (r RuleSettingEgressParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Send matching traffic to the supplied destination IP address and port.
+// Send matching traffic to the supplied destination IP address. and port.
 type RuleSettingL4overrideParam struct {
 	// IPv4 or IPv6 address.
 	IP param.Field[string] `json:"ip"`
@@ -1345,9 +1346,9 @@ func (r RuleSettingL4overrideParam) MarshalJSON() (data []byte, err error) {
 // Configure a notification to display on the user's device when this rule is
 // matched.
 type RuleSettingNotificationSettingsParam struct {
-	// Set notification on
+	// Set notification on.
 	Enabled param.Field[bool] `json:"enabled"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
@@ -1370,7 +1371,7 @@ func (r RuleSettingPayloadLogParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Settings that apply to quarantine rules
+// Settings that apply to quarantine rules.
 type RuleSettingQuarantineParam struct {
 	// Types of files to sandbox.
 	FileTypes param.Field[[]RuleSettingQuarantineFileType] `json:"file_types"`
@@ -1380,14 +1381,14 @@ func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Settings that apply to redirect rules
+// Settings that apply to redirect rules.
 type RuleSettingRedirectParam struct {
-	// URI to which the user will be redirected
+	// URI to which the user will be redirected.
 	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 	// If true, the path and query parameters from the original request will be
-	// appended to target_uri
+	// appended to target_uri.
 	PreservePathAndQuery param.Field[bool] `json:"preserve_path_and_query"`
 }
 
@@ -1554,7 +1555,7 @@ type GatewayRuleNewParams struct {
 	//
 	// This does not apply to HTTP or network policies.
 	Expiration param.Field[GatewayRuleNewParamsExpiration] `json:"expiration"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// The protocol or layer to evaluate the traffic, identity, and device. posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching. The API automatically
@@ -1640,7 +1641,7 @@ func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
 type GatewayRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1665,7 +1666,7 @@ func (r gatewayRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayRuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -1700,7 +1701,7 @@ type GatewayRuleUpdateParams struct {
 	//
 	// This does not apply to HTTP or network policies.
 	Expiration param.Field[GatewayRuleUpdateParamsExpiration] `json:"expiration"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// The protocol or layer to evaluate the traffic, identity, and device. posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching. The API automatically
@@ -1786,7 +1787,7 @@ func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error
 type GatewayRuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                              `json:"result"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1811,7 +1812,7 @@ func (r gatewayRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayRuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1837,7 +1838,7 @@ type GatewayRuleDeleteParams struct {
 type GatewayRuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRuleDeleteResponse                `json:"result"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1862,7 +1863,7 @@ func (r gatewayRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayRuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1884,7 +1885,7 @@ type GatewayRuleGetParams struct {
 type GatewayRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -1909,7 +1910,7 @@ func (r gatewayRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayRuleGetResponseEnvelopeSuccess bool
 
 const (
@@ -1931,7 +1932,7 @@ type GatewayRuleResetExpirationParams struct {
 type GatewayRuleResetExpirationResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                                       `json:"result"`
 	JSON    gatewayRuleResetExpirationResponseEnvelopeJSON    `json:"-"`
@@ -1956,7 +1957,7 @@ func (r gatewayRuleResetExpirationResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayRuleResetExpirationResponseEnvelopeSuccess bool
 
 const (

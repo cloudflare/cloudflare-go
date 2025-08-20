@@ -100,6 +100,7 @@ type DLPEntryPredefinedNewResponse struct {
 	Enabled    bool                                    `json:"enabled,required"`
 	Name       string                                  `json:"name,required"`
 	ProfileID  string                                  `json:"profile_id,nullable" format:"uuid"`
+	Variant    DLPEntryPredefinedNewResponseVariant    `json:"variant"`
 	JSON       dlpEntryPredefinedNewResponseJSON       `json:"-"`
 }
 
@@ -111,6 +112,7 @@ type dlpEntryPredefinedNewResponseJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	ProfileID   apijson.Field
+	Variant     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -149,12 +151,65 @@ func (r dlpEntryPredefinedNewResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
+type DLPEntryPredefinedNewResponseVariant struct {
+	TopicType DLPEntryPredefinedNewResponseVariantTopicType `json:"topic_type,required"`
+	Type      DLPEntryPredefinedNewResponseVariantType      `json:"type,required"`
+	JSON      dlpEntryPredefinedNewResponseVariantJSON      `json:"-"`
+}
+
+// dlpEntryPredefinedNewResponseVariantJSON contains the JSON metadata for the
+// struct [DLPEntryPredefinedNewResponseVariant]
+type dlpEntryPredefinedNewResponseVariantJSON struct {
+	TopicType   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryPredefinedNewResponseVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryPredefinedNewResponseVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryPredefinedNewResponseVariantTopicType string
+
+const (
+	DLPEntryPredefinedNewResponseVariantTopicTypeIntent  DLPEntryPredefinedNewResponseVariantTopicType = "Intent"
+	DLPEntryPredefinedNewResponseVariantTopicTypeContent DLPEntryPredefinedNewResponseVariantTopicType = "Content"
+)
+
+func (r DLPEntryPredefinedNewResponseVariantTopicType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedNewResponseVariantTopicTypeIntent, DLPEntryPredefinedNewResponseVariantTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type DLPEntryPredefinedNewResponseVariantType string
+
+const (
+	DLPEntryPredefinedNewResponseVariantTypePromptTopic DLPEntryPredefinedNewResponseVariantType = "PromptTopic"
+)
+
+func (r DLPEntryPredefinedNewResponseVariantType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedNewResponseVariantTypePromptTopic:
+		return true
+	}
+	return false
+}
+
 type DLPEntryPredefinedUpdateResponse struct {
 	ID         string                                     `json:"id,required" format:"uuid"`
 	Confidence DLPEntryPredefinedUpdateResponseConfidence `json:"confidence,required"`
 	Enabled    bool                                       `json:"enabled,required"`
 	Name       string                                     `json:"name,required"`
 	ProfileID  string                                     `json:"profile_id,nullable" format:"uuid"`
+	Variant    DLPEntryPredefinedUpdateResponseVariant    `json:"variant"`
 	JSON       dlpEntryPredefinedUpdateResponseJSON       `json:"-"`
 }
 
@@ -166,6 +221,7 @@ type dlpEntryPredefinedUpdateResponseJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	ProfileID   apijson.Field
+	Variant     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,6 +258,58 @@ func (r *DLPEntryPredefinedUpdateResponseConfidence) UnmarshalJSON(data []byte) 
 
 func (r dlpEntryPredefinedUpdateResponseConfidenceJSON) RawJSON() string {
 	return r.raw
+}
+
+type DLPEntryPredefinedUpdateResponseVariant struct {
+	TopicType DLPEntryPredefinedUpdateResponseVariantTopicType `json:"topic_type,required"`
+	Type      DLPEntryPredefinedUpdateResponseVariantType      `json:"type,required"`
+	JSON      dlpEntryPredefinedUpdateResponseVariantJSON      `json:"-"`
+}
+
+// dlpEntryPredefinedUpdateResponseVariantJSON contains the JSON metadata for the
+// struct [DLPEntryPredefinedUpdateResponseVariant]
+type dlpEntryPredefinedUpdateResponseVariantJSON struct {
+	TopicType   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryPredefinedUpdateResponseVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryPredefinedUpdateResponseVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryPredefinedUpdateResponseVariantTopicType string
+
+const (
+	DLPEntryPredefinedUpdateResponseVariantTopicTypeIntent  DLPEntryPredefinedUpdateResponseVariantTopicType = "Intent"
+	DLPEntryPredefinedUpdateResponseVariantTopicTypeContent DLPEntryPredefinedUpdateResponseVariantTopicType = "Content"
+)
+
+func (r DLPEntryPredefinedUpdateResponseVariantTopicType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedUpdateResponseVariantTopicTypeIntent, DLPEntryPredefinedUpdateResponseVariantTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type DLPEntryPredefinedUpdateResponseVariantType string
+
+const (
+	DLPEntryPredefinedUpdateResponseVariantTypePromptTopic DLPEntryPredefinedUpdateResponseVariantType = "PromptTopic"
+)
+
+func (r DLPEntryPredefinedUpdateResponseVariantType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedUpdateResponseVariantTypePromptTopic:
+		return true
+	}
+	return false
 }
 
 type DLPEntryPredefinedDeleteResponse = interface{}

@@ -182,6 +182,6 @@ func (r CategorySubcategoriesClass) IsKnown() bool {
 }
 
 type GatewayCategoryListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

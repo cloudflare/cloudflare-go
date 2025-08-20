@@ -108,54 +108,56 @@ type InvestigateListResponse struct {
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
-	PostfixID        string                                  `json:"postfix_id,required"`
-	Properties       InvestigateListResponseProperties       `json:"properties,required"`
-	Ts               string                                  `json:"ts,required"`
-	AlertID          string                                  `json:"alert_id,nullable"`
-	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
-	EdfHash          string                                  `json:"edf_hash,nullable"`
-	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
-	Findings         []InvestigateListResponseFinding        `json:"findings,nullable"`
-	From             string                                  `json:"from,nullable"`
-	FromName         string                                  `json:"from_name,nullable"`
-	MessageID        string                                  `json:"message_id,nullable"`
-	SentDate         string                                  `json:"sent_date,nullable"`
-	Subject          string                                  `json:"subject,nullable"`
-	ThreatCategories []string                                `json:"threat_categories,nullable"`
-	To               []string                                `json:"to,nullable"`
-	ToName           []string                                `json:"to_name,nullable"`
-	Validation       InvestigateListResponseValidation       `json:"validation,nullable"`
-	JSON             investigateListResponseJSON             `json:"-"`
+	PostfixID             string                                  `json:"postfix_id,required"`
+	Properties            InvestigateListResponseProperties       `json:"properties,required"`
+	Ts                    string                                  `json:"ts,required"`
+	AlertID               string                                  `json:"alert_id,nullable"`
+	DeliveryMode          InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
+	EdfHash               string                                  `json:"edf_hash,nullable"`
+	FinalDisposition      InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
+	Findings              []InvestigateListResponseFinding        `json:"findings,nullable"`
+	From                  string                                  `json:"from,nullable"`
+	FromName              string                                  `json:"from_name,nullable"`
+	HtmltextStructureHash string                                  `json:"htmltext_structure_hash,nullable"`
+	MessageID             string                                  `json:"message_id,nullable"`
+	SentDate              string                                  `json:"sent_date,nullable"`
+	Subject               string                                  `json:"subject,nullable"`
+	ThreatCategories      []string                                `json:"threat_categories,nullable"`
+	To                    []string                                `json:"to,nullable"`
+	ToName                []string                                `json:"to_name,nullable"`
+	Validation            InvestigateListResponseValidation       `json:"validation,nullable"`
+	JSON                  investigateListResponseJSON             `json:"-"`
 }
 
 // investigateListResponseJSON contains the JSON metadata for the struct
 // [InvestigateListResponse]
 type investigateListResponseJSON struct {
-	ID                apijson.Field
-	ActionLog         apijson.Field
-	ClientRecipients  apijson.Field
-	DetectionReasons  apijson.Field
-	IsPhishSubmission apijson.Field
-	IsQuarantined     apijson.Field
-	PostfixID         apijson.Field
-	Properties        apijson.Field
-	Ts                apijson.Field
-	AlertID           apijson.Field
-	DeliveryMode      apijson.Field
-	EdfHash           apijson.Field
-	FinalDisposition  apijson.Field
-	Findings          apijson.Field
-	From              apijson.Field
-	FromName          apijson.Field
-	MessageID         apijson.Field
-	SentDate          apijson.Field
-	Subject           apijson.Field
-	ThreatCategories  apijson.Field
-	To                apijson.Field
-	ToName            apijson.Field
-	Validation        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                    apijson.Field
+	ActionLog             apijson.Field
+	ClientRecipients      apijson.Field
+	DetectionReasons      apijson.Field
+	IsPhishSubmission     apijson.Field
+	IsQuarantined         apijson.Field
+	PostfixID             apijson.Field
+	Properties            apijson.Field
+	Ts                    apijson.Field
+	AlertID               apijson.Field
+	DeliveryMode          apijson.Field
+	EdfHash               apijson.Field
+	FinalDisposition      apijson.Field
+	Findings              apijson.Field
+	From                  apijson.Field
+	FromName              apijson.Field
+	HtmltextStructureHash apijson.Field
+	MessageID             apijson.Field
+	SentDate              apijson.Field
+	Subject               apijson.Field
+	ThreatCategories      apijson.Field
+	To                    apijson.Field
+	ToName                apijson.Field
+	Validation            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *InvestigateListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -171,7 +173,6 @@ type InvestigateListResponseProperties struct {
 	AllowlistedPatternType InvestigateListResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type"`
 	BlocklistedMessage     bool                                                    `json:"blocklisted_message"`
 	BlocklistedPattern     string                                                  `json:"blocklisted_pattern"`
-	WhitelistedPatternType InvestigateListResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type"`
 	JSON                   investigateListResponsePropertiesJSON                   `json:"-"`
 }
 
@@ -182,7 +183,6 @@ type investigateListResponsePropertiesJSON struct {
 	AllowlistedPatternType apijson.Field
 	BlocklistedMessage     apijson.Field
 	BlocklistedPattern     apijson.Field
-	WhitelistedPatternType apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -210,26 +210,6 @@ const (
 func (r InvestigateListResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	switch r {
 	case InvestigateListResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
-		return true
-	}
-	return false
-}
-
-type InvestigateListResponsePropertiesWhitelistedPatternType string
-
-const (
-	InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateListResponsePropertiesWhitelistedPatternType = "quarantine_release"
-	InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateListResponsePropertiesWhitelistedPatternType = "acceptable_sender"
-	InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateListResponsePropertiesWhitelistedPatternType = "allowed_sender"
-	InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateListResponsePropertiesWhitelistedPatternType = "allowed_recipient"
-	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateListResponsePropertiesWhitelistedPatternType = "domain_similarity"
-	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateListResponsePropertiesWhitelistedPatternType = "domain_recency"
-	InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateListResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
-)
-
-func (r InvestigateListResponsePropertiesWhitelistedPatternType) IsKnown() bool {
-	switch r {
-	case InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
 		return true
 	}
 	return false
@@ -396,54 +376,56 @@ type InvestigateGetResponse struct {
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
-	PostfixID        string                                 `json:"postfix_id,required"`
-	Properties       InvestigateGetResponseProperties       `json:"properties,required"`
-	Ts               string                                 `json:"ts,required"`
-	AlertID          string                                 `json:"alert_id,nullable"`
-	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
-	EdfHash          string                                 `json:"edf_hash,nullable"`
-	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
-	Findings         []InvestigateGetResponseFinding        `json:"findings,nullable"`
-	From             string                                 `json:"from,nullable"`
-	FromName         string                                 `json:"from_name,nullable"`
-	MessageID        string                                 `json:"message_id,nullable"`
-	SentDate         string                                 `json:"sent_date,nullable"`
-	Subject          string                                 `json:"subject,nullable"`
-	ThreatCategories []string                               `json:"threat_categories,nullable"`
-	To               []string                               `json:"to,nullable"`
-	ToName           []string                               `json:"to_name,nullable"`
-	Validation       InvestigateGetResponseValidation       `json:"validation,nullable"`
-	JSON             investigateGetResponseJSON             `json:"-"`
+	PostfixID             string                                 `json:"postfix_id,required"`
+	Properties            InvestigateGetResponseProperties       `json:"properties,required"`
+	Ts                    string                                 `json:"ts,required"`
+	AlertID               string                                 `json:"alert_id,nullable"`
+	DeliveryMode          InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
+	EdfHash               string                                 `json:"edf_hash,nullable"`
+	FinalDisposition      InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
+	Findings              []InvestigateGetResponseFinding        `json:"findings,nullable"`
+	From                  string                                 `json:"from,nullable"`
+	FromName              string                                 `json:"from_name,nullable"`
+	HtmltextStructureHash string                                 `json:"htmltext_structure_hash,nullable"`
+	MessageID             string                                 `json:"message_id,nullable"`
+	SentDate              string                                 `json:"sent_date,nullable"`
+	Subject               string                                 `json:"subject,nullable"`
+	ThreatCategories      []string                               `json:"threat_categories,nullable"`
+	To                    []string                               `json:"to,nullable"`
+	ToName                []string                               `json:"to_name,nullable"`
+	Validation            InvestigateGetResponseValidation       `json:"validation,nullable"`
+	JSON                  investigateGetResponseJSON             `json:"-"`
 }
 
 // investigateGetResponseJSON contains the JSON metadata for the struct
 // [InvestigateGetResponse]
 type investigateGetResponseJSON struct {
-	ID                apijson.Field
-	ActionLog         apijson.Field
-	ClientRecipients  apijson.Field
-	DetectionReasons  apijson.Field
-	IsPhishSubmission apijson.Field
-	IsQuarantined     apijson.Field
-	PostfixID         apijson.Field
-	Properties        apijson.Field
-	Ts                apijson.Field
-	AlertID           apijson.Field
-	DeliveryMode      apijson.Field
-	EdfHash           apijson.Field
-	FinalDisposition  apijson.Field
-	Findings          apijson.Field
-	From              apijson.Field
-	FromName          apijson.Field
-	MessageID         apijson.Field
-	SentDate          apijson.Field
-	Subject           apijson.Field
-	ThreatCategories  apijson.Field
-	To                apijson.Field
-	ToName            apijson.Field
-	Validation        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                    apijson.Field
+	ActionLog             apijson.Field
+	ClientRecipients      apijson.Field
+	DetectionReasons      apijson.Field
+	IsPhishSubmission     apijson.Field
+	IsQuarantined         apijson.Field
+	PostfixID             apijson.Field
+	Properties            apijson.Field
+	Ts                    apijson.Field
+	AlertID               apijson.Field
+	DeliveryMode          apijson.Field
+	EdfHash               apijson.Field
+	FinalDisposition      apijson.Field
+	Findings              apijson.Field
+	From                  apijson.Field
+	FromName              apijson.Field
+	HtmltextStructureHash apijson.Field
+	MessageID             apijson.Field
+	SentDate              apijson.Field
+	Subject               apijson.Field
+	ThreatCategories      apijson.Field
+	To                    apijson.Field
+	ToName                apijson.Field
+	Validation            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *InvestigateGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -459,7 +441,6 @@ type InvestigateGetResponseProperties struct {
 	AllowlistedPatternType InvestigateGetResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type"`
 	BlocklistedMessage     bool                                                   `json:"blocklisted_message"`
 	BlocklistedPattern     string                                                 `json:"blocklisted_pattern"`
-	WhitelistedPatternType InvestigateGetResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type"`
 	JSON                   investigateGetResponsePropertiesJSON                   `json:"-"`
 }
 
@@ -470,7 +451,6 @@ type investigateGetResponsePropertiesJSON struct {
 	AllowlistedPatternType apijson.Field
 	BlocklistedMessage     apijson.Field
 	BlocklistedPattern     apijson.Field
-	WhitelistedPatternType apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -498,26 +478,6 @@ const (
 func (r InvestigateGetResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	switch r {
 	case InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
-		return true
-	}
-	return false
-}
-
-type InvestigateGetResponsePropertiesWhitelistedPatternType string
-
-const (
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateGetResponsePropertiesWhitelistedPatternType = "quarantine_release"
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateGetResponsePropertiesWhitelistedPatternType = "acceptable_sender"
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_sender"
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_recipient"
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_similarity"
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_recency"
-	InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
-)
-
-func (r InvestigateGetResponsePropertiesWhitelistedPatternType) IsKnown() bool {
-	switch r {
-	case InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
 		return true
 	}
 	return false

@@ -250,6 +250,9 @@ type NetworkVirtualNetworkListParams struct {
 	// If `true`, only include the default virtual network. If `false`, exclude the
 	// default virtual network. If empty, all virtual networks will be included.
 	IsDefault param.Field[bool] `query:"is_default"`
+	// If `true`, only include the default virtual network. If `false`, exclude the
+	// default virtual network. If empty, all virtual networks will be included.
+	IsDefaultNetwork param.Field[bool] `query:"is_default_network"`
 	// If `true`, only include deleted virtual networks. If `false`, exclude deleted
 	// virtual networks. If empty, all virtual networks will be included.
 	IsDeleted param.Field[bool] `query:"is_deleted"`

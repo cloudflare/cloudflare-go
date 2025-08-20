@@ -503,12 +503,16 @@ type BotWebCrawlerSummaryParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[BotWebCrawlerSummaryParamsFormat] `query:"format"`
+	// Filters results by industry.
+	Industry param.Field[[]string] `query:"industry"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by vertical.
+	Vertical param.Field[[]string] `query:"vertical"`
 }
 
 // URLQuery serializes [BotWebCrawlerSummaryParams]'s query parameters as
@@ -527,11 +531,13 @@ const (
 	BotWebCrawlerSummaryParamsDimensionUserAgent       BotWebCrawlerSummaryParamsDimension = "USER_AGENT"
 	BotWebCrawlerSummaryParamsDimensionReferer         BotWebCrawlerSummaryParamsDimension = "REFERER"
 	BotWebCrawlerSummaryParamsDimensionCrawlReferRatio BotWebCrawlerSummaryParamsDimension = "CRAWL_REFER_RATIO"
+	BotWebCrawlerSummaryParamsDimensionVertical        BotWebCrawlerSummaryParamsDimension = "VERTICAL"
+	BotWebCrawlerSummaryParamsDimensionIndustry        BotWebCrawlerSummaryParamsDimension = "INDUSTRY"
 )
 
 func (r BotWebCrawlerSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case BotWebCrawlerSummaryParamsDimensionUserAgent, BotWebCrawlerSummaryParamsDimensionReferer, BotWebCrawlerSummaryParamsDimensionCrawlReferRatio:
+	case BotWebCrawlerSummaryParamsDimensionUserAgent, BotWebCrawlerSummaryParamsDimensionReferer, BotWebCrawlerSummaryParamsDimensionCrawlReferRatio, BotWebCrawlerSummaryParamsDimensionVertical, BotWebCrawlerSummaryParamsDimensionIndustry:
 		return true
 	}
 	return false
@@ -593,12 +599,16 @@ type BotWebCrawlerTimeseriesGroupsParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[BotWebCrawlerTimeseriesGroupsParamsFormat] `query:"format"`
+	// Filters results by industry.
+	Industry param.Field[[]string] `query:"industry"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by vertical.
+	Vertical param.Field[[]string] `query:"vertical"`
 }
 
 // URLQuery serializes [BotWebCrawlerTimeseriesGroupsParams]'s query parameters as
@@ -617,11 +627,13 @@ const (
 	BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent       BotWebCrawlerTimeseriesGroupsParamsDimension = "USER_AGENT"
 	BotWebCrawlerTimeseriesGroupsParamsDimensionReferer         BotWebCrawlerTimeseriesGroupsParamsDimension = "REFERER"
 	BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio BotWebCrawlerTimeseriesGroupsParamsDimension = "CRAWL_REFER_RATIO"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionVertical        BotWebCrawlerTimeseriesGroupsParamsDimension = "VERTICAL"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry        BotWebCrawlerTimeseriesGroupsParamsDimension = "INDUSTRY"
 )
 
 func (r BotWebCrawlerTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent, BotWebCrawlerTimeseriesGroupsParamsDimensionReferer, BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio:
+	case BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent, BotWebCrawlerTimeseriesGroupsParamsDimensionReferer, BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio, BotWebCrawlerTimeseriesGroupsParamsDimensionVertical, BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry:
 		return true
 	}
 	return false

@@ -570,7 +570,7 @@ type ScriptUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
+	Metadata param.Field[ScriptUpdateParamsMetadataUnion] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
 	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
@@ -598,16 +598,57 @@ func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string,
 
 // JSON-encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsMetadata struct {
+	Assets   param.Field[interface{}] `json:"assets"`
+	Bindings param.Field[interface{}] `json:"bindings"`
+	// Name of the uploaded file that contains the Worker script (e.g. the file adding
+	// a listener to the `fetch` event). Indicates a `service worker syntax` Worker.
+	BodyPart param.Field[string] `json:"body_part"`
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
+	CompatibilityDate  param.Field[string]      `json:"compatibility_date"`
+	CompatibilityFlags param.Field[interface{}] `json:"compatibility_flags"`
+	// Retain assets which exist for a previously uploaded Worker version; used in lieu
+	// of providing a completion token.
+	KeepAssets   param.Field[bool]        `json:"keep_assets"`
+	KeepBindings param.Field[interface{}] `json:"keep_bindings"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush param.Field[bool] `json:"logpush"`
+	// Name of the uploaded file that contains the main module (e.g. the file exporting
+	// a `fetch` handler). Indicates a `module syntax` Worker.
+	MainModule    param.Field[string]      `json:"main_module"`
+	Migrations    param.Field[interface{}] `json:"migrations"`
+	Observability param.Field[interface{}] `json:"observability"`
+	Placement     param.Field[interface{}] `json:"placement"`
+	Tags          param.Field[interface{}] `json:"tags"`
+	TailConsumers param.Field[interface{}] `json:"tail_consumers"`
+	// Usage model for the Worker invocations.
+	UsageModel param.Field[ScriptUpdateParamsMetadataUsageModel] `json:"usage_model"`
+}
+
+func (r ScriptUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadata) implementsScriptUpdateParamsMetadataUnion() {}
+
+// JSON-encoded metadata about the uploaded parts and Worker configuration.
+//
+// Satisfied by [workers.ScriptUpdateParamsMetadataObject],
+// [workers.ScriptUpdateParamsMetadataObject], [ScriptUpdateParamsMetadata].
+type ScriptUpdateParamsMetadataUnion interface {
+	implementsScriptUpdateParamsMetadataUnion()
+}
+
+type ScriptUpdateParamsMetadataObject struct {
+	// Name of the uploaded file that contains the main module (e.g. the file exporting
+	// a `fetch` handler). Indicates a `module syntax` Worker.
+	MainModule param.Field[string] `json:"main_module,required"`
 	// Configuration for assets within a Worker.
-	Assets param.Field[ScriptUpdateParamsMetadataAssets] `json:"assets"`
+	Assets param.Field[ScriptUpdateParamsMetadataObjectAssets] `json:"assets"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Bindings param.Field[[]ScriptUpdateParamsMetadataBindingUnion] `json:"bindings"`
-	// Name of the part in the multipart request that contains the script (e.g. the
-	// file adding a listener to the `fetch` event). Indicates a
-	// `service worker syntax` Worker.
-	BodyPart param.Field[string] `json:"body_part"`
+	Bindings param.Field[[]ScriptUpdateParamsMetadataObjectBindingUnion] `json:"bindings"`
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
 	// fixes to the runtime following this date will not affect this Worker.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
@@ -622,42 +663,41 @@ type ScriptUpdateParamsMetadata struct {
 	KeepBindings param.Field[[]string] `json:"keep_bindings"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
-	// Name of the part in the multipart request that contains the main module (e.g.
-	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
-	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptUpdateParamsMetadataMigrationsUnion] `json:"migrations"`
+	Migrations param.Field[ScriptUpdateParamsMetadataObjectMigrationsUnion] `json:"migrations"`
 	// Observability settings for the Worker.
-	Observability param.Field[ScriptUpdateParamsMetadataObservability] `json:"observability"`
+	Observability param.Field[ScriptUpdateParamsMetadataObjectObservability] `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Placement param.Field[ScriptUpdateParamsMetadataPlacement] `json:"placement"`
+	Placement param.Field[ScriptUpdateParamsMetadataObjectPlacement] `json:"placement"`
 	// List of strings to use as tags for this Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
 	// Usage model for the Worker invocations.
-	UsageModel param.Field[ScriptUpdateParamsMetadataUsageModel] `json:"usage_model"`
+	UsageModel param.Field[ScriptUpdateParamsMetadataObjectUsageModel] `json:"usage_model"`
 }
 
-func (r ScriptUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+func (r ScriptUpdateParamsMetadataObject) implementsScriptUpdateParamsMetadataUnion() {}
+
 // Configuration for assets within a Worker.
-type ScriptUpdateParamsMetadataAssets struct {
+type ScriptUpdateParamsMetadataObjectAssets struct {
 	// Configuration for assets within a Worker.
-	Config param.Field[ScriptUpdateParamsMetadataAssetsConfig] `json:"config"`
+	Config param.Field[ScriptUpdateParamsMetadataObjectAssetsConfig] `json:"config"`
 	// Token provided upon successful upload of all files from a registered manifest.
 	JWT param.Field[string] `json:"jwt"`
 }
 
-func (r ScriptUpdateParamsMetadataAssets) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectAssets) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker.
-type ScriptUpdateParamsMetadataAssetsConfig struct {
+type ScriptUpdateParamsMetadataObjectAssetsConfig struct {
 	// The contents of a \_headers file (used to attach custom headers on asset
 	// responses).
 	Headers param.Field[string] `json:"_headers"`
@@ -665,15 +705,15 @@ type ScriptUpdateParamsMetadataAssetsConfig struct {
 	// of asset serving).
 	Redirects param.Field[string] `json:"_redirects"`
 	// Determines the redirects and rewrites of requests for HTML content.
-	HTMLHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
+	HTMLHandling param.Field[ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
-	NotFoundHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	NotFoundHandling param.Field[ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling] `json:"not_found_handling"`
 	// Contains a list path rules to control routing to either the Worker or assets.
 	// Glob (\*) and negative (!) rules are supported. Rules must start with either '/'
 	// or '!/'. At least one non-negative rule must be provided, and negative rules
 	// have higher precedence than non-negative rules.
-	RunWorkerFirst param.Field[ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion] `json:"run_worker_first"`
+	RunWorkerFirst param.Field[ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion] `json:"run_worker_first"`
 	// When true and the incoming request matches an asset, that will be served instead
 	// of invoking the Worker script. When false, requests will always invoke the
 	// Worker script.
@@ -682,23 +722,23 @@ type ScriptUpdateParamsMetadataAssetsConfig struct {
 	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
-func (r ScriptUpdateParamsMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectAssetsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines the redirects and rewrites of requests for HTML content.
-type ScriptUpdateParamsMetadataAssetsConfigHTMLHandling string
+type ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling string
 
 const (
-	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
-	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
-	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
-	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingNone               ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "none"
+	ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling = "auto-trailing-slash"
+	ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling = "force-trailing-slash"
+	ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling = "drop-trailing-slash"
+	ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingNone               ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling = "none"
 )
 
-func (r ScriptUpdateParamsMetadataAssetsConfigHTMLHandling) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandling) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingNone:
+	case ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingNone:
 		return true
 	}
 	return false
@@ -706,17 +746,17 @@ func (r ScriptUpdateParamsMetadataAssetsConfigHTMLHandling) IsKnown() bool {
 
 // Determines the response when a request does not match a static asset, and there
 // is no Worker script.
-type ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling string
+type ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling string
 
 const (
-	ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling = "none"
-	ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling = "404-page"
-	ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling = "single-page-application"
+	ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling = "none"
+	ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling = "404-page"
+	ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling = "single-page-application"
 )
 
-func (r ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
+	case ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandlingSinglePageApplication:
 		return true
 	}
 	return false
@@ -728,23 +768,23 @@ func (r ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
 // have higher precedence than non-negative rules.
 //
 // Satisfied by
-// [workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray],
+// [workers.ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstArray],
 // [shared.UnionBool].
-type ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion interface {
-	ImplementsScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion()
+type ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion interface {
+	ImplementsScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion()
 }
 
-type ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray []string
+type ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstArray []string
 
-func (r ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray) ImplementsScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {
+func (r ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstArray) ImplementsScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion() {
 }
 
 // A binding to allow the Worker to communicate with resources.
-type ScriptUpdateParamsMetadataBinding struct {
+type ScriptUpdateParamsMetadataObjectBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsType] `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID        param.Field[string]      `json:"id"`
 	Algorithm param.Field[interface{}] `json:"algorithm"`
@@ -760,7 +800,7 @@ type ScriptUpdateParamsMetadataBinding struct {
 	Environment param.Field[string] `json:"environment"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format param.Field[ScriptUpdateParamsMetadataBindingsFormat] `json:"format"`
+	Format param.Field[ScriptUpdateParamsMetadataObjectBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
@@ -793,254 +833,256 @@ type ScriptUpdateParamsMetadataBinding struct {
 	WorkflowName param.Field[string] `json:"workflow_name"`
 }
 
-func (r ScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataBindingUnion() {}
+func (r ScriptUpdateParamsMetadataObjectBinding) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
+}
 
 // A binding to allow the Worker to communicate with resources.
 //
-// Satisfied by [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindService],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow],
-// [ScriptUpdateParamsMetadataBinding].
-type ScriptUpdateParamsMetadataBindingUnion interface {
-	implementsScriptUpdateParamsMetadataBindingUnion()
+// Satisfied by
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAI],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngine],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssets],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowser],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespace],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespace],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdrive],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJson],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespace],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificate],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainText],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelines],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueue],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2Bucket],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretText],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindService],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumer],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorize],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadata],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecret],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKey],
+// [workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflow],
+// [ScriptUpdateParamsMetadataObjectBinding].
+type ScriptUpdateParamsMetadataObjectBindingUnion interface {
+	implementsScriptUpdateParamsMetadataObjectBindingUnion()
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAIType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAI) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAI) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "ai"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAITypeAI ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAIType = "ai"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngine) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngine) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssetsType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssets) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssets) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssetsTypeAssets ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssetsType = "assets"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowserType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowser) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserTypeBrowser ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType = "browser"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowserTypeBrowser ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserTypeBrowser:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1 struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
 	ID param.Field[string] `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1Type] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1 ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1TypeD1 ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1Type = "d1"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
 	// Outbound worker.
-	Outbound param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound] `json:"outbound"`
+	Outbound param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceOutbound] `json:"outbound"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespace) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespace) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
 }
 
 // Outbound worker.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters.
 	Params param.Field[[]string] `json:"params"`
 	// Outbound worker.
-	Worker param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundWorker] `json:"worker"`
+	Worker param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceOutboundWorker] `json:"worker"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceOutbound) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Outbound worker.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
 	// Environment of the outbound worker.
 	Environment param.Field[string] `json:"environment"`
 	// Name of the outbound worker.
 	Service param.Field[string] `json:"service"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundWorker) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDispatchNamespaceOutboundWorker) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
 	// The environment of the script_name to bind to.
@@ -1052,308 +1094,308 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace 
 	ScriptName param.Field[string] `json:"script_name"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespace) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespace) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
 	ID param.Field[string] `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdrive) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdrive) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
 	Json param.Field[string] `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJsonType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJson) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "json"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJsonTypeJson ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJsonType = "json"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespace) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespace) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificateType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificate) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The text value to use.
 	Text param.Field[string] `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainText) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainText) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextTypePlainText ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelines) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelinesType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesTypePipelines ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType = "pipelines"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelinesTypePipelines ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelinesType = "pipelines"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesTypePipelines:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPipelinesTypePipelines:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of the Queue to bind to.
 	QueueName param.Field[string] `json:"queue_name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueueType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueue) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueueTypeQueue ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueueType = "queue"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2Bucket) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2Bucket) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "r2_bucket"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The secret value to use.
 	Text param.Field[string] `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretTextType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretText) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "secret_text"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretTextTypeSecretText ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindService struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindService struct {
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment,required"`
 	// A JavaScript variable name for the binding.
@@ -1361,123 +1403,123 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindService struct {
 	// Name of Worker to bind to.
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindServiceType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindService) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindService) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "service"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindServiceTypeService ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindServiceType = "service"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumer struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of Tail Worker to bind to.
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumer) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorize) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorize) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorizeTypeVectorize ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadata) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of the secret in the store.
@@ -1485,45 +1527,45 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret stru
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecret) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecretType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm param.Field[interface{}] `json:"algorithm,required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	Format param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages param.Field[[]ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	Usages param.Field[[]ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
 	// Key data in
@@ -1532,73 +1574,73 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey struct {
 	KeyJwk param.Field[interface{}] `json:"key_jwk"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKey) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKey) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // Data format of the key.
 // [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "raw"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "spki"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "jwk"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat = "jwk"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatJwk:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyFormatJwk:
 		return true
 	}
 	return false
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType = "secret_key"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyType = "secret_key"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyTypeSecretKey:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyTypeSecretKey:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageSign       ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "sign"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "verify"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageSign       ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageSign, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageSign, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow struct {
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name,required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
@@ -1609,60 +1651,60 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow struct {
 	ScriptName param.Field[string] `json:"script_name"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflow) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflow) implementsScriptUpdateParamsMetadataObjectBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType string
+type ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflowType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType = "workflow"
+	ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflowTypeWorkflow ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflowType = "workflow"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowTypeWorkflow:
+	case ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindWorkflowTypeWorkflow:
 		return true
 	}
 	return false
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsType string
+type ScriptUpdateParamsMetadataObjectBindingsType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsTypeAI                     ScriptUpdateParamsMetadataBindingsType = "ai"
-	ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine        ScriptUpdateParamsMetadataBindingsType = "analytics_engine"
-	ScriptUpdateParamsMetadataBindingsTypeAssets                 ScriptUpdateParamsMetadataBindingsType = "assets"
-	ScriptUpdateParamsMetadataBindingsTypeBrowser                ScriptUpdateParamsMetadataBindingsType = "browser"
-	ScriptUpdateParamsMetadataBindingsTypeD1                     ScriptUpdateParamsMetadataBindingsType = "d1"
-	ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace      ScriptUpdateParamsMetadataBindingsType = "dispatch_namespace"
-	ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace ScriptUpdateParamsMetadataBindingsType = "durable_object_namespace"
-	ScriptUpdateParamsMetadataBindingsTypeHyperdrive             ScriptUpdateParamsMetadataBindingsType = "hyperdrive"
-	ScriptUpdateParamsMetadataBindingsTypeJson                   ScriptUpdateParamsMetadataBindingsType = "json"
-	ScriptUpdateParamsMetadataBindingsTypeKVNamespace            ScriptUpdateParamsMetadataBindingsType = "kv_namespace"
-	ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate        ScriptUpdateParamsMetadataBindingsType = "mtls_certificate"
-	ScriptUpdateParamsMetadataBindingsTypePlainText              ScriptUpdateParamsMetadataBindingsType = "plain_text"
-	ScriptUpdateParamsMetadataBindingsTypePipelines              ScriptUpdateParamsMetadataBindingsType = "pipelines"
-	ScriptUpdateParamsMetadataBindingsTypeQueue                  ScriptUpdateParamsMetadataBindingsType = "queue"
-	ScriptUpdateParamsMetadataBindingsTypeR2Bucket               ScriptUpdateParamsMetadataBindingsType = "r2_bucket"
-	ScriptUpdateParamsMetadataBindingsTypeSecretText             ScriptUpdateParamsMetadataBindingsType = "secret_text"
-	ScriptUpdateParamsMetadataBindingsTypeService                ScriptUpdateParamsMetadataBindingsType = "service"
-	ScriptUpdateParamsMetadataBindingsTypeTailConsumer           ScriptUpdateParamsMetadataBindingsType = "tail_consumer"
-	ScriptUpdateParamsMetadataBindingsTypeVectorize              ScriptUpdateParamsMetadataBindingsType = "vectorize"
-	ScriptUpdateParamsMetadataBindingsTypeVersionMetadata        ScriptUpdateParamsMetadataBindingsType = "version_metadata"
-	ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret     ScriptUpdateParamsMetadataBindingsType = "secrets_store_secret"
-	ScriptUpdateParamsMetadataBindingsTypeSecretKey              ScriptUpdateParamsMetadataBindingsType = "secret_key"
-	ScriptUpdateParamsMetadataBindingsTypeWorkflow               ScriptUpdateParamsMetadataBindingsType = "workflow"
+	ScriptUpdateParamsMetadataObjectBindingsTypeAI                     ScriptUpdateParamsMetadataObjectBindingsType = "ai"
+	ScriptUpdateParamsMetadataObjectBindingsTypeAnalyticsEngine        ScriptUpdateParamsMetadataObjectBindingsType = "analytics_engine"
+	ScriptUpdateParamsMetadataObjectBindingsTypeAssets                 ScriptUpdateParamsMetadataObjectBindingsType = "assets"
+	ScriptUpdateParamsMetadataObjectBindingsTypeBrowser                ScriptUpdateParamsMetadataObjectBindingsType = "browser"
+	ScriptUpdateParamsMetadataObjectBindingsTypeD1                     ScriptUpdateParamsMetadataObjectBindingsType = "d1"
+	ScriptUpdateParamsMetadataObjectBindingsTypeDispatchNamespace      ScriptUpdateParamsMetadataObjectBindingsType = "dispatch_namespace"
+	ScriptUpdateParamsMetadataObjectBindingsTypeDurableObjectNamespace ScriptUpdateParamsMetadataObjectBindingsType = "durable_object_namespace"
+	ScriptUpdateParamsMetadataObjectBindingsTypeHyperdrive             ScriptUpdateParamsMetadataObjectBindingsType = "hyperdrive"
+	ScriptUpdateParamsMetadataObjectBindingsTypeJson                   ScriptUpdateParamsMetadataObjectBindingsType = "json"
+	ScriptUpdateParamsMetadataObjectBindingsTypeKVNamespace            ScriptUpdateParamsMetadataObjectBindingsType = "kv_namespace"
+	ScriptUpdateParamsMetadataObjectBindingsTypeMTLSCertificate        ScriptUpdateParamsMetadataObjectBindingsType = "mtls_certificate"
+	ScriptUpdateParamsMetadataObjectBindingsTypePlainText              ScriptUpdateParamsMetadataObjectBindingsType = "plain_text"
+	ScriptUpdateParamsMetadataObjectBindingsTypePipelines              ScriptUpdateParamsMetadataObjectBindingsType = "pipelines"
+	ScriptUpdateParamsMetadataObjectBindingsTypeQueue                  ScriptUpdateParamsMetadataObjectBindingsType = "queue"
+	ScriptUpdateParamsMetadataObjectBindingsTypeR2Bucket               ScriptUpdateParamsMetadataObjectBindingsType = "r2_bucket"
+	ScriptUpdateParamsMetadataObjectBindingsTypeSecretText             ScriptUpdateParamsMetadataObjectBindingsType = "secret_text"
+	ScriptUpdateParamsMetadataObjectBindingsTypeService                ScriptUpdateParamsMetadataObjectBindingsType = "service"
+	ScriptUpdateParamsMetadataObjectBindingsTypeTailConsumer           ScriptUpdateParamsMetadataObjectBindingsType = "tail_consumer"
+	ScriptUpdateParamsMetadataObjectBindingsTypeVectorize              ScriptUpdateParamsMetadataObjectBindingsType = "vectorize"
+	ScriptUpdateParamsMetadataObjectBindingsTypeVersionMetadata        ScriptUpdateParamsMetadataObjectBindingsType = "version_metadata"
+	ScriptUpdateParamsMetadataObjectBindingsTypeSecretsStoreSecret     ScriptUpdateParamsMetadataObjectBindingsType = "secrets_store_secret"
+	ScriptUpdateParamsMetadataObjectBindingsTypeSecretKey              ScriptUpdateParamsMetadataObjectBindingsType = "secret_key"
+	ScriptUpdateParamsMetadataObjectBindingsTypeWorkflow               ScriptUpdateParamsMetadataObjectBindingsType = "workflow"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTailConsumer, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow:
+	case ScriptUpdateParamsMetadataObjectBindingsTypeAI, ScriptUpdateParamsMetadataObjectBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataObjectBindingsTypeAssets, ScriptUpdateParamsMetadataObjectBindingsTypeBrowser, ScriptUpdateParamsMetadataObjectBindingsTypeD1, ScriptUpdateParamsMetadataObjectBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataObjectBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataObjectBindingsTypeHyperdrive, ScriptUpdateParamsMetadataObjectBindingsTypeJson, ScriptUpdateParamsMetadataObjectBindingsTypeKVNamespace, ScriptUpdateParamsMetadataObjectBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataObjectBindingsTypePlainText, ScriptUpdateParamsMetadataObjectBindingsTypePipelines, ScriptUpdateParamsMetadataObjectBindingsTypeQueue, ScriptUpdateParamsMetadataObjectBindingsTypeR2Bucket, ScriptUpdateParamsMetadataObjectBindingsTypeSecretText, ScriptUpdateParamsMetadataObjectBindingsTypeService, ScriptUpdateParamsMetadataObjectBindingsTypeTailConsumer, ScriptUpdateParamsMetadataObjectBindingsTypeVectorize, ScriptUpdateParamsMetadataObjectBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataObjectBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataObjectBindingsTypeSecretKey, ScriptUpdateParamsMetadataObjectBindingsTypeWorkflow:
 		return true
 	}
 	return false
@@ -1670,25 +1712,25 @@ func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 
 // Data format of the key.
 // [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-type ScriptUpdateParamsMetadataBindingsFormat string
+type ScriptUpdateParamsMetadataObjectBindingsFormat string
 
 const (
-	ScriptUpdateParamsMetadataBindingsFormatRaw   ScriptUpdateParamsMetadataBindingsFormat = "raw"
-	ScriptUpdateParamsMetadataBindingsFormatPkcs8 ScriptUpdateParamsMetadataBindingsFormat = "pkcs8"
-	ScriptUpdateParamsMetadataBindingsFormatSpki  ScriptUpdateParamsMetadataBindingsFormat = "spki"
-	ScriptUpdateParamsMetadataBindingsFormatJwk   ScriptUpdateParamsMetadataBindingsFormat = "jwk"
+	ScriptUpdateParamsMetadataObjectBindingsFormatRaw   ScriptUpdateParamsMetadataObjectBindingsFormat = "raw"
+	ScriptUpdateParamsMetadataObjectBindingsFormatPkcs8 ScriptUpdateParamsMetadataObjectBindingsFormat = "pkcs8"
+	ScriptUpdateParamsMetadataObjectBindingsFormatSpki  ScriptUpdateParamsMetadataObjectBindingsFormat = "spki"
+	ScriptUpdateParamsMetadataObjectBindingsFormatJwk   ScriptUpdateParamsMetadataObjectBindingsFormat = "jwk"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsFormat) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectBindingsFormat) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsFormatRaw, ScriptUpdateParamsMetadataBindingsFormatPkcs8, ScriptUpdateParamsMetadataBindingsFormatSpki, ScriptUpdateParamsMetadataBindingsFormatJwk:
+	case ScriptUpdateParamsMetadataObjectBindingsFormatRaw, ScriptUpdateParamsMetadataObjectBindingsFormatPkcs8, ScriptUpdateParamsMetadataObjectBindingsFormatSpki, ScriptUpdateParamsMetadataObjectBindingsFormatJwk:
 		return true
 	}
 	return false
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
-type ScriptUpdateParamsMetadataMigrations struct {
+type ScriptUpdateParamsMetadataObjectMigrations struct {
 	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
 	NewClasses       param.Field[interface{}] `json:"new_classes"`
 	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
@@ -1702,22 +1744,23 @@ type ScriptUpdateParamsMetadataMigrations struct {
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataMigrations) implementsScriptUpdateParamsMetadataMigrationsUnion() {}
+func (r ScriptUpdateParamsMetadataObjectMigrations) implementsScriptUpdateParamsMetadataObjectMigrationsUnion() {
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by [workers.SingleStepMigrationParam],
-// [workers.ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations],
-// [ScriptUpdateParamsMetadataMigrations].
-type ScriptUpdateParamsMetadataMigrationsUnion interface {
-	implementsScriptUpdateParamsMetadataMigrationsUnion()
+// [workers.ScriptUpdateParamsMetadataObjectMigrationsWorkersMultipleStepMigrations],
+// [ScriptUpdateParamsMetadataObjectMigrations].
+type ScriptUpdateParamsMetadataObjectMigrationsUnion interface {
+	implementsScriptUpdateParamsMetadataObjectMigrationsUnion()
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations struct {
+type ScriptUpdateParamsMetadataObjectMigrationsWorkersMultipleStepMigrations struct {
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
@@ -1727,30 +1770,30 @@ type ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations struct {
 	Steps param.Field[[]MigrationStepParam] `json:"steps"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) implementsScriptUpdateParamsMetadataMigrationsUnion() {
+func (r ScriptUpdateParamsMetadataObjectMigrationsWorkersMultipleStepMigrations) implementsScriptUpdateParamsMetadataObjectMigrationsUnion() {
 }
 
 // Observability settings for the Worker.
-type ScriptUpdateParamsMetadataObservability struct {
+type ScriptUpdateParamsMetadataObjectObservability struct {
 	// Whether observability is enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
-	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
+	Logs param.Field[ScriptUpdateParamsMetadataObjectObservabilityLogs] `json:"logs"`
 }
 
-func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectObservability) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Log settings for the Worker.
-type ScriptUpdateParamsMetadataObservabilityLogs struct {
+type ScriptUpdateParamsMetadataObjectObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// Whether
@@ -1761,33 +1804,33 @@ type ScriptUpdateParamsMetadataObservabilityLogs struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 }
 
-func (r ScriptUpdateParamsMetadataObservabilityLogs) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectObservabilityLogs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-type ScriptUpdateParamsMetadataPlacement struct {
+type ScriptUpdateParamsMetadataObjectPlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode param.Field[ScriptUpdateParamsMetadataPlacementMode] `json:"mode"`
+	Mode param.Field[ScriptUpdateParamsMetadataObjectPlacementMode] `json:"mode"`
 }
 
-func (r ScriptUpdateParamsMetadataPlacement) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObjectPlacement) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-type ScriptUpdateParamsMetadataPlacementMode string
+type ScriptUpdateParamsMetadataObjectPlacementMode string
 
 const (
-	ScriptUpdateParamsMetadataPlacementModeSmart ScriptUpdateParamsMetadataPlacementMode = "smart"
+	ScriptUpdateParamsMetadataObjectPlacementModeSmart ScriptUpdateParamsMetadataObjectPlacementMode = "smart"
 )
 
-func (r ScriptUpdateParamsMetadataPlacementMode) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectPlacementMode) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataPlacementModeSmart:
+	case ScriptUpdateParamsMetadataObjectPlacementModeSmart:
 		return true
 	}
 	return false
@@ -1795,17 +1838,32 @@ func (r ScriptUpdateParamsMetadataPlacementMode) IsKnown() bool {
 
 // Status of
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-type ScriptUpdateParamsMetadataPlacementStatus string
+type ScriptUpdateParamsMetadataObjectPlacementStatus string
 
 const (
-	ScriptUpdateParamsMetadataPlacementStatusSuccess                 ScriptUpdateParamsMetadataPlacementStatus = "SUCCESS"
-	ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication  ScriptUpdateParamsMetadataPlacementStatus = "UNSUPPORTED_APPLICATION"
-	ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations ScriptUpdateParamsMetadataPlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptUpdateParamsMetadataObjectPlacementStatusSuccess                 ScriptUpdateParamsMetadataObjectPlacementStatus = "SUCCESS"
+	ScriptUpdateParamsMetadataObjectPlacementStatusUnsupportedApplication  ScriptUpdateParamsMetadataObjectPlacementStatus = "UNSUPPORTED_APPLICATION"
+	ScriptUpdateParamsMetadataObjectPlacementStatusInsufficientInvocations ScriptUpdateParamsMetadataObjectPlacementStatus = "INSUFFICIENT_INVOCATIONS"
 )
 
-func (r ScriptUpdateParamsMetadataPlacementStatus) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataObjectPlacementStatus) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataPlacementStatusSuccess, ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication, ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations:
+	case ScriptUpdateParamsMetadataObjectPlacementStatusSuccess, ScriptUpdateParamsMetadataObjectPlacementStatusUnsupportedApplication, ScriptUpdateParamsMetadataObjectPlacementStatusInsufficientInvocations:
+		return true
+	}
+	return false
+}
+
+// Usage model for the Worker invocations.
+type ScriptUpdateParamsMetadataObjectUsageModel string
+
+const (
+	ScriptUpdateParamsMetadataObjectUsageModelStandard ScriptUpdateParamsMetadataObjectUsageModel = "standard"
+)
+
+func (r ScriptUpdateParamsMetadataObjectUsageModel) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataObjectUsageModelStandard:
 		return true
 	}
 	return false

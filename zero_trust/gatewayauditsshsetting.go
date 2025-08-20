@@ -94,7 +94,7 @@ type GatewaySettings struct {
 	// Base64 encoded HPKE public key used to encrypt all your ssh session logs.
 	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging
 	PublicKey string `json:"public_key"`
-	// Seed ID
+	// Seed ID.
 	SeedID    string              `json:"seed_id"`
 	UpdatedAt time.Time           `json:"updated_at" format:"date-time"`
 	JSON      gatewaySettingsJSON `json:"-"`
@@ -132,7 +132,7 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                     `json:"result"`
 	JSON    gatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -157,7 +157,7 @@ func (r gatewayAuditSSHSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -179,7 +179,7 @@ type GatewayAuditSSHSettingGetParams struct {
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                  `json:"result"`
 	JSON    gatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -204,7 +204,7 @@ func (r gatewayAuditSSHSettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayAuditSSHSettingGetResponseEnvelopeSuccess bool
 
 const (
@@ -226,7 +226,7 @@ type GatewayAuditSSHSettingRotateSeedParams struct {
 type GatewayAuditSSHSettingRotateSeedResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                         `json:"result"`
 	JSON    gatewayAuditSSHSettingRotateSeedResponseEnvelopeJSON    `json:"-"`
@@ -251,7 +251,7 @@ func (r gatewayAuditSSHSettingRotateSeedResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess bool
 
 const (

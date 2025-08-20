@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v5"
 	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/workers"
 	"github.com/cloudflare/cloudflare-go/v5/workers_for_platforms"
 )
 
@@ -39,8 +38,7 @@ func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptContentUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata: cloudflare.F(workers.WorkerMetadataParam{
-				BodyPart:   cloudflare.F("worker.js"),
+			Metadata: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptContentUpdateParamsMetadataUnion](workers_for_platforms.DispatchNamespaceScriptContentUpdateParamsMetadataMainModule{
 				MainModule: cloudflare.F("worker.js"),
 			}),
 			Files:                  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
