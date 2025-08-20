@@ -153,6 +153,7 @@ type SettingDomainListResponse struct {
 	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Regions              []SettingDomainListResponseRegion              `json:"regions,required"`
 	Transport            string                                         `json:"transport,required"`
 	Authorization        SettingDomainListResponseAuthorization         `json:"authorization,nullable"`
 	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed,nullable"`
@@ -176,6 +177,7 @@ type settingDomainListResponseJSON struct {
 	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Regions              apijson.Field
 	Transport            apijson.Field
 	Authorization        apijson.Field
 	EmailsProcessed      apijson.Field
@@ -233,6 +235,24 @@ const (
 func (r SettingDomainListResponseDropDisposition) IsKnown() bool {
 	switch r {
 	case SettingDomainListResponseDropDispositionMalicious, SettingDomainListResponseDropDispositionMaliciousBec, SettingDomainListResponseDropDispositionSuspicious, SettingDomainListResponseDropDispositionSpoof, SettingDomainListResponseDropDispositionSpam, SettingDomainListResponseDropDispositionBulk, SettingDomainListResponseDropDispositionEncrypted, SettingDomainListResponseDropDispositionExternal, SettingDomainListResponseDropDispositionUnknown, SettingDomainListResponseDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainListResponseRegion string
+
+const (
+	SettingDomainListResponseRegionGlobal SettingDomainListResponseRegion = "GLOBAL"
+	SettingDomainListResponseRegionAu     SettingDomainListResponseRegion = "AU"
+	SettingDomainListResponseRegionDe     SettingDomainListResponseRegion = "DE"
+	SettingDomainListResponseRegionIn     SettingDomainListResponseRegion = "IN"
+	SettingDomainListResponseRegionUs     SettingDomainListResponseRegion = "US"
+)
+
+func (r SettingDomainListResponseRegion) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseRegionGlobal, SettingDomainListResponseRegionAu, SettingDomainListResponseRegionDe, SettingDomainListResponseRegionIn, SettingDomainListResponseRegionUs:
 		return true
 	}
 	return false
@@ -372,6 +392,7 @@ type SettingDomainEditResponse struct {
 	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Regions              []SettingDomainEditResponseRegion              `json:"regions,required"`
 	Transport            string                                         `json:"transport,required"`
 	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization,nullable"`
 	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed,nullable"`
@@ -395,6 +416,7 @@ type settingDomainEditResponseJSON struct {
 	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Regions              apijson.Field
 	Transport            apijson.Field
 	Authorization        apijson.Field
 	EmailsProcessed      apijson.Field
@@ -452,6 +474,24 @@ const (
 func (r SettingDomainEditResponseDropDisposition) IsKnown() bool {
 	switch r {
 	case SettingDomainEditResponseDropDispositionMalicious, SettingDomainEditResponseDropDispositionMaliciousBec, SettingDomainEditResponseDropDispositionSuspicious, SettingDomainEditResponseDropDispositionSpoof, SettingDomainEditResponseDropDispositionSpam, SettingDomainEditResponseDropDispositionBulk, SettingDomainEditResponseDropDispositionEncrypted, SettingDomainEditResponseDropDispositionExternal, SettingDomainEditResponseDropDispositionUnknown, SettingDomainEditResponseDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditResponseRegion string
+
+const (
+	SettingDomainEditResponseRegionGlobal SettingDomainEditResponseRegion = "GLOBAL"
+	SettingDomainEditResponseRegionAu     SettingDomainEditResponseRegion = "AU"
+	SettingDomainEditResponseRegionDe     SettingDomainEditResponseRegion = "DE"
+	SettingDomainEditResponseRegionIn     SettingDomainEditResponseRegion = "IN"
+	SettingDomainEditResponseRegionUs     SettingDomainEditResponseRegion = "US"
+)
+
+func (r SettingDomainEditResponseRegion) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseRegionGlobal, SettingDomainEditResponseRegionAu, SettingDomainEditResponseRegionDe, SettingDomainEditResponseRegionIn, SettingDomainEditResponseRegionUs:
 		return true
 	}
 	return false
@@ -547,6 +587,7 @@ type SettingDomainGetResponse struct {
 	IPRestrictions       []string                                      `json:"ip_restrictions,required"`
 	LastModified         time.Time                                     `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                         `json:"lookback_hops,required"`
+	Regions              []SettingDomainGetResponseRegion              `json:"regions,required"`
 	Transport            string                                        `json:"transport,required"`
 	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization,nullable"`
 	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed,nullable"`
@@ -570,6 +611,7 @@ type settingDomainGetResponseJSON struct {
 	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Regions              apijson.Field
 	Transport            apijson.Field
 	Authorization        apijson.Field
 	EmailsProcessed      apijson.Field
@@ -627,6 +669,24 @@ const (
 func (r SettingDomainGetResponseDropDisposition) IsKnown() bool {
 	switch r {
 	case SettingDomainGetResponseDropDispositionMalicious, SettingDomainGetResponseDropDispositionMaliciousBec, SettingDomainGetResponseDropDispositionSuspicious, SettingDomainGetResponseDropDispositionSpoof, SettingDomainGetResponseDropDispositionSpam, SettingDomainGetResponseDropDispositionBulk, SettingDomainGetResponseDropDispositionEncrypted, SettingDomainGetResponseDropDispositionExternal, SettingDomainGetResponseDropDispositionUnknown, SettingDomainGetResponseDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseRegion string
+
+const (
+	SettingDomainGetResponseRegionGlobal SettingDomainGetResponseRegion = "GLOBAL"
+	SettingDomainGetResponseRegionAu     SettingDomainGetResponseRegion = "AU"
+	SettingDomainGetResponseRegionDe     SettingDomainGetResponseRegion = "DE"
+	SettingDomainGetResponseRegionIn     SettingDomainGetResponseRegion = "IN"
+	SettingDomainGetResponseRegionUs     SettingDomainGetResponseRegion = "US"
+)
+
+func (r SettingDomainGetResponseRegion) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseRegionGlobal, SettingDomainGetResponseRegionAu, SettingDomainGetResponseRegionDe, SettingDomainGetResponseRegionIn, SettingDomainGetResponseRegionUs:
 		return true
 	}
 	return false
@@ -861,6 +921,7 @@ type SettingDomainEditParams struct {
 	Folder               param.Field[SettingDomainEditParamsFolder]                `json:"folder"`
 	IntegrationID        param.Field[string]                                       `json:"integration_id" format:"uuid"`
 	LookbackHops         param.Field[int64]                                        `json:"lookback_hops"`
+	Regions              param.Field[[]SettingDomainEditParamsRegion]              `json:"regions"`
 	RequireTLSInbound    param.Field[bool]                                         `json:"require_tls_inbound"`
 	RequireTLSOutbound   param.Field[bool]                                         `json:"require_tls_outbound"`
 	Transport            param.Field[string]                                       `json:"transport"`
@@ -921,6 +982,24 @@ const (
 func (r SettingDomainEditParamsFolder) IsKnown() bool {
 	switch r {
 	case SettingDomainEditParamsFolderAllItems, SettingDomainEditParamsFolderInbox:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditParamsRegion string
+
+const (
+	SettingDomainEditParamsRegionGlobal SettingDomainEditParamsRegion = "GLOBAL"
+	SettingDomainEditParamsRegionAu     SettingDomainEditParamsRegion = "AU"
+	SettingDomainEditParamsRegionDe     SettingDomainEditParamsRegion = "DE"
+	SettingDomainEditParamsRegionIn     SettingDomainEditParamsRegion = "IN"
+	SettingDomainEditParamsRegionUs     SettingDomainEditParamsRegion = "US"
+)
+
+func (r SettingDomainEditParamsRegion) IsKnown() bool {
+	switch r {
+	case SettingDomainEditParamsRegionGlobal, SettingDomainEditParamsRegionAu, SettingDomainEditParamsRegionDe, SettingDomainEditParamsRegionIn, SettingDomainEditParamsRegionUs:
 		return true
 	}
 	return false
