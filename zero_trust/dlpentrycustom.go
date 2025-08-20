@@ -144,6 +144,9 @@ type DLPEntryCustomUpdateResponse struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of
+	// [DLPEntryCustomUpdateResponsePredefinedEntryVariant].
+	Variant interface{} `json:"variant"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}                      `json:"word_list"`
 	JSON     dlpEntryCustomUpdateResponseJSON `json:"-"`
@@ -164,6 +167,7 @@ type dlpEntryCustomUpdateResponseJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -295,6 +299,7 @@ type DLPEntryCustomUpdateResponsePredefinedEntry struct {
 	Name       string                                                `json:"name,required"`
 	Type       DLPEntryCustomUpdateResponsePredefinedEntryType       `json:"type,required"`
 	ProfileID  string                                                `json:"profile_id,nullable" format:"uuid"`
+	Variant    DLPEntryCustomUpdateResponsePredefinedEntryVariant    `json:"variant"`
 	JSON       dlpEntryCustomUpdateResponsePredefinedEntryJSON       `json:"-"`
 }
 
@@ -307,6 +312,7 @@ type dlpEntryCustomUpdateResponsePredefinedEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ProfileID   apijson.Field
+	Variant     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -356,6 +362,58 @@ const (
 func (r DLPEntryCustomUpdateResponsePredefinedEntryType) IsKnown() bool {
 	switch r {
 	case DLPEntryCustomUpdateResponsePredefinedEntryTypePredefined:
+		return true
+	}
+	return false
+}
+
+type DLPEntryCustomUpdateResponsePredefinedEntryVariant struct {
+	TopicType DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type      DLPEntryCustomUpdateResponsePredefinedEntryVariantType      `json:"type,required"`
+	JSON      dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON      `json:"-"`
+}
+
+// dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON contains the JSON
+// metadata for the struct [DLPEntryCustomUpdateResponsePredefinedEntryVariant]
+type dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON struct {
+	TopicType   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryCustomUpdateResponsePredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType string
+
+const (
+	DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicTypeIntent  DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType = "Intent"
+	DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicTypeContent DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType = "Content"
+)
+
+func (r DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType) IsKnown() bool {
+	switch r {
+	case DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicTypeIntent, DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type DLPEntryCustomUpdateResponsePredefinedEntryVariantType string
+
+const (
+	DLPEntryCustomUpdateResponsePredefinedEntryVariantTypePromptTopic DLPEntryCustomUpdateResponsePredefinedEntryVariantType = "PromptTopic"
+)
+
+func (r DLPEntryCustomUpdateResponsePredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case DLPEntryCustomUpdateResponsePredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false

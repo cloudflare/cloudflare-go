@@ -37,8 +37,10 @@ func TestBotWebCrawlerSummaryWithOptionalParams(t *testing.T) {
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			Format:        cloudflare.F(radar.BotWebCrawlerSummaryParamsFormatJson),
+			Industry:      cloudflare.F([]string{"string"}),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Name:          cloudflare.F([]string{"main_series"}),
+			Vertical:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
@@ -73,8 +75,10 @@ func TestBotWebCrawlerTimeseriesGroupsWithOptionalParams(t *testing.T) {
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			Format:        cloudflare.F(radar.BotWebCrawlerTimeseriesGroupsParamsFormatJson),
+			Industry:      cloudflare.F([]string{"string"}),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Name:          cloudflare.F([]string{"main_series"}),
+			Vertical:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {

@@ -465,6 +465,8 @@ func (r errorDataSourceJSON) RawJSON() string {
 type Member struct {
 	// Membership identifier tag.
 	ID string `json:"id"`
+	// The contact email address of the user.
+	Email string `json:"email"`
 	// Access policy for the membership
 	Policies []MemberPolicy `json:"policies"`
 	// Roles assigned to this Member.
@@ -479,6 +481,7 @@ type Member struct {
 // memberJSON contains the JSON metadata for the struct [Member]
 type memberJSON struct {
 	ID          apijson.Field
+	Email       apijson.Field
 	Policies    apijson.Field
 	Roles       apijson.Field
 	Status      apijson.Field

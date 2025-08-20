@@ -33,8 +33,8 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Searches for locations, autonomous systems, reports, bots, certificate logs, and
-// certificate authorities.
+// Searches for locations, autonomous systems, reports, bots, certificate logs,
+// certificate authorities, industries and verticals
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,11 +125,13 @@ const (
 	SearchGlobalParamsExcludeCertificateLogs        SearchGlobalParamsExclude = "CERTIFICATE_LOGS"
 	SearchGlobalParamsExcludeLocations              SearchGlobalParamsExclude = "LOCATIONS"
 	SearchGlobalParamsExcludeNotebooks              SearchGlobalParamsExclude = "NOTEBOOKS"
+	SearchGlobalParamsExcludeVerticals              SearchGlobalParamsExclude = "VERTICALS"
+	SearchGlobalParamsExcludeIndustries             SearchGlobalParamsExclude = "INDUSTRIES"
 )
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks:
+	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeVerticals, SearchGlobalParamsExcludeIndustries:
 		return true
 	}
 	return false
@@ -160,11 +162,13 @@ const (
 	SearchGlobalParamsIncludeCertificateLogs        SearchGlobalParamsInclude = "CERTIFICATE_LOGS"
 	SearchGlobalParamsIncludeLocations              SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeNotebooks              SearchGlobalParamsInclude = "NOTEBOOKS"
+	SearchGlobalParamsIncludeVerticals              SearchGlobalParamsInclude = "VERTICALS"
+	SearchGlobalParamsIncludeIndustries             SearchGlobalParamsInclude = "INDUSTRIES"
 )
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks:
+	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeVerticals, SearchGlobalParamsIncludeIndustries:
 		return true
 	}
 	return false

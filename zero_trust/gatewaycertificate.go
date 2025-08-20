@@ -123,7 +123,7 @@ func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID 
 	return
 }
 
-// Unbinds a single Zero Trust certificate from the edge
+// Unbinds a single Zero Trust certificate from the edge.
 func (r *GatewayCertificateService) Deactivate(ctx context.Context, certificateID string, params GatewayCertificateDeactivateParams, opts ...option.RequestOption) (res *GatewayCertificateDeactivateResponse, err error) {
 	var env GatewayCertificateDeactivateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -727,7 +727,7 @@ func (r GatewayCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayCertificateNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateNewResponse                `json:"result"`
 	JSON    gatewayCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -752,7 +752,7 @@ func (r gatewayCertificateNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayCertificateNewResponseEnvelopeSuccess bool
 
 const (
@@ -778,7 +778,7 @@ type GatewayCertificateDeleteParams struct {
 type GatewayCertificateDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateDeleteResponse                `json:"result"`
 	JSON    gatewayCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -803,7 +803,7 @@ func (r gatewayCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayCertificateDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -830,7 +830,7 @@ func (r GatewayCertificateActivateParams) MarshalJSON() (data []byte, err error)
 type GatewayCertificateActivateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayCertificateActivateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateActivateResponse                `json:"result"`
 	JSON    gatewayCertificateActivateResponseEnvelopeJSON    `json:"-"`
@@ -855,7 +855,7 @@ func (r gatewayCertificateActivateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayCertificateActivateResponseEnvelopeSuccess bool
 
 const (
@@ -882,7 +882,7 @@ func (r GatewayCertificateDeactivateParams) MarshalJSON() (data []byte, err erro
 type GatewayCertificateDeactivateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayCertificateDeactivateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateDeactivateResponse                `json:"result"`
 	JSON    gatewayCertificateDeactivateResponseEnvelopeJSON    `json:"-"`
@@ -907,7 +907,7 @@ func (r gatewayCertificateDeactivateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayCertificateDeactivateResponseEnvelopeSuccess bool
 
 const (
@@ -929,7 +929,7 @@ type GatewayCertificateGetParams struct {
 type GatewayCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateGetResponse                `json:"result"`
 	JSON    gatewayCertificateGetResponseEnvelopeJSON    `json:"-"`
@@ -954,7 +954,7 @@ func (r gatewayCertificateGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayCertificateGetResponseEnvelopeSuccess bool
 
 const (

@@ -533,7 +533,7 @@ func (r GatewayLocationNewParamsNetwork) MarshalJSON() (data []byte, err error) 
 type GatewayLocationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Location                                  `json:"result"`
 	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
@@ -558,7 +558,7 @@ func (r gatewayLocationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayLocationNewResponseEnvelopeSuccess bool
 
 const (
@@ -613,7 +613,7 @@ func (r GatewayLocationUpdateParamsNetwork) MarshalJSON() (data []byte, err erro
 type GatewayLocationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Location                                     `json:"result"`
 	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -638,7 +638,7 @@ func (r gatewayLocationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayLocationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -664,7 +664,7 @@ type GatewayLocationDeleteParams struct {
 type GatewayLocationDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayLocationDeleteResponse                `json:"result"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -689,7 +689,7 @@ func (r gatewayLocationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayLocationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -711,7 +711,7 @@ type GatewayLocationGetParams struct {
 type GatewayLocationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayLocationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Location                                  `json:"result"`
 	JSON    gatewayLocationGetResponseEnvelopeJSON    `json:"-"`
@@ -736,7 +736,7 @@ func (r gatewayLocationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayLocationGetResponseEnvelopeSuccess bool
 
 const (

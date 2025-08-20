@@ -39,9 +39,11 @@ func TestAITimeseriesGroupSummaryWithOptionalParams(t *testing.T) {
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			Format:        cloudflare.F(radar.AITimeseriesGroupSummaryParamsFormatJson),
+			Industry:      cloudflare.F([]string{"string"}),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
+			Vertical:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
@@ -75,10 +77,12 @@ func TestAITimeseriesGroupTimeseriesWithOptionalParams(t *testing.T) {
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Format:        cloudflare.F(radar.AITimeseriesGroupTimeseriesParamsFormatJson),
+		Industry:      cloudflare.F([]string{"string"}),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
 		UserAgent:     cloudflare.F([]string{"string"}),
+		Vertical:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -114,10 +118,12 @@ func TestAITimeseriesGroupTimeseriesGroupsWithOptionalParams(t *testing.T) {
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			Format:        cloudflare.F(radar.AITimeseriesGroupTimeseriesGroupsParamsFormatJson),
+			Industry:      cloudflare.F([]string{"string"}),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
 			Normalization: cloudflare.F(radar.AITimeseriesGroupTimeseriesGroupsParamsNormalizationMin0Max),
+			Vertical:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {

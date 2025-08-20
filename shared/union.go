@@ -144,7 +144,7 @@ func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                 
 
 type UnionBool bool
 
-func (UnionBool) ImplementsScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion()              {}
+func (UnionBool) ImplementsScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion()        {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion() {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion()  {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseCalculationsAggregatesGroupsValueUnion() {
@@ -179,7 +179,7 @@ func (UnionBool) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
 func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
 func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
-func (UnionBool) ImplementsDispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {
+func (UnionBool) ImplementsDispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion() {
 }
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
