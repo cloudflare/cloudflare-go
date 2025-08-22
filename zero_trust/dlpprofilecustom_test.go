@@ -28,15 +28,7 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Custom.New(context.TODO(), zero_trust.DLPProfileCustomNewParams{
-		AccountID: cloudflare.F("account_id"),
-		Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsEntryUnion{zero_trust.DLPProfileCustomNewParamsEntriesDLPNewCustomEntry{
-			Enabled: cloudflare.F(true),
-			Name:    cloudflare.F("name"),
-			Pattern: cloudflare.F(zero_trust.PatternParam{
-				Regex:      cloudflare.F("regex"),
-				Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-			}),
-		}}),
+		AccountID:           cloudflare.F("account_id"),
 		Name:                cloudflare.F("name"),
 		AIContextEnabled:    cloudflare.F(true),
 		AllowedMatchCount:   cloudflare.F(int64(5)),
@@ -48,7 +40,15 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 			}),
 		}),
 		Description: cloudflare.F("description"),
-		OCREnabled:  cloudflare.F(true),
+		Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsEntryUnion{zero_trust.DLPProfileCustomNewParamsEntriesDLPNewCustomEntry{
+			Enabled: cloudflare.F(true),
+			Name:    cloudflare.F("name"),
+			Pattern: cloudflare.F(zero_trust.PatternParam{
+				Regex:      cloudflare.F("regex"),
+				Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
+			}),
+		}}),
+		OCREnabled: cloudflare.F(true),
 		SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsSharedEntriesCustom{
 			Enabled:   cloudflare.F(true),
 			EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),

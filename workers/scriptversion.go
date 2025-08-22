@@ -4758,11 +4758,13 @@ type ScriptVersionNewParamsMetadataUsageModel string
 
 const (
 	ScriptVersionNewParamsMetadataUsageModelStandard ScriptVersionNewParamsMetadataUsageModel = "standard"
+	ScriptVersionNewParamsMetadataUsageModelBundled  ScriptVersionNewParamsMetadataUsageModel = "bundled"
+	ScriptVersionNewParamsMetadataUsageModelUnbound  ScriptVersionNewParamsMetadataUsageModel = "unbound"
 )
 
 func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataUsageModelStandard:
+	case ScriptVersionNewParamsMetadataUsageModelStandard, ScriptVersionNewParamsMetadataUsageModelBundled, ScriptVersionNewParamsMetadataUsageModelUnbound:
 		return true
 	}
 	return false

@@ -291,11 +291,13 @@ type DispatchNamespaceScriptUpdateResponseUsageModel string
 
 const (
 	DispatchNamespaceScriptUpdateResponseUsageModelStandard DispatchNamespaceScriptUpdateResponseUsageModel = "standard"
+	DispatchNamespaceScriptUpdateResponseUsageModelBundled  DispatchNamespaceScriptUpdateResponseUsageModel = "bundled"
+	DispatchNamespaceScriptUpdateResponseUsageModelUnbound  DispatchNamespaceScriptUpdateResponseUsageModel = "unbound"
 )
 
 func (r DispatchNamespaceScriptUpdateResponseUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateResponseUsageModelStandard:
+	case DispatchNamespaceScriptUpdateResponseUsageModelStandard, DispatchNamespaceScriptUpdateResponseUsageModelBundled, DispatchNamespaceScriptUpdateResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -1600,11 +1602,13 @@ type DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModel string
 
 const (
 	DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelStandard DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModel = "standard"
+	DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelBundled  DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModel = "bundled"
+	DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelUnbound  DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModel = "unbound"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelStandard:
+	case DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelStandard, DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelBundled, DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelUnbound:
 		return true
 	}
 	return false
@@ -1615,11 +1619,13 @@ type DispatchNamespaceScriptUpdateParamsMetadataUsageModel string
 
 const (
 	DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard DispatchNamespaceScriptUpdateParamsMetadataUsageModel = "standard"
+	DispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled  DispatchNamespaceScriptUpdateParamsMetadataUsageModel = "bundled"
+	DispatchNamespaceScriptUpdateParamsMetadataUsageModelUnbound  DispatchNamespaceScriptUpdateParamsMetadataUsageModel = "unbound"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard:
+	case DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard, DispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled, DispatchNamespaceScriptUpdateParamsMetadataUsageModelUnbound:
 		return true
 	}
 	return false

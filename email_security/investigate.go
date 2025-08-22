@@ -173,6 +173,7 @@ type InvestigateListResponseProperties struct {
 	AllowlistedPatternType InvestigateListResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type"`
 	BlocklistedMessage     bool                                                    `json:"blocklisted_message"`
 	BlocklistedPattern     string                                                  `json:"blocklisted_pattern"`
+	WhitelistedPatternType InvestigateListResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type"`
 	JSON                   investigateListResponsePropertiesJSON                   `json:"-"`
 }
 
@@ -183,6 +184,7 @@ type investigateListResponsePropertiesJSON struct {
 	AllowlistedPatternType apijson.Field
 	BlocklistedMessage     apijson.Field
 	BlocklistedPattern     apijson.Field
+	WhitelistedPatternType apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -210,6 +212,26 @@ const (
 func (r InvestigateListResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	switch r {
 	case InvestigateListResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
+		return true
+	}
+	return false
+}
+
+type InvestigateListResponsePropertiesWhitelistedPatternType string
+
+const (
+	InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateListResponsePropertiesWhitelistedPatternType = "quarantine_release"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateListResponsePropertiesWhitelistedPatternType = "acceptable_sender"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateListResponsePropertiesWhitelistedPatternType = "allowed_sender"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateListResponsePropertiesWhitelistedPatternType = "allowed_recipient"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateListResponsePropertiesWhitelistedPatternType = "domain_similarity"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateListResponsePropertiesWhitelistedPatternType = "domain_recency"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateListResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+)
+
+func (r InvestigateListResponsePropertiesWhitelistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
 		return true
 	}
 	return false
@@ -441,6 +463,7 @@ type InvestigateGetResponseProperties struct {
 	AllowlistedPatternType InvestigateGetResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type"`
 	BlocklistedMessage     bool                                                   `json:"blocklisted_message"`
 	BlocklistedPattern     string                                                 `json:"blocklisted_pattern"`
+	WhitelistedPatternType InvestigateGetResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type"`
 	JSON                   investigateGetResponsePropertiesJSON                   `json:"-"`
 }
 
@@ -451,6 +474,7 @@ type investigateGetResponsePropertiesJSON struct {
 	AllowlistedPatternType apijson.Field
 	BlocklistedMessage     apijson.Field
 	BlocklistedPattern     apijson.Field
+	WhitelistedPatternType apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -478,6 +502,26 @@ const (
 func (r InvestigateGetResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	switch r {
 	case InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponsePropertiesWhitelistedPatternType string
+
+const (
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateGetResponsePropertiesWhitelistedPatternType = "quarantine_release"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateGetResponsePropertiesWhitelistedPatternType = "acceptable_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_recipient"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_similarity"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_recency"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+)
+
+func (r InvestigateGetResponsePropertiesWhitelistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
 		return true
 	}
 	return false

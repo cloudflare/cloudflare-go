@@ -102,9 +102,9 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 }
 
 type SmartTieredCacheDeleteResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID SmartTieredCacheDeleteResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
@@ -129,7 +129,7 @@ func (r smartTieredCacheDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type SmartTieredCacheDeleteResponseID string
 
 const (
@@ -145,11 +145,11 @@ func (r SmartTieredCacheDeleteResponseID) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID SmartTieredCacheEditResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Smart Tiered Cache zone setting.
 	Value SmartTieredCacheEditResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
@@ -175,7 +175,7 @@ func (r smartTieredCacheEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type SmartTieredCacheEditResponseID string
 
 const (
@@ -190,7 +190,7 @@ func (r SmartTieredCacheEditResponseID) IsKnown() bool {
 	return false
 }
 
-// The value of the feature
+// Value of the Smart Tiered Cache zone setting.
 type SmartTieredCacheEditResponseValue string
 
 const (
@@ -207,11 +207,11 @@ func (r SmartTieredCacheEditResponseValue) IsKnown() bool {
 }
 
 type SmartTieredCacheGetResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID SmartTieredCacheGetResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Smart Tiered Cache zone setting.
 	Value SmartTieredCacheGetResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
@@ -237,7 +237,7 @@ func (r smartTieredCacheGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type SmartTieredCacheGetResponseID string
 
 const (
@@ -252,7 +252,7 @@ func (r SmartTieredCacheGetResponseID) IsKnown() bool {
 	return false
 }
 
-// The value of the feature
+// Value of the Smart Tiered Cache zone setting.
 type SmartTieredCacheGetResponseValue string
 
 const (
@@ -269,14 +269,14 @@ func (r SmartTieredCacheGetResponseValue) IsKnown() bool {
 }
 
 type SmartTieredCacheDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  SmartTieredCacheDeleteResponse                `json:"result"`
 	JSON    smartTieredCacheDeleteResponseEnvelopeJSON    `json:"-"`
@@ -301,7 +301,7 @@ func (r smartTieredCacheDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type SmartTieredCacheDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -317,9 +317,9 @@ func (r SmartTieredCacheDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SmartTieredCacheEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Enable or disable the Smart Tiered Cache
+	// Enable or disable the Smart Tiered Cache.
 	Value param.Field[SmartTieredCacheEditParamsValue] `json:"value,required"`
 }
 
@@ -327,7 +327,7 @@ func (r SmartTieredCacheEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Enable or disable the Smart Tiered Cache
+// Enable or disable the Smart Tiered Cache.
 type SmartTieredCacheEditParamsValue string
 
 const (
@@ -346,7 +346,7 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 type SmartTieredCacheEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  SmartTieredCacheEditResponse                `json:"result"`
 	JSON    smartTieredCacheEditResponseEnvelopeJSON    `json:"-"`
@@ -371,7 +371,7 @@ func (r smartTieredCacheEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type SmartTieredCacheEditResponseEnvelopeSuccess bool
 
 const (
@@ -387,14 +387,14 @@ func (r SmartTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SmartTieredCacheGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SmartTieredCacheGetResponse                `json:"result"`
 	JSON    smartTieredCacheGetResponseEnvelopeJSON    `json:"-"`
@@ -419,7 +419,7 @@ func (r smartTieredCacheGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type SmartTieredCacheGetResponseEnvelopeSuccess bool
 
 const (

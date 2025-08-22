@@ -422,9 +422,10 @@ func (r DLPEntryUpdateResponsePredefinedEntryType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponsePredefinedEntryVariant struct {
-	TopicType DLPEntryUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      DLPEntryUpdateResponsePredefinedEntryVariantType      `json:"type,required"`
-	JSON      dlpEntryUpdateResponsePredefinedEntryVariantJSON      `json:"-"`
+	TopicType   DLPEntryUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryUpdateResponsePredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                `json:"description,nullable"`
+	JSON        dlpEntryUpdateResponsePredefinedEntryVariantJSON      `json:"-"`
 }
 
 // dlpEntryUpdateResponsePredefinedEntryVariantJSON contains the JSON metadata for
@@ -432,6 +433,7 @@ type DLPEntryUpdateResponsePredefinedEntryVariant struct {
 type dlpEntryUpdateResponsePredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -929,9 +931,10 @@ func (r DLPEntryListResponsePredefinedEntryType) IsKnown() bool {
 }
 
 type DLPEntryListResponsePredefinedEntryVariant struct {
-	TopicType DLPEntryListResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      DLPEntryListResponsePredefinedEntryVariantType      `json:"type,required"`
-	JSON      dlpEntryListResponsePredefinedEntryVariantJSON      `json:"-"`
+	TopicType   DLPEntryListResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryListResponsePredefinedEntryVariantType      `json:"type,required"`
+	Description string                                              `json:"description,nullable"`
+	JSON        dlpEntryListResponsePredefinedEntryVariantJSON      `json:"-"`
 }
 
 // dlpEntryListResponsePredefinedEntryVariantJSON contains the JSON metadata for
@@ -939,6 +942,7 @@ type DLPEntryListResponsePredefinedEntryVariant struct {
 type dlpEntryListResponsePredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1438,9 +1442,10 @@ func (r DLPEntryGetResponsePredefinedEntryType) IsKnown() bool {
 }
 
 type DLPEntryGetResponsePredefinedEntryVariant struct {
-	TopicType DLPEntryGetResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      DLPEntryGetResponsePredefinedEntryVariantType      `json:"type,required"`
-	JSON      dlpEntryGetResponsePredefinedEntryVariantJSON      `json:"-"`
+	TopicType   DLPEntryGetResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryGetResponsePredefinedEntryVariantType      `json:"type,required"`
+	Description string                                             `json:"description,nullable"`
+	JSON        dlpEntryGetResponsePredefinedEntryVariantJSON      `json:"-"`
 }
 
 // dlpEntryGetResponsePredefinedEntryVariantJSON contains the JSON metadata for the
@@ -1448,6 +1453,7 @@ type DLPEntryGetResponsePredefinedEntryVariant struct {
 type dlpEntryGetResponsePredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

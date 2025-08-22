@@ -99,9 +99,9 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 }
 
 type VariantDeleteResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID VariantDeleteResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
@@ -126,7 +126,7 @@ func (r variantDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type VariantDeleteResponseID string
 
 const (
@@ -142,12 +142,12 @@ func (r VariantDeleteResponseID) IsKnown() bool {
 }
 
 type VariantEditResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID VariantEditResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
-	Value string `json:"value,required"`
+	// Value of the zone setting.
+	Value VariantEditResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
 	JSON       variantEditResponseJSON `json:"-"`
@@ -172,7 +172,7 @@ func (r variantEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type VariantEditResponseID string
 
 const (
@@ -187,13 +187,77 @@ func (r VariantEditResponseID) IsKnown() bool {
 	return false
 }
 
+// Value of the zone setting.
+type VariantEditResponseValue struct {
+	// List of strings with the MIME types of all the variants that should be served
+	// for avif.
+	AVIF []string `json:"avif"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for bmp.
+	BMP []string `json:"bmp"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for gif.
+	GIF []string `json:"gif"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jp2.
+	JP2 []string `json:"jp2"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jpeg.
+	JPEG []string `json:"jpeg"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jpg.
+	JPG []string `json:"jpg"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jpg2.
+	JPG2 []string `json:"jpg2"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for png.
+	PNG []string `json:"png"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for tif.
+	TIF []string `json:"tif"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for tiff.
+	TIFF []string `json:"tiff"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for webp.
+	WebP []string                     `json:"webp"`
+	JSON variantEditResponseValueJSON `json:"-"`
+}
+
+// variantEditResponseValueJSON contains the JSON metadata for the struct
+// [VariantEditResponseValue]
+type variantEditResponseValueJSON struct {
+	AVIF        apijson.Field
+	BMP         apijson.Field
+	GIF         apijson.Field
+	JP2         apijson.Field
+	JPEG        apijson.Field
+	JPG         apijson.Field
+	JPG2        apijson.Field
+	PNG         apijson.Field
+	TIF         apijson.Field
+	TIFF        apijson.Field
+	WebP        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantEditResponseValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantEditResponseValueJSON) RawJSON() string {
+	return r.raw
+}
+
 type VariantGetResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID VariantGetResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
-	Value string `json:"value,required"`
+	// Value of the zone setting.
+	Value VariantGetResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
 	JSON       variantGetResponseJSON `json:"-"`
@@ -218,7 +282,7 @@ func (r variantGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type VariantGetResponseID string
 
 const (
@@ -233,15 +297,79 @@ func (r VariantGetResponseID) IsKnown() bool {
 	return false
 }
 
+// Value of the zone setting.
+type VariantGetResponseValue struct {
+	// List of strings with the MIME types of all the variants that should be served
+	// for avif.
+	AVIF []string `json:"avif"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for bmp.
+	BMP []string `json:"bmp"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for gif.
+	GIF []string `json:"gif"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jp2.
+	JP2 []string `json:"jp2"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jpeg.
+	JPEG []string `json:"jpeg"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jpg.
+	JPG []string `json:"jpg"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for jpg2.
+	JPG2 []string `json:"jpg2"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for png.
+	PNG []string `json:"png"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for tif.
+	TIF []string `json:"tif"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for tiff.
+	TIFF []string `json:"tiff"`
+	// List of strings with the MIME types of all the variants that should be served
+	// for webp.
+	WebP []string                    `json:"webp"`
+	JSON variantGetResponseValueJSON `json:"-"`
+}
+
+// variantGetResponseValueJSON contains the JSON metadata for the struct
+// [VariantGetResponseValue]
+type variantGetResponseValueJSON struct {
+	AVIF        apijson.Field
+	BMP         apijson.Field
+	GIF         apijson.Field
+	JP2         apijson.Field
+	JPEG        apijson.Field
+	JPG         apijson.Field
+	JPG2        apijson.Field
+	PNG         apijson.Field
+	TIF         apijson.Field
+	TIFF        apijson.Field
+	WebP        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantGetResponseValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantGetResponseValueJSON) RawJSON() string {
+	return r.raw
+}
+
 type VariantDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type VariantDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantDeleteResponse                `json:"result"`
 	JSON    variantDeleteResponseEnvelopeJSON    `json:"-"`
@@ -266,7 +394,7 @@ func (r variantDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type VariantDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -282,7 +410,7 @@ func (r VariantDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type VariantEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[VariantEditParamsValue] `json:"value,required"`
@@ -336,7 +464,7 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 type VariantEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantEditResponse                `json:"result"`
 	JSON    variantEditResponseEnvelopeJSON    `json:"-"`
@@ -361,7 +489,7 @@ func (r variantEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type VariantEditResponseEnvelopeSuccess bool
 
 const (
@@ -377,14 +505,14 @@ func (r VariantEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type VariantGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type VariantGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantGetResponse                `json:"result"`
 	JSON    variantGetResponseEnvelopeJSON    `json:"-"`
@@ -409,7 +537,7 @@ func (r variantGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type VariantGetResponseEnvelopeSuccess bool
 
 const (

@@ -1919,11 +1919,13 @@ type DispatchNamespaceScriptSettingEditResponseUsageModel string
 
 const (
 	DispatchNamespaceScriptSettingEditResponseUsageModelStandard DispatchNamespaceScriptSettingEditResponseUsageModel = "standard"
+	DispatchNamespaceScriptSettingEditResponseUsageModelBundled  DispatchNamespaceScriptSettingEditResponseUsageModel = "bundled"
+	DispatchNamespaceScriptSettingEditResponseUsageModelUnbound  DispatchNamespaceScriptSettingEditResponseUsageModel = "unbound"
 )
 
 func (r DispatchNamespaceScriptSettingEditResponseUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseUsageModelStandard:
+	case DispatchNamespaceScriptSettingEditResponseUsageModelStandard, DispatchNamespaceScriptSettingEditResponseUsageModelBundled, DispatchNamespaceScriptSettingEditResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -3758,11 +3760,13 @@ type DispatchNamespaceScriptSettingGetResponseUsageModel string
 
 const (
 	DispatchNamespaceScriptSettingGetResponseUsageModelStandard DispatchNamespaceScriptSettingGetResponseUsageModel = "standard"
+	DispatchNamespaceScriptSettingGetResponseUsageModelBundled  DispatchNamespaceScriptSettingGetResponseUsageModel = "bundled"
+	DispatchNamespaceScriptSettingGetResponseUsageModelUnbound  DispatchNamespaceScriptSettingGetResponseUsageModel = "unbound"
 )
 
 func (r DispatchNamespaceScriptSettingGetResponseUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseUsageModelStandard:
+	case DispatchNamespaceScriptSettingGetResponseUsageModelStandard, DispatchNamespaceScriptSettingGetResponseUsageModelBundled, DispatchNamespaceScriptSettingGetResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -4896,11 +4900,13 @@ type DispatchNamespaceScriptSettingEditParamsSettingsUsageModel string
 
 const (
 	DispatchNamespaceScriptSettingEditParamsSettingsUsageModelStandard DispatchNamespaceScriptSettingEditParamsSettingsUsageModel = "standard"
+	DispatchNamespaceScriptSettingEditParamsSettingsUsageModelBundled  DispatchNamespaceScriptSettingEditParamsSettingsUsageModel = "bundled"
+	DispatchNamespaceScriptSettingEditParamsSettingsUsageModelUnbound  DispatchNamespaceScriptSettingEditParamsSettingsUsageModel = "unbound"
 )
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsUsageModelStandard:
+	case DispatchNamespaceScriptSettingEditParamsSettingsUsageModelStandard, DispatchNamespaceScriptSettingEditParamsSettingsUsageModelBundled, DispatchNamespaceScriptSettingEditParamsSettingsUsageModelUnbound:
 		return true
 	}
 	return false
