@@ -40,7 +40,7 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 // send a Post-Quantum keyshare in the first message to the origin (for fastest
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
-// means that PQ algorithms are not advertised
+// means that PQ algorithms are not advertised.
 func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponse, err error) {
 	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -62,7 +62,7 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 // send a Post-Quantum keyshare in the first message to the origin (for fastest
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
-// means that PQ algorithms are not advertised
+// means that PQ algorithms are not advertised.
 func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponse, err error) {
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -80,11 +80,11 @@ func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query Orig
 }
 
 type OriginPostQuantumEncryptionUpdateResponse struct {
-	// Value of the zone setting.
+	// The identifier of the caching setting.
 	ID OriginPostQuantumEncryptionUpdateResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Origin Post Quantum Encryption Setting.
 	Value OriginPostQuantumEncryptionUpdateResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
@@ -110,7 +110,7 @@ func (r originPostQuantumEncryptionUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Value of the zone setting.
+// The identifier of the caching setting.
 type OriginPostQuantumEncryptionUpdateResponseID string
 
 const (
@@ -125,7 +125,7 @@ func (r OriginPostQuantumEncryptionUpdateResponseID) IsKnown() bool {
 	return false
 }
 
-// The value of the feature
+// Value of the Origin Post Quantum Encryption Setting.
 type OriginPostQuantumEncryptionUpdateResponseValue string
 
 const (
@@ -143,11 +143,11 @@ func (r OriginPostQuantumEncryptionUpdateResponseValue) IsKnown() bool {
 }
 
 type OriginPostQuantumEncryptionGetResponse struct {
-	// Value of the zone setting.
+	// The identifier of the caching setting.
 	ID OriginPostQuantumEncryptionGetResponseID `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Origin Post Quantum Encryption Setting.
 	Value OriginPostQuantumEncryptionGetResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
@@ -173,7 +173,7 @@ func (r originPostQuantumEncryptionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Value of the zone setting.
+// The identifier of the caching setting.
 type OriginPostQuantumEncryptionGetResponseID string
 
 const (
@@ -188,7 +188,7 @@ func (r OriginPostQuantumEncryptionGetResponseID) IsKnown() bool {
 	return false
 }
 
-// The value of the feature
+// Value of the Origin Post Quantum Encryption Setting.
 type OriginPostQuantumEncryptionGetResponseValue string
 
 const (
@@ -206,7 +206,7 @@ func (r OriginPostQuantumEncryptionGetResponseValue) IsKnown() bool {
 }
 
 type OriginPostQuantumEncryptionUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Origin Post Quantum Encryption Setting.
 	Value param.Field[OriginPostQuantumEncryptionUpdateParamsValue] `json:"value,required"`
@@ -236,7 +236,7 @@ func (r OriginPostQuantumEncryptionUpdateParamsValue) IsKnown() bool {
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  OriginPostQuantumEncryptionUpdateResponse                `json:"result"`
 	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -261,7 +261,7 @@ func (r originPostQuantumEncryptionUpdateResponseEnvelopeJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -277,14 +277,14 @@ func (r OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess) IsKnown() bool
 }
 
 type OriginPostQuantumEncryptionGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  OriginPostQuantumEncryptionGetResponse                `json:"result"`
 	JSON    originPostQuantumEncryptionGetResponseEnvelopeJSON    `json:"-"`
@@ -309,7 +309,7 @@ func (r originPostQuantumEncryptionGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OriginPostQuantumEncryptionGetResponseEnvelopeSuccess bool
 
 const (

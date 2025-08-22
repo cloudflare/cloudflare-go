@@ -184,14 +184,19 @@ func (r webhooksJSON) RawJSON() string {
 type WebhooksType string
 
 const (
-	WebhooksTypeSlack   WebhooksType = "slack"
-	WebhooksTypeGeneric WebhooksType = "generic"
-	WebhooksTypeGchat   WebhooksType = "gchat"
+	WebhooksTypeDatadog  WebhooksType = "datadog"
+	WebhooksTypeDiscord  WebhooksType = "discord"
+	WebhooksTypeFeishu   WebhooksType = "feishu"
+	WebhooksTypeGchat    WebhooksType = "gchat"
+	WebhooksTypeGeneric  WebhooksType = "generic"
+	WebhooksTypeOpsgenie WebhooksType = "opsgenie"
+	WebhooksTypeSlack    WebhooksType = "slack"
+	WebhooksTypeSplunk   WebhooksType = "splunk"
 )
 
 func (r WebhooksType) IsKnown() bool {
 	switch r {
-	case WebhooksTypeSlack, WebhooksTypeGeneric, WebhooksTypeGchat:
+	case WebhooksTypeDatadog, WebhooksTypeDiscord, WebhooksTypeFeishu, WebhooksTypeGchat, WebhooksTypeGeneric, WebhooksTypeOpsgenie, WebhooksTypeSlack, WebhooksTypeSplunk:
 		return true
 	}
 	return false

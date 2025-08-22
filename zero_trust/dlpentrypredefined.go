@@ -152,9 +152,10 @@ func (r dlpEntryPredefinedNewResponseConfidenceJSON) RawJSON() string {
 }
 
 type DLPEntryPredefinedNewResponseVariant struct {
-	TopicType DLPEntryPredefinedNewResponseVariantTopicType `json:"topic_type,required"`
-	Type      DLPEntryPredefinedNewResponseVariantType      `json:"type,required"`
-	JSON      dlpEntryPredefinedNewResponseVariantJSON      `json:"-"`
+	TopicType   DLPEntryPredefinedNewResponseVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryPredefinedNewResponseVariantType      `json:"type,required"`
+	Description string                                        `json:"description,nullable"`
+	JSON        dlpEntryPredefinedNewResponseVariantJSON      `json:"-"`
 }
 
 // dlpEntryPredefinedNewResponseVariantJSON contains the JSON metadata for the
@@ -162,6 +163,7 @@ type DLPEntryPredefinedNewResponseVariant struct {
 type dlpEntryPredefinedNewResponseVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -261,9 +263,10 @@ func (r dlpEntryPredefinedUpdateResponseConfidenceJSON) RawJSON() string {
 }
 
 type DLPEntryPredefinedUpdateResponseVariant struct {
-	TopicType DLPEntryPredefinedUpdateResponseVariantTopicType `json:"topic_type,required"`
-	Type      DLPEntryPredefinedUpdateResponseVariantType      `json:"type,required"`
-	JSON      dlpEntryPredefinedUpdateResponseVariantJSON      `json:"-"`
+	TopicType   DLPEntryPredefinedUpdateResponseVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryPredefinedUpdateResponseVariantType      `json:"type,required"`
+	Description string                                           `json:"description,nullable"`
+	JSON        dlpEntryPredefinedUpdateResponseVariantJSON      `json:"-"`
 }
 
 // dlpEntryPredefinedUpdateResponseVariantJSON contains the JSON metadata for the
@@ -271,6 +274,7 @@ type DLPEntryPredefinedUpdateResponseVariant struct {
 type dlpEntryPredefinedUpdateResponseVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

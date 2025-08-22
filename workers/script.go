@@ -282,11 +282,13 @@ type ScriptUsageModel string
 
 const (
 	ScriptUsageModelStandard ScriptUsageModel = "standard"
+	ScriptUsageModelBundled  ScriptUsageModel = "bundled"
+	ScriptUsageModelUnbound  ScriptUsageModel = "unbound"
 )
 
 func (r ScriptUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUsageModelStandard:
+	case ScriptUsageModelStandard, ScriptUsageModelBundled, ScriptUsageModelUnbound:
 		return true
 	}
 	return false
@@ -554,11 +556,13 @@ type ScriptUpdateResponseUsageModel string
 
 const (
 	ScriptUpdateResponseUsageModelStandard ScriptUpdateResponseUsageModel = "standard"
+	ScriptUpdateResponseUsageModelBundled  ScriptUpdateResponseUsageModel = "bundled"
+	ScriptUpdateResponseUsageModelUnbound  ScriptUpdateResponseUsageModel = "unbound"
 )
 
 func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateResponseUsageModelStandard:
+	case ScriptUpdateResponseUsageModelStandard, ScriptUpdateResponseUsageModelBundled, ScriptUpdateResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -1859,11 +1863,13 @@ type ScriptUpdateParamsMetadataObjectUsageModel string
 
 const (
 	ScriptUpdateParamsMetadataObjectUsageModelStandard ScriptUpdateParamsMetadataObjectUsageModel = "standard"
+	ScriptUpdateParamsMetadataObjectUsageModelBundled  ScriptUpdateParamsMetadataObjectUsageModel = "bundled"
+	ScriptUpdateParamsMetadataObjectUsageModelUnbound  ScriptUpdateParamsMetadataObjectUsageModel = "unbound"
 )
 
 func (r ScriptUpdateParamsMetadataObjectUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataObjectUsageModelStandard:
+	case ScriptUpdateParamsMetadataObjectUsageModelStandard, ScriptUpdateParamsMetadataObjectUsageModelBundled, ScriptUpdateParamsMetadataObjectUsageModelUnbound:
 		return true
 	}
 	return false
@@ -1874,11 +1880,13 @@ type ScriptUpdateParamsMetadataUsageModel string
 
 const (
 	ScriptUpdateParamsMetadataUsageModelStandard ScriptUpdateParamsMetadataUsageModel = "standard"
+	ScriptUpdateParamsMetadataUsageModelBundled  ScriptUpdateParamsMetadataUsageModel = "bundled"
+	ScriptUpdateParamsMetadataUsageModelUnbound  ScriptUpdateParamsMetadataUsageModel = "unbound"
 )
 
 func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataUsageModelStandard:
+	case ScriptUpdateParamsMetadataUsageModelStandard, ScriptUpdateParamsMetadataUsageModelBundled, ScriptUpdateParamsMetadataUsageModelUnbound:
 		return true
 	}
 	return false

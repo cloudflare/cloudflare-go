@@ -368,9 +368,10 @@ func (r DLPEntryCustomUpdateResponsePredefinedEntryType) IsKnown() bool {
 }
 
 type DLPEntryCustomUpdateResponsePredefinedEntryVariant struct {
-	TopicType DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      DLPEntryCustomUpdateResponsePredefinedEntryVariantType      `json:"type,required"`
-	JSON      dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON      `json:"-"`
+	TopicType   DLPEntryCustomUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryCustomUpdateResponsePredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                      `json:"description,nullable"`
+	JSON        dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON      `json:"-"`
 }
 
 // dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON contains the JSON
@@ -378,6 +379,7 @@ type DLPEntryCustomUpdateResponsePredefinedEntryVariant struct {
 type dlpEntryCustomUpdateResponsePredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

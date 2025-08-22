@@ -529,9 +529,10 @@ func (r ProfileCustomProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesPredefinedEntryVariant struct {
-	TopicType ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      ProfileCustomProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	JSON      profileCustomProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+	TopicType   ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        ProfileCustomProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                     `json:"description,nullable"`
+	JSON        profileCustomProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
 // profileCustomProfileEntriesPredefinedEntryVariantJSON contains the JSON metadata
@@ -539,6 +540,7 @@ type ProfileCustomProfileEntriesPredefinedEntryVariant struct {
 type profileCustomProfileEntriesPredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1119,9 +1121,10 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfilePredefinedProfileEntriesPredefinedEntryVariant struct {
-	TopicType ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      ProfilePredefinedProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	JSON      profilePredefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+	TopicType   ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        ProfilePredefinedProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                         `json:"description,nullable"`
+	JSON        profilePredefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
 // profilePredefinedProfileEntriesPredefinedEntryVariantJSON contains the JSON
@@ -1129,6 +1132,7 @@ type ProfilePredefinedProfileEntriesPredefinedEntryVariant struct {
 type profilePredefinedProfileEntriesPredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1699,9 +1703,10 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileEntriesPredefinedEntryVariant struct {
-	TopicType ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type      ProfileIntegrationProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	JSON      profileIntegrationProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+	TopicType   ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        ProfileIntegrationProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                          `json:"description,nullable"`
+	JSON        profileIntegrationProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
 // profileIntegrationProfileEntriesPredefinedEntryVariantJSON contains the JSON
@@ -1709,6 +1714,7 @@ type ProfileIntegrationProfileEntriesPredefinedEntryVariant struct {
 type profileIntegrationProfileEntriesPredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

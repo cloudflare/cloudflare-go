@@ -163,7 +163,7 @@ type ThreatEventNewResponse struct {
 	Category        string                     `json:"category,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
-	Indicator       string                     `json:"indicator,required"`
+	IndicatorType   string                     `json:"indicatorType,required"`
 	KillChain       float64                    `json:"killChain,required"`
 	MitreAttack     []string                   `json:"mitreAttack,required"`
 	NumReferenced   float64                    `json:"numReferenced,required"`
@@ -189,7 +189,7 @@ type threatEventNewResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
+	IndicatorType   apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
@@ -222,7 +222,7 @@ type ThreatEventListResponse struct {
 	Category        string                      `json:"category,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
-	Indicator       string                      `json:"indicator,required"`
+	IndicatorType   string                      `json:"indicatorType,required"`
 	KillChain       float64                     `json:"killChain,required"`
 	MitreAttack     []string                    `json:"mitreAttack,required"`
 	NumReferenced   float64                     `json:"numReferenced,required"`
@@ -248,7 +248,7 @@ type threatEventListResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
+	IndicatorType   apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
@@ -302,7 +302,7 @@ type ThreatEventEditResponse struct {
 	Category        string                      `json:"category,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
-	Indicator       string                      `json:"indicator,required"`
+	IndicatorType   string                      `json:"indicatorType,required"`
 	KillChain       float64                     `json:"killChain,required"`
 	MitreAttack     []string                    `json:"mitreAttack,required"`
 	NumReferenced   float64                     `json:"numReferenced,required"`
@@ -328,7 +328,7 @@ type threatEventEditResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
+	IndicatorType   apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
@@ -361,7 +361,7 @@ type ThreatEventGetResponse struct {
 	Category        string                     `json:"category,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
-	Indicator       string                     `json:"indicator,required"`
+	IndicatorType   string                     `json:"indicatorType,required"`
 	KillChain       float64                    `json:"killChain,required"`
 	MitreAttack     []string                   `json:"mitreAttack,required"`
 	NumReferenced   float64                    `json:"numReferenced,required"`
@@ -387,7 +387,7 @@ type threatEventGetResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
+	IndicatorType   apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
