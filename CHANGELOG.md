@@ -1,5 +1,31 @@
 # Changelog
 
+## 5.2.0 (2025-08-22)
+
+Full Changelog: [v5.1.0...v5.2.0](https://github.com/cloudflare/cloudflare-go/compare/v5.1.0...v5.2.0)
+
+### Features
+
+* **api:** api update ([e16034f](https://github.com/cloudflare/cloudflare-go/commit/e16034fd9b6b0269078f4e02fc888a88782532d7))
+* **api:** api update ([9be9438](https://github.com/cloudflare/cloudflare-go/commit/9be94383bdac5126d2bd69c88b74dfedc36cf402))
+* **api:** api update ([bde7ebc](https://github.com/cloudflare/cloudflare-go/commit/bde7ebcf88ef6df6fc323e4d800013ff20ed5a08))
+* **api:** api update ([878943e](https://github.com/cloudflare/cloudflare-go/commit/878943eb0fe1be816d84e9873ce84a4a1857a7a5))
+* **api:** api update ([bc6d589](https://github.com/cloudflare/cloudflare-go/commit/bc6d58960a0749a6c202f525880b54f376751ad4))
+
+
+### Bug Fixes
+
+* update singularization rules ([54a49cf](https://github.com/cloudflare/cloudflare-go/commit/54a49cf9914237ccbd4c9fc40ec77a5071a4afac))
+
+
+### Chores
+
+* **api:** upload stainless config from cloudflare-config ([50ea4a2](https://github.com/cloudflare/cloudflare-go/commit/50ea4a29da4eb74bb1fb6dc3b83337b0eaf81385))
+* **api:** upload stainless config from cloudflare-config ([170bac6](https://github.com/cloudflare/cloudflare-go/commit/170bac6d455251f21a6b2aac4d66b1ddacadd588))
+* **api:** upload stainless config from cloudflare-config ([479a6c9](https://github.com/cloudflare/cloudflare-go/commit/479a6c9ec7156fb4e93763dc03929e38ccc38ab6))
+* **api:** upload stainless config from cloudflare-config ([a34c220](https://github.com/cloudflare/cloudflare-go/commit/a34c220175671c4202d6847989f5e2c6337a1188))
+* **api:** upload stainless config from cloudflare-config ([8fbbc09](https://github.com/cloudflare/cloudflare-go/commit/8fbbc0979f094be4077bf3a5f7298010130ccc4e))
+
 ## 5.1.0 (2025-08-14)
 
 Full Changelog: [v5.0.0...v5.1.0](https://github.com/cloudflare/cloudflare-go/compare/v5.0.0...v5.1.0)
