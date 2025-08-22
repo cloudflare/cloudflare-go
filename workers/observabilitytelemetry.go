@@ -835,7 +835,7 @@ func (r observabilityTelemetryQueryResponseStatisticsJSON) RawJSON() string {
 type ObservabilityTelemetryQueryResponseCalculation struct {
 	Aggregates  []ObservabilityTelemetryQueryResponseCalculationsAggregate `json:"aggregates,required"`
 	Calculation string                                                     `json:"calculation,required"`
-	Series      []ObservabilityTelemetryQueryResponseCalculationsSery      `json:"series,required"`
+	Series      []ObservabilityTelemetryQueryResponseCalculationsSeries    `json:"series,required"`
 	Alias       string                                                     `json:"alias"`
 	JSON        observabilityTelemetryQueryResponseCalculationJSON         `json:"-"`
 }
@@ -942,26 +942,26 @@ func init() {
 	)
 }
 
-type ObservabilityTelemetryQueryResponseCalculationsSery struct {
+type ObservabilityTelemetryQueryResponseCalculationsSeries struct {
 	Data []ObservabilityTelemetryQueryResponseCalculationsSeriesData `json:"data,required"`
 	Time string                                                      `json:"time,required"`
-	JSON observabilityTelemetryQueryResponseCalculationsSeryJSON     `json:"-"`
+	JSON observabilityTelemetryQueryResponseCalculationsSeriesJSON   `json:"-"`
 }
 
-// observabilityTelemetryQueryResponseCalculationsSeryJSON contains the JSON
-// metadata for the struct [ObservabilityTelemetryQueryResponseCalculationsSery]
-type observabilityTelemetryQueryResponseCalculationsSeryJSON struct {
+// observabilityTelemetryQueryResponseCalculationsSeriesJSON contains the JSON
+// metadata for the struct [ObservabilityTelemetryQueryResponseCalculationsSeries]
+type observabilityTelemetryQueryResponseCalculationsSeriesJSON struct {
 	Data        apijson.Field
 	Time        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservabilityTelemetryQueryResponseCalculationsSery) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservabilityTelemetryQueryResponseCalculationsSeries) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityTelemetryQueryResponseCalculationsSeryJSON) RawJSON() string {
+func (r observabilityTelemetryQueryResponseCalculationsSeriesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1055,7 +1055,7 @@ func init() {
 type ObservabilityTelemetryQueryResponseCompare struct {
 	Aggregates  []ObservabilityTelemetryQueryResponseCompareAggregate `json:"aggregates,required"`
 	Calculation string                                                `json:"calculation,required"`
-	Series      []ObservabilityTelemetryQueryResponseCompareSery      `json:"series,required"`
+	Series      []ObservabilityTelemetryQueryResponseCompareSeries    `json:"series,required"`
 	Alias       string                                                `json:"alias"`
 	JSON        observabilityTelemetryQueryResponseCompareJSON        `json:"-"`
 }
@@ -1161,26 +1161,26 @@ func init() {
 	)
 }
 
-type ObservabilityTelemetryQueryResponseCompareSery struct {
+type ObservabilityTelemetryQueryResponseCompareSeries struct {
 	Data []ObservabilityTelemetryQueryResponseCompareSeriesData `json:"data,required"`
 	Time string                                                 `json:"time,required"`
-	JSON observabilityTelemetryQueryResponseCompareSeryJSON     `json:"-"`
+	JSON observabilityTelemetryQueryResponseCompareSeriesJSON   `json:"-"`
 }
 
-// observabilityTelemetryQueryResponseCompareSeryJSON contains the JSON metadata
-// for the struct [ObservabilityTelemetryQueryResponseCompareSery]
-type observabilityTelemetryQueryResponseCompareSeryJSON struct {
+// observabilityTelemetryQueryResponseCompareSeriesJSON contains the JSON metadata
+// for the struct [ObservabilityTelemetryQueryResponseCompareSeries]
+type observabilityTelemetryQueryResponseCompareSeriesJSON struct {
 	Data        apijson.Field
 	Time        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservabilityTelemetryQueryResponseCompareSery) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservabilityTelemetryQueryResponseCompareSeries) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityTelemetryQueryResponseCompareSeryJSON) RawJSON() string {
+func (r observabilityTelemetryQueryResponseCompareSeriesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1271,11 +1271,11 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseEvents struct {
-	Count  float64                                          `json:"count"`
-	Events []ObservabilityTelemetryQueryResponseEventsEvent `json:"events"`
-	Fields []ObservabilityTelemetryQueryResponseEventsField `json:"fields"`
-	Series []ObservabilityTelemetryQueryResponseEventsSery  `json:"series"`
-	JSON   observabilityTelemetryQueryResponseEventsJSON    `json:"-"`
+	Count  float64                                           `json:"count"`
+	Events []ObservabilityTelemetryQueryResponseEventsEvent  `json:"events"`
+	Fields []ObservabilityTelemetryQueryResponseEventsField  `json:"fields"`
+	Series []ObservabilityTelemetryQueryResponseEventsSeries `json:"series"`
+	JSON   observabilityTelemetryQueryResponseEventsJSON     `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseEventsJSON contains the JSON metadata for the
@@ -1813,26 +1813,26 @@ func (r observabilityTelemetryQueryResponseEventsFieldJSON) RawJSON() string {
 	return r.raw
 }
 
-type ObservabilityTelemetryQueryResponseEventsSery struct {
+type ObservabilityTelemetryQueryResponseEventsSeries struct {
 	Data []ObservabilityTelemetryQueryResponseEventsSeriesData `json:"data,required"`
 	Time string                                                `json:"time,required"`
-	JSON observabilityTelemetryQueryResponseEventsSeryJSON     `json:"-"`
+	JSON observabilityTelemetryQueryResponseEventsSeriesJSON   `json:"-"`
 }
 
-// observabilityTelemetryQueryResponseEventsSeryJSON contains the JSON metadata for
-// the struct [ObservabilityTelemetryQueryResponseEventsSery]
-type observabilityTelemetryQueryResponseEventsSeryJSON struct {
+// observabilityTelemetryQueryResponseEventsSeriesJSON contains the JSON metadata
+// for the struct [ObservabilityTelemetryQueryResponseEventsSeries]
+type observabilityTelemetryQueryResponseEventsSeriesJSON struct {
 	Data        apijson.Field
 	Time        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservabilityTelemetryQueryResponseEventsSery) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservabilityTelemetryQueryResponseEventsSeries) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityTelemetryQueryResponseEventsSeryJSON) RawJSON() string {
+func (r observabilityTelemetryQueryResponseEventsSeriesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2424,11 +2424,11 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel) IsK
 }
 
 type ObservabilityTelemetryQueryResponsePattern struct {
-	Count   float64                                           `json:"count,required"`
-	Pattern string                                            `json:"pattern,required"`
-	Series  []ObservabilityTelemetryQueryResponsePatternsSery `json:"series,required"`
-	Service string                                            `json:"service,required"`
-	JSON    observabilityTelemetryQueryResponsePatternJSON    `json:"-"`
+	Count   float64                                             `json:"count,required"`
+	Pattern string                                              `json:"pattern,required"`
+	Series  []ObservabilityTelemetryQueryResponsePatternsSeries `json:"series,required"`
+	Service string                                              `json:"service,required"`
+	JSON    observabilityTelemetryQueryResponsePatternJSON      `json:"-"`
 }
 
 // observabilityTelemetryQueryResponsePatternJSON contains the JSON metadata for
@@ -2450,26 +2450,26 @@ func (r observabilityTelemetryQueryResponsePatternJSON) RawJSON() string {
 	return r.raw
 }
 
-type ObservabilityTelemetryQueryResponsePatternsSery struct {
+type ObservabilityTelemetryQueryResponsePatternsSeries struct {
 	Data ObservabilityTelemetryQueryResponsePatternsSeriesData `json:"data,required"`
 	Time string                                                `json:"time,required"`
-	JSON observabilityTelemetryQueryResponsePatternsSeryJSON   `json:"-"`
+	JSON observabilityTelemetryQueryResponsePatternsSeriesJSON `json:"-"`
 }
 
-// observabilityTelemetryQueryResponsePatternsSeryJSON contains the JSON metadata
-// for the struct [ObservabilityTelemetryQueryResponsePatternsSery]
-type observabilityTelemetryQueryResponsePatternsSeryJSON struct {
+// observabilityTelemetryQueryResponsePatternsSeriesJSON contains the JSON metadata
+// for the struct [ObservabilityTelemetryQueryResponsePatternsSeries]
+type observabilityTelemetryQueryResponsePatternsSeriesJSON struct {
 	Data        apijson.Field
 	Time        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservabilityTelemetryQueryResponsePatternsSery) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservabilityTelemetryQueryResponsePatternsSeries) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityTelemetryQueryResponsePatternsSeryJSON) RawJSON() string {
+func (r observabilityTelemetryQueryResponsePatternsSeriesJSON) RawJSON() string {
 	return r.raw
 }
 
