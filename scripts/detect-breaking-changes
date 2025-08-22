@@ -145,6 +145,8 @@ TEST_PATHS=(
 	web3/hostname_test.go
 	web3/hostnameipfsuniversalpathcontentlist_test.go
 	web3/hostnameipfsuniversalpathcontentlistentry_test.go
+	workers/betaworker_test.go
+	workers/betaworkerversion_test.go
 	workers/route_test.go
 	workers/assetupload_test.go
 	workers/script_test.go

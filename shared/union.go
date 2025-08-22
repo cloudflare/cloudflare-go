@@ -144,6 +144,8 @@ func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                 
 
 type UnionBool bool
 
+func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnionParam()                            {}
+func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnion()                                 {}
 func (UnionBool) ImplementsScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion()        {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion() {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion()  {}
