@@ -35,30 +35,34 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata: cloudflare.F[workers.ScriptUpdateParamsMetadataUnion](workers.ScriptUpdateParamsMetadataObject{
-				MainModule: cloudflare.F("worker.js"),
-				Assets: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectAssets{
-					Config: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectAssetsConfig{
+			Metadata: cloudflare.F(workers.ScriptUpdateParamsMetadata{
+				Assets: cloudflare.F(workers.ScriptUpdateParamsMetadataAssets{
+					Config: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfig{
 						Headers:          cloudflare.F("/dashboard/*\nX-Frame-Options: DENY\n\n/static/*\nAccess-Control-Allow-Origin: *"),
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
-						HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingAutoTrailingSlash),
-						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling404Page),
-						RunWorkerFirst:   cloudflare.F[workers.ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion](workers.ScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstArray([]string{"string"})),
+						HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
+						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
+						RunWorkerFirst:   cloudflare.F[workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray([]string{"string"})),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),
 				}),
-				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataObjectBindingUnion{workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainText{
+				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
 					Text: cloudflare.F("my_data"),
-					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextTypePlainText),
+					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
+				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				KeepAssets:         cloudflare.F(false),
 				KeepBindings:       cloudflare.F([]string{"string"}),
-				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers.ScriptUpdateParamsMetadataObjectMigrationsUnion](workers.SingleStepMigrationParam{
+				Limits: cloudflare.F(workers.ScriptUpdateParamsMetadataLimits{
+					CPUMs: cloudflare.F(int64(50)),
+				}),
+				Logpush:    cloudflare.F(false),
+				MainModule: cloudflare.F("worker.js"),
+				Migrations: cloudflare.F[workers.ScriptUpdateParamsMetadataMigrationsUnion](workers.SingleStepMigrationParam{
 					DeletedClasses:   cloudflare.F([]string{"string"}),
 					NewClasses:       cloudflare.F([]string{"string"}),
 					NewSqliteClasses: cloudflare.F([]string{"string"}),
@@ -74,17 +78,17 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("to"),
 					}}),
 				}),
-				Observability: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectObservability{
+				Observability: cloudflare.F(workers.ScriptUpdateParamsMetadataObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
-					Logs: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectObservabilityLogs{
+					Logs: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(0.100000),
 					}),
 				}),
-				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectPlacement{
-					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectPlacementModeSmart),
+				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacement{
+					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
@@ -92,7 +96,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 				}}),
-				UsageModel: cloudflare.F(workers.ScriptUpdateParamsMetadataObjectUsageModelStandard),
+				UsageModel: cloudflare.F(workers.ScriptUpdateParamsMetadataUsageModelStandard),
 			}),
 			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},

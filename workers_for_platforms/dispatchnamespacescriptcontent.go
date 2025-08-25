@@ -95,7 +95,7 @@ type DispatchNamespaceScriptContentUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[DispatchNamespaceScriptContentUpdateParamsMetadataUnion] `json:"metadata,required"`
+	Metadata param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
 	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
@@ -121,59 +121,6 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
-}
-
-// JSON-encoded metadata about the uploaded parts and Worker configuration.
-type DispatchNamespaceScriptContentUpdateParamsMetadata struct {
-	// Name of the uploaded file that contains the Worker script (e.g. the file adding
-	// a listener to the `fetch` event). Indicates a `service worker syntax` Worker.
-	BodyPart param.Field[string] `json:"body_part"`
-	// Name of the uploaded file that contains the main module (e.g. the file exporting
-	// a `fetch` handler). Indicates a `module syntax` Worker.
-	MainModule param.Field[string] `json:"main_module"`
-}
-
-func (r DispatchNamespaceScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DispatchNamespaceScriptContentUpdateParamsMetadata) implementsDispatchNamespaceScriptContentUpdateParamsMetadataUnion() {
-}
-
-// JSON-encoded metadata about the uploaded parts and Worker configuration.
-//
-// Satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptContentUpdateParamsMetadataMainModule],
-// [workers_for_platforms.DispatchNamespaceScriptContentUpdateParamsMetadataBodyPart],
-// [DispatchNamespaceScriptContentUpdateParamsMetadata].
-type DispatchNamespaceScriptContentUpdateParamsMetadataUnion interface {
-	implementsDispatchNamespaceScriptContentUpdateParamsMetadataUnion()
-}
-
-type DispatchNamespaceScriptContentUpdateParamsMetadataMainModule struct {
-	// Name of the uploaded file that contains the main module (e.g. the file exporting
-	// a `fetch` handler). Indicates a `module syntax` Worker.
-	MainModule param.Field[string] `json:"main_module,required"`
-}
-
-func (r DispatchNamespaceScriptContentUpdateParamsMetadataMainModule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DispatchNamespaceScriptContentUpdateParamsMetadataMainModule) implementsDispatchNamespaceScriptContentUpdateParamsMetadataUnion() {
-}
-
-type DispatchNamespaceScriptContentUpdateParamsMetadataBodyPart struct {
-	// Name of the uploaded file that contains the Worker script (e.g. the file adding
-	// a listener to the `fetch` event). Indicates a `service worker syntax` Worker.
-	BodyPart param.Field[string] `json:"body_part,required"`
-}
-
-func (r DispatchNamespaceScriptContentUpdateParamsMetadataBodyPart) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DispatchNamespaceScriptContentUpdateParamsMetadataBodyPart) implementsDispatchNamespaceScriptContentUpdateParamsMetadataUnion() {
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {

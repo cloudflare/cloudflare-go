@@ -2143,6 +2143,7 @@ Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#MigrationStepParam">MigrationStepParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#SingleStepMigrationParam">SingleStepMigrationParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v5/workers#WorkerMetadataParam">WorkerMetadataParam</a>
 
 Response Types:
 

@@ -37,30 +37,34 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObject{
-				MainModule: cloudflare.F("worker.js"),
-				Assets: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectAssets{
-					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfig{
+			Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadata{
+				Assets: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssets{
+					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig{
 						Headers:          cloudflare.F("/dashboard/*\nX-Frame-Options: DENY\n\n/static/*\nAccess-Control-Allow-Origin: *"),
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
-						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfigHTMLHandlingAutoTrailingSlash),
-						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfigNotFoundHandling404Page),
-						RunWorkerFirst:   cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstArray([]string{"string"})),
+						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
+						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
+						RunWorkerFirst:   cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray([]string{"string"})),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),
 				}),
-				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectBindingUnion{workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainText{
+				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingUnion{workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
 					Text: cloudflare.F("my_data"),
-					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectBindingsWorkersBindingKindPlainTextTypePlainText),
+					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
+				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				KeepAssets:         cloudflare.F(false),
 				KeepBindings:       cloudflare.F([]string{"string"}),
-				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectMigrationsUnion](workers.SingleStepMigrationParam{
+				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataLimits{
+					CPUMs: cloudflare.F(int64(50)),
+				}),
+				Logpush:    cloudflare.F(false),
+				MainModule: cloudflare.F("worker.js"),
+				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrationsUnion](workers.SingleStepMigrationParam{
 					DeletedClasses:   cloudflare.F([]string{"string"}),
 					NewClasses:       cloudflare.F([]string{"string"}),
 					NewSqliteClasses: cloudflare.F([]string{"string"}),
@@ -76,17 +80,17 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("to"),
 					}}),
 				}),
-				Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectObservability{
+				Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
-					Logs: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectObservabilityLogs{
+					Logs: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(0.100000),
 					}),
 				}),
-				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectPlacement{
-					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectPlacementModeSmart),
+				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacement{
+					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
@@ -94,7 +98,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 				}}),
-				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObjectUsageModelStandard),
+				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard),
 			}),
 			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},

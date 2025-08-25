@@ -146,7 +146,7 @@ type UnionBool bool
 
 func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnionParam()                            {}
 func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnion()                                 {}
-func (UnionBool) ImplementsScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion()        {}
+func (UnionBool) ImplementsScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion()              {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion() {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion()  {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseCalculationsAggregatesGroupsValueUnion() {
@@ -181,7 +181,7 @@ func (UnionBool) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
 func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
 func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
-func (UnionBool) ImplementsDispatchNamespaceScriptUpdateParamsMetadataObjectAssetsConfigRunWorkerFirstUnion() {
+func (UnionBool) ImplementsDispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {
 }
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
