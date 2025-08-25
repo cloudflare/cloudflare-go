@@ -427,6 +427,7 @@ type ThreatEventNewParams struct {
 	AttackerCountry param.Field[string]                  `json:"attackerCountry"`
 	DatasetID       param.Field[string]                  `json:"datasetId"`
 	Indicator       param.Field[string]                  `json:"indicator"`
+	IndicatorType   param.Field[string]                  `json:"indicatorType"`
 	Tags            param.Field[[]string]                `json:"tags"`
 	TargetCountry   param.Field[string]                  `json:"targetCountry"`
 	TargetIndustry  param.Field[string]                  `json:"targetIndustry"`
@@ -563,6 +564,7 @@ type ThreatEventBulkNewParamsData struct {
 	AttackerCountry param.Field[string]                          `json:"attackerCountry"`
 	DatasetID       param.Field[string]                          `json:"datasetId"`
 	Indicator       param.Field[string]                          `json:"indicator"`
+	IndicatorType   param.Field[string]                          `json:"indicatorType"`
 	Tags            param.Field[[]string]                        `json:"tags"`
 	TargetCountry   param.Field[string]                          `json:"targetCountry"`
 	TargetIndustry  param.Field[string]                          `json:"targetIndustry"`
