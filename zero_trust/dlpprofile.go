@@ -140,9 +140,6 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 type Profile struct {
 	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
-	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
-	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
-	Entries interface{} `json:"entries,required"`
 	// The name of the profile.
 	Name             string      `json:"name,required"`
 	Type             ProfileType `json:"type,required"`
@@ -159,7 +156,10 @@ type Profile struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description,nullable"`
-	OCREnabled  bool   `json:"ocr_enabled"`
+	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
+	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
+	Entries    interface{} `json:"entries"`
+	OCREnabled bool        `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
 	// When the profile was lasted updated.
@@ -171,7 +171,6 @@ type Profile struct {
 // profileJSON contains the JSON metadata for the struct [Profile]
 type profileJSON struct {
 	ID                  apijson.Field
-	Entries             apijson.Field
 	Name                apijson.Field
 	Type                apijson.Field
 	AIContextEnabled    apijson.Field
@@ -180,6 +179,7 @@ type profileJSON struct {
 	ContextAwareness    apijson.Field
 	CreatedAt           apijson.Field
 	Description         apijson.Field
+	Entries             apijson.Field
 	OCREnabled          apijson.Field
 	OpenAccess          apijson.Field
 	UpdatedAt           apijson.Field
@@ -240,8 +240,7 @@ type ProfileCustomProfile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
 	// When the profile was created.
-	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
-	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// The name of the profile.
 	Name       string                   `json:"name,required"`
 	OCREnabled bool                     `json:"ocr_enabled,required"`
@@ -256,8 +255,9 @@ type ProfileCustomProfile struct {
 	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// The description of the profile.
-	Description string                   `json:"description,nullable"`
-	JSON        profileCustomProfileJSON `json:"-"`
+	Description string                      `json:"description,nullable"`
+	Entries     []ProfileCustomProfileEntry `json:"entries"`
+	JSON        profileCustomProfileJSON    `json:"-"`
 }
 
 // profileCustomProfileJSON contains the JSON metadata for the struct
@@ -266,7 +266,6 @@ type profileCustomProfileJSON struct {
 	ID                  apijson.Field
 	AllowedMatchCount   apijson.Field
 	CreatedAt           apijson.Field
-	Entries             apijson.Field
 	Name                apijson.Field
 	OCREnabled          apijson.Field
 	Type                apijson.Field
@@ -275,6 +274,7 @@ type profileCustomProfileJSON struct {
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
 	Description         apijson.Field
+	Entries             apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -288,6 +288,37 @@ func (r profileCustomProfileJSON) RawJSON() string {
 }
 
 func (r ProfileCustomProfile) implementsProfile() {}
+
+type ProfileCustomProfileType string
+
+const (
+	ProfileCustomProfileTypeCustom ProfileCustomProfileType = "custom"
+)
+
+func (r ProfileCustomProfileType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileConfidenceThreshold string
+
+const (
+	ProfileCustomProfileConfidenceThresholdLow      ProfileCustomProfileConfidenceThreshold = "low"
+	ProfileCustomProfileConfidenceThresholdMedium   ProfileCustomProfileConfidenceThreshold = "medium"
+	ProfileCustomProfileConfidenceThresholdHigh     ProfileCustomProfileConfidenceThreshold = "high"
+	ProfileCustomProfileConfidenceThresholdVeryHigh ProfileCustomProfileConfidenceThreshold = "very_high"
+)
+
+func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileConfidenceThresholdLow, ProfileCustomProfileConfidenceThresholdMedium, ProfileCustomProfileConfidenceThresholdHigh, ProfileCustomProfileConfidenceThresholdVeryHigh:
+		return true
+	}
+	return false
+}
 
 type ProfileCustomProfileEntry struct {
 	ID      string                          `json:"id,required" format:"uuid"`
@@ -796,37 +827,6 @@ const (
 func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	switch r {
 	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeDocumentFingerprint, ProfileCustomProfileEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type ProfileCustomProfileType string
-
-const (
-	ProfileCustomProfileTypeCustom ProfileCustomProfileType = "custom"
-)
-
-func (r ProfileCustomProfileType) IsKnown() bool {
-	switch r {
-	case ProfileCustomProfileTypeCustom:
-		return true
-	}
-	return false
-}
-
-type ProfileCustomProfileConfidenceThreshold string
-
-const (
-	ProfileCustomProfileConfidenceThresholdLow      ProfileCustomProfileConfidenceThreshold = "low"
-	ProfileCustomProfileConfidenceThresholdMedium   ProfileCustomProfileConfidenceThreshold = "medium"
-	ProfileCustomProfileConfidenceThresholdHigh     ProfileCustomProfileConfidenceThreshold = "high"
-	ProfileCustomProfileConfidenceThresholdVeryHigh ProfileCustomProfileConfidenceThreshold = "very_high"
-)
-
-func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
-	switch r {
-	case ProfileCustomProfileConfidenceThresholdLow, ProfileCustomProfileConfidenceThresholdMedium, ProfileCustomProfileConfidenceThresholdHigh, ProfileCustomProfileConfidenceThresholdVeryHigh:
 		return true
 	}
 	return false
