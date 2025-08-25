@@ -65,7 +65,7 @@ func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID strin
 }
 
 // List all the resource groups for an account.
-func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceGroupListResponse], err error) {
+func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ResourceGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -87,8 +87,8 @@ func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupLis
 }
 
 // List all the resource groups for an account.
-func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ResourceGroupListResponse] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ResourceGroupListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a resource group from an account.
@@ -641,10 +641,6 @@ type ResourceGroupListParams struct {
 	ID param.Field[string] `query:"id"`
 	// Name of the resource group to be fetched.
 	Name param.Field[string] `query:"name"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results per page.
-	PerPage param.Field[float64] `query:"per_page"`
 }
 
 // URLQuery serializes [ResourceGroupListParams]'s query parameters as
