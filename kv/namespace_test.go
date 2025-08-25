@@ -88,7 +88,7 @@ func TestNamespaceListWithOptionalParams(t *testing.T) {
 		Direction: cloudflare.F(kv.NamespaceListParamsDirectionAsc),
 		Order:     cloudflare.F(kv.NamespaceListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(5.000000),
+		PerPage:   cloudflare.F(1.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
