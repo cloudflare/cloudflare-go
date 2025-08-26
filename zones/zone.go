@@ -192,7 +192,10 @@ type Zone struct {
 	Owner ZoneOwner `json:"owner,required"`
 	// A Zones subscription information.
 	//
-	// Deprecated: deprecated
+	// Deprecated: Please use the `/zones/{zone_id}/subscription` API to update a
+	// zone's plan. Changing this value will create/cancel associated subscriptions. To
+	// view available plans for this zone, see
+	// [Zone Plans](https://developers.cloudflare.com/api/resources/zones/subresources/plans/).
 	Plan ZonePlan `json:"plan,required"`
 	// Allows the customer to use a custom apex. _Tenants Only Configuration_.
 	CNAMESuffix string `json:"cname_suffix"`
@@ -201,7 +204,7 @@ type Zone struct {
 	Paused bool `json:"paused"`
 	// Legacy permissions based on legacy user membership information.
 	//
-	// Deprecated: deprecated
+	// Deprecated: This has been replaced by Account memberships.
 	Permissions []string `json:"permissions"`
 	// The zone status on Cloudflare.
 	Status ZoneStatus `json:"status"`
@@ -353,7 +356,10 @@ func (r zoneOwnerJSON) RawJSON() string {
 
 // A Zones subscription information.
 //
-// Deprecated: deprecated
+// Deprecated: Please use the `/zones/{zone_id}/subscription` API to update a
+// zone's plan. Changing this value will create/cancel associated subscriptions. To
+// view available plans for this zone, see
+// [Zone Plans](https://developers.cloudflare.com/api/resources/zones/subresources/plans/).
 type ZonePlan struct {
 	// Identifier
 	ID string `json:"id"`
