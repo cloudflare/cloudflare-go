@@ -1,6 +1,7 @@
 package apiform
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -28,9 +29,16 @@ func MarshalRoot(value interface{}, writer *multipart.Writer) error {
 	return e.marshal(value, writer)
 }
 
+func MarshalRootWithJSON(value interface{}, writer *multipart.Writer) error {
+	e := &encoder{root: true, dateFormat: time.RFC3339, fieldsAsJSON: true}
+	return e.marshal(value, writer)
+}
+
 type encoder struct {
-	dateFormat string
-	root       bool
+	dateFormat    string
+	root          bool
+	fieldsAsJSON  bool
+	objectsAsJSON bool
 }
 
 type encoderFunc func(key string, value reflect.Value, writer *multipart.Writer) error
@@ -163,14 +171,18 @@ func (e *encoder) newPrimitiveTypeEncoder(t reflect.Type) encoderFunc {
 }
 
 func (e *encoder) newArrayTypeEncoder(t reflect.Type) encoderFunc {
-	itemEncoder := e.typeEncoder(t.Elem())
+	if e.objectsAsJSON && t.Elem() != reflect.TypeOf((*io.Reader)(nil)).Elem() {
+		return e.newJSONEncoder()
+	}
 
+	itemEncoder := e.typeEncoder(t.Elem())
 	return func(key string, v reflect.Value, writer *multipart.Writer) error {
-		if key != "" {
-			key = key + "."
-		}
 		for i := 0; i < v.Len(); i++ {
-			err := itemEncoder(key+strconv.Itoa(i), v.Index(i), writer)
+			newKey := key
+			if newKey != "" && !e.objectsAsJSON {
+				newKey = newKey + "." + strconv.Itoa(i)
+			}
+			err := itemEncoder(newKey, v.Index(i), writer)
 			if err != nil {
 				return err
 			}
@@ -179,9 +191,37 @@ func (e *encoder) newArrayTypeEncoder(t reflect.Type) encoderFunc {
 	}
 }
 
+func (e *encoder) newJSONEncoder() encoderFunc {
+	return func(key string, v reflect.Value, writer *multipart.Writer) error {
+		b, err := json.Marshal(v.Interface())
+		if err != nil {
+			return err
+		}
+		h := make(textproto.MIMEHeader)
+		h.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"`, escapeQuotes(key)))
+		h.Set("Content-Type", "application/json")
+		w, err := writer.CreatePart(h)
+		if err != nil {
+			return err
+		}
+		_, err = w.Write(b)
+		return err
+	}
+}
+
 func (e *encoder) newStructTypeEncoder(t reflect.Type) encoderFunc {
 	if t.Implements(reflect.TypeOf((*param.FieldLike)(nil)).Elem()) {
 		return e.newFieldTypeEncoder(t)
+	}
+
+	if e.objectsAsJSON {
+		return e.newJSONEncoder()
+	}
+
+	if e.fieldsAsJSON {
+		enc := *e
+		e = &enc
+		e.objectsAsJSON = true
 	}
 
 	encoderFields := []encoderField{}
@@ -377,6 +417,9 @@ func (e *encoder) encodeMapEntries(key string, v reflect.Value, writer *multipar
 }
 
 func (e *encoder) newMapEncoder(t reflect.Type) encoderFunc {
+	if e.objectsAsJSON {
+		return e.newJSONEncoder()
+	}
 	return func(key string, value reflect.Value, writer *multipart.Writer) error {
 		return e.encodeMapEntries(key, value, writer)
 	}
