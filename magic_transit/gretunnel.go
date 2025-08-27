@@ -186,7 +186,9 @@ type GRETunnelNewResponse struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name      string                        `json:"name,required"`
+	BGP       GRETunnelNewResponseBGP       `json:"bgp"`
+	BGPStatus GRETunnelNewResponseBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -215,6 +217,8 @@ type greTunnelNewResponseJSON struct {
 	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
@@ -232,6 +236,103 @@ func (r *GRETunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r greTunnelNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type GRETunnelNewResponseBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                      `json:"md5_key"`
+	JSON   greTunnelNewResponseBGPJSON `json:"-"`
+}
+
+// greTunnelNewResponseBGPJSON contains the JSON metadata for the struct
+// [GRETunnelNewResponseBGP]
+type greTunnelNewResponseBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GRETunnelNewResponseBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelNewResponseBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelNewResponseBGPStatus struct {
+	State               GRETunnelNewResponseBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                               `json:"tcp_established,required"`
+	UpdatedAt           time.Time                          `json:"updated_at,required" format:"date-time"`
+	BGPState            string                             `json:"bgp_state"`
+	CfSpeakerIP         string                             `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                              `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                             `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                              `json:"customer_speaker_port"`
+	JSON                greTunnelNewResponseBGPStatusJSON  `json:"-"`
+}
+
+// greTunnelNewResponseBGPStatusJSON contains the JSON metadata for the struct
+// [GRETunnelNewResponseBGPStatus]
+type greTunnelNewResponseBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *GRETunnelNewResponseBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelNewResponseBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelNewResponseBGPStatusState string
+
+const (
+	GRETunnelNewResponseBGPStatusStateBGPDown         GRETunnelNewResponseBGPStatusState = "BGP_DOWN"
+	GRETunnelNewResponseBGPStatusStateBGPUp           GRETunnelNewResponseBGPStatusState = "BGP_UP"
+	GRETunnelNewResponseBGPStatusStateBGPEstablishing GRETunnelNewResponseBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r GRETunnelNewResponseBGPStatusState) IsKnown() bool {
+	switch r {
+	case GRETunnelNewResponseBGPStatusStateBGPDown, GRETunnelNewResponseBGPStatusStateBGPUp, GRETunnelNewResponseBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type GRETunnelNewResponseHealthCheck struct {
@@ -398,7 +499,9 @@ type GRETunnelUpdateResponseModifiedGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name      string                                            `json:"name,required"`
+	BGP       GRETunnelUpdateResponseModifiedGRETunnelBGP       `json:"bgp"`
+	BGPStatus GRETunnelUpdateResponseModifiedGRETunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -427,6 +530,8 @@ type greTunnelUpdateResponseModifiedGRETunnelJSON struct {
 	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
@@ -444,6 +549,103 @@ func (r *GRETunnelUpdateResponseModifiedGRETunnel) UnmarshalJSON(data []byte) (e
 
 func (r greTunnelUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type GRETunnelUpdateResponseModifiedGRETunnelBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                          `json:"md5_key"`
+	JSON   greTunnelUpdateResponseModifiedGRETunnelBGPJSON `json:"-"`
+}
+
+// greTunnelUpdateResponseModifiedGRETunnelBGPJSON contains the JSON metadata for
+// the struct [GRETunnelUpdateResponseModifiedGRETunnelBGP]
+type greTunnelUpdateResponseModifiedGRETunnelBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GRETunnelUpdateResponseModifiedGRETunnelBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelUpdateResponseModifiedGRETunnelBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelUpdateResponseModifiedGRETunnelBGPStatus struct {
+	State               GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                                   `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                              `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                                 `json:"bgp_state"`
+	CfSpeakerIP         string                                                 `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                                  `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                                 `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                                  `json:"customer_speaker_port"`
+	JSON                greTunnelUpdateResponseModifiedGRETunnelBGPStatusJSON  `json:"-"`
+}
+
+// greTunnelUpdateResponseModifiedGRETunnelBGPStatusJSON contains the JSON metadata
+// for the struct [GRETunnelUpdateResponseModifiedGRETunnelBGPStatus]
+type greTunnelUpdateResponseModifiedGRETunnelBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *GRETunnelUpdateResponseModifiedGRETunnelBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelUpdateResponseModifiedGRETunnelBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState string
+
+const (
+	GRETunnelUpdateResponseModifiedGRETunnelBGPStatusStateBGPDown         GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState = "BGP_DOWN"
+	GRETunnelUpdateResponseModifiedGRETunnelBGPStatusStateBGPUp           GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState = "BGP_UP"
+	GRETunnelUpdateResponseModifiedGRETunnelBGPStatusStateBGPEstablishing GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState) IsKnown() bool {
+	switch r {
+	case GRETunnelUpdateResponseModifiedGRETunnelBGPStatusStateBGPDown, GRETunnelUpdateResponseModifiedGRETunnelBGPStatusStateBGPUp, GRETunnelUpdateResponseModifiedGRETunnelBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type GRETunnelUpdateResponseModifiedGRETunnelHealthCheck struct {
@@ -609,7 +811,9 @@ type GRETunnelListResponseGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name      string                                   `json:"name,required"`
+	BGP       GRETunnelListResponseGRETunnelsBGP       `json:"bgp"`
+	BGPStatus GRETunnelListResponseGRETunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -638,6 +842,8 @@ type greTunnelListResponseGRETunnelJSON struct {
 	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
@@ -655,6 +861,103 @@ func (r *GRETunnelListResponseGRETunnel) UnmarshalJSON(data []byte) (err error) 
 
 func (r greTunnelListResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type GRETunnelListResponseGRETunnelsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                 `json:"md5_key"`
+	JSON   greTunnelListResponseGRETunnelsBGPJSON `json:"-"`
+}
+
+// greTunnelListResponseGRETunnelsBGPJSON contains the JSON metadata for the struct
+// [GRETunnelListResponseGRETunnelsBGP]
+type greTunnelListResponseGRETunnelsBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GRETunnelListResponseGRETunnelsBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelListResponseGRETunnelsBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelListResponseGRETunnelsBGPStatus struct {
+	State               GRETunnelListResponseGRETunnelsBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                          `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                     `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                        `json:"bgp_state"`
+	CfSpeakerIP         string                                        `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                         `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                        `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                         `json:"customer_speaker_port"`
+	JSON                greTunnelListResponseGRETunnelsBGPStatusJSON  `json:"-"`
+}
+
+// greTunnelListResponseGRETunnelsBGPStatusJSON contains the JSON metadata for the
+// struct [GRETunnelListResponseGRETunnelsBGPStatus]
+type greTunnelListResponseGRETunnelsBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *GRETunnelListResponseGRETunnelsBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelListResponseGRETunnelsBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelListResponseGRETunnelsBGPStatusState string
+
+const (
+	GRETunnelListResponseGRETunnelsBGPStatusStateBGPDown         GRETunnelListResponseGRETunnelsBGPStatusState = "BGP_DOWN"
+	GRETunnelListResponseGRETunnelsBGPStatusStateBGPUp           GRETunnelListResponseGRETunnelsBGPStatusState = "BGP_UP"
+	GRETunnelListResponseGRETunnelsBGPStatusStateBGPEstablishing GRETunnelListResponseGRETunnelsBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r GRETunnelListResponseGRETunnelsBGPStatusState) IsKnown() bool {
+	switch r {
+	case GRETunnelListResponseGRETunnelsBGPStatusStateBGPDown, GRETunnelListResponseGRETunnelsBGPStatusStateBGPUp, GRETunnelListResponseGRETunnelsBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type GRETunnelListResponseGRETunnelsHealthCheck struct {
@@ -822,7 +1125,9 @@ type GRETunnelDeleteResponseDeletedGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name      string                                           `json:"name,required"`
+	BGP       GRETunnelDeleteResponseDeletedGRETunnelBGP       `json:"bgp"`
+	BGPStatus GRETunnelDeleteResponseDeletedGRETunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -851,6 +1156,8 @@ type greTunnelDeleteResponseDeletedGRETunnelJSON struct {
 	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
@@ -868,6 +1175,103 @@ func (r *GRETunnelDeleteResponseDeletedGRETunnel) UnmarshalJSON(data []byte) (er
 
 func (r greTunnelDeleteResponseDeletedGRETunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type GRETunnelDeleteResponseDeletedGRETunnelBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                         `json:"md5_key"`
+	JSON   greTunnelDeleteResponseDeletedGRETunnelBGPJSON `json:"-"`
+}
+
+// greTunnelDeleteResponseDeletedGRETunnelBGPJSON contains the JSON metadata for
+// the struct [GRETunnelDeleteResponseDeletedGRETunnelBGP]
+type greTunnelDeleteResponseDeletedGRETunnelBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GRETunnelDeleteResponseDeletedGRETunnelBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelDeleteResponseDeletedGRETunnelBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelDeleteResponseDeletedGRETunnelBGPStatus struct {
+	State               GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                                  `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                             `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                                `json:"bgp_state"`
+	CfSpeakerIP         string                                                `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                                 `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                                `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                                 `json:"customer_speaker_port"`
+	JSON                greTunnelDeleteResponseDeletedGRETunnelBGPStatusJSON  `json:"-"`
+}
+
+// greTunnelDeleteResponseDeletedGRETunnelBGPStatusJSON contains the JSON metadata
+// for the struct [GRETunnelDeleteResponseDeletedGRETunnelBGPStatus]
+type greTunnelDeleteResponseDeletedGRETunnelBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *GRETunnelDeleteResponseDeletedGRETunnelBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelDeleteResponseDeletedGRETunnelBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState string
+
+const (
+	GRETunnelDeleteResponseDeletedGRETunnelBGPStatusStateBGPDown         GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState = "BGP_DOWN"
+	GRETunnelDeleteResponseDeletedGRETunnelBGPStatusStateBGPUp           GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState = "BGP_UP"
+	GRETunnelDeleteResponseDeletedGRETunnelBGPStatusStateBGPEstablishing GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState) IsKnown() bool {
+	switch r {
+	case GRETunnelDeleteResponseDeletedGRETunnelBGPStatusStateBGPDown, GRETunnelDeleteResponseDeletedGRETunnelBGPStatusStateBGPUp, GRETunnelDeleteResponseDeletedGRETunnelBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type GRETunnelDeleteResponseDeletedGRETunnelHealthCheck struct {
@@ -1035,7 +1439,9 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name      string                                                 `json:"name,required"`
+	BGP       GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP       `json:"bgp"`
+	BGPStatus GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -1064,6 +1470,8 @@ type greTunnelBulkUpdateResponseModifiedGRETunnelJSON struct {
 	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
@@ -1081,6 +1489,103 @@ func (r *GRETunnelBulkUpdateResponseModifiedGRETunnel) UnmarshalJSON(data []byte
 
 func (r greTunnelBulkUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                               `json:"md5_key"`
+	JSON   greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON contains the JSON metadata
+// for the struct [GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP]
+type greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus struct {
+	State               GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                                        `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                                   `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                                      `json:"bgp_state"`
+	CfSpeakerIP         string                                                      `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                                       `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                                      `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                                       `json:"customer_speaker_port"`
+	JSON                greTunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusJSON  `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusJSON contains the JSON
+// metadata for the struct [GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus]
+type greTunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState string
+
+const (
+	GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusStateBGPDown         GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState = "BGP_DOWN"
+	GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusStateBGPUp           GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState = "BGP_UP"
+	GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusStateBGPEstablishing GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState) IsKnown() bool {
+	switch r {
+	case GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusStateBGPDown, GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusStateBGPUp, GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck struct {
@@ -1247,7 +1752,9 @@ type GRETunnelGetResponseGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name      string                                 `json:"name,required"`
+	BGP       GRETunnelGetResponseGRETunnelBGP       `json:"bgp"`
+	BGPStatus GRETunnelGetResponseGRETunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -1276,6 +1783,8 @@ type greTunnelGetResponseGRETunnelJSON struct {
 	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
 	HealthCheck           apijson.Field
@@ -1293,6 +1802,103 @@ func (r *GRETunnelGetResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
 
 func (r greTunnelGetResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type GRETunnelGetResponseGRETunnelBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                               `json:"md5_key"`
+	JSON   greTunnelGetResponseGRETunnelBGPJSON `json:"-"`
+}
+
+// greTunnelGetResponseGRETunnelBGPJSON contains the JSON metadata for the struct
+// [GRETunnelGetResponseGRETunnelBGP]
+type greTunnelGetResponseGRETunnelBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GRETunnelGetResponseGRETunnelBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelGetResponseGRETunnelBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelGetResponseGRETunnelBGPStatus struct {
+	State               GRETunnelGetResponseGRETunnelBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                        `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                   `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                      `json:"bgp_state"`
+	CfSpeakerIP         string                                      `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                       `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                      `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                       `json:"customer_speaker_port"`
+	JSON                greTunnelGetResponseGRETunnelBGPStatusJSON  `json:"-"`
+}
+
+// greTunnelGetResponseGRETunnelBGPStatusJSON contains the JSON metadata for the
+// struct [GRETunnelGetResponseGRETunnelBGPStatus]
+type greTunnelGetResponseGRETunnelBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *GRETunnelGetResponseGRETunnelBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelGetResponseGRETunnelBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelGetResponseGRETunnelBGPStatusState string
+
+const (
+	GRETunnelGetResponseGRETunnelBGPStatusStateBGPDown         GRETunnelGetResponseGRETunnelBGPStatusState = "BGP_DOWN"
+	GRETunnelGetResponseGRETunnelBGPStatusStateBGPUp           GRETunnelGetResponseGRETunnelBGPStatusState = "BGP_UP"
+	GRETunnelGetResponseGRETunnelBGPStatusStateBGPEstablishing GRETunnelGetResponseGRETunnelBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r GRETunnelGetResponseGRETunnelBGPStatusState) IsKnown() bool {
+	switch r {
+	case GRETunnelGetResponseGRETunnelBGPStatusStateBGPDown, GRETunnelGetResponseGRETunnelBGPStatusStateBGPUp, GRETunnelGetResponseGRETunnelBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type GRETunnelGetResponseGRETunnelHealthCheck struct {
@@ -1437,7 +2043,8 @@ type GRETunnelNewParams struct {
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string]                `json:"name,required"`
+	BGP  param.Field[GRETunnelNewParamsBGP] `json:"bgp"`
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                        `json:"description"`
 	HealthCheck param.Field[GRETunnelNewParamsHealthCheck] `json:"health_check"`
@@ -1455,6 +2062,37 @@ type GRETunnelNewParams struct {
 }
 
 func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type GRETunnelNewParamsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key param.Field[string] `json:"md5_key"`
+}
+
+func (r GRETunnelNewParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

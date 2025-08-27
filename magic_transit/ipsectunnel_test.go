@@ -32,8 +32,13 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 		InterfaceAddress:   cloudflare.F("192.0.2.0/31"),
 		Name:               cloudflare.F("IPsec_1"),
-		CustomerEndpoint:   cloudflare.F("203.0.113.1"),
-		Description:        cloudflare.F("Tunnel for ISP X"),
+		BGP: cloudflare.F(magic_transit.IPSECTunnelNewParamsBGP{
+			CustomerASN:   cloudflare.F(int64(0)),
+			ExtraPrefixes: cloudflare.F([]string{"string"}),
+			Md5Key:        cloudflare.F("md5_key"),
+		}),
+		CustomerEndpoint: cloudflare.F("203.0.113.1"),
+		Description:      cloudflare.F("Tunnel for ISP X"),
 		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
 			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionBidirectional),
 			Enabled:   cloudflare.F(true),
@@ -79,8 +84,13 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			InterfaceAddress:   cloudflare.F("192.0.2.0/31"),
 			Name:               cloudflare.F("IPsec_1"),
-			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
-			Description:        cloudflare.F("Tunnel for ISP X"),
+			BGP: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsBGP{
+				CustomerASN:   cloudflare.F(int64(0)),
+				ExtraPrefixes: cloudflare.F([]string{"string"}),
+				Md5Key:        cloudflare.F("md5_key"),
+			}),
+			CustomerEndpoint: cloudflare.F("203.0.113.1"),
+			Description:      cloudflare.F("Tunnel for ISP X"),
 			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
 				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
