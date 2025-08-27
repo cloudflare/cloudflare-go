@@ -34,7 +34,12 @@ func TestGRETunnelNewWithOptionalParams(t *testing.T) {
 		CustomerGREEndpoint:   cloudflare.F("203.0.113.1"),
 		InterfaceAddress:      cloudflare.F("192.0.2.0/31"),
 		Name:                  cloudflare.F("GRE_1"),
-		Description:           cloudflare.F("Tunnel for ISP X"),
+		BGP: cloudflare.F(magic_transit.GRETunnelNewParamsBGP{
+			CustomerASN:   cloudflare.F(int64(0)),
+			ExtraPrefixes: cloudflare.F([]string{"string"}),
+			Md5Key:        cloudflare.F("md5_key"),
+		}),
+		Description: cloudflare.F("Tunnel for ISP X"),
 		HealthCheck: cloudflare.F(magic_transit.GRETunnelNewParamsHealthCheck{
 			Direction: cloudflare.F(magic_transit.GRETunnelNewParamsHealthCheckDirectionBidirectional),
 			Enabled:   cloudflare.F(true),
