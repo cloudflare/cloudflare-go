@@ -169,6 +169,7 @@ type AIGatewayNewResponse struct {
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
+	DLP                     AIGatewayNewResponseDLP                   `json:"dlp"`
 	LogManagement           int64                                     `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
@@ -193,6 +194,7 @@ type aiGatewayNewResponseJSON struct {
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
+	DLP                     apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -220,6 +222,46 @@ const (
 func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayNewResponseRateLimitingTechniqueFixed, AIGatewayNewResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseDLP struct {
+	Action   AIGatewayNewResponseDLPAction `json:"action,required"`
+	Enabled  bool                          `json:"enabled,required"`
+	Profiles []string                      `json:"profiles,required"`
+	JSON     aiGatewayNewResponseDLPJSON   `json:"-"`
+}
+
+// aiGatewayNewResponseDLPJSON contains the JSON metadata for the struct
+// [AIGatewayNewResponseDLP]
+type aiGatewayNewResponseDLPJSON struct {
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayNewResponseDLPAction string
+
+const (
+	AIGatewayNewResponseDLPActionBlock AIGatewayNewResponseDLPAction = "BLOCK"
+	AIGatewayNewResponseDLPActionFlag  AIGatewayNewResponseDLPAction = "FLAG"
+)
+
+func (r AIGatewayNewResponseDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseDLPActionBlock, AIGatewayNewResponseDLPActionFlag:
 		return true
 	}
 	return false
@@ -255,6 +297,7 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
+	DLP                     AIGatewayUpdateResponseDLP                   `json:"dlp"`
 	LogManagement           int64                                        `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
@@ -279,6 +322,7 @@ type aiGatewayUpdateResponseJSON struct {
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
+	DLP                     apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -306,6 +350,46 @@ const (
 func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateResponseRateLimitingTechniqueFixed, AIGatewayUpdateResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseDLP struct {
+	Action   AIGatewayUpdateResponseDLPAction `json:"action,required"`
+	Enabled  bool                             `json:"enabled,required"`
+	Profiles []string                         `json:"profiles,required"`
+	JSON     aiGatewayUpdateResponseDLPJSON   `json:"-"`
+}
+
+// aiGatewayUpdateResponseDLPJSON contains the JSON metadata for the struct
+// [AIGatewayUpdateResponseDLP]
+type aiGatewayUpdateResponseDLPJSON struct {
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayUpdateResponseDLPAction string
+
+const (
+	AIGatewayUpdateResponseDLPActionBlock AIGatewayUpdateResponseDLPAction = "BLOCK"
+	AIGatewayUpdateResponseDLPActionFlag  AIGatewayUpdateResponseDLPAction = "FLAG"
+)
+
+func (r AIGatewayUpdateResponseDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseDLPActionBlock, AIGatewayUpdateResponseDLPActionFlag:
 		return true
 	}
 	return false
@@ -341,6 +425,7 @@ type AIGatewayListResponse struct {
 	RateLimitingLimit       int64                                      `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                       `json:"authentication"`
+	DLP                     AIGatewayListResponseDLP                   `json:"dlp"`
 	LogManagement           int64                                      `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                       `json:"logpush"`
@@ -365,6 +450,7 @@ type aiGatewayListResponseJSON struct {
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
+	DLP                     apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -392,6 +478,46 @@ const (
 func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayListResponseRateLimitingTechniqueFixed, AIGatewayListResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseDLP struct {
+	Action   AIGatewayListResponseDLPAction `json:"action,required"`
+	Enabled  bool                           `json:"enabled,required"`
+	Profiles []string                       `json:"profiles,required"`
+	JSON     aiGatewayListResponseDLPJSON   `json:"-"`
+}
+
+// aiGatewayListResponseDLPJSON contains the JSON metadata for the struct
+// [AIGatewayListResponseDLP]
+type aiGatewayListResponseDLPJSON struct {
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayListResponseDLPAction string
+
+const (
+	AIGatewayListResponseDLPActionBlock AIGatewayListResponseDLPAction = "BLOCK"
+	AIGatewayListResponseDLPActionFlag  AIGatewayListResponseDLPAction = "FLAG"
+)
+
+func (r AIGatewayListResponseDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseDLPActionBlock, AIGatewayListResponseDLPActionFlag:
 		return true
 	}
 	return false
@@ -427,6 +553,7 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
+	DLP                     AIGatewayDeleteResponseDLP                   `json:"dlp"`
 	LogManagement           int64                                        `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
@@ -451,6 +578,7 @@ type aiGatewayDeleteResponseJSON struct {
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
+	DLP                     apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -478,6 +606,46 @@ const (
 func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayDeleteResponseRateLimitingTechniqueFixed, AIGatewayDeleteResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseDLP struct {
+	Action   AIGatewayDeleteResponseDLPAction `json:"action,required"`
+	Enabled  bool                             `json:"enabled,required"`
+	Profiles []string                         `json:"profiles,required"`
+	JSON     aiGatewayDeleteResponseDLPJSON   `json:"-"`
+}
+
+// aiGatewayDeleteResponseDLPJSON contains the JSON metadata for the struct
+// [AIGatewayDeleteResponseDLP]
+type aiGatewayDeleteResponseDLPJSON struct {
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayDeleteResponseDLPAction string
+
+const (
+	AIGatewayDeleteResponseDLPActionBlock AIGatewayDeleteResponseDLPAction = "BLOCK"
+	AIGatewayDeleteResponseDLPActionFlag  AIGatewayDeleteResponseDLPAction = "FLAG"
+)
+
+func (r AIGatewayDeleteResponseDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseDLPActionBlock, AIGatewayDeleteResponseDLPActionFlag:
 		return true
 	}
 	return false
@@ -513,6 +681,7 @@ type AIGatewayGetResponse struct {
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
+	DLP                     AIGatewayGetResponseDLP                   `json:"dlp"`
 	LogManagement           int64                                     `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
@@ -537,6 +706,7 @@ type aiGatewayGetResponseJSON struct {
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
+	DLP                     apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -564,6 +734,46 @@ const (
 func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayGetResponseRateLimitingTechniqueFixed, AIGatewayGetResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseDLP struct {
+	Action   AIGatewayGetResponseDLPAction `json:"action,required"`
+	Enabled  bool                          `json:"enabled,required"`
+	Profiles []string                      `json:"profiles,required"`
+	JSON     aiGatewayGetResponseDLPJSON   `json:"-"`
+}
+
+// aiGatewayGetResponseDLPJSON contains the JSON metadata for the struct
+// [AIGatewayGetResponseDLP]
+type aiGatewayGetResponseDLPJSON struct {
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayGetResponseDLPAction string
+
+const (
+	AIGatewayGetResponseDLPActionBlock AIGatewayGetResponseDLPAction = "BLOCK"
+	AIGatewayGetResponseDLPActionFlag  AIGatewayGetResponseDLPAction = "FLAG"
+)
+
+func (r AIGatewayGetResponseDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseDLPActionBlock, AIGatewayGetResponseDLPActionFlag:
 		return true
 	}
 	return false
@@ -667,6 +877,7 @@ type AIGatewayUpdateParams struct {
 	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                       `json:"authentication"`
+	DLP                     param.Field[AIGatewayUpdateParamsDLP]                   `json:"dlp"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
@@ -688,6 +899,31 @@ const (
 func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsRateLimitingTechniqueFixed, AIGatewayUpdateParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsDLP struct {
+	Action   param.Field[AIGatewayUpdateParamsDLPAction] `json:"action,required"`
+	Enabled  param.Field[bool]                           `json:"enabled,required"`
+	Profiles param.Field[[]string]                       `json:"profiles,required"`
+}
+
+func (r AIGatewayUpdateParamsDLP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsDLPAction string
+
+const (
+	AIGatewayUpdateParamsDLPActionBlock AIGatewayUpdateParamsDLPAction = "BLOCK"
+	AIGatewayUpdateParamsDLPActionFlag  AIGatewayUpdateParamsDLPAction = "FLAG"
+)
+
+func (r AIGatewayUpdateParamsDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsDLPActionBlock, AIGatewayUpdateParamsDLPActionFlag:
 		return true
 	}
 	return false
