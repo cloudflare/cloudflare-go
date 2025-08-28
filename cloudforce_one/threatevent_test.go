@@ -203,6 +203,7 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 			Date:            cloudflare.F(time.Now()),
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			Indicator:       cloudflare.F("domain2.com"),
+			IndicatorType:   cloudflare.F("domain"),
 			Insight:         cloudflare.F("new insight"),
 			Raw: cloudflare.F(cloudforce_one.ThreatEventEditParamsRaw{
 				Data: cloudflare.F(map[string]interface{}{
