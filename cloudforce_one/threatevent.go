@@ -593,6 +593,7 @@ type ThreatEventEditParams struct {
 	Date            param.Field[time.Time]                `json:"date" format:"date-time"`
 	Event           param.Field[string]                   `json:"event"`
 	Indicator       param.Field[string]                   `json:"indicator"`
+	IndicatorType   param.Field[string]                   `json:"indicatorType"`
 	Insight         param.Field[string]                   `json:"insight"`
 	Raw             param.Field[ThreatEventEditParamsRaw] `json:"raw"`
 	TargetCountry   param.Field[string]                   `json:"targetCountry"`
