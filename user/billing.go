@@ -3,7 +3,7 @@
 package user
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // BillingService contains methods and other services that help with interacting

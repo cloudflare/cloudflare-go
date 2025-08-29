@@ -18,11 +18,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 )
 
 func getDefaultHeaders() map[string]string {

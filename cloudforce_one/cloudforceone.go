@@ -3,7 +3,7 @@
 package cloudforce_one
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // CloudforceOneService contains methods and other services that help with

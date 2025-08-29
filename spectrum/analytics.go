@@ -3,7 +3,7 @@
 package spectrum
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // AnalyticsService contains methods and other services that help with interacting
