@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
 func TestNetworkVirtualNetworkNewWithOptionalParams(t *testing.T) {
@@ -57,11 +57,12 @@ func TestNetworkVirtualNetworkListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.List(context.TODO(), zero_trust.NetworkVirtualNetworkListParams{
-		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		ID:        cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
-		IsDefault: cloudflare.F(true),
-		IsDeleted: cloudflare.F(true),
-		Name:      cloudflare.F("us-east-1-vpc"),
+		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		ID:               cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
+		IsDefault:        cloudflare.F(true),
+		IsDefaultNetwork: cloudflare.F(true),
+		IsDeleted:        cloudflare.F(true),
+		Name:             cloudflare.F("us-east-1-vpc"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

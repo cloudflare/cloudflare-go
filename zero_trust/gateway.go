@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // GatewayService contains methods and other services that help with interacting
@@ -93,7 +93,7 @@ type GatewayNewResponse struct {
 	ID string `json:"id"`
 	// Gateway internal ID.
 	GatewayTag string `json:"gateway_tag"`
-	// The name of the provider. Usually Cloudflare.
+	// Provider Name. Usually Cloudflare.
 	ProviderName string                 `json:"provider_name"`
 	JSON         gatewayNewResponseJSON `json:"-"`
 }
@@ -121,7 +121,7 @@ type GatewayListResponse struct {
 	ID string `json:"id"`
 	// Gateway internal ID.
 	GatewayTag string `json:"gateway_tag"`
-	// The name of the provider. Usually Cloudflare.
+	// Provider Name. Usually Cloudflare.
 	ProviderName string                  `json:"provider_name"`
 	JSON         gatewayListResponseJSON `json:"-"`
 }
@@ -151,7 +151,7 @@ type GatewayNewParams struct {
 type GatewayNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayNewResponse                `json:"result"`
 	JSON    gatewayNewResponseEnvelopeJSON    `json:"-"`
@@ -176,7 +176,7 @@ func (r gatewayNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayNewResponseEnvelopeSuccess bool
 
 const (
@@ -198,7 +198,7 @@ type GatewayListParams struct {
 type GatewayListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayListResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayListResponse                `json:"result"`
 	JSON    gatewayListResponseEnvelopeJSON    `json:"-"`
@@ -223,7 +223,7 @@ func (r gatewayListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayListResponseEnvelopeSuccess bool
 
 const (

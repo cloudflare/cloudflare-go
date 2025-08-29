@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -140,7 +140,8 @@ type Account struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Account name
-	Name string `json:"name,required"`
+	Name string      `json:"name,required"`
+	Type AccountType `json:"type,required"`
 	// Timestamp for the creation of the account
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Account settings
@@ -152,6 +153,7 @@ type Account struct {
 type accountJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
+	Type        apijson.Field
 	CreatedOn   apijson.Field
 	Settings    apijson.Field
 	raw         string
@@ -164,6 +166,21 @@ func (r *Account) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccountType string
+
+const (
+	AccountTypeStandard   AccountType = "standard"
+	AccountTypeEnterprise AccountType = "enterprise"
+)
+
+func (r AccountType) IsKnown() bool {
+	switch r {
+	case AccountTypeStandard, AccountTypeEnterprise:
+		return true
+	}
+	return false
 }
 
 // Account settings
@@ -196,7 +213,8 @@ type AccountParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	// Account name
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string]      `json:"name,required"`
+	Type param.Field[AccountType] `json:"type,required"`
 	// Account settings
 	Settings param.Field[AccountSettingsParam] `json:"settings"`
 }
@@ -242,10 +260,8 @@ func (r accountDeleteResponseJSON) RawJSON() string {
 
 type AccountNewParams struct {
 	// Account name
-	Name param.Field[string] `json:"name,required"`
-	// the type of account being created. For self-serve customers, use standard. for
-	// enterprise customers, use enterprise.
-	Type param.Field[AccountNewParamsType] `json:"type,required"`
+	Name param.Field[string]               `json:"name,required"`
+	Type param.Field[AccountNewParamsType] `json:"type"`
 	// information related to the tenant unit, and optionally, an id of the unit to
 	// create the account on. see
 	// https://developers.cloudflare.com/tenant/how-to/manage-accounts/
@@ -256,8 +272,6 @@ func (r AccountNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// the type of account being created. For self-serve customers, use standard. for
-// enterprise customers, use enterprise.
 type AccountNewParamsType string
 
 const (

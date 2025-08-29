@@ -3,8 +3,8 @@
 package ai_gateway
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 type Error = apierror.Error

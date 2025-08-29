@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -5389,10 +5389,16 @@ func (r SettingEditResponseZonesMaxUploadEditable) IsKnown() bool {
 // Refer to
 // [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 // more information.
+//
+// Deprecated: Mirage is being deprecated. More information at
+// https://developers.cloudflare.com/speed/optimization/images/mirage/
 type SettingEditResponseZonesSchemasMirage struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSchemasMirageID `json:"id,required"`
 	// Current value of the zone setting.
+	//
+	// Deprecated: Mirage is being deprecated. More information at
+	// https://developers.cloudflare.com/speed/optimization/images/mirage/
 	Value SettingEditResponseZonesSchemasMirageValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
@@ -5695,7 +5701,7 @@ func (r SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
 // requests to your origin. (Refer to
 // [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 // for more information.). The default value is "2" for all plan types except
-// Enterprise where it is "1"
+// Enterprise where it is "1".
 type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion struct {
 	// Value of the zone setting.
 	ID SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID `json:"id,required"`
@@ -8591,10 +8597,16 @@ func (r SettingGetResponseZonesMaxUploadEditable) IsKnown() bool {
 // Refer to
 // [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 // more information.
+//
+// Deprecated: Mirage is being deprecated. More information at
+// https://developers.cloudflare.com/speed/optimization/images/mirage/
 type SettingGetResponseZonesSchemasMirage struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSchemasMirageID `json:"id,required"`
 	// Current value of the zone setting.
+	//
+	// Deprecated: Mirage is being deprecated. More information at
+	// https://developers.cloudflare.com/speed/optimization/images/mirage/
 	Value SettingGetResponseZonesSchemasMirageValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
@@ -8897,7 +8909,7 @@ func (r SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
 // requests to your origin. (Refer to
 // [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 // for more information.). The default value is "2" for all plan types except
-// Enterprise where it is "1"
+// Enterprise where it is "1".
 type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion struct {
 	// Value of the zone setting.
 	ID SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID `json:"id,required"`

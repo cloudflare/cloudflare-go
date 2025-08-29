@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // InvestigateService contains methods and other services that help with
@@ -108,54 +108,56 @@ type InvestigateListResponse struct {
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
-	PostfixID        string                                  `json:"postfix_id,required"`
-	Properties       InvestigateListResponseProperties       `json:"properties,required"`
-	Ts               string                                  `json:"ts,required"`
-	AlertID          string                                  `json:"alert_id,nullable"`
-	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
-	EdfHash          string                                  `json:"edf_hash,nullable"`
-	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
-	Findings         []InvestigateListResponseFinding        `json:"findings,nullable"`
-	From             string                                  `json:"from,nullable"`
-	FromName         string                                  `json:"from_name,nullable"`
-	MessageID        string                                  `json:"message_id,nullable"`
-	SentDate         string                                  `json:"sent_date,nullable"`
-	Subject          string                                  `json:"subject,nullable"`
-	ThreatCategories []string                                `json:"threat_categories,nullable"`
-	To               []string                                `json:"to,nullable"`
-	ToName           []string                                `json:"to_name,nullable"`
-	Validation       InvestigateListResponseValidation       `json:"validation,nullable"`
-	JSON             investigateListResponseJSON             `json:"-"`
+	PostfixID             string                                  `json:"postfix_id,required"`
+	Properties            InvestigateListResponseProperties       `json:"properties,required"`
+	Ts                    string                                  `json:"ts,required"`
+	AlertID               string                                  `json:"alert_id,nullable"`
+	DeliveryMode          InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
+	EdfHash               string                                  `json:"edf_hash,nullable"`
+	FinalDisposition      InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
+	Findings              []InvestigateListResponseFinding        `json:"findings,nullable"`
+	From                  string                                  `json:"from,nullable"`
+	FromName              string                                  `json:"from_name,nullable"`
+	HtmltextStructureHash string                                  `json:"htmltext_structure_hash,nullable"`
+	MessageID             string                                  `json:"message_id,nullable"`
+	SentDate              string                                  `json:"sent_date,nullable"`
+	Subject               string                                  `json:"subject,nullable"`
+	ThreatCategories      []string                                `json:"threat_categories,nullable"`
+	To                    []string                                `json:"to,nullable"`
+	ToName                []string                                `json:"to_name,nullable"`
+	Validation            InvestigateListResponseValidation       `json:"validation,nullable"`
+	JSON                  investigateListResponseJSON             `json:"-"`
 }
 
 // investigateListResponseJSON contains the JSON metadata for the struct
 // [InvestigateListResponse]
 type investigateListResponseJSON struct {
-	ID                apijson.Field
-	ActionLog         apijson.Field
-	ClientRecipients  apijson.Field
-	DetectionReasons  apijson.Field
-	IsPhishSubmission apijson.Field
-	IsQuarantined     apijson.Field
-	PostfixID         apijson.Field
-	Properties        apijson.Field
-	Ts                apijson.Field
-	AlertID           apijson.Field
-	DeliveryMode      apijson.Field
-	EdfHash           apijson.Field
-	FinalDisposition  apijson.Field
-	Findings          apijson.Field
-	From              apijson.Field
-	FromName          apijson.Field
-	MessageID         apijson.Field
-	SentDate          apijson.Field
-	Subject           apijson.Field
-	ThreatCategories  apijson.Field
-	To                apijson.Field
-	ToName            apijson.Field
-	Validation        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                    apijson.Field
+	ActionLog             apijson.Field
+	ClientRecipients      apijson.Field
+	DetectionReasons      apijson.Field
+	IsPhishSubmission     apijson.Field
+	IsQuarantined         apijson.Field
+	PostfixID             apijson.Field
+	Properties            apijson.Field
+	Ts                    apijson.Field
+	AlertID               apijson.Field
+	DeliveryMode          apijson.Field
+	EdfHash               apijson.Field
+	FinalDisposition      apijson.Field
+	Findings              apijson.Field
+	From                  apijson.Field
+	FromName              apijson.Field
+	HtmltextStructureHash apijson.Field
+	MessageID             apijson.Field
+	SentDate              apijson.Field
+	Subject               apijson.Field
+	ThreatCategories      apijson.Field
+	To                    apijson.Field
+	ToName                apijson.Field
+	Validation            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *InvestigateListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -396,54 +398,56 @@ type InvestigateGetResponse struct {
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
-	PostfixID        string                                 `json:"postfix_id,required"`
-	Properties       InvestigateGetResponseProperties       `json:"properties,required"`
-	Ts               string                                 `json:"ts,required"`
-	AlertID          string                                 `json:"alert_id,nullable"`
-	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
-	EdfHash          string                                 `json:"edf_hash,nullable"`
-	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
-	Findings         []InvestigateGetResponseFinding        `json:"findings,nullable"`
-	From             string                                 `json:"from,nullable"`
-	FromName         string                                 `json:"from_name,nullable"`
-	MessageID        string                                 `json:"message_id,nullable"`
-	SentDate         string                                 `json:"sent_date,nullable"`
-	Subject          string                                 `json:"subject,nullable"`
-	ThreatCategories []string                               `json:"threat_categories,nullable"`
-	To               []string                               `json:"to,nullable"`
-	ToName           []string                               `json:"to_name,nullable"`
-	Validation       InvestigateGetResponseValidation       `json:"validation,nullable"`
-	JSON             investigateGetResponseJSON             `json:"-"`
+	PostfixID             string                                 `json:"postfix_id,required"`
+	Properties            InvestigateGetResponseProperties       `json:"properties,required"`
+	Ts                    string                                 `json:"ts,required"`
+	AlertID               string                                 `json:"alert_id,nullable"`
+	DeliveryMode          InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
+	EdfHash               string                                 `json:"edf_hash,nullable"`
+	FinalDisposition      InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
+	Findings              []InvestigateGetResponseFinding        `json:"findings,nullable"`
+	From                  string                                 `json:"from,nullable"`
+	FromName              string                                 `json:"from_name,nullable"`
+	HtmltextStructureHash string                                 `json:"htmltext_structure_hash,nullable"`
+	MessageID             string                                 `json:"message_id,nullable"`
+	SentDate              string                                 `json:"sent_date,nullable"`
+	Subject               string                                 `json:"subject,nullable"`
+	ThreatCategories      []string                               `json:"threat_categories,nullable"`
+	To                    []string                               `json:"to,nullable"`
+	ToName                []string                               `json:"to_name,nullable"`
+	Validation            InvestigateGetResponseValidation       `json:"validation,nullable"`
+	JSON                  investigateGetResponseJSON             `json:"-"`
 }
 
 // investigateGetResponseJSON contains the JSON metadata for the struct
 // [InvestigateGetResponse]
 type investigateGetResponseJSON struct {
-	ID                apijson.Field
-	ActionLog         apijson.Field
-	ClientRecipients  apijson.Field
-	DetectionReasons  apijson.Field
-	IsPhishSubmission apijson.Field
-	IsQuarantined     apijson.Field
-	PostfixID         apijson.Field
-	Properties        apijson.Field
-	Ts                apijson.Field
-	AlertID           apijson.Field
-	DeliveryMode      apijson.Field
-	EdfHash           apijson.Field
-	FinalDisposition  apijson.Field
-	Findings          apijson.Field
-	From              apijson.Field
-	FromName          apijson.Field
-	MessageID         apijson.Field
-	SentDate          apijson.Field
-	Subject           apijson.Field
-	ThreatCategories  apijson.Field
-	To                apijson.Field
-	ToName            apijson.Field
-	Validation        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                    apijson.Field
+	ActionLog             apijson.Field
+	ClientRecipients      apijson.Field
+	DetectionReasons      apijson.Field
+	IsPhishSubmission     apijson.Field
+	IsQuarantined         apijson.Field
+	PostfixID             apijson.Field
+	Properties            apijson.Field
+	Ts                    apijson.Field
+	AlertID               apijson.Field
+	DeliveryMode          apijson.Field
+	EdfHash               apijson.Field
+	FinalDisposition      apijson.Field
+	Findings              apijson.Field
+	From                  apijson.Field
+	FromName              apijson.Field
+	HtmltextStructureHash apijson.Field
+	MessageID             apijson.Field
+	SentDate              apijson.Field
+	Subject               apijson.Field
+	ThreatCategories      apijson.Field
+	To                    apijson.Field
+	ToName                apijson.Field
+	Validation            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *InvestigateGetResponse) UnmarshalJSON(data []byte) (err error) {

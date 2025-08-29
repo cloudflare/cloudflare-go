@@ -10,10 +10,10 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -156,11 +156,11 @@ type PhaseUpdateResponseRule struct {
 	Action PhaseUpdateResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
-	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
-	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
-	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
+	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
+	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
+	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
+	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -171,16 +171,16 @@ type PhaseUpdateResponseRule struct {
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [PhaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
-	// [ExecuteRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck], [ExecuteRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck],
 	// [PhaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
-	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [LogCustomFieldRuleExposedCredentialCheck],
+	// [ManagedChallengeRuleExposedCredentialCheck],
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
-	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
-	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
-	// [LogCustomFieldRuleExposedCredentialCheck],
-	// [DDoSDynamicRuleExposedCredentialCheck],
-	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	// [ServeErrorRuleExposedCredentialCheck],
+	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -188,15 +188,15 @@ type PhaseUpdateResponseRule struct {
 	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit],
-	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [DDoSDynamicRuleRatelimit],
+	// [ExecuteRuleRatelimit], [ForceConnectionCloseRuleRatelimit],
 	// [PhaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimit], [LogRuleRatelimit],
-	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
-	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
-	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
-	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
+	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
+	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref   string                      `json:"ref"`
 	JSON  phaseUpdateResponseRuleJSON `json:"-"`
 	union PhaseUpdateResponseRulesUnion
@@ -240,20 +240,21 @@ func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [BlockRule],
 // [PhaseUpdateResponseRulesRulesetsChallengeRule], [CompressResponseRule],
-// [ExecuteRule], [PhaseUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
+// [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
+// [PhaseUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
+// [RouteRule], [ScoreRule], [ServeErrorRule], [SetCacheSettingsRule],
+// [SetConfigRule], [SkipRule].
 func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 	return r.union
 }
 
 // Union satisfied by [BlockRule], [PhaseUpdateResponseRulesRulesetsChallengeRule],
-// [CompressResponseRule], [ExecuteRule],
-// [PhaseUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
+// [CompressResponseRule], [DDoSDynamicRule], [ExecuteRule],
+// [ForceConnectionCloseRule], [PhaseUpdateResponseRulesRulesetsJSChallengeRule],
+// [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
+// [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
+// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
 type PhaseUpdateResponseRulesUnion interface {
 	implementsPhaseUpdateResponseRule()
 }
@@ -279,8 +280,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
+			DiscriminatorValue: "ddos_dynamic",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
+			DiscriminatorValue: "force_connection_close",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -291,6 +302,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
+			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -324,6 +340,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
+			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetConfigRule{}),
 			DiscriminatorValue: "set_config",
 		},
@@ -331,26 +352,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
-			DiscriminatorValue: "set_cache_settings",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogCustomFieldRule{}),
-			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -372,15 +373,15 @@ type PhaseUpdateResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck PhaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                            `json:"ref"`
 	JSON phaseUpdateResponseRulesRulesetsChallengeRuleJSON `json:"-"`
 }
@@ -430,11 +431,11 @@ func (r PhaseUpdateResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type PhaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                  `json:"username_expression,required"`
 	JSON               phaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -457,14 +458,14 @@ func (r phaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON)
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -473,13 +474,13 @@ type PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                     `json:"score_response_header_name"`
 	JSON                    phaseUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -524,15 +525,15 @@ type PhaseUpdateResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck PhaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit PhaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON phaseUpdateResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
 }
@@ -582,11 +583,11 @@ func (r PhaseUpdateResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type PhaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                    `json:"username_expression,required"`
 	JSON               phaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -609,14 +610,14 @@ func (r phaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSO
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type PhaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -625,13 +626,13 @@ type PhaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                       `json:"score_response_header_name"`
 	JSON                    phaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -667,26 +668,26 @@ const (
 	PhaseUpdateResponseRulesActionBlock                PhaseUpdateResponseRulesAction = "block"
 	PhaseUpdateResponseRulesActionChallenge            PhaseUpdateResponseRulesAction = "challenge"
 	PhaseUpdateResponseRulesActionCompressResponse     PhaseUpdateResponseRulesAction = "compress_response"
+	PhaseUpdateResponseRulesActionDDoSDynamic          PhaseUpdateResponseRulesAction = "ddos_dynamic"
 	PhaseUpdateResponseRulesActionExecute              PhaseUpdateResponseRulesAction = "execute"
+	PhaseUpdateResponseRulesActionForceConnectionClose PhaseUpdateResponseRulesAction = "force_connection_close"
 	PhaseUpdateResponseRulesActionJSChallenge          PhaseUpdateResponseRulesAction = "js_challenge"
 	PhaseUpdateResponseRulesActionLog                  PhaseUpdateResponseRulesAction = "log"
+	PhaseUpdateResponseRulesActionLogCustomField       PhaseUpdateResponseRulesAction = "log_custom_field"
 	PhaseUpdateResponseRulesActionManagedChallenge     PhaseUpdateResponseRulesAction = "managed_challenge"
 	PhaseUpdateResponseRulesActionRedirect             PhaseUpdateResponseRulesAction = "redirect"
 	PhaseUpdateResponseRulesActionRewrite              PhaseUpdateResponseRulesAction = "rewrite"
 	PhaseUpdateResponseRulesActionRoute                PhaseUpdateResponseRulesAction = "route"
 	PhaseUpdateResponseRulesActionScore                PhaseUpdateResponseRulesAction = "score"
 	PhaseUpdateResponseRulesActionServeError           PhaseUpdateResponseRulesAction = "serve_error"
+	PhaseUpdateResponseRulesActionSetCacheSettings     PhaseUpdateResponseRulesAction = "set_cache_settings"
 	PhaseUpdateResponseRulesActionSetConfig            PhaseUpdateResponseRulesAction = "set_config"
 	PhaseUpdateResponseRulesActionSkip                 PhaseUpdateResponseRulesAction = "skip"
-	PhaseUpdateResponseRulesActionSetCacheSettings     PhaseUpdateResponseRulesAction = "set_cache_settings"
-	PhaseUpdateResponseRulesActionLogCustomField       PhaseUpdateResponseRulesAction = "log_custom_field"
-	PhaseUpdateResponseRulesActionDDoSDynamic          PhaseUpdateResponseRulesAction = "ddos_dynamic"
-	PhaseUpdateResponseRulesActionForceConnectionClose PhaseUpdateResponseRulesAction = "force_connection_close"
 )
 
 func (r PhaseUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionChallenge, PhaseUpdateResponseRulesActionCompressResponse, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionJSChallenge, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionManagedChallenge, PhaseUpdateResponseRulesActionRedirect, PhaseUpdateResponseRulesActionRewrite, PhaseUpdateResponseRulesActionRoute, PhaseUpdateResponseRulesActionScore, PhaseUpdateResponseRulesActionServeError, PhaseUpdateResponseRulesActionSetConfig, PhaseUpdateResponseRulesActionSkip, PhaseUpdateResponseRulesActionSetCacheSettings, PhaseUpdateResponseRulesActionLogCustomField, PhaseUpdateResponseRulesActionDDoSDynamic, PhaseUpdateResponseRulesActionForceConnectionClose:
+	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionChallenge, PhaseUpdateResponseRulesActionCompressResponse, PhaseUpdateResponseRulesActionDDoSDynamic, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionForceConnectionClose, PhaseUpdateResponseRulesActionJSChallenge, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionLogCustomField, PhaseUpdateResponseRulesActionManagedChallenge, PhaseUpdateResponseRulesActionRedirect, PhaseUpdateResponseRulesActionRewrite, PhaseUpdateResponseRulesActionRoute, PhaseUpdateResponseRulesActionScore, PhaseUpdateResponseRulesActionServeError, PhaseUpdateResponseRulesActionSetCacheSettings, PhaseUpdateResponseRulesActionSetConfig, PhaseUpdateResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -747,11 +748,11 @@ type PhaseGetResponseRule struct {
 	Action PhaseGetResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
-	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
-	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
-	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
+	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
+	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
+	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
+	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -762,16 +763,16 @@ type PhaseGetResponseRule struct {
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [PhaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
-	// [ExecuteRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck], [ExecuteRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck],
 	// [PhaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
-	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [LogCustomFieldRuleExposedCredentialCheck],
+	// [ManagedChallengeRuleExposedCredentialCheck],
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
-	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
-	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
-	// [LogCustomFieldRuleExposedCredentialCheck],
-	// [DDoSDynamicRuleExposedCredentialCheck],
-	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	// [ServeErrorRuleExposedCredentialCheck],
+	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -779,15 +780,15 @@ type PhaseGetResponseRule struct {
 	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [PhaseGetResponseRulesRulesetsChallengeRuleRatelimit],
-	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [DDoSDynamicRuleRatelimit],
+	// [ExecuteRuleRatelimit], [ForceConnectionCloseRuleRatelimit],
 	// [PhaseGetResponseRulesRulesetsJSChallengeRuleRatelimit], [LogRuleRatelimit],
-	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
-	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
-	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
-	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
+	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
+	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref   string                   `json:"ref"`
 	JSON  phaseGetResponseRuleJSON `json:"-"`
 	union PhaseGetResponseRulesUnion
@@ -831,20 +832,20 @@ func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [BlockRule],
 // [PhaseGetResponseRulesRulesetsChallengeRule], [CompressResponseRule],
-// [ExecuteRule], [PhaseGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
+// [PhaseGetResponseRulesRulesetsJSChallengeRule], [LogRule], [LogCustomFieldRule],
 // [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
+// [ServeErrorRule], [SetCacheSettingsRule], [SetConfigRule], [SkipRule].
 func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 	return r.union
 }
 
 // Union satisfied by [BlockRule], [PhaseGetResponseRulesRulesetsChallengeRule],
-// [CompressResponseRule], [ExecuteRule],
-// [PhaseGetResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
+// [CompressResponseRule], [DDoSDynamicRule], [ExecuteRule],
+// [ForceConnectionCloseRule], [PhaseGetResponseRulesRulesetsJSChallengeRule],
+// [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
+// [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
+// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
 type PhaseGetResponseRulesUnion interface {
 	implementsPhaseGetResponseRule()
 }
@@ -870,8 +871,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
+			DiscriminatorValue: "ddos_dynamic",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
+			DiscriminatorValue: "force_connection_close",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -882,6 +893,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
+			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -915,6 +931,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
+			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetConfigRule{}),
 			DiscriminatorValue: "set_config",
 		},
@@ -922,26 +943,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
-			DiscriminatorValue: "set_cache_settings",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogCustomFieldRule{}),
-			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -963,15 +964,15 @@ type PhaseGetResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck PhaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit PhaseGetResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                         `json:"ref"`
 	JSON phaseGetResponseRulesRulesetsChallengeRuleJSON `json:"-"`
 }
@@ -1021,11 +1022,11 @@ func (r PhaseGetResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type PhaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                               `json:"username_expression,required"`
 	JSON               phaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -1048,14 +1049,14 @@ func (r phaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) Ra
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type PhaseGetResponseRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1064,13 +1065,13 @@ type PhaseGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                  `json:"score_response_header_name"`
 	JSON                    phaseGetResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -1115,15 +1116,15 @@ type PhaseGetResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck PhaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit PhaseGetResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON phaseGetResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
 }
@@ -1173,11 +1174,11 @@ func (r PhaseGetResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type PhaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                 `json:"username_expression,required"`
 	JSON               phaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -1200,14 +1201,14 @@ func (r phaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON) 
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type PhaseGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1216,13 +1217,13 @@ type PhaseGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                    `json:"score_response_header_name"`
 	JSON                    phaseGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -1257,26 +1258,26 @@ const (
 	PhaseGetResponseRulesActionBlock                PhaseGetResponseRulesAction = "block"
 	PhaseGetResponseRulesActionChallenge            PhaseGetResponseRulesAction = "challenge"
 	PhaseGetResponseRulesActionCompressResponse     PhaseGetResponseRulesAction = "compress_response"
+	PhaseGetResponseRulesActionDDoSDynamic          PhaseGetResponseRulesAction = "ddos_dynamic"
 	PhaseGetResponseRulesActionExecute              PhaseGetResponseRulesAction = "execute"
+	PhaseGetResponseRulesActionForceConnectionClose PhaseGetResponseRulesAction = "force_connection_close"
 	PhaseGetResponseRulesActionJSChallenge          PhaseGetResponseRulesAction = "js_challenge"
 	PhaseGetResponseRulesActionLog                  PhaseGetResponseRulesAction = "log"
+	PhaseGetResponseRulesActionLogCustomField       PhaseGetResponseRulesAction = "log_custom_field"
 	PhaseGetResponseRulesActionManagedChallenge     PhaseGetResponseRulesAction = "managed_challenge"
 	PhaseGetResponseRulesActionRedirect             PhaseGetResponseRulesAction = "redirect"
 	PhaseGetResponseRulesActionRewrite              PhaseGetResponseRulesAction = "rewrite"
 	PhaseGetResponseRulesActionRoute                PhaseGetResponseRulesAction = "route"
 	PhaseGetResponseRulesActionScore                PhaseGetResponseRulesAction = "score"
 	PhaseGetResponseRulesActionServeError           PhaseGetResponseRulesAction = "serve_error"
+	PhaseGetResponseRulesActionSetCacheSettings     PhaseGetResponseRulesAction = "set_cache_settings"
 	PhaseGetResponseRulesActionSetConfig            PhaseGetResponseRulesAction = "set_config"
 	PhaseGetResponseRulesActionSkip                 PhaseGetResponseRulesAction = "skip"
-	PhaseGetResponseRulesActionSetCacheSettings     PhaseGetResponseRulesAction = "set_cache_settings"
-	PhaseGetResponseRulesActionLogCustomField       PhaseGetResponseRulesAction = "log_custom_field"
-	PhaseGetResponseRulesActionDDoSDynamic          PhaseGetResponseRulesAction = "ddos_dynamic"
-	PhaseGetResponseRulesActionForceConnectionClose PhaseGetResponseRulesAction = "force_connection_close"
 )
 
 func (r PhaseGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionChallenge, PhaseGetResponseRulesActionCompressResponse, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionJSChallenge, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionManagedChallenge, PhaseGetResponseRulesActionRedirect, PhaseGetResponseRulesActionRewrite, PhaseGetResponseRulesActionRoute, PhaseGetResponseRulesActionScore, PhaseGetResponseRulesActionServeError, PhaseGetResponseRulesActionSetConfig, PhaseGetResponseRulesActionSkip, PhaseGetResponseRulesActionSetCacheSettings, PhaseGetResponseRulesActionLogCustomField, PhaseGetResponseRulesActionDDoSDynamic, PhaseGetResponseRulesActionForceConnectionClose:
+	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionChallenge, PhaseGetResponseRulesActionCompressResponse, PhaseGetResponseRulesActionDDoSDynamic, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionForceConnectionClose, PhaseGetResponseRulesActionJSChallenge, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionLogCustomField, PhaseGetResponseRulesActionManagedChallenge, PhaseGetResponseRulesActionRedirect, PhaseGetResponseRulesActionRewrite, PhaseGetResponseRulesActionRoute, PhaseGetResponseRulesActionScore, PhaseGetResponseRulesActionServeError, PhaseGetResponseRulesActionSetCacheSettings, PhaseGetResponseRulesActionSetConfig, PhaseGetResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -1316,7 +1317,7 @@ type PhaseUpdateParamsRule struct {
 	// An object configuring the rule's logging behavior.
 	Logging   param.Field[LoggingParam] `json:"logging"`
 	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -1328,15 +1329,15 @@ func (r PhaseUpdateParamsRule) implementsPhaseUpdateParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.PhaseUpdateParamsRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
+// [rulesets.CompressResponseRuleParam], [rulesets.DDoSDynamicRuleParam],
+// [rulesets.ExecuteRuleParam], [rulesets.ForceConnectionCloseRuleParam],
 // [rulesets.PhaseUpdateParamsRulesRulesetsJSChallengeRule],
-// [rulesets.LogRuleParam], [rulesets.ManagedChallengeRuleParam],
-// [rulesets.RedirectRuleParam], [rulesets.RewriteRuleParam],
-// [rulesets.RouteRuleParam], [rulesets.ScoreRuleParam],
-// [rulesets.ServeErrorRuleParam], [rulesets.SetConfigRuleParam],
-// [rulesets.SkipRuleParam], [rulesets.SetCacheSettingsRuleParam],
-// [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
-// [rulesets.ForceConnectionCloseRuleParam], [PhaseUpdateParamsRule].
+// [rulesets.LogRuleParam], [rulesets.LogCustomFieldRuleParam],
+// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
+// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
+// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
+// [rulesets.SetCacheSettingsRuleParam], [rulesets.SetConfigRuleParam],
+// [rulesets.SkipRuleParam], [PhaseUpdateParamsRule].
 type PhaseUpdateParamsRuleUnion interface {
 	implementsPhaseUpdateParamsRuleUnion()
 }
@@ -1352,15 +1353,15 @@ type PhaseUpdateParamsRulesRulesetsChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck param.Field[PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit param.Field[PhaseUpdateParamsRulesRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -1385,11 +1386,11 @@ func (r PhaseUpdateParamsRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
@@ -1397,14 +1398,14 @@ func (r PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type PhaseUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period param.Field[int64] `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1413,13 +1414,13 @@ type PhaseUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
@@ -1438,15 +1439,15 @@ type PhaseUpdateParamsRulesRulesetsJSChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck param.Field[PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit param.Field[PhaseUpdateParamsRulesRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -1471,11 +1472,11 @@ func (r PhaseUpdateParamsRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
@@ -1483,14 +1484,14 @@ func (r PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) Mar
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type PhaseUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period param.Field[int64] `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1499,13 +1500,13 @@ type PhaseUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
@@ -1520,26 +1521,26 @@ const (
 	PhaseUpdateParamsRulesActionBlock                PhaseUpdateParamsRulesAction = "block"
 	PhaseUpdateParamsRulesActionChallenge            PhaseUpdateParamsRulesAction = "challenge"
 	PhaseUpdateParamsRulesActionCompressResponse     PhaseUpdateParamsRulesAction = "compress_response"
+	PhaseUpdateParamsRulesActionDDoSDynamic          PhaseUpdateParamsRulesAction = "ddos_dynamic"
 	PhaseUpdateParamsRulesActionExecute              PhaseUpdateParamsRulesAction = "execute"
+	PhaseUpdateParamsRulesActionForceConnectionClose PhaseUpdateParamsRulesAction = "force_connection_close"
 	PhaseUpdateParamsRulesActionJSChallenge          PhaseUpdateParamsRulesAction = "js_challenge"
 	PhaseUpdateParamsRulesActionLog                  PhaseUpdateParamsRulesAction = "log"
+	PhaseUpdateParamsRulesActionLogCustomField       PhaseUpdateParamsRulesAction = "log_custom_field"
 	PhaseUpdateParamsRulesActionManagedChallenge     PhaseUpdateParamsRulesAction = "managed_challenge"
 	PhaseUpdateParamsRulesActionRedirect             PhaseUpdateParamsRulesAction = "redirect"
 	PhaseUpdateParamsRulesActionRewrite              PhaseUpdateParamsRulesAction = "rewrite"
 	PhaseUpdateParamsRulesActionRoute                PhaseUpdateParamsRulesAction = "route"
 	PhaseUpdateParamsRulesActionScore                PhaseUpdateParamsRulesAction = "score"
 	PhaseUpdateParamsRulesActionServeError           PhaseUpdateParamsRulesAction = "serve_error"
+	PhaseUpdateParamsRulesActionSetCacheSettings     PhaseUpdateParamsRulesAction = "set_cache_settings"
 	PhaseUpdateParamsRulesActionSetConfig            PhaseUpdateParamsRulesAction = "set_config"
 	PhaseUpdateParamsRulesActionSkip                 PhaseUpdateParamsRulesAction = "skip"
-	PhaseUpdateParamsRulesActionSetCacheSettings     PhaseUpdateParamsRulesAction = "set_cache_settings"
-	PhaseUpdateParamsRulesActionLogCustomField       PhaseUpdateParamsRulesAction = "log_custom_field"
-	PhaseUpdateParamsRulesActionDDoSDynamic          PhaseUpdateParamsRulesAction = "ddos_dynamic"
-	PhaseUpdateParamsRulesActionForceConnectionClose PhaseUpdateParamsRulesAction = "force_connection_close"
 )
 
 func (r PhaseUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionChallenge, PhaseUpdateParamsRulesActionCompressResponse, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionJSChallenge, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionManagedChallenge, PhaseUpdateParamsRulesActionRedirect, PhaseUpdateParamsRulesActionRewrite, PhaseUpdateParamsRulesActionRoute, PhaseUpdateParamsRulesActionScore, PhaseUpdateParamsRulesActionServeError, PhaseUpdateParamsRulesActionSetConfig, PhaseUpdateParamsRulesActionSkip, PhaseUpdateParamsRulesActionSetCacheSettings, PhaseUpdateParamsRulesActionLogCustomField, PhaseUpdateParamsRulesActionDDoSDynamic, PhaseUpdateParamsRulesActionForceConnectionClose:
+	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionChallenge, PhaseUpdateParamsRulesActionCompressResponse, PhaseUpdateParamsRulesActionDDoSDynamic, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionForceConnectionClose, PhaseUpdateParamsRulesActionJSChallenge, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionLogCustomField, PhaseUpdateParamsRulesActionManagedChallenge, PhaseUpdateParamsRulesActionRedirect, PhaseUpdateParamsRulesActionRewrite, PhaseUpdateParamsRulesActionRoute, PhaseUpdateParamsRulesActionScore, PhaseUpdateParamsRulesActionServeError, PhaseUpdateParamsRulesActionSetCacheSettings, PhaseUpdateParamsRulesActionSetConfig, PhaseUpdateParamsRulesActionSkip:
 		return true
 	}
 	return false

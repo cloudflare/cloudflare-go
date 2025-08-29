@@ -9,11 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/cloudforce_one"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 func TestThreatEventNewWithOptionalParams(t *testing.T) {
@@ -35,7 +35,6 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		Category:      cloudflare.F("Domain Resolution"),
 		Date:          cloudflare.F(time.Now()),
 		Event:         cloudflare.F("An attacker registered the domain domain.com"),
-		IndicatorType: cloudflare.F("domain"),
 		Raw: cloudflare.F(cloudforce_one.ThreatEventNewParamsRaw{
 			Data: cloudflare.F(map[string]interface{}{
 				"foo": "bar",
@@ -49,6 +48,7 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		AttackerCountry: cloudflare.F("CN"),
 		DatasetID:       cloudflare.F("durableObjectName"),
 		Indicator:       cloudflare.F("domain.com"),
+		IndicatorType:   cloudflare.F("domain"),
 		Tags:            cloudflare.F([]string{"malware"}),
 		TargetCountry:   cloudflare.F("US"),
 		TargetIndustry:  cloudflare.F("Agriculture"),
@@ -146,10 +146,9 @@ func TestThreatEventBulkNew(t *testing.T) {
 	_, err := client.CloudforceOne.ThreatEvents.BulkNew(context.TODO(), cloudforce_one.ThreatEventBulkNewParams{
 		AccountID: cloudflare.F("account_id"),
 		Data: cloudflare.F([]cloudforce_one.ThreatEventBulkNewParamsData{{
-			Category:      cloudflare.F("Domain Resolution"),
-			Date:          cloudflare.F(time.Now()),
-			Event:         cloudflare.F("An attacker registered the domain domain.com"),
-			IndicatorType: cloudflare.F("domain"),
+			Category: cloudflare.F("Domain Resolution"),
+			Date:     cloudflare.F(time.Now()),
+			Event:    cloudflare.F("An attacker registered the domain domain.com"),
 			Raw: cloudflare.F(cloudforce_one.ThreatEventBulkNewParamsDataRaw{
 				Data: cloudflare.F(map[string]interface{}{
 					"foo": "bar",
@@ -163,6 +162,7 @@ func TestThreatEventBulkNew(t *testing.T) {
 			AttackerCountry: cloudflare.F("CN"),
 			DatasetID:       cloudflare.F("durableObjectName"),
 			Indicator:       cloudflare.F("domain.com"),
+			IndicatorType:   cloudflare.F("domain"),
 			Tags:            cloudflare.F([]string{"malware"}),
 			TargetCountry:   cloudflare.F("US"),
 			TargetIndustry:  cloudflare.F("Agriculture"),
@@ -203,7 +203,7 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 			Date:            cloudflare.F(time.Now()),
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			Indicator:       cloudflare.F("domain2.com"),
-			IndicatorType:   cloudflare.F("sha256"),
+			IndicatorType:   cloudflare.F("domain"),
 			Insight:         cloudflare.F("new insight"),
 			Raw: cloudflare.F(cloudforce_one.ThreatEventEditParamsRaw{
 				Data: cloudflare.F(map[string]interface{}{

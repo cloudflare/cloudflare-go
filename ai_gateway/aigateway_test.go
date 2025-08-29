@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/ai_gateway"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 func TestAIGatewayNewWithOptionalParams(t *testing.T) {
@@ -76,11 +76,16 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			RateLimitingLimit:       cloudflare.F(int64(0)),
 			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			Authentication:          cloudflare.F(true),
-			LogManagement:           cloudflare.F(int64(10000)),
-			LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
-			Logpush:                 cloudflare.F(true),
-			LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
-			StoreID:                 cloudflare.F("store_id"),
+			DLP: cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLP{
+				Action:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLPActionBlock),
+				Enabled:  cloudflare.F(true),
+				Profiles: cloudflare.F([]string{"string"}),
+			}),
+			LogManagement:         cloudflare.F(int64(10000)),
+			LogManagementStrategy: cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
+			Logpush:               cloudflare.F(true),
+			LogpushPublicKey:      cloudflare.F("xxxxxxxxxxxxxxxx"),
+			StoreID:               cloudflare.F("store_id"),
 		},
 	)
 	if err != nil {

@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -328,11 +328,11 @@ type RulesetNewResponseRule struct {
 	Action RulesetNewResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
-	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
-	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
-	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
+	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
+	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
+	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
+	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -343,16 +343,16 @@ type RulesetNewResponseRule struct {
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
-	// [ExecuteRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck], [ExecuteRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck],
 	// [RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
-	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [LogCustomFieldRuleExposedCredentialCheck],
+	// [ManagedChallengeRuleExposedCredentialCheck],
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
-	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
-	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
-	// [LogCustomFieldRuleExposedCredentialCheck],
-	// [DDoSDynamicRuleExposedCredentialCheck],
-	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	// [ServeErrorRuleExposedCredentialCheck],
+	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -360,15 +360,15 @@ type RulesetNewResponseRule struct {
 	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RulesetNewResponseRulesRulesetsChallengeRuleRatelimit],
-	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [DDoSDynamicRuleRatelimit],
+	// [ExecuteRuleRatelimit], [ForceConnectionCloseRuleRatelimit],
 	// [RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit], [LogRuleRatelimit],
-	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
-	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
-	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
-	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
+	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
+	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref   string                     `json:"ref"`
 	JSON  rulesetNewResponseRuleJSON `json:"-"`
 	union RulesetNewResponseRulesUnion
@@ -412,20 +412,21 @@ func (r *RulesetNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [BlockRule],
 // [RulesetNewResponseRulesRulesetsChallengeRule], [CompressResponseRule],
-// [ExecuteRule], [RulesetNewResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
+// [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
+// [RulesetNewResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
+// [RouteRule], [ScoreRule], [ServeErrorRule], [SetCacheSettingsRule],
+// [SetConfigRule], [SkipRule].
 func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 	return r.union
 }
 
 // Union satisfied by [BlockRule], [RulesetNewResponseRulesRulesetsChallengeRule],
-// [CompressResponseRule], [ExecuteRule],
-// [RulesetNewResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
+// [CompressResponseRule], [DDoSDynamicRule], [ExecuteRule],
+// [ForceConnectionCloseRule], [RulesetNewResponseRulesRulesetsJSChallengeRule],
+// [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
+// [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
+// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
 type RulesetNewResponseRulesUnion interface {
 	implementsRulesetNewResponseRule()
 }
@@ -451,8 +452,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
+			DiscriminatorValue: "ddos_dynamic",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
+			DiscriminatorValue: "force_connection_close",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -463,6 +474,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
+			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -496,6 +512,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
+			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetConfigRule{}),
 			DiscriminatorValue: "set_config",
 		},
@@ -503,26 +524,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
-			DiscriminatorValue: "set_cache_settings",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogCustomFieldRule{}),
-			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -544,15 +545,15 @@ type RulesetNewResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit RulesetNewResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsChallengeRuleJSON `json:"-"`
 }
@@ -602,11 +603,11 @@ func (r RulesetNewResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                 `json:"username_expression,required"`
 	JSON               rulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -629,14 +630,14 @@ func (r rulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) 
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetNewResponseRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -645,13 +646,13 @@ type RulesetNewResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                    `json:"score_response_header_name"`
 	JSON                    rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -696,15 +697,15 @@ type RulesetNewResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                             `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
 }
@@ -754,11 +755,11 @@ func (r RulesetNewResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                   `json:"username_expression,required"`
 	JSON               rulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -781,14 +782,14 @@ func (r rulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -797,13 +798,13 @@ type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                      `json:"score_response_header_name"`
 	JSON                    rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -839,26 +840,26 @@ const (
 	RulesetNewResponseRulesActionBlock                RulesetNewResponseRulesAction = "block"
 	RulesetNewResponseRulesActionChallenge            RulesetNewResponseRulesAction = "challenge"
 	RulesetNewResponseRulesActionCompressResponse     RulesetNewResponseRulesAction = "compress_response"
+	RulesetNewResponseRulesActionDDoSDynamic          RulesetNewResponseRulesAction = "ddos_dynamic"
 	RulesetNewResponseRulesActionExecute              RulesetNewResponseRulesAction = "execute"
+	RulesetNewResponseRulesActionForceConnectionClose RulesetNewResponseRulesAction = "force_connection_close"
 	RulesetNewResponseRulesActionJSChallenge          RulesetNewResponseRulesAction = "js_challenge"
 	RulesetNewResponseRulesActionLog                  RulesetNewResponseRulesAction = "log"
+	RulesetNewResponseRulesActionLogCustomField       RulesetNewResponseRulesAction = "log_custom_field"
 	RulesetNewResponseRulesActionManagedChallenge     RulesetNewResponseRulesAction = "managed_challenge"
 	RulesetNewResponseRulesActionRedirect             RulesetNewResponseRulesAction = "redirect"
 	RulesetNewResponseRulesActionRewrite              RulesetNewResponseRulesAction = "rewrite"
 	RulesetNewResponseRulesActionRoute                RulesetNewResponseRulesAction = "route"
 	RulesetNewResponseRulesActionScore                RulesetNewResponseRulesAction = "score"
 	RulesetNewResponseRulesActionServeError           RulesetNewResponseRulesAction = "serve_error"
+	RulesetNewResponseRulesActionSetCacheSettings     RulesetNewResponseRulesAction = "set_cache_settings"
 	RulesetNewResponseRulesActionSetConfig            RulesetNewResponseRulesAction = "set_config"
 	RulesetNewResponseRulesActionSkip                 RulesetNewResponseRulesAction = "skip"
-	RulesetNewResponseRulesActionSetCacheSettings     RulesetNewResponseRulesAction = "set_cache_settings"
-	RulesetNewResponseRulesActionLogCustomField       RulesetNewResponseRulesAction = "log_custom_field"
-	RulesetNewResponseRulesActionDDoSDynamic          RulesetNewResponseRulesAction = "ddos_dynamic"
-	RulesetNewResponseRulesActionForceConnectionClose RulesetNewResponseRulesAction = "force_connection_close"
 )
 
 func (r RulesetNewResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip, RulesetNewResponseRulesActionSetCacheSettings, RulesetNewResponseRulesActionLogCustomField, RulesetNewResponseRulesActionDDoSDynamic, RulesetNewResponseRulesActionForceConnectionClose:
+	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionDDoSDynamic, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionForceConnectionClose, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionLogCustomField, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetCacheSettings, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -919,11 +920,11 @@ type RulesetUpdateResponseRule struct {
 	Action RulesetUpdateResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
-	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
-	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
-	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
+	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
+	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
+	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
+	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -934,16 +935,16 @@ type RulesetUpdateResponseRule struct {
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
-	// [ExecuteRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck], [ExecuteRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck],
 	// [RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
-	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [LogCustomFieldRuleExposedCredentialCheck],
+	// [ManagedChallengeRuleExposedCredentialCheck],
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
-	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
-	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
-	// [LogCustomFieldRuleExposedCredentialCheck],
-	// [DDoSDynamicRuleExposedCredentialCheck],
-	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	// [ServeErrorRuleExposedCredentialCheck],
+	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -951,15 +952,16 @@ type RulesetUpdateResponseRule struct {
 	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit],
-	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [DDoSDynamicRuleRatelimit],
+	// [ExecuteRuleRatelimit], [ForceConnectionCloseRuleRatelimit],
 	// [RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit],
-	// [LogRuleRatelimit], [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
+	// [LogRuleRatelimit], [LogCustomFieldRuleRatelimit],
+	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
 	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
-	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
-	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	// [ServeErrorRuleRatelimit], [SetCacheSettingsRuleRatelimit],
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref   string                        `json:"ref"`
 	JSON  rulesetUpdateResponseRuleJSON `json:"-"`
 	union RulesetUpdateResponseRulesUnion
@@ -1003,20 +1005,22 @@ func (r *RulesetUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [BlockRule],
 // [RulesetUpdateResponseRulesRulesetsChallengeRule], [CompressResponseRule],
-// [ExecuteRule], [RulesetUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
+// [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
+// [RulesetUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
+// [RouteRule], [ScoreRule], [ServeErrorRule], [SetCacheSettingsRule],
+// [SetConfigRule], [SkipRule].
 func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 	return r.union
 }
 
 // Union satisfied by [BlockRule],
 // [RulesetUpdateResponseRulesRulesetsChallengeRule], [CompressResponseRule],
-// [ExecuteRule], [RulesetUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
+// [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
+// [RulesetUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
+// [RouteRule], [ScoreRule], [ServeErrorRule], [SetCacheSettingsRule],
+// [SetConfigRule] or [SkipRule].
 type RulesetUpdateResponseRulesUnion interface {
 	implementsRulesetUpdateResponseRule()
 }
@@ -1042,8 +1046,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
+			DiscriminatorValue: "ddos_dynamic",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
+			DiscriminatorValue: "force_connection_close",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1054,6 +1068,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
+			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1087,6 +1106,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
+			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetConfigRule{}),
 			DiscriminatorValue: "set_config",
 		},
@@ -1094,26 +1118,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
-			DiscriminatorValue: "set_cache_settings",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogCustomFieldRule{}),
-			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -1135,15 +1139,15 @@ type RulesetUpdateResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsChallengeRuleJSON `json:"-"`
 }
@@ -1193,11 +1197,11 @@ func (r RulesetUpdateResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                    `json:"username_expression,required"`
 	JSON               rulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -1220,14 +1224,14 @@ func (r rulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSO
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1236,13 +1240,13 @@ type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                       `json:"score_response_header_name"`
 	JSON                    rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -1288,15 +1292,15 @@ type RulesetUpdateResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                                `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
 }
@@ -1346,11 +1350,11 @@ func (r RulesetUpdateResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool 
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                      `json:"username_expression,required"`
 	JSON               rulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -1373,14 +1377,14 @@ func (r rulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJ
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1389,13 +1393,13 @@ type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                         `json:"score_response_header_name"`
 	JSON                    rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -1431,26 +1435,26 @@ const (
 	RulesetUpdateResponseRulesActionBlock                RulesetUpdateResponseRulesAction = "block"
 	RulesetUpdateResponseRulesActionChallenge            RulesetUpdateResponseRulesAction = "challenge"
 	RulesetUpdateResponseRulesActionCompressResponse     RulesetUpdateResponseRulesAction = "compress_response"
+	RulesetUpdateResponseRulesActionDDoSDynamic          RulesetUpdateResponseRulesAction = "ddos_dynamic"
 	RulesetUpdateResponseRulesActionExecute              RulesetUpdateResponseRulesAction = "execute"
+	RulesetUpdateResponseRulesActionForceConnectionClose RulesetUpdateResponseRulesAction = "force_connection_close"
 	RulesetUpdateResponseRulesActionJSChallenge          RulesetUpdateResponseRulesAction = "js_challenge"
 	RulesetUpdateResponseRulesActionLog                  RulesetUpdateResponseRulesAction = "log"
+	RulesetUpdateResponseRulesActionLogCustomField       RulesetUpdateResponseRulesAction = "log_custom_field"
 	RulesetUpdateResponseRulesActionManagedChallenge     RulesetUpdateResponseRulesAction = "managed_challenge"
 	RulesetUpdateResponseRulesActionRedirect             RulesetUpdateResponseRulesAction = "redirect"
 	RulesetUpdateResponseRulesActionRewrite              RulesetUpdateResponseRulesAction = "rewrite"
 	RulesetUpdateResponseRulesActionRoute                RulesetUpdateResponseRulesAction = "route"
 	RulesetUpdateResponseRulesActionScore                RulesetUpdateResponseRulesAction = "score"
 	RulesetUpdateResponseRulesActionServeError           RulesetUpdateResponseRulesAction = "serve_error"
+	RulesetUpdateResponseRulesActionSetCacheSettings     RulesetUpdateResponseRulesAction = "set_cache_settings"
 	RulesetUpdateResponseRulesActionSetConfig            RulesetUpdateResponseRulesAction = "set_config"
 	RulesetUpdateResponseRulesActionSkip                 RulesetUpdateResponseRulesAction = "skip"
-	RulesetUpdateResponseRulesActionSetCacheSettings     RulesetUpdateResponseRulesAction = "set_cache_settings"
-	RulesetUpdateResponseRulesActionLogCustomField       RulesetUpdateResponseRulesAction = "log_custom_field"
-	RulesetUpdateResponseRulesActionDDoSDynamic          RulesetUpdateResponseRulesAction = "ddos_dynamic"
-	RulesetUpdateResponseRulesActionForceConnectionClose RulesetUpdateResponseRulesAction = "force_connection_close"
 )
 
 func (r RulesetUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip, RulesetUpdateResponseRulesActionSetCacheSettings, RulesetUpdateResponseRulesActionLogCustomField, RulesetUpdateResponseRulesActionDDoSDynamic, RulesetUpdateResponseRulesActionForceConnectionClose:
+	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionDDoSDynamic, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionForceConnectionClose, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionLogCustomField, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetCacheSettings, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -1552,11 +1556,11 @@ type RulesetGetResponseRule struct {
 	Action RulesetGetResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
-	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
-	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
-	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
+	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
+	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
+	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
+	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -1567,16 +1571,16 @@ type RulesetGetResponseRule struct {
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
-	// [ExecuteRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck], [ExecuteRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck],
 	// [RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
-	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [LogCustomFieldRuleExposedCredentialCheck],
+	// [ManagedChallengeRuleExposedCredentialCheck],
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
-	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
-	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
-	// [LogCustomFieldRuleExposedCredentialCheck],
-	// [DDoSDynamicRuleExposedCredentialCheck],
-	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	// [ServeErrorRuleExposedCredentialCheck],
+	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -1584,15 +1588,15 @@ type RulesetGetResponseRule struct {
 	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RulesetGetResponseRulesRulesetsChallengeRuleRatelimit],
-	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [DDoSDynamicRuleRatelimit],
+	// [ExecuteRuleRatelimit], [ForceConnectionCloseRuleRatelimit],
 	// [RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit], [LogRuleRatelimit],
-	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
-	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
-	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
-	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
+	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
+	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref   string                     `json:"ref"`
 	JSON  rulesetGetResponseRuleJSON `json:"-"`
 	union RulesetGetResponseRulesUnion
@@ -1636,20 +1640,21 @@ func (r *RulesetGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [BlockRule],
 // [RulesetGetResponseRulesRulesetsChallengeRule], [CompressResponseRule],
-// [ExecuteRule], [RulesetGetResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
+// [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
+// [RulesetGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
+// [RouteRule], [ScoreRule], [ServeErrorRule], [SetCacheSettingsRule],
+// [SetConfigRule], [SkipRule].
 func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 	return r.union
 }
 
 // Union satisfied by [BlockRule], [RulesetGetResponseRulesRulesetsChallengeRule],
-// [CompressResponseRule], [ExecuteRule],
-// [RulesetGetResponseRulesRulesetsJSChallengeRule], [LogRule],
-// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
-// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
+// [CompressResponseRule], [DDoSDynamicRule], [ExecuteRule],
+// [ForceConnectionCloseRule], [RulesetGetResponseRulesRulesetsJSChallengeRule],
+// [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
+// [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
+// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
 type RulesetGetResponseRulesUnion interface {
 	implementsRulesetGetResponseRule()
 }
@@ -1675,8 +1680,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
+			DiscriminatorValue: "ddos_dynamic",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ExecuteRule{}),
 			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
+			DiscriminatorValue: "force_connection_close",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1687,6 +1702,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(LogRule{}),
 			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
+			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1720,6 +1740,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
+			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetConfigRule{}),
 			DiscriminatorValue: "set_config",
 		},
@@ -1727,26 +1752,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
-			DiscriminatorValue: "set_cache_settings",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LogCustomFieldRule{}),
-			DiscriminatorValue: "log_custom_field",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DDoSDynamicRule{}),
-			DiscriminatorValue: "ddos_dynamic",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
-			DiscriminatorValue: "force_connection_close",
 		},
 	)
 }
@@ -1768,15 +1773,15 @@ type RulesetGetResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit RulesetGetResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsChallengeRuleJSON `json:"-"`
 }
@@ -1826,11 +1831,11 @@ func (r RulesetGetResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                 `json:"username_expression,required"`
 	JSON               rulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -1853,14 +1858,14 @@ func (r rulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) 
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetGetResponseRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -1869,13 +1874,13 @@ type RulesetGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                    `json:"score_response_header_name"`
 	JSON                    rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -1920,15 +1925,15 @@ type RulesetGetResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref  string                                             `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
 }
@@ -1978,11 +1983,11 @@ func (r RulesetGetResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                   `json:"username_expression,required"`
 	JSON               rulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
@@ -2005,14 +2010,14 @@ func (r rulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON
 	return r.raw
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period int64 `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -2021,13 +2026,13 @@ type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin bool `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod int64 `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                      `json:"score_response_header_name"`
 	JSON                    rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
@@ -2063,26 +2068,26 @@ const (
 	RulesetGetResponseRulesActionBlock                RulesetGetResponseRulesAction = "block"
 	RulesetGetResponseRulesActionChallenge            RulesetGetResponseRulesAction = "challenge"
 	RulesetGetResponseRulesActionCompressResponse     RulesetGetResponseRulesAction = "compress_response"
+	RulesetGetResponseRulesActionDDoSDynamic          RulesetGetResponseRulesAction = "ddos_dynamic"
 	RulesetGetResponseRulesActionExecute              RulesetGetResponseRulesAction = "execute"
+	RulesetGetResponseRulesActionForceConnectionClose RulesetGetResponseRulesAction = "force_connection_close"
 	RulesetGetResponseRulesActionJSChallenge          RulesetGetResponseRulesAction = "js_challenge"
 	RulesetGetResponseRulesActionLog                  RulesetGetResponseRulesAction = "log"
+	RulesetGetResponseRulesActionLogCustomField       RulesetGetResponseRulesAction = "log_custom_field"
 	RulesetGetResponseRulesActionManagedChallenge     RulesetGetResponseRulesAction = "managed_challenge"
 	RulesetGetResponseRulesActionRedirect             RulesetGetResponseRulesAction = "redirect"
 	RulesetGetResponseRulesActionRewrite              RulesetGetResponseRulesAction = "rewrite"
 	RulesetGetResponseRulesActionRoute                RulesetGetResponseRulesAction = "route"
 	RulesetGetResponseRulesActionScore                RulesetGetResponseRulesAction = "score"
 	RulesetGetResponseRulesActionServeError           RulesetGetResponseRulesAction = "serve_error"
+	RulesetGetResponseRulesActionSetCacheSettings     RulesetGetResponseRulesAction = "set_cache_settings"
 	RulesetGetResponseRulesActionSetConfig            RulesetGetResponseRulesAction = "set_config"
 	RulesetGetResponseRulesActionSkip                 RulesetGetResponseRulesAction = "skip"
-	RulesetGetResponseRulesActionSetCacheSettings     RulesetGetResponseRulesAction = "set_cache_settings"
-	RulesetGetResponseRulesActionLogCustomField       RulesetGetResponseRulesAction = "log_custom_field"
-	RulesetGetResponseRulesActionDDoSDynamic          RulesetGetResponseRulesAction = "ddos_dynamic"
-	RulesetGetResponseRulesActionForceConnectionClose RulesetGetResponseRulesAction = "force_connection_close"
 )
 
 func (r RulesetGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip, RulesetGetResponseRulesActionSetCacheSettings, RulesetGetResponseRulesActionLogCustomField, RulesetGetResponseRulesActionDDoSDynamic, RulesetGetResponseRulesActionForceConnectionClose:
+	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionDDoSDynamic, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionForceConnectionClose, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionLogCustomField, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetCacheSettings, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -2126,7 +2131,7 @@ type RulesetNewParamsRule struct {
 	// An object configuring the rule's logging behavior.
 	Logging   param.Field[LoggingParam] `json:"logging"`
 	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -2138,15 +2143,15 @@ func (r RulesetNewParamsRule) implementsRulesetNewParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.RulesetNewParamsRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
+// [rulesets.CompressResponseRuleParam], [rulesets.DDoSDynamicRuleParam],
+// [rulesets.ExecuteRuleParam], [rulesets.ForceConnectionCloseRuleParam],
 // [rulesets.RulesetNewParamsRulesRulesetsJSChallengeRule],
-// [rulesets.LogRuleParam], [rulesets.ManagedChallengeRuleParam],
-// [rulesets.RedirectRuleParam], [rulesets.RewriteRuleParam],
-// [rulesets.RouteRuleParam], [rulesets.ScoreRuleParam],
-// [rulesets.ServeErrorRuleParam], [rulesets.SetConfigRuleParam],
-// [rulesets.SkipRuleParam], [rulesets.SetCacheSettingsRuleParam],
-// [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
-// [rulesets.ForceConnectionCloseRuleParam], [RulesetNewParamsRule].
+// [rulesets.LogRuleParam], [rulesets.LogCustomFieldRuleParam],
+// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
+// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
+// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
+// [rulesets.SetCacheSettingsRuleParam], [rulesets.SetConfigRuleParam],
+// [rulesets.SkipRuleParam], [RulesetNewParamsRule].
 type RulesetNewParamsRuleUnion interface {
 	implementsRulesetNewParamsRuleUnion()
 }
@@ -2162,15 +2167,15 @@ type RulesetNewParamsRulesRulesetsChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck param.Field[RulesetNewParamsRulesRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit param.Field[RulesetNewParamsRulesRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -2195,11 +2200,11 @@ func (r RulesetNewParamsRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetNewParamsRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
@@ -2207,14 +2212,14 @@ func (r RulesetNewParamsRulesRulesetsChallengeRuleExposedCredentialCheck) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetNewParamsRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period param.Field[int64] `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -2223,13 +2228,13 @@ type RulesetNewParamsRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
@@ -2248,15 +2253,15 @@ type RulesetNewParamsRulesRulesetsJSChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck param.Field[RulesetNewParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit param.Field[RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -2281,11 +2286,11 @@ func (r RulesetNewParamsRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetNewParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
@@ -2293,14 +2298,14 @@ func (r RulesetNewParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) Mars
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period param.Field[int64] `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -2309,13 +2314,13 @@ type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
@@ -2330,26 +2335,26 @@ const (
 	RulesetNewParamsRulesActionBlock                RulesetNewParamsRulesAction = "block"
 	RulesetNewParamsRulesActionChallenge            RulesetNewParamsRulesAction = "challenge"
 	RulesetNewParamsRulesActionCompressResponse     RulesetNewParamsRulesAction = "compress_response"
+	RulesetNewParamsRulesActionDDoSDynamic          RulesetNewParamsRulesAction = "ddos_dynamic"
 	RulesetNewParamsRulesActionExecute              RulesetNewParamsRulesAction = "execute"
+	RulesetNewParamsRulesActionForceConnectionClose RulesetNewParamsRulesAction = "force_connection_close"
 	RulesetNewParamsRulesActionJSChallenge          RulesetNewParamsRulesAction = "js_challenge"
 	RulesetNewParamsRulesActionLog                  RulesetNewParamsRulesAction = "log"
+	RulesetNewParamsRulesActionLogCustomField       RulesetNewParamsRulesAction = "log_custom_field"
 	RulesetNewParamsRulesActionManagedChallenge     RulesetNewParamsRulesAction = "managed_challenge"
 	RulesetNewParamsRulesActionRedirect             RulesetNewParamsRulesAction = "redirect"
 	RulesetNewParamsRulesActionRewrite              RulesetNewParamsRulesAction = "rewrite"
 	RulesetNewParamsRulesActionRoute                RulesetNewParamsRulesAction = "route"
 	RulesetNewParamsRulesActionScore                RulesetNewParamsRulesAction = "score"
 	RulesetNewParamsRulesActionServeError           RulesetNewParamsRulesAction = "serve_error"
+	RulesetNewParamsRulesActionSetCacheSettings     RulesetNewParamsRulesAction = "set_cache_settings"
 	RulesetNewParamsRulesActionSetConfig            RulesetNewParamsRulesAction = "set_config"
 	RulesetNewParamsRulesActionSkip                 RulesetNewParamsRulesAction = "skip"
-	RulesetNewParamsRulesActionSetCacheSettings     RulesetNewParamsRulesAction = "set_cache_settings"
-	RulesetNewParamsRulesActionLogCustomField       RulesetNewParamsRulesAction = "log_custom_field"
-	RulesetNewParamsRulesActionDDoSDynamic          RulesetNewParamsRulesAction = "ddos_dynamic"
-	RulesetNewParamsRulesActionForceConnectionClose RulesetNewParamsRulesAction = "force_connection_close"
 )
 
 func (r RulesetNewParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip, RulesetNewParamsRulesActionSetCacheSettings, RulesetNewParamsRulesActionLogCustomField, RulesetNewParamsRulesActionDDoSDynamic, RulesetNewParamsRulesActionForceConnectionClose:
+	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionDDoSDynamic, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionForceConnectionClose, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionLogCustomField, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetCacheSettings, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip:
 		return true
 	}
 	return false
@@ -2544,7 +2549,7 @@ type RulesetUpdateParamsRule struct {
 	// An object configuring the rule's logging behavior.
 	Logging   param.Field[LoggingParam] `json:"logging"`
 	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -2556,15 +2561,15 @@ func (r RulesetUpdateParamsRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.RulesetUpdateParamsRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
+// [rulesets.CompressResponseRuleParam], [rulesets.DDoSDynamicRuleParam],
+// [rulesets.ExecuteRuleParam], [rulesets.ForceConnectionCloseRuleParam],
 // [rulesets.RulesetUpdateParamsRulesRulesetsJSChallengeRule],
-// [rulesets.LogRuleParam], [rulesets.ManagedChallengeRuleParam],
-// [rulesets.RedirectRuleParam], [rulesets.RewriteRuleParam],
-// [rulesets.RouteRuleParam], [rulesets.ScoreRuleParam],
-// [rulesets.ServeErrorRuleParam], [rulesets.SetConfigRuleParam],
-// [rulesets.SkipRuleParam], [rulesets.SetCacheSettingsRuleParam],
-// [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
-// [rulesets.ForceConnectionCloseRuleParam], [RulesetUpdateParamsRule].
+// [rulesets.LogRuleParam], [rulesets.LogCustomFieldRuleParam],
+// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
+// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
+// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
+// [rulesets.SetCacheSettingsRuleParam], [rulesets.SetConfigRuleParam],
+// [rulesets.SkipRuleParam], [RulesetUpdateParamsRule].
 type RulesetUpdateParamsRuleUnion interface {
 	implementsRulesetUpdateParamsRuleUnion()
 }
@@ -2580,15 +2585,15 @@ type RulesetUpdateParamsRulesRulesetsChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck param.Field[RulesetUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit param.Field[RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -2613,11 +2618,11 @@ func (r RulesetUpdateParamsRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
@@ -2625,14 +2630,14 @@ func (r RulesetUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck) Mar
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period param.Field[int64] `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -2641,13 +2646,13 @@ type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
@@ -2666,15 +2671,15 @@ type RulesetUpdateParamsRulesRulesetsJSChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Configure checks for exposed credentials.
+	// Configuration for exposed credential checking.
 	ExposedCredentialCheck param.Field[RulesetUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's ratelimit behavior.
+	// An object configuring the rule's rate limit behavior.
 	Ratelimit param.Field[RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule ID by default).
+	// The reference of the rule (the rule's ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
@@ -2699,11 +2704,11 @@ func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
-// Configure checks for exposed credentials.
+// Configuration for exposed credential checking.
 type RulesetUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
-	// Expression that selects the password used in the credentials check.
+	// An expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
-	// Expression that selects the user ID used in the credentials check.
+	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
@@ -2711,14 +2716,14 @@ func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) M
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring the rule's ratelimit behavior.
+// An object configuring the rule's rate limit behavior.
 type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the ratelimiter counter will be
+	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
 	Period param.Field[int64] `json:"period,required"`
-	// Defines when the ratelimit counter should be incremented. It is optional and
+	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
 	// Period of time in seconds after which the action will be disabled following its
@@ -2727,13 +2732,13 @@ type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	// The threshold of requests per period after which the action will be executed for
 	// the first time.
 	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Defines if ratelimit counting is only done when an origin is reached.
+	// Whether counting is only performed when an origin is reached.
 	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
 	// The score threshold per period for which the action will be executed the first
 	// time.
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// The response header name provided by the origin which should contain the score
-	// to increment ratelimit counter on.
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
@@ -2748,26 +2753,26 @@ const (
 	RulesetUpdateParamsRulesActionBlock                RulesetUpdateParamsRulesAction = "block"
 	RulesetUpdateParamsRulesActionChallenge            RulesetUpdateParamsRulesAction = "challenge"
 	RulesetUpdateParamsRulesActionCompressResponse     RulesetUpdateParamsRulesAction = "compress_response"
+	RulesetUpdateParamsRulesActionDDoSDynamic          RulesetUpdateParamsRulesAction = "ddos_dynamic"
 	RulesetUpdateParamsRulesActionExecute              RulesetUpdateParamsRulesAction = "execute"
+	RulesetUpdateParamsRulesActionForceConnectionClose RulesetUpdateParamsRulesAction = "force_connection_close"
 	RulesetUpdateParamsRulesActionJSChallenge          RulesetUpdateParamsRulesAction = "js_challenge"
 	RulesetUpdateParamsRulesActionLog                  RulesetUpdateParamsRulesAction = "log"
+	RulesetUpdateParamsRulesActionLogCustomField       RulesetUpdateParamsRulesAction = "log_custom_field"
 	RulesetUpdateParamsRulesActionManagedChallenge     RulesetUpdateParamsRulesAction = "managed_challenge"
 	RulesetUpdateParamsRulesActionRedirect             RulesetUpdateParamsRulesAction = "redirect"
 	RulesetUpdateParamsRulesActionRewrite              RulesetUpdateParamsRulesAction = "rewrite"
 	RulesetUpdateParamsRulesActionRoute                RulesetUpdateParamsRulesAction = "route"
 	RulesetUpdateParamsRulesActionScore                RulesetUpdateParamsRulesAction = "score"
 	RulesetUpdateParamsRulesActionServeError           RulesetUpdateParamsRulesAction = "serve_error"
+	RulesetUpdateParamsRulesActionSetCacheSettings     RulesetUpdateParamsRulesAction = "set_cache_settings"
 	RulesetUpdateParamsRulesActionSetConfig            RulesetUpdateParamsRulesAction = "set_config"
 	RulesetUpdateParamsRulesActionSkip                 RulesetUpdateParamsRulesAction = "skip"
-	RulesetUpdateParamsRulesActionSetCacheSettings     RulesetUpdateParamsRulesAction = "set_cache_settings"
-	RulesetUpdateParamsRulesActionLogCustomField       RulesetUpdateParamsRulesAction = "log_custom_field"
-	RulesetUpdateParamsRulesActionDDoSDynamic          RulesetUpdateParamsRulesAction = "ddos_dynamic"
-	RulesetUpdateParamsRulesActionForceConnectionClose RulesetUpdateParamsRulesAction = "force_connection_close"
 )
 
 func (r RulesetUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionSetCacheSettings, RulesetUpdateParamsRulesActionLogCustomField, RulesetUpdateParamsRulesActionDDoSDynamic, RulesetUpdateParamsRulesActionForceConnectionClose:
+	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionDDoSDynamic, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionForceConnectionClose, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionLogCustomField, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetCacheSettings, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip:
 		return true
 	}
 	return false
@@ -2929,9 +2934,9 @@ type RulesetListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// Cursor to use for the next page.
+	// The cursor to use for the next page.
 	Cursor param.Field[string] `query:"cursor"`
-	// Number of rulesets to return per page.
+	// The number of rulesets to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 

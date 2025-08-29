@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -314,6 +314,9 @@ type SubscriptionConfiguration struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel bool `json:"auto_update_model"`
+	// Indicates that the bot management cookie can be placed on end user devices
+	// accessing the site. Defaults to true
+	BmCookieEnabled bool `json:"bm_cookie_enabled"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SubscriptionConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -339,6 +342,7 @@ type SubscriptionConfiguration struct {
 type subscriptionConfigurationJSON struct {
 	AIBotsProtection       apijson.Field
 	AutoUpdateModel        apijson.Field
+	BmCookieEnabled        apijson.Field
 	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	IsRobotsTXTManaged     apijson.Field
@@ -444,6 +448,9 @@ type SubscriptionConfigurationParam struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel param.Field[bool] `json:"auto_update_model"`
+	// Indicates that the bot management cookie can be placed on end user devices
+	// accessing the site. Defaults to true
+	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SubscriptionConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -910,6 +917,9 @@ type BotManagementUpdateResponse struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel bool `json:"auto_update_model"`
+	// Indicates that the bot management cookie can be placed on end user devices
+	// accessing the site. Defaults to true
+	BmCookieEnabled bool `json:"bm_cookie_enabled"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotManagementUpdateResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -953,6 +963,7 @@ type BotManagementUpdateResponse struct {
 type botManagementUpdateResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
+	BmCookieEnabled              apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
@@ -1114,6 +1125,9 @@ type BotManagementGetResponse struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel bool `json:"auto_update_model"`
+	// Indicates that the bot management cookie can be placed on end user devices
+	// accessing the site. Defaults to true
+	BmCookieEnabled bool `json:"bm_cookie_enabled"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotManagementGetResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1157,6 +1171,7 @@ type BotManagementGetResponse struct {
 type botManagementGetResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
+	BmCookieEnabled              apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
@@ -1328,6 +1343,9 @@ type BotManagementUpdateParamsBody struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel param.Field[bool] `json:"auto_update_model"`
+	// Indicates that the bot management cookie can be placed on end user devices
+	// accessing the site. Defaults to true
+	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[BotManagementUpdateParamsBodyCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.

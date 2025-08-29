@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/email_security"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/email_security"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 func TestSettingDomainListWithOptionalParams(t *testing.T) {
@@ -126,6 +126,7 @@ func TestSettingDomainEditWithOptionalParams(t *testing.T) {
 			Folder:               cloudflare.F(email_security.SettingDomainEditParamsFolderAllItems),
 			IntegrationID:        cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			LookbackHops:         cloudflare.F(int64(1)),
+			Regions:              cloudflare.F([]email_security.SettingDomainEditParamsRegion{email_security.SettingDomainEditParamsRegionGlobal}),
 			RequireTLSInbound:    cloudflare.F(true),
 			RequireTLSOutbound:   cloudflare.F(true),
 			Transport:            cloudflare.F("transport"),

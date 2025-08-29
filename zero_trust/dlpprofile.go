@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -140,9 +140,6 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 type Profile struct {
 	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
-	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
-	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
-	Entries interface{} `json:"entries,required"`
 	// The name of the profile.
 	Name             string      `json:"name,required"`
 	Type             ProfileType `json:"type,required"`
@@ -159,7 +156,10 @@ type Profile struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description,nullable"`
-	OCREnabled  bool   `json:"ocr_enabled"`
+	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
+	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
+	Entries    interface{} `json:"entries"`
+	OCREnabled bool        `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
 	// When the profile was lasted updated.
@@ -171,7 +171,6 @@ type Profile struct {
 // profileJSON contains the JSON metadata for the struct [Profile]
 type profileJSON struct {
 	ID                  apijson.Field
-	Entries             apijson.Field
 	Name                apijson.Field
 	Type                apijson.Field
 	AIContextEnabled    apijson.Field
@@ -180,6 +179,7 @@ type profileJSON struct {
 	ContextAwareness    apijson.Field
 	CreatedAt           apijson.Field
 	Description         apijson.Field
+	Entries             apijson.Field
 	OCREnabled          apijson.Field
 	OpenAccess          apijson.Field
 	UpdatedAt           apijson.Field
@@ -240,8 +240,7 @@ type ProfileCustomProfile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
 	// When the profile was created.
-	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
-	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// The name of the profile.
 	Name       string                   `json:"name,required"`
 	OCREnabled bool                     `json:"ocr_enabled,required"`
@@ -256,8 +255,9 @@ type ProfileCustomProfile struct {
 	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// The description of the profile.
-	Description string                   `json:"description,nullable"`
-	JSON        profileCustomProfileJSON `json:"-"`
+	Description string                      `json:"description,nullable"`
+	Entries     []ProfileCustomProfileEntry `json:"entries"`
+	JSON        profileCustomProfileJSON    `json:"-"`
 }
 
 // profileCustomProfileJSON contains the JSON metadata for the struct
@@ -266,7 +266,6 @@ type profileCustomProfileJSON struct {
 	ID                  apijson.Field
 	AllowedMatchCount   apijson.Field
 	CreatedAt           apijson.Field
-	Entries             apijson.Field
 	Name                apijson.Field
 	OCREnabled          apijson.Field
 	Type                apijson.Field
@@ -275,6 +274,7 @@ type profileCustomProfileJSON struct {
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
 	Description         apijson.Field
+	Entries             apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -288,6 +288,37 @@ func (r profileCustomProfileJSON) RawJSON() string {
 }
 
 func (r ProfileCustomProfile) implementsProfile() {}
+
+type ProfileCustomProfileType string
+
+const (
+	ProfileCustomProfileTypeCustom ProfileCustomProfileType = "custom"
+)
+
+func (r ProfileCustomProfileType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileConfidenceThreshold string
+
+const (
+	ProfileCustomProfileConfidenceThresholdLow      ProfileCustomProfileConfidenceThreshold = "low"
+	ProfileCustomProfileConfidenceThresholdMedium   ProfileCustomProfileConfidenceThreshold = "medium"
+	ProfileCustomProfileConfidenceThresholdHigh     ProfileCustomProfileConfidenceThreshold = "high"
+	ProfileCustomProfileConfidenceThresholdVeryHigh ProfileCustomProfileConfidenceThreshold = "very_high"
+)
+
+func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileConfidenceThresholdLow, ProfileCustomProfileConfidenceThresholdMedium, ProfileCustomProfileConfidenceThresholdHigh, ProfileCustomProfileConfidenceThresholdVeryHigh:
+		return true
+	}
+	return false
+}
 
 type ProfileCustomProfileEntry struct {
 	ID      string                          `json:"id,required" format:"uuid"`
@@ -305,6 +336,9 @@ type ProfileCustomProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of
+	// [ProfileCustomProfileEntriesPredefinedEntryVariant].
+	Variant interface{} `json:"variant"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}                   `json:"word_list"`
 	JSON     profileCustomProfileEntryJSON `json:"-"`
@@ -325,6 +359,7 @@ type profileCustomProfileEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -456,6 +491,7 @@ type ProfileCustomProfileEntriesPredefinedEntry struct {
 	Name       string                                               `json:"name,required"`
 	Type       ProfileCustomProfileEntriesPredefinedEntryType       `json:"type,required"`
 	ProfileID  string                                               `json:"profile_id,nullable" format:"uuid"`
+	Variant    ProfileCustomProfileEntriesPredefinedEntryVariant    `json:"variant"`
 	JSON       profileCustomProfileEntriesPredefinedEntryJSON       `json:"-"`
 }
 
@@ -468,6 +504,7 @@ type profileCustomProfileEntriesPredefinedEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ProfileID   apijson.Field
+	Variant     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -517,6 +554,60 @@ const (
 func (r ProfileCustomProfileEntriesPredefinedEntryType) IsKnown() bool {
 	switch r {
 	case ProfileCustomProfileEntriesPredefinedEntryTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileEntriesPredefinedEntryVariant struct {
+	TopicType   ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        ProfileCustomProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                     `json:"description,nullable"`
+	JSON        profileCustomProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+}
+
+// profileCustomProfileEntriesPredefinedEntryVariantJSON contains the JSON metadata
+// for the struct [ProfileCustomProfileEntriesPredefinedEntryVariant]
+type profileCustomProfileEntriesPredefinedEntryVariantJSON struct {
+	TopicType   apijson.Field
+	Type        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProfileCustomProfileEntriesPredefinedEntryVariantTopicType string
+
+const (
+	ProfileCustomProfileEntriesPredefinedEntryVariantTopicTypeIntent  ProfileCustomProfileEntriesPredefinedEntryVariantTopicType = "Intent"
+	ProfileCustomProfileEntriesPredefinedEntryVariantTopicTypeContent ProfileCustomProfileEntriesPredefinedEntryVariantTopicType = "Content"
+)
+
+func (r ProfileCustomProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesPredefinedEntryVariantTopicTypeIntent, ProfileCustomProfileEntriesPredefinedEntryVariantTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileEntriesPredefinedEntryVariantType string
+
+const (
+	ProfileCustomProfileEntriesPredefinedEntryVariantTypePromptTopic ProfileCustomProfileEntriesPredefinedEntryVariantType = "PromptTopic"
+)
+
+func (r ProfileCustomProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
@@ -741,37 +832,6 @@ func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	return false
 }
 
-type ProfileCustomProfileType string
-
-const (
-	ProfileCustomProfileTypeCustom ProfileCustomProfileType = "custom"
-)
-
-func (r ProfileCustomProfileType) IsKnown() bool {
-	switch r {
-	case ProfileCustomProfileTypeCustom:
-		return true
-	}
-	return false
-}
-
-type ProfileCustomProfileConfidenceThreshold string
-
-const (
-	ProfileCustomProfileConfidenceThresholdLow      ProfileCustomProfileConfidenceThreshold = "low"
-	ProfileCustomProfileConfidenceThresholdMedium   ProfileCustomProfileConfidenceThreshold = "medium"
-	ProfileCustomProfileConfidenceThresholdHigh     ProfileCustomProfileConfidenceThreshold = "high"
-	ProfileCustomProfileConfidenceThresholdVeryHigh ProfileCustomProfileConfidenceThreshold = "very_high"
-)
-
-func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
-	switch r {
-	case ProfileCustomProfileConfidenceThresholdLow, ProfileCustomProfileConfidenceThresholdMedium, ProfileCustomProfileConfidenceThresholdHigh, ProfileCustomProfileConfidenceThresholdVeryHigh:
-		return true
-	}
-	return false
-}
-
 type ProfilePredefinedProfile struct {
 	// The id of the predefined profile (uuid).
 	ID                string                          `json:"id,required" format:"uuid"`
@@ -836,6 +896,9 @@ type ProfilePredefinedProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of
+	// [ProfilePredefinedProfileEntriesPredefinedEntryVariant].
+	Variant interface{} `json:"variant"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}                       `json:"word_list"`
 	JSON     profilePredefinedProfileEntryJSON `json:"-"`
@@ -856,6 +919,7 @@ type profilePredefinedProfileEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -987,6 +1051,7 @@ type ProfilePredefinedProfileEntriesPredefinedEntry struct {
 	Name       string                                                   `json:"name,required"`
 	Type       ProfilePredefinedProfileEntriesPredefinedEntryType       `json:"type,required"`
 	ProfileID  string                                                   `json:"profile_id,nullable" format:"uuid"`
+	Variant    ProfilePredefinedProfileEntriesPredefinedEntryVariant    `json:"variant"`
 	JSON       profilePredefinedProfileEntriesPredefinedEntryJSON       `json:"-"`
 }
 
@@ -999,6 +1064,7 @@ type profilePredefinedProfileEntriesPredefinedEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ProfileID   apijson.Field
+	Variant     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1049,6 +1115,60 @@ const (
 func (r ProfilePredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 	switch r {
 	case ProfilePredefinedProfileEntriesPredefinedEntryTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedProfileEntriesPredefinedEntryVariant struct {
+	TopicType   ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        ProfilePredefinedProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                         `json:"description,nullable"`
+	JSON        profilePredefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+}
+
+// profilePredefinedProfileEntriesPredefinedEntryVariantJSON contains the JSON
+// metadata for the struct [ProfilePredefinedProfileEntriesPredefinedEntryVariant]
+type profilePredefinedProfileEntriesPredefinedEntryVariantJSON struct {
+	TopicType   apijson.Field
+	Type        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType string
+
+const (
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicTypeIntent  ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType = "Intent"
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicTypeContent ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType = "Content"
+)
+
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicTypeIntent, ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantType string
+
+const (
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic ProfilePredefinedProfileEntriesPredefinedEntryVariantType = "PromptTopic"
+)
+
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
@@ -1358,6 +1478,9 @@ type ProfileIntegrationProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of
+	// [ProfileIntegrationProfileEntriesPredefinedEntryVariant].
+	Variant interface{} `json:"variant"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}                        `json:"word_list"`
 	JSON     profileIntegrationProfileEntryJSON `json:"-"`
@@ -1378,6 +1501,7 @@ type profileIntegrationProfileEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -1509,6 +1633,7 @@ type ProfileIntegrationProfileEntriesPredefinedEntry struct {
 	Name       string                                                    `json:"name,required"`
 	Type       ProfileIntegrationProfileEntriesPredefinedEntryType       `json:"type,required"`
 	ProfileID  string                                                    `json:"profile_id,nullable" format:"uuid"`
+	Variant    ProfileIntegrationProfileEntriesPredefinedEntryVariant    `json:"variant"`
 	JSON       profileIntegrationProfileEntriesPredefinedEntryJSON       `json:"-"`
 }
 
@@ -1521,6 +1646,7 @@ type profileIntegrationProfileEntriesPredefinedEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	ProfileID   apijson.Field
+	Variant     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1571,6 +1697,60 @@ const (
 func (r ProfileIntegrationProfileEntriesPredefinedEntryType) IsKnown() bool {
 	switch r {
 	case ProfileIntegrationProfileEntriesPredefinedEntryTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileEntriesPredefinedEntryVariant struct {
+	TopicType   ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        ProfileIntegrationProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
+	Description string                                                          `json:"description,nullable"`
+	JSON        profileIntegrationProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+}
+
+// profileIntegrationProfileEntriesPredefinedEntryVariantJSON contains the JSON
+// metadata for the struct [ProfileIntegrationProfileEntriesPredefinedEntryVariant]
+type profileIntegrationProfileEntriesPredefinedEntryVariantJSON struct {
+	TopicType   apijson.Field
+	Type        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType string
+
+const (
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicTypeIntent  ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType = "Intent"
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicTypeContent ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType = "Content"
+)
+
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicTypeIntent, ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantType string
+
+const (
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantTypePromptTopic ProfileIntegrationProfileEntriesPredefinedEntryVariantType = "PromptTopic"
+)
+
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false

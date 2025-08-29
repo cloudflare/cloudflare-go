@@ -11,11 +11,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -1907,11 +1907,13 @@ type ScriptScriptAndVersionSettingEditResponseUsageModel string
 
 const (
 	ScriptScriptAndVersionSettingEditResponseUsageModelStandard ScriptScriptAndVersionSettingEditResponseUsageModel = "standard"
+	ScriptScriptAndVersionSettingEditResponseUsageModelBundled  ScriptScriptAndVersionSettingEditResponseUsageModel = "bundled"
+	ScriptScriptAndVersionSettingEditResponseUsageModelUnbound  ScriptScriptAndVersionSettingEditResponseUsageModel = "unbound"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseUsageModelStandard:
+	case ScriptScriptAndVersionSettingEditResponseUsageModelStandard, ScriptScriptAndVersionSettingEditResponseUsageModelBundled, ScriptScriptAndVersionSettingEditResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -3743,11 +3745,13 @@ type ScriptScriptAndVersionSettingGetResponseUsageModel string
 
 const (
 	ScriptScriptAndVersionSettingGetResponseUsageModelStandard ScriptScriptAndVersionSettingGetResponseUsageModel = "standard"
+	ScriptScriptAndVersionSettingGetResponseUsageModelBundled  ScriptScriptAndVersionSettingGetResponseUsageModel = "bundled"
+	ScriptScriptAndVersionSettingGetResponseUsageModelUnbound  ScriptScriptAndVersionSettingGetResponseUsageModel = "unbound"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseUsageModelStandard:
+	case ScriptScriptAndVersionSettingGetResponseUsageModelStandard, ScriptScriptAndVersionSettingGetResponseUsageModelBundled, ScriptScriptAndVersionSettingGetResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -4881,11 +4885,13 @@ type ScriptScriptAndVersionSettingEditParamsSettingsUsageModel string
 
 const (
 	ScriptScriptAndVersionSettingEditParamsSettingsUsageModelStandard ScriptScriptAndVersionSettingEditParamsSettingsUsageModel = "standard"
+	ScriptScriptAndVersionSettingEditParamsSettingsUsageModelBundled  ScriptScriptAndVersionSettingEditParamsSettingsUsageModel = "bundled"
+	ScriptScriptAndVersionSettingEditParamsSettingsUsageModelUnbound  ScriptScriptAndVersionSettingEditParamsSettingsUsageModel = "unbound"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsUsageModelStandard:
+	case ScriptScriptAndVersionSettingEditParamsSettingsUsageModelStandard, ScriptScriptAndVersionSettingEditParamsSettingsUsageModelBundled, ScriptScriptAndVersionSettingEditParamsSettingsUsageModelUnbound:
 		return true
 	}
 	return false

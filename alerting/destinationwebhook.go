@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // DestinationWebhookService contains methods and other services that help with
@@ -184,14 +184,19 @@ func (r webhooksJSON) RawJSON() string {
 type WebhooksType string
 
 const (
-	WebhooksTypeSlack   WebhooksType = "slack"
-	WebhooksTypeGeneric WebhooksType = "generic"
-	WebhooksTypeGchat   WebhooksType = "gchat"
+	WebhooksTypeDatadog  WebhooksType = "datadog"
+	WebhooksTypeDiscord  WebhooksType = "discord"
+	WebhooksTypeFeishu   WebhooksType = "feishu"
+	WebhooksTypeGchat    WebhooksType = "gchat"
+	WebhooksTypeGeneric  WebhooksType = "generic"
+	WebhooksTypeOpsgenie WebhooksType = "opsgenie"
+	WebhooksTypeSlack    WebhooksType = "slack"
+	WebhooksTypeSplunk   WebhooksType = "splunk"
 )
 
 func (r WebhooksType) IsKnown() bool {
 	switch r {
-	case WebhooksTypeSlack, WebhooksTypeGeneric, WebhooksTypeGchat:
+	case WebhooksTypeDatadog, WebhooksTypeDiscord, WebhooksTypeFeishu, WebhooksTypeGchat, WebhooksTypeGeneric, WebhooksTypeOpsgenie, WebhooksTypeSlack, WebhooksTypeSplunk:
 		return true
 	}
 	return false

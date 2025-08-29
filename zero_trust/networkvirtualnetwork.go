@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // NetworkVirtualNetworkService contains methods and other services that help with
@@ -250,6 +250,9 @@ type NetworkVirtualNetworkListParams struct {
 	// If `true`, only include the default virtual network. If `false`, exclude the
 	// default virtual network. If empty, all virtual networks will be included.
 	IsDefault param.Field[bool] `query:"is_default"`
+	// If `true`, only include the default virtual network. If `false`, exclude the
+	// default virtual network. If empty, all virtual networks will be included.
+	IsDefaultNetwork param.Field[bool] `query:"is_default_network"`
 	// If `true`, only include deleted virtual networks. If `false`, exclude deleted
 	// virtual networks. If empty, all virtual networks will be included.
 	IsDeleted param.Field[bool] `query:"is_deleted"`
