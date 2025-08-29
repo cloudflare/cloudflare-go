@@ -3,7 +3,7 @@
 package magic_cloud_networking
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // MagicCloudNetworkingService contains methods and other services that help with

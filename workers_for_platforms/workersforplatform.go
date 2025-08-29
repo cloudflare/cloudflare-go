@@ -3,7 +3,7 @@
 package workers_for_platforms
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // WorkersForPlatformService contains methods and other services that help with
