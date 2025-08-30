@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // LeakedCredentialSummaryService contains methods and other services that help

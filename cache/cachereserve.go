@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // CacheReserveService contains methods and other services that help with
@@ -119,7 +119,7 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 	return
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type CacheReserve string
 
 const (
@@ -204,11 +204,11 @@ func (r cacheReserveClearResponseJSON) RawJSON() string {
 }
 
 type CacheReserveEditResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID CacheReserve `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Cache Reserve zone setting.
 	Value CacheReserveEditResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
@@ -234,7 +234,7 @@ func (r cacheReserveEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The value of the feature
+// Value of the Cache Reserve zone setting.
 type CacheReserveEditResponseValue string
 
 const (
@@ -251,11 +251,11 @@ func (r CacheReserveEditResponseValue) IsKnown() bool {
 }
 
 type CacheReserveGetResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID CacheReserve `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Cache Reserve zone setting.
 	Value CacheReserveGetResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
@@ -281,7 +281,7 @@ func (r cacheReserveGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The value of the feature
+// Value of the Cache Reserve zone setting.
 type CacheReserveGetResponseValue string
 
 const (
@@ -336,7 +336,7 @@ func (r cacheReserveStatusResponseJSON) RawJSON() string {
 }
 
 type CacheReserveClearParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Body   interface{}         `json:"body,required"`
 }
@@ -348,7 +348,7 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 type CacheReserveClearResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
@@ -377,7 +377,7 @@ func (r cacheReserveClearResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type CacheReserveClearResponseEnvelopeSuccess bool
 
 const (
@@ -393,7 +393,7 @@ func (r CacheReserveClearResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type CacheReserveEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Cache Reserve zone setting.
 	Value param.Field[CacheReserveEditParamsValue] `json:"value,required"`
@@ -422,7 +422,7 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 type CacheReserveEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success CacheReserveEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  CacheReserveEditResponse                `json:"result"`
 	JSON    cacheReserveEditResponseEnvelopeJSON    `json:"-"`
@@ -447,7 +447,7 @@ func (r cacheReserveEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type CacheReserveEditResponseEnvelopeSuccess bool
 
 const (
@@ -463,14 +463,14 @@ func (r CacheReserveEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type CacheReserveGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type CacheReserveGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success CacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CacheReserveGetResponse                `json:"result"`
 	JSON    cacheReserveGetResponseEnvelopeJSON    `json:"-"`
@@ -495,7 +495,7 @@ func (r cacheReserveGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type CacheReserveGetResponseEnvelopeSuccess bool
 
 const (
@@ -511,14 +511,14 @@ func (r CacheReserveGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type CacheReserveStatusParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type CacheReserveStatusResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
@@ -547,7 +547,7 @@ func (r cacheReserveStatusResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type CacheReserveStatusResponseEnvelopeSuccess bool
 
 const (

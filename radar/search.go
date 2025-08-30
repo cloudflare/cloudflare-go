@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // SearchService contains methods and other services that help with interacting
@@ -33,8 +33,8 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Searches for locations, autonomous systems, reports, bots, certificate logs, and
-// certificate authorities.
+// Searches for locations, autonomous systems, reports, bots, certificate logs,
+// certificate authorities, industries and verticals
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -123,13 +123,16 @@ const (
 	SearchGlobalParamsExcludeBots                   SearchGlobalParamsExclude = "BOTS"
 	SearchGlobalParamsExcludeCertificateAuthorities SearchGlobalParamsExclude = "CERTIFICATE_AUTHORITIES"
 	SearchGlobalParamsExcludeCertificateLogs        SearchGlobalParamsExclude = "CERTIFICATE_LOGS"
+	SearchGlobalParamsExcludeIndustries             SearchGlobalParamsExclude = "INDUSTRIES"
 	SearchGlobalParamsExcludeLocations              SearchGlobalParamsExclude = "LOCATIONS"
 	SearchGlobalParamsExcludeNotebooks              SearchGlobalParamsExclude = "NOTEBOOKS"
+	SearchGlobalParamsExcludeTlds                   SearchGlobalParamsExclude = "TLDS"
+	SearchGlobalParamsExcludeVerticals              SearchGlobalParamsExclude = "VERTICALS"
 )
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks:
+	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
 		return true
 	}
 	return false
@@ -158,13 +161,16 @@ const (
 	SearchGlobalParamsIncludeBots                   SearchGlobalParamsInclude = "BOTS"
 	SearchGlobalParamsIncludeCertificateAuthorities SearchGlobalParamsInclude = "CERTIFICATE_AUTHORITIES"
 	SearchGlobalParamsIncludeCertificateLogs        SearchGlobalParamsInclude = "CERTIFICATE_LOGS"
+	SearchGlobalParamsIncludeIndustries             SearchGlobalParamsInclude = "INDUSTRIES"
 	SearchGlobalParamsIncludeLocations              SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeNotebooks              SearchGlobalParamsInclude = "NOTEBOOKS"
+	SearchGlobalParamsIncludeTlds                   SearchGlobalParamsInclude = "TLDS"
+	SearchGlobalParamsIncludeVerticals              SearchGlobalParamsInclude = "VERTICALS"
 )
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks:
+	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
 		return true
 	}
 	return false

@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // LogAuditService contains methods and other services that help with interacting
@@ -42,7 +42,7 @@ func NewLogAuditService(opts ...option.RequestOption) (r *LogAuditService) {
 // missing entries in the available audit logs. Be aware of the following
 // limitations. <br /> <ul> <li>Audit logs are available only for the past 30 days.
 // <br /></li> <li>Error handling is not yet implemented. <br /> </li> </ul>
-func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[LogAuditListResponse], err error) {
+func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[LogAuditListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,8 +68,8 @@ func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, o
 // missing entries in the available audit logs. Be aware of the following
 // limitations. <br /> <ul> <li>Audit logs are available only for the past 30 days.
 // <br /></li> <li>Error handling is not yet implemented. <br /> </li> </ul>
-func (r *LogAuditService) ListAutoPaging(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[LogAuditListResponse] {
-	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, params, opts...))
+func (r *LogAuditService) ListAutoPaging(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[LogAuditListResponse] {
+	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, params, opts...))
 }
 
 type LogAuditListResponse struct {

@@ -10,11 +10,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // BotService contains methods and other services that help with interacting with
@@ -134,6 +134,8 @@ type BotListResponseBot struct {
 	Category string `json:"category,required"`
 	// A summary for the bot (e.g., purpose).
 	Description string `json:"description,required"`
+	// The kind of the bot.
+	Kind string `json:"kind,required"`
 	// The name of the bot.
 	Name string `json:"name,required"`
 	// The organization that owns and operates the bot.
@@ -149,6 +151,7 @@ type BotListResponseBot struct {
 type botListResponseBotJSON struct {
 	Category          apijson.Field
 	Description       apijson.Field
+	Kind              apijson.Field
 	Name              apijson.Field
 	Operator          apijson.Field
 	Slug              apijson.Field
@@ -190,6 +193,8 @@ type BotGetResponseBot struct {
 	Category string `json:"category,required"`
 	// A summary for the bot (e.g., purpose).
 	Description string `json:"description,required"`
+	// The kind of the bot.
+	Kind string `json:"kind,required"`
 	// The name of the bot.
 	Name string `json:"name,required"`
 	// The organization that owns and operates the bot.
@@ -208,6 +213,7 @@ type BotGetResponseBot struct {
 type botGetResponseBotJSON struct {
 	Category          apijson.Field
 	Description       apijson.Field
+	Kind              apijson.Field
 	Name              apijson.Field
 	Operator          apijson.Field
 	OperatorURL       apijson.Field
@@ -873,6 +879,8 @@ type BotListParams struct {
 	BotVerificationStatus param.Field[BotListParamsBotVerificationStatus] `query:"botVerificationStatus"`
 	// Format in which results will be returned.
 	Format param.Field[BotListParamsFormat] `query:"format"`
+	// Filters results by bot kind.
+	Kind param.Field[BotListParamsKind] `query:"kind"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Skips the specified number of objects before fetching the results.
@@ -943,6 +951,22 @@ const (
 func (r BotListParamsFormat) IsKnown() bool {
 	switch r {
 	case BotListParamsFormatJson, BotListParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by bot kind.
+type BotListParamsKind string
+
+const (
+	BotListParamsKindAgent BotListParamsKind = "AGENT"
+	BotListParamsKindBot   BotListParamsKind = "BOT"
+)
+
+func (r BotListParamsKind) IsKnown() bool {
+	switch r {
+	case BotListParamsKindAgent, BotListParamsKindBot:
 		return true
 	}
 	return false
@@ -1033,6 +1057,8 @@ type BotSummaryParams struct {
 	Bot param.Field[[]string] `query:"bot"`
 	// Filters results by bot category.
 	BotCategory param.Field[[]BotSummaryParamsBotCategory] `query:"botCategory"`
+	// Filters results by bot kind.
+	BotKind param.Field[[]BotSummaryParamsBotKind] `query:"botKind"`
 	// Filters results by bot operator.
 	BotOperator param.Field[[]string] `query:"botOperator"`
 	// Filters results by bot verification status (Verified vs. Unverified).
@@ -1076,13 +1102,14 @@ type BotSummaryParamsDimension string
 
 const (
 	BotSummaryParamsDimensionBot         BotSummaryParamsDimension = "BOT"
+	BotSummaryParamsDimensionBotKind     BotSummaryParamsDimension = "BOT_KIND"
 	BotSummaryParamsDimensionBotOperator BotSummaryParamsDimension = "BOT_OPERATOR"
 	BotSummaryParamsDimensionBotCategory BotSummaryParamsDimension = "BOT_CATEGORY"
 )
 
 func (r BotSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case BotSummaryParamsDimensionBot, BotSummaryParamsDimensionBotOperator, BotSummaryParamsDimensionBotCategory:
+	case BotSummaryParamsDimensionBot, BotSummaryParamsDimensionBotKind, BotSummaryParamsDimensionBotOperator, BotSummaryParamsDimensionBotCategory:
 		return true
 	}
 	return false
@@ -1113,6 +1140,21 @@ const (
 func (r BotSummaryParamsBotCategory) IsKnown() bool {
 	switch r {
 	case BotSummaryParamsBotCategorySearchEngineCrawler, BotSummaryParamsBotCategorySearchEngineOptimization, BotSummaryParamsBotCategoryMonitoringAndAnalytics, BotSummaryParamsBotCategoryAdvertisingAndMarketing, BotSummaryParamsBotCategorySocialMediaMarketing, BotSummaryParamsBotCategoryPagePreview, BotSummaryParamsBotCategoryAcademicResearch, BotSummaryParamsBotCategorySecurity, BotSummaryParamsBotCategoryAccessibility, BotSummaryParamsBotCategoryWebhooks, BotSummaryParamsBotCategoryFeedFetcher, BotSummaryParamsBotCategoryAICrawler, BotSummaryParamsBotCategoryAggregator, BotSummaryParamsBotCategoryAIAssistant, BotSummaryParamsBotCategoryAISearch, BotSummaryParamsBotCategoryArchiver:
+		return true
+	}
+	return false
+}
+
+type BotSummaryParamsBotKind string
+
+const (
+	BotSummaryParamsBotKindAgent BotSummaryParamsBotKind = "AGENT"
+	BotSummaryParamsBotKindBot   BotSummaryParamsBotKind = "BOT"
+)
+
+func (r BotSummaryParamsBotKind) IsKnown() bool {
+	switch r {
+	case BotSummaryParamsBotKindAgent, BotSummaryParamsBotKindBot:
 		return true
 	}
 	return false
@@ -1186,6 +1228,8 @@ type BotTimeseriesParams struct {
 	Bot param.Field[[]string] `query:"bot"`
 	// Filters results by bot category.
 	BotCategory param.Field[[]BotTimeseriesParamsBotCategory] `query:"botCategory"`
+	// Filters results by bot kind.
+	BotKind param.Field[[]BotTimeseriesParamsBotKind] `query:"botKind"`
 	// Filters results by bot operator.
 	BotOperator param.Field[[]string] `query:"botOperator"`
 	// Filters results by bot verification status (Verified vs. Unverified).
@@ -1270,6 +1314,21 @@ func (r BotTimeseriesParamsBotCategory) IsKnown() bool {
 	return false
 }
 
+type BotTimeseriesParamsBotKind string
+
+const (
+	BotTimeseriesParamsBotKindAgent BotTimeseriesParamsBotKind = "AGENT"
+	BotTimeseriesParamsBotKindBot   BotTimeseriesParamsBotKind = "BOT"
+)
+
+func (r BotTimeseriesParamsBotKind) IsKnown() bool {
+	switch r {
+	case BotTimeseriesParamsBotKindAgent, BotTimeseriesParamsBotKindBot:
+		return true
+	}
+	return false
+}
+
 // The category of the bot.
 type BotTimeseriesParamsBotVerificationStatus string
 
@@ -1338,6 +1397,8 @@ type BotTimeseriesGroupsParams struct {
 	Bot param.Field[[]string] `query:"bot"`
 	// Filters results by bot category.
 	BotCategory param.Field[[]BotTimeseriesGroupsParamsBotCategory] `query:"botCategory"`
+	// Filters results by bot kind.
+	BotKind param.Field[[]BotTimeseriesGroupsParamsBotKind] `query:"botKind"`
 	// Filters results by bot operator.
 	BotOperator param.Field[[]string] `query:"botOperator"`
 	// Filters results by bot verification status (Verified vs. Unverified).
@@ -1382,13 +1443,14 @@ type BotTimeseriesGroupsParamsDimension string
 
 const (
 	BotTimeseriesGroupsParamsDimensionBot         BotTimeseriesGroupsParamsDimension = "BOT"
+	BotTimeseriesGroupsParamsDimensionBotKind     BotTimeseriesGroupsParamsDimension = "BOT_KIND"
 	BotTimeseriesGroupsParamsDimensionBotOperator BotTimeseriesGroupsParamsDimension = "BOT_OPERATOR"
 	BotTimeseriesGroupsParamsDimensionBotCategory BotTimeseriesGroupsParamsDimension = "BOT_CATEGORY"
 )
 
 func (r BotTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case BotTimeseriesGroupsParamsDimensionBot, BotTimeseriesGroupsParamsDimensionBotOperator, BotTimeseriesGroupsParamsDimensionBotCategory:
+	case BotTimeseriesGroupsParamsDimensionBot, BotTimeseriesGroupsParamsDimensionBotKind, BotTimeseriesGroupsParamsDimensionBotOperator, BotTimeseriesGroupsParamsDimensionBotCategory:
 		return true
 	}
 	return false
@@ -1439,6 +1501,21 @@ const (
 func (r BotTimeseriesGroupsParamsBotCategory) IsKnown() bool {
 	switch r {
 	case BotTimeseriesGroupsParamsBotCategorySearchEngineCrawler, BotTimeseriesGroupsParamsBotCategorySearchEngineOptimization, BotTimeseriesGroupsParamsBotCategoryMonitoringAndAnalytics, BotTimeseriesGroupsParamsBotCategoryAdvertisingAndMarketing, BotTimeseriesGroupsParamsBotCategorySocialMediaMarketing, BotTimeseriesGroupsParamsBotCategoryPagePreview, BotTimeseriesGroupsParamsBotCategoryAcademicResearch, BotTimeseriesGroupsParamsBotCategorySecurity, BotTimeseriesGroupsParamsBotCategoryAccessibility, BotTimeseriesGroupsParamsBotCategoryWebhooks, BotTimeseriesGroupsParamsBotCategoryFeedFetcher, BotTimeseriesGroupsParamsBotCategoryAICrawler, BotTimeseriesGroupsParamsBotCategoryAggregator, BotTimeseriesGroupsParamsBotCategoryAIAssistant, BotTimeseriesGroupsParamsBotCategoryAISearch, BotTimeseriesGroupsParamsBotCategoryArchiver:
+		return true
+	}
+	return false
+}
+
+type BotTimeseriesGroupsParamsBotKind string
+
+const (
+	BotTimeseriesGroupsParamsBotKindAgent BotTimeseriesGroupsParamsBotKind = "AGENT"
+	BotTimeseriesGroupsParamsBotKindBot   BotTimeseriesGroupsParamsBotKind = "BOT"
+)
+
+func (r BotTimeseriesGroupsParamsBotKind) IsKnown() bool {
+	switch r {
+	case BotTimeseriesGroupsParamsBotKindAgent, BotTimeseriesGroupsParamsBotKindBot:
 		return true
 	}
 	return false

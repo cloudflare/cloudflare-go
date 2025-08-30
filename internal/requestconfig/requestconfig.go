@@ -18,11 +18,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 )
 
 func getDefaultHeaders() map[string]string {
@@ -466,6 +466,11 @@ func (cfg *RequestConfig) Execute() (err error) {
 		// Can't actually refresh the body, so we don't attempt to retry here
 		if cfg.Request.GetBody == nil && cfg.Request.Body != nil {
 			break
+		}
+
+		// Close the response body before retrying to prevent connection leaks
+		if res != nil && res.Body != nil {
+			res.Body.Close()
 		}
 
 		time.Sleep(retryDelay(res, retryCount))

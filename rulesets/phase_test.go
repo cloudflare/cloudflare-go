@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/rulesets"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/rulesets"
 )
 
 func TestPhaseUpdateWithOptionalParams(t *testing.T) {
@@ -33,7 +33,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
 			AccountID:   cloudflare.F("account_id"),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Description: cloudflare.F("A description for my ruleset."),
 			Name:        cloudflare.F("My ruleset"),
 			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.BlockRuleParam{
 				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
@@ -45,18 +45,18 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 						StatusCode:  cloudflare.F(int64(400)),
 					}),
 				}),
-				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
+				Description: cloudflare.F("Block the request."),
 				Enabled:     cloudflare.F(true),
 				ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
 					PasswordExpression: cloudflare.F(`url_decode(http.request.body.form[\"password\"][0])`),
 					UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 				}),
-				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
+				Expression: cloudflare.F("ip.src eq 1.1.1.1"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
-					Characteristics:         cloudflare.F([]string{"ip.src"}),
+					Characteristics:         cloudflare.F([]string{"cf.colo.id"}),
 					Period:                  cloudflare.F(int64(60)),
 					CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 					MitigationTimeout:       cloudflare.F(int64(600)),

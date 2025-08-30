@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/content_scanning"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/content_scanning"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 func TestPayloadNew(t *testing.T) {

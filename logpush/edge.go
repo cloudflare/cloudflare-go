@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // EdgeService contains methods and other services that help with interacting with
@@ -42,7 +42,7 @@ func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...opt
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logpush/edge", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/logpush/edge/jobs", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,7 +60,7 @@ func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...opti
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logpush/edge", query.ZoneID)
+	path := fmt.Sprintf("zones/%s/logpush/edge/jobs", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err

@@ -9,11 +9,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // AITimeseriesGroupService contains methods and other services that help with
@@ -991,6 +991,8 @@ type AITimeseriesGroupSummaryParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[AITimeseriesGroupSummaryParamsFormat] `query:"format"`
+	// Filters results by industry.
+	Industry param.Field[[]string] `query:"industry"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
@@ -1001,6 +1003,8 @@ type AITimeseriesGroupSummaryParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by vertical.
+	Vertical param.Field[[]string] `query:"vertical"`
 }
 
 // URLQuery serializes [AITimeseriesGroupSummaryParams]'s query parameters as
@@ -1018,11 +1022,13 @@ type AITimeseriesGroupSummaryParamsDimension string
 const (
 	AITimeseriesGroupSummaryParamsDimensionUserAgent    AITimeseriesGroupSummaryParamsDimension = "USER_AGENT"
 	AITimeseriesGroupSummaryParamsDimensionCrawlPurpose AITimeseriesGroupSummaryParamsDimension = "CRAWL_PURPOSE"
+	AITimeseriesGroupSummaryParamsDimensionIndustry     AITimeseriesGroupSummaryParamsDimension = "INDUSTRY"
+	AITimeseriesGroupSummaryParamsDimensionVertical     AITimeseriesGroupSummaryParamsDimension = "VERTICAL"
 )
 
 func (r AITimeseriesGroupSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case AITimeseriesGroupSummaryParamsDimensionUserAgent, AITimeseriesGroupSummaryParamsDimensionCrawlPurpose:
+	case AITimeseriesGroupSummaryParamsDimensionUserAgent, AITimeseriesGroupSummaryParamsDimensionCrawlPurpose, AITimeseriesGroupSummaryParamsDimensionIndustry, AITimeseriesGroupSummaryParamsDimensionVertical:
 		return true
 	}
 	return false
@@ -1093,6 +1099,8 @@ type AITimeseriesGroupTimeseriesParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[AITimeseriesGroupTimeseriesParamsFormat] `query:"format"`
+	// Filters results by industry.
+	Industry param.Field[[]string] `query:"industry"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
@@ -1105,6 +1113,8 @@ type AITimeseriesGroupTimeseriesParams struct {
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by user agent.
 	UserAgent param.Field[[]string] `query:"userAgent"`
+	// Filters results by vertical.
+	Vertical param.Field[[]string] `query:"vertical"`
 }
 
 // URLQuery serializes [AITimeseriesGroupTimeseriesParams]'s query parameters as
@@ -1201,6 +1211,8 @@ type AITimeseriesGroupTimeseriesGroupsParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[AITimeseriesGroupTimeseriesGroupsParamsFormat] `query:"format"`
+	// Filters results by industry.
+	Industry param.Field[[]string] `query:"industry"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
@@ -1214,6 +1226,8 @@ type AITimeseriesGroupTimeseriesGroupsParams struct {
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization param.Field[AITimeseriesGroupTimeseriesGroupsParamsNormalization] `query:"normalization"`
+	// Filters results by vertical.
+	Vertical param.Field[[]string] `query:"vertical"`
 }
 
 // URLQuery serializes [AITimeseriesGroupTimeseriesGroupsParams]'s query parameters
@@ -1231,11 +1245,13 @@ type AITimeseriesGroupTimeseriesGroupsParamsDimension string
 const (
 	AITimeseriesGroupTimeseriesGroupsParamsDimensionUserAgent    AITimeseriesGroupTimeseriesGroupsParamsDimension = "USER_AGENT"
 	AITimeseriesGroupTimeseriesGroupsParamsDimensionCrawlPurpose AITimeseriesGroupTimeseriesGroupsParamsDimension = "CRAWL_PURPOSE"
+	AITimeseriesGroupTimeseriesGroupsParamsDimensionIndustry     AITimeseriesGroupTimeseriesGroupsParamsDimension = "INDUSTRY"
+	AITimeseriesGroupTimeseriesGroupsParamsDimensionVertical     AITimeseriesGroupTimeseriesGroupsParamsDimension = "VERTICAL"
 )
 
 func (r AITimeseriesGroupTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case AITimeseriesGroupTimeseriesGroupsParamsDimensionUserAgent, AITimeseriesGroupTimeseriesGroupsParamsDimensionCrawlPurpose:
+	case AITimeseriesGroupTimeseriesGroupsParamsDimensionUserAgent, AITimeseriesGroupTimeseriesGroupsParamsDimensionCrawlPurpose, AITimeseriesGroupTimeseriesGroupsParamsDimensionIndustry, AITimeseriesGroupTimeseriesGroupsParamsDimensionVertical:
 		return true
 	}
 	return false

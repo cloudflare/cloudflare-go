@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/kv"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/kv"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 func TestNamespaceNew(t *testing.T) {
@@ -88,7 +88,7 @@ func TestNamespaceListWithOptionalParams(t *testing.T) {
 		Direction: cloudflare.F(kv.NamespaceListParamsDirectionAsc),
 		Order:     cloudflare.F(kv.NamespaceListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(5.000000),
+		PerPage:   cloudflare.F(1.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

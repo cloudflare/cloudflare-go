@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // GatewayProxyEndpointService contains methods and other services that help with
@@ -197,7 +197,7 @@ func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayProxyEndpointNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ProxyEndpoint                                  `json:"result"`
 	JSON    gatewayProxyEndpointNewResponseEnvelopeJSON    `json:"-"`
@@ -222,7 +222,7 @@ func (r gatewayProxyEndpointNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayProxyEndpointNewResponseEnvelopeSuccess bool
 
 const (
@@ -244,7 +244,7 @@ type GatewayProxyEndpointListParams struct {
 type GatewayProxyEndpointListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayProxyEndpointListResponseEnvelopeSuccess `json:"success,required"`
 	Result  ProxyEndpoint                                   `json:"result"`
 	JSON    gatewayProxyEndpointListResponseEnvelopeJSON    `json:"-"`
@@ -269,7 +269,7 @@ func (r gatewayProxyEndpointListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayProxyEndpointListResponseEnvelopeSuccess bool
 
 const (
@@ -291,7 +291,7 @@ type GatewayProxyEndpointDeleteParams struct {
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayProxyEndpointDeleteResponse                `json:"result"`
 	JSON    gatewayProxyEndpointDeleteResponseEnvelopeJSON    `json:"-"`
@@ -316,7 +316,7 @@ func (r gatewayProxyEndpointDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayProxyEndpointDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -346,7 +346,7 @@ func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayProxyEndpointEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ProxyEndpoint                                   `json:"result"`
 	JSON    gatewayProxyEndpointEditResponseEnvelopeJSON    `json:"-"`
@@ -371,7 +371,7 @@ func (r gatewayProxyEndpointEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayProxyEndpointEditResponseEnvelopeSuccess bool
 
 const (

@@ -10,10 +10,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/workers"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/workers"
 )
 
 func TestScriptUpdateWithOptionalParams(t *testing.T) {
@@ -57,8 +57,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				KeepAssets:         cloudflare.F(false),
 				KeepBindings:       cloudflare.F([]string{"string"}),
-				Logpush:            cloudflare.F(false),
-				MainModule:         cloudflare.F("worker.js"),
+				Limits: cloudflare.F(workers.ScriptUpdateParamsMetadataLimits{
+					CPUMs: cloudflare.F(int64(50)),
+				}),
+				Logpush:    cloudflare.F(false),
+				MainModule: cloudflare.F("worker.js"),
 				Migrations: cloudflare.F[workers.ScriptUpdateParamsMetadataMigrationsUnion](workers.SingleStepMigrationParam{
 					DeletedClasses:   cloudflare.F([]string{"string"}),
 					NewClasses:       cloudflare.F([]string{"string"}),

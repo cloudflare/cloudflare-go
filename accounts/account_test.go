@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/accounts"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/accounts"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 func TestAccountNewWithOptionalParams(t *testing.T) {
@@ -61,6 +61,7 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		Account: accounts.AccountParam{
 			ID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name: cloudflare.F("Demo Account"),
+			Type: cloudflare.F(accounts.AccountTypeStandard),
 			Settings: cloudflare.F(accounts.AccountSettingsParam{
 				AbuseContactEmail: cloudflare.F("abuse_contact_email"),
 				EnforceTwofactor:  cloudflare.F(true),

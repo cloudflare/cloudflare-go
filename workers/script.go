@@ -13,13 +13,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -153,18 +153,35 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 type Script struct {
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
+	CompatibilityDate string `json:"compatibility_date"`
+	// Flags that enable or disable certain features in the Workers runtime. Used to
+	// enable upcoming features or opt in or out of specific changes not included in a
+	// `compatibility_date`.
+	CompatibilityFlags []string `json:"compatibility_flags"`
 	// When the script was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// The names of handlers exported as part of the default export.
+	Handlers []string `json:"handlers"`
 	// Whether a Worker contains assets.
 	HasAssets bool `json:"has_assets"`
 	// Whether a Worker contains modules.
 	HasModules bool `json:"has_modules"`
+	// The client most recently used to deploy this Worker.
+	LastDeployedFrom string `json:"last_deployed_from"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
+	// The tag of the Durable Object migration that was most recently applied for this
+	// Worker.
+	MigrationTag string `json:"migration_tag"`
 	// When the script was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Named exports, such as Durable Object class implementations and named
+	// entrypoints.
+	NamedHandlers []ScriptNamedHandler `json:"named_handlers"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptPlacement `json:"placement"`
@@ -187,20 +204,26 @@ type Script struct {
 
 // scriptJSON contains the JSON metadata for the struct [Script]
 type scriptJSON struct {
-	ID              apijson.Field
-	CreatedOn       apijson.Field
-	Etag            apijson.Field
-	HasAssets       apijson.Field
-	HasModules      apijson.Field
-	Logpush         apijson.Field
-	ModifiedOn      apijson.Field
-	Placement       apijson.Field
-	PlacementMode   apijson.Field
-	PlacementStatus apijson.Field
-	TailConsumers   apijson.Field
-	UsageModel      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                 apijson.Field
+	CompatibilityDate  apijson.Field
+	CompatibilityFlags apijson.Field
+	CreatedOn          apijson.Field
+	Etag               apijson.Field
+	Handlers           apijson.Field
+	HasAssets          apijson.Field
+	HasModules         apijson.Field
+	LastDeployedFrom   apijson.Field
+	Logpush            apijson.Field
+	MigrationTag       apijson.Field
+	ModifiedOn         apijson.Field
+	NamedHandlers      apijson.Field
+	Placement          apijson.Field
+	PlacementMode      apijson.Field
+	PlacementStatus    apijson.Field
+	TailConsumers      apijson.Field
+	UsageModel         apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *Script) UnmarshalJSON(data []byte) (err error) {
@@ -208,6 +231,31 @@ func (r *Script) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptNamedHandler struct {
+	// The names of handlers exported as part of the named export.
+	Handlers []string `json:"handlers"`
+	// The name of the export.
+	Name string                 `json:"name"`
+	JSON scriptNamedHandlerJSON `json:"-"`
+}
+
+// scriptNamedHandlerJSON contains the JSON metadata for the struct
+// [ScriptNamedHandler]
+type scriptNamedHandlerJSON struct {
+	Handlers    apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptNamedHandler) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptNamedHandlerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -282,11 +330,13 @@ type ScriptUsageModel string
 
 const (
 	ScriptUsageModelStandard ScriptUsageModel = "standard"
+	ScriptUsageModelBundled  ScriptUsageModel = "bundled"
+	ScriptUsageModelUnbound  ScriptUsageModel = "unbound"
 )
 
 func (r ScriptUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUsageModelStandard:
+	case ScriptUsageModelStandard, ScriptUsageModelBundled, ScriptUsageModelUnbound:
 		return true
 	}
 	return false
@@ -428,18 +478,35 @@ type ScriptUpdateResponse struct {
 	StartupTimeMs int64 `json:"startup_time_ms,required"`
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
+	CompatibilityDate string `json:"compatibility_date"`
+	// Flags that enable or disable certain features in the Workers runtime. Used to
+	// enable upcoming features or opt in or out of specific changes not included in a
+	// `compatibility_date`.
+	CompatibilityFlags []string `json:"compatibility_flags"`
 	// When the script was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// The names of handlers exported as part of the default export.
+	Handlers []string `json:"handlers"`
 	// Whether a Worker contains assets.
 	HasAssets bool `json:"has_assets"`
 	// Whether a Worker contains modules.
 	HasModules bool `json:"has_modules"`
+	// The client most recently used to deploy this Worker.
+	LastDeployedFrom string `json:"last_deployed_from"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
+	// The tag of the Durable Object migration that was most recently applied for this
+	// Worker.
+	MigrationTag string `json:"migration_tag"`
 	// When the script was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Named exports, such as Durable Object class implementations and named
+	// entrypoints.
+	NamedHandlers []ScriptUpdateResponseNamedHandler `json:"named_handlers"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptUpdateResponsePlacement `json:"placement"`
@@ -457,21 +524,27 @@ type ScriptUpdateResponse struct {
 // scriptUpdateResponseJSON contains the JSON metadata for the struct
 // [ScriptUpdateResponse]
 type scriptUpdateResponseJSON struct {
-	StartupTimeMs   apijson.Field
-	ID              apijson.Field
-	CreatedOn       apijson.Field
-	Etag            apijson.Field
-	HasAssets       apijson.Field
-	HasModules      apijson.Field
-	Logpush         apijson.Field
-	ModifiedOn      apijson.Field
-	Placement       apijson.Field
-	PlacementMode   apijson.Field
-	PlacementStatus apijson.Field
-	TailConsumers   apijson.Field
-	UsageModel      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	StartupTimeMs      apijson.Field
+	ID                 apijson.Field
+	CompatibilityDate  apijson.Field
+	CompatibilityFlags apijson.Field
+	CreatedOn          apijson.Field
+	Etag               apijson.Field
+	Handlers           apijson.Field
+	HasAssets          apijson.Field
+	HasModules         apijson.Field
+	LastDeployedFrom   apijson.Field
+	Logpush            apijson.Field
+	MigrationTag       apijson.Field
+	ModifiedOn         apijson.Field
+	NamedHandlers      apijson.Field
+	Placement          apijson.Field
+	PlacementMode      apijson.Field
+	PlacementStatus    apijson.Field
+	TailConsumers      apijson.Field
+	UsageModel         apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -479,6 +552,31 @@ func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptUpdateResponseNamedHandler struct {
+	// The names of handlers exported as part of the named export.
+	Handlers []string `json:"handlers"`
+	// The name of the export.
+	Name string                               `json:"name"`
+	JSON scriptUpdateResponseNamedHandlerJSON `json:"-"`
+}
+
+// scriptUpdateResponseNamedHandlerJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponseNamedHandler]
+type scriptUpdateResponseNamedHandlerJSON struct {
+	Handlers    apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseNamedHandler) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseNamedHandlerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -554,11 +652,13 @@ type ScriptUpdateResponseUsageModel string
 
 const (
 	ScriptUpdateResponseUsageModelStandard ScriptUpdateResponseUsageModel = "standard"
+	ScriptUpdateResponseUsageModelBundled  ScriptUpdateResponseUsageModel = "bundled"
+	ScriptUpdateResponseUsageModelUnbound  ScriptUpdateResponseUsageModel = "unbound"
 )
 
 func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateResponseUsageModelStandard:
+	case ScriptUpdateResponseUsageModelStandard, ScriptUpdateResponseUsageModelBundled, ScriptUpdateResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -584,7 +684,7 @@ type ScriptUpdateParams struct {
 func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRootWithJSON(r, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
@@ -620,6 +720,8 @@ type ScriptUpdateParamsMetadata struct {
 	KeepAssets param.Field[bool] `json:"keep_assets"`
 	// List of binding types to keep from previous_upload.
 	KeepBindings param.Field[[]string] `json:"keep_bindings"`
+	// Limits to apply for this Worker.
+	Limits param.Field[ScriptUpdateParamsMetadataLimits] `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// Name of the part in the multipart request that contains the main module (e.g.
@@ -1687,6 +1789,16 @@ func (r ScriptUpdateParamsMetadataBindingsFormat) IsKnown() bool {
 	return false
 }
 
+// Limits to apply for this Worker.
+type ScriptUpdateParamsMetadataLimits struct {
+	// The amount of CPU time this Worker can use in milliseconds.
+	CPUMs param.Field[int64] `json:"cpu_ms"`
+}
+
+func (r ScriptUpdateParamsMetadataLimits) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Migrations to apply for Durable Objects associated with this Worker.
 type ScriptUpdateParamsMetadataMigrations struct {
 	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
@@ -1816,11 +1928,13 @@ type ScriptUpdateParamsMetadataUsageModel string
 
 const (
 	ScriptUpdateParamsMetadataUsageModelStandard ScriptUpdateParamsMetadataUsageModel = "standard"
+	ScriptUpdateParamsMetadataUsageModelBundled  ScriptUpdateParamsMetadataUsageModel = "bundled"
+	ScriptUpdateParamsMetadataUsageModelUnbound  ScriptUpdateParamsMetadataUsageModel = "unbound"
 )
 
 func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataUsageModelStandard:
+	case ScriptUpdateParamsMetadataUsageModelStandard, ScriptUpdateParamsMetadataUsageModelBundled, ScriptUpdateParamsMetadataUsageModelUnbound:
 		return true
 	}
 	return false

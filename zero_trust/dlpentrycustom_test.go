@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
 func TestDLPEntryCustomNewWithOptionalParams(t *testing.T) {
@@ -65,17 +65,39 @@ func TestDLPEntryCustomUpdateWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPEntryCustomUpdateParams{
 			AccountID: cloudflare.F("account_id"),
-			Body: zero_trust.DLPEntryCustomUpdateParamsBodyCustom{
-				Name: cloudflare.F("name"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("regex"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-				Type:    cloudflare.F(zero_trust.DLPEntryCustomUpdateParamsBodyCustomTypeCustom),
-				Enabled: cloudflare.F(true),
-			},
+			Enabled:   cloudflare.F(true),
+			Name:      cloudflare.F("name"),
+			Pattern: cloudflare.F(zero_trust.PatternParam{
+				Regex:      cloudflare.F("regex"),
+				Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
+			}),
 		},
 	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDLPEntryCustomList(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.DLP.Entries.Custom.List(context.TODO(), zero_trust.DLPEntryCustomListParams{
+		AccountID: cloudflare.F("account_id"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -102,6 +124,35 @@ func TestDLPEntryCustomDelete(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPEntryCustomDeleteParams{
+			AccountID: cloudflare.F("account_id"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDLPEntryCustomGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.DLP.Entries.Custom.Get(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.DLPEntryCustomGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)

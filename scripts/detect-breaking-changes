@@ -145,6 +145,8 @@ TEST_PATHS=(
 	web3/hostname_test.go
 	web3/hostnameipfsuniversalpathcontentlist_test.go
 	web3/hostnameipfsuniversalpathcontentlistentry_test.go
+	workers/betaworker_test.go
+	workers/betaworkerversion_test.go
 	workers/route_test.go
 	workers/assetupload_test.go
 	workers/script_test.go
@@ -169,9 +171,10 @@ TEST_PATHS=(
 	durable_objects/namespace_test.go
 	durable_objects/namespaceobject_test.go
 	queues/queue_test.go
-	queues/consumer_test.go
 	queues/message_test.go
 	queues/purge_test.go
+	queues/consumer_test.go
+	queues/subscription_test.go
 	api_gateway/configuration_test.go
 	api_gateway/discovery_test.go
 	api_gateway/discoveryoperation_test.go

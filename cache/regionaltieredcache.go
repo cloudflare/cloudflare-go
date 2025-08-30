@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // RegionalTieredCacheService contains methods and other services that help with
@@ -73,7 +73,7 @@ func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTier
 	return
 }
 
-// ID of the zone setting.
+// The identifier of the caching setting.
 type RegionalTieredCache string
 
 const (
@@ -89,11 +89,11 @@ func (r RegionalTieredCache) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID RegionalTieredCache `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Regional Tiered Cache zone setting.
 	Value RegionalTieredCacheEditResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
@@ -119,7 +119,7 @@ func (r regionalTieredCacheEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The value of the feature
+// Value of the Regional Tiered Cache zone setting.
 type RegionalTieredCacheEditResponseValue string
 
 const (
@@ -136,11 +136,11 @@ func (r RegionalTieredCacheEditResponseValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheGetResponse struct {
-	// ID of the zone setting.
+	// The identifier of the caching setting.
 	ID RegionalTieredCache `json:"id,required"`
-	// Whether the setting is editable
+	// Whether the setting is editable.
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// Value of the Regional Tiered Cache zone setting.
 	Value RegionalTieredCacheGetResponseValue `json:"value,required"`
 	// Last time this setting was modified.
 	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
@@ -166,7 +166,7 @@ func (r regionalTieredCacheGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The value of the feature
+// Value of the Regional Tiered Cache zone setting.
 type RegionalTieredCacheGetResponseValue string
 
 const (
@@ -183,7 +183,7 @@ func (r RegionalTieredCacheGetResponseValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Regional Tiered Cache zone setting.
 	Value param.Field[RegionalTieredCacheEditParamsValue] `json:"value,required"`
@@ -212,7 +212,7 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 type RegionalTieredCacheEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegionalTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalTieredCacheEditResponse                `json:"result"`
 	JSON    regionalTieredCacheEditResponseEnvelopeJSON    `json:"-"`
@@ -237,7 +237,7 @@ func (r regionalTieredCacheEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type RegionalTieredCacheEditResponseEnvelopeSuccess bool
 
 const (
@@ -253,14 +253,14 @@ func (r RegionalTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RegionalTieredCacheGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegionalTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalTieredCacheGetResponse                `json:"result"`
 	JSON    regionalTieredCacheGetResponseEnvelopeJSON    `json:"-"`
@@ -285,7 +285,7 @@ func (r regionalTieredCacheGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type RegionalTieredCacheGetResponseEnvelopeSuccess bool
 
 const (

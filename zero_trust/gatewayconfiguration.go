@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // GatewayConfigurationService contains methods and other services that help with
@@ -179,7 +179,7 @@ func (r AntiVirusSettingsParam) MarshalJSON() (data []byte, err error) {
 type BlockPageSettings struct {
 	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
 	Enabled bool `json:"enabled,nullable"`
 	// If mode is customized_block_page: block page footer text.
 	FooterText string `json:"footer_text"`
@@ -201,16 +201,16 @@ type BlockPageSettings struct {
 	// If mode is customized_block_page: block page title.
 	Name string `json:"name"`
 	// This setting was shared via the Orgs API and cannot be edited by the current
-	// account
+	// account.
 	ReadOnly bool `json:"read_only,nullable"`
-	// Account tag of account that shared this setting
+	// Account tag of account that shared this setting.
 	SourceAccount string `json:"source_account,nullable"`
 	// If mode is customized_block_page: suppress detailed info at the bottom of the
 	// block page.
 	SuppressFooter bool `json:"suppress_footer"`
 	// If mode is redirect_uri: URI to which the user should be redirected.
 	TargetURI string `json:"target_uri" format:"uri"`
-	// Version number of the setting
+	// Version number of the setting.
 	Version int64                 `json:"version,nullable"`
 	JSON    blockPageSettingsJSON `json:"-"`
 }
@@ -267,7 +267,7 @@ func (r BlockPageSettingsMode) IsKnown() bool {
 type BlockPageSettingsParam struct {
 	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor param.Field[string] `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
 	Enabled param.Field[bool] `json:"enabled"`
 	// If mode is customized_block_page: block page footer text.
 	FooterText param.Field[string] `json:"footer_text"`
@@ -387,11 +387,11 @@ func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Custom certificate settings for BYO-PKI. (deprecated and replaced by
-// `certificate`)
+// `certificate`).
 //
 // Deprecated: deprecated
 type CustomCertificateSettings struct {
-	// Enable use of custom certificate authority for signing Gateway traffic.
+	// Enable use of custom certificate authority for signing Gateway. traffic.
 	Enabled bool `json:"enabled,required,nullable"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
@@ -421,11 +421,11 @@ func (r customCertificateSettingsJSON) RawJSON() string {
 }
 
 // Custom certificate settings for BYO-PKI. (deprecated and replaced by
-// `certificate`)
+// `certificate`).
 //
 // Deprecated: deprecated
 type CustomCertificateSettingsParam struct {
-	// Enable use of custom certificate authority for signing Gateway traffic.
+	// Enable use of custom certificate authority for signing Gateway. traffic.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID param.Field[string] `json:"id"`
@@ -441,11 +441,11 @@ type ExtendedEmailMatching struct {
 	// criteria in Firewall policies.
 	Enabled bool `json:"enabled,nullable"`
 	// This setting was shared via the Orgs API and cannot be edited by the current
-	// account
+	// account.
 	ReadOnly bool `json:"read_only"`
-	// Account tag of account that shared this setting
+	// Account tag of account that shared this setting.
 	SourceAccount string `json:"source_account"`
-	// Version number of the setting
+	// Version number of the setting.
 	Version int64                     `json:"version"`
 	JSON    extendedEmailMatchingJSON `json:"-"`
 }
@@ -482,7 +482,7 @@ func (r ExtendedEmailMatchingParam) MarshalJSON() (data []byte, err error) {
 
 // FIPS settings.
 type FipsSettings struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
 	TLS  bool             `json:"tls"`
 	JSON fipsSettingsJSON `json:"-"`
 }
@@ -504,7 +504,7 @@ func (r fipsSettingsJSON) RawJSON() string {
 
 // FIPS settings.
 type FipsSettingsParam struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
 	TLS param.Field[bool] `json:"tls"`
 }
 
@@ -512,7 +512,7 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Account settings
+// Account settings.
 type GatewayConfigurationSettings struct {
 	// Activity log settings.
 	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
@@ -528,7 +528,7 @@ type GatewayConfigurationSettings struct {
 	// Cloudflare Root CA will be used.
 	Certificate GatewayConfigurationSettingsCertificate `json:"certificate,nullable"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-	// `certificate`)
+	// `certificate`).
 	//
 	// Deprecated: deprecated
 	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
@@ -538,7 +538,7 @@ type GatewayConfigurationSettings struct {
 	Fips FipsSettings `json:"fips,nullable"`
 	// Setting to enable host selector in egress policies.
 	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
-	// Setting to define inspection settings
+	// Setting to define inspection settings.
 	Inspection GatewayConfigurationSettingsInspection `json:"inspection,nullable"`
 	// Protocol Detection settings.
 	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
@@ -627,7 +627,7 @@ func (r gatewayConfigurationSettingsHostSelectorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Setting to define inspection settings
+// Setting to define inspection settings.
 type GatewayConfigurationSettingsInspection struct {
 	// Defines the mode of inspection the proxy will use.
 	//
@@ -718,7 +718,7 @@ func (r GatewayConfigurationSettingsSandboxFallbackAction) IsKnown() bool {
 	return false
 }
 
-// Account settings
+// Account settings.
 type GatewayConfigurationSettingsParam struct {
 	// Activity log settings.
 	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
@@ -734,7 +734,7 @@ type GatewayConfigurationSettingsParam struct {
 	// Cloudflare Root CA will be used.
 	Certificate param.Field[GatewayConfigurationSettingsCertificateParam] `json:"certificate"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-	// `certificate`)
+	// `certificate`).
 	//
 	// Deprecated: deprecated
 	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
@@ -744,7 +744,7 @@ type GatewayConfigurationSettingsParam struct {
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
 	// Setting to enable host selector in egress policies.
 	HostSelector param.Field[GatewayConfigurationSettingsHostSelectorParam] `json:"host_selector"`
-	// Setting to define inspection settings
+	// Setting to define inspection settings.
 	Inspection param.Field[GatewayConfigurationSettingsInspectionParam] `json:"inspection"`
 	// Protocol Detection settings.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
@@ -781,7 +781,7 @@ func (r GatewayConfigurationSettingsHostSelectorParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Setting to define inspection settings
+// Setting to define inspection settings.
 type GatewayConfigurationSettingsInspectionParam struct {
 	// Defines the mode of inspection the proxy will use.
 	//
@@ -811,9 +811,9 @@ func (r GatewayConfigurationSettingsSandboxParam) MarshalJSON() (data []byte, er
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
 type NotificationSettings struct {
-	// Set notification on
+	// Set notification on.
 	Enabled bool `json:"enabled"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
@@ -845,9 +845,9 @@ func (r notificationSettingsJSON) RawJSON() string {
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
 type NotificationSettingsParam struct {
-	// Set notification on
+	// Set notification on.
 	Enabled param.Field[bool] `json:"enabled"`
-	// If true, context information will be passed as query parameters
+	// If true, context information will be passed as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
@@ -925,10 +925,10 @@ func (r TLSSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Account settings
+// Account settings.
 type GatewayConfigurationUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account settings
+	// Account settings.
 	Settings  GatewayConfigurationSettings           `json:"settings"`
 	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationUpdateResponseJSON `json:"-"`
@@ -952,10 +952,10 @@ func (r gatewayConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Account settings
+// Account settings.
 type GatewayConfigurationEditResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account settings
+	// Account settings.
 	Settings  GatewayConfigurationSettings         `json:"settings"`
 	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationEditResponseJSON `json:"-"`
@@ -979,10 +979,10 @@ func (r gatewayConfigurationEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Account settings
+// Account settings.
 type GatewayConfigurationGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account settings
+	// Account settings.
 	Settings  GatewayConfigurationSettings        `json:"settings"`
 	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationGetResponseJSON `json:"-"`
@@ -1008,7 +1008,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 
 type GatewayConfigurationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Account settings
+	// Account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -1019,9 +1019,9 @@ func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error)
 type GatewayConfigurationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// Account settings
+	// Account settings.
 	Result GatewayConfigurationUpdateResponse             `json:"result"`
 	JSON   gatewayConfigurationUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -1045,7 +1045,7 @@ func (r gatewayConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1062,7 +1062,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayConfigurationEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Account settings
+	// Account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -1073,9 +1073,9 @@ func (r GatewayConfigurationEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayConfigurationEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
-	// Account settings
+	// Account settings.
 	Result GatewayConfigurationEditResponse             `json:"result"`
 	JSON   gatewayConfigurationEditResponseEnvelopeJSON `json:"-"`
 }
@@ -1099,7 +1099,7 @@ func (r gatewayConfigurationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayConfigurationEditResponseEnvelopeSuccess bool
 
 const (
@@ -1121,9 +1121,9 @@ type GatewayConfigurationGetParams struct {
 type GatewayConfigurationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
-	// Account settings
+	// Account settings.
 	Result GatewayConfigurationGetResponse             `json:"result"`
 	JSON   gatewayConfigurationGetResponseEnvelopeJSON `json:"-"`
 }
@@ -1147,7 +1147,7 @@ func (r gatewayConfigurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayConfigurationGetResponseEnvelopeSuccess bool
 
 const (

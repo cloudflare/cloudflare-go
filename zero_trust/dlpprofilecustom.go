@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // DLPProfileCustomService contains methods and other services that help with
@@ -163,10 +163,9 @@ func (r PatternParam) MarshalJSON() (data []byte, err error) {
 type DLPProfileCustomDeleteResponse = interface{}
 
 type DLPProfileCustomNewParams struct {
-	AccountID        param.Field[string]                                `path:"account_id,required"`
-	Entries          param.Field[[]DLPProfileCustomNewParamsEntryUnion] `json:"entries,required"`
-	Name             param.Field[string]                                `json:"name,required"`
-	AIContextEnabled param.Field[bool]                                  `json:"ai_context_enabled"`
+	AccountID        param.Field[string] `path:"account_id,required"`
+	Name             param.Field[string] `json:"name,required"`
+	AIContextEnabled param.Field[bool]   `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
@@ -174,8 +173,9 @@ type DLPProfileCustomNewParams struct {
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
 	// The description of the profile.
-	Description param.Field[string] `json:"description"`
-	OCREnabled  param.Field[bool]   `json:"ocr_enabled"`
+	Description param.Field[string]                                `json:"description"`
+	Entries     param.Field[[]DLPProfileCustomNewParamsEntryUnion] `json:"entries"`
+	OCREnabled  param.Field[bool]                                  `json:"ocr_enabled"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
 	// Microsoft Information Protection profiles).
 	SharedEntries param.Field[[]DLPProfileCustomNewParamsSharedEntryUnion] `json:"shared_entries"`

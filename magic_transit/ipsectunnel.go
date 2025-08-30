@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -237,7 +237,9 @@ type IPSECTunnelNewResponse struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
+	AllowNullCipher bool                            `json:"allow_null_cipher"`
+	BGP             IPSECTunnelNewResponseBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelNewResponseBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
@@ -269,6 +271,8 @@ type ipsecTunnelNewResponseJSON struct {
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
 	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
@@ -287,6 +291,103 @@ func (r *IPSECTunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r ipsecTunnelNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type IPSECTunnelNewResponseBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                        `json:"md5_key"`
+	JSON   ipsecTunnelNewResponseBGPJSON `json:"-"`
+}
+
+// ipsecTunnelNewResponseBGPJSON contains the JSON metadata for the struct
+// [IPSECTunnelNewResponseBGP]
+type ipsecTunnelNewResponseBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelNewResponseBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelNewResponseBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelNewResponseBGPStatus struct {
+	State               IPSECTunnelNewResponseBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                 `json:"tcp_established,required"`
+	UpdatedAt           time.Time                            `json:"updated_at,required" format:"date-time"`
+	BGPState            string                               `json:"bgp_state"`
+	CfSpeakerIP         string                               `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                               `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                `json:"customer_speaker_port"`
+	JSON                ipsecTunnelNewResponseBGPStatusJSON  `json:"-"`
+}
+
+// ipsecTunnelNewResponseBGPStatusJSON contains the JSON metadata for the struct
+// [IPSECTunnelNewResponseBGPStatus]
+type ipsecTunnelNewResponseBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IPSECTunnelNewResponseBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelNewResponseBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelNewResponseBGPStatusState string
+
+const (
+	IPSECTunnelNewResponseBGPStatusStateBGPDown         IPSECTunnelNewResponseBGPStatusState = "BGP_DOWN"
+	IPSECTunnelNewResponseBGPStatusStateBGPUp           IPSECTunnelNewResponseBGPStatusState = "BGP_UP"
+	IPSECTunnelNewResponseBGPStatusStateBGPEstablishing IPSECTunnelNewResponseBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r IPSECTunnelNewResponseBGPStatusState) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseBGPStatusStateBGPDown, IPSECTunnelNewResponseBGPStatusStateBGPUp, IPSECTunnelNewResponseBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelNewResponseHealthCheck struct {
@@ -454,7 +555,9 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
+	AllowNullCipher bool                                                  `json:"allow_null_cipher"`
+	BGP             IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
@@ -486,6 +589,8 @@ type ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON struct {
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
 	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
@@ -504,6 +609,103 @@ func (r *IPSECTunnelUpdateResponseModifiedIPSECTunnel) UnmarshalJSON(data []byte
 
 func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                              `json:"md5_key"`
+	JSON   ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON `json:"-"`
+}
+
+// ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON contains the JSON metadata
+// for the struct [IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP]
+type ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus struct {
+	State               IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                                       `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                                  `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                                     `json:"bgp_state"`
+	CfSpeakerIP         string                                                     `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                                      `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                                     `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                                      `json:"customer_speaker_port"`
+	JSON                ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPStatusJSON  `json:"-"`
+}
+
+// ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPStatusJSON contains the JSON
+// metadata for the struct [IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus]
+type ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState string
+
+const (
+	IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusStateBGPDown         IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState = "BGP_DOWN"
+	IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusStateBGPUp           IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState = "BGP_UP"
+	IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusStateBGPEstablishing IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusStateBGPDown, IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusStateBGPUp, IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheck struct {
@@ -670,7 +872,9 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
+	AllowNullCipher bool                                         `json:"allow_null_cipher"`
+	BGP             IPSECTunnelListResponseIPSECTunnelsBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelListResponseIPSECTunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
@@ -702,6 +906,8 @@ type ipsecTunnelListResponseIPSECTunnelJSON struct {
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
 	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
@@ -720,6 +926,103 @@ func (r *IPSECTunnelListResponseIPSECTunnel) UnmarshalJSON(data []byte) (err err
 
 func (r ipsecTunnelListResponseIPSECTunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type IPSECTunnelListResponseIPSECTunnelsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                     `json:"md5_key"`
+	JSON   ipsecTunnelListResponseIPSECTunnelsBGPJSON `json:"-"`
+}
+
+// ipsecTunnelListResponseIPSECTunnelsBGPJSON contains the JSON metadata for the
+// struct [IPSECTunnelListResponseIPSECTunnelsBGP]
+type ipsecTunnelListResponseIPSECTunnelsBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelListResponseIPSECTunnelsBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelListResponseIPSECTunnelsBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelListResponseIPSECTunnelsBGPStatus struct {
+	State               IPSECTunnelListResponseIPSECTunnelsBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                              `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                         `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                            `json:"bgp_state"`
+	CfSpeakerIP         string                                            `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                             `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                            `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                             `json:"customer_speaker_port"`
+	JSON                ipsecTunnelListResponseIPSECTunnelsBGPStatusJSON  `json:"-"`
+}
+
+// ipsecTunnelListResponseIPSECTunnelsBGPStatusJSON contains the JSON metadata for
+// the struct [IPSECTunnelListResponseIPSECTunnelsBGPStatus]
+type ipsecTunnelListResponseIPSECTunnelsBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IPSECTunnelListResponseIPSECTunnelsBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelListResponseIPSECTunnelsBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelListResponseIPSECTunnelsBGPStatusState string
+
+const (
+	IPSECTunnelListResponseIPSECTunnelsBGPStatusStateBGPDown         IPSECTunnelListResponseIPSECTunnelsBGPStatusState = "BGP_DOWN"
+	IPSECTunnelListResponseIPSECTunnelsBGPStatusStateBGPUp           IPSECTunnelListResponseIPSECTunnelsBGPStatusState = "BGP_UP"
+	IPSECTunnelListResponseIPSECTunnelsBGPStatusStateBGPEstablishing IPSECTunnelListResponseIPSECTunnelsBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r IPSECTunnelListResponseIPSECTunnelsBGPStatusState) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseIPSECTunnelsBGPStatusStateBGPDown, IPSECTunnelListResponseIPSECTunnelsBGPStatusStateBGPUp, IPSECTunnelListResponseIPSECTunnelsBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelListResponseIPSECTunnelsHealthCheck struct {
@@ -887,7 +1190,9 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
+	AllowNullCipher bool                                                 `json:"allow_null_cipher"`
+	BGP             IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
@@ -919,6 +1224,8 @@ type ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON struct {
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
 	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
@@ -937,6 +1244,103 @@ func (r *IPSECTunnelDeleteResponseDeletedIPSECTunnel) UnmarshalJSON(data []byte)
 
 func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                             `json:"md5_key"`
+	JSON   ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON `json:"-"`
+}
+
+// ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON contains the JSON metadata
+// for the struct [IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP]
+type ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus struct {
+	State               IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                                      `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                                 `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                                    `json:"bgp_state"`
+	CfSpeakerIP         string                                                    `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                                     `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                                    `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                                     `json:"customer_speaker_port"`
+	JSON                ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPStatusJSON  `json:"-"`
+}
+
+// ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPStatusJSON contains the JSON
+// metadata for the struct [IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus]
+type ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState string
+
+const (
+	IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusStateBGPDown         IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState = "BGP_DOWN"
+	IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusStateBGPUp           IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState = "BGP_UP"
+	IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusStateBGPEstablishing IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState) IsKnown() bool {
+	switch r {
+	case IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusStateBGPDown, IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusStateBGPUp, IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheck struct {
@@ -1104,7 +1508,9 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
+	AllowNullCipher bool                                                       `json:"allow_null_cipher"`
+	BGP             IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
@@ -1136,6 +1542,8 @@ type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON struct {
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
 	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
@@ -1154,6 +1562,104 @@ func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel) UnmarshalJSON(data []
 
 func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                                   `json:"md5_key"`
+	JSON   ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON contains the JSON
+// metadata for the struct [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP]
+type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus struct {
+	State               IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                                            `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                                       `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                                          `json:"bgp_state"`
+	CfSpeakerIP         string                                                          `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                                           `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                                          `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                                           `json:"customer_speaker_port"`
+	JSON                ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusJSON  `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusJSON contains the JSON
+// metadata for the struct
+// [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus]
+type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState string
+
+const (
+	IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusStateBGPDown         IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState = "BGP_DOWN"
+	IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusStateBGPUp           IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState = "BGP_UP"
+	IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusStateBGPEstablishing IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState) IsKnown() bool {
+	switch r {
+	case IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusStateBGPDown, IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusStateBGPUp, IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck struct {
@@ -1320,7 +1826,9 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
+	AllowNullCipher bool                                       `json:"allow_null_cipher"`
+	BGP             IPSECTunnelGetResponseIPSECTunnelBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelGetResponseIPSECTunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
@@ -1352,6 +1860,8 @@ type ipsecTunnelGetResponseIPSECTunnelJSON struct {
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
 	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
 	Description        apijson.Field
@@ -1370,6 +1880,103 @@ func (r *IPSECTunnelGetResponseIPSECTunnel) UnmarshalJSON(data []byte) (err erro
 
 func (r ipsecTunnelGetResponseIPSECTunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+type IPSECTunnelGetResponseIPSECTunnelBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN int64 `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                   `json:"md5_key"`
+	JSON   ipsecTunnelGetResponseIPSECTunnelBGPJSON `json:"-"`
+}
+
+// ipsecTunnelGetResponseIPSECTunnelBGPJSON contains the JSON metadata for the
+// struct [IPSECTunnelGetResponseIPSECTunnelBGP]
+type ipsecTunnelGetResponseIPSECTunnelBGPJSON struct {
+	CustomerASN   apijson.Field
+	ExtraPrefixes apijson.Field
+	Md5Key        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelGetResponseIPSECTunnelBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelGetResponseIPSECTunnelBGPJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelGetResponseIPSECTunnelBGPStatus struct {
+	State               IPSECTunnelGetResponseIPSECTunnelBGPStatusState `json:"state,required"`
+	TCPEstablished      bool                                            `json:"tcp_established,required"`
+	UpdatedAt           time.Time                                       `json:"updated_at,required" format:"date-time"`
+	BGPState            string                                          `json:"bgp_state"`
+	CfSpeakerIP         string                                          `json:"cf_speaker_ip" format:"ipv4"`
+	CfSpeakerPort       int64                                           `json:"cf_speaker_port"`
+	CustomerSpeakerIP   string                                          `json:"customer_speaker_ip" format:"ipv4"`
+	CustomerSpeakerPort int64                                           `json:"customer_speaker_port"`
+	JSON                ipsecTunnelGetResponseIPSECTunnelBGPStatusJSON  `json:"-"`
+}
+
+// ipsecTunnelGetResponseIPSECTunnelBGPStatusJSON contains the JSON metadata for
+// the struct [IPSECTunnelGetResponseIPSECTunnelBGPStatus]
+type ipsecTunnelGetResponseIPSECTunnelBGPStatusJSON struct {
+	State               apijson.Field
+	TCPEstablished      apijson.Field
+	UpdatedAt           apijson.Field
+	BGPState            apijson.Field
+	CfSpeakerIP         apijson.Field
+	CfSpeakerPort       apijson.Field
+	CustomerSpeakerIP   apijson.Field
+	CustomerSpeakerPort apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IPSECTunnelGetResponseIPSECTunnelBGPStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelGetResponseIPSECTunnelBGPStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelGetResponseIPSECTunnelBGPStatusState string
+
+const (
+	IPSECTunnelGetResponseIPSECTunnelBGPStatusStateBGPDown         IPSECTunnelGetResponseIPSECTunnelBGPStatusState = "BGP_DOWN"
+	IPSECTunnelGetResponseIPSECTunnelBGPStatusStateBGPUp           IPSECTunnelGetResponseIPSECTunnelBGPStatusState = "BGP_UP"
+	IPSECTunnelGetResponseIPSECTunnelBGPStatusStateBGPEstablishing IPSECTunnelGetResponseIPSECTunnelBGPStatusState = "BGP_ESTABLISHING"
+)
+
+func (r IPSECTunnelGetResponseIPSECTunnelBGPStatusState) IsKnown() bool {
+	switch r {
+	case IPSECTunnelGetResponseIPSECTunnelBGPStatusStateBGPDown, IPSECTunnelGetResponseIPSECTunnelBGPStatusStateBGPUp, IPSECTunnelGetResponseIPSECTunnelBGPStatusStateBGPEstablishing:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelGetResponseIPSECTunnelHealthCheck struct {
@@ -1539,7 +2146,8 @@ type IPSECTunnelNewParams struct {
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string]                  `json:"name,required"`
+	BGP  param.Field[IPSECTunnelNewParamsBGP] `json:"bgp"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
@@ -1560,6 +2168,37 @@ type IPSECTunnelNewParams struct {
 }
 
 func (r IPSECTunnelNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPSECTunnelNewParamsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key param.Field[string] `json:"md5_key"`
+}
+
+func (r IPSECTunnelNewParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1694,7 +2333,8 @@ type IPSECTunnelUpdateParams struct {
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string]                     `json:"name,required"`
+	BGP  param.Field[IPSECTunnelUpdateParamsBGP] `json:"bgp"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
@@ -1715,6 +2355,37 @@ type IPSECTunnelUpdateParams struct {
 }
 
 func (r IPSECTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPSECTunnelUpdateParamsBGP struct {
+	// ASN used on the customer end of the BGP session
+	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key param.Field[string] `json:"md5_key"`
+}
+
+func (r IPSECTunnelUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

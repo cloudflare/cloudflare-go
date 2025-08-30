@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // GatewayLoggingService contains methods and other services that help with
@@ -262,7 +262,7 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayLoggingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                              `json:"result"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -287,7 +287,7 @@ func (r gatewayLoggingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayLoggingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -309,7 +309,7 @@ type GatewayLoggingGetParams struct {
 type GatewayLoggingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                           `json:"result"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`
@@ -334,7 +334,7 @@ func (r gatewayLoggingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type GatewayLoggingGetResponseEnvelopeSuccess bool
 
 const (

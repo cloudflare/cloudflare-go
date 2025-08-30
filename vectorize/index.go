@@ -3,20 +3,24 @@
 package vectorize
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // IndexService contains methods and other services that help with interacting with
@@ -204,6 +208,27 @@ func (r *IndexService) Insert(ctx context.Context, indexName string, params Inde
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/insert", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Returns a paginated list of vector identifiers from the specified index.
+func (r *IndexService) ListVectors(ctx context.Context, indexName string, params IndexListVectorsParams, opts ...option.RequestOption) (res *IndexListVectorsResponse, err error) {
+	var env IndexListVectorsResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/list", params.AccountID, indexName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -415,6 +440,65 @@ func (r *IndexInsertResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexInsertResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type IndexListVectorsResponse struct {
+	// Number of vectors returned in this response
+	Count int64 `json:"count,required"`
+	// Whether there are more vectors available beyond this response
+	IsTruncated bool `json:"isTruncated,required"`
+	// Total number of vectors in the index
+	TotalCount int64 `json:"totalCount,required"`
+	// Array of vector items
+	Vectors []IndexListVectorsResponseVector `json:"vectors,required"`
+	// When the cursor expires as an ISO8601 string
+	CursorExpirationTimestamp time.Time `json:"cursorExpirationTimestamp,nullable" format:"date-time"`
+	// Cursor for the next page of results
+	NextCursor string                       `json:"nextCursor,nullable"`
+	JSON       indexListVectorsResponseJSON `json:"-"`
+}
+
+// indexListVectorsResponseJSON contains the JSON metadata for the struct
+// [IndexListVectorsResponse]
+type indexListVectorsResponseJSON struct {
+	Count                     apijson.Field
+	IsTruncated               apijson.Field
+	TotalCount                apijson.Field
+	Vectors                   apijson.Field
+	CursorExpirationTimestamp apijson.Field
+	NextCursor                apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *IndexListVectorsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexListVectorsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type IndexListVectorsResponseVector struct {
+	// Identifier for a Vector
+	ID   string                             `json:"id,required"`
+	JSON indexListVectorsResponseVectorJSON `json:"-"`
+}
+
+// indexListVectorsResponseVectorJSON contains the JSON metadata for the struct
+// [IndexListVectorsResponseVector]
+type indexListVectorsResponseVectorJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexListVectorsResponseVector) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexListVectorsResponseVectorJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -907,13 +991,24 @@ type IndexInsertParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// ndjson file containing vectors to insert.
-	Body string `json:"body,required"`
+	Body io.Reader `json:"body,required" format:"binary"`
 	// Behavior for ndjson parse failures.
 	UnparsableBehavior param.Field[IndexInsertParamsUnparsableBehavior] `query:"unparsable-behavior"`
 }
 
-func (r IndexInsertParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+func (r IndexInsertParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 // URLQuery serializes [IndexInsertParams]'s query parameters as `url.Values`.
@@ -978,6 +1073,66 @@ const (
 func (r IndexInsertResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case IndexInsertResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IndexListVectorsParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Maximum number of vectors to return
+	Count param.Field[int64] `query:"count"`
+	// Cursor for pagination to get the next page of results
+	Cursor param.Field[string] `query:"cursor"`
+}
+
+// URLQuery serializes [IndexListVectorsParams]'s query parameters as `url.Values`.
+func (r IndexListVectorsParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type IndexListVectorsResponseEnvelope struct {
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   IndexListVectorsResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success IndexListVectorsResponseEnvelopeSuccess `json:"success,required"`
+	JSON    indexListVectorsResponseEnvelopeJSON    `json:"-"`
+}
+
+// indexListVectorsResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IndexListVectorsResponseEnvelope]
+type indexListVectorsResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexListVectorsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexListVectorsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type IndexListVectorsResponseEnvelopeSuccess bool
+
+const (
+	IndexListVectorsResponseEnvelopeSuccessTrue IndexListVectorsResponseEnvelopeSuccess = true
+)
+
+func (r IndexListVectorsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexListVectorsResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -1068,13 +1223,24 @@ type IndexUpsertParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// ndjson file containing vectors to upsert.
-	Body string `json:"body,required"`
+	Body io.Reader `json:"body,required" format:"binary"`
 	// Behavior for ndjson parse failures.
 	UnparsableBehavior param.Field[IndexUpsertParamsUnparsableBehavior] `query:"unparsable-behavior"`
 }
 
-func (r IndexUpsertParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+func (r IndexUpsertParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 // URLQuery serializes [IndexUpsertParams]'s query parameters as `url.Values`.

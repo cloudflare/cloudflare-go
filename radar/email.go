@@ -3,8 +3,8 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
 // EmailService contains methods and other services that help with interacting with

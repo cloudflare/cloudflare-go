@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // NamespaceObjectService contains methods and other services that help with
@@ -37,7 +37,7 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[DurableObject], err error) {
+func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[DurableObject], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -63,8 +63,8 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[DurableObject] {
-	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, id, params, opts...))
+func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[DurableObject] {
+	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, id, params, opts...))
 }
 
 type DurableObject struct {

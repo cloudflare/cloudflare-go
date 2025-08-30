@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -25,10 +25,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewQueueService] method instead.
 type QueueService struct {
-	Options   []option.RequestOption
-	Consumers *ConsumerService
-	Messages  *MessageService
-	Purge     *PurgeService
+	Options       []option.RequestOption
+	Messages      *MessageService
+	Purge         *PurgeService
+	Consumers     *ConsumerService
+	Subscriptions *SubscriptionService
 }
 
 // NewQueueService generates a new service that applies the given options to each
@@ -37,9 +38,10 @@ type QueueService struct {
 func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 	r = &QueueService{}
 	r.Options = opts
-	r.Consumers = NewConsumerService(opts...)
 	r.Messages = NewMessageService(opts...)
 	r.Purge = NewPurgeService(opts...)
+	r.Consumers = NewConsumerService(opts...)
+	r.Subscriptions = NewSubscriptionService(opts...)
 	return
 }
 

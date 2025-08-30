@@ -13,13 +13,13 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v5/internal/param"
-	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v5/option"
-	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -3752,7 +3752,7 @@ type ScriptVersionNewParams struct {
 func (r ScriptVersionNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRootWithJSON(r, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
@@ -4758,11 +4758,13 @@ type ScriptVersionNewParamsMetadataUsageModel string
 
 const (
 	ScriptVersionNewParamsMetadataUsageModelStandard ScriptVersionNewParamsMetadataUsageModel = "standard"
+	ScriptVersionNewParamsMetadataUsageModelBundled  ScriptVersionNewParamsMetadataUsageModel = "bundled"
+	ScriptVersionNewParamsMetadataUsageModelUnbound  ScriptVersionNewParamsMetadataUsageModel = "unbound"
 )
 
 func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataUsageModelStandard:
+	case ScriptVersionNewParamsMetadataUsageModelStandard, ScriptVersionNewParamsMetadataUsageModelBundled, ScriptVersionNewParamsMetadataUsageModelUnbound:
 		return true
 	}
 	return false
