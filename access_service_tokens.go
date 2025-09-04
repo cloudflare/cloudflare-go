@@ -16,68 +16,79 @@ var (
 
 // AccessServiceToken represents an Access Service Token.
 type AccessServiceToken struct {
-	ClientID   string     `json:"client_id"`
-	CreatedAt  *time.Time `json:"created_at"`
-	ExpiresAt  *time.Time `json:"expires_at"`
-	ID         string     `json:"id"`
-	Name       string     `json:"name"`
-	UpdatedAt  *time.Time `json:"updated_at"`
-	Duration   string     `json:"duration,omitempty"`
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	ClientID                      string     `json:"client_id"`
+	CreatedAt                     *time.Time `json:"created_at"`
+	ExpiresAt                     *time.Time `json:"expires_at"`
+	ID                            string     `json:"id"`
+	Name                          string     `json:"name"`
+	UpdatedAt                     *time.Time `json:"updated_at"`
+	Duration                      string     `json:"duration,omitempty"`
+	LastSeenAt                    *time.Time `json:"last_seen_at,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 // AccessServiceTokenUpdateResponse represents the response from the API
 // when a new Service Token is updated. This base struct is also used in the
 // Create as they are very similar responses.
 type AccessServiceTokenUpdateResponse struct {
-	CreatedAt  *time.Time `json:"created_at"`
-	UpdatedAt  *time.Time `json:"updated_at"`
-	ExpiresAt  *time.Time `json:"expires_at"`
-	ID         string     `json:"id"`
-	Name       string     `json:"name"`
-	ClientID   string     `json:"client_id"`
-	Duration   string     `json:"duration,omitempty"`
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	CreatedAt                     *time.Time `json:"created_at"`
+	UpdatedAt                     *time.Time `json:"updated_at"`
+	ExpiresAt                     *time.Time `json:"expires_at"`
+	ID                            string     `json:"id"`
+	Name                          string     `json:"name"`
+	ClientID                      string     `json:"client_id"`
+	ClientSecret                  string     `json:"client_secret,omitempty"`
+	Duration                      string     `json:"duration,omitempty"`
+	LastSeenAt                    *time.Time `json:"last_seen_at,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 // AccessServiceTokenRefreshResponse represents the response from the API
 // when an existing service token is refreshed to last longer.
 type AccessServiceTokenRefreshResponse struct {
-	CreatedAt  *time.Time `json:"created_at"`
-	UpdatedAt  *time.Time `json:"updated_at"`
-	ExpiresAt  *time.Time `json:"expires_at"`
-	ID         string     `json:"id"`
-	Name       string     `json:"name"`
-	ClientID   string     `json:"client_id"`
-	Duration   string     `json:"duration,omitempty"`
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	CreatedAt                     *time.Time `json:"created_at"`
+	UpdatedAt                     *time.Time `json:"updated_at"`
+	ExpiresAt                     *time.Time `json:"expires_at"`
+	ID                            string     `json:"id"`
+	Name                          string     `json:"name"`
+	ClientID                      string     `json:"client_id"`
+	Duration                      string     `json:"duration,omitempty"`
+	LastSeenAt                    *time.Time `json:"last_seen_at,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 // AccessServiceTokenCreateResponse is the same API response as the Update
 // operation with the exception that the `ClientSecret` is present in a
 // Create operation.
 type AccessServiceTokenCreateResponse struct {
-	CreatedAt    *time.Time `json:"created_at"`
-	UpdatedAt    *time.Time `json:"updated_at"`
-	ExpiresAt    *time.Time `json:"expires_at"`
-	ID           string     `json:"id"`
-	Name         string     `json:"name"`
-	ClientID     string     `json:"client_id"`
-	ClientSecret string     `json:"client_secret"`
-	Duration     string     `json:"duration,omitempty"`
+	CreatedAt                     *time.Time `json:"created_at"`
+	UpdatedAt                     *time.Time `json:"updated_at"`
+	ExpiresAt                     *time.Time `json:"expires_at"`
+	ID                            string     `json:"id"`
+	Name                          string     `json:"name"`
+	ClientID                      string     `json:"client_id"`
+	ClientSecret                  string     `json:"client_secret"`
+	Duration                      string     `json:"duration,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 // AccessServiceTokenRotateResponse is the same API response as the Create
 // operation.
 type AccessServiceTokenRotateResponse struct {
-	CreatedAt    *time.Time `json:"created_at"`
-	UpdatedAt    *time.Time `json:"updated_at"`
-	ExpiresAt    *time.Time `json:"expires_at"`
-	ID           string     `json:"id"`
-	Name         string     `json:"name"`
-	ClientID     string     `json:"client_id"`
-	ClientSecret string     `json:"client_secret"`
-	Duration     string     `json:"duration,omitempty"`
+	CreatedAt                     *time.Time `json:"created_at"`
+	UpdatedAt                     *time.Time `json:"updated_at"`
+	ExpiresAt                     *time.Time `json:"expires_at"`
+	ID                            string     `json:"id"`
+	Name                          string     `json:"name"`
+	ClientID                      string     `json:"client_id"`
+	ClientSecret                  string     `json:"client_secret"`
+	Duration                      string     `json:"duration,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 // AccessServiceTokensListResponse represents the response from the list
@@ -136,14 +147,18 @@ type AccessServiceTokensRotateSecretDetailResponse struct {
 type ListAccessServiceTokensParams struct{}
 
 type CreateAccessServiceTokenParams struct {
-	Name     string `json:"name"`
-	Duration string `json:"duration,omitempty"`
+	Name                          string     `json:"name"`
+	Duration                      string     `json:"duration,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 type UpdateAccessServiceTokenParams struct {
-	Name     string `json:"name"`
-	UUID     string `json:"-"`
-	Duration string `json:"duration,omitempty"`
+	Name                          string     `json:"name"`
+	UUID                          string     `json:"-"`
+	Duration                      string     `json:"duration,omitempty"`
+	ClientSecretVersion           int64      `json:"client_secret_version"`
+	PreviousClientSecretExpiresAt *time.Time `json:"previous_client_secret_expires_at,omitempty"`
 }
 
 func (api *API) ListAccessServiceTokens(ctx context.Context, rc *ResourceContainer, params ListAccessServiceTokensParams) ([]AccessServiceToken, ResultInfo, error) {
