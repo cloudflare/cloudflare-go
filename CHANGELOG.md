@@ -2,6 +2,12 @@
 
 ENHANCEMENTS:
 
+* access_service_tokens: Added graceful rotation support for client secrets ([#4189](https://github.com/cloudflare/cloudflare-go/issues/4189))
+
+## 0.115.0 (January 29th, 2025)
+
+ENHANCEMENTS:
+
 * access_service_token: add `last_seen_at` field ([#3838](https://github.com/cloudflare/cloudflare-go/issues/3838))
 * dns: Add settings to DNSRecord ([#3670](https://github.com/cloudflare/cloudflare-go/issues/3670))
 * teams_rules: add support for biso admin controls v2 ([#3848](https://github.com/cloudflare/cloudflare-go/issues/3848))
