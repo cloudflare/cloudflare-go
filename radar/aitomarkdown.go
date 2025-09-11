@@ -39,16 +39,16 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 }
 
 // Convert Files into Markdown
-func (r *AIToMarkdownService) New(ctx context.Context, Body io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
+func (r *AIToMarkdownService) New(ctx context.Context, body io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", body), option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/ai/tomarkdown", body.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, body, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +61,8 @@ func (r *AIToMarkdownService) New(ctx context.Context, Body io.Reader, body AITo
 }
 
 // Convert Files into Markdown
-func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, Body io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
-	return pagination.NewSinglePageAutoPager(r.New(ctx, Body, body, opts...))
+func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, body io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, body, body, opts...))
 }
 
 type AIToMarkdownNewResponse struct {
@@ -96,7 +96,6 @@ func (r aiToMarkdownNewResponseJSON) RawJSON() string {
 
 type AIToMarkdownNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      io.Reader           `json:"body" format:"binary"`
 }
 
 func (r AIToMarkdownNewParams) MarshalMultipart() (data []byte, contentType string, err error) {

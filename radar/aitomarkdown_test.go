@@ -16,7 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestAIToMarkdownNewWithOptionalParams(t *testing.T) {
+func TestAIToMarkdownNew(t *testing.T) {
 	t.Skip("TODO: investigate prism error for invalid security scheme used")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -35,7 +35,6 @@ func TestAIToMarkdownNewWithOptionalParams(t *testing.T) {
 		io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		radar.AIToMarkdownNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {
