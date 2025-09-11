@@ -234,7 +234,7 @@ type SnippetUpdateParams struct {
 func (r SnippetUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRootWithJSON(r, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
