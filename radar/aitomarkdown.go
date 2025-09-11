@@ -39,10 +39,10 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 }
 
 // Convert Files into Markdown
-func (r *AIToMarkdownService) New(ctx context.Context, body io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
+func (r *AIToMarkdownService) New(ctx context.Context, file io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", body), option.WithResponseInto(&raw)}, opts...)
+	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", file), option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *AIToMarkdownService) New(ctx context.Context, body io.Reader, body AITo
 }
 
 // Convert Files into Markdown
-func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, body io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
-	return pagination.NewSinglePageAutoPager(r.New(ctx, body, body, opts...))
+func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, file io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, file, body, opts...))
 }
 
 type AIToMarkdownNewResponse struct {
