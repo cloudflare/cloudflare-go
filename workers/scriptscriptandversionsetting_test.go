@@ -15,6 +15,7 @@ import (
 )
 
 func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
+	t.Skip("422 Unprocessable Entity: needs schema update which is merged but not published")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
