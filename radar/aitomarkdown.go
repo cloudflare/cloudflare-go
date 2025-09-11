@@ -96,6 +96,7 @@ func (r aiToMarkdownNewResponseJSON) RawJSON() string {
 
 type AIToMarkdownNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	Body      io.Reader           `json:"body" format:"binary"`
 }
 
 func (r AIToMarkdownNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
