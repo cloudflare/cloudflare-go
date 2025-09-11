@@ -1,5 +1,27 @@
 # Changelog
 
+## 6.0.1 (2025-09-11)
+
+Full Changelog: [v6.0.0...v6.0.1](https://github.com/cloudflare/cloudflare-go/compare/v6.0.0...v6.0.1)
+
+### Features
+
+* Merge branch 'vaishak/skip-worker-test' into 'main' ([8bda71e](https://github.com/cloudflare/cloudflare-go/commit/8bda71eca34941140820022da6df800bc60dd9c7))
+
+
+### Bug Fixes
+
+* **client:** custom fix to rename Body io.Reader param to file ([e845c6d](https://github.com/cloudflare/cloudflare-go/commit/e845c6d767c063b891008134ff632178aba6f171))
+* correctly handle sending multipart/form-data requests with JSON ([98bbcaa](https://github.com/cloudflare/cloudflare-go/commit/98bbcaa1be2d9d5f6c621a96eaa8b9f1df75d297))
+* remove null from release please manifest ([e3d2798](https://github.com/cloudflare/cloudflare-go/commit/e3d2798b229c3a8a2c0f9d079263f4d6b2524955))
+* use release please annotations on more places ([63ded25](https://github.com/cloudflare/cloudflare-go/commit/63ded25e9f14851eeb77c9ead21018d5528ff98e))
+
+
+### Chores
+
+* **client:** add back Body param to AIToMarkdownNewParams ([6a2f9b5](https://github.com/cloudflare/cloudflare-go/commit/6a2f9b5fe51f389de29205eb435c182a96e0b171))
+* **internal:** codegen related update ([049772e](https://github.com/cloudflare/cloudflare-go/commit/049772ef56bec7ab59df6c2bf73824147180d34e))
+
 ## 6.0.0 (2025-08-29)
 
 Full Changelog: [v5.1.0...v6.0.0](https://github.com/cloudflare/cloudflare-go/compare/v5.1.0...v6.0.0)
