@@ -53,6 +53,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 		Longitude:         cloudflare.F(0.000000),
 		MinimumOrigins:    cloudflare.F(int64(0)),
 		Monitor:           cloudflare.F("monitor"),
+		MonitorGroup:      cloudflare.F("monitor_group"),
 		NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 		NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 			Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -120,6 +121,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
 			Monitor:           cloudflare.F("monitor"),
+			MonitorGroup:      cloudflare.F("monitor_group"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 				Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -258,6 +260,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
 			Monitor:           cloudflare.F("monitor"),
+			MonitorGroup:      cloudflare.F("monitor_group"),
 			Name:              cloudflare.F("primary-dc-1"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{

@@ -234,6 +234,9 @@ type Pool struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor string `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup string `json:"monitor_group"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name string `json:"name"`
@@ -271,6 +274,7 @@ type poolJSON struct {
 	MinimumOrigins     apijson.Field
 	ModifiedOn         apijson.Field
 	Monitor            apijson.Field
+	MonitorGroup       apijson.Field
 	Name               apijson.Field
 	Networks           apijson.Field
 	NotificationEmail  apijson.Field
@@ -340,6 +344,9 @@ type PoolNewParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup param.Field[string] `json:"monitor_group"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -434,6 +441,9 @@ type PoolUpdateParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup param.Field[string] `json:"monitor_group"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -616,6 +626,9 @@ type PoolEditParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup param.Field[string] `json:"monitor_group"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name"`
