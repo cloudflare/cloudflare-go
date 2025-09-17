@@ -34,7 +34,7 @@ func NewGatewayLoggingService(opts ...option.RequestOption) (r *GatewayLoggingSe
 	return
 }
 
-// Updates logging settings for the current Zero Trust account.
+// Update logging settings for the current Zero Trust account.
 func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *LoggingSetting, err error) {
 	var env GatewayLoggingUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -51,7 +51,7 @@ func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggin
 	return
 }
 
-// Fetches the current logging settings for Zero Trust account.
+// Retrieve the current logging settings for the Zero Trust account.
 func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *LoggingSetting, err error) {
 	var env GatewayLoggingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -69,10 +69,11 @@ func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGet
 }
 
 type LoggingSetting struct {
-	// Redact personally identifiable information from activity logging (PII fields
-	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
+	// Indicate whether to redact personally identifiable information from activity
+	// logging (PII fields include source IP, user email, user ID, device ID, URL,
+	// referrer, and user agent).
 	RedactPii bool `json:"redact_pii"`
-	// Logging settings by rule type.
+	// Configure logging settings for each rule type.
 	SettingsByRuleType LoggingSettingSettingsByRuleType `json:"settings_by_rule_type"`
 	JSON               loggingSettingJSON               `json:"-"`
 }
@@ -93,10 +94,13 @@ func (r loggingSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Logging settings by rule type.
+// Configure logging settings for each rule type.
 type LoggingSettingSettingsByRuleType struct {
-	DNS  LoggingSettingSettingsByRuleTypeDNS  `json:"dns"`
+	// Configure logging settings for DNS firewall.
+	DNS LoggingSettingSettingsByRuleTypeDNS `json:"dns"`
+	// Configure logging settings for HTTP/HTTPS firewall.
 	HTTP LoggingSettingSettingsByRuleTypeHTTP `json:"http"`
+	// Configure logging settings for Network firewall.
 	L4   LoggingSettingSettingsByRuleTypeL4   `json:"l4"`
 	JSON loggingSettingSettingsByRuleTypeJSON `json:"-"`
 }
@@ -119,10 +123,11 @@ func (r loggingSettingSettingsByRuleTypeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configure logging settings for DNS firewall.
 type LoggingSettingSettingsByRuleTypeDNS struct {
-	// Log all requests to this service.
+	// Specify whether to log all requests to this service.
 	LogAll bool `json:"log_all"`
-	// Log only blocking requests to this service.
+	// Specify whether to log only blocking requests to this service.
 	LogBlocks bool                                    `json:"log_blocks"`
 	JSON      loggingSettingSettingsByRuleTypeDNSJSON `json:"-"`
 }
@@ -144,10 +149,11 @@ func (r loggingSettingSettingsByRuleTypeDNSJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configure logging settings for HTTP/HTTPS firewall.
 type LoggingSettingSettingsByRuleTypeHTTP struct {
-	// Log all requests to this service.
+	// Specify whether to log all requests to this service.
 	LogAll bool `json:"log_all"`
-	// Log only blocking requests to this service.
+	// Specify whether to log only blocking requests to this service.
 	LogBlocks bool                                     `json:"log_blocks"`
 	JSON      loggingSettingSettingsByRuleTypeHTTPJSON `json:"-"`
 }
@@ -169,10 +175,11 @@ func (r loggingSettingSettingsByRuleTypeHTTPJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configure logging settings for Network firewall.
 type LoggingSettingSettingsByRuleTypeL4 struct {
-	// Log all requests to this service.
+	// Specify whether to log all requests to this service.
 	LogAll bool `json:"log_all"`
-	// Log only blocking requests to this service.
+	// Specify whether to log only blocking requests to this service.
 	LogBlocks bool                                   `json:"log_blocks"`
 	JSON      loggingSettingSettingsByRuleTypeL4JSON `json:"-"`
 }
@@ -195,10 +202,11 @@ func (r loggingSettingSettingsByRuleTypeL4JSON) RawJSON() string {
 }
 
 type LoggingSettingParam struct {
-	// Redact personally identifiable information from activity logging (PII fields
-	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
+	// Indicate whether to redact personally identifiable information from activity
+	// logging (PII fields include source IP, user email, user ID, device ID, URL,
+	// referrer, and user agent).
 	RedactPii param.Field[bool] `json:"redact_pii"`
-	// Logging settings by rule type.
+	// Configure logging settings for each rule type.
 	SettingsByRuleType param.Field[LoggingSettingSettingsByRuleTypeParam] `json:"settings_by_rule_type"`
 }
 
@@ -206,21 +214,25 @@ func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Logging settings by rule type.
+// Configure logging settings for each rule type.
 type LoggingSettingSettingsByRuleTypeParam struct {
-	DNS  param.Field[LoggingSettingSettingsByRuleTypeDNSParam]  `json:"dns"`
+	// Configure logging settings for DNS firewall.
+	DNS param.Field[LoggingSettingSettingsByRuleTypeDNSParam] `json:"dns"`
+	// Configure logging settings for HTTP/HTTPS firewall.
 	HTTP param.Field[LoggingSettingSettingsByRuleTypeHTTPParam] `json:"http"`
-	L4   param.Field[LoggingSettingSettingsByRuleTypeL4Param]   `json:"l4"`
+	// Configure logging settings for Network firewall.
+	L4 param.Field[LoggingSettingSettingsByRuleTypeL4Param] `json:"l4"`
 }
 
 func (r LoggingSettingSettingsByRuleTypeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Configure logging settings for DNS firewall.
 type LoggingSettingSettingsByRuleTypeDNSParam struct {
-	// Log all requests to this service.
+	// Specify whether to log all requests to this service.
 	LogAll param.Field[bool] `json:"log_all"`
-	// Log only blocking requests to this service.
+	// Specify whether to log only blocking requests to this service.
 	LogBlocks param.Field[bool] `json:"log_blocks"`
 }
 
@@ -228,10 +240,11 @@ func (r LoggingSettingSettingsByRuleTypeDNSParam) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
+// Configure logging settings for HTTP/HTTPS firewall.
 type LoggingSettingSettingsByRuleTypeHTTPParam struct {
-	// Log all requests to this service.
+	// Specify whether to log all requests to this service.
 	LogAll param.Field[bool] `json:"log_all"`
-	// Log only blocking requests to this service.
+	// Specify whether to log only blocking requests to this service.
 	LogBlocks param.Field[bool] `json:"log_blocks"`
 }
 
@@ -239,10 +252,11 @@ func (r LoggingSettingSettingsByRuleTypeHTTPParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
+// Configure logging settings for Network firewall.
 type LoggingSettingSettingsByRuleTypeL4Param struct {
-	// Log all requests to this service.
+	// Specify whether to log all requests to this service.
 	LogAll param.Field[bool] `json:"log_all"`
-	// Log only blocking requests to this service.
+	// Specify whether to log only blocking requests to this service.
 	LogBlocks param.Field[bool] `json:"log_blocks"`
 }
 
@@ -262,7 +276,7 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayLoggingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                              `json:"result"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -287,7 +301,7 @@ func (r gatewayLoggingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayLoggingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -309,7 +323,7 @@ type GatewayLoggingGetParams struct {
 type GatewayLoggingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                           `json:"result"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`
@@ -334,7 +348,7 @@ func (r gatewayLoggingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayLoggingGetResponseEnvelopeSuccess bool
 
 const (

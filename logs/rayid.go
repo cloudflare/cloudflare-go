@@ -58,7 +58,7 @@ func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetPar
 }
 
 type RayIDGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The `/received` route by default returns a limited set of fields, and allows
 	// customers to override the default field set by specifying individual fields. The

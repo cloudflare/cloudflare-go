@@ -86,7 +86,9 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Logs: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
 						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacement{

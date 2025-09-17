@@ -35,6 +35,8 @@ func NewAIInferenceSummaryService(opts ...option.RequestOption) (r *AIInferenceS
 }
 
 // Retrieves the distribution of unique accounts by model.
+//
+// Deprecated: deprecated
 func (r *AIInferenceSummaryService) Model(ctx context.Context, query AIInferenceSummaryModelParams, opts ...option.RequestOption) (res *AIInferenceSummaryModelResponse, err error) {
 	var env AIInferenceSummaryModelResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,6 +50,8 @@ func (r *AIInferenceSummaryService) Model(ctx context.Context, query AIInference
 }
 
 // Retrieves the distribution of unique accounts by task.
+//
+// Deprecated: deprecated
 func (r *AIInferenceSummaryService) Task(ctx context.Context, query AIInferenceSummaryTaskParams, opts ...option.RequestOption) (res *AIInferenceSummaryTaskResponse, err error) {
 	var env AIInferenceSummaryTaskResponseEnvelope
 	opts = append(r.Options[:], opts...)

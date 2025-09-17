@@ -274,6 +274,13 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 
 // Scan for common DNS records on your domain and automatically add them to your
 // zone. Useful if you haven't updated your nameservers yet.
+//
+// Deprecated: This endpoint is deprecated in favor of a new asynchronous version.
+// Please use the
+// [/scan/trigger](https://developers.cloudflare.com/api/resources/dns/subresources/records/methods/scan/trigger)
+// and
+// [/scan/review](https://developers.cloudflare.com/api/resources/dns/subresources/records/methods/scan/review)
+// endpoints instead.
 func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
 	var env RecordScanResponseEnvelope
 	opts = append(r.Options[:], opts...)

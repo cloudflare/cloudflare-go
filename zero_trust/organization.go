@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -221,7 +220,6 @@ type Organization struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
 	AutoRedirectToIdentity bool                    `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time               `json:"created_at" format:"date-time"`
 	CustomPages            OrganizationCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
@@ -234,8 +232,7 @@ type Organization struct {
 	// h.
 	SessionDuration string `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UIReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
-	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
+	UIReadOnlyToggleReason string `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
 	// longer counts against your Teams seat count. Minimum value for this setting is 1
@@ -253,14 +250,12 @@ type organizationJSON struct {
 	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
-	CreatedAt                      apijson.Field
 	CustomPages                    apijson.Field
 	IsUIReadOnly                   apijson.Field
 	LoginDesign                    apijson.Field
 	Name                           apijson.Field
 	SessionDuration                apijson.Field
 	UIReadOnlyToggleReason         apijson.Field
-	UpdatedAt                      apijson.Field
 	UserSeatExpirationInactiveTime apijson.Field
 	WARPAuthSessionDuration        apijson.Field
 	raw                            string

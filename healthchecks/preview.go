@@ -129,7 +129,7 @@ type PreviewNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -153,7 +153,7 @@ func (r previewNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewNewResponseEnvelopeSuccess bool
 
 const (
@@ -177,7 +177,7 @@ type PreviewDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PreviewDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -201,7 +201,7 @@ func (r previewDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -225,7 +225,7 @@ type PreviewGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -249,7 +249,7 @@ func (r previewGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewGetResponseEnvelopeSuccess bool
 
 const (

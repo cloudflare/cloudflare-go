@@ -68,6 +68,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 			Cursor:    cloudflare.F("cursor"),
 			DateEnd:   cloudflare.F(time.Now()),
 			DateStart: cloudflare.F(time.Now()),
+			Direction: cloudflare.F(workflows.InstanceListParamsDirectionAsc),
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(1.000000),
 			Status:    cloudflare.F(workflows.InstanceListParamsStatusQueued),

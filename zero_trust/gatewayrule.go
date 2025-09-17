@@ -36,7 +36,7 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 	return
 }
 
-// Creates a new Zero Trust Gateway rule.
+// Create a new Zero Trust Gateway rule.
 func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -53,7 +53,7 @@ func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParam
 	return
 }
 
-// Updates a configured Zero Trust Gateway rule.
+// Update a configured Zero Trust Gateway rule.
 func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -74,7 +74,7 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 	return
 }
 
-// Fetches the Zero Trust Gateway rules for an account.
+// List Zero Trust Gateway rules for an account.
 func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -96,12 +96,12 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 	return res, nil
 }
 
-// Fetches the Zero Trust Gateway rules for an account.
+// List Zero Trust Gateway rules for an account.
 func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayRule] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes a Zero Trust Gateway rule.
+// Delete a Zero Trust Gateway rule.
 func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
 	var env GatewayRuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -122,7 +122,7 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body Gat
 	return
 }
 
-// Fetches a single Zero Trust Gateway rule.
+// Get a single Zero Trust Gateway rule.
 func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -143,11 +143,9 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	return
 }
 
-// Resets the expiration of a Zero Trust Gateway Rule if its duration has elapsed
-// and it has a default duration.
-//
-// The Zero Trust Gateway Rule must have values for both `expiration.expires_at`
-// and `expiration.duration`.
+// Resets the expiration of a Zero Trust Gateway Rule if its duration elapsed and
+// it has a default duration. The Zero Trust Gateway Rule must have values for both
+// `expiration.expires_at` and `expiration.duration`.
 func (r *GatewayRuleService) ResetExpiration(ctx context.Context, ruleID string, body GatewayRuleResetExpirationParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleResetExpirationResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -169,14 +167,15 @@ func (r *GatewayRuleService) ResetExpiration(ctx context.Context, ruleID string,
 }
 
 type DNSResolverSettingsV4 struct {
-	// IPv4 address of upstream resolver.
+	// Specify the IPv4 address of the upstream resolver.
 	IP string `json:"ip,required"`
-	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
+	// Specify a port number to use for the upstream resolver. Defaults to 53 if
+	// unspecified.
 	Port int64 `json:"port"`
-	// Whether to connect to this resolver over a private network. Must be set when
-	// vnet_id is set.
+	// Indicate whether to connect to this resolver over a private network. Must set
+	// when vnet_id set.
 	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
-	// Optionally specify a virtual network for this resolver. Uses default virtual
+	// Specify an optional virtual network for this resolver. Uses default virtual
 	// network id if omitted.
 	VnetID string                    `json:"vnet_id"`
 	JSON   dnsResolverSettingsV4JSON `json:"-"`
@@ -202,14 +201,15 @@ func (r dnsResolverSettingsV4JSON) RawJSON() string {
 }
 
 type DNSResolverSettingsV4Param struct {
-	// IPv4 address of upstream resolver.
+	// Specify the IPv4 address of the upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
-	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
+	// Specify a port number to use for the upstream resolver. Defaults to 53 if
+	// unspecified.
 	Port param.Field[int64] `json:"port"`
-	// Whether to connect to this resolver over a private network. Must be set when
-	// vnet_id is set.
+	// Indicate whether to connect to this resolver over a private network. Must set
+	// when vnet_id set.
 	RouteThroughPrivateNetwork param.Field[bool] `json:"route_through_private_network"`
-	// Optionally specify a virtual network for this resolver. Uses default virtual
+	// Specify an optional virtual network for this resolver. Uses default virtual
 	// network id if omitted.
 	VnetID param.Field[string] `json:"vnet_id"`
 }
@@ -219,14 +219,15 @@ func (r DNSResolverSettingsV4Param) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSResolverSettingsV6 struct {
-	// IPv6 address of upstream resolver.
+	// Specify the IPv6 address of the upstream resolver.
 	IP string `json:"ip,required"`
-	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
+	// Specify a port number to use for the upstream resolver. Defaults to 53 if
+	// unspecified.
 	Port int64 `json:"port"`
-	// Whether to connect to this resolver over a private network. Must be set when
-	// vnet_id is set.
+	// Indicate whether to connect to this resolver over a private network. Must set
+	// when vnet_id set.
 	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
-	// Optionally specify a virtual network for this resolver. Uses default virtual
+	// Specify an optional virtual network for this resolver. Uses default virtual
 	// network id if omitted.
 	VnetID string                    `json:"vnet_id"`
 	JSON   dnsResolverSettingsV6JSON `json:"-"`
@@ -252,14 +253,15 @@ func (r dnsResolverSettingsV6JSON) RawJSON() string {
 }
 
 type DNSResolverSettingsV6Param struct {
-	// IPv6 address of upstream resolver.
+	// Specify the IPv6 address of the upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
-	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
+	// Specify a port number to use for the upstream resolver. Defaults to 53 if
+	// unspecified.
 	Port param.Field[int64] `json:"port"`
-	// Whether to connect to this resolver over a private network. Must be set when
-	// vnet_id is set.
+	// Indicate whether to connect to this resolver over a private network. Must set
+	// when vnet_id set.
 	RouteThroughPrivateNetwork param.Field[bool] `json:"route_through_private_network"`
-	// Optionally specify a virtual network for this resolver. Uses default virtual
+	// Specify an optional virtual network for this resolver. Uses default virtual
 	// network id if omitted.
 	VnetID param.Field[string] `json:"vnet_id"`
 }
@@ -268,7 +270,7 @@ func (r DNSResolverSettingsV6Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The protocol or layer to use.
+// Specify the protocol or layer to use.
 type GatewayFilter string
 
 const (
@@ -288,62 +290,63 @@ func (r GatewayFilter) IsKnown() bool {
 }
 
 type GatewayRule struct {
-	// The action to perform when the associated traffic, identity, and device posture
-	// expressions are either absent or evaluate to `true`.
+	// Specify the action to perform when the associated traffic, identity, and device
+	// posture expressions either absent or evaluate to `true`.
 	Action GatewayRuleAction `json:"action,required"`
-	// True if the rule is enabled.
+	// Specify whether the rule is enabled.
 	Enabled bool `json:"enabled,required"`
-	// The protocol or layer to evaluate the traffic, identity, and device. posture
-	// expressions.
+	// Specify the protocol or layer to evaluate the traffic, identity, and device
+	// posture expressions.
 	Filters []GatewayFilter `json:"filters,required"`
-	// The name of the rule.
+	// Specify the rule name.
 	Name string `json:"name,required"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value. Refer to
+	// Set the order of your rules. Lower values indicate higher precedence. At each
+	// processing phase, evaluate applicable rules in ascending order of this value.
+	// Refer to
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
-	// docs on how to manage precedence via Terraform.
+	// to manage precedence via Terraform.
 	Precedence int64 `json:"precedence,required"`
-	// The wirefilter expression used for traffic matching. The API automatically
-	// formats and sanitizes this expression. This returns a normalized version that
-	// may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for traffic matching. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	Traffic string `json:"traffic,required"`
-	// The API resource UUID.
+	// Identify the API resource with a UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Date of deletion, if any.
+	// Indicate the date of deletion, if any.
 	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The description of the rule.
+	// Specify the rule description.
 	Description string `json:"description"`
-	// The wirefilter expression used for device posture check matching. The API
-	// automatically formats and sanitizes this expression. This returns a normalized
-	// version that may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for device posture check. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	DevicePosture string `json:"device_posture"`
-	// The expiration time stamp and default duration of a DNS policy. Takes precedence
-	// over the policy's `schedule` configuration, if any.
-	//
-	// This does not apply to HTTP or network policies.
+	// Defines the expiration time stamp and default duration of a DNS policy. Takes
+	// precedence over the policy's `schedule` configuration, if any. This does not
+	// apply to HTTP or network policies.
 	Expiration GatewayRuleExpiration `json:"expiration,nullable"`
-	// The wirefilter expression used for identity matching. The API automatically
-	// formats and sanitizes this expression. This returns a normalized version that
-	// may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for identity matching. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	Identity string `json:"identity"`
-	// The rule cannot be shared via the Orgs API.
-	NotSharable bool `json:"not_sharable"`
-	// The rule was shared via the Orgs API and cannot be edited by the current
-	// account.
+	// Indicate that this rule is shared via the Orgs API and read only.
 	ReadOnly bool `json:"read_only"`
-	// Additional settings that modify the rule's action.
+	// Set settings related to this rule.
 	RuleSettings RuleSetting `json:"rule_settings"`
-	// The schedule for activating DNS policies. This does not apply to HTTP or network
-	// policies.
+	// Defines the schedule for activating DNS policies. (HTTP/Egress or L4
+	// unsupported).
 	Schedule Schedule `json:"schedule,nullable"`
-	// account tag of account that created the rule.
+	// Indicate that this rule is sharable via the Orgs API.
+	Sharable bool `json:"sharable"`
+	// Provide the account tag of the account that created the rule.
 	SourceAccount string    `json:"source_account"`
 	UpdatedAt     time.Time `json:"updated_at" format:"date-time"`
-	// version number of the rule.
+	// Indicate the version number of the rule(read-only).
 	Version int64 `json:"version"`
-	// Warning for a misconfigured rule, if any.
+	// Indicate a warning for a misconfigured rule, if any.
 	WarningStatus string          `json:"warning_status,nullable"`
 	JSON          gatewayRuleJSON `json:"-"`
 }
@@ -363,10 +366,10 @@ type gatewayRuleJSON struct {
 	DevicePosture apijson.Field
 	Expiration    apijson.Field
 	Identity      apijson.Field
-	NotSharable   apijson.Field
 	ReadOnly      apijson.Field
 	RuleSettings  apijson.Field
 	Schedule      apijson.Field
+	Sharable      apijson.Field
 	SourceAccount apijson.Field
 	UpdatedAt     apijson.Field
 	Version       apijson.Field
@@ -383,8 +386,8 @@ func (r gatewayRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action to perform when the associated traffic, identity, and device posture
-// expressions are either absent or evaluate to `true`.
+// Specify the action to perform when the associated traffic, identity, and device
+// posture expressions either absent or evaluate to `true`.
 type GatewayRuleAction string
 
 const (
@@ -414,25 +417,20 @@ func (r GatewayRuleAction) IsKnown() bool {
 	return false
 }
 
-// The expiration time stamp and default duration of a DNS policy. Takes precedence
-// over the policy's `schedule` configuration, if any.
-//
-// This does not apply to HTTP or network policies.
+// Defines the expiration time stamp and default duration of a DNS policy. Takes
+// precedence over the policy's `schedule` configuration, if any. This does not
+// apply to HTTP or network policies.
 type GatewayRuleExpiration struct {
-	// The time stamp at which the policy will expire and cease to be applied.
-	//
-	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
-	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
-	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
-	//
-	// Policies with an expiration do not consider the timezone of clients they are
-	// applied to, and expire "globally" at the point given by their `expires_at`
-	// value.
+	// Show the timestamp when the policy expires and stops applying. The value must
+	// follow RFC 3339 and include a UTC offset. The system accepts non-zero offsets
+	// but converts them to the equivalent UTC+00:00 value and returns timestamps with
+	// a trailing Z. Expiration policies ignore client timezones and expire globally at
+	// the specified expires_at time.
 	ExpiresAt time.Time `json:"expires_at,required" format:"date-time"`
-	// The default duration a policy will be active in minutes. Must be set in order to
+	// Defines the default duration a policy active in minutes. Must set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration int64 `json:"duration"`
-	// Whether the policy has expired.
+	// Indicates whether the policy is expired.
 	Expired bool                      `json:"expired"`
 	JSON    gatewayRuleExpirationJSON `json:"-"`
 }
@@ -455,76 +453,76 @@ func (r gatewayRuleExpirationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Additional settings that modify the rule's action.
+// Set settings related to this rule.
 type RuleSetting struct {
-	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
-	// header names, pointing to an array with its header value(s).
+	// Add custom headers to allowed requests as key-value pairs. Use header names as
+	// keys that map to arrays of header values.
 	AddHeaders map[string][]string `json:"add_headers,nullable"`
-	// Set by parent MSP accounts to enable their children to bypass this rule.
+	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
+	// this. this rule.
 	AllowChildBypass bool `json:"allow_child_bypass,nullable"`
-	// Settings for the Audit SSH action.
+	// Define the settings for the Audit SSH action.
 	AuditSSH RuleSettingAuditSSH `json:"audit_ssh,nullable"`
-	// Configure how browser isolation behaves.
+	// Configure browser isolation behavior.
 	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
-	// Custom block page settings. If missing/null, blocking will use the the account
+	// Configure custom block page settings. If missing or null, use the account
 	// settings.
 	BlockPage RuleSettingBlockPage `json:"block_page,nullable"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
-	// The text describing why this block occurred, displayed on the custom block page
+	// Explain why the rule blocks the request. The custom block page shows this text
 	// (if enabled).
 	BlockReason string `json:"block_reason,nullable"`
-	// Set by children MSP accounts to bypass their parent's rules.
+	// Set to enable MSP accounts to bypass their parent's rules. Only MSP child
+	// accounts can set this.
 	BypassParentRule bool `json:"bypass_parent_rule,nullable"`
-	// Configure how session check behaves.
+	// Configure session check behavior.
 	CheckSession RuleSettingCheckSession `json:"check_session,nullable"`
-	// Add your own custom resolvers to route queries that match the resolver policy.
-	// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
-	// are set. DNS queries will route to the address closest to their origin. Only
+	// Configure custom resolvers to route queries that match the resolver policy.
+	// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+	// settings. DNS queries get routed to the address closest to their origin. Only
 	// valid when a rule's action is set to 'resolve'.
 	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers,nullable"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
 	Egress RuleSettingEgress `json:"egress,nullable"`
-	// Set to true, to ignore the category matches at CNAME domains in a response. If
-	// unchecked, the categories in this rule will be checked against all the CNAME
-	// domain categories in a response.
+	// Ignore category matches at CNAME domains in a response. When off, evaluate
+	// categories in this rule against all CNAME domain categories in the response.
 	IgnoreCNAMECategoryMatches bool `json:"ignore_cname_category_matches"`
-	// INSECURE - disable DNSSEC validation (for Allow actions).
+	// Specify whether to disable DNSSEC validation (for Allow actions) [INSECURE].
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
-	// Set to true to enable IPs in DNS resolver category blocks. By default categories
-	// only block based on domain names.
+	// Enable IPs in DNS resolver category blocks. The system blocks only domain name
+	// categories unless you enable this setting.
 	IPCategories bool `json:"ip_categories"`
-	// Set to true to include IPs in DNS resolver indicator feed blocks. By default
-	// indicator feeds only block based on domain names.
+	// Indicates whether to include IPs in DNS resolver indicator feed blocks. Default,
+	// indicator feeds block only domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address. and port.
 	L4override RuleSettingL4override `json:"l4override,nullable"`
-	// Configure a notification to display on the user's device when this rule is
-	// matched.
+	// Configure a notification to display on the user's device when this rule matched.
 	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings,nullable"`
-	// Override matching DNS queries with a hostname.
+	// Defines a hostname for override, for the matching DNS queries.
 	OverrideHost string `json:"override_host"`
-	// Override matching DNS queries with an IP or set of IPs.
+	// Defines a an IP or set of IPs for overriding matched DNS queries.
 	OverrideIPs []string `json:"override_ips,nullable"`
 	// Configure DLP payload logging.
 	PayloadLog RuleSettingPayloadLog `json:"payload_log,nullable"`
-	// Settings that apply to quarantine rules.
+	// Configure settings that apply to quarantine rules.
 	Quarantine RuleSettingQuarantine `json:"quarantine,nullable"`
-	// Settings that apply to redirect rules.
+	// Apply settings to redirect rules.
 	Redirect RuleSettingRedirect `json:"redirect,nullable"`
 	// Configure to forward the query to the internal DNS service, passing the
-	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
-	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
-	// set to 'resolve'.
+	// specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
+	// 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is set
+	// to 'resolve'.
 	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally,nullable"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when 'dns_resolvers' are specified or
-	// 'resolve_dns_internally' is set. Only valid when a rule's action is set to
-	// 'resolve'.
+	// resolver. Cannot set when 'dns_resolvers' specified or 'resolve_dns_internally'
+	// is set. Only valid when a rule's action set to 'resolve'.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare,nullable"`
-	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
+	// Configure behavior when an upstream certificate is invalid or an SSL error
+	// occurs.
 	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert,nullable"`
 	JSON          ruleSettingJSON          `json:"-"`
 }
@@ -568,9 +566,9 @@ func (r ruleSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the Audit SSH action.
+// Define the settings for the Audit SSH action.
 type RuleSettingAuditSSH struct {
-	// Enable to turn on SSH command logging.
+	// Enable SSH command logging.
 	CommandLogging bool                    `json:"command_logging"`
 	JSON           ruleSettingAuditSSHJSON `json:"-"`
 }
@@ -591,11 +589,11 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure how browser isolation behaves.
+// Configure browser isolation behavior.
 type RuleSettingBISOAdminControls struct {
-	// Configure whether copy is enabled or not. When set with "remote_only", copying
-	// isolated content from the remote browser to the user's local clipboard is
-	// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+	// Configure copy behavior. If set to remote_only, users cannot copy isolated
+	// content from the remote browser to the local clipboard. If this field is absent,
+	// copying remains enabled. Applies only when version == "v2".
 	Copy RuleSettingBISOAdminControlsCopy `json:"copy"`
 	// Set to false to enable copy-pasting. Only applies when `version == "v1"`.
 	DCP bool `json:"dcp"`
@@ -603,27 +601,27 @@ type RuleSettingBISOAdminControls struct {
 	DD bool `json:"dd"`
 	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK bool `json:"dk"`
-	// Configure whether downloading enabled or not. When set with "remote_only",
-	// downloads are only available for viewing. Only applies when `version == "v2"`.
+	// Configure download behavior. When set to remote_only, users can view downloads
+	// but cannot save them. Applies only when version == "v2".
 	Download RuleSettingBISOAdminControlsDownload `json:"download"`
 	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP bool `json:"dp"`
 	// Set to false to enable uploading. Only applies when `version == "v1"`.
 	DU bool `json:"du"`
-	// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
-	// is enabled. Only applies when `version == "v2"`.
+	// Configure keyboard usage behavior. If this field is absent, keyboard usage
+	// remains enabled. Applies only when version == "v2".
 	Keyboard RuleSettingBISOAdminControlsKeyboard `json:"keyboard"`
-	// Configure whether pasting is enabled or not. When set with "remote_only",
-	// pasting content from the user's local clipboard into isolated pages is disabled.
-	// When absent, paste is enabled. Only applies when `version == "v2"`.
+	// Configure paste behavior. If set to remote_only, users cannot paste content from
+	// the local clipboard into isolated pages. If this field is absent, pasting
+	// remains enabled. Applies only when version == "v2".
 	Paste RuleSettingBISOAdminControlsPaste `json:"paste"`
-	// Configure whether printing is enabled or not. When absent, printing is enabled.
-	// Only applies when `version == "v2"`.
+	// Configure print behavior. Default, Printing is enabled. Applies only when
+	// version == "v2".
 	Printing RuleSettingBISOAdminControlsPrinting `json:"printing"`
-	// Configure whether uploading is enabled or not. When absent, uploading is
-	// enabled. Only applies when `version == "v2"`.
+	// Configure upload behavior. If this field is absent, uploading remains enabled.
+	// Applies only when version == "v2".
 	Upload RuleSettingBISOAdminControlsUpload `json:"upload"`
-	// Indicates which version of the browser isolation controls should apply.
+	// Indicate which version of the browser isolation controls should apply.
 	Version RuleSettingBISOAdminControlsVersion `json:"version"`
 	JSON    ruleSettingBISOAdminControlsJSON    `json:"-"`
 }
@@ -655,9 +653,9 @@ func (r ruleSettingBISOAdminControlsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure whether copy is enabled or not. When set with "remote_only", copying
-// isolated content from the remote browser to the user's local clipboard is
-// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+// Configure copy behavior. If set to remote_only, users cannot copy isolated
+// content from the remote browser to the local clipboard. If this field is absent,
+// copying remains enabled. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsCopy string
 
 const (
@@ -674,8 +672,8 @@ func (r RuleSettingBISOAdminControlsCopy) IsKnown() bool {
 	return false
 }
 
-// Configure whether downloading enabled or not. When set with "remote_only",
-// downloads are only available for viewing. Only applies when `version == "v2"`.
+// Configure download behavior. When set to remote_only, users can view downloads
+// but cannot save them. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsDownload string
 
 const (
@@ -692,8 +690,8 @@ func (r RuleSettingBISOAdminControlsDownload) IsKnown() bool {
 	return false
 }
 
-// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
-// is enabled. Only applies when `version == "v2"`.
+// Configure keyboard usage behavior. If this field is absent, keyboard usage
+// remains enabled. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsKeyboard string
 
 const (
@@ -709,9 +707,9 @@ func (r RuleSettingBISOAdminControlsKeyboard) IsKnown() bool {
 	return false
 }
 
-// Configure whether pasting is enabled or not. When set with "remote_only",
-// pasting content from the user's local clipboard into isolated pages is disabled.
-// When absent, paste is enabled. Only applies when `version == "v2"`.
+// Configure paste behavior. If set to remote_only, users cannot paste content from
+// the local clipboard into isolated pages. If this field is absent, pasting
+// remains enabled. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsPaste string
 
 const (
@@ -728,8 +726,8 @@ func (r RuleSettingBISOAdminControlsPaste) IsKnown() bool {
 	return false
 }
 
-// Configure whether printing is enabled or not. When absent, printing is enabled.
-// Only applies when `version == "v2"`.
+// Configure print behavior. Default, Printing is enabled. Applies only when
+// version == "v2".
 type RuleSettingBISOAdminControlsPrinting string
 
 const (
@@ -745,8 +743,8 @@ func (r RuleSettingBISOAdminControlsPrinting) IsKnown() bool {
 	return false
 }
 
-// Configure whether uploading is enabled or not. When absent, uploading is
-// enabled. Only applies when `version == "v2"`.
+// Configure upload behavior. If this field is absent, uploading remains enabled.
+// Applies only when version == "v2".
 type RuleSettingBISOAdminControlsUpload string
 
 const (
@@ -762,7 +760,7 @@ func (r RuleSettingBISOAdminControlsUpload) IsKnown() bool {
 	return false
 }
 
-// Indicates which version of the browser isolation controls should apply.
+// Indicate which version of the browser isolation controls should apply.
 type RuleSettingBISOAdminControlsVersion string
 
 const (
@@ -778,12 +776,12 @@ func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
 	return false
 }
 
-// Custom block page settings. If missing/null, blocking will use the the account
+// Configure custom block page settings. If missing or null, use the account
 // settings.
 type RuleSettingBlockPage struct {
-	// URI to which the user will be redirected.
+	// Specify the URI to which the user is redirected.
 	TargetURI string `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters.
+	// Specify whether to pass the context information as query parameters.
 	IncludeContext bool                     `json:"include_context"`
 	JSON           ruleSettingBlockPageJSON `json:"-"`
 }
@@ -805,13 +803,12 @@ func (r ruleSettingBlockPageJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure how session check behaves.
+// Configure session check behavior.
 type RuleSettingCheckSession struct {
-	// Configure how fresh the session needs to be to be considered valid. The API
-	// automatically formats and sanitizes this expression. This returns a normalized
-	// version that may differ from your input and cause Terraform state drift.
+	// Sets the required session freshness threshold. The API returns a normalized
+	// version of this value.
 	Duration string `json:"duration"`
-	// Set to true to enable session enforcement.
+	// Enable session enforcement.
 	Enforce bool                        `json:"enforce"`
 	JSON    ruleSettingCheckSessionJSON `json:"-"`
 }
@@ -833,9 +830,9 @@ func (r ruleSettingCheckSessionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Add your own custom resolvers to route queries that match the resolver policy.
-// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
-// are set. DNS queries will route to the address closest to their origin. Only
+// Configure custom resolvers to route queries that match the resolver policy.
+// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+// settings. DNS queries get routed to the address closest to their origin. Only
 // valid when a rule's action is set to 'resolve'.
 type RuleSettingDNSResolvers struct {
 	IPV4 []DNSResolverSettingsV4     `json:"ipv4"`
@@ -864,13 +861,12 @@ func (r ruleSettingDNSResolversJSON) RawJSON() string {
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
 type RuleSettingEgress struct {
-	// The IPv4 address to be used for egress.
+	// Specify the IPv4 address to use for egress.
 	IPV4 string `json:"ipv4"`
-	// The fallback IPv4 address to be used for egress in the event of an error
-	// egressing with the primary IPv4. Can be '0.0.0.0' to indicate local egress via
-	// WARP IPs.
+	// Specify the fallback IPv4 address to use for egress when the primary IPv4 fails.
+	// Set '0.0.0.0' to indicate local egress via WARP IPs.
 	IPV4Fallback string `json:"ipv4_fallback"`
-	// The IPv6 range to be used for egress.
+	// Specify the IPv6 range to use for egress.
 	IPV6 string                `json:"ipv6"`
 	JSON ruleSettingEgressJSON `json:"-"`
 }
@@ -895,9 +891,9 @@ func (r ruleSettingEgressJSON) RawJSON() string {
 
 // Send matching traffic to the supplied destination IP address. and port.
 type RuleSettingL4override struct {
-	// IPv4 or IPv6 address.
+	// Defines the IPv4 or IPv6 address.
 	IP string `json:"ip"`
-	// A port number to use for TCP/UDP overrides.
+	// Defines a port number to use for TCP/UDP overrides.
 	Port int64                     `json:"port"`
 	JSON ruleSettingL4overrideJSON `json:"-"`
 }
@@ -919,17 +915,16 @@ func (r ruleSettingL4overrideJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure a notification to display on the user's device when this rule is
-// matched.
+// Configure a notification to display on the user's device when this rule matched.
 type RuleSettingNotificationSettings struct {
-	// Set notification on.
+	// Enable notification.
 	Enabled bool `json:"enabled"`
-	// If true, context information will be passed as query parameters.
+	// Indicates whether to pass the context information as query parameters.
 	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
+	// Defines an optional URL to direct users to additional information. If unset, the
+	// notification opens a block page.
 	SupportURL string                              `json:"support_url"`
 	JSON       ruleSettingNotificationSettingsJSON `json:"-"`
 }
@@ -955,7 +950,7 @@ func (r ruleSettingNotificationSettingsJSON) RawJSON() string {
 
 // Configure DLP payload logging.
 type RuleSettingPayloadLog struct {
-	// Set to true to enable DLP payload logging for this rule.
+	// Enable DLP payload logging for this rule.
 	Enabled bool                      `json:"enabled"`
 	JSON    ruleSettingPayloadLogJSON `json:"-"`
 }
@@ -976,9 +971,9 @@ func (r ruleSettingPayloadLogJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings that apply to quarantine rules.
+// Configure settings that apply to quarantine rules.
 type RuleSettingQuarantine struct {
-	// Types of files to sandbox.
+	// Specify the types of files to sandbox.
 	FileTypes []RuleSettingQuarantineFileType `json:"file_types"`
 	JSON      ruleSettingQuarantineJSON       `json:"-"`
 }
@@ -1025,14 +1020,14 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	return false
 }
 
-// Settings that apply to redirect rules.
+// Apply settings to redirect rules.
 type RuleSettingRedirect struct {
-	// URI to which the user will be redirected.
+	// Specify the URI to which the user is redirected.
 	TargetURI string `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters.
+	// Specify whether to pass the context information as query parameters.
 	IncludeContext bool `json:"include_context"`
-	// If true, the path and query parameters from the original request will be
-	// appended to target_uri.
+	// Specify whether to append the path and query parameters from the original
+	// request to target_uri.
 	PreservePathAndQuery bool                    `json:"preserve_path_and_query"`
 	JSON                 ruleSettingRedirectJSON `json:"-"`
 }
@@ -1056,15 +1051,15 @@ func (r ruleSettingRedirectJSON) RawJSON() string {
 }
 
 // Configure to forward the query to the internal DNS service, passing the
-// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
-// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
-// set to 'resolve'.
+// specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
+// 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is set
+// to 'resolve'.
 type RuleSettingResolveDNSInternally struct {
-	// The fallback behavior to apply when the internal DNS response code is different
-	// from 'NOERROR' or when the response data only contains CNAME records for 'A' or
-	// 'AAAA' queries.
+	// Specify the fallback behavior to apply when the internal DNS response code
+	// differs from 'NOERROR' or when the response data contains only CNAME records for
+	// 'A' or 'AAAA' queries.
 	Fallback RuleSettingResolveDNSInternallyFallback `json:"fallback"`
-	// The internal DNS view identifier that's passed to the internal DNS service.
+	// Specify the internal DNS view identifier to pass to the internal DNS service.
 	ViewID string                              `json:"view_id"`
 	JSON   ruleSettingResolveDNSInternallyJSON `json:"-"`
 }
@@ -1086,9 +1081,9 @@ func (r ruleSettingResolveDNSInternallyJSON) RawJSON() string {
 	return r.raw
 }
 
-// The fallback behavior to apply when the internal DNS response code is different
-// from 'NOERROR' or when the response data only contains CNAME records for 'A' or
-// 'AAAA' queries.
+// Specify the fallback behavior to apply when the internal DNS response code
+// differs from 'NOERROR' or when the response data contains only CNAME records for
+// 'A' or 'AAAA' queries.
 type RuleSettingResolveDNSInternallyFallback string
 
 const (
@@ -1104,10 +1099,11 @@ func (r RuleSettingResolveDNSInternallyFallback) IsKnown() bool {
 	return false
 }
 
-// Configure behavior when an upstream cert is invalid or an SSL error occurs.
+// Configure behavior when an upstream certificate is invalid or an SSL error
+// occurs.
 type RuleSettingUntrustedCERT struct {
-	// The action performed when an untrusted certificate is seen. The default action
-	// is an error with HTTP code 526.
+	// Defines the action performed when an untrusted certificate seen. The default
+	// action an error with HTTP code 526.
 	Action RuleSettingUntrustedCERTAction `json:"action"`
 	JSON   ruleSettingUntrustedCERTJSON   `json:"-"`
 }
@@ -1128,8 +1124,8 @@ func (r ruleSettingUntrustedCERTJSON) RawJSON() string {
 	return r.raw
 }
 
-// The action performed when an untrusted certificate is seen. The default action
-// is an error with HTTP code 526.
+// Defines the action performed when an untrusted certificate seen. The default
+// action an error with HTTP code 526.
 type RuleSettingUntrustedCERTAction string
 
 const (
@@ -1146,76 +1142,76 @@ func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 	return false
 }
 
-// Additional settings that modify the rule's action.
+// Set settings related to this rule.
 type RuleSettingParam struct {
-	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
-	// header names, pointing to an array with its header value(s).
+	// Add custom headers to allowed requests as key-value pairs. Use header names as
+	// keys that map to arrays of header values.
 	AddHeaders param.Field[map[string][]string] `json:"add_headers"`
-	// Set by parent MSP accounts to enable their children to bypass this rule.
+	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
+	// this. this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
-	// Settings for the Audit SSH action.
+	// Define the settings for the Audit SSH action.
 	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
-	// Configure how browser isolation behaves.
+	// Configure browser isolation behavior.
 	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
-	// Custom block page settings. If missing/null, blocking will use the the account
+	// Configure custom block page settings. If missing or null, use the account
 	// settings.
 	BlockPage param.Field[RuleSettingBlockPageParam] `json:"block_page"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
-	// The text describing why this block occurred, displayed on the custom block page
+	// Explain why the rule blocks the request. The custom block page shows this text
 	// (if enabled).
 	BlockReason param.Field[string] `json:"block_reason"`
-	// Set by children MSP accounts to bypass their parent's rules.
+	// Set to enable MSP accounts to bypass their parent's rules. Only MSP child
+	// accounts can set this.
 	BypassParentRule param.Field[bool] `json:"bypass_parent_rule"`
-	// Configure how session check behaves.
+	// Configure session check behavior.
 	CheckSession param.Field[RuleSettingCheckSessionParam] `json:"check_session"`
-	// Add your own custom resolvers to route queries that match the resolver policy.
-	// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
-	// are set. DNS queries will route to the address closest to their origin. Only
+	// Configure custom resolvers to route queries that match the resolver policy.
+	// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+	// settings. DNS queries get routed to the address closest to their origin. Only
 	// valid when a rule's action is set to 'resolve'.
 	DNSResolvers param.Field[RuleSettingDNSResolversParam] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
 	Egress param.Field[RuleSettingEgressParam] `json:"egress"`
-	// Set to true, to ignore the category matches at CNAME domains in a response. If
-	// unchecked, the categories in this rule will be checked against all the CNAME
-	// domain categories in a response.
+	// Ignore category matches at CNAME domains in a response. When off, evaluate
+	// categories in this rule against all CNAME domain categories in the response.
 	IgnoreCNAMECategoryMatches param.Field[bool] `json:"ignore_cname_category_matches"`
-	// INSECURE - disable DNSSEC validation (for Allow actions).
+	// Specify whether to disable DNSSEC validation (for Allow actions) [INSECURE].
 	InsecureDisableDNSSECValidation param.Field[bool] `json:"insecure_disable_dnssec_validation"`
-	// Set to true to enable IPs in DNS resolver category blocks. By default categories
-	// only block based on domain names.
+	// Enable IPs in DNS resolver category blocks. The system blocks only domain name
+	// categories unless you enable this setting.
 	IPCategories param.Field[bool] `json:"ip_categories"`
-	// Set to true to include IPs in DNS resolver indicator feed blocks. By default
-	// indicator feeds only block based on domain names.
+	// Indicates whether to include IPs in DNS resolver indicator feed blocks. Default,
+	// indicator feeds block only domain names.
 	IPIndicatorFeeds param.Field[bool] `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address. and port.
 	L4override param.Field[RuleSettingL4overrideParam] `json:"l4override"`
-	// Configure a notification to display on the user's device when this rule is
-	// matched.
+	// Configure a notification to display on the user's device when this rule matched.
 	NotificationSettings param.Field[RuleSettingNotificationSettingsParam] `json:"notification_settings"`
-	// Override matching DNS queries with a hostname.
+	// Defines a hostname for override, for the matching DNS queries.
 	OverrideHost param.Field[string] `json:"override_host"`
-	// Override matching DNS queries with an IP or set of IPs.
+	// Defines a an IP or set of IPs for overriding matched DNS queries.
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
-	// Settings that apply to quarantine rules.
+	// Configure settings that apply to quarantine rules.
 	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
-	// Settings that apply to redirect rules.
+	// Apply settings to redirect rules.
 	Redirect param.Field[RuleSettingRedirectParam] `json:"redirect"`
 	// Configure to forward the query to the internal DNS service, passing the
-	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
-	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
-	// set to 'resolve'.
+	// specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
+	// 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is set
+	// to 'resolve'.
 	ResolveDNSInternally param.Field[RuleSettingResolveDNSInternallyParam] `json:"resolve_dns_internally"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when 'dns_resolvers' are specified or
-	// 'resolve_dns_internally' is set. Only valid when a rule's action is set to
-	// 'resolve'.
+	// resolver. Cannot set when 'dns_resolvers' specified or 'resolve_dns_internally'
+	// is set. Only valid when a rule's action set to 'resolve'.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
-	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
+	// Configure behavior when an upstream certificate is invalid or an SSL error
+	// occurs.
 	UntrustedCERT param.Field[RuleSettingUntrustedCERTParam] `json:"untrusted_cert"`
 }
 
@@ -1223,9 +1219,9 @@ func (r RuleSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Settings for the Audit SSH action.
+// Define the settings for the Audit SSH action.
 type RuleSettingAuditSSHParam struct {
-	// Enable to turn on SSH command logging.
+	// Enable SSH command logging.
 	CommandLogging param.Field[bool] `json:"command_logging"`
 }
 
@@ -1233,11 +1229,11 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configure how browser isolation behaves.
+// Configure browser isolation behavior.
 type RuleSettingBISOAdminControlsParam struct {
-	// Configure whether copy is enabled or not. When set with "remote_only", copying
-	// isolated content from the remote browser to the user's local clipboard is
-	// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+	// Configure copy behavior. If set to remote_only, users cannot copy isolated
+	// content from the remote browser to the local clipboard. If this field is absent,
+	// copying remains enabled. Applies only when version == "v2".
 	Copy param.Field[RuleSettingBISOAdminControlsCopy] `json:"copy"`
 	// Set to false to enable copy-pasting. Only applies when `version == "v1"`.
 	DCP param.Field[bool] `json:"dcp"`
@@ -1245,27 +1241,27 @@ type RuleSettingBISOAdminControlsParam struct {
 	DD param.Field[bool] `json:"dd"`
 	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK param.Field[bool] `json:"dk"`
-	// Configure whether downloading enabled or not. When set with "remote_only",
-	// downloads are only available for viewing. Only applies when `version == "v2"`.
+	// Configure download behavior. When set to remote_only, users can view downloads
+	// but cannot save them. Applies only when version == "v2".
 	Download param.Field[RuleSettingBISOAdminControlsDownload] `json:"download"`
 	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP param.Field[bool] `json:"dp"`
 	// Set to false to enable uploading. Only applies when `version == "v1"`.
 	DU param.Field[bool] `json:"du"`
-	// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
-	// is enabled. Only applies when `version == "v2"`.
+	// Configure keyboard usage behavior. If this field is absent, keyboard usage
+	// remains enabled. Applies only when version == "v2".
 	Keyboard param.Field[RuleSettingBISOAdminControlsKeyboard] `json:"keyboard"`
-	// Configure whether pasting is enabled or not. When set with "remote_only",
-	// pasting content from the user's local clipboard into isolated pages is disabled.
-	// When absent, paste is enabled. Only applies when `version == "v2"`.
+	// Configure paste behavior. If set to remote_only, users cannot paste content from
+	// the local clipboard into isolated pages. If this field is absent, pasting
+	// remains enabled. Applies only when version == "v2".
 	Paste param.Field[RuleSettingBISOAdminControlsPaste] `json:"paste"`
-	// Configure whether printing is enabled or not. When absent, printing is enabled.
-	// Only applies when `version == "v2"`.
+	// Configure print behavior. Default, Printing is enabled. Applies only when
+	// version == "v2".
 	Printing param.Field[RuleSettingBISOAdminControlsPrinting] `json:"printing"`
-	// Configure whether uploading is enabled or not. When absent, uploading is
-	// enabled. Only applies when `version == "v2"`.
+	// Configure upload behavior. If this field is absent, uploading remains enabled.
+	// Applies only when version == "v2".
 	Upload param.Field[RuleSettingBISOAdminControlsUpload] `json:"upload"`
-	// Indicates which version of the browser isolation controls should apply.
+	// Indicate which version of the browser isolation controls should apply.
 	Version param.Field[RuleSettingBISOAdminControlsVersion] `json:"version"`
 }
 
@@ -1273,12 +1269,12 @@ func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// Custom block page settings. If missing/null, blocking will use the the account
+// Configure custom block page settings. If missing or null, use the account
 // settings.
 type RuleSettingBlockPageParam struct {
-	// URI to which the user will be redirected.
+	// Specify the URI to which the user is redirected.
 	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters.
+	// Specify whether to pass the context information as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 }
 
@@ -1286,13 +1282,12 @@ func (r RuleSettingBlockPageParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configure how session check behaves.
+// Configure session check behavior.
 type RuleSettingCheckSessionParam struct {
-	// Configure how fresh the session needs to be to be considered valid. The API
-	// automatically formats and sanitizes this expression. This returns a normalized
-	// version that may differ from your input and cause Terraform state drift.
+	// Sets the required session freshness threshold. The API returns a normalized
+	// version of this value.
 	Duration param.Field[string] `json:"duration"`
-	// Set to true to enable session enforcement.
+	// Enable session enforcement.
 	Enforce param.Field[bool] `json:"enforce"`
 }
 
@@ -1300,9 +1295,9 @@ func (r RuleSettingCheckSessionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Add your own custom resolvers to route queries that match the resolver policy.
-// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
-// are set. DNS queries will route to the address closest to their origin. Only
+// Configure custom resolvers to route queries that match the resolver policy.
+// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+// settings. DNS queries get routed to the address closest to their origin. Only
 // valid when a rule's action is set to 'resolve'.
 type RuleSettingDNSResolversParam struct {
 	IPV4 param.Field[[]DNSResolverSettingsV4Param] `json:"ipv4"`
@@ -1317,13 +1312,12 @@ func (r RuleSettingDNSResolversParam) MarshalJSON() (data []byte, err error) {
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
 type RuleSettingEgressParam struct {
-	// The IPv4 address to be used for egress.
+	// Specify the IPv4 address to use for egress.
 	IPV4 param.Field[string] `json:"ipv4"`
-	// The fallback IPv4 address to be used for egress in the event of an error
-	// egressing with the primary IPv4. Can be '0.0.0.0' to indicate local egress via
-	// WARP IPs.
+	// Specify the fallback IPv4 address to use for egress when the primary IPv4 fails.
+	// Set '0.0.0.0' to indicate local egress via WARP IPs.
 	IPV4Fallback param.Field[string] `json:"ipv4_fallback"`
-	// The IPv6 range to be used for egress.
+	// Specify the IPv6 range to use for egress.
 	IPV6 param.Field[string] `json:"ipv6"`
 }
 
@@ -1333,9 +1327,9 @@ func (r RuleSettingEgressParam) MarshalJSON() (data []byte, err error) {
 
 // Send matching traffic to the supplied destination IP address. and port.
 type RuleSettingL4overrideParam struct {
-	// IPv4 or IPv6 address.
+	// Defines the IPv4 or IPv6 address.
 	IP param.Field[string] `json:"ip"`
-	// A port number to use for TCP/UDP overrides.
+	// Defines a port number to use for TCP/UDP overrides.
 	Port param.Field[int64] `json:"port"`
 }
 
@@ -1343,17 +1337,16 @@ func (r RuleSettingL4overrideParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configure a notification to display on the user's device when this rule is
-// matched.
+// Configure a notification to display on the user's device when this rule matched.
 type RuleSettingNotificationSettingsParam struct {
-	// Set notification on.
+	// Enable notification.
 	Enabled param.Field[bool] `json:"enabled"`
-	// If true, context information will be passed as query parameters.
+	// Indicates whether to pass the context information as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
+	// Defines an optional URL to direct users to additional information. If unset, the
+	// notification opens a block page.
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
@@ -1363,7 +1356,7 @@ func (r RuleSettingNotificationSettingsParam) MarshalJSON() (data []byte, err er
 
 // Configure DLP payload logging.
 type RuleSettingPayloadLogParam struct {
-	// Set to true to enable DLP payload logging for this rule.
+	// Enable DLP payload logging for this rule.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -1371,9 +1364,9 @@ func (r RuleSettingPayloadLogParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Settings that apply to quarantine rules.
+// Configure settings that apply to quarantine rules.
 type RuleSettingQuarantineParam struct {
-	// Types of files to sandbox.
+	// Specify the types of files to sandbox.
 	FileTypes param.Field[[]RuleSettingQuarantineFileType] `json:"file_types"`
 }
 
@@ -1381,14 +1374,14 @@ func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Settings that apply to redirect rules.
+// Apply settings to redirect rules.
 type RuleSettingRedirectParam struct {
-	// URI to which the user will be redirected.
+	// Specify the URI to which the user is redirected.
 	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
-	// If true, context information will be passed as query parameters.
+	// Specify whether to pass the context information as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
-	// If true, the path and query parameters from the original request will be
-	// appended to target_uri.
+	// Specify whether to append the path and query parameters from the original
+	// request to target_uri.
 	PreservePathAndQuery param.Field[bool] `json:"preserve_path_and_query"`
 }
 
@@ -1397,15 +1390,15 @@ func (r RuleSettingRedirectParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Configure to forward the query to the internal DNS service, passing the
-// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
-// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
-// set to 'resolve'.
+// specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
+// 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is set
+// to 'resolve'.
 type RuleSettingResolveDNSInternallyParam struct {
-	// The fallback behavior to apply when the internal DNS response code is different
-	// from 'NOERROR' or when the response data only contains CNAME records for 'A' or
-	// 'AAAA' queries.
+	// Specify the fallback behavior to apply when the internal DNS response code
+	// differs from 'NOERROR' or when the response data contains only CNAME records for
+	// 'A' or 'AAAA' queries.
 	Fallback param.Field[RuleSettingResolveDNSInternallyFallback] `json:"fallback"`
-	// The internal DNS view identifier that's passed to the internal DNS service.
+	// Specify the internal DNS view identifier to pass to the internal DNS service.
 	ViewID param.Field[string] `json:"view_id"`
 }
 
@@ -1413,10 +1406,11 @@ func (r RuleSettingResolveDNSInternallyParam) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// Configure behavior when an upstream cert is invalid or an SSL error occurs.
+// Configure behavior when an upstream certificate is invalid or an SSL error
+// occurs.
 type RuleSettingUntrustedCERTParam struct {
-	// The action performed when an untrusted certificate is seen. The default action
-	// is an error with HTTP code 526.
+	// Defines the action performed when an untrusted certificate seen. The default
+	// action an error with HTTP code 526.
 	Action param.Field[RuleSettingUntrustedCERTAction] `json:"action"`
 }
 
@@ -1424,44 +1418,50 @@ func (r RuleSettingUntrustedCERTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The schedule for activating DNS policies. This does not apply to HTTP or network
-// policies.
+// Defines the schedule for activating DNS policies. (HTTP/Egress or L4
+// unsupported).
 type Schedule struct {
-	// The time intervals when the rule will be active on Fridays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Fridays.
+	// Specify the time intervals when the rule is active on Fridays, in the increasing
+	// order from 00:00-24:00. If this parameter omitted, the rule is deactivated on
+	// Fridays. API returns a formatted version of this string, which may cause
+	// Terraform drift if a unformatted value is used.
 	Fri string `json:"fri"`
-	// The time intervals when the rule will be active on Mondays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Mondays.
+	// Specify the time intervals when the rule is active on Mondays, in the increasing
+	// order from 00:00-24:00(capped at maximum of 6 time splits). If this parameter
+	// omitted, the rule is deactivated on Mondays. API returns a formatted version of
+	// this string, which may cause Terraform drift if a unformatted value is used.
 	Mon string `json:"mon"`
-	// The time intervals when the rule will be active on Saturdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Saturdays.
+	// Specify the time intervals when the rule is active on Saturdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Saturdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Sat string `json:"sat"`
-	// The time intervals when the rule will be active on Sundays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Sundays.
+	// Specify the time intervals when the rule is active on Sundays, in the increasing
+	// order from 00:00-24:00. If this parameter omitted, the rule is deactivated on
+	// Sundays. API returns a formatted version of this string, which may cause
+	// Terraform drift if a unformatted value is used.
 	Sun string `json:"sun"`
-	// The time intervals when the rule will be active on Thursdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Thursdays.
+	// Specify the time intervals when the rule is active on Thursdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Thursdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Thu string `json:"thu"`
-	// The time zone the rule will be evaluated against. If a
+	// Specify the time zone for rule evaluation. When a
 	// [valid time zone city name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
-	// is provided, Gateway will always use the current time at that time zone. If this
-	// parameter is omitted, then Gateway will use the time zone inferred from the
-	// user's source IP to evaluate the rule. If Gateway cannot determine the time zone
-	// from the IP, we will fall back to the time zone of the user's connected data
-	// center.
+	// is provided, Gateway always uses the current time for that time zone. When this
+	// parameter is omitted, Gateway uses the time zone determined from the user's IP
+	// address. Colo time zone is used when the user's IP address does not resolve to a
+	// location.
 	TimeZone string `json:"time_zone"`
-	// The time intervals when the rule will be active on Tuesdays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Tuesdays.
+	// Specify the time intervals when the rule is active on Tuesdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Tuesdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Tue string `json:"tue"`
-	// The time intervals when the rule will be active on Wednesdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Wednesdays.
+	// Specify the time intervals when the rule is active on Wednesdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Wednesdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Wed  string       `json:"wed"`
 	JSON scheduleJSON `json:"-"`
 }
@@ -1488,44 +1488,50 @@ func (r scheduleJSON) RawJSON() string {
 	return r.raw
 }
 
-// The schedule for activating DNS policies. This does not apply to HTTP or network
-// policies.
+// Defines the schedule for activating DNS policies. (HTTP/Egress or L4
+// unsupported).
 type ScheduleParam struct {
-	// The time intervals when the rule will be active on Fridays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Fridays.
+	// Specify the time intervals when the rule is active on Fridays, in the increasing
+	// order from 00:00-24:00. If this parameter omitted, the rule is deactivated on
+	// Fridays. API returns a formatted version of this string, which may cause
+	// Terraform drift if a unformatted value is used.
 	Fri param.Field[string] `json:"fri"`
-	// The time intervals when the rule will be active on Mondays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Mondays.
+	// Specify the time intervals when the rule is active on Mondays, in the increasing
+	// order from 00:00-24:00(capped at maximum of 6 time splits). If this parameter
+	// omitted, the rule is deactivated on Mondays. API returns a formatted version of
+	// this string, which may cause Terraform drift if a unformatted value is used.
 	Mon param.Field[string] `json:"mon"`
-	// The time intervals when the rule will be active on Saturdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Saturdays.
+	// Specify the time intervals when the rule is active on Saturdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Saturdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Sat param.Field[string] `json:"sat"`
-	// The time intervals when the rule will be active on Sundays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Sundays.
+	// Specify the time intervals when the rule is active on Sundays, in the increasing
+	// order from 00:00-24:00. If this parameter omitted, the rule is deactivated on
+	// Sundays. API returns a formatted version of this string, which may cause
+	// Terraform drift if a unformatted value is used.
 	Sun param.Field[string] `json:"sun"`
-	// The time intervals when the rule will be active on Thursdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Thursdays.
+	// Specify the time intervals when the rule is active on Thursdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Thursdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Thu param.Field[string] `json:"thu"`
-	// The time zone the rule will be evaluated against. If a
+	// Specify the time zone for rule evaluation. When a
 	// [valid time zone city name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
-	// is provided, Gateway will always use the current time at that time zone. If this
-	// parameter is omitted, then Gateway will use the time zone inferred from the
-	// user's source IP to evaluate the rule. If Gateway cannot determine the time zone
-	// from the IP, we will fall back to the time zone of the user's connected data
-	// center.
+	// is provided, Gateway always uses the current time for that time zone. When this
+	// parameter is omitted, Gateway uses the time zone determined from the user's IP
+	// address. Colo time zone is used when the user's IP address does not resolve to a
+	// location.
 	TimeZone param.Field[string] `json:"time_zone"`
-	// The time intervals when the rule will be active on Tuesdays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Tuesdays.
+	// Specify the time intervals when the rule is active on Tuesdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Tuesdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Tue param.Field[string] `json:"tue"`
-	// The time intervals when the rule will be active on Wednesdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Wednesdays.
+	// Specify the time intervals when the rule is active on Wednesdays, in the
+	// increasing order from 00:00-24:00. If this parameter omitted, the rule is
+	// deactivated on Wednesdays. API returns a formatted version of this string, which
+	// may cause Terraform drift if a unformatted value is used.
 	Wed param.Field[string] `json:"wed"`
 }
 
@@ -1537,45 +1543,47 @@ type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The action to perform when the associated traffic, identity, and device posture
-	// expressions are either absent or evaluate to `true`.
+	// Specify the action to perform when the associated traffic, identity, and device
+	// posture expressions either absent or evaluate to `true`.
 	Action param.Field[GatewayRuleNewParamsAction] `json:"action,required"`
-	// The name of the rule.
+	// Specify the rule name.
 	Name param.Field[string] `json:"name,required"`
-	// The description of the rule.
+	// Specify the rule description.
 	Description param.Field[string] `json:"description"`
-	// The wirefilter expression used for device posture check matching. The API
-	// automatically formats and sanitizes this expression. This returns a normalized
-	// version that may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for device posture check. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	DevicePosture param.Field[string] `json:"device_posture"`
-	// True if the rule is enabled.
+	// Specify whether the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
-	// The expiration time stamp and default duration of a DNS policy. Takes precedence
-	// over the policy's `schedule` configuration, if any.
-	//
-	// This does not apply to HTTP or network policies.
+	// Defines the expiration time stamp and default duration of a DNS policy. Takes
+	// precedence over the policy's `schedule` configuration, if any. This does not
+	// apply to HTTP or network policies.
 	Expiration param.Field[GatewayRuleNewParamsExpiration] `json:"expiration"`
-	// The protocol or layer to evaluate the traffic, identity, and device. posture
-	// expressions.
+	// Specify the protocol or layer to evaluate the traffic, identity, and device
+	// posture expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
-	// The wirefilter expression used for identity matching. The API automatically
-	// formats and sanitizes this expression. This returns a normalized version that
-	// may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for identity matching. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	Identity param.Field[string] `json:"identity"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value. Refer to
+	// Set the order of your rules. Lower values indicate higher precedence. At each
+	// processing phase, evaluate applicable rules in ascending order of this value.
+	// Refer to
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
-	// docs on how to manage precedence via Terraform.
+	// to manage precedence via Terraform.
 	Precedence param.Field[int64] `json:"precedence"`
-	// Additional settings that modify the rule's action.
+	// Set settings related to this rule.
 	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
-	// The schedule for activating DNS policies. This does not apply to HTTP or network
-	// policies.
+	// Defines the schedule for activating DNS policies. (HTTP/Egress or L4
+	// unsupported).
 	Schedule param.Field[ScheduleParam] `json:"schedule"`
-	// The wirefilter expression used for traffic matching. The API automatically
-	// formats and sanitizes this expression. This returns a normalized version that
-	// may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for traffic matching. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	Traffic param.Field[string] `json:"traffic"`
 }
 
@@ -1583,8 +1591,8 @@ func (r GatewayRuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action to perform when the associated traffic, identity, and device posture
-// expressions are either absent or evaluate to `true`.
+// Specify the action to perform when the associated traffic, identity, and device
+// posture expressions either absent or evaluate to `true`.
 type GatewayRuleNewParamsAction string
 
 const (
@@ -1614,22 +1622,17 @@ func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	return false
 }
 
-// The expiration time stamp and default duration of a DNS policy. Takes precedence
-// over the policy's `schedule` configuration, if any.
-//
-// This does not apply to HTTP or network policies.
+// Defines the expiration time stamp and default duration of a DNS policy. Takes
+// precedence over the policy's `schedule` configuration, if any. This does not
+// apply to HTTP or network policies.
 type GatewayRuleNewParamsExpiration struct {
-	// The time stamp at which the policy will expire and cease to be applied.
-	//
-	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
-	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
-	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
-	//
-	// Policies with an expiration do not consider the timezone of clients they are
-	// applied to, and expire "globally" at the point given by their `expires_at`
-	// value.
+	// Show the timestamp when the policy expires and stops applying. The value must
+	// follow RFC 3339 and include a UTC offset. The system accepts non-zero offsets
+	// but converts them to the equivalent UTC+00:00 value and returns timestamps with
+	// a trailing Z. Expiration policies ignore client timezones and expire globally at
+	// the specified expires_at time.
 	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
-	// The default duration a policy will be active in minutes. Must be set in order to
+	// Defines the default duration a policy active in minutes. Must set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
 }
@@ -1641,7 +1644,7 @@ func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
 type GatewayRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1666,7 +1669,7 @@ func (r gatewayRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -1683,45 +1686,47 @@ func (r GatewayRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayRuleUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The action to perform when the associated traffic, identity, and device posture
-	// expressions are either absent or evaluate to `true`.
+	// Specify the action to perform when the associated traffic, identity, and device
+	// posture expressions either absent or evaluate to `true`.
 	Action param.Field[GatewayRuleUpdateParamsAction] `json:"action,required"`
-	// The name of the rule.
+	// Specify the rule name.
 	Name param.Field[string] `json:"name,required"`
-	// The description of the rule.
+	// Specify the rule description.
 	Description param.Field[string] `json:"description"`
-	// The wirefilter expression used for device posture check matching. The API
-	// automatically formats and sanitizes this expression. This returns a normalized
-	// version that may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for device posture check. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	DevicePosture param.Field[string] `json:"device_posture"`
-	// True if the rule is enabled.
+	// Specify whether the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
-	// The expiration time stamp and default duration of a DNS policy. Takes precedence
-	// over the policy's `schedule` configuration, if any.
-	//
-	// This does not apply to HTTP or network policies.
+	// Defines the expiration time stamp and default duration of a DNS policy. Takes
+	// precedence over the policy's `schedule` configuration, if any. This does not
+	// apply to HTTP or network policies.
 	Expiration param.Field[GatewayRuleUpdateParamsExpiration] `json:"expiration"`
-	// The protocol or layer to evaluate the traffic, identity, and device. posture
-	// expressions.
+	// Specify the protocol or layer to evaluate the traffic, identity, and device
+	// posture expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
-	// The wirefilter expression used for identity matching. The API automatically
-	// formats and sanitizes this expression. This returns a normalized version that
-	// may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for identity matching. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	Identity param.Field[string] `json:"identity"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value. Refer to
+	// Set the order of your rules. Lower values indicate higher precedence. At each
+	// processing phase, evaluate applicable rules in ascending order of this value.
+	// Refer to
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
-	// docs on how to manage precedence via Terraform.
+	// to manage precedence via Terraform.
 	Precedence param.Field[int64] `json:"precedence"`
-	// Additional settings that modify the rule's action.
+	// Set settings related to this rule.
 	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
-	// The schedule for activating DNS policies. This does not apply to HTTP or network
-	// policies.
+	// Defines the schedule for activating DNS policies. (HTTP/Egress or L4
+	// unsupported).
 	Schedule param.Field[ScheduleParam] `json:"schedule"`
-	// The wirefilter expression used for traffic matching. The API automatically
-	// formats and sanitizes this expression. This returns a normalized version that
-	// may differ from your input and cause Terraform state drift.
+	// Specify the wirefilter expression used for traffic matching. The API
+	// automatically formats and sanitizes expressions before storing them. To prevent
+	// Terraform state drift, use the formatted expression returned in the API
+	// response.
 	Traffic param.Field[string] `json:"traffic"`
 }
 
@@ -1729,8 +1734,8 @@ func (r GatewayRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action to perform when the associated traffic, identity, and device posture
-// expressions are either absent or evaluate to `true`.
+// Specify the action to perform when the associated traffic, identity, and device
+// posture expressions either absent or evaluate to `true`.
 type GatewayRuleUpdateParamsAction string
 
 const (
@@ -1760,22 +1765,17 @@ func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	return false
 }
 
-// The expiration time stamp and default duration of a DNS policy. Takes precedence
-// over the policy's `schedule` configuration, if any.
-//
-// This does not apply to HTTP or network policies.
+// Defines the expiration time stamp and default duration of a DNS policy. Takes
+// precedence over the policy's `schedule` configuration, if any. This does not
+// apply to HTTP or network policies.
 type GatewayRuleUpdateParamsExpiration struct {
-	// The time stamp at which the policy will expire and cease to be applied.
-	//
-	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
-	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
-	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
-	//
-	// Policies with an expiration do not consider the timezone of clients they are
-	// applied to, and expire "globally" at the point given by their `expires_at`
-	// value.
+	// Show the timestamp when the policy expires and stops applying. The value must
+	// follow RFC 3339 and include a UTC offset. The system accepts non-zero offsets
+	// but converts them to the equivalent UTC+00:00 value and returns timestamps with
+	// a trailing Z. Expiration policies ignore client timezones and expire globally at
+	// the specified expires_at time.
 	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
-	// The default duration a policy will be active in minutes. Must be set in order to
+	// Defines the default duration a policy active in minutes. Must set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
 }
@@ -1787,7 +1787,7 @@ func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error
 type GatewayRuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                              `json:"result"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1812,7 +1812,7 @@ func (r gatewayRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1838,7 +1838,7 @@ type GatewayRuleDeleteParams struct {
 type GatewayRuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRuleDeleteResponse                `json:"result"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1863,7 +1863,7 @@ func (r gatewayRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1885,7 +1885,7 @@ type GatewayRuleGetParams struct {
 type GatewayRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -1910,7 +1910,7 @@ func (r gatewayRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleGetResponseEnvelopeSuccess bool
 
 const (
@@ -1932,7 +1932,7 @@ type GatewayRuleResetExpirationParams struct {
 type GatewayRuleResetExpirationResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                                       `json:"result"`
 	JSON    gatewayRuleResetExpirationResponseEnvelopeJSON    `json:"-"`
@@ -1957,7 +1957,7 @@ func (r gatewayRuleResetExpirationResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleResetExpirationResponseEnvelopeSuccess bool
 
 const (
