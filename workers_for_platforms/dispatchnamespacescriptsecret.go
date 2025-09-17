@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -97,10 +99,10 @@ func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Contex
 }
 
 // Remove a secret from a script uploaded to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, body DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
+func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
 	var env DispatchNamespaceScriptSecretDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -116,8 +118,8 @@ func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispa
 		err = errors.New("missing required secret_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", body.AccountID, dispatchNamespace, scriptName, secretName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", params.AccountID, dispatchNamespace, scriptName, secretName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -127,10 +129,10 @@ func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispa
 
 // Get a given secret binding (value omitted) on a script uploaded to a Workers for
 // Platforms namespace.
-func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, query DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
+func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
 	var env DispatchNamespaceScriptSecretGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -146,8 +148,8 @@ func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatch
 		err = errors.New("missing required secret_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", query.AccountID, dispatchNamespace, scriptName, secretName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", params.AccountID, dispatchNamespace, scriptName, secretName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1276,6 +1278,17 @@ type DispatchNamespaceScriptSecretListParams struct {
 type DispatchNamespaceScriptSecretDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Flag that indicates whether the secret name is URL encoded.
+	URLEncoded param.Field[bool] `query:"url_encoded"`
+}
+
+// URLQuery serializes [DispatchNamespaceScriptSecretDeleteParams]'s query
+// parameters as `url.Values`.
+func (r DispatchNamespaceScriptSecretDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type DispatchNamespaceScriptSecretDeleteResponseEnvelope struct {
@@ -1424,6 +1437,17 @@ func (r DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bo
 type DispatchNamespaceScriptSecretGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Flag that indicates whether the secret name is URL encoded.
+	URLEncoded param.Field[bool] `query:"url_encoded"`
+}
+
+// URLQuery serializes [DispatchNamespaceScriptSecretGetParams]'s query parameters
+// as `url.Values`.
+func (r DispatchNamespaceScriptSecretGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type DispatchNamespaceScriptSecretGetResponseEnvelope struct {

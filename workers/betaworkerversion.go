@@ -420,6 +420,10 @@ type VersionBinding struct {
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction VersionBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
@@ -481,6 +485,7 @@ type versionBindingJSON struct {
 	Format                      apijson.Field
 	IndexName                   apijson.Field
 	Json                        apijson.Field
+	Jurisdiction                apijson.Field
 	KeyJwk                      apijson.Field
 	Namespace                   apijson.Field
 	NamespaceID                 apijson.Field
@@ -1576,17 +1581,22 @@ type VersionBindingsWorkersBindingKindR2Bucket struct {
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type VersionBindingsWorkersBindingKindR2BucketType `json:"type,required"`
-	JSON versionBindingsWorkersBindingKindR2BucketJSON `json:"-"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction VersionBindingsWorkersBindingKindR2BucketJurisdiction `json:"jurisdiction"`
+	JSON         versionBindingsWorkersBindingKindR2BucketJSON         `json:"-"`
 }
 
 // versionBindingsWorkersBindingKindR2BucketJSON contains the JSON metadata for the
 // struct [VersionBindingsWorkersBindingKindR2Bucket]
 type versionBindingsWorkersBindingKindR2BucketJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	BucketName   apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *VersionBindingsWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
@@ -1609,6 +1619,24 @@ const (
 func (r VersionBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindR2BucketTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type VersionBindingsWorkersBindingKindR2BucketJurisdiction string
+
+const (
+	VersionBindingsWorkersBindingKindR2BucketJurisdictionEu      VersionBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	VersionBindingsWorkersBindingKindR2BucketJurisdictionFedramp VersionBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+)
+
+func (r VersionBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindR2BucketJurisdictionEu, VersionBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -2240,6 +2268,24 @@ func (r VersionBindingsFormat) IsKnown() bool {
 	return false
 }
 
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type VersionBindingsJurisdiction string
+
+const (
+	VersionBindingsJurisdictionEu      VersionBindingsJurisdiction = "eu"
+	VersionBindingsJurisdictionFedramp VersionBindingsJurisdiction = "fedramp"
+)
+
+func (r VersionBindingsJurisdiction) IsKnown() bool {
+	switch r {
+	case VersionBindingsJurisdictionEu, VersionBindingsJurisdictionFedramp:
+		return true
+	}
+	return false
+}
+
 // Resource limits enforced at runtime.
 type VersionLimits struct {
 	// CPU time limit in milliseconds.
@@ -2590,6 +2636,10 @@ type VersionBindingParam struct {
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
 	Json param.Field[string] `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction param.Field[VersionBindingsJurisdiction] `json:"jurisdiction"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
@@ -2972,6 +3022,10 @@ type VersionBindingsWorkersBindingKindR2BucketParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction param.Field[VersionBindingsWorkersBindingKindR2BucketJurisdiction] `json:"jurisdiction"`
 }
 
 func (r VersionBindingsWorkersBindingKindR2BucketParam) MarshalJSON() (data []byte, err error) {

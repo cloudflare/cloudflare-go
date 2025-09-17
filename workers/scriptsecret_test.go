@@ -77,7 +77,7 @@ func TestScriptSecretList(t *testing.T) {
 	}
 }
 
-func TestScriptSecretDelete(t *testing.T) {
+func TestScriptSecretDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -95,7 +95,8 @@ func TestScriptSecretDelete(t *testing.T) {
 		"this-is_my_script-01",
 		"mySecret",
 		workers.ScriptSecretDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			URLEncoded: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -107,7 +108,7 @@ func TestScriptSecretDelete(t *testing.T) {
 	}
 }
 
-func TestScriptSecretGet(t *testing.T) {
+func TestScriptSecretGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -125,7 +126,8 @@ func TestScriptSecretGet(t *testing.T) {
 		"this-is_my_script-01",
 		"mySecret",
 		workers.ScriptSecretGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			URLEncoded: cloudflare.F(true),
 		},
 	)
 	if err != nil {
