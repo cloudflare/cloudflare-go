@@ -359,11 +359,24 @@ type JsonNewParamsResponseFormat struct {
 	Type param.Field[string] `json:"type,required"`
 	// Schema for the response format. More information here:
 	// https://developers.cloudflare.com/workers-ai/json-mode/
-	Schema param.Field[map[string]interface{}] `json:"schema"`
+	JsonSchema param.Field[map[string]JsonNewParamsResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
 func (r JsonNewParamsResponseFormat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
+// [browser_rendering.JsonNewParamsResponseFormatJsonSchemaArray].
+//
+// Use [Raw()] to specify an arbitrary value for this param
+type JsonNewParamsResponseFormatJsonSchemaUnion interface {
+	ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()
+}
+
+type JsonNewParamsResponseFormatJsonSchemaArray []string
+
+func (r JsonNewParamsResponseFormatJsonSchemaArray) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion() {
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).

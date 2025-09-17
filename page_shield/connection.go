@@ -142,7 +142,7 @@ type ConnectionListParams struct {
 	// Excludes connections whose URL contains one of the URL-encoded URLs separated by
 	// commas.
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
-	// Export the list of connections as a file.
+	// Export the list of connections as a file, limited to 50000 entries.
 	Export param.Field[ConnectionListParamsExport] `query:"export"`
 	// Includes connections that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -204,7 +204,7 @@ func (r ConnectionListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of connections as a file.
+// Export the list of connections as a file, limited to 50000 entries.
 type ConnectionListParamsExport string
 
 const (

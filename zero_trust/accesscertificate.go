@@ -225,25 +225,21 @@ type Certificate struct {
 	ID string `json:"id"`
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames []AssociatedHostnames `json:"associated_hostnames"`
-	CreatedAt           time.Time             `json:"created_at" format:"date-time"`
 	ExpiresOn           time.Time             `json:"expires_on" format:"date-time"`
 	// The MD5 fingerprint of the certificate.
 	Fingerprint string `json:"fingerprint"`
 	// The name of the certificate.
-	Name      string          `json:"name"`
-	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
-	JSON      certificateJSON `json:"-"`
+	Name string          `json:"name"`
+	JSON certificateJSON `json:"-"`
 }
 
 // certificateJSON contains the JSON metadata for the struct [Certificate]
 type certificateJSON struct {
 	ID                  apijson.Field
 	AssociatedHostnames apijson.Field
-	CreatedAt           apijson.Field
 	ExpiresOn           apijson.Field
 	Fingerprint         apijson.Field
 	Name                apijson.Field
-	UpdatedAt           apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
