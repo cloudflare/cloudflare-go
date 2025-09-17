@@ -38,7 +38,7 @@ func TestThreatEventTagNewWithOptionalParams(t *testing.T) {
 		AnalyticPriority:        cloudflare.F(0.000000),
 		AttributionConfidence:   cloudflare.F("attributionConfidence"),
 		AttributionOrganization: cloudflare.F("attributionOrganization"),
-		CategoryID:              cloudflare.F(1.000000),
+		CategoryUUID:            cloudflare.F("12345678-1234-1234-1234-1234567890ab"),
 		ExternalReferenceLinks:  cloudflare.F([]string{"string"}),
 		InternalDescription:     cloudflare.F("internalDescription"),
 		Motive:                  cloudflare.F("motive"),

@@ -55,7 +55,7 @@ type ThreatEventTagNewResponse struct {
 	AnalyticPriority        float64                       `json:"analyticPriority"`
 	AttributionConfidence   string                        `json:"attributionConfidence"`
 	AttributionOrganization string                        `json:"attributionOrganization"`
-	CategoryID              float64                       `json:"categoryId"`
+	CategoryUUID            string                        `json:"categoryUuid"`
 	ExternalReferenceLinks  []string                      `json:"externalReferenceLinks"`
 	InternalDescription     string                        `json:"internalDescription"`
 	Motive                  string                        `json:"motive"`
@@ -78,7 +78,7 @@ type threatEventTagNewResponseJSON struct {
 	AnalyticPriority        apijson.Field
 	AttributionConfidence   apijson.Field
 	AttributionOrganization apijson.Field
-	CategoryID              apijson.Field
+	CategoryUUID            apijson.Field
 	ExternalReferenceLinks  apijson.Field
 	InternalDescription     apijson.Field
 	Motive                  apijson.Field
@@ -109,7 +109,7 @@ type ThreatEventTagNewParams struct {
 	AnalyticPriority        param.Field[float64]  `json:"analyticPriority"`
 	AttributionConfidence   param.Field[string]   `json:"attributionConfidence"`
 	AttributionOrganization param.Field[string]   `json:"attributionOrganization"`
-	CategoryID              param.Field[float64]  `json:"categoryId"`
+	CategoryUUID            param.Field[string]   `json:"categoryUuid"`
 	ExternalReferenceLinks  param.Field[[]string] `json:"externalReferenceLinks"`
 	InternalDescription     param.Field[string]   `json:"internalDescription"`
 	Motive                  param.Field[string]   `json:"motive"`
