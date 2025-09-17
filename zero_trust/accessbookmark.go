@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -162,27 +161,23 @@ type Bookmark struct {
 	// The unique identifier for the Bookmark application.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
-	AppLauncherVisible bool      `json:"app_launcher_visible"`
-	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// The domain of the Bookmark application.
 	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the Bookmark application.
-	Name      string       `json:"name"`
-	UpdatedAt time.Time    `json:"updated_at" format:"date-time"`
-	JSON      bookmarkJSON `json:"-"`
+	Name string       `json:"name"`
+	JSON bookmarkJSON `json:"-"`
 }
 
 // bookmarkJSON contains the JSON metadata for the struct [Bookmark]
 type bookmarkJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
-	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
-	UpdatedAt          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }

@@ -166,7 +166,7 @@ type InstanceEventNewResponseEnvelopeResultInfo struct {
 	Count      float64                                        `json:"count,required"`
 	PerPage    float64                                        `json:"per_page,required"`
 	TotalCount float64                                        `json:"total_count,required"`
-	NextCursor string                                         `json:"next_cursor"`
+	Cursor     string                                         `json:"cursor"`
 	Page       float64                                        `json:"page"`
 	JSON       instanceEventNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -177,7 +177,7 @@ type instanceEventNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
