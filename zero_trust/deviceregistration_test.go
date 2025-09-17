@@ -113,7 +113,7 @@ func TestDeviceRegistrationBulkDelete(t *testing.T) {
 	}
 }
 
-func TestDeviceRegistrationGetWithOptionalParams(t *testing.T) {
+func TestDeviceRegistrationGet(t *testing.T) {
 	t.Skip("TODO: investigate prism error for invalid security scheme used")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -132,7 +132,6 @@ func TestDeviceRegistrationGetWithOptionalParams(t *testing.T) {
 		"registration_id",
 		zero_trust.DeviceRegistrationGetParams{
 			AccountID: cloudflare.F("account_id"),
-			Include:   cloudflare.F("include"),
 		},
 	)
 	if err != nil {

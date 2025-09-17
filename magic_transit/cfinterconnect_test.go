@@ -32,9 +32,8 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.CfInterconnectUpdateParams{
-			AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AutomaticReturnRouting: cloudflare.F(true),
-			Description:            cloudflare.F("Tunnel for Interconnect to ORD"),
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Description: cloudflare.F("Tunnel for Interconnect to ORD"),
 			GRE: cloudflare.F(magic_transit.CfInterconnectUpdateParamsGRE{
 				CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			}),

@@ -33,8 +33,7 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 	return
 }
 
-// Creates a download for a video when a video is ready to view. Use
-// `/downloads/{download_type}` instead for type-specific downloads.
+// Creates a download for a video when a video is ready to view.
 func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
 	var env DownloadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -55,8 +54,7 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 	return
 }
 
-// Delete the downloads for a video. Use `/downloads/{download_type}` instead for
-// type-specific downloads.
+// Delete the downloads for a video.
 func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env DownloadDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)

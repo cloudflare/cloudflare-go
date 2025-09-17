@@ -138,7 +138,7 @@ type DispatchNamespaceScriptTagDeleteResponse = interface{}
 type DispatchNamespaceScriptTagUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Tags associated with the Worker.
+	// Tags to help you manage your Workers.
 	Body []string `json:"body,required"`
 }
 

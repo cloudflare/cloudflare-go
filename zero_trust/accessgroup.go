@@ -275,7 +275,8 @@ func (r zeroTrustGroupMetaJSON) RawJSON() string {
 
 type AccessGroupNewResponse struct {
 	// UUID.
-	ID string `json:"id"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -289,19 +290,22 @@ type AccessGroupNewResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule               `json:"require"`
-	JSON    accessGroupNewResponseJSON `json:"-"`
+	Require   []AccessRule               `json:"require"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessGroupNewResponseJSON `json:"-"`
 }
 
 // accessGroupNewResponseJSON contains the JSON metadata for the struct
 // [AccessGroupNewResponse]
 type accessGroupNewResponseJSON struct {
 	ID          apijson.Field
+	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -316,7 +320,8 @@ func (r accessGroupNewResponseJSON) RawJSON() string {
 
 type AccessGroupUpdateResponse struct {
 	// UUID.
-	ID string `json:"id"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -330,19 +335,22 @@ type AccessGroupUpdateResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule                  `json:"require"`
-	JSON    accessGroupUpdateResponseJSON `json:"-"`
+	Require   []AccessRule                  `json:"require"`
+	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
+	JSON      accessGroupUpdateResponseJSON `json:"-"`
 }
 
 // accessGroupUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessGroupUpdateResponse]
 type accessGroupUpdateResponseJSON struct {
 	ID          apijson.Field
+	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -357,7 +365,8 @@ func (r accessGroupUpdateResponseJSON) RawJSON() string {
 
 type AccessGroupListResponse struct {
 	// UUID.
-	ID string `json:"id"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -371,19 +380,22 @@ type AccessGroupListResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule                `json:"require"`
-	JSON    accessGroupListResponseJSON `json:"-"`
+	Require   []AccessRule                `json:"require"`
+	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
+	JSON      accessGroupListResponseJSON `json:"-"`
 }
 
 // accessGroupListResponseJSON contains the JSON metadata for the struct
 // [AccessGroupListResponse]
 type accessGroupListResponseJSON struct {
 	ID          apijson.Field
+	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -420,7 +432,8 @@ func (r accessGroupDeleteResponseJSON) RawJSON() string {
 
 type AccessGroupGetResponse struct {
 	// UUID.
-	ID string `json:"id"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -434,19 +447,22 @@ type AccessGroupGetResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule               `json:"require"`
-	JSON    accessGroupGetResponseJSON `json:"-"`
+	Require   []AccessRule               `json:"require"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessGroupGetResponseJSON `json:"-"`
 }
 
 // accessGroupGetResponseJSON contains the JSON metadata for the struct
 // [AccessGroupGetResponse]
 type accessGroupGetResponseJSON struct {
 	ID          apijson.Field
+	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

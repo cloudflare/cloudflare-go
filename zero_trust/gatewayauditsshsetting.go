@@ -35,7 +35,7 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 	return
 }
 
-// Update Zero Trust Audit SSH and SSH with Access for Infrastructure settings for
+// Updates Zero Trust Audit SSH and SSH with Access for Infrastructure settings for
 // an account.
 func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
@@ -53,8 +53,8 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 	return
 }
 
-// Retrieve all Zero Trust Audit SSH and SSH with Access for Infrastructure
-// settings for an account.
+// Gets all Zero Trust Audit SSH and SSH with Access for Infrastructure settings
+// for an account.
 func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -71,8 +71,8 @@ func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAu
 	return
 }
 
-// Rotate the SSH account seed that generates the host key identity when connecting
-// through the Cloudflare SSH Proxy.
+// Rotates the SSH account seed that is used for generating the host key identity
+// when connecting through the Cloudflare SSH Proxy.
 func (r *GatewayAuditSSHSettingService) RotateSeed(ctx context.Context, body GatewayAuditSSHSettingRotateSeedParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingRotateSeedResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -91,10 +91,10 @@ func (r *GatewayAuditSSHSettingService) RotateSeed(ctx context.Context, body Gat
 
 type GatewaySettings struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Provide the Base64-encoded HPKE public key that encrypts SSH session logs. See
-	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging.
+	// Base64 encoded HPKE public key used to encrypt all your ssh session logs.
+	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging
 	PublicKey string `json:"public_key"`
-	// Identify the seed ID.
+	// Seed ID.
 	SeedID    string              `json:"seed_id"`
 	UpdatedAt time.Time           `json:"updated_at" format:"date-time"`
 	JSON      gatewaySettingsJSON `json:"-"`
@@ -120,8 +120,8 @@ func (r gatewaySettingsJSON) RawJSON() string {
 
 type GatewayAuditSSHSettingUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Provide the Base64-encoded HPKE public key that encrypts SSH session logs. See
-	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging.
+	// Base64 encoded HPKE public key used to encrypt all your ssh session logs.
+	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging
 	PublicKey param.Field[string] `json:"public_key,required"`
 }
 
@@ -132,7 +132,7 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                     `json:"result"`
 	JSON    gatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -157,7 +157,7 @@ func (r gatewayAuditSSHSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -179,7 +179,7 @@ type GatewayAuditSSHSettingGetParams struct {
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                  `json:"result"`
 	JSON    gatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -204,7 +204,7 @@ func (r gatewayAuditSSHSettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayAuditSSHSettingGetResponseEnvelopeSuccess bool
 
 const (
@@ -226,7 +226,7 @@ type GatewayAuditSSHSettingRotateSeedParams struct {
 type GatewayAuditSSHSettingRotateSeedResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                         `json:"result"`
 	JSON    gatewayAuditSSHSettingRotateSeedResponseEnvelopeJSON    `json:"-"`
@@ -251,7 +251,7 @@ func (r gatewayAuditSSHSettingRotateSeedResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess bool
 
 const (

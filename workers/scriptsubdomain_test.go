@@ -33,7 +33,7 @@ func TestScriptSubdomainNewWithOptionalParams(t *testing.T) {
 		workers.ScriptSubdomainNewParams{
 			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Enabled:         cloudflare.F(true),
-			PreviewsEnabled: cloudflare.F(false),
+			PreviewsEnabled: cloudflare.F(true),
 		},
 	)
 	if err != nil {

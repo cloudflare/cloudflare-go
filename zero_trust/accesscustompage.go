@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -150,9 +151,13 @@ type CustomPage struct {
 	Name string `json:"name,required"`
 	// Custom page type.
 	Type CustomPageType `json:"type,required"`
+	// Number of apps the custom page is assigned to.
+	AppCount  int64     `json:"app_count"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID.
-	UID  string         `json:"uid"`
-	JSON customPageJSON `json:"-"`
+	UID       string         `json:"uid"`
+	UpdatedAt time.Time      `json:"updated_at" format:"date-time"`
+	JSON      customPageJSON `json:"-"`
 }
 
 // customPageJSON contains the JSON metadata for the struct [CustomPage]
@@ -160,7 +165,10 @@ type customPageJSON struct {
 	CustomHTML  apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	AppCount    apijson.Field
+	CreatedAt   apijson.Field
 	UID         apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -196,6 +204,8 @@ type CustomPageParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Custom page type.
 	Type param.Field[CustomPageType] `json:"type,required"`
+	// Number of apps the custom page is assigned to.
+	AppCount param.Field[int64] `json:"app_count"`
 }
 
 func (r CustomPageParam) MarshalJSON() (data []byte, err error) {
@@ -207,9 +217,13 @@ type CustomPageWithoutHTML struct {
 	Name string `json:"name,required"`
 	// Custom page type.
 	Type CustomPageWithoutHTMLType `json:"type,required"`
+	// Number of apps the custom page is assigned to.
+	AppCount  int64     `json:"app_count"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID.
-	UID  string                    `json:"uid"`
-	JSON customPageWithoutHTMLJSON `json:"-"`
+	UID       string                    `json:"uid"`
+	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
+	JSON      customPageWithoutHTMLJSON `json:"-"`
 }
 
 // customPageWithoutHTMLJSON contains the JSON metadata for the struct
@@ -217,7 +231,10 @@ type CustomPageWithoutHTML struct {
 type customPageWithoutHTMLJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	AppCount    apijson.Field
+	CreatedAt   apijson.Field
 	UID         apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -35,8 +35,6 @@ func NewAIInferenceTimeseriesGroupSummaryService(opts ...option.RequestOption) (
 }
 
 // Retrieves the distribution of unique accounts by model over time.
-//
-// Deprecated: deprecated
 func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, query AIInferenceTimeseriesGroupSummaryModelParams, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupSummaryModelResponse, err error) {
 	var env AIInferenceTimeseriesGroupSummaryModelResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -50,8 +48,6 @@ func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, qu
 }
 
 // Retrieves the distribution of unique accounts by task over time.
-//
-// Deprecated: deprecated
 func (r *AIInferenceTimeseriesGroupSummaryService) Task(ctx context.Context, query AIInferenceTimeseriesGroupSummaryTaskParams, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupSummaryTaskResponse, err error) {
 	var env AIInferenceTimeseriesGroupSummaryTaskResponseEnvelope
 	opts = append(r.Options[:], opts...)

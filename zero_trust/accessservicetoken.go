@@ -238,10 +238,10 @@ func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID 
 }
 
 // Generates a new Client Secret for a service token and revokes the old one.
-func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID string, params AccessServiceTokenRotateParams, opts ...option.RequestOption) (res *AccessServiceTokenRotateResponse, err error) {
+func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID string, body AccessServiceTokenRotateParams, opts ...option.RequestOption) (res *AccessServiceTokenRotateResponse, err error) {
 	var env AccessServiceTokenRotateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -249,8 +249,8 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID s
 		err = errors.New("missing required service_token_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/rotate", params.AccountID, serviceTokenID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/rotate", body.AccountID, serviceTokenID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -263,24 +263,30 @@ type ServiceToken struct {
 	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
-	ClientID string `json:"client_id"`
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
-	Duration  string    `json:"duration"`
-	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
+	Duration   string    `json:"duration"`
+	ExpiresAt  time.Time `json:"expires_at" format:"date-time"`
+	LastSeenAt time.Time `json:"last_seen_at" format:"date-time"`
 	// The name of the service token.
-	Name string           `json:"name"`
-	JSON serviceTokenJSON `json:"-"`
+	Name      string           `json:"name"`
+	UpdatedAt time.Time        `json:"updated_at" format:"date-time"`
+	JSON      serviceTokenJSON `json:"-"`
 }
 
 // serviceTokenJSON contains the JSON metadata for the struct [ServiceToken]
 type serviceTokenJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
+	CreatedAt   apijson.Field
 	Duration    apijson.Field
 	ExpiresAt   apijson.Field
+	LastSeenAt  apijson.Field
 	Name        apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -301,14 +307,16 @@ type AccessServiceTokenNewResponse struct {
 	ClientID string `json:"client_id"`
 	// The Client Secret for the service token. Access will check for this value in the
 	// `CF-Access-Client-Secret` request header.
-	ClientSecret string `json:"client_secret"`
+	ClientSecret string    `json:"client_secret"`
+	CreatedAt    time.Time `json:"created_at" format:"date-time"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name string                            `json:"name"`
-	JSON accessServiceTokenNewResponseJSON `json:"-"`
+	Name      string                            `json:"name"`
+	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenNewResponseJSON `json:"-"`
 }
 
 // accessServiceTokenNewResponseJSON contains the JSON metadata for the struct
@@ -317,8 +325,10 @@ type accessServiceTokenNewResponseJSON struct {
 	ID           apijson.Field
 	ClientID     apijson.Field
 	ClientSecret apijson.Field
+	CreatedAt    apijson.Field
 	Duration     apijson.Field
 	Name         apijson.Field
+	UpdatedAt    apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -339,14 +349,16 @@ type AccessServiceTokenRotateResponse struct {
 	ClientID string `json:"client_id"`
 	// The Client Secret for the service token. Access will check for this value in the
 	// `CF-Access-Client-Secret` request header.
-	ClientSecret string `json:"client_secret"`
+	ClientSecret string    `json:"client_secret"`
+	CreatedAt    time.Time `json:"created_at" format:"date-time"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name string                               `json:"name"`
-	JSON accessServiceTokenRotateResponseJSON `json:"-"`
+	Name      string                               `json:"name"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenRotateResponseJSON `json:"-"`
 }
 
 // accessServiceTokenRotateResponseJSON contains the JSON metadata for the struct
@@ -355,8 +367,10 @@ type accessServiceTokenRotateResponseJSON struct {
 	ID           apijson.Field
 	ClientID     apijson.Field
 	ClientSecret apijson.Field
+	CreatedAt    apijson.Field
 	Duration     apijson.Field
 	Name         apijson.Field
+	UpdatedAt    apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -376,20 +390,10 @@ type AccessServiceTokenNewParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// A version number identifying the current `client_secret` associated with the
-	// service token. Incrementing it triggers a rotation; the previous secret will
-	// still be accepted until the time indicated by
-	// `previous_client_secret_expires_at`.
-	ClientSecretVersion param.Field[float64] `json:"client_secret_version"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
 	Duration param.Field[string] `json:"duration"`
-	// The expiration of the previous `client_secret`. This can be modified at any
-	// point after a rotation. For example, you may extend it further into the future
-	// if you need more time to update services with the new secret; or move it into
-	// the past to immediately invalidate the previous token in case of compromise.
-	PreviousClientSecretExpiresAt param.Field[time.Time] `json:"previous_client_secret_expires_at" format:"date-time"`
 }
 
 func (r AccessServiceTokenNewParams) MarshalJSON() (data []byte, err error) {
@@ -540,22 +544,12 @@ type AccessServiceTokenUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// A version number identifying the current `client_secret` associated with the
-	// service token. Incrementing it triggers a rotation; the previous secret will
-	// still be accepted until the time indicated by
-	// `previous_client_secret_expires_at`.
-	ClientSecretVersion param.Field[float64] `json:"client_secret_version"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
 	Duration param.Field[string] `json:"duration"`
 	// The name of the service token.
 	Name param.Field[string] `json:"name"`
-	// The expiration of the previous `client_secret`. This can be modified at any
-	// point after a rotation. For example, you may extend it further into the future
-	// if you need more time to update services with the new secret; or move it into
-	// the past to immediately invalidate the previous token in case of compromise.
-	PreviousClientSecretExpiresAt param.Field[time.Time] `json:"previous_client_secret_expires_at" format:"date-time"`
 }
 
 func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1165,13 +1159,6 @@ func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
 type AccessServiceTokenRotateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The expiration of the previous `client_secret`. If not provided, it defaults to
-	// the current timestamp in order to immediately expire the previous secret.
-	PreviousClientSecretExpiresAt param.Field[time.Time] `json:"previous_client_secret_expires_at" format:"date-time"`
-}
-
-func (r AccessServiceTokenRotateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type AccessServiceTokenRotateResponseEnvelope struct {

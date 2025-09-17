@@ -451,7 +451,7 @@ type WorkflowUpdateResponseEnvelopeResultInfo struct {
 	Count      float64                                      `json:"count,required"`
 	PerPage    float64                                      `json:"per_page,required"`
 	TotalCount float64                                      `json:"total_count,required"`
-	Cursor     string                                       `json:"cursor"`
+	NextCursor string                                       `json:"next_cursor"`
 	Page       float64                                      `json:"page"`
 	JSON       workflowUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -462,7 +462,7 @@ type workflowUpdateResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	Cursor      apijson.Field
+	NextCursor  apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -589,7 +589,7 @@ type WorkflowDeleteResponseEnvelopeResultInfo struct {
 	Count      float64                                      `json:"count,required"`
 	PerPage    float64                                      `json:"per_page,required"`
 	TotalCount float64                                      `json:"total_count,required"`
-	Cursor     string                                       `json:"cursor"`
+	NextCursor string                                       `json:"next_cursor"`
 	Page       float64                                      `json:"page"`
 	JSON       workflowDeleteResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -600,7 +600,7 @@ type workflowDeleteResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	Cursor      apijson.Field
+	NextCursor  apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -711,7 +711,7 @@ type WorkflowGetResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
-	Cursor     string                                    `json:"cursor"`
+	NextCursor string                                    `json:"next_cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       workflowGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -722,7 +722,7 @@ type workflowGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	Cursor      apijson.Field
+	NextCursor  apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

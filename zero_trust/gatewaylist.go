@@ -58,7 +58,7 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 }
 
 // Updates a configured Zero Trust list. Skips updating list items if not included
-// in the payload. A non empty list items will overwrite the existing list.
+// in the payload.
 func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	var env GatewayListUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *GatewayListService) Update(ctx context.Context, listID string, params G
 	return
 }
 
-// Fetch all Zero Trust lists for an account.
+// Fetches all Zero Trust lists for an account.
 func (r *GatewayListService) List(ctx context.Context, params GatewayListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayList], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -101,7 +101,7 @@ func (r *GatewayListService) List(ctx context.Context, params GatewayListListPar
 	return res, nil
 }
 
-// Fetch all Zero Trust lists for an account.
+// Fetches all Zero Trust lists for an account.
 func (r *GatewayListService) ListAutoPaging(ctx context.Context, params GatewayListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayList] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
@@ -148,7 +148,7 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 	return
 }
 
-// Fetch a single Zero Trust list.
+// Fetches a single Zero Trust list.
 func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	var env GatewayListGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -171,9 +171,9 @@ func (r *GatewayListService) Get(ctx context.Context, listID string, query Gatew
 
 type GatewayItem struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Provide the list item description (optional).
+	// The description of the list item, if present.
 	Description string `json:"description"`
-	// Specify the item value.
+	// The value of the item in a list.
 	Value string          `json:"value"`
 	JSON  gatewayItemJSON `json:"-"`
 }
@@ -196,18 +196,18 @@ func (r gatewayItemJSON) RawJSON() string {
 }
 
 type GatewayList struct {
-	// Identify the API resource with a UUID.
+	// API Resource UUID tag.
 	ID string `json:"id"`
-	// Indicate the number of items in the list.
+	// The number of items in the list.
 	Count     float64   `json:"count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Provide the list description.
+	// The description of the list.
 	Description string `json:"description"`
-	// Provide the list items.
+	// The items in the list.
 	Items []GatewayItem `json:"items"`
-	// Specify the list name.
+	// The name of the list.
 	Name string `json:"name"`
-	// Specify the list type.
+	// The type of list.
 	Type      GatewayListType `json:"type"`
 	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
 	JSON      gatewayListJSON `json:"-"`
@@ -235,7 +235,7 @@ func (r gatewayListJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specify the list type.
+// The type of list.
 type GatewayListType string
 
 const (
@@ -255,16 +255,16 @@ func (r GatewayListType) IsKnown() bool {
 }
 
 type GatewayListNewResponse struct {
-	// Identify the API resource with a UUID.
+	// API Resource UUID tag.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Provide the list description.
+	// The description of the list.
 	Description string `json:"description"`
-	// Provide the list items.
+	// The items in the list.
 	Items []GatewayItem `json:"items"`
-	// Specify the list name.
+	// The name of the list.
 	Name string `json:"name"`
-	// Specify the list type.
+	// The type of list.
 	Type      GatewayListNewResponseType `json:"type"`
 	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
 	JSON      gatewayListNewResponseJSON `json:"-"`
@@ -292,7 +292,7 @@ func (r gatewayListNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specify the list type.
+// The type of list.
 type GatewayListNewResponseType string
 
 const (
@@ -315,13 +315,13 @@ type GatewayListDeleteResponse = interface{}
 
 type GatewayListNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Specify the list name.
+	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
-	// Specify the list type.
+	// The type of list.
 	Type param.Field[GatewayListNewParamsType] `json:"type,required"`
-	// Provide the list description.
+	// The description of the list.
 	Description param.Field[string] `json:"description"`
-	// Add items to the list.
+	// items to add to the list.
 	Items param.Field[[]GatewayListNewParamsItem] `json:"items"`
 }
 
@@ -329,7 +329,7 @@ func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Specify the list type.
+// The type of list.
 type GatewayListNewParamsType string
 
 const (
@@ -349,9 +349,9 @@ func (r GatewayListNewParamsType) IsKnown() bool {
 }
 
 type GatewayListNewParamsItem struct {
-	// Provide the list item description (optional).
+	// The description of the list item, if present.
 	Description param.Field[string] `json:"description"`
-	// Specify the item value.
+	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
 
@@ -362,7 +362,7 @@ func (r GatewayListNewParamsItem) MarshalJSON() (data []byte, err error) {
 type GatewayListNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayListNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayListNewResponse                `json:"result"`
 	JSON    gatewayListNewResponseEnvelopeJSON    `json:"-"`
@@ -387,7 +387,7 @@ func (r gatewayListNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayListNewResponseEnvelopeSuccess bool
 
 const (
@@ -404,11 +404,11 @@ func (r GatewayListNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayListUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Specify the list name.
+	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
-	// Provide the list description.
+	// The description of the list.
 	Description param.Field[string] `json:"description"`
-	// Add items to the list.
+	// items to add to the list.
 	Items param.Field[[]GatewayListUpdateParamsItem] `json:"items"`
 }
 
@@ -417,9 +417,9 @@ func (r GatewayListUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListUpdateParamsItem struct {
-	// Provide the list item description (optional).
+	// The description of the list item, if present.
 	Description param.Field[string] `json:"description"`
-	// Specify the item value.
+	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
 
@@ -430,7 +430,7 @@ func (r GatewayListUpdateParamsItem) MarshalJSON() (data []byte, err error) {
 type GatewayListUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayList                              `json:"result"`
 	JSON    gatewayListUpdateResponseEnvelopeJSON    `json:"-"`
@@ -455,7 +455,7 @@ func (r gatewayListUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayListUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -472,7 +472,7 @@ func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayListListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Specify the list type.
+	// The type of list.
 	Type param.Field[GatewayListListParamsType] `query:"type"`
 }
 
@@ -484,7 +484,7 @@ func (r GatewayListListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Specify the list type.
+// The type of list.
 type GatewayListListParamsType string
 
 const (
@@ -510,7 +510,7 @@ type GatewayListDeleteParams struct {
 type GatewayListDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayListDeleteResponse                `json:"result"`
 	JSON    gatewayListDeleteResponseEnvelopeJSON    `json:"-"`
@@ -535,7 +535,7 @@ func (r gatewayListDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayListDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -552,9 +552,9 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayListEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Add items to the list.
+	// items to add to the list.
 	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
-	// Lists of item values you want to remove.
+	// A list of the item values you want to remove.
 	Remove param.Field[[]string] `json:"remove"`
 }
 
@@ -563,9 +563,9 @@ func (r GatewayListEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListEditParamsAppend struct {
-	// Provide the list item description (optional).
+	// The description of the list item, if present.
 	Description param.Field[string] `json:"description"`
-	// Specify the item value.
+	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
 
@@ -576,7 +576,7 @@ func (r GatewayListEditParamsAppend) MarshalJSON() (data []byte, err error) {
 type GatewayListEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayListEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayList                            `json:"result"`
 	JSON    gatewayListEditResponseEnvelopeJSON    `json:"-"`
@@ -601,7 +601,7 @@ func (r gatewayListEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayListEditResponseEnvelopeSuccess bool
 
 const (
@@ -623,7 +623,7 @@ type GatewayListGetParams struct {
 type GatewayListGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayListGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayList                           `json:"result"`
 	JSON    gatewayListGetResponseEnvelopeJSON    `json:"-"`
@@ -648,7 +648,7 @@ func (r gatewayListGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayListGetResponseEnvelopeSuccess bool
 
 const (

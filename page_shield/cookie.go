@@ -251,7 +251,7 @@ type CookieListParams struct {
 	Direction param.Field[CookieListParamsDirection] `query:"direction"`
 	// Filters the returned cookies that match the specified domain attribute
 	Domain param.Field[string] `query:"domain"`
-	// Export the list of cookies as a file, limited to 50000 entries.
+	// Export the list of cookies as a file.
 	Export param.Field[CookieListParamsExport] `query:"export"`
 	// Includes cookies that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -317,7 +317,7 @@ func (r CookieListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of cookies as a file, limited to 50000 entries.
+// Export the list of cookies as a file.
 type CookieListParamsExport string
 
 const (

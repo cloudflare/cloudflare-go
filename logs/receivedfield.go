@@ -68,6 +68,6 @@ func (r receivedFieldGetResponseJSON) RawJSON() string {
 }
 
 type ReceivedFieldGetParams struct {
-	// Identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

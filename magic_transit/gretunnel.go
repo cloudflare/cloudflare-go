@@ -186,12 +186,9 @@ type GRETunnelNewResponse struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                          `json:"automatic_return_routing"`
-	BGP                    GRETunnelNewResponseBGP       `json:"bgp"`
-	BGPStatus              GRETunnelNewResponseBGPStatus `json:"bgp_status"`
+	Name      string                        `json:"name,required"`
+	BGP       GRETunnelNewResponseBGP       `json:"bgp"`
+	BGPStatus GRETunnelNewResponseBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -215,23 +212,22 @@ type GRETunnelNewResponse struct {
 // greTunnelNewResponseJSON contains the JSON metadata for the struct
 // [GRETunnelNewResponse]
 type greTunnelNewResponseJSON struct {
-	ID                     apijson.Field
-	CloudflareGREEndpoint  apijson.Field
-	CustomerGREEndpoint    apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	TTL                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                    apijson.Field
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *GRETunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -503,12 +499,9 @@ type GRETunnelUpdateResponseModifiedGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                              `json:"automatic_return_routing"`
-	BGP                    GRETunnelUpdateResponseModifiedGRETunnelBGP       `json:"bgp"`
-	BGPStatus              GRETunnelUpdateResponseModifiedGRETunnelBGPStatus `json:"bgp_status"`
+	Name      string                                            `json:"name,required"`
+	BGP       GRETunnelUpdateResponseModifiedGRETunnelBGP       `json:"bgp"`
+	BGPStatus GRETunnelUpdateResponseModifiedGRETunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -532,23 +525,22 @@ type GRETunnelUpdateResponseModifiedGRETunnel struct {
 // greTunnelUpdateResponseModifiedGRETunnelJSON contains the JSON metadata for the
 // struct [GRETunnelUpdateResponseModifiedGRETunnel]
 type greTunnelUpdateResponseModifiedGRETunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareGREEndpoint  apijson.Field
-	CustomerGREEndpoint    apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	TTL                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                    apijson.Field
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *GRETunnelUpdateResponseModifiedGRETunnel) UnmarshalJSON(data []byte) (err error) {
@@ -819,12 +811,9 @@ type GRETunnelListResponseGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                     `json:"automatic_return_routing"`
-	BGP                    GRETunnelListResponseGRETunnelsBGP       `json:"bgp"`
-	BGPStatus              GRETunnelListResponseGRETunnelsBGPStatus `json:"bgp_status"`
+	Name      string                                   `json:"name,required"`
+	BGP       GRETunnelListResponseGRETunnelsBGP       `json:"bgp"`
+	BGPStatus GRETunnelListResponseGRETunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -848,23 +837,22 @@ type GRETunnelListResponseGRETunnel struct {
 // greTunnelListResponseGRETunnelJSON contains the JSON metadata for the struct
 // [GRETunnelListResponseGRETunnel]
 type greTunnelListResponseGRETunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareGREEndpoint  apijson.Field
-	CustomerGREEndpoint    apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	TTL                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                    apijson.Field
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *GRETunnelListResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1137,12 +1125,9 @@ type GRETunnelDeleteResponseDeletedGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                             `json:"automatic_return_routing"`
-	BGP                    GRETunnelDeleteResponseDeletedGRETunnelBGP       `json:"bgp"`
-	BGPStatus              GRETunnelDeleteResponseDeletedGRETunnelBGPStatus `json:"bgp_status"`
+	Name      string                                           `json:"name,required"`
+	BGP       GRETunnelDeleteResponseDeletedGRETunnelBGP       `json:"bgp"`
+	BGPStatus GRETunnelDeleteResponseDeletedGRETunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -1166,23 +1151,22 @@ type GRETunnelDeleteResponseDeletedGRETunnel struct {
 // greTunnelDeleteResponseDeletedGRETunnelJSON contains the JSON metadata for the
 // struct [GRETunnelDeleteResponseDeletedGRETunnel]
 type greTunnelDeleteResponseDeletedGRETunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareGREEndpoint  apijson.Field
-	CustomerGREEndpoint    apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	TTL                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                    apijson.Field
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *GRETunnelDeleteResponseDeletedGRETunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1455,12 +1439,9 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                                   `json:"automatic_return_routing"`
-	BGP                    GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP       `json:"bgp"`
-	BGPStatus              GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus `json:"bgp_status"`
+	Name      string                                                 `json:"name,required"`
+	BGP       GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP       `json:"bgp"`
+	BGPStatus GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -1484,23 +1465,22 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
 // greTunnelBulkUpdateResponseModifiedGRETunnelJSON contains the JSON metadata for
 // the struct [GRETunnelBulkUpdateResponseModifiedGRETunnel]
 type greTunnelBulkUpdateResponseModifiedGRETunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareGREEndpoint  apijson.Field
-	CustomerGREEndpoint    apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	TTL                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                    apijson.Field
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *GRETunnelBulkUpdateResponseModifiedGRETunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1772,12 +1752,9 @@ type GRETunnelGetResponseGRETunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                   `json:"automatic_return_routing"`
-	BGP                    GRETunnelGetResponseGRETunnelBGP       `json:"bgp"`
-	BGPStatus              GRETunnelGetResponseGRETunnelBGPStatus `json:"bgp_status"`
+	Name      string                                 `json:"name,required"`
+	BGP       GRETunnelGetResponseGRETunnelBGP       `json:"bgp"`
+	BGPStatus GRETunnelGetResponseGRETunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
@@ -1801,23 +1778,22 @@ type GRETunnelGetResponseGRETunnel struct {
 // greTunnelGetResponseGRETunnelJSON contains the JSON metadata for the struct
 // [GRETunnelGetResponseGRETunnel]
 type greTunnelGetResponseGRETunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareGREEndpoint  apijson.Field
-	CustomerGREEndpoint    apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	TTL                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                    apijson.Field
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	BGP                   apijson.Field
+	BGPStatus             apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	InterfaceAddress6     apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *GRETunnelGetResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
@@ -2067,11 +2043,8 @@ type GRETunnelNewParams struct {
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name param.Field[string] `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting param.Field[bool]                  `json:"automatic_return_routing"`
-	BGP                    param.Field[GRETunnelNewParamsBGP] `json:"bgp"`
+	Name param.Field[string]                `json:"name,required"`
+	BGP  param.Field[GRETunnelNewParamsBGP] `json:"bgp"`
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                        `json:"description"`
 	HealthCheck param.Field[GRETunnelNewParamsHealthCheck] `json:"health_check"`
@@ -2258,9 +2231,6 @@ type GRETunnelUpdateParams struct {
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name param.Field[string] `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting param.Field[bool] `json:"automatic_return_routing"`
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                           `json:"description"`
 	HealthCheck param.Field[GRETunnelUpdateParamsHealthCheck] `json:"health_check"`

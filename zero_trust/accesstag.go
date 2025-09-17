@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -146,13 +147,20 @@ func (r *AccessTagService) Get(ctx context.Context, tagName string, query Access
 // A tag
 type Tag struct {
 	// The name of the tag
-	Name string  `json:"name,required"`
-	JSON tagJSON `json:"-"`
+	Name string `json:"name,required"`
+	// The number of applications that have this tag
+	AppCount  int64     `json:"app_count"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      tagJSON   `json:"-"`
 }
 
 // tagJSON contains the JSON metadata for the struct [Tag]
 type tagJSON struct {
 	Name        apijson.Field
+	AppCount    apijson.Field
+	CreatedAt   apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

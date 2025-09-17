@@ -35,8 +35,6 @@ func NewLeakedCredentialSummaryService(opts ...option.RequestOption) (r *LeakedC
 }
 
 // Retrieves the distribution of HTTP authentication requests by bot class.
-//
-// Deprecated: deprecated
 func (r *LeakedCredentialSummaryService) BotClass(ctx context.Context, query LeakedCredentialSummaryBotClassParams, opts ...option.RequestOption) (res *LeakedCredentialSummaryBotClassResponse, err error) {
 	var env LeakedCredentialSummaryBotClassResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -51,8 +49,6 @@ func (r *LeakedCredentialSummaryService) BotClass(ctx context.Context, query Lea
 
 // Retrieves the distribution of HTTP authentication requests by compromised
 // credential status.
-//
-// Deprecated: deprecated
 func (r *LeakedCredentialSummaryService) Compromised(ctx context.Context, query LeakedCredentialSummaryCompromisedParams, opts ...option.RequestOption) (res *LeakedCredentialSummaryCompromisedResponse, err error) {
 	var env LeakedCredentialSummaryCompromisedResponseEnvelope
 	opts = append(r.Options[:], opts...)

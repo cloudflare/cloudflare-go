@@ -64,8 +64,7 @@ func TestLinkNewWithOptionalParams(t *testing.T) {
 			SourceScheme: cloudflare.F(browser_rendering.LinkNewParamsCookiesSourceSchemeUnset),
 			URL:          cloudflare.F("url"),
 		}}),
-		EmulateMediaType:     cloudflare.F("emulateMediaType"),
-		ExcludeExternalLinks: cloudflare.F(true),
+		EmulateMediaType: cloudflare.F("emulateMediaType"),
 		GotoOptions: cloudflare.F(browser_rendering.LinkNewParamsGotoOptions{
 			Referer:        cloudflare.F("referer"),
 			ReferrerPolicy: cloudflare.F("referrerPolicy"),

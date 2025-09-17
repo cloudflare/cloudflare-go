@@ -163,14 +163,11 @@ type ThreatEventNewResponse struct {
 	Category        string                     `json:"category,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
-	Indicator       string                     `json:"indicator,required"`
 	IndicatorType   string                     `json:"indicatorType,required"`
-	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
 	KillChain       float64                    `json:"killChain,required"`
 	MitreAttack     []string                   `json:"mitreAttack,required"`
 	NumReferenced   float64                    `json:"numReferenced,required"`
 	NumReferences   float64                    `json:"numReferences,required"`
-	RawID           string                     `json:"rawId,required"`
 	Referenced      []string                   `json:"referenced,required"`
 	ReferencedIDs   []float64                  `json:"referencedIds,required"`
 	References      []string                   `json:"references,required"`
@@ -181,7 +178,6 @@ type ThreatEventNewResponse struct {
 	TLP             string                     `json:"tlp,required"`
 	UUID            string                     `json:"uuid,required"`
 	Insight         string                     `json:"insight"`
-	ReleasabilityID string                     `json:"releasabilityId"`
 	JSON            threatEventNewResponseJSON `json:"-"`
 }
 
@@ -193,14 +189,11 @@ type threatEventNewResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
 	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
-	RawID           apijson.Field
 	Referenced      apijson.Field
 	ReferencedIDs   apijson.Field
 	References      apijson.Field
@@ -211,7 +204,6 @@ type threatEventNewResponseJSON struct {
 	TLP             apijson.Field
 	UUID            apijson.Field
 	Insight         apijson.Field
-	ReleasabilityID apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -230,14 +222,11 @@ type ThreatEventListResponse struct {
 	Category        string                      `json:"category,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
-	Indicator       string                      `json:"indicator,required"`
 	IndicatorType   string                      `json:"indicatorType,required"`
-	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
 	KillChain       float64                     `json:"killChain,required"`
 	MitreAttack     []string                    `json:"mitreAttack,required"`
 	NumReferenced   float64                     `json:"numReferenced,required"`
 	NumReferences   float64                     `json:"numReferences,required"`
-	RawID           string                      `json:"rawId,required"`
 	Referenced      []string                    `json:"referenced,required"`
 	ReferencedIDs   []float64                   `json:"referencedIds,required"`
 	References      []string                    `json:"references,required"`
@@ -248,7 +237,6 @@ type ThreatEventListResponse struct {
 	TLP             string                      `json:"tlp,required"`
 	UUID            string                      `json:"uuid,required"`
 	Insight         string                      `json:"insight"`
-	ReleasabilityID string                      `json:"releasabilityId"`
 	JSON            threatEventListResponseJSON `json:"-"`
 }
 
@@ -260,14 +248,11 @@ type threatEventListResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
 	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
-	RawID           apijson.Field
 	Referenced      apijson.Field
 	ReferencedIDs   apijson.Field
 	References      apijson.Field
@@ -278,7 +263,6 @@ type threatEventListResponseJSON struct {
 	TLP             apijson.Field
 	UUID            apijson.Field
 	Insight         apijson.Field
-	ReleasabilityID apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -318,14 +302,11 @@ type ThreatEventEditResponse struct {
 	Category        string                      `json:"category,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
-	Indicator       string                      `json:"indicator,required"`
 	IndicatorType   string                      `json:"indicatorType,required"`
-	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
 	KillChain       float64                     `json:"killChain,required"`
 	MitreAttack     []string                    `json:"mitreAttack,required"`
 	NumReferenced   float64                     `json:"numReferenced,required"`
 	NumReferences   float64                     `json:"numReferences,required"`
-	RawID           string                      `json:"rawId,required"`
 	Referenced      []string                    `json:"referenced,required"`
 	ReferencedIDs   []float64                   `json:"referencedIds,required"`
 	References      []string                    `json:"references,required"`
@@ -336,7 +317,6 @@ type ThreatEventEditResponse struct {
 	TLP             string                      `json:"tlp,required"`
 	UUID            string                      `json:"uuid,required"`
 	Insight         string                      `json:"insight"`
-	ReleasabilityID string                      `json:"releasabilityId"`
 	JSON            threatEventEditResponseJSON `json:"-"`
 }
 
@@ -348,14 +328,11 @@ type threatEventEditResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
 	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
-	RawID           apijson.Field
 	Referenced      apijson.Field
 	ReferencedIDs   apijson.Field
 	References      apijson.Field
@@ -366,7 +343,6 @@ type threatEventEditResponseJSON struct {
 	TLP             apijson.Field
 	UUID            apijson.Field
 	Insight         apijson.Field
-	ReleasabilityID apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -385,14 +361,11 @@ type ThreatEventGetResponse struct {
 	Category        string                     `json:"category,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
-	Indicator       string                     `json:"indicator,required"`
 	IndicatorType   string                     `json:"indicatorType,required"`
-	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
 	KillChain       float64                    `json:"killChain,required"`
 	MitreAttack     []string                   `json:"mitreAttack,required"`
 	NumReferenced   float64                    `json:"numReferenced,required"`
 	NumReferences   float64                    `json:"numReferences,required"`
-	RawID           string                     `json:"rawId,required"`
 	Referenced      []string                   `json:"referenced,required"`
 	ReferencedIDs   []float64                  `json:"referencedIds,required"`
 	References      []string                   `json:"references,required"`
@@ -403,7 +376,6 @@ type ThreatEventGetResponse struct {
 	TLP             string                     `json:"tlp,required"`
 	UUID            string                     `json:"uuid,required"`
 	Insight         string                     `json:"insight"`
-	ReleasabilityID string                     `json:"releasabilityId"`
 	JSON            threatEventGetResponseJSON `json:"-"`
 }
 
@@ -415,14 +387,11 @@ type threatEventGetResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
-	Indicator       apijson.Field
 	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
-	RawID           apijson.Field
 	Referenced      apijson.Field
 	ReferencedIDs   apijson.Field
 	References      apijson.Field
@@ -433,7 +402,6 @@ type threatEventGetResponseJSON struct {
 	TLP             apijson.Field
 	UUID            apijson.Field
 	Insight         apijson.Field
-	ReleasabilityID apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -452,7 +420,6 @@ type ThreatEventNewParams struct {
 	Category        param.Field[string]                  `json:"category,required"`
 	Date            param.Field[time.Time]               `json:"date,required" format:"date-time"`
 	Event           param.Field[string]                  `json:"event,required"`
-	IndicatorType   param.Field[string]                  `json:"indicatorType,required"`
 	Raw             param.Field[ThreatEventNewParamsRaw] `json:"raw,required"`
 	TLP             param.Field[string]                  `json:"tlp,required"`
 	BodyAccountID   param.Field[float64]                 `json:"accountId"`
@@ -460,7 +427,7 @@ type ThreatEventNewParams struct {
 	AttackerCountry param.Field[string]                  `json:"attackerCountry"`
 	DatasetID       param.Field[string]                  `json:"datasetId"`
 	Indicator       param.Field[string]                  `json:"indicator"`
-	Insight         param.Field[string]                  `json:"insight"`
+	IndicatorType   param.Field[string]                  `json:"indicatorType"`
 	Tags            param.Field[[]string]                `json:"tags"`
 	TargetCountry   param.Field[string]                  `json:"targetCountry"`
 	TargetIndustry  param.Field[string]                  `json:"targetIndustry"`
@@ -590,7 +557,6 @@ type ThreatEventBulkNewParamsData struct {
 	Category        param.Field[string]                          `json:"category,required"`
 	Date            param.Field[time.Time]                       `json:"date,required" format:"date-time"`
 	Event           param.Field[string]                          `json:"event,required"`
-	IndicatorType   param.Field[string]                          `json:"indicatorType,required"`
 	Raw             param.Field[ThreatEventBulkNewParamsDataRaw] `json:"raw,required"`
 	TLP             param.Field[string]                          `json:"tlp,required"`
 	AccountID       param.Field[float64]                         `json:"accountId"`
@@ -598,7 +564,7 @@ type ThreatEventBulkNewParamsData struct {
 	AttackerCountry param.Field[string]                          `json:"attackerCountry"`
 	DatasetID       param.Field[string]                          `json:"datasetId"`
 	Indicator       param.Field[string]                          `json:"indicator"`
-	Insight         param.Field[string]                          `json:"insight"`
+	IndicatorType   param.Field[string]                          `json:"indicatorType"`
 	Tags            param.Field[[]string]                        `json:"tags"`
 	TargetCountry   param.Field[string]                          `json:"targetCountry"`
 	TargetIndustry  param.Field[string]                          `json:"targetIndustry"`

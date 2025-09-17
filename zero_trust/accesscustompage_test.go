@@ -33,6 +33,7 @@ func TestAccessCustomPageNewWithOptionalParams(t *testing.T) {
 			CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
 			Name:       cloudflare.F("name"),
 			Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
+			AppCount:   cloudflare.F(int64(0)),
 		},
 	})
 	if err != nil {
@@ -66,6 +67,7 @@ func TestAccessCustomPageUpdateWithOptionalParams(t *testing.T) {
 				CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
 				Name:       cloudflare.F("name"),
 				Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
+				AppCount:   cloudflare.F(int64(0)),
 			},
 		},
 	)

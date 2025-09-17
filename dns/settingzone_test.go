@@ -37,8 +37,8 @@ func TestSettingZoneEditWithOptionalParams(t *testing.T) {
 		}),
 		MultiProvider: cloudflare.F(false),
 		Nameservers: cloudflare.F(dns.SettingZoneEditParamsNameservers{
-			NSSet: cloudflare.F(int64(1)),
 			Type:  cloudflare.F(dns.SettingZoneEditParamsNameserversTypeCloudflareStandard),
+			NSSet: cloudflare.F(int64(1)),
 		}),
 		NSTTL:              cloudflare.F(86400.000000),
 		SecondaryOverrides: cloudflare.F(false),

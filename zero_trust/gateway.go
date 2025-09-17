@@ -54,7 +54,7 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 	return
 }
 
-// Create a Zero Trust account for an existing Cloudflare account.
+// Creates a Zero Trust account with an existing Cloudflare account.
 func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ...option.RequestOption) (res *GatewayNewResponse, err error) {
 	var env GatewayNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -71,7 +71,7 @@ func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ..
 	return
 }
 
-// Retrieve information about the current Zero Trust account.
+// Gets information about the current Zero Trust account.
 func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts ...option.RequestOption) (res *GatewayListResponse, err error) {
 	var env GatewayListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -89,11 +89,11 @@ func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts
 }
 
 type GatewayNewResponse struct {
-	// Specify the Cloudflare account ID.
+	// Cloudflare account ID.
 	ID string `json:"id"`
-	// Specify the gateway internal ID.
+	// Gateway internal ID.
 	GatewayTag string `json:"gateway_tag"`
-	// Specify the provider name (usually Cloudflare).
+	// Provider Name. Usually Cloudflare.
 	ProviderName string                 `json:"provider_name"`
 	JSON         gatewayNewResponseJSON `json:"-"`
 }
@@ -117,11 +117,11 @@ func (r gatewayNewResponseJSON) RawJSON() string {
 }
 
 type GatewayListResponse struct {
-	// Specify the Cloudflare account ID.
+	// Cloudflare account ID.
 	ID string `json:"id"`
-	// Specify the gateway internal ID.
+	// Gateway internal ID.
 	GatewayTag string `json:"gateway_tag"`
-	// Specify the provider name (usually Cloudflare).
+	// Provider Name. Usually Cloudflare.
 	ProviderName string                  `json:"provider_name"`
 	JSON         gatewayListResponseJSON `json:"-"`
 }
@@ -151,7 +151,7 @@ type GatewayNewParams struct {
 type GatewayNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayNewResponse                `json:"result"`
 	JSON    gatewayNewResponseEnvelopeJSON    `json:"-"`
@@ -176,7 +176,7 @@ func (r gatewayNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayNewResponseEnvelopeSuccess bool
 
 const (
@@ -198,7 +198,7 @@ type GatewayListParams struct {
 type GatewayListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayListResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayListResponse                `json:"result"`
 	JSON    gatewayListResponseEnvelopeJSON    `json:"-"`
@@ -223,7 +223,7 @@ func (r gatewayListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayListResponseEnvelopeSuccess bool
 
 const (

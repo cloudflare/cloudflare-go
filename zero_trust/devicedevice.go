@@ -85,10 +85,10 @@ func (r *DeviceDeviceService) Delete(ctx context.Context, deviceID string, body 
 }
 
 // Fetches a single WARP device.
-func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, params DeviceDeviceGetParams, opts ...option.RequestOption) (res *DeviceDeviceGetResponse, err error) {
+func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, query DeviceDeviceGetParams, opts ...option.RequestOption) (res *DeviceDeviceGetResponse, err error) {
 	var env DeviceDeviceGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -96,8 +96,8 @@ func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, params D
 		err = errors.New("missing required device_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/physical-devices/%s", params.AccountID, deviceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/devices/physical-devices/%s", query.AccountID, deviceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -149,8 +149,6 @@ type DeviceDeviceListResponse struct {
 	DeviceType string `json:"device_type,nullable"`
 	// A string that uniquely identifies the hardware or virtual machine (VM).
 	HardwareID string `json:"hardware_id,nullable"`
-	// The last seen registration for the device.
-	LastSeenRegistration DeviceDeviceListResponseLastSeenRegistration `json:"last_seen_registration,nullable"`
 	// The last user to use the WARP device.
 	LastSeenUser DeviceDeviceListResponseLastSeenUser `json:"last_seen_user,nullable"`
 	// The device MAC address.
@@ -174,27 +172,26 @@ type DeviceDeviceListResponse struct {
 // deviceDeviceListResponseJSON contains the JSON metadata for the struct
 // [DeviceDeviceListResponse]
 type deviceDeviceListResponseJSON struct {
-	ID                   apijson.Field
-	ActiveRegistrations  apijson.Field
-	CreatedAt            apijson.Field
-	LastSeenAt           apijson.Field
-	Name                 apijson.Field
-	UpdatedAt            apijson.Field
-	ClientVersion        apijson.Field
-	DeletedAt            apijson.Field
-	DeviceType           apijson.Field
-	HardwareID           apijson.Field
-	LastSeenRegistration apijson.Field
-	LastSeenUser         apijson.Field
-	MacAddress           apijson.Field
-	Manufacturer         apijson.Field
-	Model                apijson.Field
-	OSVersion            apijson.Field
-	OSVersionExtra       apijson.Field
-	PublicIP             apijson.Field
-	SerialNumber         apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	ID                  apijson.Field
+	ActiveRegistrations apijson.Field
+	CreatedAt           apijson.Field
+	LastSeenAt          apijson.Field
+	Name                apijson.Field
+	UpdatedAt           apijson.Field
+	ClientVersion       apijson.Field
+	DeletedAt           apijson.Field
+	DeviceType          apijson.Field
+	HardwareID          apijson.Field
+	LastSeenUser        apijson.Field
+	MacAddress          apijson.Field
+	Manufacturer        apijson.Field
+	Model               apijson.Field
+	OSVersion           apijson.Field
+	OSVersionExtra      apijson.Field
+	PublicIP            apijson.Field
+	SerialNumber        apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *DeviceDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -202,65 +199,6 @@ func (r *DeviceDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r deviceDeviceListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The last seen registration for the device.
-type DeviceDeviceListResponseLastSeenRegistration struct {
-	// A summary of the device profile evaluated for the registration.
-	Policy DeviceDeviceListResponseLastSeenRegistrationPolicy `json:"policy,nullable"`
-	JSON   deviceDeviceListResponseLastSeenRegistrationJSON   `json:"-"`
-}
-
-// deviceDeviceListResponseLastSeenRegistrationJSON contains the JSON metadata for
-// the struct [DeviceDeviceListResponseLastSeenRegistration]
-type deviceDeviceListResponseLastSeenRegistrationJSON struct {
-	Policy      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDeviceListResponseLastSeenRegistration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDeviceListResponseLastSeenRegistrationJSON) RawJSON() string {
-	return r.raw
-}
-
-// A summary of the device profile evaluated for the registration.
-type DeviceDeviceListResponseLastSeenRegistrationPolicy struct {
-	// The ID of the device settings profile.
-	ID string `json:"id,required"`
-	// Whether the device settings profile is the default profile for the account.
-	Default bool `json:"default,required"`
-	// Whether the device settings profile was deleted.
-	Deleted bool `json:"deleted,required"`
-	// The name of the device settings profile.
-	Name string `json:"name,required"`
-	// The RFC3339 timestamp of when the device settings profile last changed for the
-	// registration.
-	UpdatedAt string                                                 `json:"updated_at,required"`
-	JSON      deviceDeviceListResponseLastSeenRegistrationPolicyJSON `json:"-"`
-}
-
-// deviceDeviceListResponseLastSeenRegistrationPolicyJSON contains the JSON
-// metadata for the struct [DeviceDeviceListResponseLastSeenRegistrationPolicy]
-type deviceDeviceListResponseLastSeenRegistrationPolicyJSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Deleted     apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDeviceListResponseLastSeenRegistrationPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDeviceListResponseLastSeenRegistrationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -318,8 +256,6 @@ type DeviceDeviceGetResponse struct {
 	DeviceType string `json:"device_type,nullable"`
 	// A string that uniquely identifies the hardware or virtual machine (VM).
 	HardwareID string `json:"hardware_id,nullable"`
-	// The last seen registration for the device.
-	LastSeenRegistration DeviceDeviceGetResponseLastSeenRegistration `json:"last_seen_registration,nullable"`
 	// The last user to use the WARP device.
 	LastSeenUser DeviceDeviceGetResponseLastSeenUser `json:"last_seen_user,nullable"`
 	// The device MAC address.
@@ -343,27 +279,26 @@ type DeviceDeviceGetResponse struct {
 // deviceDeviceGetResponseJSON contains the JSON metadata for the struct
 // [DeviceDeviceGetResponse]
 type deviceDeviceGetResponseJSON struct {
-	ID                   apijson.Field
-	ActiveRegistrations  apijson.Field
-	CreatedAt            apijson.Field
-	LastSeenAt           apijson.Field
-	Name                 apijson.Field
-	UpdatedAt            apijson.Field
-	ClientVersion        apijson.Field
-	DeletedAt            apijson.Field
-	DeviceType           apijson.Field
-	HardwareID           apijson.Field
-	LastSeenRegistration apijson.Field
-	LastSeenUser         apijson.Field
-	MacAddress           apijson.Field
-	Manufacturer         apijson.Field
-	Model                apijson.Field
-	OSVersion            apijson.Field
-	OSVersionExtra       apijson.Field
-	PublicIP             apijson.Field
-	SerialNumber         apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	ID                  apijson.Field
+	ActiveRegistrations apijson.Field
+	CreatedAt           apijson.Field
+	LastSeenAt          apijson.Field
+	Name                apijson.Field
+	UpdatedAt           apijson.Field
+	ClientVersion       apijson.Field
+	DeletedAt           apijson.Field
+	DeviceType          apijson.Field
+	HardwareID          apijson.Field
+	LastSeenUser        apijson.Field
+	MacAddress          apijson.Field
+	Manufacturer        apijson.Field
+	Model               apijson.Field
+	OSVersion           apijson.Field
+	OSVersionExtra      apijson.Field
+	PublicIP            apijson.Field
+	SerialNumber        apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *DeviceDeviceGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -371,65 +306,6 @@ func (r *DeviceDeviceGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r deviceDeviceGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The last seen registration for the device.
-type DeviceDeviceGetResponseLastSeenRegistration struct {
-	// A summary of the device profile evaluated for the registration.
-	Policy DeviceDeviceGetResponseLastSeenRegistrationPolicy `json:"policy,nullable"`
-	JSON   deviceDeviceGetResponseLastSeenRegistrationJSON   `json:"-"`
-}
-
-// deviceDeviceGetResponseLastSeenRegistrationJSON contains the JSON metadata for
-// the struct [DeviceDeviceGetResponseLastSeenRegistration]
-type deviceDeviceGetResponseLastSeenRegistrationJSON struct {
-	Policy      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDeviceGetResponseLastSeenRegistration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDeviceGetResponseLastSeenRegistrationJSON) RawJSON() string {
-	return r.raw
-}
-
-// A summary of the device profile evaluated for the registration.
-type DeviceDeviceGetResponseLastSeenRegistrationPolicy struct {
-	// The ID of the device settings profile.
-	ID string `json:"id,required"`
-	// Whether the device settings profile is the default profile for the account.
-	Default bool `json:"default,required"`
-	// Whether the device settings profile was deleted.
-	Deleted bool `json:"deleted,required"`
-	// The name of the device settings profile.
-	Name string `json:"name,required"`
-	// The RFC3339 timestamp of when the device settings profile last changed for the
-	// registration.
-	UpdatedAt string                                                `json:"updated_at,required"`
-	JSON      deviceDeviceGetResponseLastSeenRegistrationPolicyJSON `json:"-"`
-}
-
-// deviceDeviceGetResponseLastSeenRegistrationPolicyJSON contains the JSON metadata
-// for the struct [DeviceDeviceGetResponseLastSeenRegistrationPolicy]
-type deviceDeviceGetResponseLastSeenRegistrationPolicyJSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Deleted     apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDeviceGetResponseLastSeenRegistrationPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDeviceGetResponseLastSeenRegistrationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -474,9 +350,7 @@ type DeviceDeviceListParams struct {
 	// Opaque token indicating the starting position when requesting the next set of
 	// records. A cursor value can be obtained from the result_info.cursor field in the
 	// response.
-	Cursor param.Field[string] `query:"cursor"`
-	// Comma-separated list of additional information that should be included in the
-	// device response. Supported values are: "last_seen_registration.policy".
+	Cursor       param.Field[string]                             `query:"cursor"`
 	Include      param.Field[string]                             `query:"include"`
 	LastSeenUser param.Field[DeviceDeviceListParamsLastSeenUser] `query:"last_seen_user"`
 	// The maximum number of devices to return in a single response.
@@ -656,17 +530,6 @@ func (r deviceDeviceDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type DeviceDeviceGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Comma-separated list of additional information that should be included in the
-	// device response. Supported values are: "last_seen_registration.policy".
-	Include param.Field[string] `query:"include"`
-}
-
-// URLQuery serializes [DeviceDeviceGetParams]'s query parameters as `url.Values`.
-func (r DeviceDeviceGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type DeviceDeviceGetResponseEnvelope struct {

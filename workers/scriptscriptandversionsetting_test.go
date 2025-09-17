@@ -67,15 +67,13 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 					Logs: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
-						Destinations:     cloudflare.F([]string{"cloudflare"}),
 						HeadSamplingRate: cloudflare.F(0.100000),
-						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Placement: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacement{
 					Mode: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeSmart),
 				}),
-				Tags: cloudflare.F([]string{"my-team", "my-public-api"}),
+				Tags: cloudflare.F([]string{"my-tag"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),

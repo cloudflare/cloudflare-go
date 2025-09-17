@@ -84,9 +84,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Logs: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
-						Destinations:     cloudflare.F([]string{"cloudflare"}),
 						HeadSamplingRate: cloudflare.F(0.100000),
-						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacement{
@@ -188,36 +186,6 @@ func TestScriptGet(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestScriptSearchWithOptionalParams(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Workers.Scripts.Search(context.TODO(), workers.ScriptSearchParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:        cloudflare.F("bdf3567828824b74aadd550004cf4913"),
-		Name:      cloudflare.F("my-worker"),
-		OrderBy:   cloudflare.F(workers.ScriptSearchParamsOrderByCreatedOn),
-		Page:      cloudflare.F(int64(1)),
-		PerPage:   cloudflare.F(int64(1)),
-	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
