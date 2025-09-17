@@ -33,7 +33,7 @@ func NewGatewayConfigurationCustomCertificateService(opts ...option.RequestOptio
 	return
 }
 
-// Fetches the current Zero Trust certificate configuration.
+// Retrieve the current Zero Trust certificate configuration.
 //
 // Deprecated: deprecated
 func (r *GatewayConfigurationCustomCertificateService) Get(ctx context.Context, query GatewayConfigurationCustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateSettings, err error) {

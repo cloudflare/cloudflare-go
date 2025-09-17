@@ -102,10 +102,10 @@ func (r *DeviceRegistrationService) BulkDelete(ctx context.Context, params Devic
 }
 
 // Fetches a single WARP registration.
-func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID string, query DeviceRegistrationGetParams, opts ...option.RequestOption) (res *DeviceRegistrationGetResponse, err error) {
+func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID string, params DeviceRegistrationGetParams, opts ...option.RequestOption) (res *DeviceRegistrationGetResponse, err error) {
 	var env DeviceRegistrationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -113,8 +113,8 @@ func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID stri
 		err = errors.New("missing required registration_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/devices/registrations/%s", query.AccountID, registrationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/devices/registrations/%s", params.AccountID, registrationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -176,6 +176,8 @@ type DeviceRegistrationListResponse struct {
 	// The type of encryption key used by the WARP client for the active key. Currently
 	// 'curve25519' for WireGuard and 'secp256r1' for MASQUE.
 	KeyType string `json:"key_type,nullable"`
+	// The device settings profile assigned to this registration.
+	Policy DeviceRegistrationListResponsePolicy `json:"policy"`
 	// The RFC3339 timestamp when the registration was revoked.
 	RevokedAt string `json:"revoked_at,nullable"`
 	// Type of the tunnel - wireguard or masque.
@@ -195,6 +197,7 @@ type deviceRegistrationListResponseJSON struct {
 	UpdatedAt   apijson.Field
 	DeletedAt   apijson.Field
 	KeyType     apijson.Field
+	Policy      apijson.Field
 	RevokedAt   apijson.Field
 	TunnelType  apijson.Field
 	User        apijson.Field
@@ -236,6 +239,42 @@ func (r *DeviceRegistrationListResponseDevice) UnmarshalJSON(data []byte) (err e
 }
 
 func (r deviceRegistrationListResponseDeviceJSON) RawJSON() string {
+	return r.raw
+}
+
+// The device settings profile assigned to this registration.
+type DeviceRegistrationListResponsePolicy struct {
+	// The ID of the device settings profile.
+	ID string `json:"id,required"`
+	// Whether the device settings profile is the default profile for the account.
+	Default bool `json:"default,required"`
+	// Whether the device settings profile was deleted.
+	Deleted bool `json:"deleted,required"`
+	// The name of the device settings profile.
+	Name string `json:"name,required"`
+	// The RFC3339 timestamp of when the device settings profile last changed for the
+	// registration.
+	UpdatedAt string                                   `json:"updated_at,required"`
+	JSON      deviceRegistrationListResponsePolicyJSON `json:"-"`
+}
+
+// deviceRegistrationListResponsePolicyJSON contains the JSON metadata for the
+// struct [DeviceRegistrationListResponsePolicy]
+type deviceRegistrationListResponsePolicyJSON struct {
+	ID          apijson.Field
+	Default     apijson.Field
+	Deleted     apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceRegistrationListResponsePolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceRegistrationListResponsePolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -291,6 +330,8 @@ type DeviceRegistrationGetResponse struct {
 	// The type of encryption key used by the WARP client for the active key. Currently
 	// 'curve25519' for WireGuard and 'secp256r1' for MASQUE.
 	KeyType string `json:"key_type,nullable"`
+	// The device settings profile assigned to this registration.
+	Policy DeviceRegistrationGetResponsePolicy `json:"policy"`
 	// The RFC3339 timestamp when the registration was revoked.
 	RevokedAt string `json:"revoked_at,nullable"`
 	// Type of the tunnel - wireguard or masque.
@@ -310,6 +351,7 @@ type deviceRegistrationGetResponseJSON struct {
 	UpdatedAt   apijson.Field
 	DeletedAt   apijson.Field
 	KeyType     apijson.Field
+	Policy      apijson.Field
 	RevokedAt   apijson.Field
 	TunnelType  apijson.Field
 	User        apijson.Field
@@ -354,6 +396,42 @@ func (r deviceRegistrationGetResponseDeviceJSON) RawJSON() string {
 	return r.raw
 }
 
+// The device settings profile assigned to this registration.
+type DeviceRegistrationGetResponsePolicy struct {
+	// The ID of the device settings profile.
+	ID string `json:"id,required"`
+	// Whether the device settings profile is the default profile for the account.
+	Default bool `json:"default,required"`
+	// Whether the device settings profile was deleted.
+	Deleted bool `json:"deleted,required"`
+	// The name of the device settings profile.
+	Name string `json:"name,required"`
+	// The RFC3339 timestamp of when the device settings profile last changed for the
+	// registration.
+	UpdatedAt string                                  `json:"updated_at,required"`
+	JSON      deviceRegistrationGetResponsePolicyJSON `json:"-"`
+}
+
+// deviceRegistrationGetResponsePolicyJSON contains the JSON metadata for the
+// struct [DeviceRegistrationGetResponsePolicy]
+type deviceRegistrationGetResponsePolicyJSON struct {
+	ID          apijson.Field
+	Default     apijson.Field
+	Deleted     apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceRegistrationGetResponsePolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceRegistrationGetResponsePolicyJSON) RawJSON() string {
+	return r.raw
+}
+
 type DeviceRegistrationGetResponseUser struct {
 	// UUID.
 	ID string `json:"id"`
@@ -393,9 +471,11 @@ type DeviceRegistrationListParams struct {
 	// Opaque token indicating the starting position when requesting the next set of
 	// records. A cursor value can be obtained from the result_info.cursor field in the
 	// response.
-	Cursor  param.Field[string]                             `query:"cursor"`
-	Device  param.Field[DeviceRegistrationListParamsDevice] `query:"device"`
-	Include param.Field[string]                             `query:"include"`
+	Cursor param.Field[string]                             `query:"cursor"`
+	Device param.Field[DeviceRegistrationListParamsDevice] `query:"device"`
+	// Comma-separated list of additional information that should be included in the
+	// registration response. Supported values are: "policy".
+	Include param.Field[string] `query:"include"`
 	// The maximum number of devices to return in a single response.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Filter by registration details.
@@ -716,6 +796,18 @@ func (r deviceRegistrationBulkDeleteResponseEnvelopeResultInfoJSON) RawJSON() st
 
 type DeviceRegistrationGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Comma-separated list of additional information that should be included in the
+	// registration response. Supported values are: "policy".
+	Include param.Field[string] `query:"include"`
+}
+
+// URLQuery serializes [DeviceRegistrationGetParams]'s query parameters as
+// `url.Values`.
+func (r DeviceRegistrationGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type DeviceRegistrationGetResponseEnvelope struct {

@@ -70,26 +70,26 @@ func (r *SettingZoneService) Get(ctx context.Context, query SettingZoneGetParams
 type SettingZoneEditResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames,required"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
-	FoundationDNS bool `json:"foundation_dns"`
+	FoundationDNS bool `json:"foundation_dns,required"`
 	// Settings for this internal zone.
-	InternalDNS SettingZoneEditResponseInternalDNS `json:"internal_dns"`
+	InternalDNS SettingZoneEditResponseInternalDNS `json:"internal_dns,required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
-	MultiProvider bool `json:"multi_provider"`
+	MultiProvider bool `json:"multi_provider,required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers SettingZoneEditResponseNameservers `json:"nameservers"`
+	Nameservers SettingZoneEditResponseNameservers `json:"nameservers,required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
-	NSTTL float64 `json:"ns_ttl"`
+	NSTTL float64 `json:"ns_ttl,required"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
-	SecondaryOverrides bool `json:"secondary_overrides"`
+	SecondaryOverrides bool `json:"secondary_overrides,required"`
 	// Components of the zone's SOA record.
-	SOA SettingZoneEditResponseSOA `json:"soa"`
+	SOA SettingZoneEditResponseSOA `json:"soa,required"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode SettingZoneEditResponseZoneMode `json:"zone_mode"`
+	ZoneMode SettingZoneEditResponseZoneMode `json:"zone_mode,required"`
 	JSON     settingZoneEditResponseJSON     `json:"-"`
 }
 
@@ -188,22 +188,23 @@ func (r SettingZoneEditResponseNameserversType) IsKnown() bool {
 type SettingZoneEditResponseSOA struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
-	Expire float64 `json:"expire,required"`
+	Expire float64 `json:"expire"`
 	// The time to live (TTL) for negative caching of records within the zone.
-	MinTTL float64 `json:"min_ttl,required"`
-	// The primary nameserver, which may be used for outbound zone transfers.
-	MNAME string `json:"mname,required"`
+	MinTTL float64 `json:"min_ttl"`
+	// The primary nameserver, which may be used for outbound zone transfers. If null,
+	// a Cloudflare-assigned value will be used.
+	MNAME string `json:"mname,nullable"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
-	Refresh float64 `json:"refresh,required"`
+	Refresh float64 `json:"refresh"`
 	// Time in seconds after which secondary servers should retry queries after the
 	// primary server was unresponsive.
-	Retry float64 `json:"retry,required"`
+	Retry float64 `json:"retry"`
 	// The email address of the zone administrator, with the first label representing
 	// the local part of the email address.
-	RNAME string `json:"rname,required"`
+	RNAME string `json:"rname"`
 	// The time to live (TTL) of the SOA record itself.
-	TTL  float64                        `json:"ttl,required"`
+	TTL  float64                        `json:"ttl"`
 	JSON settingZoneEditResponseSOAJSON `json:"-"`
 }
 
@@ -249,26 +250,26 @@ func (r SettingZoneEditResponseZoneMode) IsKnown() bool {
 type SettingZoneGetResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames,required"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
-	FoundationDNS bool `json:"foundation_dns"`
+	FoundationDNS bool `json:"foundation_dns,required"`
 	// Settings for this internal zone.
-	InternalDNS SettingZoneGetResponseInternalDNS `json:"internal_dns"`
+	InternalDNS SettingZoneGetResponseInternalDNS `json:"internal_dns,required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
-	MultiProvider bool `json:"multi_provider"`
+	MultiProvider bool `json:"multi_provider,required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers SettingZoneGetResponseNameservers `json:"nameservers"`
+	Nameservers SettingZoneGetResponseNameservers `json:"nameservers,required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
-	NSTTL float64 `json:"ns_ttl"`
+	NSTTL float64 `json:"ns_ttl,required"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
-	SecondaryOverrides bool `json:"secondary_overrides"`
+	SecondaryOverrides bool `json:"secondary_overrides,required"`
 	// Components of the zone's SOA record.
-	SOA SettingZoneGetResponseSOA `json:"soa"`
+	SOA SettingZoneGetResponseSOA `json:"soa,required"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode SettingZoneGetResponseZoneMode `json:"zone_mode"`
+	ZoneMode SettingZoneGetResponseZoneMode `json:"zone_mode,required"`
 	JSON     settingZoneGetResponseJSON     `json:"-"`
 }
 
@@ -367,22 +368,23 @@ func (r SettingZoneGetResponseNameserversType) IsKnown() bool {
 type SettingZoneGetResponseSOA struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
-	Expire float64 `json:"expire,required"`
+	Expire float64 `json:"expire"`
 	// The time to live (TTL) for negative caching of records within the zone.
-	MinTTL float64 `json:"min_ttl,required"`
-	// The primary nameserver, which may be used for outbound zone transfers.
-	MNAME string `json:"mname,required"`
+	MinTTL float64 `json:"min_ttl"`
+	// The primary nameserver, which may be used for outbound zone transfers. If null,
+	// a Cloudflare-assigned value will be used.
+	MNAME string `json:"mname,nullable"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
-	Refresh float64 `json:"refresh,required"`
+	Refresh float64 `json:"refresh"`
 	// Time in seconds after which secondary servers should retry queries after the
 	// primary server was unresponsive.
-	Retry float64 `json:"retry,required"`
+	Retry float64 `json:"retry"`
 	// The email address of the zone administrator, with the first label representing
 	// the local part of the email address.
-	RNAME string `json:"rname,required"`
+	RNAME string `json:"rname"`
 	// The time to live (TTL) of the SOA record itself.
-	TTL  float64                       `json:"ttl,required"`
+	TTL  float64                       `json:"ttl"`
 	JSON settingZoneGetResponseSOAJSON `json:"-"`
 }
 
@@ -468,10 +470,10 @@ func (r SettingZoneEditParamsInternalDNS) MarshalJSON() (data []byte, err error)
 
 // Settings determining the nameservers through which the zone should be available.
 type SettingZoneEditParamsNameservers struct {
-	// Nameserver type
-	Type param.Field[SettingZoneEditParamsNameserversType] `json:"type,required"`
 	// Configured nameserver set to be used for this zone
 	NSSet param.Field[int64] `json:"ns_set"`
+	// Nameserver type
+	Type param.Field[SettingZoneEditParamsNameserversType] `json:"type"`
 }
 
 func (r SettingZoneEditParamsNameservers) MarshalJSON() (data []byte, err error) {
@@ -500,22 +502,23 @@ func (r SettingZoneEditParamsNameserversType) IsKnown() bool {
 type SettingZoneEditParamsSOA struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
-	Expire param.Field[float64] `json:"expire,required"`
+	Expire param.Field[float64] `json:"expire"`
 	// The time to live (TTL) for negative caching of records within the zone.
-	MinTTL param.Field[float64] `json:"min_ttl,required"`
-	// The primary nameserver, which may be used for outbound zone transfers.
-	MNAME param.Field[string] `json:"mname,required"`
+	MinTTL param.Field[float64] `json:"min_ttl"`
+	// The primary nameserver, which may be used for outbound zone transfers. If null,
+	// a Cloudflare-assigned value will be used.
+	MNAME param.Field[string] `json:"mname"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
-	Refresh param.Field[float64] `json:"refresh,required"`
+	Refresh param.Field[float64] `json:"refresh"`
 	// Time in seconds after which secondary servers should retry queries after the
 	// primary server was unresponsive.
-	Retry param.Field[float64] `json:"retry,required"`
+	Retry param.Field[float64] `json:"retry"`
 	// The email address of the zone administrator, with the first label representing
 	// the local part of the email address.
-	RNAME param.Field[string] `json:"rname,required"`
+	RNAME param.Field[string] `json:"rname"`
 	// The time to live (TTL) of the SOA record itself.
-	TTL param.Field[float64] `json:"ttl,required"`
+	TTL param.Field[float64] `json:"ttl"`
 }
 
 func (r SettingZoneEditParamsSOA) MarshalJSON() (data []byte, err error) {

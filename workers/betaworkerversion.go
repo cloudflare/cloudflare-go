@@ -93,7 +93,7 @@ func (r *BetaWorkerVersionService) ListAutoPaging(ctx context.Context, workerID 
 }
 
 // Delete a version.
-func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, versionID BetaWorkerVersionDeleteParamsVersionID, body BetaWorkerVersionDeleteParams, opts ...option.RequestOption) (res *BetaWorkerVersionDeleteResponse, err error) {
+func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, versionID string, body BetaWorkerVersionDeleteParams, opts ...option.RequestOption) (res *BetaWorkerVersionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -103,13 +103,17 @@ func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, 
 		err = errors.New("missing required worker_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%v", body.AccountID, workerID, versionID)
+	if versionID == "" {
+		err = errors.New("missing required version_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%s", body.AccountID, workerID, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Get details about a specific version.
-func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, versionID BetaWorkerVersionGetParamsVersionID, params BetaWorkerVersionGetParams, opts ...option.RequestOption) (res *Version, err error) {
+func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, versionID string, params BetaWorkerVersionGetParams, opts ...option.RequestOption) (res *Version, err error) {
 	var env BetaWorkerVersionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -120,7 +124,11 @@ func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, ver
 		err = errors.New("missing required worker_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%v", params.AccountID, workerID, versionID)
+	if versionID == "" {
+		err = errors.New("missing required version_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%s", params.AccountID, workerID, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -139,6 +147,12 @@ type Version struct {
 	// Metadata about the version.
 	Annotations VersionAnnotations `json:"annotations"`
 	// Configuration for assets within a Worker.
+	//
+	// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
+	// and
+	// [`_redirects`](https://developers.cloudflare.com/workers/static-assets/redirects/)
+	// files should be included as modules named `_headers` and `_redirects` with
+	// content type `text/plain`.
 	Assets VersionAssets `json:"assets"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -160,6 +174,15 @@ type Version struct {
 	// applied when the version is deployed.
 	Migrations VersionMigrations `json:"migrations"`
 	// Code, sourcemaps, and other content used at runtime.
+	//
+	// This includes
+	// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
+	// and
+	// [`_redirects`](https://developers.cloudflare.com/workers/static-assets/redirects/)
+	// files used to configure
+	// [Static Assets](https://developers.cloudflare.com/workers/static-assets/).
+	// `_headers` and `_redirects` files should be included as modules named `_headers`
+	// and `_redirects` with content type `text/plain`.
 	Modules []VersionModule `json:"modules"`
 	// Placement settings for the version.
 	Placement VersionPlacement `json:"placement"`
@@ -231,6 +254,12 @@ func (r versionAnnotationsJSON) RawJSON() string {
 }
 
 // Configuration for assets within a Worker.
+//
+// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
+// and
+// [`_redirects`](https://developers.cloudflare.com/workers/static-assets/redirects/)
+// files should be included as modules named `_headers` and `_redirects` with
+// content type `text/plain`.
 type VersionAssets struct {
 	// Configuration for assets within a Worker.
 	Config VersionAssetsConfig `json:"config"`
@@ -368,6 +397,10 @@ type VersionBinding struct {
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
+	// This field can have the runtime type of [[]string].
+	AllowedDestinationAddresses interface{} `json:"allowed_destination_addresses"`
+	// This field can have the runtime type of [[]string].
+	AllowedSenderAddresses interface{} `json:"allowed_sender_addresses"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -376,6 +409,8 @@ type VersionBinding struct {
 	ClassName string `json:"class_name"`
 	// The name of the dataset to bind to.
 	Dataset string `json:"dataset"`
+	// Destination address for the email.
+	DestinationAddress string `json:"destination_address" format:"email"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -391,9 +426,16 @@ type VersionBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName string `json:"old_name"`
 	// This field can have the runtime type of
 	// [VersionBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
@@ -412,6 +454,10 @@ type VersionBinding struct {
 	// This field can have the runtime type of
 	// [[]VersionBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID string `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName string             `json:"workflow_name"`
 	JSON         versionBindingJSON `json:"-"`
@@ -420,33 +466,39 @@ type VersionBinding struct {
 
 // versionBindingJSON contains the JSON metadata for the struct [VersionBinding]
 type versionBindingJSON struct {
-	Name          apijson.Field
-	Type          apijson.Field
-	ID            apijson.Field
-	Algorithm     apijson.Field
-	BucketName    apijson.Field
-	CertificateID apijson.Field
-	ClassName     apijson.Field
-	Dataset       apijson.Field
-	Environment   apijson.Field
-	Format        apijson.Field
-	IndexName     apijson.Field
-	Json          apijson.Field
-	KeyJwk        apijson.Field
-	Namespace     apijson.Field
-	NamespaceID   apijson.Field
-	Outbound      apijson.Field
-	Pipeline      apijson.Field
-	QueueName     apijson.Field
-	ScriptName    apijson.Field
-	SecretName    apijson.Field
-	Service       apijson.Field
-	StoreID       apijson.Field
-	Text          apijson.Field
-	Usages        apijson.Field
-	WorkflowName  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	Name                        apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	Algorithm                   apijson.Field
+	AllowedDestinationAddresses apijson.Field
+	AllowedSenderAddresses      apijson.Field
+	BucketName                  apijson.Field
+	CertificateID               apijson.Field
+	ClassName                   apijson.Field
+	Dataset                     apijson.Field
+	DestinationAddress          apijson.Field
+	Environment                 apijson.Field
+	Format                      apijson.Field
+	IndexName                   apijson.Field
+	Json                        apijson.Field
+	KeyJwk                      apijson.Field
+	Namespace                   apijson.Field
+	NamespaceID                 apijson.Field
+	OldName                     apijson.Field
+	Outbound                    apijson.Field
+	Part                        apijson.Field
+	Pipeline                    apijson.Field
+	QueueName                   apijson.Field
+	ScriptName                  apijson.Field
+	SecretName                  apijson.Field
+	Service                     apijson.Field
+	StoreID                     apijson.Field
+	Text                        apijson.Field
+	Usages                      apijson.Field
+	VersionID                   apijson.Field
+	WorkflowName                apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r versionBindingJSON) RawJSON() string {
@@ -470,9 +522,12 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
 // [VersionBindingsWorkersBindingKindD1],
+// [VersionBindingsWorkersBindingKindDataBlob],
 // [VersionBindingsWorkersBindingKindDispatchNamespace],
 // [VersionBindingsWorkersBindingKindDurableObjectNamespace],
 // [VersionBindingsWorkersBindingKindHyperdrive],
+// [VersionBindingsWorkersBindingKindInherit],
+// [VersionBindingsWorkersBindingKindImages],
 // [VersionBindingsWorkersBindingKindJson],
 // [VersionBindingsWorkersBindingKindKVNamespace],
 // [VersionBindingsWorkersBindingKindMTLSCertificate],
@@ -481,13 +536,16 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindQueue],
 // [VersionBindingsWorkersBindingKindR2Bucket],
 // [VersionBindingsWorkersBindingKindSecretText],
+// [VersionBindingsWorkersBindingKindSendEmail],
 // [VersionBindingsWorkersBindingKindService],
 // [VersionBindingsWorkersBindingKindTailConsumer],
+// [VersionBindingsWorkersBindingKindTextBlob],
 // [VersionBindingsWorkersBindingKindVectorize],
 // [VersionBindingsWorkersBindingKindVersionMetadata],
 // [VersionBindingsWorkersBindingKindSecretsStoreSecret],
 // [VersionBindingsWorkersBindingKindSecretKey],
-// [VersionBindingsWorkersBindingKindWorkflow].
+// [VersionBindingsWorkersBindingKindWorkflow],
+// [VersionBindingsWorkersBindingKindWasmModule].
 func (r VersionBinding) AsUnion() VersionBindingsUnion {
 	return r.union
 }
@@ -499,9 +557,12 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
 // [VersionBindingsWorkersBindingKindD1],
+// [VersionBindingsWorkersBindingKindDataBlob],
 // [VersionBindingsWorkersBindingKindDispatchNamespace],
 // [VersionBindingsWorkersBindingKindDurableObjectNamespace],
 // [VersionBindingsWorkersBindingKindHyperdrive],
+// [VersionBindingsWorkersBindingKindInherit],
+// [VersionBindingsWorkersBindingKindImages],
 // [VersionBindingsWorkersBindingKindJson],
 // [VersionBindingsWorkersBindingKindKVNamespace],
 // [VersionBindingsWorkersBindingKindMTLSCertificate],
@@ -510,13 +571,16 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindQueue],
 // [VersionBindingsWorkersBindingKindR2Bucket],
 // [VersionBindingsWorkersBindingKindSecretText],
+// [VersionBindingsWorkersBindingKindSendEmail],
 // [VersionBindingsWorkersBindingKindService],
 // [VersionBindingsWorkersBindingKindTailConsumer],
+// [VersionBindingsWorkersBindingKindTextBlob],
 // [VersionBindingsWorkersBindingKindVectorize],
 // [VersionBindingsWorkersBindingKindVersionMetadata],
 // [VersionBindingsWorkersBindingKindSecretsStoreSecret],
-// [VersionBindingsWorkersBindingKindSecretKey] or
-// [VersionBindingsWorkersBindingKindWorkflow].
+// [VersionBindingsWorkersBindingKindSecretKey],
+// [VersionBindingsWorkersBindingKindWorkflow] or
+// [VersionBindingsWorkersBindingKindWasmModule].
 type VersionBindingsUnion interface {
 	implementsVersionBinding()
 }
@@ -552,6 +616,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindDataBlob{}),
+			DiscriminatorValue: "data_blob",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindDispatchNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
@@ -564,6 +633,16 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindHyperdrive{}),
 			DiscriminatorValue: "hyperdrive",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindInherit{}),
+			DiscriminatorValue: "inherit",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindImages{}),
+			DiscriminatorValue: "images",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -607,6 +686,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindSendEmail{}),
+			DiscriminatorValue: "send_email",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
 		},
@@ -614,6 +698,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "tail_consumer",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindTextBlob{}),
+			DiscriminatorValue: "text_blob",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -639,6 +728,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindWorkflow{}),
 			DiscriminatorValue: "workflow",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindWasmModule{}),
+			DiscriminatorValue: "wasm_module",
 		},
 	)
 }
@@ -859,6 +953,54 @@ func (r VersionBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindDataBlob struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type VersionBindingsWorkersBindingKindDataBlobType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindDataBlobJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindDataBlobJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindDataBlob]
+type versionBindingsWorkersBindingKindDataBlobJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindDataBlob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindDataBlobJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindDataBlob) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindDataBlobType string
+
+const (
+	VersionBindingsWorkersBindingKindDataBlobTypeDataBlob VersionBindingsWorkersBindingKindDataBlobType = "data_blob"
+)
+
+func (r VersionBindingsWorkersBindingKindDataBlobType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindDataBlobTypeDataBlob:
+		return true
+	}
+	return false
+}
+
 type VersionBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1058,6 +1200,100 @@ const (
 func (r VersionBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindInherit struct {
+	// The name of the inherited binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindInheritType `json:"type,required"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName string `json:"old_name"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID string                                       `json:"version_id"`
+	JSON      versionBindingsWorkersBindingKindInheritJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindInheritJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindInherit]
+type versionBindingsWorkersBindingKindInheritJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	OldName     apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindInherit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindInheritJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindInherit) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindInheritType string
+
+const (
+	VersionBindingsWorkersBindingKindInheritTypeInherit VersionBindingsWorkersBindingKindInheritType = "inherit"
+)
+
+func (r VersionBindingsWorkersBindingKindInheritType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindInheritTypeInherit:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindImages struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindImagesType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindImagesJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindImagesJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindImages]
+type versionBindingsWorkersBindingKindImagesJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindImages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindImagesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindImages) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindImagesType string
+
+const (
+	VersionBindingsWorkersBindingKindImagesTypeImages VersionBindingsWorkersBindingKindImagesType = "images"
+)
+
+func (r VersionBindingsWorkersBindingKindImagesType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindImagesTypeImages:
 		return true
 	}
 	return false
@@ -1420,25 +1656,76 @@ func (r VersionBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindSendEmail struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindSendEmailType `json:"type,required"`
+	// List of allowed destination addresses.
+	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
+	// List of allowed sender addresses.
+	AllowedSenderAddresses []string `json:"allowed_sender_addresses" format:"email"`
+	// Destination address for the email.
+	DestinationAddress string                                         `json:"destination_address" format:"email"`
+	JSON               versionBindingsWorkersBindingKindSendEmailJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindSendEmailJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindSendEmail]
+type versionBindingsWorkersBindingKindSendEmailJSON struct {
+	Name                        apijson.Field
+	Type                        apijson.Field
+	AllowedDestinationAddresses apijson.Field
+	AllowedSenderAddresses      apijson.Field
+	DestinationAddress          apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindSendEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindSendEmailJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindSendEmail) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindSendEmailType string
+
+const (
+	VersionBindingsWorkersBindingKindSendEmailTypeSendEmail VersionBindingsWorkersBindingKindSendEmailType = "send_email"
+)
+
+func (r VersionBindingsWorkersBindingKindSendEmailType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindSendEmailTypeSendEmail:
+		return true
+	}
+	return false
+}
+
 type VersionBindingsWorkersBindingKindService struct {
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type VersionBindingsWorkersBindingKindServiceType `json:"type,required"`
-	JSON versionBindingsWorkersBindingKindServiceJSON `json:"-"`
+	// Optional environment if the Worker utilizes one.
+	Environment string                                       `json:"environment"`
+	JSON        versionBindingsWorkersBindingKindServiceJSON `json:"-"`
 }
 
 // versionBindingsWorkersBindingKindServiceJSON contains the JSON metadata for the
 // struct [VersionBindingsWorkersBindingKindService]
 type versionBindingsWorkersBindingKindServiceJSON struct {
-	Environment apijson.Field
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1508,6 +1795,54 @@ const (
 func (r VersionBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindTextBlob struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the text content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type VersionBindingsWorkersBindingKindTextBlobType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindTextBlobJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindTextBlobJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindTextBlob]
+type versionBindingsWorkersBindingKindTextBlobJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindTextBlob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindTextBlobJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindTextBlob) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindTextBlobType string
+
+const (
+	VersionBindingsWorkersBindingKindTextBlobTypeTextBlob VersionBindingsWorkersBindingKindTextBlobType = "text_blob"
+)
+
+func (r VersionBindingsWorkersBindingKindTextBlobType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindTextBlobTypeTextBlob:
 		return true
 	}
 	return false
@@ -1795,6 +2130,54 @@ func (r VersionBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindWasmModule struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the WebAssembly module content. Only accepted
+	// for `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type VersionBindingsWorkersBindingKindWasmModuleType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindWasmModuleJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindWasmModuleJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindWasmModule]
+type versionBindingsWorkersBindingKindWasmModuleJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindWasmModule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindWasmModuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindWasmModule) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindWasmModuleType string
+
+const (
+	VersionBindingsWorkersBindingKindWasmModuleTypeWasmModule VersionBindingsWorkersBindingKindWasmModuleType = "wasm_module"
+)
+
+func (r VersionBindingsWorkersBindingKindWasmModuleType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindWasmModuleTypeWasmModule:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type VersionBindingsType string
 
@@ -1804,9 +2187,12 @@ const (
 	VersionBindingsTypeAssets                 VersionBindingsType = "assets"
 	VersionBindingsTypeBrowser                VersionBindingsType = "browser"
 	VersionBindingsTypeD1                     VersionBindingsType = "d1"
+	VersionBindingsTypeDataBlob               VersionBindingsType = "data_blob"
 	VersionBindingsTypeDispatchNamespace      VersionBindingsType = "dispatch_namespace"
 	VersionBindingsTypeDurableObjectNamespace VersionBindingsType = "durable_object_namespace"
 	VersionBindingsTypeHyperdrive             VersionBindingsType = "hyperdrive"
+	VersionBindingsTypeInherit                VersionBindingsType = "inherit"
+	VersionBindingsTypeImages                 VersionBindingsType = "images"
 	VersionBindingsTypeJson                   VersionBindingsType = "json"
 	VersionBindingsTypeKVNamespace            VersionBindingsType = "kv_namespace"
 	VersionBindingsTypeMTLSCertificate        VersionBindingsType = "mtls_certificate"
@@ -1815,18 +2201,21 @@ const (
 	VersionBindingsTypeQueue                  VersionBindingsType = "queue"
 	VersionBindingsTypeR2Bucket               VersionBindingsType = "r2_bucket"
 	VersionBindingsTypeSecretText             VersionBindingsType = "secret_text"
+	VersionBindingsTypeSendEmail              VersionBindingsType = "send_email"
 	VersionBindingsTypeService                VersionBindingsType = "service"
 	VersionBindingsTypeTailConsumer           VersionBindingsType = "tail_consumer"
+	VersionBindingsTypeTextBlob               VersionBindingsType = "text_blob"
 	VersionBindingsTypeVectorize              VersionBindingsType = "vectorize"
 	VersionBindingsTypeVersionMetadata        VersionBindingsType = "version_metadata"
 	VersionBindingsTypeSecretsStoreSecret     VersionBindingsType = "secrets_store_secret"
 	VersionBindingsTypeSecretKey              VersionBindingsType = "secret_key"
 	VersionBindingsTypeWorkflow               VersionBindingsType = "workflow"
+	VersionBindingsTypeWasmModule             VersionBindingsType = "wasm_module"
 )
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeService, VersionBindingsTypeTailConsumer, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow:
+	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTailConsumer, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule:
 		return true
 	}
 	return false
@@ -2058,6 +2447,12 @@ type VersionParam struct {
 	// Metadata about the version.
 	Annotations param.Field[VersionAnnotationsParam] `json:"annotations"`
 	// Configuration for assets within a Worker.
+	//
+	// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
+	// and
+	// [`_redirects`](https://developers.cloudflare.com/workers/static-assets/redirects/)
+	// files should be included as modules named `_headers` and `_redirects` with
+	// content type `text/plain`.
 	Assets param.Field[VersionAssetsParam] `json:"assets"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -2079,6 +2474,15 @@ type VersionParam struct {
 	// applied when the version is deployed.
 	Migrations param.Field[VersionMigrationsUnionParam] `json:"migrations"`
 	// Code, sourcemaps, and other content used at runtime.
+	//
+	// This includes
+	// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
+	// and
+	// [`_redirects`](https://developers.cloudflare.com/workers/static-assets/redirects/)
+	// files used to configure
+	// [Static Assets](https://developers.cloudflare.com/workers/static-assets/).
+	// `_headers` and `_redirects` files should be included as modules named `_headers`
+	// and `_redirects` with content type `text/plain`.
 	Modules param.Field[[]VersionModuleParam] `json:"modules"`
 	// Placement settings for the version.
 	Placement param.Field[VersionPlacementParam] `json:"placement"`
@@ -2105,6 +2509,12 @@ func (r VersionAnnotationsParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Configuration for assets within a Worker.
+//
+// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
+// and
+// [`_redirects`](https://developers.cloudflare.com/workers/static-assets/redirects/)
+// files should be included as modules named `_headers` and `_redirects` with
+// content type `text/plain`.
 type VersionAssetsParam struct {
 	// Configuration for assets within a Worker.
 	Config param.Field[VersionAssetsConfigParam] `json:"config"`
@@ -2157,8 +2567,10 @@ type VersionBindingParam struct {
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsType] `json:"type,required"`
 	// Identifier of the D1 database to bind to.
-	ID        param.Field[string]      `json:"id"`
-	Algorithm param.Field[interface{}] `json:"algorithm"`
+	ID                          param.Field[string]      `json:"id"`
+	Algorithm                   param.Field[interface{}] `json:"algorithm"`
+	AllowedDestinationAddresses param.Field[interface{}] `json:"allowed_destination_addresses"`
+	AllowedSenderAddresses      param.Field[interface{}] `json:"allowed_sender_addresses"`
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -2167,6 +2579,8 @@ type VersionBindingParam struct {
 	ClassName param.Field[string] `json:"class_name"`
 	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset"`
+	// Destination address for the email.
+	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Data format of the key.
@@ -2182,8 +2596,15 @@ type VersionBindingParam struct {
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
-	NamespaceID param.Field[string]      `json:"namespace_id"`
-	Outbound    param.Field[interface{}] `json:"outbound"`
+	NamespaceID param.Field[string] `json:"namespace_id"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName  param.Field[string]      `json:"old_name"`
+	Outbound param.Field[interface{}] `json:"outbound"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part param.Field[string] `json:"part"`
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
@@ -2200,6 +2621,10 @@ type VersionBindingParam struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID param.Field[string] `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name"`
 }
@@ -2217,9 +2642,12 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindAssetsParam],
 // [workers.VersionBindingsWorkersBindingKindBrowserParam],
 // [workers.VersionBindingsWorkersBindingKindD1Param],
+// [workers.VersionBindingsWorkersBindingKindDataBlobParam],
 // [workers.VersionBindingsWorkersBindingKindDispatchNamespaceParam],
 // [workers.VersionBindingsWorkersBindingKindDurableObjectNamespaceParam],
 // [workers.VersionBindingsWorkersBindingKindHyperdriveParam],
+// [workers.VersionBindingsWorkersBindingKindInheritParam],
+// [workers.VersionBindingsWorkersBindingKindImagesParam],
 // [workers.VersionBindingsWorkersBindingKindJsonParam],
 // [workers.VersionBindingsWorkersBindingKindKVNamespaceParam],
 // [workers.VersionBindingsWorkersBindingKindMTLSCertificateParam],
@@ -2228,13 +2656,17 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindQueueParam],
 // [workers.VersionBindingsWorkersBindingKindR2BucketParam],
 // [workers.VersionBindingsWorkersBindingKindSecretTextParam],
+// [workers.VersionBindingsWorkersBindingKindSendEmailParam],
 // [workers.VersionBindingsWorkersBindingKindServiceParam],
 // [workers.VersionBindingsWorkersBindingKindTailConsumerParam],
+// [workers.VersionBindingsWorkersBindingKindTextBlobParam],
 // [workers.VersionBindingsWorkersBindingKindVectorizeParam],
 // [workers.VersionBindingsWorkersBindingKindVersionMetadataParam],
 // [workers.VersionBindingsWorkersBindingKindSecretsStoreSecretParam],
 // [workers.VersionBindingsWorkersBindingKindSecretKeyParam],
-// [workers.VersionBindingsWorkersBindingKindWorkflowParam], [VersionBindingParam].
+// [workers.VersionBindingsWorkersBindingKindWorkflowParam],
+// [workers.VersionBindingsWorkersBindingKindWasmModuleParam],
+// [VersionBindingParam].
 type VersionBindingsUnionParam interface {
 	implementsVersionBindingsUnionParam()
 }
@@ -2308,6 +2740,24 @@ func (r VersionBindingsWorkersBindingKindD1Param) MarshalJSON() (data []byte, er
 }
 
 func (r VersionBindingsWorkersBindingKindD1Param) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindDataBlobParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part param.Field[string] `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type param.Field[VersionBindingsWorkersBindingKindDataBlobType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindDataBlobParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindDataBlobParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindDispatchNamespaceParam struct {
 	// A JavaScript variable name for the binding.
@@ -2389,6 +2839,40 @@ func (r VersionBindingsWorkersBindingKindHyperdriveParam) MarshalJSON() (data []
 }
 
 func (r VersionBindingsWorkersBindingKindHyperdriveParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindInheritParam struct {
+	// The name of the inherited binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindInheritType] `json:"type,required"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName param.Field[string] `json:"old_name"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID param.Field[string] `json:"version_id"`
+}
+
+func (r VersionBindingsWorkersBindingKindInheritParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindInheritParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindImagesParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindImagesType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindImagesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindImagesParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindJsonParam struct {
 	// JSON data to use.
@@ -2511,15 +2995,34 @@ func (r VersionBindingsWorkersBindingKindSecretTextParam) MarshalJSON() (data []
 
 func (r VersionBindingsWorkersBindingKindSecretTextParam) implementsVersionBindingsUnionParam() {}
 
+type VersionBindingsWorkersBindingKindSendEmailParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindSendEmailType] `json:"type,required"`
+	// List of allowed destination addresses.
+	AllowedDestinationAddresses param.Field[[]string] `json:"allowed_destination_addresses" format:"email"`
+	// List of allowed sender addresses.
+	AllowedSenderAddresses param.Field[[]string] `json:"allowed_sender_addresses" format:"email"`
+	// Destination address for the email.
+	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
+}
+
+func (r VersionBindingsWorkersBindingKindSendEmailParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindSendEmailParam) implementsVersionBindingsUnionParam() {}
+
 type VersionBindingsWorkersBindingKindServiceParam struct {
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of Worker to bind to.
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment"`
 }
 
 func (r VersionBindingsWorkersBindingKindServiceParam) MarshalJSON() (data []byte, err error) {
@@ -2542,6 +3045,24 @@ func (r VersionBindingsWorkersBindingKindTailConsumerParam) MarshalJSON() (data 
 }
 
 func (r VersionBindingsWorkersBindingKindTailConsumerParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindTextBlobParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The name of the file containing the text content. Only accepted for
+	// `service worker syntax` Workers.
+	Part param.Field[string] `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type param.Field[VersionBindingsWorkersBindingKindTextBlobType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindTextBlobParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindTextBlobParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindVectorizeParam struct {
 	// Name of the Vectorize index to bind to.
@@ -2638,6 +3159,24 @@ func (r VersionBindingsWorkersBindingKindWorkflowParam) MarshalJSON() (data []by
 }
 
 func (r VersionBindingsWorkersBindingKindWorkflowParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindWasmModuleParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The name of the file containing the WebAssembly module content. Only accepted
+	// for `service worker syntax` Workers.
+	Part param.Field[string] `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type param.Field[VersionBindingsWorkersBindingKindWasmModuleType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindWasmModuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindWasmModuleParam) implementsVersionBindingsUnionParam() {}
 
 // Resource limits enforced at runtime.
 type VersionLimitsParam struct {
@@ -2862,10 +3401,22 @@ type BetaWorkerVersionNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Version   VersionParam        `json:"version,required"`
+	// If true, a deployment will be created that sends 100% of traffic to the new
+	// version.
+	Deploy param.Field[bool] `query:"deploy"`
 }
 
 func (r BetaWorkerVersionNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Version)
+}
+
+// URLQuery serializes [BetaWorkerVersionNewParams]'s query parameters as
+// `url.Values`.
+func (r BetaWorkerVersionNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type BetaWorkerVersionNewResponseEnvelope struct {
@@ -3030,24 +3581,13 @@ type BetaWorkerVersionDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type BetaWorkerVersionDeleteParamsVersionID string
-
-const (
-	BetaWorkerVersionDeleteParamsVersionIDLatest BetaWorkerVersionDeleteParamsVersionID = "latest"
-)
-
-func (r BetaWorkerVersionDeleteParamsVersionID) IsKnown() bool {
-	switch r {
-	case BetaWorkerVersionDeleteParamsVersionIDLatest:
-		return true
-	}
-	return false
-}
-
 type BetaWorkerVersionGetParams struct {
 	// Identifier.
-	AccountID param.Field[string]                            `path:"account_id,required"`
-	Include   param.Field[BetaWorkerVersionGetParamsInclude] `query:"include"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Whether to include the `modules` property of the version in the response, which
+	// contains code and sourcemap content and may add several megabytes to the
+	// response size.
+	Include param.Field[BetaWorkerVersionGetParamsInclude] `query:"include"`
 }
 
 // URLQuery serializes [BetaWorkerVersionGetParams]'s query parameters as
@@ -3059,20 +3599,9 @@ func (r BetaWorkerVersionGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-type BetaWorkerVersionGetParamsVersionID string
-
-const (
-	BetaWorkerVersionGetParamsVersionIDLatest BetaWorkerVersionGetParamsVersionID = "latest"
-)
-
-func (r BetaWorkerVersionGetParamsVersionID) IsKnown() bool {
-	switch r {
-	case BetaWorkerVersionGetParamsVersionIDLatest:
-		return true
-	}
-	return false
-}
-
+// Whether to include the `modules` property of the version in the response, which
+// contains code and sourcemap content and may add several megabytes to the
+// response size.
 type BetaWorkerVersionGetParamsInclude string
 
 const (

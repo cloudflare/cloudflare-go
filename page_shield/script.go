@@ -287,7 +287,7 @@ type ScriptListParams struct {
 	// Excludes scripts whose URL contains one of the URL-encoded URLs separated by
 	// commas.
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
-	// Export the list of scripts as a file.
+	// Export the list of scripts as a file, limited to 50000 entries.
 	Export param.Field[ScriptListParamsExport] `query:"export"`
 	// Includes scripts that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -348,7 +348,7 @@ func (r ScriptListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of scripts as a file.
+// Export the list of scripts as a file, limited to 50000 entries.
 type ScriptListParamsExport string
 
 const (

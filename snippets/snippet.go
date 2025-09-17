@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -225,8 +224,6 @@ func (r snippetGetResponseJSON) RawJSON() string {
 type SnippetUpdateParams struct {
 	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The list of files belonging to the snippet.
-	Files param.Field[[]io.Reader] `json:"files,required" format:"binary"`
 	// Metadata about the snippet.
 	Metadata param.Field[SnippetUpdateParamsMetadata] `json:"metadata,required"`
 }

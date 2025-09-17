@@ -37,7 +37,7 @@ func NewGatewayConfigurationService(opts ...option.RequestOption) (r *GatewayCon
 	return
 }
 
-// Updates the current Zero Trust account configuration.
+// Update the current Zero Trust account configuration.
 func (r *GatewayConfigurationService) Update(ctx context.Context, params GatewayConfigurationUpdateParams, opts ...option.RequestOption) (res *GatewayConfigurationUpdateResponse, err error) {
 	var env GatewayConfigurationUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -54,11 +54,11 @@ func (r *GatewayConfigurationService) Update(ctx context.Context, params Gateway
 	return
 }
 
-// Patches the current Zero Trust account configuration. This endpoint can update a
-// single subcollection of settings such as `antivirus`, `tls_decrypt`,
-// `activity_log`, `block_page`, `browser_isolation`, `fips`, `body_scanning`, or
-// `certificate`, without updating the entire configuration object. Returns an
-// error if any collection of settings is not properly configured.
+// Update (PATCH) a single subcollection of settings such as `antivirus`,
+// `tls_decrypt`, `activity_log`, `block_page`, `browser_isolation`, `fips`,
+// `body_scanning`, or `certificate` without updating the entire configuration
+// object. This endpoint returns an error if any settings collection lacks proper
+// configuration.
 func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayConfigurationEditParams, opts ...option.RequestOption) (res *GatewayConfigurationEditResponse, err error) {
 	var env GatewayConfigurationEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -75,7 +75,7 @@ func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayCo
 	return
 }
 
-// Fetches the current Zero Trust account configuration.
+// Retrieve the current Zero Trust account configuration.
 func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConfigurationGetParams, opts ...option.RequestOption) (res *GatewayConfigurationGetResponse, err error) {
 	var env GatewayConfigurationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -92,9 +92,9 @@ func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConf
 	return
 }
 
-// Activity log settings.
+// Specify activity log settings.
 type ActivityLogSettings struct {
-	// Enable activity logging.
+	// Specify whether to log activity.
 	Enabled bool                    `json:"enabled,nullable"`
 	JSON    activityLogSettingsJSON `json:"-"`
 }
@@ -115,9 +115,9 @@ func (r activityLogSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Activity log settings.
+// Specify activity log settings.
 type ActivityLogSettingsParam struct {
-	// Enable activity logging.
+	// Specify whether to log activity.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -125,16 +125,15 @@ func (r ActivityLogSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Anti-virus settings.
+// Specify anti-virus settings.
 type AntiVirusSettings struct {
-	// Enable anti-virus scanning on downloads.
+	// Specify whether to enable anti-virus scanning on downloads.
 	EnabledDownloadPhase bool `json:"enabled_download_phase,nullable"`
-	// Enable anti-virus scanning on uploads.
+	// Specify whether to enable anti-virus scanning on uploads.
 	EnabledUploadPhase bool `json:"enabled_upload_phase,nullable"`
-	// Block requests for files that cannot be scanned.
+	// Specify whether to block requests for unscannable files.
 	FailClosed bool `json:"fail_closed,nullable"`
-	// Configure a message to display on the user's device when an antivirus search is
-	// performed.
+	// Configure the message the user's device shows during an antivirus scan.
 	NotificationSettings NotificationSettings  `json:"notification_settings,nullable"`
 	JSON                 antiVirusSettingsJSON `json:"-"`
 }
@@ -158,16 +157,15 @@ func (r antiVirusSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Anti-virus settings.
+// Specify anti-virus settings.
 type AntiVirusSettingsParam struct {
-	// Enable anti-virus scanning on downloads.
+	// Specify whether to enable anti-virus scanning on downloads.
 	EnabledDownloadPhase param.Field[bool] `json:"enabled_download_phase"`
-	// Enable anti-virus scanning on uploads.
+	// Specify whether to enable anti-virus scanning on uploads.
 	EnabledUploadPhase param.Field[bool] `json:"enabled_upload_phase"`
-	// Block requests for files that cannot be scanned.
+	// Specify whether to block requests for unscannable files.
 	FailClosed param.Field[bool] `json:"fail_closed"`
-	// Configure a message to display on the user's device when an antivirus search is
-	// performed.
+	// Configure the message the user's device shows during an antivirus scan.
 	NotificationSettings param.Field[NotificationSettingsParam] `json:"notification_settings"`
 }
 
@@ -175,42 +173,44 @@ func (r AntiVirusSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Block page layout settings.
+// Specify block page layout settings.
 type BlockPageSettings struct {
-	// If mode is customized_block_page: block page background color in #rrggbb format.
+	// Specify the block page background color in `#rrggbb` format when the mode is
+	// customized_block_page.
 	BackgroundColor string `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
+	// Specify whether to enable the custom block page.
 	Enabled bool `json:"enabled,nullable"`
-	// If mode is customized_block_page: block page footer text.
+	// Specify the block page footer text when the mode is customized_block_page.
 	FooterText string `json:"footer_text"`
-	// If mode is customized_block_page: block page header text.
+	// Specify the block page header text when the mode is customized_block_page.
 	HeaderText string `json:"header_text"`
-	// If mode is redirect_uri: when enabled, context will be appended to target_uri as
-	// query parameters.
+	// Specify whether to append context to target_uri as query parameters. This
+	// applies only when the mode is redirect_uri.
 	IncludeContext bool `json:"include_context"`
-	// If mode is customized_block_page: full URL to the logo file.
+	// Specify the full URL to the logo file when the mode is customized_block_page.
 	LogoPath string `json:"logo_path"`
-	// If mode is customized_block_page: admin email for users to contact.
+	// Specify the admin email for users to contact when the mode is
+	// customized_block_page.
 	MailtoAddress string `json:"mailto_address"`
-	// If mode is customized_block_page: subject line for emails created from block
-	// page.
+	// Specify the subject line for emails created from the block page when the mode is
+	// customized_block_page.
 	MailtoSubject string `json:"mailto_subject"`
-	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-	// a customer-provided URI.
+	// Specify whether to redirect users to a Cloudflare-hosted block page or a
+	// customer-provided URI.
 	Mode BlockPageSettingsMode `json:"mode"`
-	// If mode is customized_block_page: block page title.
+	// Specify the block page title when the mode is customized_block_page.
 	Name string `json:"name"`
-	// This setting was shared via the Orgs API and cannot be edited by the current
-	// account.
+	// Indicate that this setting was shared via the Orgs API and read only for the
+	// current account.
 	ReadOnly bool `json:"read_only,nullable"`
-	// Account tag of account that shared this setting.
+	// Indicate the account tag of the account that shared this setting.
 	SourceAccount string `json:"source_account,nullable"`
-	// If mode is customized_block_page: suppress detailed info at the bottom of the
-	// block page.
+	// Specify whether to suppress detailed information at the bottom of the block page
+	// when the mode is customized_block_page.
 	SuppressFooter bool `json:"suppress_footer"`
-	// If mode is redirect_uri: URI to which the user should be redirected.
+	// Specify the URI to redirect users to when the mode is redirect_uri.
 	TargetURI string `json:"target_uri" format:"uri"`
-	// Version number of the setting.
+	// Indicate the version number of the setting.
 	Version int64                 `json:"version,nullable"`
 	JSON    blockPageSettingsJSON `json:"-"`
 }
@@ -245,8 +245,8 @@ func (r blockPageSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-// a customer-provided URI.
+// Specify whether to redirect users to a Cloudflare-hosted block page or a
+// customer-provided URI.
 type BlockPageSettingsMode string
 
 const (
@@ -263,35 +263,37 @@ func (r BlockPageSettingsMode) IsKnown() bool {
 	return false
 }
 
-// Block page layout settings.
+// Specify block page layout settings.
 type BlockPageSettingsParam struct {
-	// If mode is customized_block_page: block page background color in #rrggbb format.
+	// Specify the block page background color in `#rrggbb` format when the mode is
+	// customized_block_page.
 	BackgroundColor param.Field[string] `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
+	// Specify whether to enable the custom block page.
 	Enabled param.Field[bool] `json:"enabled"`
-	// If mode is customized_block_page: block page footer text.
+	// Specify the block page footer text when the mode is customized_block_page.
 	FooterText param.Field[string] `json:"footer_text"`
-	// If mode is customized_block_page: block page header text.
+	// Specify the block page header text when the mode is customized_block_page.
 	HeaderText param.Field[string] `json:"header_text"`
-	// If mode is redirect_uri: when enabled, context will be appended to target_uri as
-	// query parameters.
+	// Specify whether to append context to target_uri as query parameters. This
+	// applies only when the mode is redirect_uri.
 	IncludeContext param.Field[bool] `json:"include_context"`
-	// If mode is customized_block_page: full URL to the logo file.
+	// Specify the full URL to the logo file when the mode is customized_block_page.
 	LogoPath param.Field[string] `json:"logo_path"`
-	// If mode is customized_block_page: admin email for users to contact.
+	// Specify the admin email for users to contact when the mode is
+	// customized_block_page.
 	MailtoAddress param.Field[string] `json:"mailto_address"`
-	// If mode is customized_block_page: subject line for emails created from block
-	// page.
+	// Specify the subject line for emails created from the block page when the mode is
+	// customized_block_page.
 	MailtoSubject param.Field[string] `json:"mailto_subject"`
-	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
-	// a customer-provided URI.
+	// Specify whether to redirect users to a Cloudflare-hosted block page or a
+	// customer-provided URI.
 	Mode param.Field[BlockPageSettingsMode] `json:"mode"`
-	// If mode is customized_block_page: block page title.
+	// Specify the block page title when the mode is customized_block_page.
 	Name param.Field[string] `json:"name"`
-	// If mode is customized_block_page: suppress detailed info at the bottom of the
-	// block page.
+	// Specify whether to suppress detailed information at the bottom of the block page
+	// when the mode is customized_block_page.
 	SuppressFooter param.Field[bool] `json:"suppress_footer"`
-	// If mode is redirect_uri: URI to which the user should be redirected.
+	// Specify the URI to redirect users to when the mode is redirect_uri.
 	TargetURI param.Field[string] `json:"target_uri" format:"uri"`
 }
 
@@ -299,9 +301,9 @@ func (r BlockPageSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DLP body scanning settings.
+// Specify the DLP inspection mode.
 type BodyScanningSettings struct {
-	// Set the inspection mode to either `deep` or `shallow`.
+	// Specify the inspection mode as either `deep` or `shallow`.
 	InspectionMode BodyScanningSettingsInspectionMode `json:"inspection_mode"`
 	JSON           bodyScanningSettingsJSON           `json:"-"`
 }
@@ -322,7 +324,7 @@ func (r bodyScanningSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Set the inspection mode to either `deep` or `shallow`.
+// Specify the inspection mode as either `deep` or `shallow`.
 type BodyScanningSettingsInspectionMode string
 
 const (
@@ -338,9 +340,9 @@ func (r BodyScanningSettingsInspectionMode) IsKnown() bool {
 	return false
 }
 
-// DLP body scanning settings.
+// Specify the DLP inspection mode.
 type BodyScanningSettingsParam struct {
-	// Set the inspection mode to either `deep` or `shallow`.
+	// Specify the inspection mode as either `deep` or `shallow`.
 	InspectionMode param.Field[BodyScanningSettingsInspectionMode] `json:"inspection_mode"`
 }
 
@@ -348,11 +350,11 @@ func (r BodyScanningSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Browser isolation settings.
+// Specify Clientless Browser Isolation settings.
 type BrowserIsolationSettings struct {
-	// Enable non-identity onramp support for Browser Isolation.
+	// Specify whether to enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled bool `json:"non_identity_enabled"`
-	// Enable Clientless Browser Isolation.
+	// Specify whether to enable Clientless Browser Isolation.
 	URLBrowserIsolationEnabled bool                         `json:"url_browser_isolation_enabled"`
 	JSON                       browserIsolationSettingsJSON `json:"-"`
 }
@@ -374,11 +376,11 @@ func (r browserIsolationSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Browser isolation settings.
+// Specify Clientless Browser Isolation settings.
 type BrowserIsolationSettingsParam struct {
-	// Enable non-identity onramp support for Browser Isolation.
+	// Specify whether to enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled param.Field[bool] `json:"non_identity_enabled"`
-	// Enable Clientless Browser Isolation.
+	// Specify whether to enable Clientless Browser Isolation.
 	URLBrowserIsolationEnabled param.Field[bool] `json:"url_browser_isolation_enabled"`
 }
 
@@ -386,16 +388,17 @@ func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-// `certificate`).
+// Specify custom certificate settings for BYO-PKI. This field is deprecated; use
+// `certificate` instead.
 //
 // Deprecated: deprecated
 type CustomCertificateSettings struct {
-	// Enable use of custom certificate authority for signing Gateway. traffic.
+	// Specify whether to enable a custom certificate authority for signing Gateway
+	// traffic.
 	Enabled bool `json:"enabled,required,nullable"`
-	// UUID of certificate (ID from MTLS certificate store).
+	// Specify the UUID of the certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
-	// Certificate status (internal).
+	// Indicate the internal certificate status.
 	BindingStatus string                        `json:"binding_status"`
 	UpdatedAt     time.Time                     `json:"updated_at" format:"date-time"`
 	JSON          customCertificateSettingsJSON `json:"-"`
@@ -420,14 +423,15 @@ func (r customCertificateSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-// `certificate`).
+// Specify custom certificate settings for BYO-PKI. This field is deprecated; use
+// `certificate` instead.
 //
 // Deprecated: deprecated
 type CustomCertificateSettingsParam struct {
-	// Enable use of custom certificate authority for signing Gateway. traffic.
+	// Specify whether to enable a custom certificate authority for signing Gateway
+	// traffic.
 	Enabled param.Field[bool] `json:"enabled,required"`
-	// UUID of certificate (ID from MTLS certificate store).
+	// Specify the UUID of the certificate (ID from MTLS certificate store).
 	ID param.Field[string] `json:"id"`
 }
 
@@ -435,17 +439,17 @@ func (r CustomCertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extended e-mail matching settings.
+// Specify user emails settings for the firewall policies.
 type ExtendedEmailMatching struct {
-	// Enable matching all variants of user emails (with + or . modifiers) used as
-	// criteria in Firewall policies.
+	// Specify whether to match all variants of user emails (with + or . modifiers)
+	// used as criteria in Firewall policies.
 	Enabled bool `json:"enabled,nullable"`
-	// This setting was shared via the Orgs API and cannot be edited by the current
-	// account.
+	// Indicate that this setting was shared via the Orgs API and read only for the
+	// current account.
 	ReadOnly bool `json:"read_only"`
-	// Account tag of account that shared this setting.
+	// Indicate the account tag of the account that shared this setting.
 	SourceAccount string `json:"source_account"`
-	// Version number of the setting.
+	// Indicate the version number of the setting.
 	Version int64                     `json:"version"`
 	JSON    extendedEmailMatchingJSON `json:"-"`
 }
@@ -469,10 +473,10 @@ func (r extendedEmailMatchingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Extended e-mail matching settings.
+// Specify user emails settings for the firewall policies.
 type ExtendedEmailMatchingParam struct {
-	// Enable matching all variants of user emails (with + or . modifiers) used as
-	// criteria in Firewall policies.
+	// Specify whether to match all variants of user emails (with + or . modifiers)
+	// used as criteria in Firewall policies.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -480,9 +484,9 @@ func (r ExtendedEmailMatchingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// FIPS settings.
+// Specify FIPS settings.
 type FipsSettings struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
+	// Enforce cipher suites and TLS versions compliant with FIPS 140-2.
 	TLS  bool             `json:"tls"`
 	JSON fipsSettingsJSON `json:"-"`
 }
@@ -502,9 +506,9 @@ func (r fipsSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// FIPS settings.
+// Specify FIPS settings.
 type FipsSettingsParam struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS. 140-2.
+	// Enforce cipher suites and TLS versions compliant with FIPS 140-2.
 	TLS param.Field[bool] `json:"tls"`
 }
 
@@ -512,39 +516,39 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Account settings.
+// Specify account settings.
 type GatewayConfigurationSettings struct {
-	// Activity log settings.
+	// Specify activity log settings.
 	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
-	// Anti-virus settings.
+	// Specify anti-virus settings.
 	Antivirus AntiVirusSettings `json:"antivirus,nullable"`
-	// Block page layout settings.
+	// Specify block page layout settings.
 	BlockPage BlockPageSettings `json:"block_page,nullable"`
-	// DLP body scanning settings.
+	// Specify the DLP inspection mode.
 	BodyScanning BodyScanningSettings `json:"body_scanning,nullable"`
-	// Browser isolation settings.
+	// Specify Clientless Browser Isolation settings.
 	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation,nullable"`
-	// Certificate settings for Gateway TLS interception. If not specified, the
-	// Cloudflare Root CA will be used.
+	// Specify certificate settings for Gateway TLS interception. If unset, the
+	// Cloudflare Root CA handles interception.
 	Certificate GatewayConfigurationSettingsCertificate `json:"certificate,nullable"`
-	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-	// `certificate`).
+	// Specify custom certificate settings for BYO-PKI. This field is deprecated; use
+	// `certificate` instead.
 	//
 	// Deprecated: deprecated
 	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
-	// Extended e-mail matching settings.
+	// Specify user emails settings for the firewall policies.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching,nullable"`
-	// FIPS settings.
+	// Specify FIPS settings.
 	Fips FipsSettings `json:"fips,nullable"`
-	// Setting to enable host selector in egress policies.
+	// Enable host selection in egress policies.
 	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
-	// Setting to define inspection settings.
+	// Define the proxy inspection mode.
 	Inspection GatewayConfigurationSettingsInspection `json:"inspection,nullable"`
-	// Protocol Detection settings.
+	// Specify whether to detect protocols from the initial bytes of client traffic.
 	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
-	// Sandbox settings.
+	// Specify whether to enable the sandbox.
 	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox,nullable"`
-	// TLS interception settings.
+	// Specify whether to inspect encrypted HTTP traffic.
 	TLSDecrypt TLSSettings                      `json:"tls_decrypt,nullable"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
 }
@@ -578,12 +582,12 @@ func (r gatewayConfigurationSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate settings for Gateway TLS interception. If not specified, the
-// Cloudflare Root CA will be used.
+// Specify certificate settings for Gateway TLS interception. If unset, the
+// Cloudflare Root CA handles interception.
 type GatewayConfigurationSettingsCertificate struct {
-	// UUID of certificate to be used for interception. Certificate must be available
-	// (previously called 'active') on the edge. A nil UUID will indicate the
-	// Cloudflare Root CA should be used.
+	// Specify the UUID of the certificate used for interception. Ensure the
+	// certificate is available at the edge(previously called 'active'). A nil UUID
+	// directs Cloudflare to use the Root CA.
 	ID   string                                      `json:"id,required"`
 	JSON gatewayConfigurationSettingsCertificateJSON `json:"-"`
 }
@@ -604,9 +608,9 @@ func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// Setting to enable host selector in egress policies.
+// Enable host selection in egress policies.
 type GatewayConfigurationSettingsHostSelector struct {
-	// Enable filtering via hosts for egress policies.
+	// Specify whether to enable filtering via hosts for egress policies.
 	Enabled bool                                         `json:"enabled,nullable"`
 	JSON    gatewayConfigurationSettingsHostSelectorJSON `json:"-"`
 }
@@ -627,14 +631,13 @@ func (r gatewayConfigurationSettingsHostSelectorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Setting to define inspection settings.
+// Define the proxy inspection mode.
 type GatewayConfigurationSettingsInspection struct {
-	// Defines the mode of inspection the proxy will use.
-	//
-	//   - static: Gateway will use static inspection to inspect HTTP on TCP(80). If TLS
-	//     decryption is on, Gateway will inspect HTTPS traffic on TCP(443) & UDP(443).
-	//   - dynamic: Gateway will use protocol detection to dynamically inspect HTTP and
-	//     HTTPS traffic on any port. TLS decryption must be on to inspect HTTPS traffic.
+	// Define the proxy inspection mode. 1. static: Gateway applies static inspection
+	// to HTTP on TCP(80). With TLS decryption on, Gateway inspects HTTPS traffic on
+	// TCP(443) and UDP(443). 2. dynamic: Gateway applies protocol detection to inspect
+	// HTTP and HTTPS traffic on any port. TLS decryption must remain on to inspect
+	// HTTPS traffic.
 	Mode GatewayConfigurationSettingsInspectionMode `json:"mode"`
 	JSON gatewayConfigurationSettingsInspectionJSON `json:"-"`
 }
@@ -655,12 +658,11 @@ func (r gatewayConfigurationSettingsInspectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Defines the mode of inspection the proxy will use.
-//
-//   - static: Gateway will use static inspection to inspect HTTP on TCP(80). If TLS
-//     decryption is on, Gateway will inspect HTTPS traffic on TCP(443) & UDP(443).
-//   - dynamic: Gateway will use protocol detection to dynamically inspect HTTP and
-//     HTTPS traffic on any port. TLS decryption must be on to inspect HTTPS traffic.
+// Define the proxy inspection mode. 1. static: Gateway applies static inspection
+// to HTTP on TCP(80). With TLS decryption on, Gateway inspects HTTPS traffic on
+// TCP(443) and UDP(443). 2. dynamic: Gateway applies protocol detection to inspect
+// HTTP and HTTPS traffic on any port. TLS decryption must remain on to inspect
+// HTTPS traffic.
 type GatewayConfigurationSettingsInspectionMode string
 
 const (
@@ -676,11 +678,11 @@ func (r GatewayConfigurationSettingsInspectionMode) IsKnown() bool {
 	return false
 }
 
-// Sandbox settings.
+// Specify whether to enable the sandbox.
 type GatewayConfigurationSettingsSandbox struct {
-	// Enable sandbox.
+	// Specify whether to enable the sandbox.
 	Enabled bool `json:"enabled,nullable"`
-	// Action to take when the file cannot be scanned.
+	// Specify the action to take when the system cannot scan the file.
 	FallbackAction GatewayConfigurationSettingsSandboxFallbackAction `json:"fallback_action"`
 	JSON           gatewayConfigurationSettingsSandboxJSON           `json:"-"`
 }
@@ -702,7 +704,7 @@ func (r gatewayConfigurationSettingsSandboxJSON) RawJSON() string {
 	return r.raw
 }
 
-// Action to take when the file cannot be scanned.
+// Specify the action to take when the system cannot scan the file.
 type GatewayConfigurationSettingsSandboxFallbackAction string
 
 const (
@@ -718,39 +720,39 @@ func (r GatewayConfigurationSettingsSandboxFallbackAction) IsKnown() bool {
 	return false
 }
 
-// Account settings.
+// Specify account settings.
 type GatewayConfigurationSettingsParam struct {
-	// Activity log settings.
+	// Specify activity log settings.
 	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
-	// Anti-virus settings.
+	// Specify anti-virus settings.
 	Antivirus param.Field[AntiVirusSettingsParam] `json:"antivirus"`
-	// Block page layout settings.
+	// Specify block page layout settings.
 	BlockPage param.Field[BlockPageSettingsParam] `json:"block_page"`
-	// DLP body scanning settings.
+	// Specify the DLP inspection mode.
 	BodyScanning param.Field[BodyScanningSettingsParam] `json:"body_scanning"`
-	// Browser isolation settings.
+	// Specify Clientless Browser Isolation settings.
 	BrowserIsolation param.Field[BrowserIsolationSettingsParam] `json:"browser_isolation"`
-	// Certificate settings for Gateway TLS interception. If not specified, the
-	// Cloudflare Root CA will be used.
+	// Specify certificate settings for Gateway TLS interception. If unset, the
+	// Cloudflare Root CA handles interception.
 	Certificate param.Field[GatewayConfigurationSettingsCertificateParam] `json:"certificate"`
-	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
-	// `certificate`).
+	// Specify custom certificate settings for BYO-PKI. This field is deprecated; use
+	// `certificate` instead.
 	//
 	// Deprecated: deprecated
 	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
-	// Extended e-mail matching settings.
+	// Specify user emails settings for the firewall policies.
 	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
-	// FIPS settings.
+	// Specify FIPS settings.
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
-	// Setting to enable host selector in egress policies.
+	// Enable host selection in egress policies.
 	HostSelector param.Field[GatewayConfigurationSettingsHostSelectorParam] `json:"host_selector"`
-	// Setting to define inspection settings.
+	// Define the proxy inspection mode.
 	Inspection param.Field[GatewayConfigurationSettingsInspectionParam] `json:"inspection"`
-	// Protocol Detection settings.
+	// Specify whether to detect protocols from the initial bytes of client traffic.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
-	// Sandbox settings.
+	// Specify whether to enable the sandbox.
 	Sandbox param.Field[GatewayConfigurationSettingsSandboxParam] `json:"sandbox"`
-	// TLS interception settings.
+	// Specify whether to inspect encrypted HTTP traffic.
 	TLSDecrypt param.Field[TLSSettingsParam] `json:"tls_decrypt"`
 }
 
@@ -758,12 +760,12 @@ func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// Certificate settings for Gateway TLS interception. If not specified, the
-// Cloudflare Root CA will be used.
+// Specify certificate settings for Gateway TLS interception. If unset, the
+// Cloudflare Root CA handles interception.
 type GatewayConfigurationSettingsCertificateParam struct {
-	// UUID of certificate to be used for interception. Certificate must be available
-	// (previously called 'active') on the edge. A nil UUID will indicate the
-	// Cloudflare Root CA should be used.
+	// Specify the UUID of the certificate used for interception. Ensure the
+	// certificate is available at the edge(previously called 'active'). A nil UUID
+	// directs Cloudflare to use the Root CA.
 	ID param.Field[string] `json:"id,required"`
 }
 
@@ -771,9 +773,9 @@ func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-// Setting to enable host selector in egress policies.
+// Enable host selection in egress policies.
 type GatewayConfigurationSettingsHostSelectorParam struct {
-	// Enable filtering via hosts for egress policies.
+	// Specify whether to enable filtering via hosts for egress policies.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -781,14 +783,13 @@ func (r GatewayConfigurationSettingsHostSelectorParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Setting to define inspection settings.
+// Define the proxy inspection mode.
 type GatewayConfigurationSettingsInspectionParam struct {
-	// Defines the mode of inspection the proxy will use.
-	//
-	//   - static: Gateway will use static inspection to inspect HTTP on TCP(80). If TLS
-	//     decryption is on, Gateway will inspect HTTPS traffic on TCP(443) & UDP(443).
-	//   - dynamic: Gateway will use protocol detection to dynamically inspect HTTP and
-	//     HTTPS traffic on any port. TLS decryption must be on to inspect HTTPS traffic.
+	// Define the proxy inspection mode. 1. static: Gateway applies static inspection
+	// to HTTP on TCP(80). With TLS decryption on, Gateway inspects HTTPS traffic on
+	// TCP(443) and UDP(443). 2. dynamic: Gateway applies protocol detection to inspect
+	// HTTP and HTTPS traffic on any port. TLS decryption must remain on to inspect
+	// HTTPS traffic.
 	Mode param.Field[GatewayConfigurationSettingsInspectionMode] `json:"mode"`
 }
 
@@ -796,11 +797,11 @@ func (r GatewayConfigurationSettingsInspectionParam) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// Sandbox settings.
+// Specify whether to enable the sandbox.
 type GatewayConfigurationSettingsSandboxParam struct {
-	// Enable sandbox.
+	// Specify whether to enable the sandbox.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Action to take when the file cannot be scanned.
+	// Specify the action to take when the system cannot scan the file.
 	FallbackAction param.Field[GatewayConfigurationSettingsSandboxFallbackAction] `json:"fallback_action"`
 }
 
@@ -808,17 +809,16 @@ func (r GatewayConfigurationSettingsSandboxParam) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// Configure a message to display on the user's device when an antivirus search is
-// performed.
+// Configure the message the user's device shows during an antivirus scan.
 type NotificationSettings struct {
-	// Set notification on.
+	// Specify whether to enable notifications.
 	Enabled bool `json:"enabled"`
-	// If true, context information will be passed as query parameters.
+	// Specify whether to include context information as query parameters.
 	IncludeContext bool `json:"include_context"`
-	// Customize the message shown in the notification.
+	// Specify the message to show in the notification.
 	Msg string `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
+	// Specify a URL that directs users to more information. If unset, the notification
+	// opens a block page.
 	SupportURL string                   `json:"support_url"`
 	JSON       notificationSettingsJSON `json:"-"`
 }
@@ -842,17 +842,16 @@ func (r notificationSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure a message to display on the user's device when an antivirus search is
-// performed.
+// Configure the message the user's device shows during an antivirus scan.
 type NotificationSettingsParam struct {
-	// Set notification on.
+	// Specify whether to enable notifications.
 	Enabled param.Field[bool] `json:"enabled"`
-	// If true, context information will be passed as query parameters.
+	// Specify whether to include context information as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
-	// Customize the message shown in the notification.
+	// Specify the message to show in the notification.
 	Msg param.Field[string] `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
+	// Specify a URL that directs users to more information. If unset, the notification
+	// opens a block page.
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
@@ -860,9 +859,9 @@ func (r NotificationSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Protocol Detection settings.
+// Specify whether to detect protocols from the initial bytes of client traffic.
 type ProtocolDetection struct {
-	// Enable detecting protocol on initial bytes of client traffic.
+	// Specify whether to detect protocols from the initial bytes of client traffic.
 	Enabled bool                  `json:"enabled,nullable"`
 	JSON    protocolDetectionJSON `json:"-"`
 }
@@ -883,9 +882,9 @@ func (r protocolDetectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Protocol Detection settings.
+// Specify whether to detect protocols from the initial bytes of client traffic.
 type ProtocolDetectionParam struct {
-	// Enable detecting protocol on initial bytes of client traffic.
+	// Specify whether to detect protocols from the initial bytes of client traffic.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -893,9 +892,9 @@ func (r ProtocolDetectionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// TLS interception settings.
+// Specify whether to inspect encrypted HTTP traffic.
 type TLSSettings struct {
-	// Enable inspecting encrypted HTTP traffic.
+	// Specify whether to inspect encrypted HTTP traffic.
 	Enabled bool            `json:"enabled"`
 	JSON    tlsSettingsJSON `json:"-"`
 }
@@ -915,9 +914,9 @@ func (r tlsSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// TLS interception settings.
+// Specify whether to inspect encrypted HTTP traffic.
 type TLSSettingsParam struct {
-	// Enable inspecting encrypted HTTP traffic.
+	// Specify whether to inspect encrypted HTTP traffic.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -925,10 +924,10 @@ func (r TLSSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Account settings.
+// Specify account settings.
 type GatewayConfigurationUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account settings.
+	// Specify account settings.
 	Settings  GatewayConfigurationSettings           `json:"settings"`
 	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationUpdateResponseJSON `json:"-"`
@@ -952,10 +951,10 @@ func (r gatewayConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Account settings.
+// Specify account settings.
 type GatewayConfigurationEditResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account settings.
+	// Specify account settings.
 	Settings  GatewayConfigurationSettings         `json:"settings"`
 	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationEditResponseJSON `json:"-"`
@@ -979,10 +978,10 @@ func (r gatewayConfigurationEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Account settings.
+// Specify account settings.
 type GatewayConfigurationGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account settings.
+	// Specify account settings.
 	Settings  GatewayConfigurationSettings        `json:"settings"`
 	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationGetResponseJSON `json:"-"`
@@ -1008,7 +1007,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 
 type GatewayConfigurationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Account settings.
+	// Specify account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -1019,9 +1018,9 @@ func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error)
 type GatewayConfigurationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// Account settings.
+	// Specify account settings.
 	Result GatewayConfigurationUpdateResponse             `json:"result"`
 	JSON   gatewayConfigurationUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -1045,7 +1044,7 @@ func (r gatewayConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1062,7 +1061,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayConfigurationEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Account settings.
+	// Specify account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -1073,9 +1072,9 @@ func (r GatewayConfigurationEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayConfigurationEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
-	// Account settings.
+	// Specify account settings.
 	Result GatewayConfigurationEditResponse             `json:"result"`
 	JSON   gatewayConfigurationEditResponseEnvelopeJSON `json:"-"`
 }
@@ -1099,7 +1098,7 @@ func (r gatewayConfigurationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayConfigurationEditResponseEnvelopeSuccess bool
 
 const (
@@ -1121,9 +1120,9 @@ type GatewayConfigurationGetParams struct {
 type GatewayConfigurationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
-	// Account settings.
+	// Specify account settings.
 	Result GatewayConfigurationGetResponse             `json:"result"`
 	JSON   gatewayConfigurationGetResponseEnvelopeJSON `json:"-"`
 }
@@ -1147,7 +1146,7 @@ func (r gatewayConfigurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayConfigurationGetResponseEnvelopeSuccess bool
 
 const (

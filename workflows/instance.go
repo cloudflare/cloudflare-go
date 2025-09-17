@@ -827,7 +827,7 @@ type InstanceNewResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
-	NextCursor string                                    `json:"next_cursor"`
+	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -838,7 +838,7 @@ type instanceNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -860,6 +860,9 @@ type InstanceListParams struct {
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
+	// should only be used when `cursor` is used, defines a new direction for the
+	// cursor
+	Direction param.Field[InstanceListParamsDirection] `query:"direction"`
 	// `page` and `cursor` are mutually exclusive, use one or the other.
 	Page    param.Field[float64]                  `query:"page"`
 	PerPage param.Field[float64]                  `query:"per_page"`
@@ -872,6 +875,23 @@ func (r InstanceListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// should only be used when `cursor` is used, defines a new direction for the
+// cursor
+type InstanceListParamsDirection string
+
+const (
+	InstanceListParamsDirectionAsc  InstanceListParamsDirection = "asc"
+	InstanceListParamsDirectionDesc InstanceListParamsDirection = "desc"
+)
+
+func (r InstanceListParamsDirection) IsKnown() bool {
+	switch r {
+	case InstanceListParamsDirectionAsc, InstanceListParamsDirectionDesc:
+		return true
+	}
+	return false
 }
 
 type InstanceListParamsStatus string
@@ -1011,7 +1031,7 @@ type InstanceGetResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
-	NextCursor string                                    `json:"next_cursor"`
+	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -1022,7 +1042,7 @@ type instanceGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

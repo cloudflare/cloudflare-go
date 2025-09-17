@@ -62,9 +62,10 @@ func TestRecipientListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"3fd85f74b32742f1bff64a85009dda07",
 		resource_sharing.RecipientListParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Page:      cloudflare.F(int64(2)),
-			PerPage:   cloudflare.F(int64(20)),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			IncludeResources: cloudflare.F(true),
+			Page:             cloudflare.F(int64(2)),
+			PerPage:          cloudflare.F(int64(20)),
 		},
 	)
 	if err != nil {
@@ -106,7 +107,7 @@ func TestRecipientDelete(t *testing.T) {
 	}
 }
 
-func TestRecipientGet(t *testing.T) {
+func TestRecipientGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -124,7 +125,8 @@ func TestRecipientGet(t *testing.T) {
 		"3fd85f74b32742f1bff64a85009dda07",
 		"3fd85f74b32742f1bff64a85009dda07",
 		resource_sharing.RecipientGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			IncludeResources: cloudflare.F(true),
 		},
 	)
 	if err != nil {

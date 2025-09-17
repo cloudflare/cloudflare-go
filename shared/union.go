@@ -141,6 +141,7 @@ func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()            
 func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                            {}
 func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                              {}
 func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                  {}
+func (UnionString) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                        {}
 
 type UnionBool bool
 
@@ -205,6 +206,7 @@ func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()     
 func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                {}
 func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()              {}
 func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                 {}
+func (UnionBool) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                     {}
 
 type UnionInt int64
 
@@ -285,3 +287,4 @@ func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()             
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                                {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                  {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                      {}
+func (UnionFloat) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                            {}

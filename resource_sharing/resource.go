@@ -217,13 +217,17 @@ func (r resourceNewResponseJSON) RawJSON() string {
 type ResourceNewResponseResourceType string
 
 const (
-	ResourceNewResponseResourceTypeCustomRuleset ResourceNewResponseResourceType = "custom-ruleset"
-	ResourceNewResponseResourceTypeWidget        ResourceNewResponseResourceType = "widget"
+	ResourceNewResponseResourceTypeCustomRuleset                ResourceNewResponseResourceType = "custom-ruleset"
+	ResourceNewResponseResourceTypeWidget                       ResourceNewResponseResourceType = "widget"
+	ResourceNewResponseResourceTypeGatewayPolicy                ResourceNewResponseResourceType = "gateway-policy"
+	ResourceNewResponseResourceTypeGatewayDestinationIP         ResourceNewResponseResourceType = "gateway-destination-ip"
+	ResourceNewResponseResourceTypeGatewayBlockPageSettings     ResourceNewResponseResourceType = "gateway-block-page-settings"
+	ResourceNewResponseResourceTypeGatewayExtendedEmailMatching ResourceNewResponseResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceNewResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceNewResponseResourceTypeCustomRuleset, ResourceNewResponseResourceTypeWidget:
+	case ResourceNewResponseResourceTypeCustomRuleset, ResourceNewResponseResourceTypeWidget, ResourceNewResponseResourceTypeGatewayPolicy, ResourceNewResponseResourceTypeGatewayDestinationIP, ResourceNewResponseResourceTypeGatewayBlockPageSettings, ResourceNewResponseResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -296,13 +300,17 @@ func (r resourceUpdateResponseJSON) RawJSON() string {
 type ResourceUpdateResponseResourceType string
 
 const (
-	ResourceUpdateResponseResourceTypeCustomRuleset ResourceUpdateResponseResourceType = "custom-ruleset"
-	ResourceUpdateResponseResourceTypeWidget        ResourceUpdateResponseResourceType = "widget"
+	ResourceUpdateResponseResourceTypeCustomRuleset                ResourceUpdateResponseResourceType = "custom-ruleset"
+	ResourceUpdateResponseResourceTypeWidget                       ResourceUpdateResponseResourceType = "widget"
+	ResourceUpdateResponseResourceTypeGatewayPolicy                ResourceUpdateResponseResourceType = "gateway-policy"
+	ResourceUpdateResponseResourceTypeGatewayDestinationIP         ResourceUpdateResponseResourceType = "gateway-destination-ip"
+	ResourceUpdateResponseResourceTypeGatewayBlockPageSettings     ResourceUpdateResponseResourceType = "gateway-block-page-settings"
+	ResourceUpdateResponseResourceTypeGatewayExtendedEmailMatching ResourceUpdateResponseResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceUpdateResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceUpdateResponseResourceTypeCustomRuleset, ResourceUpdateResponseResourceTypeWidget:
+	case ResourceUpdateResponseResourceTypeCustomRuleset, ResourceUpdateResponseResourceTypeWidget, ResourceUpdateResponseResourceTypeGatewayPolicy, ResourceUpdateResponseResourceTypeGatewayDestinationIP, ResourceUpdateResponseResourceTypeGatewayBlockPageSettings, ResourceUpdateResponseResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -375,13 +383,17 @@ func (r resourceListResponseJSON) RawJSON() string {
 type ResourceListResponseResourceType string
 
 const (
-	ResourceListResponseResourceTypeCustomRuleset ResourceListResponseResourceType = "custom-ruleset"
-	ResourceListResponseResourceTypeWidget        ResourceListResponseResourceType = "widget"
+	ResourceListResponseResourceTypeCustomRuleset                ResourceListResponseResourceType = "custom-ruleset"
+	ResourceListResponseResourceTypeWidget                       ResourceListResponseResourceType = "widget"
+	ResourceListResponseResourceTypeGatewayPolicy                ResourceListResponseResourceType = "gateway-policy"
+	ResourceListResponseResourceTypeGatewayDestinationIP         ResourceListResponseResourceType = "gateway-destination-ip"
+	ResourceListResponseResourceTypeGatewayBlockPageSettings     ResourceListResponseResourceType = "gateway-block-page-settings"
+	ResourceListResponseResourceTypeGatewayExtendedEmailMatching ResourceListResponseResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceListResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceListResponseResourceTypeCustomRuleset, ResourceListResponseResourceTypeWidget:
+	case ResourceListResponseResourceTypeCustomRuleset, ResourceListResponseResourceTypeWidget, ResourceListResponseResourceTypeGatewayPolicy, ResourceListResponseResourceTypeGatewayDestinationIP, ResourceListResponseResourceTypeGatewayBlockPageSettings, ResourceListResponseResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -454,13 +466,17 @@ func (r resourceDeleteResponseJSON) RawJSON() string {
 type ResourceDeleteResponseResourceType string
 
 const (
-	ResourceDeleteResponseResourceTypeCustomRuleset ResourceDeleteResponseResourceType = "custom-ruleset"
-	ResourceDeleteResponseResourceTypeWidget        ResourceDeleteResponseResourceType = "widget"
+	ResourceDeleteResponseResourceTypeCustomRuleset                ResourceDeleteResponseResourceType = "custom-ruleset"
+	ResourceDeleteResponseResourceTypeWidget                       ResourceDeleteResponseResourceType = "widget"
+	ResourceDeleteResponseResourceTypeGatewayPolicy                ResourceDeleteResponseResourceType = "gateway-policy"
+	ResourceDeleteResponseResourceTypeGatewayDestinationIP         ResourceDeleteResponseResourceType = "gateway-destination-ip"
+	ResourceDeleteResponseResourceTypeGatewayBlockPageSettings     ResourceDeleteResponseResourceType = "gateway-block-page-settings"
+	ResourceDeleteResponseResourceTypeGatewayExtendedEmailMatching ResourceDeleteResponseResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceDeleteResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceDeleteResponseResourceTypeCustomRuleset, ResourceDeleteResponseResourceTypeWidget:
+	case ResourceDeleteResponseResourceTypeCustomRuleset, ResourceDeleteResponseResourceTypeWidget, ResourceDeleteResponseResourceTypeGatewayPolicy, ResourceDeleteResponseResourceTypeGatewayDestinationIP, ResourceDeleteResponseResourceTypeGatewayBlockPageSettings, ResourceDeleteResponseResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -533,13 +549,17 @@ func (r resourceGetResponseJSON) RawJSON() string {
 type ResourceGetResponseResourceType string
 
 const (
-	ResourceGetResponseResourceTypeCustomRuleset ResourceGetResponseResourceType = "custom-ruleset"
-	ResourceGetResponseResourceTypeWidget        ResourceGetResponseResourceType = "widget"
+	ResourceGetResponseResourceTypeCustomRuleset                ResourceGetResponseResourceType = "custom-ruleset"
+	ResourceGetResponseResourceTypeWidget                       ResourceGetResponseResourceType = "widget"
+	ResourceGetResponseResourceTypeGatewayPolicy                ResourceGetResponseResourceType = "gateway-policy"
+	ResourceGetResponseResourceTypeGatewayDestinationIP         ResourceGetResponseResourceType = "gateway-destination-ip"
+	ResourceGetResponseResourceTypeGatewayBlockPageSettings     ResourceGetResponseResourceType = "gateway-block-page-settings"
+	ResourceGetResponseResourceTypeGatewayExtendedEmailMatching ResourceGetResponseResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceGetResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceGetResponseResourceTypeCustomRuleset, ResourceGetResponseResourceTypeWidget:
+	case ResourceGetResponseResourceTypeCustomRuleset, ResourceGetResponseResourceTypeWidget, ResourceGetResponseResourceTypeGatewayPolicy, ResourceGetResponseResourceTypeGatewayDestinationIP, ResourceGetResponseResourceTypeGatewayBlockPageSettings, ResourceGetResponseResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -583,13 +603,17 @@ func (r ResourceNewParams) MarshalJSON() (data []byte, err error) {
 type ResourceNewParamsResourceType string
 
 const (
-	ResourceNewParamsResourceTypeCustomRuleset ResourceNewParamsResourceType = "custom-ruleset"
-	ResourceNewParamsResourceTypeWidget        ResourceNewParamsResourceType = "widget"
+	ResourceNewParamsResourceTypeCustomRuleset                ResourceNewParamsResourceType = "custom-ruleset"
+	ResourceNewParamsResourceTypeWidget                       ResourceNewParamsResourceType = "widget"
+	ResourceNewParamsResourceTypeGatewayPolicy                ResourceNewParamsResourceType = "gateway-policy"
+	ResourceNewParamsResourceTypeGatewayDestinationIP         ResourceNewParamsResourceType = "gateway-destination-ip"
+	ResourceNewParamsResourceTypeGatewayBlockPageSettings     ResourceNewParamsResourceType = "gateway-block-page-settings"
+	ResourceNewParamsResourceTypeGatewayExtendedEmailMatching ResourceNewParamsResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceNewParamsResourceType) IsKnown() bool {
 	switch r {
-	case ResourceNewParamsResourceTypeCustomRuleset, ResourceNewParamsResourceTypeWidget:
+	case ResourceNewParamsResourceTypeCustomRuleset, ResourceNewParamsResourceTypeWidget, ResourceNewParamsResourceTypeGatewayPolicy, ResourceNewParamsResourceTypeGatewayDestinationIP, ResourceNewParamsResourceTypeGatewayBlockPageSettings, ResourceNewParamsResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -683,13 +707,17 @@ func (r ResourceListParams) URLQuery() (v url.Values) {
 type ResourceListParamsResourceType string
 
 const (
-	ResourceListParamsResourceTypeCustomRuleset ResourceListParamsResourceType = "custom-ruleset"
-	ResourceListParamsResourceTypeWidget        ResourceListParamsResourceType = "widget"
+	ResourceListParamsResourceTypeCustomRuleset                ResourceListParamsResourceType = "custom-ruleset"
+	ResourceListParamsResourceTypeWidget                       ResourceListParamsResourceType = "widget"
+	ResourceListParamsResourceTypeGatewayPolicy                ResourceListParamsResourceType = "gateway-policy"
+	ResourceListParamsResourceTypeGatewayDestinationIP         ResourceListParamsResourceType = "gateway-destination-ip"
+	ResourceListParamsResourceTypeGatewayBlockPageSettings     ResourceListParamsResourceType = "gateway-block-page-settings"
+	ResourceListParamsResourceTypeGatewayExtendedEmailMatching ResourceListParamsResourceType = "gateway-extended-email-matching"
 )
 
 func (r ResourceListParamsResourceType) IsKnown() bool {
 	switch r {
-	case ResourceListParamsResourceTypeCustomRuleset, ResourceListParamsResourceTypeWidget:
+	case ResourceListParamsResourceTypeCustomRuleset, ResourceListParamsResourceTypeWidget, ResourceListParamsResourceTypeGatewayPolicy, ResourceListParamsResourceTypeGatewayDestinationIP, ResourceListParamsResourceTypeGatewayBlockPageSettings, ResourceListParamsResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false

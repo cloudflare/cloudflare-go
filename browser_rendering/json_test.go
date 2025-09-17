@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 func TestJsonNewWithOptionalParams(t *testing.T) {
@@ -81,8 +82,8 @@ func TestJsonNewWithOptionalParams(t *testing.T) {
 		RejectResourceTypes:  cloudflare.F([]browser_rendering.JsonNewParamsRejectResourceType{browser_rendering.JsonNewParamsRejectResourceTypeDocument}),
 		ResponseFormat: cloudflare.F(browser_rendering.JsonNewParamsResponseFormat{
 			Type: cloudflare.F("type"),
-			Schema: cloudflare.F(map[string]interface{}{
-				"foo": map[string]interface{}{},
+			JsonSchema: cloudflare.F(map[string]browser_rendering.JsonNewParamsResponseFormatJsonSchemaUnion{
+				"foo": shared.UnionString("string"),
 			}),
 		}),
 		SetExtraHTTPHeaders: cloudflare.F(map[string]string{
