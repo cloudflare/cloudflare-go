@@ -262,7 +262,7 @@ type VersionGetResponseEnvelopeResultInfo struct {
 	Count      float64                                  `json:"count,required"`
 	PerPage    float64                                  `json:"per_page,required"`
 	TotalCount float64                                  `json:"total_count,required"`
-	Cursor     string                                   `json:"cursor"`
+	NextCursor string                                   `json:"next_cursor"`
 	Page       float64                                  `json:"page"`
 	JSON       versionGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -273,7 +273,7 @@ type versionGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	Cursor      apijson.Field
+	NextCursor  apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

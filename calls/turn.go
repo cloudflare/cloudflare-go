@@ -37,18 +37,13 @@ func NewTURNService(opts ...option.RequestOption) (r *TURNService) {
 
 // Creates a new Cloudflare Calls TURN key.
 func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...option.RequestOption) (res *TURNNewResponse, err error) {
-	var env TURNNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -307,145 +302,6 @@ type TURNNewParams struct {
 
 func (r TURNNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type TURNNewResponseEnvelope struct {
-	Errors   []TURNNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TURNNewResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
-	Success TURNNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  TURNNewResponse                `json:"result"`
-	JSON    turnNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// turnNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TURNNewResponseEnvelope]
-type turnNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TURNNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r turnNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TURNNewResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
-	DocumentationURL string                              `json:"documentation_url"`
-	Source           TURNNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             turnNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// turnNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TURNNewResponseEnvelopeErrors]
-type turnNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TURNNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r turnNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TURNNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                  `json:"pointer"`
-	JSON    turnNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// turnNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [TURNNewResponseEnvelopeErrorsSource]
-type turnNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TURNNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r turnNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type TURNNewResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
-	DocumentationURL string                                `json:"documentation_url"`
-	Source           TURNNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             turnNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// turnNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TURNNewResponseEnvelopeMessages]
-type turnNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TURNNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r turnNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type TURNNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                    `json:"pointer"`
-	JSON    turnNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// turnNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [TURNNewResponseEnvelopeMessagesSource]
-type turnNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TURNNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r turnNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type TURNNewResponseEnvelopeSuccess bool
-
-const (
-	TURNNewResponseEnvelopeSuccessTrue TURNNewResponseEnvelopeSuccess = true
-)
-
-func (r TURNNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TURNNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type TURNUpdateParams struct {

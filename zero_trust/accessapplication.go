@@ -424,6 +424,7 @@ type OIDCSaaSApp struct {
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string                   `json:"client_secret"`
+	CreatedAt    time.Time                `json:"created_at" format:"date-time"`
 	CustomClaims []OIDCSaaSAppCustomClaim `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes []OIDCSaaSAppGrantType `json:"grant_types"`
@@ -438,8 +439,9 @@ type OIDCSaaSApp struct {
 	RefreshTokenOptions OIDCSaaSAppRefreshTokenOptions `json:"refresh_token_options"`
 	// Define the user information shared with access, "offline_access" scope will be
 	// automatically enabled if refresh tokens are enabled
-	Scopes []OIDCSaaSAppScope `json:"scopes"`
-	JSON   oidcSaaSAppJSON    `json:"-"`
+	Scopes    []OIDCSaaSAppScope `json:"scopes"`
+	UpdatedAt time.Time          `json:"updated_at" format:"date-time"`
+	JSON      oidcSaaSAppJSON    `json:"-"`
 }
 
 // oidcSaaSAppJSON contains the JSON metadata for the struct [OIDCSaaSApp]
@@ -450,6 +452,7 @@ type oidcSaaSAppJSON struct {
 	AuthType                     apijson.Field
 	ClientID                     apijson.Field
 	ClientSecret                 apijson.Field
+	CreatedAt                    apijson.Field
 	CustomClaims                 apijson.Field
 	GrantTypes                   apijson.Field
 	GroupFilterRegex             apijson.Field
@@ -458,6 +461,7 @@ type oidcSaaSAppJSON struct {
 	RedirectURIs                 apijson.Field
 	RefreshTokenOptions          apijson.Field
 	Scopes                       apijson.Field
+	UpdatedAt                    apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -761,6 +765,7 @@ type SAMLSaaSApp struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string                       `json:"consumer_service_url"`
+	CreatedAt          time.Time                    `json:"created_at" format:"date-time"`
 	CustomAttributes   []SAMLSaaSAppCustomAttribute `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -786,6 +791,7 @@ type SAMLSaaSApp struct {
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string          `json:"sso_endpoint"`
+	UpdatedAt   time.Time       `json:"updated_at" format:"date-time"`
 	JSON        samlSaaSAppJSON `json:"-"`
 }
 
@@ -793,6 +799,7 @@ type SAMLSaaSApp struct {
 type samlSaaSAppJSON struct {
 	AuthType                      apijson.Field
 	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
 	DefaultRelayState             apijson.Field
 	IdPEntityID                   apijson.Field
@@ -802,6 +809,7 @@ type samlSaaSAppJSON struct {
 	SAMLAttributeTransformJsonata apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -1916,6 +1924,7 @@ type AccessApplicationNewResponse struct {
 	// The background color of the App Launcher page.
 	BgColor     string      `json:"bg_color"`
 	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -2011,9 +2020,10 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                  `json:"type"`
-	JSON  accessApplicationNewResponseJSON `json:"-"`
-	union AccessApplicationNewResponseUnion
+	Type      ApplicationType                  `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseJSON `json:"-"`
+	union     AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
@@ -2029,6 +2039,7 @@ type accessApplicationNewResponseJSON struct {
 	AutoRedirectToIdentity      apijson.Field
 	BgColor                     apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -2057,6 +2068,7 @@ type accessApplicationNewResponseJSON struct {
 	Tags                        apijson.Field
 	TargetCriteria              apijson.Field
 	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -2179,6 +2191,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -2241,8 +2254,9 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseSelfHostedApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationJSON contains the JSON metadata
@@ -2258,6 +2272,7 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -2278,6 +2293,7 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -2930,7 +2946,8 @@ type AccessApplicationNewResponseSaaSApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -2946,8 +2963,9 @@ type AccessApplicationNewResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                 `json:"type"`
-	JSON accessApplicationNewResponseSaaSApplicationJSON `json:"-"`
+	Type      ApplicationType                                 `json:"type"`
+	UpdatedAt time.Time                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseSaaSApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseSaaSApplicationJSON contains the JSON metadata for
@@ -2958,6 +2976,7 @@ type accessApplicationNewResponseSaaSApplicationJSON struct {
 	AppLauncherVisible     apijson.Field
 	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
+	CreatedAt              apijson.Field
 	CustomPages            apijson.Field
 	LogoURL                apijson.Field
 	Name                   apijson.Field
@@ -2966,6 +2985,7 @@ type accessApplicationNewResponseSaaSApplicationJSON struct {
 	SCIMConfig             apijson.Field
 	Tags                   apijson.Field
 	Type                   apijson.Field
+	UpdatedAt              apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -3070,7 +3090,8 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string `json:"consumer_service_url"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
 	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
 	CustomAttributes interface{} `json:"custom_attributes"`
 	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
@@ -3111,6 +3132,7 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string                                                 `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                              `json:"updated_at" format:"date-time"`
 	JSON        accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
 	union       AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
 }
@@ -3125,6 +3147,7 @@ type accessApplicationNewResponseSaaSApplicationSaaSAppJSON struct {
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
 	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
@@ -3141,6 +3164,7 @@ type accessApplicationNewResponseSaaSApplicationSaaSAppJSON struct {
 	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -3539,6 +3563,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -3601,8 +3626,9 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationJSON contains the JSON metadata
@@ -3618,6 +3644,7 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -3638,6 +3665,7 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -4329,6 +4357,7 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -4391,8 +4420,9 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationJSON contains the JSON metadata
@@ -4408,6 +4438,7 @@ type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -4428,6 +4459,7 @@ type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -5109,7 +5141,8 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
 	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -5136,6 +5169,7 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                              `json:"updated_at" format:"date-time"`
 	JSON                     accessApplicationNewResponseAppLauncherApplicationJSON `json:"-"`
 }
 
@@ -5149,6 +5183,7 @@ type accessApplicationNewResponseAppLauncherApplicationJSON struct {
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -5160,6 +5195,7 @@ type accessApplicationNewResponseAppLauncherApplicationJSON struct {
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -5347,7 +5383,8 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -5366,6 +5403,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
@@ -5378,6 +5416,7 @@ type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON stru
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -5385,6 +5424,7 @@ type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON stru
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -5485,7 +5525,8 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -5504,6 +5545,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
@@ -5516,6 +5558,7 @@ type accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON stru
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -5523,6 +5566,7 @@ type accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON stru
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -5617,7 +5661,8 @@ type AccessApplicationNewResponseBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The URL or domain of the bookmark.
 	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -5628,8 +5673,9 @@ type AccessApplicationNewResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                     `json:"type"`
-	JSON accessApplicationNewResponseBookmarkApplicationJSON `json:"-"`
+	Type      ApplicationType                                     `json:"type"`
+	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseBookmarkApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBookmarkApplicationJSON contains the JSON metadata
@@ -5638,11 +5684,13 @@ type accessApplicationNewResponseBookmarkApplicationJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	AUD                apijson.Field
+	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
+	UpdatedAt          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -5664,11 +5712,13 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                        `json:"name"`
-	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationNewResponseInfrastructureApplicationJSON     `json:"-"`
+	Name      string                                                        `json:"name"`
+	Policies  []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
@@ -5678,8 +5728,10 @@ type accessApplicationNewResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
+	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -5871,6 +5923,7 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -5933,8 +5986,9 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRdpApplicationJSON contains the JSON metadata
@@ -5951,6 +6005,7 @@ type accessApplicationNewResponseBrowserRdpApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -5971,6 +6026,7 @@ type accessApplicationNewResponseBrowserRdpApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -6680,6 +6736,7 @@ type AccessApplicationUpdateResponse struct {
 	// The background color of the App Launcher page.
 	BgColor     string      `json:"bg_color"`
 	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -6775,9 +6832,10 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                     `json:"type"`
-	JSON  accessApplicationUpdateResponseJSON `json:"-"`
-	union AccessApplicationUpdateResponseUnion
+	Type      ApplicationType                     `json:"type"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseJSON `json:"-"`
+	union     AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
@@ -6793,6 +6851,7 @@ type accessApplicationUpdateResponseJSON struct {
 	AutoRedirectToIdentity      apijson.Field
 	BgColor                     apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -6821,6 +6880,7 @@ type accessApplicationUpdateResponseJSON struct {
 	Tags                        apijson.Field
 	TargetCriteria              apijson.Field
 	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -6943,6 +7003,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -7005,8 +7066,9 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseSelfHostedApplicationJSON `json:"-"`
+	Tags      []string                                                 `json:"tags"`
+	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationJSON contains the JSON
@@ -7022,6 +7084,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -7042,6 +7105,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -7695,7 +7759,8 @@ type AccessApplicationUpdateResponseSaaSApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -7711,8 +7776,9 @@ type AccessApplicationUpdateResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                    `json:"type"`
-	JSON accessApplicationUpdateResponseSaaSApplicationJSON `json:"-"`
+	Type      ApplicationType                                    `json:"type"`
+	UpdatedAt time.Time                                          `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseSaaSApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseSaaSApplicationJSON contains the JSON metadata
@@ -7723,6 +7789,7 @@ type accessApplicationUpdateResponseSaaSApplicationJSON struct {
 	AppLauncherVisible     apijson.Field
 	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
+	CreatedAt              apijson.Field
 	CustomPages            apijson.Field
 	LogoURL                apijson.Field
 	Name                   apijson.Field
@@ -7731,6 +7798,7 @@ type accessApplicationUpdateResponseSaaSApplicationJSON struct {
 	SCIMConfig             apijson.Field
 	Tags                   apijson.Field
 	Type                   apijson.Field
+	UpdatedAt              apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -7835,7 +7903,8 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string `json:"consumer_service_url"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
 	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
 	CustomAttributes interface{} `json:"custom_attributes"`
 	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
@@ -7876,6 +7945,7 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string                                                    `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                                 `json:"updated_at" format:"date-time"`
 	JSON        accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
 	union       AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
 }
@@ -7890,6 +7960,7 @@ type accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON struct {
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
 	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
@@ -7906,6 +7977,7 @@ type accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON struct {
 	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -8305,6 +8377,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -8367,8 +8440,9 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags      []string                                                 `json:"tags"`
+	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationJSON contains the JSON
@@ -8384,6 +8458,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -8404,6 +8479,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -9096,6 +9172,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -9158,8 +9235,9 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags      []string                                                 `json:"tags"`
+	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationJSON contains the JSON
@@ -9175,6 +9253,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -9195,6 +9274,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -9877,7 +9957,8 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
 	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -9904,6 +9985,7 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                      `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                 `json:"updated_at" format:"date-time"`
 	JSON                     accessApplicationUpdateResponseAppLauncherApplicationJSON `json:"-"`
 }
 
@@ -9917,6 +9999,7 @@ type accessApplicationUpdateResponseAppLauncherApplicationJSON struct {
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -9928,6 +10011,7 @@ type accessApplicationUpdateResponseAppLauncherApplicationJSON struct {
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -10115,7 +10199,8 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -10134,6 +10219,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                                                 `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
@@ -10146,6 +10232,7 @@ type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON s
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -10153,6 +10240,7 @@ type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON s
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -10253,7 +10341,8 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -10272,6 +10361,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                                                 `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
@@ -10284,6 +10374,7 @@ type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON s
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -10291,6 +10382,7 @@ type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON s
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -10385,7 +10477,8 @@ type AccessApplicationUpdateResponseBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The URL or domain of the bookmark.
 	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -10396,8 +10489,9 @@ type AccessApplicationUpdateResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                        `json:"type"`
-	JSON accessApplicationUpdateResponseBookmarkApplicationJSON `json:"-"`
+	Type      ApplicationType                                        `json:"type"`
+	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseBookmarkApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBookmarkApplicationJSON contains the JSON
@@ -10406,11 +10500,13 @@ type accessApplicationUpdateResponseBookmarkApplicationJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	AUD                apijson.Field
+	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
+	UpdatedAt          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -10433,11 +10529,13 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                           `json:"name"`
-	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationUpdateResponseInfrastructureApplicationJSON     `json:"-"`
+	Name      string                                                           `json:"name"`
+	Policies  []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
@@ -10448,8 +10546,10 @@ type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
+	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -10641,6 +10741,7 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -10703,8 +10804,9 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags      []string                                                 `json:"tags"`
+	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRdpApplicationJSON contains the JSON
@@ -10721,6 +10823,7 @@ type accessApplicationUpdateResponseBrowserRdpApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -10741,6 +10844,7 @@ type accessApplicationUpdateResponseBrowserRdpApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -11451,6 +11555,7 @@ type AccessApplicationListResponse struct {
 	// The background color of the App Launcher page.
 	BgColor     string      `json:"bg_color"`
 	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -11546,9 +11651,10 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                   `json:"type"`
-	JSON  accessApplicationListResponseJSON `json:"-"`
-	union AccessApplicationListResponseUnion
+	Type      ApplicationType                   `json:"type"`
+	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseJSON `json:"-"`
+	union     AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
@@ -11564,6 +11670,7 @@ type accessApplicationListResponseJSON struct {
 	AutoRedirectToIdentity      apijson.Field
 	BgColor                     apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -11592,6 +11699,7 @@ type accessApplicationListResponseJSON struct {
 	Tags                        apijson.Field
 	TargetCriteria              apijson.Field
 	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -11714,6 +11822,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -11776,8 +11885,9 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseSelfHostedApplicationJSON `json:"-"`
+	Tags      []string                                               `json:"tags"`
+	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationJSON contains the JSON
@@ -11793,6 +11903,7 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -11813,6 +11924,7 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -12466,7 +12578,8 @@ type AccessApplicationListResponseSaaSApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -12482,8 +12595,9 @@ type AccessApplicationListResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                  `json:"type"`
-	JSON accessApplicationListResponseSaaSApplicationJSON `json:"-"`
+	Type      ApplicationType                                  `json:"type"`
+	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseSaaSApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseSaaSApplicationJSON contains the JSON metadata for
@@ -12494,6 +12608,7 @@ type accessApplicationListResponseSaaSApplicationJSON struct {
 	AppLauncherVisible     apijson.Field
 	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
+	CreatedAt              apijson.Field
 	CustomPages            apijson.Field
 	LogoURL                apijson.Field
 	Name                   apijson.Field
@@ -12502,6 +12617,7 @@ type accessApplicationListResponseSaaSApplicationJSON struct {
 	SCIMConfig             apijson.Field
 	Tags                   apijson.Field
 	Type                   apijson.Field
+	UpdatedAt              apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -12606,7 +12722,8 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string `json:"consumer_service_url"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
 	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
 	CustomAttributes interface{} `json:"custom_attributes"`
 	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
@@ -12647,6 +12764,7 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string                                                  `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                               `json:"updated_at" format:"date-time"`
 	JSON        accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
 	union       AccessApplicationListResponseSaaSApplicationSaaSAppUnion
 }
@@ -12661,6 +12779,7 @@ type accessApplicationListResponseSaaSApplicationSaaSAppJSON struct {
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
 	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
@@ -12677,6 +12796,7 @@ type accessApplicationListResponseSaaSApplicationSaaSAppJSON struct {
 	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -13075,6 +13195,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -13137,8 +13258,9 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags      []string                                               `json:"tags"`
+	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationJSON contains the JSON
@@ -13154,6 +13276,7 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -13174,6 +13297,7 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -13866,6 +13990,7 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -13928,8 +14053,9 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags      []string                                               `json:"tags"`
+	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationJSON contains the JSON
@@ -13945,6 +14071,7 @@ type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -13965,6 +14092,7 @@ type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -14647,7 +14775,8 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
 	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -14674,6 +14803,7 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                    `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                               `json:"updated_at" format:"date-time"`
 	JSON                     accessApplicationListResponseAppLauncherApplicationJSON `json:"-"`
 }
 
@@ -14687,6 +14817,7 @@ type accessApplicationListResponseAppLauncherApplicationJSON struct {
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -14698,6 +14829,7 @@ type accessApplicationListResponseAppLauncherApplicationJSON struct {
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -14885,7 +15017,8 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -14904,6 +15037,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                  `json:"session_duration"`
+	UpdatedAt       time.Time                                                               `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
@@ -14916,6 +15050,7 @@ type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON str
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -14923,6 +15058,7 @@ type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON str
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -15023,7 +15159,8 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -15042,6 +15179,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                  `json:"session_duration"`
+	UpdatedAt       time.Time                                                               `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
@@ -15054,6 +15192,7 @@ type accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON str
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -15061,6 +15200,7 @@ type accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON str
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -15155,7 +15295,8 @@ type AccessApplicationListResponseBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The URL or domain of the bookmark.
 	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -15166,8 +15307,9 @@ type AccessApplicationListResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                      `json:"type"`
-	JSON accessApplicationListResponseBookmarkApplicationJSON `json:"-"`
+	Type      ApplicationType                                      `json:"type"`
+	UpdatedAt time.Time                                            `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseBookmarkApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBookmarkApplicationJSON contains the JSON metadata
@@ -15176,11 +15318,13 @@ type accessApplicationListResponseBookmarkApplicationJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	AUD                apijson.Field
+	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
+	UpdatedAt          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -15202,11 +15346,13 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                         `json:"name"`
-	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationListResponseInfrastructureApplicationJSON     `json:"-"`
+	Name      string                                                         `json:"name"`
+	Policies  []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                      `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
@@ -15216,8 +15362,10 @@ type accessApplicationListResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
+	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -15409,6 +15557,7 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -15471,8 +15620,9 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags      []string                                               `json:"tags"`
+	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRdpApplicationJSON contains the JSON
@@ -15489,6 +15639,7 @@ type accessApplicationListResponseBrowserRdpApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -15509,6 +15660,7 @@ type accessApplicationListResponseBrowserRdpApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -16241,6 +16393,7 @@ type AccessApplicationGetResponse struct {
 	// The background color of the App Launcher page.
 	BgColor     string      `json:"bg_color"`
 	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -16336,9 +16489,10 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                  `json:"type"`
-	JSON  accessApplicationGetResponseJSON `json:"-"`
-	union AccessApplicationGetResponseUnion
+	Type      ApplicationType                  `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseJSON `json:"-"`
+	union     AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
@@ -16354,6 +16508,7 @@ type accessApplicationGetResponseJSON struct {
 	AutoRedirectToIdentity      apijson.Field
 	BgColor                     apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -16382,6 +16537,7 @@ type accessApplicationGetResponseJSON struct {
 	Tags                        apijson.Field
 	TargetCriteria              apijson.Field
 	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -16504,6 +16660,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -16566,8 +16723,9 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseSelfHostedApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationJSON contains the JSON metadata
@@ -16583,6 +16741,7 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -16603,6 +16762,7 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -17255,7 +17415,8 @@ type AccessApplicationGetResponseSaaSApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -17271,8 +17432,9 @@ type AccessApplicationGetResponseSaaSApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                 `json:"type"`
-	JSON accessApplicationGetResponseSaaSApplicationJSON `json:"-"`
+	Type      ApplicationType                                 `json:"type"`
+	UpdatedAt time.Time                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseSaaSApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseSaaSApplicationJSON contains the JSON metadata for
@@ -17283,6 +17445,7 @@ type accessApplicationGetResponseSaaSApplicationJSON struct {
 	AppLauncherVisible     apijson.Field
 	AUD                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
+	CreatedAt              apijson.Field
 	CustomPages            apijson.Field
 	LogoURL                apijson.Field
 	Name                   apijson.Field
@@ -17291,6 +17454,7 @@ type accessApplicationGetResponseSaaSApplicationJSON struct {
 	SCIMConfig             apijson.Field
 	Tags                   apijson.Field
 	Type                   apijson.Field
+	UpdatedAt              apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -17395,7 +17559,8 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string `json:"consumer_service_url"`
+	ConsumerServiceURL string    `json:"consumer_service_url"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
 	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
 	CustomAttributes interface{} `json:"custom_attributes"`
 	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
@@ -17436,6 +17601,7 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint string                                                 `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                              `json:"updated_at" format:"date-time"`
 	JSON        accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
 	union       AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
 }
@@ -17450,6 +17616,7 @@ type accessApplicationGetResponseSaaSApplicationSaaSAppJSON struct {
 	ClientID                      apijson.Field
 	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
 	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
@@ -17466,6 +17633,7 @@ type accessApplicationGetResponseSaaSApplicationSaaSAppJSON struct {
 	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -17864,6 +18032,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -17926,8 +18095,9 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationJSON contains the JSON metadata
@@ -17943,6 +18113,7 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -17963,6 +18134,7 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -18654,6 +18826,7 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -18716,8 +18889,9 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationJSON contains the JSON metadata
@@ -18733,6 +18907,7 @@ type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -18753,6 +18928,7 @@ type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -19434,7 +19610,8 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
 	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -19461,6 +19638,7 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                              `json:"updated_at" format:"date-time"`
 	JSON                     accessApplicationGetResponseAppLauncherApplicationJSON `json:"-"`
 }
 
@@ -19474,6 +19652,7 @@ type accessApplicationGetResponseAppLauncherApplicationJSON struct {
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
 	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -19485,6 +19664,7 @@ type accessApplicationGetResponseAppLauncherApplicationJSON struct {
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -19672,7 +19852,8 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -19691,6 +19872,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
@@ -19703,6 +19885,7 @@ type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON stru
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -19710,6 +19893,7 @@ type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON stru
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -19810,7 +19994,8 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time `json:"created_at" format:"date-time"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
 	CustomDenyURL string `json:"custom_deny_url"`
@@ -19829,6 +20014,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h. Note: unsupported for infrastructure type applications.
 	SessionDuration string                                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
@@ -19841,6 +20027,7 @@ type accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON stru
 	AllowedIdPs              apijson.Field
 	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
@@ -19848,6 +20035,7 @@ type accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON stru
 	Name                     apijson.Field
 	Policies                 apijson.Field
 	SessionDuration          apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -19942,7 +20130,8 @@ type AccessApplicationGetResponseBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The URL or domain of the bookmark.
 	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -19953,8 +20142,9 @@ type AccessApplicationGetResponseBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type ApplicationType                                     `json:"type"`
-	JSON accessApplicationGetResponseBookmarkApplicationJSON `json:"-"`
+	Type      ApplicationType                                     `json:"type"`
+	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseBookmarkApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBookmarkApplicationJSON contains the JSON metadata
@@ -19963,11 +20153,13 @@ type accessApplicationGetResponseBookmarkApplicationJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	AUD                apijson.Field
+	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
+	UpdatedAt          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -19989,11 +20181,13 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
-	AUD string `json:"aud"`
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string                                                        `json:"name"`
-	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationGetResponseInfrastructureApplicationJSON     `json:"-"`
+	Name      string                                                        `json:"name"`
+	Policies  []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
+	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseInfrastructureApplicationJSON     `json:"-"`
 }
 
 // accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
@@ -20003,8 +20197,10 @@ type accessApplicationGetResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	CreatedAt      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
+	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -20196,6 +20392,7 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
 	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -20258,8 +20455,9 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags      []string                                              `json:"tags"`
+	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRdpApplicationJSON contains the JSON metadata
@@ -20276,6 +20474,7 @@ type accessApplicationGetResponseBrowserRdpApplicationJSON struct {
 	AUD                         apijson.Field
 	AutoRedirectToIdentity      apijson.Field
 	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
 	CustomDenyMessage           apijson.Field
 	CustomDenyURL               apijson.Field
 	CustomNonIdentityDenyURL    apijson.Field
@@ -20296,6 +20495,7 @@ type accessApplicationGetResponseBrowserRdpApplicationJSON struct {
 	SessionDuration             apijson.Field
 	SkipInterstitial            apijson.Field
 	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }

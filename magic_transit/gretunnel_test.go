@@ -29,12 +29,11 @@ func TestGRETunnelNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.GRETunnels.New(context.TODO(), magic_transit.GRETunnelNewParams{
-		AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		CloudflareGREEndpoint:  cloudflare.F("203.0.113.1"),
-		CustomerGREEndpoint:    cloudflare.F("203.0.113.1"),
-		InterfaceAddress:       cloudflare.F("192.0.2.0/31"),
-		Name:                   cloudflare.F("GRE_1"),
-		AutomaticReturnRouting: cloudflare.F(true),
+		AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CloudflareGREEndpoint: cloudflare.F("203.0.113.1"),
+		CustomerGREEndpoint:   cloudflare.F("203.0.113.1"),
+		InterfaceAddress:      cloudflare.F("192.0.2.0/31"),
+		Name:                  cloudflare.F("GRE_1"),
 		BGP: cloudflare.F(magic_transit.GRETunnelNewParamsBGP{
 			CustomerASN:   cloudflare.F(int64(0)),
 			ExtraPrefixes: cloudflare.F([]string{"string"}),
@@ -82,13 +81,12 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.GRETunnelUpdateParams{
-			AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CloudflareGREEndpoint:  cloudflare.F("203.0.113.1"),
-			CustomerGREEndpoint:    cloudflare.F("203.0.113.1"),
-			InterfaceAddress:       cloudflare.F("192.0.2.0/31"),
-			Name:                   cloudflare.F("GRE_1"),
-			AutomaticReturnRouting: cloudflare.F(true),
-			Description:            cloudflare.F("Tunnel for ISP X"),
+			AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CloudflareGREEndpoint: cloudflare.F("203.0.113.1"),
+			CustomerGREEndpoint:   cloudflare.F("203.0.113.1"),
+			InterfaceAddress:      cloudflare.F("192.0.2.0/31"),
+			Name:                  cloudflare.F("GRE_1"),
+			Description:           cloudflare.F("Tunnel for ISP X"),
 			HealthCheck: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheck{
 				Direction: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),

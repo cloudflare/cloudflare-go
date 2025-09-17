@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestThreatEventTagNew(t *testing.T) {
+func TestThreatEventDatasetHealthGet(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,10 +28,13 @@ func TestThreatEventTagNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Tags.New(context.TODO(), cloudforce_one.ThreatEventTagNewParams{
-		AccountID: cloudflare.F("account_id"),
-		Name:      cloudflare.F("name"),
-	})
+	_, err := client.CloudforceOne.ThreatEvents.Datasets.Health.Get(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		cloudforce_one.ThreatEventDatasetHealthGetParams{
+			AccountID: cloudflare.F("account_id"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

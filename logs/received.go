@@ -62,7 +62,7 @@ func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opt
 }
 
 type ReceivedGetParams struct {
-	// Identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Sets the (exclusive) end of the requested time frame. This can be a unix
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to

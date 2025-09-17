@@ -76,8 +76,8 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			RateLimitingLimit:       cloudflare.F(int64(0)),
 			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			Authentication:          cloudflare.F(true),
-			DLP: cloudflare.F[ai_gateway.AIGatewayUpdateParamsDLPUnion](ai_gateway.AIGatewayUpdateParamsDLPObject{
-				Action:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLPObjectActionBlock),
+			DLP: cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLP{
+				Action:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLPActionBlock),
 				Enabled:  cloudflare.F(true),
 				Profiles: cloudflare.F([]string{"string"}),
 			}),

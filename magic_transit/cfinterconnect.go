@@ -153,9 +153,6 @@ func (r cfInterconnectUpdateResponseJSON) RawJSON() string {
 type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -187,20 +184,19 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 // cfInterconnectUpdateResponseModifiedInterconnectJSON contains the JSON metadata
 // for the struct [CfInterconnectUpdateResponseModifiedInterconnect]
 type cfInterconnectUpdateResponseModifiedInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -259,9 +255,6 @@ func (r cfInterconnectListResponseJSON) RawJSON() string {
 type CfInterconnectListResponseInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -293,20 +286,19 @@ type CfInterconnectListResponseInterconnect struct {
 // cfInterconnectListResponseInterconnectJSON contains the JSON metadata for the
 // struct [CfInterconnectListResponseInterconnect]
 type cfInterconnectListResponseInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectListResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -367,9 +359,6 @@ func (r cfInterconnectBulkUpdateResponseJSON) RawJSON() string {
 type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -401,20 +390,19 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 // cfInterconnectBulkUpdateResponseModifiedInterconnectJSON contains the JSON
 // metadata for the struct [CfInterconnectBulkUpdateResponseModifiedInterconnect]
 type cfInterconnectBulkUpdateResponseModifiedInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectBulkUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -474,9 +462,6 @@ func (r cfInterconnectGetResponseJSON) RawJSON() string {
 type CfInterconnectGetResponseInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -508,20 +493,19 @@ type CfInterconnectGetResponseInterconnect struct {
 // cfInterconnectGetResponseInterconnectJSON contains the JSON metadata for the
 // struct [CfInterconnectGetResponseInterconnect]
 type cfInterconnectGetResponseInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                apijson.Field
+	ColoName          apijson.Field
+	CreatedOn         apijson.Field
+	Description       apijson.Field
+	GRE               apijson.Field
+	HealthCheck       apijson.Field
+	InterfaceAddress  apijson.Field
+	InterfaceAddress6 apijson.Field
+	ModifiedOn        apijson.Field
+	Mtu               apijson.Field
+	Name              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CfInterconnectGetResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -559,9 +543,6 @@ func (r cfInterconnectGetResponseInterconnectGREJSON) RawJSON() string {
 type CfInterconnectUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting param.Field[bool] `json:"automatic_return_routing"`
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
 	// The configuration specific to GRE interconnects.

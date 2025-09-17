@@ -28,11 +28,10 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.New(context.TODO(), magic_transit.IPSECTunnelNewParams{
-		AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		CloudflareEndpoint:     cloudflare.F("203.0.113.1"),
-		InterfaceAddress:       cloudflare.F("192.0.2.0/31"),
-		Name:                   cloudflare.F("IPsec_1"),
-		AutomaticReturnRouting: cloudflare.F(true),
+		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CloudflareEndpoint: cloudflare.F("203.0.113.1"),
+		InterfaceAddress:   cloudflare.F("192.0.2.0/31"),
+		Name:               cloudflare.F("IPsec_1"),
 		BGP: cloudflare.F(magic_transit.IPSECTunnelNewParamsBGP{
 			CustomerASN:   cloudflare.F(int64(0)),
 			ExtraPrefixes: cloudflare.F([]string{"string"}),
@@ -81,11 +80,10 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.IPSECTunnelUpdateParams{
-			AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CloudflareEndpoint:     cloudflare.F("203.0.113.1"),
-			InterfaceAddress:       cloudflare.F("192.0.2.0/31"),
-			Name:                   cloudflare.F("IPsec_1"),
-			AutomaticReturnRouting: cloudflare.F(true),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CloudflareEndpoint: cloudflare.F("203.0.113.1"),
+			InterfaceAddress:   cloudflare.F("192.0.2.0/31"),
+			Name:               cloudflare.F("IPsec_1"),
 			BGP: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsBGP{
 				CustomerASN:   cloudflare.F(int64(0)),
 				ExtraPrefixes: cloudflare.F([]string{"string"}),

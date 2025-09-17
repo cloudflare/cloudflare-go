@@ -76,9 +76,8 @@ type LinkNewParams struct {
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies              param.Field[[]LinkNewParamsCookie] `json:"cookies"`
-	EmulateMediaType     param.Field[string]                `json:"emulateMediaType"`
-	ExcludeExternalLinks param.Field[bool]                  `json:"excludeExternalLinks"`
+	Cookies          param.Field[[]LinkNewParamsCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]                `json:"emulateMediaType"`
 	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
 	GotoOptions param.Field[LinkNewParamsGotoOptions] `json:"gotoOptions"`
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or

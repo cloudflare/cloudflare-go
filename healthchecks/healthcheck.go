@@ -518,7 +518,7 @@ type HealthcheckNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -542,7 +542,7 @@ func (r healthcheckNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type HealthcheckNewResponseEnvelopeSuccess bool
 
 const (
@@ -571,7 +571,7 @@ type HealthcheckUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -595,7 +595,7 @@ func (r healthcheckUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type HealthcheckUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -636,7 +636,7 @@ type HealthcheckDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo     `json:"errors,required"`
 	Messages []shared.ResponseInfo     `json:"messages,required"`
 	Result   HealthcheckDeleteResponse `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success HealthcheckDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -660,7 +660,7 @@ func (r healthcheckDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type HealthcheckDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -689,7 +689,7 @@ type HealthcheckEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success HealthcheckEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -713,7 +713,7 @@ func (r healthcheckEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type HealthcheckEditResponseEnvelopeSuccess bool
 
 const (
@@ -737,7 +737,7 @@ type HealthcheckGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success HealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -761,7 +761,7 @@ func (r healthcheckGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type HealthcheckGetResponseEnvelopeSuccess bool
 
 const (

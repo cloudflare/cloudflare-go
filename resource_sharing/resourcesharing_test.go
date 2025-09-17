@@ -94,17 +94,14 @@ func TestResourceSharingListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ResourceSharing.List(context.TODO(), resource_sharing.ResourceSharingListParams{
-		AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction:              cloudflare.F(resource_sharing.ResourceSharingListParamsDirectionAsc),
-		IncludeRecipientCounts: cloudflare.F(true),
-		IncludeResources:       cloudflare.F(true),
-		Kind:                   cloudflare.F(resource_sharing.ResourceSharingListParamsKindSent),
-		Order:                  cloudflare.F(resource_sharing.ResourceSharingListParamsOrderName),
-		Page:                   cloudflare.F(int64(2)),
-		PerPage:                cloudflare.F(int64(20)),
-		ResourceTypes:          cloudflare.F([]resource_sharing.ResourceSharingListParamsResourceType{resource_sharing.ResourceSharingListParamsResourceTypeCustomRuleset}),
-		Status:                 cloudflare.F(resource_sharing.ResourceSharingListParamsStatusActive),
-		TargetType:             cloudflare.F(resource_sharing.ResourceSharingListParamsTargetTypeAccount),
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction:  cloudflare.F(resource_sharing.ResourceSharingListParamsDirectionAsc),
+		Kind:       cloudflare.F(resource_sharing.ResourceSharingListParamsKindSent),
+		Order:      cloudflare.F(resource_sharing.ResourceSharingListParamsOrderName),
+		Page:       cloudflare.F(int64(2)),
+		PerPage:    cloudflare.F(int64(20)),
+		Status:     cloudflare.F(resource_sharing.ResourceSharingListParamsStatusActive),
+		TargetType: cloudflare.F(resource_sharing.ResourceSharingListParamsTargetTypeAccount),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -144,7 +141,7 @@ func TestResourceSharingDelete(t *testing.T) {
 	}
 }
 
-func TestResourceSharingGetWithOptionalParams(t *testing.T) {
+func TestResourceSharingGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -161,9 +158,7 @@ func TestResourceSharingGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"3fd85f74b32742f1bff64a85009dda07",
 		resource_sharing.ResourceSharingGetParams{
-			AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			IncludeRecipientCounts: cloudflare.F(true),
-			IncludeResources:       cloudflare.F(true),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

@@ -33,7 +33,7 @@ func NewThreatEventTagService(opts ...option.RequestOption) (r *ThreatEventTagSe
 	return
 }
 
-// Creates a new tag to be used accross threat events.
+// Creates a new tag
 func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventTagNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -46,48 +46,18 @@ func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNe
 }
 
 type ThreatEventTagNewResponse struct {
-	UUID                    string                        `json:"uuid,required"`
-	Value                   string                        `json:"value,required"`
-	ActiveDuration          string                        `json:"activeDuration"`
-	ActorCategory           string                        `json:"actorCategory"`
-	AliasGroupNames         []string                      `json:"aliasGroupNames"`
-	AliasGroupNamesInternal []string                      `json:"aliasGroupNamesInternal"`
-	AnalyticPriority        float64                       `json:"analyticPriority"`
-	AttributionConfidence   string                        `json:"attributionConfidence"`
-	AttributionOrganization string                        `json:"attributionOrganization"`
-	CategoryID              float64                       `json:"categoryId"`
-	ExternalReferenceLinks  []string                      `json:"externalReferenceLinks"`
-	InternalDescription     string                        `json:"internalDescription"`
-	Motive                  string                        `json:"motive"`
-	OpsecLevel              string                        `json:"opsecLevel"`
-	OriginCountryISO        string                        `json:"originCountryISO"`
-	Priority                float64                       `json:"priority"`
-	SophisticationLevel     string                        `json:"sophisticationLevel"`
-	JSON                    threatEventTagNewResponseJSON `json:"-"`
+	Name string                        `json:"name,required"`
+	UUID string                        `json:"uuid,required"`
+	JSON threatEventTagNewResponseJSON `json:"-"`
 }
 
 // threatEventTagNewResponseJSON contains the JSON metadata for the struct
 // [ThreatEventTagNewResponse]
 type threatEventTagNewResponseJSON struct {
-	UUID                    apijson.Field
-	Value                   apijson.Field
-	ActiveDuration          apijson.Field
-	ActorCategory           apijson.Field
-	AliasGroupNames         apijson.Field
-	AliasGroupNamesInternal apijson.Field
-	AnalyticPriority        apijson.Field
-	AttributionConfidence   apijson.Field
-	AttributionOrganization apijson.Field
-	CategoryID              apijson.Field
-	ExternalReferenceLinks  apijson.Field
-	InternalDescription     apijson.Field
-	Motive                  apijson.Field
-	OpsecLevel              apijson.Field
-	OriginCountryISO        apijson.Field
-	Priority                apijson.Field
-	SophisticationLevel     apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	Name        apijson.Field
+	UUID        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ThreatEventTagNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -100,23 +70,8 @@ func (r threatEventTagNewResponseJSON) RawJSON() string {
 
 type ThreatEventTagNewParams struct {
 	// Account ID.
-	AccountID               param.Field[string]   `path:"account_id,required"`
-	Value                   param.Field[string]   `json:"value,required"`
-	ActiveDuration          param.Field[string]   `json:"activeDuration"`
-	ActorCategory           param.Field[string]   `json:"actorCategory"`
-	AliasGroupNames         param.Field[[]string] `json:"aliasGroupNames"`
-	AliasGroupNamesInternal param.Field[[]string] `json:"aliasGroupNamesInternal"`
-	AnalyticPriority        param.Field[float64]  `json:"analyticPriority"`
-	AttributionConfidence   param.Field[string]   `json:"attributionConfidence"`
-	AttributionOrganization param.Field[string]   `json:"attributionOrganization"`
-	CategoryID              param.Field[float64]  `json:"categoryId"`
-	ExternalReferenceLinks  param.Field[[]string] `json:"externalReferenceLinks"`
-	InternalDescription     param.Field[string]   `json:"internalDescription"`
-	Motive                  param.Field[string]   `json:"motive"`
-	OpsecLevel              param.Field[string]   `json:"opsecLevel"`
-	OriginCountryISO        param.Field[string]   `json:"originCountryISO"`
-	Priority                param.Field[float64]  `json:"priority"`
-	SophisticationLevel     param.Field[string]   `json:"sophisticationLevel"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Name      param.Field[string] `json:"name,required"`
 }
 
 func (r ThreatEventTagNewParams) MarshalJSON() (data []byte, err error) {

@@ -152,19 +152,9 @@ type Prefix struct {
 	AccountID string `json:"account_id"`
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
-	//
-	// Deprecated: Prefer the
-	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
-	// instead, which allows for advertising multiple BGP routes within a single IP
-	// Prefix.
 	Advertised bool `json:"advertised,nullable"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	//
-	// Deprecated: Prefer the
-	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
-	// instead, which allows for advertising multiple BGP routes within a single IP
-	// Prefix.
 	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
@@ -180,19 +170,9 @@ type Prefix struct {
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
-	//
-	// Deprecated: Prefer the
-	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
-	// instead, which allows for advertising multiple BGP routes within a single IP
-	// Prefix.
 	OnDemandEnabled bool `json:"on_demand_enabled"`
 	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
-	//
-	// Deprecated: Prefer the
-	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
-	// instead, which allows for advertising multiple BGP routes within a single IP
-	// Prefix.
 	OnDemandLocked bool       `json:"on_demand_locked"`
 	JSON           prefixJSON `json:"-"`
 }

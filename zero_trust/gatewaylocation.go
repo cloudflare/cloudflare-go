@@ -36,7 +36,7 @@ func NewGatewayLocationService(opts ...option.RequestOption) (r *GatewayLocation
 	return
 }
 
-// Create a new Zero Trust Gateway location.
+// Creates a new Zero Trust Gateway location.
 func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocationNewParams, opts ...option.RequestOption) (res *Location, err error) {
 	var env GatewayLocationNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -53,7 +53,7 @@ func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocation
 	return
 }
 
-// Update a configured Zero Trust Gateway location.
+// Updates a configured Zero Trust Gateway location.
 func (r *GatewayLocationService) Update(ctx context.Context, locationID string, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *Location, err error) {
 	var env GatewayLocationUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -74,7 +74,7 @@ func (r *GatewayLocationService) Update(ctx context.Context, locationID string, 
 	return
 }
 
-// List Zero Trust Gateway locations for an account.
+// Fetches Zero Trust Gateway locations for an account.
 func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Location], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -96,12 +96,12 @@ func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocation
 	return res, nil
 }
 
-// List Zero Trust Gateway locations for an account.
+// Fetches Zero Trust Gateway locations for an account.
 func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Location] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a configured Zero Trust Gateway location.
+// Deletes a configured Zero Trust Gateway location.
 func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
 	var env GatewayLocationDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -122,7 +122,7 @@ func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, 
 	return
 }
 
-// Get a single Zero Trust Gateway location.
+// Fetches a single Zero Trust Gateway location.
 func (r *GatewayLocationService) Get(ctx context.Context, locationID string, query GatewayLocationGetParams, opts ...option.RequestOption) (res *Location, err error) {
 	var env GatewayLocationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -144,13 +144,15 @@ func (r *GatewayLocationService) Get(ctx context.Context, locationID string, que
 }
 
 type DOHEndpoint struct {
-	// Indicate whether the DOH endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled bool `json:"enabled"`
-	// Specify the list of allowed source IP network ranges for this endpoint. When the
-	// list is empty, the endpoint allows all source IPs. The list takes effect only if
-	// the endpoint is enabled for this location.
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
 	Networks []IPNetwork `json:"networks,nullable"`
-	// Specify whether the DOH endpoint requires user identity authentication.
+	// True if the endpoint requires
+	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
+	// authentication.
 	RequireToken bool            `json:"require_token"`
 	JSON         dohEndpointJSON `json:"-"`
 }
@@ -173,13 +175,15 @@ func (r dohEndpointJSON) RawJSON() string {
 }
 
 type DOHEndpointParam struct {
-	// Indicate whether the DOH endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Specify the list of allowed source IP network ranges for this endpoint. When the
-	// list is empty, the endpoint allows all source IPs. The list takes effect only if
-	// the endpoint is enabled for this location.
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
 	Networks param.Field[[]IPNetworkParam] `json:"networks"`
-	// Specify whether the DOH endpoint requires user identity authentication.
+	// True if the endpoint requires
+	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
+	// authentication.
 	RequireToken param.Field[bool] `json:"require_token"`
 }
 
@@ -188,11 +192,11 @@ func (r DOHEndpointParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DOTEndpoint struct {
-	// Indicate whether the DOT endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled bool `json:"enabled"`
-	// Specify the list of allowed source IP network ranges for this endpoint. When the
-	// list is empty, the endpoint allows all source IPs. The list takes effect only if
-	// the endpoint is enabled for this location.
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
 	Networks []IPNetwork     `json:"networks,nullable"`
 	JSON     dotEndpointJSON `json:"-"`
 }
@@ -214,11 +218,11 @@ func (r dotEndpointJSON) RawJSON() string {
 }
 
 type DOTEndpointParam struct {
-	// Indicate whether the DOT endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Specify the list of allowed source IP network ranges for this endpoint. When the
-	// list is empty, the endpoint allows all source IPs. The list takes effect only if
-	// the endpoint is enabled for this location.
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
 	Networks param.Field[[]IPNetworkParam] `json:"networks"`
 }
 
@@ -226,7 +230,9 @@ func (r DOTEndpointParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configure the destination endpoints for this location.
+// The destination endpoints configured for this location. When updating a
+// location, if this field is absent or set with null, the endpoints configuration
+// remains unchanged.
 type Endpoint struct {
 	DOH  DOHEndpoint  `json:"doh,required"`
 	DOT  DOTEndpoint  `json:"dot,required"`
@@ -253,7 +259,9 @@ func (r endpointJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure the destination endpoints for this location.
+// The destination endpoints configured for this location. When updating a
+// location, if this field is absent or set with null, the endpoints configuration
+// remains unchanged.
 type EndpointParam struct {
 	DOH  param.Field[DOHEndpointParam]  `json:"doh,required"`
 	DOT  param.Field[DOTEndpointParam]  `json:"dot,required"`
@@ -266,7 +274,7 @@ func (r EndpointParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IPNetwork struct {
-	// Specify the IP address or IP CIDR.
+	// The IP address or IP CIDR.
 	Network string        `json:"network,required"`
 	JSON    ipNetworkJSON `json:"-"`
 }
@@ -287,7 +295,7 @@ func (r ipNetworkJSON) RawJSON() string {
 }
 
 type IPNetworkParam struct {
-	// Specify the IP address or IP CIDR.
+	// The IP address or IP CIDR.
 	Network param.Field[string] `json:"network,required"`
 }
 
@@ -296,7 +304,7 @@ func (r IPNetworkParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IPV4Endpoint struct {
-	// Indicate whether the IPv4 endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled bool             `json:"enabled"`
 	JSON    ipv4EndpointJSON `json:"-"`
 }
@@ -317,7 +325,7 @@ func (r ipv4EndpointJSON) RawJSON() string {
 }
 
 type IPV4EndpointParam struct {
-	// Indicate whether the IPv4 endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -326,11 +334,11 @@ func (r IPV4EndpointParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IPV6Endpoint struct {
-	// Indicate whether the IPV6 endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled bool `json:"enabled"`
-	// Specify the list of allowed source IPv6 network ranges for this endpoint. When
-	// the list is empty, the endpoint allows all source IPs. The list takes effect
-	// only if the endpoint is enabled for this location.
+	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
 	Networks []IPV6Network    `json:"networks,nullable"`
 	JSON     ipv6EndpointJSON `json:"-"`
 }
@@ -352,11 +360,11 @@ func (r ipv6EndpointJSON) RawJSON() string {
 }
 
 type IPV6EndpointParam struct {
-	// Indicate whether the IPV6 endpoint is enabled for this location.
+	// True if the endpoint is enabled for this location.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Specify the list of allowed source IPv6 network ranges for this endpoint. When
-	// the list is empty, the endpoint allows all source IPs. The list takes effect
-	// only if the endpoint is enabled for this location.
+	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
 	Networks param.Field[[]IPV6NetworkParam] `json:"networks"`
 }
 
@@ -365,7 +373,7 @@ func (r IPV6EndpointParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IPV6Network struct {
-	// Specify the IPv6 address or IPv6 CIDR.
+	// The IPv6 address or IPv6 CIDR.
 	Network string          `json:"network,required"`
 	JSON    ipv6NetworkJSON `json:"-"`
 }
@@ -386,7 +394,7 @@ func (r ipv6NetworkJSON) RawJSON() string {
 }
 
 type IPV6NetworkParam struct {
-	// Specify the IPv6 address or IPv6 CIDR.
+	// The IPv6 address or IPv6 CIDR.
 	Network param.Field[string] `json:"network,required"`
 }
 
@@ -396,37 +404,39 @@ func (r IPV6NetworkParam) MarshalJSON() (data []byte, err error) {
 
 type Location struct {
 	ID string `json:"id"`
-	// Indicate whether this location is the default location.
+	// True if the location is the default location.
 	ClientDefault bool      `json:"client_default"`
 	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	// Indicate the identifier of the pair of IPv4 addresses assigned to this location.
+	// The identifier of the pair of IPv4 addresses assigned to this location.
 	DNSDestinationIPsID string `json:"dns_destination_ips_id"`
-	// Specify the UUID of the IPv6 block brought to the gateway so that this
-	// location's IPv6 address is allocated from the Bring Your Own IPv6 (BYOIPv6)
-	// block rather than the standard Cloudflare IPv6 block.
+	// The uuid identifier of the IPv6 block brought to the gateway, so that this
+	// location's IPv6 address is allocated from the Bring Your Own Ipv6(BYOIPv6) block
+	// and not from the standard Cloudflare IPv6 block.
 	DNSDestinationIPV6BlockID string `json:"dns_destination_ipv6_block_id,nullable"`
-	// Specify the DNS over HTTPS domain that receives DNS requests. Gateway
-	// automatically generates this value.
+	// The DNS over HTTPS domain to send DNS requests to. This field is auto-generated
+	// by Gateway.
 	DOHSubdomain string `json:"doh_subdomain"`
-	// Indicate whether the location must resolve EDNS queries.
+	// True if the location needs to resolve EDNS queries.
 	ECSSupport bool `json:"ecs_support"`
-	// Configure the destination endpoints for this location.
+	// The destination endpoints configured for this location. When updating a
+	// location, if this field is absent or set with null, the endpoints configuration
+	// remains unchanged.
 	Endpoints Endpoint `json:"endpoints,nullable"`
-	// Defines the automatically generated IPv6 destination IP assigned to this
-	// location. Gateway counts all DNS requests sent to this IP as requests under this
-	// location.
+	// IPV6 destination ip assigned to this location. DNS requests sent to this IP will
+	// counted as the request under this location. This field is auto-generated by
+	// Gateway.
 	IP string `json:"ip"`
-	// Show the primary destination IPv4 address from the pair identified
-	// dns_destination_ips_id. This field read-only.
+	// The primary destination IPv4 address from the pair identified by the
+	// dns_destination_ips_id. This field is read-only.
 	IPV4Destination string `json:"ipv4_destination"`
-	// Show the backup destination IPv4 address from the pair identified
-	// dns_destination_ips_id. This field read-only.
+	// The backup destination IPv4 address from the pair identified by the
+	// dns_destination_ips_id. This field is read-only.
 	IPV4DestinationBackup string `json:"ipv4_destination_backup"`
-	// Specify the location name.
+	// The name of the location.
 	Name string `json:"name"`
-	// Specify the list of network ranges from which requests at this location
-	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
-	// is enabled for this location.
+	// A list of network ranges that requests from this location would originate from.
+	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
+	// location.
 	Networks  []LocationNetwork `json:"networks,nullable"`
 	UpdatedAt time.Time         `json:"updated_at" format:"date-time"`
 	JSON      locationJSON      `json:"-"`
@@ -461,7 +471,7 @@ func (r locationJSON) RawJSON() string {
 }
 
 type LocationNetwork struct {
-	// Specify the IPv4 address or IPv4 CIDR. Limit IPv4 CIDRs to a maximum of /24.
+	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network string              `json:"network,required"`
 	JSON    locationNetworkJSON `json:"-"`
 }
@@ -485,23 +495,25 @@ type GatewayLocationDeleteResponse = interface{}
 
 type GatewayLocationNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Specify the location name.
+	// The name of the location.
 	Name param.Field[string] `json:"name,required"`
-	// Indicate whether this location is the default location.
+	// True if the location is the default location.
 	ClientDefault param.Field[bool] `json:"client_default"`
-	// Specify the identifier of the pair of IPv4 addresses assigned to this location.
-	// When creating a location, if this field is absent or set to null, the pair of
+	// The identifier of the pair of IPv4 addresses assigned to this location. When
+	// creating a location, if this field is absent or set with null, the pair of
 	// shared IPv4 addresses (0e4a32c6-6fb8-4858-9296-98f51631e8e6) is auto-assigned.
-	// When updating a location, if this field is absent or set to null, the
+	// When updating a location, if the field is absent or set with null, the
 	// pre-assigned pair remains unchanged.
 	DNSDestinationIPsID param.Field[string] `json:"dns_destination_ips_id"`
-	// Indicate whether the location must resolve EDNS queries.
+	// True if the location needs to resolve EDNS queries.
 	ECSSupport param.Field[bool] `json:"ecs_support"`
-	// Configure the destination endpoints for this location.
+	// The destination endpoints configured for this location. When updating a
+	// location, if this field is absent or set with null, the endpoints configuration
+	// remains unchanged.
 	Endpoints param.Field[EndpointParam] `json:"endpoints"`
-	// Specify the list of network ranges from which requests at this location
-	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
-	// is enabled for this location.
+	// A list of network ranges that requests from this location would originate from.
+	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
+	// location.
 	Networks param.Field[[]GatewayLocationNewParamsNetwork] `json:"networks"`
 }
 
@@ -510,7 +522,7 @@ func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationNewParamsNetwork struct {
-	// Specify the IPv4 address or IPv4 CIDR. Limit IPv4 CIDRs to a maximum of /24.
+	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network param.Field[string] `json:"network,required"`
 }
 
@@ -521,7 +533,7 @@ func (r GatewayLocationNewParamsNetwork) MarshalJSON() (data []byte, err error) 
 type GatewayLocationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Location                                  `json:"result"`
 	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
@@ -546,7 +558,7 @@ func (r gatewayLocationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayLocationNewResponseEnvelopeSuccess bool
 
 const (
@@ -563,23 +575,25 @@ func (r GatewayLocationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayLocationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Specify the location name.
+	// The name of the location.
 	Name param.Field[string] `json:"name,required"`
-	// Indicate whether this location is the default location.
+	// True if the location is the default location.
 	ClientDefault param.Field[bool] `json:"client_default"`
-	// Specify the identifier of the pair of IPv4 addresses assigned to this location.
-	// When creating a location, if this field is absent or set to null, the pair of
+	// The identifier of the pair of IPv4 addresses assigned to this location. When
+	// creating a location, if this field is absent or set with null, the pair of
 	// shared IPv4 addresses (0e4a32c6-6fb8-4858-9296-98f51631e8e6) is auto-assigned.
-	// When updating a location, if this field is absent or set to null, the
+	// When updating a location, if the field is absent or set with null, the
 	// pre-assigned pair remains unchanged.
 	DNSDestinationIPsID param.Field[string] `json:"dns_destination_ips_id"`
-	// Indicate whether the location must resolve EDNS queries.
+	// True if the location needs to resolve EDNS queries.
 	ECSSupport param.Field[bool] `json:"ecs_support"`
-	// Configure the destination endpoints for this location.
+	// The destination endpoints configured for this location. When updating a
+	// location, if this field is absent or set with null, the endpoints configuration
+	// remains unchanged.
 	Endpoints param.Field[EndpointParam] `json:"endpoints"`
-	// Specify the list of network ranges from which requests at this location
-	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
-	// is enabled for this location.
+	// A list of network ranges that requests from this location would originate from.
+	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
+	// location.
 	Networks param.Field[[]GatewayLocationUpdateParamsNetwork] `json:"networks"`
 }
 
@@ -588,7 +602,7 @@ func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationUpdateParamsNetwork struct {
-	// Specify the IPv4 address or IPv4 CIDR. Limit IPv4 CIDRs to a maximum of /24.
+	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network param.Field[string] `json:"network,required"`
 }
 
@@ -599,7 +613,7 @@ func (r GatewayLocationUpdateParamsNetwork) MarshalJSON() (data []byte, err erro
 type GatewayLocationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Location                                     `json:"result"`
 	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -624,7 +638,7 @@ func (r gatewayLocationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayLocationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -650,7 +664,7 @@ type GatewayLocationDeleteParams struct {
 type GatewayLocationDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayLocationDeleteResponse                `json:"result"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -675,7 +689,7 @@ func (r gatewayLocationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayLocationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -697,7 +711,7 @@ type GatewayLocationGetParams struct {
 type GatewayLocationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Indicate whether the API call was successful.
+	// Whether the API call was successful.
 	Success GatewayLocationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Location                                  `json:"result"`
 	JSON    gatewayLocationGetResponseEnvelopeJSON    `json:"-"`
@@ -722,7 +736,7 @@ func (r gatewayLocationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// Whether the API call was successful.
 type GatewayLocationGetResponseEnvelopeSuccess bool
 
 const (

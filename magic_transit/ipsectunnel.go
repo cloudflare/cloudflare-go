@@ -237,15 +237,11 @@ type IPSECTunnelNewResponse struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                            `json:"automatic_return_routing"`
-	BGP                    IPSECTunnelNewResponseBGP       `json:"bgp"`
-	BGPStatus              IPSECTunnelNewResponseBGPStatus `json:"bgp_status"`
+	AllowNullCipher bool                            `json:"allow_null_cipher"`
+	BGP             IPSECTunnelNewResponseBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelNewResponseBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
-	CreatedOn              time.Time                                    `json:"created_on" format:"date-time"`
-	CustomRemoteIdentities IPSECTunnelNewResponseCustomRemoteIdentities `json:"custom_remote_identities"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
@@ -270,25 +266,23 @@ type IPSECTunnelNewResponse struct {
 // ipsecTunnelNewResponseJSON contains the JSON metadata for the struct
 // [IPSECTunnelNewResponse]
 type ipsecTunnelNewResponseJSON struct {
-	ID                     apijson.Field
-	CloudflareEndpoint     apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AllowNullCipher        apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	CustomRemoteIdentities apijson.Field
-	CustomerEndpoint       apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	PSKMetadata            apijson.Field
-	ReplayProtection       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                 apijson.Field
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *IPSECTunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -394,35 +388,6 @@ func (r IPSECTunnelNewResponseBGPStatusState) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type IPSECTunnelNewResponseCustomRemoteIdentities struct {
-	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
-	// generated IKE IDs can still be used even if this custom value is specified.
-	//
-	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
-	//
-	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
-	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
-	// tunnels cannot have the same cloudflare_endpoint.
-	FqdnID string                                           `json:"fqdn_id"`
-	JSON   ipsecTunnelNewResponseCustomRemoteIdentitiesJSON `json:"-"`
-}
-
-// ipsecTunnelNewResponseCustomRemoteIdentitiesJSON contains the JSON metadata for
-// the struct [IPSECTunnelNewResponseCustomRemoteIdentities]
-type ipsecTunnelNewResponseCustomRemoteIdentitiesJSON struct {
-	FqdnID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelNewResponseCustomRemoteIdentities) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelNewResponseCustomRemoteIdentitiesJSON) RawJSON() string {
-	return r.raw
 }
 
 type IPSECTunnelNewResponseHealthCheck struct {
@@ -590,15 +555,11 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                                  `json:"automatic_return_routing"`
-	BGP                    IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP       `json:"bgp"`
-	BGPStatus              IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus `json:"bgp_status"`
+	AllowNullCipher bool                                                  `json:"allow_null_cipher"`
+	BGP             IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
-	CreatedOn              time.Time                                                          `json:"created_on" format:"date-time"`
-	CustomRemoteIdentities IPSECTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentities `json:"custom_remote_identities"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
@@ -623,25 +584,23 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 // ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON contains the JSON metadata for
 // the struct [IPSECTunnelUpdateResponseModifiedIPSECTunnel]
 type ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareEndpoint     apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AllowNullCipher        apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	CustomRemoteIdentities apijson.Field
-	CustomerEndpoint       apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	PSKMetadata            apijson.Field
-	ReplayProtection       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                 apijson.Field
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *IPSECTunnelUpdateResponseModifiedIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -747,36 +706,6 @@ func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState) IsKnown() bo
 		return true
 	}
 	return false
-}
-
-type IPSECTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentities struct {
-	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
-	// generated IKE IDs can still be used even if this custom value is specified.
-	//
-	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
-	//
-	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
-	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
-	// tunnels cannot have the same cloudflare_endpoint.
-	FqdnID string                                                                 `json:"fqdn_id"`
-	JSON   ipsecTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentitiesJSON `json:"-"`
-}
-
-// ipsecTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentitiesJSON contains
-// the JSON metadata for the struct
-// [IPSECTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentities]
-type ipsecTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentitiesJSON struct {
-	FqdnID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentities) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelCustomRemoteIdentitiesJSON) RawJSON() string {
-	return r.raw
 }
 
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheck struct {
@@ -943,15 +872,11 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                         `json:"automatic_return_routing"`
-	BGP                    IPSECTunnelListResponseIPSECTunnelsBGP       `json:"bgp"`
-	BGPStatus              IPSECTunnelListResponseIPSECTunnelsBGPStatus `json:"bgp_status"`
+	AllowNullCipher bool                                         `json:"allow_null_cipher"`
+	BGP             IPSECTunnelListResponseIPSECTunnelsBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelListResponseIPSECTunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
-	CreatedOn              time.Time                                                 `json:"created_on" format:"date-time"`
-	CustomRemoteIdentities IPSECTunnelListResponseIPSECTunnelsCustomRemoteIdentities `json:"custom_remote_identities"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
@@ -976,25 +901,23 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 // ipsecTunnelListResponseIPSECTunnelJSON contains the JSON metadata for the struct
 // [IPSECTunnelListResponseIPSECTunnel]
 type ipsecTunnelListResponseIPSECTunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareEndpoint     apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AllowNullCipher        apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	CustomRemoteIdentities apijson.Field
-	CustomerEndpoint       apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	PSKMetadata            apijson.Field
-	ReplayProtection       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                 apijson.Field
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *IPSECTunnelListResponseIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1100,36 +1023,6 @@ func (r IPSECTunnelListResponseIPSECTunnelsBGPStatusState) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type IPSECTunnelListResponseIPSECTunnelsCustomRemoteIdentities struct {
-	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
-	// generated IKE IDs can still be used even if this custom value is specified.
-	//
-	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
-	//
-	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
-	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
-	// tunnels cannot have the same cloudflare_endpoint.
-	FqdnID string                                                        `json:"fqdn_id"`
-	JSON   ipsecTunnelListResponseIPSECTunnelsCustomRemoteIdentitiesJSON `json:"-"`
-}
-
-// ipsecTunnelListResponseIPSECTunnelsCustomRemoteIdentitiesJSON contains the JSON
-// metadata for the struct
-// [IPSECTunnelListResponseIPSECTunnelsCustomRemoteIdentities]
-type ipsecTunnelListResponseIPSECTunnelsCustomRemoteIdentitiesJSON struct {
-	FqdnID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelListResponseIPSECTunnelsCustomRemoteIdentities) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelListResponseIPSECTunnelsCustomRemoteIdentitiesJSON) RawJSON() string {
-	return r.raw
 }
 
 type IPSECTunnelListResponseIPSECTunnelsHealthCheck struct {
@@ -1297,15 +1190,11 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                                 `json:"automatic_return_routing"`
-	BGP                    IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP       `json:"bgp"`
-	BGPStatus              IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus `json:"bgp_status"`
+	AllowNullCipher bool                                                 `json:"allow_null_cipher"`
+	BGP             IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
-	CreatedOn              time.Time                                                         `json:"created_on" format:"date-time"`
-	CustomRemoteIdentities IPSECTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentities `json:"custom_remote_identities"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
@@ -1330,25 +1219,23 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 // ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON contains the JSON metadata for
 // the struct [IPSECTunnelDeleteResponseDeletedIPSECTunnel]
 type ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareEndpoint     apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AllowNullCipher        apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	CustomRemoteIdentities apijson.Field
-	CustomerEndpoint       apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	PSKMetadata            apijson.Field
-	ReplayProtection       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                 apijson.Field
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *IPSECTunnelDeleteResponseDeletedIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1454,36 +1341,6 @@ func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState) IsKnown() boo
 		return true
 	}
 	return false
-}
-
-type IPSECTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentities struct {
-	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
-	// generated IKE IDs can still be used even if this custom value is specified.
-	//
-	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
-	//
-	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
-	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
-	// tunnels cannot have the same cloudflare_endpoint.
-	FqdnID string                                                                `json:"fqdn_id"`
-	JSON   ipsecTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentitiesJSON `json:"-"`
-}
-
-// ipsecTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentitiesJSON contains
-// the JSON metadata for the struct
-// [IPSECTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentities]
-type ipsecTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentitiesJSON struct {
-	FqdnID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentities) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelCustomRemoteIdentitiesJSON) RawJSON() string {
-	return r.raw
 }
 
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheck struct {
@@ -1651,15 +1508,11 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                                       `json:"automatic_return_routing"`
-	BGP                    IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP       `json:"bgp"`
-	BGPStatus              IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus `json:"bgp_status"`
+	AllowNullCipher bool                                                       `json:"allow_null_cipher"`
+	BGP             IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
-	CreatedOn              time.Time                                                               `json:"created_on" format:"date-time"`
-	CustomRemoteIdentities IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentities `json:"custom_remote_identities"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
@@ -1684,25 +1537,23 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 // ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON contains the JSON metadata
 // for the struct [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel]
 type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareEndpoint     apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AllowNullCipher        apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	CustomRemoteIdentities apijson.Field
-	CustomerEndpoint       apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	PSKMetadata            apijson.Field
-	ReplayProtection       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                 apijson.Field
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1809,36 +1660,6 @@ func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState) IsKnown
 		return true
 	}
 	return false
-}
-
-type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentities struct {
-	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
-	// generated IKE IDs can still be used even if this custom value is specified.
-	//
-	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
-	//
-	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
-	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
-	// tunnels cannot have the same cloudflare_endpoint.
-	FqdnID string                                                                      `json:"fqdn_id"`
-	JSON   ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentitiesJSON `json:"-"`
-}
-
-// ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentitiesJSON
-// contains the JSON metadata for the struct
-// [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentities]
-type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentitiesJSON struct {
-	FqdnID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentities) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsCustomRemoteIdentitiesJSON) RawJSON() string {
-	return r.raw
 }
 
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck struct {
@@ -2005,15 +1826,11 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 	Name string `json:"name,required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
-	AllowNullCipher bool `json:"allow_null_cipher"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting bool                                       `json:"automatic_return_routing"`
-	BGP                    IPSECTunnelGetResponseIPSECTunnelBGP       `json:"bgp"`
-	BGPStatus              IPSECTunnelGetResponseIPSECTunnelBGPStatus `json:"bgp_status"`
+	AllowNullCipher bool                                       `json:"allow_null_cipher"`
+	BGP             IPSECTunnelGetResponseIPSECTunnelBGP       `json:"bgp"`
+	BGPStatus       IPSECTunnelGetResponseIPSECTunnelBGPStatus `json:"bgp_status"`
 	// The date and time the tunnel was created.
-	CreatedOn              time.Time                                               `json:"created_on" format:"date-time"`
-	CustomRemoteIdentities IPSECTunnelGetResponseIPSECTunnelCustomRemoteIdentities `json:"custom_remote_identities"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
@@ -2038,25 +1855,23 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 // ipsecTunnelGetResponseIPSECTunnelJSON contains the JSON metadata for the struct
 // [IPSECTunnelGetResponseIPSECTunnel]
 type ipsecTunnelGetResponseIPSECTunnelJSON struct {
-	ID                     apijson.Field
-	CloudflareEndpoint     apijson.Field
-	InterfaceAddress       apijson.Field
-	Name                   apijson.Field
-	AllowNullCipher        apijson.Field
-	AutomaticReturnRouting apijson.Field
-	BGP                    apijson.Field
-	BGPStatus              apijson.Field
-	CreatedOn              apijson.Field
-	CustomRemoteIdentities apijson.Field
-	CustomerEndpoint       apijson.Field
-	Description            apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	PSKMetadata            apijson.Field
-	ReplayProtection       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                 apijson.Field
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	AllowNullCipher    apijson.Field
+	BGP                apijson.Field
+	BGPStatus          apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	InterfaceAddress6  apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *IPSECTunnelGetResponseIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -2162,36 +1977,6 @@ func (r IPSECTunnelGetResponseIPSECTunnelBGPStatusState) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type IPSECTunnelGetResponseIPSECTunnelCustomRemoteIdentities struct {
-	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
-	// generated IKE IDs can still be used even if this custom value is specified.
-	//
-	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
-	//
-	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
-	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
-	// tunnels cannot have the same cloudflare_endpoint.
-	FqdnID string                                                      `json:"fqdn_id"`
-	JSON   ipsecTunnelGetResponseIPSECTunnelCustomRemoteIdentitiesJSON `json:"-"`
-}
-
-// ipsecTunnelGetResponseIPSECTunnelCustomRemoteIdentitiesJSON contains the JSON
-// metadata for the struct
-// [IPSECTunnelGetResponseIPSECTunnelCustomRemoteIdentities]
-type ipsecTunnelGetResponseIPSECTunnelCustomRemoteIdentitiesJSON struct {
-	FqdnID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPSECTunnelGetResponseIPSECTunnelCustomRemoteIdentities) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelGetResponseIPSECTunnelCustomRemoteIdentitiesJSON) RawJSON() string {
-	return r.raw
 }
 
 type IPSECTunnelGetResponseIPSECTunnelHealthCheck struct {
@@ -2361,11 +2146,8 @@ type IPSECTunnelNewParams struct {
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting param.Field[bool]                    `json:"automatic_return_routing"`
-	BGP                    param.Field[IPSECTunnelNewParamsBGP] `json:"bgp"`
+	Name param.Field[string]                  `json:"name,required"`
+	BGP  param.Field[IPSECTunnelNewParamsBGP] `json:"bgp"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
@@ -2551,11 +2333,8 @@ type IPSECTunnelUpdateParams struct {
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
-	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
-	AutomaticReturnRouting param.Field[bool]                       `json:"automatic_return_routing"`
-	BGP                    param.Field[IPSECTunnelUpdateParamsBGP] `json:"bgp"`
+	Name param.Field[string]                     `json:"name,required"`
+	BGP  param.Field[IPSECTunnelUpdateParamsBGP] `json:"bgp"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`

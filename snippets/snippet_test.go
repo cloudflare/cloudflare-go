@@ -3,8 +3,10 @@
 package snippets_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -33,6 +35,7 @@ func TestSnippetUpdate(t *testing.T) {
 		"my_snippet",
 		snippets.SnippetUpdateParams{
 			ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+			Files:  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(snippets.SnippetUpdateParamsMetadata{
 				MainModule: cloudflare.F("main.js"),
 			}),

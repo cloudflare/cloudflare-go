@@ -696,7 +696,7 @@ type DNSNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Domain of your zone.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r DNSNewParams) MarshalJSON() (data []byte, err error) {
@@ -851,7 +851,7 @@ type DNSEditParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Domain of your zone.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r DNSEditParams) MarshalJSON() (data []byte, err error) {

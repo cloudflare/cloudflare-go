@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
@@ -30,11 +29,9 @@ func TestAccessServiceTokenNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.New(context.TODO(), zero_trust.AccessServiceTokenNewParams{
-		Name:                          cloudflare.F("CI/CD token"),
-		AccountID:                     cloudflare.F("account_id"),
-		ClientSecretVersion:           cloudflare.F(0.000000),
-		Duration:                      cloudflare.F("60m"),
-		PreviousClientSecretExpiresAt: cloudflare.F(time.Now()),
+		Name:      cloudflare.F("CI/CD token"),
+		AccountID: cloudflare.F("account_id"),
+		Duration:  cloudflare.F("60m"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,11 +60,9 @@ func TestAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessServiceTokenUpdateParams{
-			AccountID:                     cloudflare.F("account_id"),
-			ClientSecretVersion:           cloudflare.F(0.000000),
-			Duration:                      cloudflare.F("60m"),
-			Name:                          cloudflare.F("CI/CD token"),
-			PreviousClientSecretExpiresAt: cloudflare.F(time.Now()),
+			AccountID: cloudflare.F("account_id"),
+			Duration:  cloudflare.F("60m"),
+			Name:      cloudflare.F("CI/CD token"),
 		},
 	)
 	if err != nil {
@@ -198,7 +193,7 @@ func TestAccessServiceTokenRefresh(t *testing.T) {
 	}
 }
 
-func TestAccessServiceTokenRotateWithOptionalParams(t *testing.T) {
+func TestAccessServiceTokenRotate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -215,8 +210,7 @@ func TestAccessServiceTokenRotateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessServiceTokenRotateParams{
-			AccountID:                     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			PreviousClientSecretExpiresAt: cloudflare.F(time.Now()),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

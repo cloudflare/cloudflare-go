@@ -581,7 +581,9 @@ TEST_PATHS=(
 	cloudforce_one/threateventattacker_test.go
 	cloudforce_one/threateventcategory_test.go
 	cloudforce_one/threateventcountry_test.go
+	cloudforce_one/threateventcron_test.go
 	cloudforce_one/threateventdataset_test.go
+	cloudforce_one/threateventdatasethealth_test.go
 	cloudforce_one/threateventindicatortype_test.go
 	cloudforce_one/threateventraw_test.go
 	cloudforce_one/threateventrelate_test.go
@@ -610,6 +612,8 @@ TEST_PATHS=(
 	resource_sharing/resourcesharing_test.go
 	resource_sharing/recipient_test.go
 	resource_sharing/resource_test.go
+	leaked_credential_checks/leakedcredentialcheck_test.go
+	leaked_credential_checks/detection_test.go
 	content_scanning/contentscanning_test.go
 	content_scanning/payload_test.go
 	content_scanning/setting_test.go

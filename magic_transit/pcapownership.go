@@ -167,7 +167,7 @@ func (r OwnershipStatus) IsKnown() bool {
 }
 
 type PCAPOwnershipNewParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
@@ -181,7 +181,7 @@ type PCAPOwnershipNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Ownership             `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -205,7 +205,7 @@ func (r pcapOwnershipNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type PCAPOwnershipNewResponseEnvelopeSuccess bool
 
 const (
@@ -221,17 +221,17 @@ func (r PCAPOwnershipNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PCAPOwnershipDeleteParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PCAPOwnershipGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PCAPOwnershipValidateParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
@@ -247,7 +247,7 @@ type PCAPOwnershipValidateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Ownership             `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeJSON    `json:"-"`
 }
@@ -271,7 +271,7 @@ func (r pcapOwnershipValidateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type PCAPOwnershipValidateResponseEnvelopeSuccess bool
 
 const (

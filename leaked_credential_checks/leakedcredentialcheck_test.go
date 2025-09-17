@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers_test
+package leaked_credential_checks_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/leaked_credential_checks"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/workers"
 )
 
-func TestScriptSettingEditWithOptionalParams(t *testing.T) {
+func TestLeakedCredentialCheckNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,30 +27,10 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.Scripts.Settings.Edit(
-		context.TODO(),
-		"this-is_my_script-01",
-		workers.ScriptSettingEditParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ScriptSetting: workers.ScriptSettingParam{
-				Logpush: cloudflare.F(false),
-				Observability: cloudflare.F(workers.ScriptSettingObservabilityParam{
-					Enabled:          cloudflare.F(true),
-					HeadSamplingRate: cloudflare.F(0.100000),
-					Logs: cloudflare.F(workers.ScriptSettingObservabilityLogsParam{
-						Enabled:          cloudflare.F(true),
-						InvocationLogs:   cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(0.100000),
-					}),
-				}),
-				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}}),
-			},
-		},
-	)
+	_, err := client.LeakedCredentialChecks.New(context.TODO(), leaked_credential_checks.LeakedCredentialCheckNewParams{
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Enabled: cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -60,7 +40,7 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestScriptSettingGet(t *testing.T) {
+func TestLeakedCredentialCheckGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,13 +53,9 @@ func TestScriptSettingGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.Scripts.Settings.Get(
-		context.TODO(),
-		"this-is_my_script-01",
-		workers.ScriptSettingGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
-	)
+	_, err := client.LeakedCredentialChecks.Get(context.TODO(), leaked_credential_checks.LeakedCredentialCheckGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
