@@ -942,6 +942,10 @@ type ScriptUpdateParamsMetadataBinding struct {
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
 	Json param.Field[string] `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction param.Field[ScriptUpdateParamsMetadataBindingsJurisdiction] `json:"jurisdiction"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
@@ -1592,6 +1596,10 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction] `json:"jurisdiction"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket) MarshalJSON() (data []byte, err error) {
@@ -1611,6 +1619,24 @@ const (
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
 	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -2085,6 +2111,24 @@ const (
 func (r ScriptUpdateParamsMetadataBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptUpdateParamsMetadataBindingsFormatRaw, ScriptUpdateParamsMetadataBindingsFormatPkcs8, ScriptUpdateParamsMetadataBindingsFormatSpki, ScriptUpdateParamsMetadataBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptUpdateParamsMetadataBindingsJurisdiction string
+
+const (
+	ScriptUpdateParamsMetadataBindingsJurisdictionEu      ScriptUpdateParamsMetadataBindingsJurisdiction = "eu"
+	ScriptUpdateParamsMetadataBindingsJurisdictionFedramp ScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsJurisdictionEu, ScriptUpdateParamsMetadataBindingsJurisdictionFedramp:
 		return true
 	}
 	return false

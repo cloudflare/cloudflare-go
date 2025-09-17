@@ -106,6 +106,10 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction DispatchNamespaceScriptBindingGetResponseJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
@@ -168,6 +172,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Format                      apijson.Field
 	IndexName                   apijson.Field
 	Json                        apijson.Field
+	Jurisdiction                apijson.Field
 	KeyJwk                      apijson.Field
 	Namespace                   apijson.Field
 	NamespaceID                 apijson.Field
@@ -1298,18 +1303,23 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket struct 
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJSON `json:"-"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction `json:"jurisdiction"`
+	JSON         dispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJSON         `json:"-"`
 }
 
 // dispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJSON contains
 // the JSON metadata for the struct
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket]
 type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	BucketName   apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
@@ -1333,6 +1343,24 @@ const (
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionEu      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction = "eu"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedramp DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction = "fedramp"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -1981,6 +2009,24 @@ const (
 func (r DispatchNamespaceScriptBindingGetResponseFormat) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptBindingGetResponseFormatRaw, DispatchNamespaceScriptBindingGetResponseFormatPkcs8, DispatchNamespaceScriptBindingGetResponseFormatSpki, DispatchNamespaceScriptBindingGetResponseFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type DispatchNamespaceScriptBindingGetResponseJurisdiction string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseJurisdictionEu      DispatchNamespaceScriptBindingGetResponseJurisdiction = "eu"
+	DispatchNamespaceScriptBindingGetResponseJurisdictionFedramp DispatchNamespaceScriptBindingGetResponseJurisdiction = "fedramp"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseJurisdiction) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseJurisdictionEu, DispatchNamespaceScriptBindingGetResponseJurisdictionFedramp:
 		return true
 	}
 	return false
