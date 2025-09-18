@@ -41,6 +41,7 @@ TEST_PATHS=(
 	load_balancers/monitor_test.go
 	load_balancers/monitorpreview_test.go
 	load_balancers/monitorreference_test.go
+	load_balancers/monitorgroup_test.go
 	load_balancers/pool_test.go
 	load_balancers/poolhealth_test.go
 	load_balancers/poolreference_test.go
