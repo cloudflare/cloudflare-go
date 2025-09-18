@@ -24,12 +24,13 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewLoadBalancerService] method instead.
 type LoadBalancerService struct {
-	Options  []option.RequestOption
-	Monitors *MonitorService
-	Pools    *PoolService
-	Previews *PreviewService
-	Regions  *RegionService
-	Searches *SearchService
+	Options       []option.RequestOption
+	Monitors      *MonitorService
+	MonitorGroups *MonitorGroupService
+	Pools         *PoolService
+	Previews      *PreviewService
+	Regions       *RegionService
+	Searches      *SearchService
 }
 
 // NewLoadBalancerService generates a new service that applies the given options to
@@ -39,6 +40,7 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 	r = &LoadBalancerService{}
 	r.Options = opts
 	r.Monitors = NewMonitorService(opts...)
+	r.MonitorGroups = NewMonitorGroupService(opts...)
 	r.Pools = NewPoolService(opts...)
 	r.Previews = NewPreviewService(opts...)
 	r.Regions = NewRegionService(opts...)
