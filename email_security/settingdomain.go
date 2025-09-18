@@ -156,7 +156,6 @@ type SettingDomainListResponse struct {
 	Regions              []SettingDomainListResponseRegion              `json:"regions,required"`
 	Transport            string                                         `json:"transport,required"`
 	Authorization        SettingDomainListResponseAuthorization         `json:"authorization,nullable"`
-	DMARCStatus          SettingDomainListResponseDMARCStatus           `json:"dmarc_status,nullable"`
 	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed,nullable"`
 	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider,nullable"`
@@ -164,7 +163,6 @@ type SettingDomainListResponse struct {
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
 	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
 	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
-	SPFStatus            SettingDomainListResponseSPFStatus             `json:"spf_status,nullable"`
 	JSON                 settingDomainListResponseJSON                  `json:"-"`
 }
 
@@ -182,7 +180,6 @@ type settingDomainListResponseJSON struct {
 	Regions              apijson.Field
 	Transport            apijson.Field
 	Authorization        apijson.Field
-	DMARCStatus          apijson.Field
 	EmailsProcessed      apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
@@ -190,7 +187,6 @@ type settingDomainListResponseJSON struct {
 	O365TenantID         apijson.Field
 	RequireTLSInbound    apijson.Field
 	RequireTLSOutbound   apijson.Field
-	SPFStatus            apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -287,22 +283,6 @@ func (r settingDomainListResponseAuthorizationJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingDomainListResponseDMARCStatus string
-
-const (
-	SettingDomainListResponseDMARCStatusNone    SettingDomainListResponseDMARCStatus = "none"
-	SettingDomainListResponseDMARCStatusGood    SettingDomainListResponseDMARCStatus = "good"
-	SettingDomainListResponseDMARCStatusInvalid SettingDomainListResponseDMARCStatus = "invalid"
-)
-
-func (r SettingDomainListResponseDMARCStatus) IsKnown() bool {
-	switch r {
-	case SettingDomainListResponseDMARCStatusNone, SettingDomainListResponseDMARCStatusGood, SettingDomainListResponseDMARCStatusInvalid:
-		return true
-	}
-	return false
-}
-
 type SettingDomainListResponseEmailsProcessed struct {
 	Timestamp                    time.Time                                    `json:"timestamp,required" format:"date-time"`
 	TotalEmailsProcessed         int64                                        `json:"total_emails_processed,required"`
@@ -353,24 +333,6 @@ const (
 func (r SettingDomainListResponseInboxProvider) IsKnown() bool {
 	switch r {
 	case SettingDomainListResponseInboxProviderMicrosoft, SettingDomainListResponseInboxProviderGoogle:
-		return true
-	}
-	return false
-}
-
-type SettingDomainListResponseSPFStatus string
-
-const (
-	SettingDomainListResponseSPFStatusNone    SettingDomainListResponseSPFStatus = "none"
-	SettingDomainListResponseSPFStatusGood    SettingDomainListResponseSPFStatus = "good"
-	SettingDomainListResponseSPFStatusNeutral SettingDomainListResponseSPFStatus = "neutral"
-	SettingDomainListResponseSPFStatusOpen    SettingDomainListResponseSPFStatus = "open"
-	SettingDomainListResponseSPFStatusInvalid SettingDomainListResponseSPFStatus = "invalid"
-)
-
-func (r SettingDomainListResponseSPFStatus) IsKnown() bool {
-	switch r {
-	case SettingDomainListResponseSPFStatusNone, SettingDomainListResponseSPFStatusGood, SettingDomainListResponseSPFStatusNeutral, SettingDomainListResponseSPFStatusOpen, SettingDomainListResponseSPFStatusInvalid:
 		return true
 	}
 	return false
@@ -433,7 +395,6 @@ type SettingDomainEditResponse struct {
 	Regions              []SettingDomainEditResponseRegion              `json:"regions,required"`
 	Transport            string                                         `json:"transport,required"`
 	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization,nullable"`
-	DMARCStatus          SettingDomainEditResponseDMARCStatus           `json:"dmarc_status,nullable"`
 	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed,nullable"`
 	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider,nullable"`
@@ -441,7 +402,6 @@ type SettingDomainEditResponse struct {
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
 	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
 	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
-	SPFStatus            SettingDomainEditResponseSPFStatus             `json:"spf_status,nullable"`
 	JSON                 settingDomainEditResponseJSON                  `json:"-"`
 }
 
@@ -459,7 +419,6 @@ type settingDomainEditResponseJSON struct {
 	Regions              apijson.Field
 	Transport            apijson.Field
 	Authorization        apijson.Field
-	DMARCStatus          apijson.Field
 	EmailsProcessed      apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
@@ -467,7 +426,6 @@ type settingDomainEditResponseJSON struct {
 	O365TenantID         apijson.Field
 	RequireTLSInbound    apijson.Field
 	RequireTLSOutbound   apijson.Field
-	SPFStatus            apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -564,22 +522,6 @@ func (r settingDomainEditResponseAuthorizationJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingDomainEditResponseDMARCStatus string
-
-const (
-	SettingDomainEditResponseDMARCStatusNone    SettingDomainEditResponseDMARCStatus = "none"
-	SettingDomainEditResponseDMARCStatusGood    SettingDomainEditResponseDMARCStatus = "good"
-	SettingDomainEditResponseDMARCStatusInvalid SettingDomainEditResponseDMARCStatus = "invalid"
-)
-
-func (r SettingDomainEditResponseDMARCStatus) IsKnown() bool {
-	switch r {
-	case SettingDomainEditResponseDMARCStatusNone, SettingDomainEditResponseDMARCStatusGood, SettingDomainEditResponseDMARCStatusInvalid:
-		return true
-	}
-	return false
-}
-
 type SettingDomainEditResponseEmailsProcessed struct {
 	Timestamp                    time.Time                                    `json:"timestamp,required" format:"date-time"`
 	TotalEmailsProcessed         int64                                        `json:"total_emails_processed,required"`
@@ -635,24 +577,6 @@ func (r SettingDomainEditResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
-type SettingDomainEditResponseSPFStatus string
-
-const (
-	SettingDomainEditResponseSPFStatusNone    SettingDomainEditResponseSPFStatus = "none"
-	SettingDomainEditResponseSPFStatusGood    SettingDomainEditResponseSPFStatus = "good"
-	SettingDomainEditResponseSPFStatusNeutral SettingDomainEditResponseSPFStatus = "neutral"
-	SettingDomainEditResponseSPFStatusOpen    SettingDomainEditResponseSPFStatus = "open"
-	SettingDomainEditResponseSPFStatusInvalid SettingDomainEditResponseSPFStatus = "invalid"
-)
-
-func (r SettingDomainEditResponseSPFStatus) IsKnown() bool {
-	switch r {
-	case SettingDomainEditResponseSPFStatusNone, SettingDomainEditResponseSPFStatusGood, SettingDomainEditResponseSPFStatusNeutral, SettingDomainEditResponseSPFStatusOpen, SettingDomainEditResponseSPFStatusInvalid:
-		return true
-	}
-	return false
-}
-
 type SettingDomainGetResponse struct {
 	// The unique identifier for the domain.
 	ID                   int64                                         `json:"id,required"`
@@ -666,7 +590,6 @@ type SettingDomainGetResponse struct {
 	Regions              []SettingDomainGetResponseRegion              `json:"regions,required"`
 	Transport            string                                        `json:"transport,required"`
 	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization,nullable"`
-	DMARCStatus          SettingDomainGetResponseDMARCStatus           `json:"dmarc_status,nullable"`
 	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed,nullable"`
 	Folder               SettingDomainGetResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider,nullable"`
@@ -674,7 +597,6 @@ type SettingDomainGetResponse struct {
 	O365TenantID         string                                        `json:"o365_tenant_id,nullable"`
 	RequireTLSInbound    bool                                          `json:"require_tls_inbound,nullable"`
 	RequireTLSOutbound   bool                                          `json:"require_tls_outbound,nullable"`
-	SPFStatus            SettingDomainGetResponseSPFStatus             `json:"spf_status,nullable"`
 	JSON                 settingDomainGetResponseJSON                  `json:"-"`
 }
 
@@ -692,7 +614,6 @@ type settingDomainGetResponseJSON struct {
 	Regions              apijson.Field
 	Transport            apijson.Field
 	Authorization        apijson.Field
-	DMARCStatus          apijson.Field
 	EmailsProcessed      apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
@@ -700,7 +621,6 @@ type settingDomainGetResponseJSON struct {
 	O365TenantID         apijson.Field
 	RequireTLSInbound    apijson.Field
 	RequireTLSOutbound   apijson.Field
-	SPFStatus            apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -797,22 +717,6 @@ func (r settingDomainGetResponseAuthorizationJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingDomainGetResponseDMARCStatus string
-
-const (
-	SettingDomainGetResponseDMARCStatusNone    SettingDomainGetResponseDMARCStatus = "none"
-	SettingDomainGetResponseDMARCStatusGood    SettingDomainGetResponseDMARCStatus = "good"
-	SettingDomainGetResponseDMARCStatusInvalid SettingDomainGetResponseDMARCStatus = "invalid"
-)
-
-func (r SettingDomainGetResponseDMARCStatus) IsKnown() bool {
-	switch r {
-	case SettingDomainGetResponseDMARCStatusNone, SettingDomainGetResponseDMARCStatusGood, SettingDomainGetResponseDMARCStatusInvalid:
-		return true
-	}
-	return false
-}
-
 type SettingDomainGetResponseEmailsProcessed struct {
 	Timestamp                    time.Time                                   `json:"timestamp,required" format:"date-time"`
 	TotalEmailsProcessed         int64                                       `json:"total_emails_processed,required"`
@@ -863,24 +767,6 @@ const (
 func (r SettingDomainGetResponseInboxProvider) IsKnown() bool {
 	switch r {
 	case SettingDomainGetResponseInboxProviderMicrosoft, SettingDomainGetResponseInboxProviderGoogle:
-		return true
-	}
-	return false
-}
-
-type SettingDomainGetResponseSPFStatus string
-
-const (
-	SettingDomainGetResponseSPFStatusNone    SettingDomainGetResponseSPFStatus = "none"
-	SettingDomainGetResponseSPFStatusGood    SettingDomainGetResponseSPFStatus = "good"
-	SettingDomainGetResponseSPFStatusNeutral SettingDomainGetResponseSPFStatus = "neutral"
-	SettingDomainGetResponseSPFStatusOpen    SettingDomainGetResponseSPFStatus = "open"
-	SettingDomainGetResponseSPFStatusInvalid SettingDomainGetResponseSPFStatus = "invalid"
-)
-
-func (r SettingDomainGetResponseSPFStatus) IsKnown() bool {
-	switch r {
-	case SettingDomainGetResponseSPFStatusNone, SettingDomainGetResponseSPFStatusGood, SettingDomainGetResponseSPFStatusNeutral, SettingDomainGetResponseSPFStatusOpen, SettingDomainGetResponseSPFStatusInvalid:
 		return true
 	}
 	return false
