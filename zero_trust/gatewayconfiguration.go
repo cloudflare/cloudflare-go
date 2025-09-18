@@ -439,12 +439,7 @@ func (r CustomCertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Specify user email settings for the firewall policies. When this is enabled, we
-// standardize the email addresses in the identity part of the rule, so that they
-// match the extended email variants in the firewall policies. When this setting is
-// turned off, the email addresses in the identity part of the rule will be matched
-// exactly as provided. If your email has `.` or `+` modifiers, you should enable
-// this setting.
+// Specify user emails settings for the firewall policies.
 type ExtendedEmailMatching struct {
 	// Specify whether to match all variants of user emails (with + or . modifiers)
 	// used as criteria in Firewall policies.
@@ -478,12 +473,7 @@ func (r extendedEmailMatchingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specify user email settings for the firewall policies. When this is enabled, we
-// standardize the email addresses in the identity part of the rule, so that they
-// match the extended email variants in the firewall policies. When this setting is
-// turned off, the email addresses in the identity part of the rule will be matched
-// exactly as provided. If your email has `.` or `+` modifiers, you should enable
-// this setting.
+// Specify user emails settings for the firewall policies.
 type ExtendedEmailMatchingParam struct {
 	// Specify whether to match all variants of user emails (with + or . modifiers)
 	// used as criteria in Firewall policies.
@@ -546,12 +536,7 @@ type GatewayConfigurationSettings struct {
 	//
 	// Deprecated: deprecated
 	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
-	// Specify user email settings for the firewall policies. When this is enabled, we
-	// standardize the email addresses in the identity part of the rule, so that they
-	// match the extended email variants in the firewall policies. When this setting is
-	// turned off, the email addresses in the identity part of the rule will be matched
-	// exactly as provided. If your email has `.` or `+` modifiers, you should enable
-	// this setting.
+	// Specify user emails settings for the firewall policies.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching,nullable"`
 	// Specify FIPS settings.
 	Fips FipsSettings `json:"fips,nullable"`
@@ -755,12 +740,7 @@ type GatewayConfigurationSettingsParam struct {
 	//
 	// Deprecated: deprecated
 	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
-	// Specify user email settings for the firewall policies. When this is enabled, we
-	// standardize the email addresses in the identity part of the rule, so that they
-	// match the extended email variants in the firewall policies. When this setting is
-	// turned off, the email addresses in the identity part of the rule will be matched
-	// exactly as provided. If your email has `.` or `+` modifiers, you should enable
-	// this setting.
+	// Specify user emails settings for the firewall policies.
 	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
 	// Specify FIPS settings.
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
