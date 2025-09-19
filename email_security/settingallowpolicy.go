@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewSettingAllowPolicyService(opts ...option.RequestOption) (r *SettingAllow
 // Create an email allow policy
 func (r *SettingAllowPolicyService) New(ctx context.Context, params SettingAllowPolicyNewParams, opts ...option.RequestOption) (res *SettingAllowPolicyNewResponse, err error) {
 	var env SettingAllowPolicyNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *SettingAllowPolicyService) New(ctx context.Context, params SettingAllow
 // Lists, searches, and sorts an account’s email allow policies.
 func (r *SettingAllowPolicyService) List(ctx context.Context, params SettingAllowPolicyListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingAllowPolicyListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -85,7 +86,7 @@ func (r *SettingAllowPolicyService) ListAutoPaging(ctx context.Context, params S
 // Delete an email allow policy
 func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID int64, body SettingAllowPolicyDeleteParams, opts ...option.RequestOption) (res *SettingAllowPolicyDeleteResponse, err error) {
 	var env SettingAllowPolicyDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -102,7 +103,7 @@ func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID int64, 
 // Update an email allow policy
 func (r *SettingAllowPolicyService) Edit(ctx context.Context, policyID int64, params SettingAllowPolicyEditParams, opts ...option.RequestOption) (res *SettingAllowPolicyEditResponse, err error) {
 	var env SettingAllowPolicyEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,7 +120,7 @@ func (r *SettingAllowPolicyService) Edit(ctx context.Context, policyID int64, pa
 // Get an email allow policy
 func (r *SettingAllowPolicyService) Get(ctx context.Context, policyID int64, query SettingAllowPolicyGetParams, opts ...option.RequestOption) (res *SettingAllowPolicyGetResponse, err error) {
 	var env SettingAllowPolicyGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

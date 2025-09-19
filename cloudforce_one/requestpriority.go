@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 // Create a New Priority Intelligence Requirement
 func (r *RequestPriorityService) New(ctx context.Context, params RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	var env RequestPriorityNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *RequestPriorityService) New(ctx context.Context, params RequestPriority
 // Update a Priority Intelligence Requirement
 func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, params RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -74,7 +75,7 @@ func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, 
 
 // Delete a Priority Intelligence Requirement
 func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, body RequestPriorityDeleteParams, opts ...option.RequestOption) (res *RequestPriorityDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -91,7 +92,7 @@ func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, 
 // Get a Priority Intelligence Requirement
 func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, query RequestPriorityGetParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -112,7 +113,7 @@ func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, que
 // Get Priority Intelligence Requirement Quota
 func (r *RequestPriorityService) Quota(ctx context.Context, query RequestPriorityQuotaParams, opts ...option.RequestOption) (res *Quota, err error) {
 	var env RequestPriorityQuotaResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

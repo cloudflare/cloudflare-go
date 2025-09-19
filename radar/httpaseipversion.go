@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPAseIPVersionService(opts ...option.RequestOption) (r *HTTPAseIPVersi
 // version.
 func (r *HTTPAseIPVersionService) Get(ctx context.Context, ipVersion HTTPAseIPVersionGetParamsIPVersion, query HTTPAseIPVersionGetParams, opts ...option.RequestOption) (res *HTTPAseIPVersionGetResponse, err error) {
 	var env HTTPAseIPVersionGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/ases/ip_version/%v", ipVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

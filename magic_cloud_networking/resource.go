@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -41,7 +42,7 @@ func NewResourceService(opts ...option.RequestOption) (r *ResourceService) {
 // List resources in the Resource Catalog (Closed Beta).
 func (r *ResourceService) List(ctx context.Context, params ResourceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -67,7 +68,7 @@ func (r *ResourceService) ListAutoPaging(ctx context.Context, params ResourceLis
 
 // Export resources in the Resource Catalog as a JSON file (Closed Beta).
 func (r *ResourceService) Export(ctx context.Context, params ResourceExportParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -81,7 +82,7 @@ func (r *ResourceService) Export(ctx context.Context, params ResourceExportParam
 // Read an resource from the Resource Catalog (Closed Beta).
 func (r *ResourceService) Get(ctx context.Context, resourceID string, params ResourceGetParams, opts ...option.RequestOption) (res *ResourceGetResponse, err error) {
 	var env ResourceGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -102,7 +103,7 @@ func (r *ResourceService) Get(ctx context.Context, resourceID string, params Res
 // Preview Rego query result against the latest resource catalog (Closed Beta).
 func (r *ResourceService) PolicyPreview(ctx context.Context, params ResourcePolicyPreviewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ResourcePolicyPreviewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewFinetuneService(opts ...option.RequestOption) (r *FinetuneService) {
 // Create a new Finetune
 func (r *FinetuneService) New(ctx context.Context, params FinetuneNewParams, opts ...option.RequestOption) (res *FinetuneNewResponse, err error) {
 	var env FinetuneNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *FinetuneService) New(ctx context.Context, params FinetuneNewParams, opt
 // List Finetunes
 func (r *FinetuneService) List(ctx context.Context, query FinetuneListParams, opts ...option.RequestOption) (res *FinetuneListResponse, err error) {
 	var env FinetuneListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

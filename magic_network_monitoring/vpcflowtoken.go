@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewVPCFlowTokenService(opts ...option.RequestOption) (r *VPCFlowTokenServic
 // Generate authentication token for VPC flow logs export.
 func (r *VPCFlowTokenService) New(ctx context.Context, body VPCFlowTokenNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env VPCFlowTokenNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

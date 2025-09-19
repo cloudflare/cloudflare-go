@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewDeviceRegistrationService(opts ...option.RequestOption) (r *DeviceRegist
 // Lists WARP registrations.
 func (r *DeviceRegistrationService) List(ctx context.Context, params DeviceRegistrationListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[DeviceRegistrationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -66,7 +67,7 @@ func (r *DeviceRegistrationService) ListAutoPaging(ctx context.Context, params D
 // Deletes a WARP registration.
 func (r *DeviceRegistrationService) Delete(ctx context.Context, registrationID string, body DeviceRegistrationDeleteParams, opts ...option.RequestOption) (res *DeviceRegistrationDeleteResponse, err error) {
 	var env DeviceRegistrationDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -87,7 +88,7 @@ func (r *DeviceRegistrationService) Delete(ctx context.Context, registrationID s
 // Deletes a list of WARP registrations.
 func (r *DeviceRegistrationService) BulkDelete(ctx context.Context, params DeviceRegistrationBulkDeleteParams, opts ...option.RequestOption) (res *DeviceRegistrationBulkDeleteResponse, err error) {
 	var env DeviceRegistrationBulkDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -104,7 +105,7 @@ func (r *DeviceRegistrationService) BulkDelete(ctx context.Context, params Devic
 // Fetches a single WARP registration.
 func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID string, params DeviceRegistrationGetParams, opts ...option.RequestOption) (res *DeviceRegistrationGetResponse, err error) {
 	var env DeviceRegistrationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,7 +126,7 @@ func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID stri
 // Revokes a list of WARP registrations.
 func (r *DeviceRegistrationService) Revoke(ctx context.Context, params DeviceRegistrationRevokeParams, opts ...option.RequestOption) (res *DeviceRegistrationRevokeResponse, err error) {
 	var env DeviceRegistrationRevokeResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -142,7 +143,7 @@ func (r *DeviceRegistrationService) Revoke(ctx context.Context, params DeviceReg
 // Unrevokes a list of WARP registrations.
 func (r *DeviceRegistrationService) Unrevoke(ctx context.Context, params DeviceRegistrationUnrevokeParams, opts ...option.RequestOption) (res *DeviceRegistrationUnrevokeResponse, err error) {
 	var env DeviceRegistrationUnrevokeResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

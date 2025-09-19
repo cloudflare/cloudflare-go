@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -37,7 +38,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 // Updates a user's subscriptions.
 func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SubscriptionUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
@@ -53,7 +54,7 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 
 // Deletes a user's subscription.
 func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
@@ -66,7 +67,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opt
 // Lists all of a user's subscriptions.
 func (r *SubscriptionService) Get(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Subscription], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/subscriptions"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)

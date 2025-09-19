@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/api_gateway"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewSettingOperationService(opts ...option.RequestOption) (r *SettingOperati
 // Update per-operation schema validation setting
 func (r *SettingOperationService) Update(ctx context.Context, operationID string, params SettingOperationUpdateParams, opts ...option.RequestOption) (res *SettingOperationUpdateResponse, err error) {
 	var env SettingOperationUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *SettingOperationService) Update(ctx context.Context, operationID string
 // List per-operation schema validation settings
 func (r *SettingOperationService) List(ctx context.Context, params SettingOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingOperationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -88,7 +89,7 @@ func (r *SettingOperationService) ListAutoPaging(ctx context.Context, params Set
 // Delete per-operation schema validation setting
 func (r *SettingOperationService) Delete(ctx context.Context, operationID string, body SettingOperationDeleteParams, opts ...option.RequestOption) (res *SettingOperationDeleteResponse, err error) {
 	var env SettingOperationDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -109,7 +110,7 @@ func (r *SettingOperationService) Delete(ctx context.Context, operationID string
 // Bulk edit per-operation schema validation settings
 func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOperationBulkEditParams, opts ...option.RequestOption) (res *SettingOperationBulkEditResponse, err error) {
 	var env SettingOperationBulkEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -126,7 +127,7 @@ func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOp
 // Get per-operation schema validation setting
 func (r *SettingOperationService) Get(ctx context.Context, operationID string, query SettingOperationGetParams, opts ...option.RequestOption) (res *SettingOperationGetResponse, err error) {
 	var env SettingOperationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

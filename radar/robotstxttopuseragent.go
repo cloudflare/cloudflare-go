@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewRobotsTXTTopUserAgentService(opts ...option.RequestOption) (r *RobotsTXT
 // Retrieves the top user agents on robots.txt files.
 func (r *RobotsTXTTopUserAgentService) Directive(ctx context.Context, query RobotsTXTTopUserAgentDirectiveParams, opts ...option.RequestOption) (res *RobotsTXTTopUserAgentDirectiveResponse, err error) {
 	var env RobotsTXTTopUserAgentDirectiveResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/robots_txt/top/user_agents/directive"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

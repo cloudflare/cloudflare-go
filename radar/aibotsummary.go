@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewAIBotSummaryService(opts ...option.RequestOption) (r *AIBotSummaryServic
 // Deprecated: deprecated
 func (r *AIBotSummaryService) UserAgent(ctx context.Context, query AIBotSummaryUserAgentParams, opts ...option.RequestOption) (res *AIBotSummaryUserAgentResponse, err error) {
 	var env AIBotSummaryUserAgentResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ai/bots/summary/user_agent"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewDeviceDeviceService(opts ...option.RequestOption) (r *DeviceDeviceServic
 // Lists WARP devices.
 func (r *DeviceDeviceService) List(ctx context.Context, params DeviceDeviceListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[DeviceDeviceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -66,7 +67,7 @@ func (r *DeviceDeviceService) ListAutoPaging(ctx context.Context, params DeviceD
 // Deletes a WARP device.
 func (r *DeviceDeviceService) Delete(ctx context.Context, deviceID string, body DeviceDeviceDeleteParams, opts ...option.RequestOption) (res *DeviceDeviceDeleteResponse, err error) {
 	var env DeviceDeviceDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -87,7 +88,7 @@ func (r *DeviceDeviceService) Delete(ctx context.Context, deviceID string, body 
 // Fetches a single WARP device.
 func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, params DeviceDeviceGetParams, opts ...option.RequestOption) (res *DeviceDeviceGetResponse, err error) {
 	var env DeviceDeviceGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -108,7 +109,7 @@ func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, params D
 // Revokes all WARP registrations associated with the specified device.
 func (r *DeviceDeviceService) Revoke(ctx context.Context, deviceID string, body DeviceDeviceRevokeParams, opts ...option.RequestOption) (res *DeviceDeviceRevokeResponse, err error) {
 	var env DeviceDeviceRevokeResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

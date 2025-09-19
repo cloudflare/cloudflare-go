@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewEventDetailService(opts ...option.RequestOption) (r *EventDetailService)
 // waiting room will be displayed with their current values.
 func (r *EventDetailService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventDetailGetParams, opts ...option.RequestOption) (res *EventDetailGetResponse, err error) {
 	var env EventDetailGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

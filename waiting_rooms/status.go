@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -54,7 +55,7 @@ func NewStatusService(opts ...option.RequestOption) (r *StatusService) {
 //     presented to the users.
 func (r *StatusService) Get(ctx context.Context, waitingRoomID string, query StatusGetParams, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
 	var env StatusGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

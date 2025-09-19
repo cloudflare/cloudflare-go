@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPAseBrowserFamilyService(opts ...option.RequestOption) (r *HTTPAseBro
 // family.
 func (r *HTTPAseBrowserFamilyService) Get(ctx context.Context, browserFamily HTTPAseBrowserFamilyGetParamsBrowserFamily, query HTTPAseBrowserFamilyGetParams, opts ...option.RequestOption) (res *HTTPAseBrowserFamilyGetResponse, err error) {
 	var env HTTPAseBrowserFamilyGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/ases/browser_family/%v", browserFamily)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

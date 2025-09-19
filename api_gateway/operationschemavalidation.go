@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -39,7 +40,7 @@ func NewOperationSchemaValidationService(opts ...option.RequestOption) (r *Opera
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *OperationSchemaValidationService) Update(ctx context.Context, operationID string, params OperationSchemaValidationUpdateParams, opts ...option.RequestOption) (res *OperationSchemaValidationUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 // instead.
 func (r *OperationSchemaValidationService) Edit(ctx context.Context, params OperationSchemaValidationEditParams, opts ...option.RequestOption) (res *SettingsMultipleRequest, err error) {
 	var env OperationSchemaValidationEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -80,7 +81,7 @@ func (r *OperationSchemaValidationService) Edit(ctx context.Context, params Oper
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
 func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID string, query OperationSchemaValidationGetParams, opts ...option.RequestOption) (res *OperationSchemaValidationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewScriptSubdomainService(opts ...option.RequestOption) (r *ScriptSubdomain
 // Enable or disable the Worker on the workers.dev subdomain.
 func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, params ScriptSubdomainNewParams, opts ...option.RequestOption) (res *ScriptSubdomainNewResponse, err error) {
 	var env ScriptSubdomainNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, par
 // Disable all workers.dev subdomains for a Worker.
 func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, body ScriptSubdomainDeleteParams, opts ...option.RequestOption) (res *ScriptSubdomainDeleteResponse, err error) {
 	var env ScriptSubdomainDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -78,7 +79,7 @@ func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, 
 // Get if the Worker is available on the workers.dev subdomain.
 func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, query ScriptSubdomainGetParams, opts ...option.RequestOption) (res *ScriptSubdomainGetResponse, err error) {
 	var env ScriptSubdomainGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

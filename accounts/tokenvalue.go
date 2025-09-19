@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 // Roll the Account Owned API token secret.
 func (r *TokenValueService) Update(ctx context.Context, tokenID string, params TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
 	var env TokenValueUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

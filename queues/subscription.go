@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 // Create a new event subscription for a queue
 func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponse, err error) {
 	var env SubscriptionNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 // Update an existing event subscription
 func (r *SubscriptionService) Update(ctx context.Context, subscriptionID string, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
 	var env SubscriptionUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -81,7 +82,7 @@ func (r *SubscriptionService) Update(ctx context.Context, subscriptionID string,
 // Get a paginated list of event subscriptions with optional sorting and filtering
 func (r *SubscriptionService) List(ctx context.Context, params SubscriptionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SubscriptionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -108,7 +109,7 @@ func (r *SubscriptionService) ListAutoPaging(ctx context.Context, params Subscri
 // Delete an existing event subscription
 func (r *SubscriptionService) Delete(ctx context.Context, subscriptionID string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	var env SubscriptionDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

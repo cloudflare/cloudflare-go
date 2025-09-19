@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewDeviceResilienceGlobalWARPOverrideService(opts ...option.RequestOption) 
 // Sets the Global WARP override state.
 func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, params DeviceResilienceGlobalWARPOverrideNewParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideNewResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, par
 // Fetch the Global WARP override state.
 func (r *DeviceResilienceGlobalWARPOverrideService) Get(ctx context.Context, query DeviceResilienceGlobalWARPOverrideGetParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideGetResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

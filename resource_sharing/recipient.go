@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewRecipientService(opts ...option.RequestOption) (r *RecipientService) {
 // Create a new share recipient
 func (r *RecipientService) New(ctx context.Context, shareID string, params RecipientNewParams, opts ...option.RequestOption) (res *RecipientNewResponse, err error) {
 	var env RecipientNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *RecipientService) New(ctx context.Context, shareID string, params Recip
 // List share recipients by share ID.
 func (r *RecipientService) List(ctx context.Context, shareID string, params RecipientListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RecipientListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -94,7 +95,7 @@ func (r *RecipientService) ListAutoPaging(ctx context.Context, shareID string, p
 // will be returned.
 func (r *RecipientService) Delete(ctx context.Context, shareID string, recipientID string, body RecipientDeleteParams, opts ...option.RequestOption) (res *RecipientDeleteResponse, err error) {
 	var env RecipientDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,7 +120,7 @@ func (r *RecipientService) Delete(ctx context.Context, shareID string, recipient
 // Get share recipient by ID.
 func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID string, params RecipientGetParams, opts ...option.RequestOption) (res *RecipientGetResponse, err error) {
 	var env RecipientGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 // Service Key or an API token when calling this endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "certificates"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -58,7 +59,7 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 // ([see above](#requests)).
 func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OriginCACertificate], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "certificates"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -85,7 +86,7 @@ func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query O
 // endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
 	var env OriginCACertificateDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
 		return
@@ -104,7 +105,7 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 // endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
 		return

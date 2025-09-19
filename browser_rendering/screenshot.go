@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewScreenshotService(opts ...option.RequestOption) (r *ScreenshotService) {
 // with `gotoOptions` and `waitFor*` options. Customize screenshots with
 // `viewport`, `fullPage`, `clip` and others.
 func (r *ScreenshotService) New(ctx context.Context, params ScreenshotNewParams, opts ...option.RequestOption) (res *ScreenshotNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -41,7 +42,7 @@ func NewPrefixServiceBindingService(opts ...option.RequestOption) (r *PrefixServ
 // the Cloudflare CDN or Cloudflare Spectrum.
 func (r *PrefixServiceBindingService) New(ctx context.Context, prefixID string, params PrefixServiceBindingNewParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
 	var env PrefixServiceBindingNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,7 +68,7 @@ func (r *PrefixServiceBindingService) New(ctx context.Context, prefixID string, 
 // IPs in the prefix to Cloudflare Magic Transit.
 func (r *PrefixServiceBindingService) List(ctx context.Context, prefixID string, query PrefixServiceBindingListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceBinding], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -102,7 +103,7 @@ func (r *PrefixServiceBindingService) ListAutoPaging(ctx context.Context, prefix
 
 // Delete a Service Binding
 func (r *PrefixServiceBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixServiceBindingDeleteParams, opts ...option.RequestOption) (res *PrefixServiceBindingDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,7 +124,7 @@ func (r *PrefixServiceBindingService) Delete(ctx context.Context, prefixID strin
 // Fetch a single Service Binding
 func (r *PrefixServiceBindingService) Get(ctx context.Context, prefixID string, bindingID string, query PrefixServiceBindingGetParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
 	var env PrefixServiceBindingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

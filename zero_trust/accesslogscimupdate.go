@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewAccessLogSCIMUpdateService(opts ...option.RequestOption) (r *AccessLogSC
 // Management (SCIM).
 func (r *AccessLogSCIMUpdateService) List(ctx context.Context, params AccessLogSCIMUpdateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessLogSCIMUpdateListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

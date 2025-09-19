@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewTURNService(opts ...option.RequestOption) (r *TURNService) {
 // Creates a new Cloudflare Calls TURN key.
 func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...option.RequestOption) (res *TURNNewResponse, err error) {
 	var env TURNNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...opt
 // Edit details for a single TURN key.
 func (r *TURNService) Update(ctx context.Context, keyID string, params TURNUpdateParams, opts ...option.RequestOption) (res *TURNUpdateResponse, err error) {
 	var env TURNUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -76,7 +77,7 @@ func (r *TURNService) Update(ctx context.Context, keyID string, params TURNUpdat
 // Lists all TURN keys in the Cloudflare account
 func (r *TURNService) List(ctx context.Context, query TURNListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TURNListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -103,7 +104,7 @@ func (r *TURNService) ListAutoPaging(ctx context.Context, query TURNListParams, 
 // Deletes a TURN key from Cloudflare Calls
 func (r *TURNService) Delete(ctx context.Context, keyID string, body TURNDeleteParams, opts ...option.RequestOption) (res *TURNDeleteResponse, err error) {
 	var env TURNDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,7 +125,7 @@ func (r *TURNService) Delete(ctx context.Context, keyID string, body TURNDeleteP
 // Fetches details for a single TURN key.
 func (r *TURNService) Get(ctx context.Context, keyID string, query TURNGetParams, opts ...option.RequestOption) (res *TURNGetResponse, err error) {
 	var env TURNGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewSuperSlurperConnectivityPrecheckService(opts ...option.RequestOption) (r
 // Check whether tokens are valid against the source bucket
 func (r *SuperSlurperConnectivityPrecheckService) Source(ctx context.Context, params SuperSlurperConnectivityPrecheckSourceParams, opts ...option.RequestOption) (res *SuperSlurperConnectivityPrecheckSourceResponse, err error) {
 	var env SuperSlurperConnectivityPrecheckSourceResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *SuperSlurperConnectivityPrecheckService) Source(ctx context.Context, pa
 // Check whether tokens are valid against the target bucket
 func (r *SuperSlurperConnectivityPrecheckService) Target(ctx context.Context, params SuperSlurperConnectivityPrecheckTargetParams, opts ...option.RequestOption) (res *SuperSlurperConnectivityPrecheckTargetResponse, err error) {
 	var env SuperSlurperConnectivityPrecheckTargetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

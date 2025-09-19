@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewHTTPLocationBrowserFamilyService(opts ...option.RequestOption) (r *HTTPL
 // Retrieves the top locations, by HTTP requests, of the requested browser family.
 func (r *HTTPLocationBrowserFamilyService) Get(ctx context.Context, browserFamily HTTPLocationBrowserFamilyGetParamsBrowserFamily, query HTTPLocationBrowserFamilyGetParams, opts ...option.RequestOption) (res *HTTPLocationBrowserFamilyGetResponse, err error) {
 	var env HTTPLocationBrowserFamilyGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/browser_family/%v", browserFamily)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

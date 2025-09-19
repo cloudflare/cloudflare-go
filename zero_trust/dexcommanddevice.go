@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -40,7 +41,7 @@ func NewDEXCommandDeviceService(opts ...option.RequestOption) (r *DEXCommandDevi
 // connected in the last 1 hour.
 func (r *DEXCommandDeviceService) List(ctx context.Context, params DEXCommandDeviceListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DEXCommandDeviceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -40,7 +41,7 @@ func NewHostnameIPFSUniversalPathContentListService(opts ...option.RequestOption
 // Update IPFS Universal Path Gateway Content List
 func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, identifier string, params HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *ContentList, err error) {
 	var env HostnameIPFSUniversalPathContentListUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 // IPFS Universal Path Gateway Content List Details
 func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, identifier string, query HostnameIPFSUniversalPathContentListGetParams, opts ...option.RequestOption) (res *ContentList, err error) {
 	var env HostnameIPFSUniversalPathContentListGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -44,7 +45,7 @@ func NewSuperSlurperJobService(opts ...option.RequestOption) (r *SuperSlurperJob
 // Create a job
 func (r *SuperSlurperJobService) New(ctx context.Context, params SuperSlurperJobNewParams, opts ...option.RequestOption) (res *SuperSlurperJobNewResponse, err error) {
 	var env SuperSlurperJobNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *SuperSlurperJobService) New(ctx context.Context, params SuperSlurperJob
 // List jobs
 func (r *SuperSlurperJobService) List(ctx context.Context, params SuperSlurperJobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SuperSlurperJobListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -88,7 +89,7 @@ func (r *SuperSlurperJobService) ListAutoPaging(ctx context.Context, params Supe
 // Abort a job
 func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body SuperSlurperJobAbortParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobAbortResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -109,7 +110,7 @@ func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body S
 // Abort all jobs
 func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurperJobAbortAllParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobAbortAllResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -126,7 +127,7 @@ func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurper
 // Get job details
 func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query SuperSlurperJobGetParams, opts ...option.RequestOption) (res *SuperSlurperJobGetResponse, err error) {
 	var env SuperSlurperJobGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -147,7 +148,7 @@ func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query Su
 // Pause a job
 func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body SuperSlurperJobPauseParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobPauseResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -168,7 +169,7 @@ func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body S
 // Get job progress
 func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, query SuperSlurperJobProgressParams, opts ...option.RequestOption) (res *SuperSlurperJobProgressResponse, err error) {
 	var env SuperSlurperJobProgressResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -189,7 +190,7 @@ func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, que
 // Resume a job
 func (r *SuperSlurperJobService) Resume(ctx context.Context, jobID string, body SuperSlurperJobResumeParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobResumeResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

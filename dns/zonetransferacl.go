@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewZoneTransferACLService(opts ...option.RequestOption) (r *ZoneTransferACL
 // Create ACL.
 func (r *ZoneTransferACLService) New(ctx context.Context, params ZoneTransferACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env ZoneTransferACLNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *ZoneTransferACLService) New(ctx context.Context, params ZoneTransferACL
 // Modify ACL.
 func (r *ZoneTransferACLService) Update(ctx context.Context, aclID string, params ZoneTransferACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env ZoneTransferACLUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *ZoneTransferACLService) Update(ctx context.Context, aclID string, param
 // List ACLs.
 func (r *ZoneTransferACLService) List(ctx context.Context, query ZoneTransferACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -102,7 +103,7 @@ func (r *ZoneTransferACLService) ListAutoPaging(ctx context.Context, query ZoneT
 // Delete ACL.
 func (r *ZoneTransferACLService) Delete(ctx context.Context, aclID string, body ZoneTransferACLDeleteParams, opts ...option.RequestOption) (res *ZoneTransferACLDeleteResponse, err error) {
 	var env ZoneTransferACLDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,7 +124,7 @@ func (r *ZoneTransferACLService) Delete(ctx context.Context, aclID string, body 
 // Get ACL.
 func (r *ZoneTransferACLService) Get(ctx context.Context, aclID string, query ZoneTransferACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env ZoneTransferACLGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

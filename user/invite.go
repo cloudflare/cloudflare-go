@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewInviteService(opts ...option.RequestOption) (r *InviteService) {
 // Lists all invitations associated with my user.
 func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[Invite], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/invites"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -61,7 +62,7 @@ func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.Reque
 // Responds to an invitation.
 func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *Invite, err error) {
 	var env InviteEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if inviteID == "" {
 		err = errors.New("missing required invite_id parameter")
 		return
@@ -78,7 +79,7 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 // Gets the details of an invitation.
 func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *Invite, err error) {
 	var env InviteGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if inviteID == "" {
 		err = errors.New("missing required invite_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewZoneTransferTSIGService(opts ...option.RequestOption) (r *ZoneTransferTS
 // Create TSIG.
 func (r *ZoneTransferTSIGService) New(ctx context.Context, params ZoneTransferTSIGNewParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	var env ZoneTransferTSIGNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *ZoneTransferTSIGService) New(ctx context.Context, params ZoneTransferTS
 // Modify TSIG.
 func (r *ZoneTransferTSIGService) Update(ctx context.Context, tsigID string, params ZoneTransferTSIGUpdateParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	var env ZoneTransferTSIGUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *ZoneTransferTSIGService) Update(ctx context.Context, tsigID string, par
 // List TSIGs.
 func (r *ZoneTransferTSIGService) List(ctx context.Context, query ZoneTransferTSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TSIG], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -102,7 +103,7 @@ func (r *ZoneTransferTSIGService) ListAutoPaging(ctx context.Context, query Zone
 // Delete TSIG.
 func (r *ZoneTransferTSIGService) Delete(ctx context.Context, tsigID string, body ZoneTransferTSIGDeleteParams, opts ...option.RequestOption) (res *ZoneTransferTSIGDeleteResponse, err error) {
 	var env ZoneTransferTSIGDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,7 +124,7 @@ func (r *ZoneTransferTSIGService) Delete(ctx context.Context, tsigID string, bod
 // Get TSIG.
 func (r *ZoneTransferTSIGService) Get(ctx context.Context, tsigID string, query ZoneTransferTSIGGetParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	var env ZoneTransferTSIGGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

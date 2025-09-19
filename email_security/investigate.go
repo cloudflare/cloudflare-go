@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -55,7 +56,7 @@ func NewInvestigateService(opts ...option.RequestOption) (r *InvestigateService)
 // Returns information for each email that matches the search parameter(s).
 func (r *InvestigateService) List(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -82,7 +83,7 @@ func (r *InvestigateService) ListAutoPaging(ctx context.Context, params Investig
 // Get message details
 func (r *InvestigateService) Get(ctx context.Context, postfixID string, query InvestigateGetParams, opts ...option.RequestOption) (res *InvestigateGetResponse, err error) {
 	var env InvestigateGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

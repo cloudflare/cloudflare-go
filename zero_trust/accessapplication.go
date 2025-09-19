@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -52,7 +53,7 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 // Adds a new application to Access.
 func (r *AccessApplicationService) New(ctx context.Context, params AccessApplicationNewParams, opts ...option.RequestOption) (res *AccessApplicationNewResponse, err error) {
 	var env AccessApplicationNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -83,7 +84,7 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 // Updates an Access application.
 func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApplicationUpdateResponse, err error) {
 	var env AccessApplicationUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -118,7 +119,7 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam,
 // Lists all Access applications in an account or zone.
 func (r *AccessApplicationService) List(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessApplicationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -159,7 +160,7 @@ func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, params Ac
 // Deletes an application from Access.
 func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
 	var env AccessApplicationDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -194,7 +195,7 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam,
 // Fetches information about an Access application.
 func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApplicationGetResponse, err error) {
 	var env AccessApplicationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -229,7 +230,7 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, qu
 // Revokes all tokens issued for an application.
 func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppIDParam, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
 	var env AccessApplicationRevokeTokensResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {

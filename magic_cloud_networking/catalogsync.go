@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -44,7 +45,7 @@ func (r *CatalogSyncService) New(ctx context.Context, params CatalogSyncNewParam
 	if params.Forwarded.Present {
 		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%s", params.Forwarded)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *CatalogSyncService) New(ctx context.Context, params CatalogSyncNewParam
 // Update a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Update(ctx context.Context, syncID string, params CatalogSyncUpdateParams, opts ...option.RequestOption) (res *CatalogSyncUpdateResponse, err error) {
 	var env CatalogSyncUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,7 +83,7 @@ func (r *CatalogSyncService) Update(ctx context.Context, syncID string, params C
 // List Catalog Syncs (Closed Beta).
 func (r *CatalogSyncService) List(ctx context.Context, query CatalogSyncListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CatalogSyncListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -109,7 +110,7 @@ func (r *CatalogSyncService) ListAutoPaging(ctx context.Context, query CatalogSy
 // Delete a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Delete(ctx context.Context, syncID string, params CatalogSyncDeleteParams, opts ...option.RequestOption) (res *CatalogSyncDeleteResponse, err error) {
 	var env CatalogSyncDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -130,7 +131,7 @@ func (r *CatalogSyncService) Delete(ctx context.Context, syncID string, params C
 // Update a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Edit(ctx context.Context, syncID string, params CatalogSyncEditParams, opts ...option.RequestOption) (res *CatalogSyncEditResponse, err error) {
 	var env CatalogSyncEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -151,7 +152,7 @@ func (r *CatalogSyncService) Edit(ctx context.Context, syncID string, params Cat
 // Read a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Get(ctx context.Context, syncID string, query CatalogSyncGetParams, opts ...option.RequestOption) (res *CatalogSyncGetResponse, err error) {
 	var env CatalogSyncGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -173,7 +174,7 @@ func (r *CatalogSyncService) Get(ctx context.Context, syncID string, query Catal
 // resource catalog (Closed Beta).
 func (r *CatalogSyncService) Refresh(ctx context.Context, syncID string, body CatalogSyncRefreshParams, opts ...option.RequestOption) (res *string, err error) {
 	var env CatalogSyncRefreshResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

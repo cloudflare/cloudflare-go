@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,7 +39,7 @@ func NewResourceGroupService(opts ...option.RequestOption) (r *ResourceGroupServ
 
 // Create a new Resource Group under the specified account.
 func (r *ResourceGroupService) New(ctx context.Context, params ResourceGroupNewParams, opts ...option.RequestOption) (res *ResourceGroupNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -50,7 +51,7 @@ func (r *ResourceGroupService) New(ctx context.Context, params ResourceGroupNewP
 
 // Modify an existing resource group.
 func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID string, params ResourceGroupUpdateParams, opts ...option.RequestOption) (res *ResourceGroupUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,7 +68,7 @@ func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID strin
 // List all the resource groups for an account.
 func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ResourceGroupListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -94,7 +95,7 @@ func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params Resour
 // Remove a resource group from an account.
 func (r *ResourceGroupService) Delete(ctx context.Context, resourceGroupID string, body ResourceGroupDeleteParams, opts ...option.RequestOption) (res *ResourceGroupDeleteResponse, err error) {
 	var env ResourceGroupDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -114,7 +115,7 @@ func (r *ResourceGroupService) Delete(ctx context.Context, resourceGroupID strin
 
 // Get information about a specific resource group in an account.
 func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, query ResourceGroupGetParams, opts ...option.RequestOption) (res *ResourceGroupGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

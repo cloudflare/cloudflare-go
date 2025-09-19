@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,7 +39,7 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 // Submit a URL to scan. Check limits at
 // https://developers.cloudflare.com/security-center/investigate/scan-limits/.
 func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...opt
 // "microsoft".<br/>- 'apikey:me AND date:[2025-01 TO 2025-02]': my scans from 2025
 // January to 2025 February.
 func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...option.RequestOption) (res *ScanListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -72,7 +73,7 @@ func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...o
 // take into account scans submitted in bulk have lower priority and may take
 // longer to finish.
 func (r *ScanService) BulkNew(ctx context.Context, params ScanBulkNewParams, opts ...option.RequestOption) (res *[]ScanBulkNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -85,7 +86,7 @@ func (r *ScanService) BulkNew(ctx context.Context, params ScanBulkNewParams, opt
 // Returns a plain text response, with the scan's DOM content as rendered by
 // Chrome.
 func (r *ScanService) DOM(ctx context.Context, scanID string, query ScanDOMParams, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -102,7 +103,7 @@ func (r *ScanService) DOM(ctx context.Context, scanID string, query ScanDOMParam
 
 // Get URL scan by uuid
 func (r *ScanService) Get(ctx context.Context, scanID string, query ScanGetParams, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,7 +120,7 @@ func (r *ScanService) Get(ctx context.Context, scanID string, query ScanGetParam
 // Get a URL scan's HAR file. See HAR spec at
 // http://www.softwareishard.com/blog/har-12-spec/.
 func (r *ScanService) HAR(ctx context.Context, scanID string, query ScanHARParams, opts ...option.RequestOption) (res *ScanHARResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -135,7 +136,7 @@ func (r *ScanService) HAR(ctx context.Context, scanID string, query ScanHARParam
 
 // Get scan's screenshot by resolution (desktop/mobile/tablet).
 func (r *ScanService) Screenshot(ctx context.Context, scanID string, params ScanScreenshotParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/png")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPLocationTLSVersionService(opts ...option.RequestOption) (r *HTTPLoca
 // version.
 func (r *HTTPLocationTLSVersionService) Get(ctx context.Context, tlsVersion HTTPLocationTLSVersionGetParamsTLSVersion, query HTTPLocationTLSVersionGetParams, opts ...option.RequestOption) (res *HTTPLocationTLSVersionGetResponse, err error) {
 	var env HTTPLocationTLSVersionGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/tls_version/%v", tlsVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

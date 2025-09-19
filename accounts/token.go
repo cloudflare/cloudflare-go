@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 // Create a new Account Owned API token.
 func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 // Update an existing token.
 func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenUpdateParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -83,7 +84,7 @@ func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenU
 // List all Account Owned API tokens created for this account.
 func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Token], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -110,7 +111,7 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParam
 // Destroy an Account Owned API token.
 func (r *TokenService) Delete(ctx context.Context, tokenID string, body TokenDeleteParams, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -131,7 +132,7 @@ func (r *TokenService) Delete(ctx context.Context, tokenID string, body TokenDel
 // Get information about a specific Account Owned API token.
 func (r *TokenService) Get(ctx context.Context, tokenID string, query TokenGetParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -152,7 +153,7 @@ func (r *TokenService) Get(ctx context.Context, tokenID string, query TokenGetPa
 // Test whether a token works.
 func (r *TokenService) Verify(ctx context.Context, query TokenVerifyParams, opts ...option.RequestOption) (res *TokenVerifyResponse, err error) {
 	var env TokenVerifyResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewDLPEmailAccountMappingService(opts ...option.RequestOption) (r *DLPEmail
 // Create mapping
 func (r *DLPEmailAccountMappingService) New(ctx context.Context, params DLPEmailAccountMappingNewParams, opts ...option.RequestOption) (res *DLPEmailAccountMappingNewResponse, err error) {
 	var env DLPEmailAccountMappingNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *DLPEmailAccountMappingService) New(ctx context.Context, params DLPEmail
 // Get mapping
 func (r *DLPEmailAccountMappingService) Get(ctx context.Context, query DLPEmailAccountMappingGetParams, opts ...option.RequestOption) (res *DLPEmailAccountMappingGetResponse, err error) {
 	var env DLPEmailAccountMappingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

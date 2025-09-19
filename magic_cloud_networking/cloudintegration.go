@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -44,7 +45,7 @@ func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrati
 	if params.Forwarded.Present {
 		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%s", params.Forwarded)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrati
 // Update a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Update(ctx context.Context, providerID string, params CloudIntegrationUpdateParams, opts ...option.RequestOption) (res *CloudIntegrationUpdateResponse, err error) {
 	var env CloudIntegrationUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,7 +83,7 @@ func (r *CloudIntegrationService) Update(ctx context.Context, providerID string,
 // List Cloud Integrations (Closed Beta).
 func (r *CloudIntegrationService) List(ctx context.Context, params CloudIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CloudIntegrationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -109,7 +110,7 @@ func (r *CloudIntegrationService) ListAutoPaging(ctx context.Context, params Clo
 // Delete a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string, body CloudIntegrationDeleteParams, opts ...option.RequestOption) (res *CloudIntegrationDeleteResponse, err error) {
 	var env CloudIntegrationDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -129,7 +130,7 @@ func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string,
 
 // Run discovery for a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Discover(ctx context.Context, providerID string, params CloudIntegrationDiscoverParams, opts ...option.RequestOption) (res *CloudIntegrationDiscoverResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -145,7 +146,7 @@ func (r *CloudIntegrationService) Discover(ctx context.Context, providerID strin
 
 // Run discovery for all Cloud Integrations in an account (Closed Beta).
 func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudIntegrationDiscoverAllParams, opts ...option.RequestOption) (res *CloudIntegrationDiscoverAllResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -158,7 +159,7 @@ func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudInt
 // Update a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, params CloudIntegrationEditParams, opts ...option.RequestOption) (res *CloudIntegrationEditResponse, err error) {
 	var env CloudIntegrationEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -179,7 +180,7 @@ func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, p
 // Read a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, params CloudIntegrationGetParams, opts ...option.RequestOption) (res *CloudIntegrationGetResponse, err error) {
 	var env CloudIntegrationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -200,7 +201,7 @@ func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, pa
 // Get initial configuration to complete Cloud Integration setup (Closed Beta).
 func (r *CloudIntegrationService) InitialSetup(ctx context.Context, providerID string, query CloudIntegrationInitialSetupParams, opts ...option.RequestOption) (res *CloudIntegrationInitialSetupResponse, err error) {
 	var env CloudIntegrationInitialSetupResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

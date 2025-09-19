@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewAccessServiceTokenService(opts ...option.RequestOption) (r *AccessServic
 // Secret or create a new service token.
 func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServiceTokenNewParams, opts ...option.RequestOption) (res *AccessServiceTokenNewResponse, err error) {
 	var env AccessServiceTokenNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -73,7 +74,7 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 // Updates a configured service token.
 func (r *AccessServiceTokenService) Update(ctx context.Context, serviceTokenID string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -108,7 +109,7 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, serviceTokenID s
 // Lists all service tokens.
 func (r *AccessServiceTokenService) List(ctx context.Context, params AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ServiceToken], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -149,7 +150,7 @@ func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, params A
 // Deletes a service token.
 func (r *AccessServiceTokenService) Delete(ctx context.Context, serviceTokenID string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -184,7 +185,7 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, serviceTokenID s
 // Fetches a single service token.
 func (r *AccessServiceTokenService) Get(ctx context.Context, serviceTokenID string, query AccessServiceTokenGetParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -219,7 +220,7 @@ func (r *AccessServiceTokenService) Get(ctx context.Context, serviceTokenID stri
 // Refreshes the expiration of a service token.
 func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID string, body AccessServiceTokenRefreshParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenRefreshResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -240,7 +241,7 @@ func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID 
 // Generates a new Client Secret for a service token and revokes the old one.
 func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID string, params AccessServiceTokenRotateParams, opts ...option.RequestOption) (res *AccessServiceTokenRotateResponse, err error) {
 	var env AccessServiceTokenRotateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

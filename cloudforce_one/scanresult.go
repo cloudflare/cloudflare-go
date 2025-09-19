@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewScanResultService(opts ...option.RequestOption) (r *ScanResultService) {
 // Get the Latest Scan Result
 func (r *ScanResultService) Get(ctx context.Context, configID string, query ScanResultGetParams, opts ...option.RequestOption) (res *ScanResultGetResponse, err error) {
 	var env ScanResultGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -39,7 +40,7 @@ func NewIdentityProviderSCIMGroupService(opts ...option.RequestOption) (r *Ident
 // Identity Management (SCIM).
 func (r *IdentityProviderSCIMGroupService) List(ctx context.Context, identityProviderID string, params IdentityProviderSCIMGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ZeroTrustGroup], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPLocationOSService(opts ...option.RequestOption) (r *HTTPLocationOSSe
 // system.
 func (r *HTTPLocationOSService) Get(ctx context.Context, os HTTPLocationOSGetParamsOS, query HTTPLocationOSGetParams, opts ...option.RequestOption) (res *HTTPLocationOSGetResponse, err error) {
 	var env HTTPLocationOSGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/os/%v", os)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

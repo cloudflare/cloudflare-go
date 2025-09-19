@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -35,7 +36,7 @@ func NewV1BlobService(opts ...option.RequestOption) (r *V1BlobService) {
 // Fetch base image. For most images this will be the originally uploaded file. For
 // larger images it can be a near-lossless version of the original.
 func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -44,7 +45,7 @@ func NewUserSchemaHostService(opts ...option.RequestOption) (r *UserSchemaHostSe
 // instead.
 func (r *UserSchemaHostService) List(ctx context.Context, params UserSchemaHostListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserSchemaHostListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")

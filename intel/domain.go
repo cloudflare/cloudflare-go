@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -40,7 +41,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 // Gets security details and statistics about a domain.
 func (r *DomainService) Get(ctx context.Context, params DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	var env DomainGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

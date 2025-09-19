@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewQuotaService(opts ...option.RequestOption) (r *QuotaService) {
 // Lists the number of secrets used in the account.
 func (r *QuotaService) Get(ctx context.Context, query QuotaGetParams, opts ...option.RequestOption) (res *QuotaGetResponse, err error) {
 	var env QuotaGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

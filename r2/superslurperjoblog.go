@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewSuperSlurperJobLogService(opts ...option.RequestOption) (r *SuperSlurper
 // Get job logs
 func (r *SuperSlurperJobLogService) List(ctx context.Context, jobID string, params SuperSlurperJobLogListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SuperSlurperJobLogListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

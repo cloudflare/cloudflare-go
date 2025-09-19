@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/intel"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewInsightSeverityService(opts ...option.RequestOption) (r *InsightSeverity
 // Get Security Center Insight Counts by Severity
 func (r *InsightSeverityService) Get(ctx context.Context, params InsightSeverityGetParams, opts ...option.RequestOption) (res *[]InsightSeverityGetResponse, err error) {
 	var env InsightSeverityGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

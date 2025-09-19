@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -37,7 +38,7 @@ func NewSlotService(opts ...option.RequestOption) (r *SlotService) {
 
 // Retrieve a list of all slots matching the specified parameters
 func (r *SlotService) List(ctx context.Context, params SlotListParams, opts ...option.RequestOption) (res *SlotListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,7 +50,7 @@ func (r *SlotService) List(ctx context.Context, params SlotListParams, opts ...o
 
 // Get information about the specified slot
 func (r *SlotService) Get(ctx context.Context, slot string, query SlotGetParams, opts ...option.RequestOption) (res *SlotGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

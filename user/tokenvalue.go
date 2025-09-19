@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -36,7 +37,7 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 // Roll the token secret.
 func (r *TokenValueService) Update(ctx context.Context, tokenID string, body TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
 	var env TokenValueUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if tokenID == "" {
 		err = errors.New("missing required token_id parameter")
 		return

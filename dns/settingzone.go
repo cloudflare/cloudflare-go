@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewSettingZoneService(opts ...option.RequestOption) (r *SettingZoneService)
 // Update DNS settings for a zone
 func (r *SettingZoneService) Edit(ctx context.Context, params SettingZoneEditParams, opts ...option.RequestOption) (res *SettingZoneEditResponse, err error) {
 	var env SettingZoneEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,7 +54,7 @@ func (r *SettingZoneService) Edit(ctx context.Context, params SettingZoneEditPar
 // Show DNS settings for a zone
 func (r *SettingZoneService) Get(ctx context.Context, query SettingZoneGetParams, opts ...option.RequestOption) (res *SettingZoneGetResponse, err error) {
 	var env SettingZoneGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

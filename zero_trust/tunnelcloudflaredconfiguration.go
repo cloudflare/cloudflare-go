@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewTunnelCloudflaredConfigurationService(opts ...option.RequestOption) (r *
 // Adds or updates the configuration for a remotely-managed tunnel.
 func (r *TunnelCloudflaredConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelCloudflaredConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelCloudflaredConfigurationUpdateResponse, err error) {
 	var env TunnelCloudflaredConfigurationUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *TunnelCloudflaredConfigurationService) Update(ctx context.Context, tunn
 // Gets the configuration for a remotely-managed tunnel
 func (r *TunnelCloudflaredConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredConfigurationGetParams, opts ...option.RequestOption) (res *TunnelCloudflaredConfigurationGetResponse, err error) {
 	var env TunnelCloudflaredConfigurationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

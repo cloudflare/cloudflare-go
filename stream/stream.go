@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -80,7 +81,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 	if params.UploadMetadata.Present {
 		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%s", params.UploadMetadata)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -95,7 +96,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 // the optional parameters.
 func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Video], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -122,7 +123,7 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 
 // Deletes a video and its copies from Cloudflare Stream.
 func (r *StreamService) Delete(ctx context.Context, identifier string, body StreamDeleteParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -140,7 +141,7 @@ func (r *StreamService) Delete(ctx context.Context, identifier string, body Stre
 // Edit details for a single video.
 func (r *StreamService) Edit(ctx context.Context, identifier string, params StreamEditParams, opts ...option.RequestOption) (res *Video, err error) {
 	var env StreamEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -161,7 +162,7 @@ func (r *StreamService) Edit(ctx context.Context, identifier string, params Stre
 // Fetches details for a single video.
 func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *Video, err error) {
 	var env StreamGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

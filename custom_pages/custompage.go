@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewCustomPageService(opts ...option.RequestOption) (r *CustomPageService) {
 // Updates the configuration of an existing custom page.
 func (r *CustomPageService) Update(ctx context.Context, identifier CustomPageUpdateParamsIdentifier, params CustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageUpdateResponse, err error) {
 	var env CustomPageUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -69,7 +70,7 @@ func (r *CustomPageService) Update(ctx context.Context, identifier CustomPageUpd
 // Fetches all the custom pages.
 func (r *CustomPageService) List(ctx context.Context, query CustomPageListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CustomPageListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -110,7 +111,7 @@ func (r *CustomPageService) ListAutoPaging(ctx context.Context, query CustomPage
 // Fetches the details of a custom page.
 func (r *CustomPageService) Get(ctx context.Context, identifier CustomPageGetParamsIdentifier, query CustomPageGetParams, opts ...option.RequestOption) (res *CustomPageGetResponse, err error) {
 	var env CustomPageGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

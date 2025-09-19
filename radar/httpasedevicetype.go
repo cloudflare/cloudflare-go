@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPAseDeviceTypeService(opts ...option.RequestOption) (r *HTTPAseDevice
 // type.
 func (r *HTTPAseDeviceTypeService) Get(ctx context.Context, deviceType HTTPAseDeviceTypeGetParamsDeviceType, query HTTPAseDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPAseDeviceTypeGetResponse, err error) {
 	var env HTTPAseDeviceTypeGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/ases/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -50,7 +51,7 @@ func NewWaitingRoomService(opts ...option.RequestOption) (r *WaitingRoomService)
 // Creates a new waiting room.
 func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -67,7 +68,7 @@ func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParam
 // Updates a configured waiting room.
 func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, params WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -88,7 +89,7 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 // Lists waiting rooms for account or zone.
 func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WaitingRoom], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -129,7 +130,7 @@ func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingR
 // Deletes a waiting room.
 func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, body WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
 	var env WaitingRoomDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -150,7 +151,7 @@ func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, b
 // Patches a configured waiting room.
 func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, params WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -171,7 +172,7 @@ func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, par
 // Fetches a single configured waiting room.
 func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, query WaitingRoomGetParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

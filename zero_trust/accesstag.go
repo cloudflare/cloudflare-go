@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 // Create a tag
 func (r *AccessTagService) New(ctx context.Context, params AccessTagNewParams, opts ...option.RequestOption) (res *Tag, err error) {
 	var env AccessTagNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *AccessTagService) New(ctx context.Context, params AccessTagNewParams, o
 // Update a tag
 func (r *AccessTagService) Update(ctx context.Context, tagName string, params AccessTagUpdateParams, opts ...option.RequestOption) (res *Tag, err error) {
 	var env AccessTagUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,7 +78,7 @@ func (r *AccessTagService) Update(ctx context.Context, tagName string, params Ac
 // List tags
 func (r *AccessTagService) List(ctx context.Context, params AccessTagListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Tag], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -104,7 +105,7 @@ func (r *AccessTagService) ListAutoPaging(ctx context.Context, params AccessTagL
 // Delete a tag
 func (r *AccessTagService) Delete(ctx context.Context, tagName string, body AccessTagDeleteParams, opts ...option.RequestOption) (res *AccessTagDeleteResponse, err error) {
 	var env AccessTagDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,7 +126,7 @@ func (r *AccessTagService) Delete(ctx context.Context, tagName string, body Acce
 // Get a tag
 func (r *AccessTagService) Get(ctx context.Context, tagName string, query AccessTagGetParams, opts ...option.RequestOption) (res *Tag, err error) {
 	var env AccessTagGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

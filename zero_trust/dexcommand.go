@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -46,7 +47,7 @@ func NewDEXCommandService(opts ...option.RequestOption) (r *DEXCommandService) {
 // Initiate commands for up to 10 devices per account
 func (r *DEXCommandService) New(ctx context.Context, params DEXCommandNewParams, opts ...option.RequestOption) (res *DEXCommandNewResponse, err error) {
 	var env DEXCommandNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,7 +65,7 @@ func (r *DEXCommandService) New(ctx context.Context, params DEXCommandNewParams,
 // account, optionally filtered by time range, device, or other parameters
 func (r *DEXCommandService) List(ctx context.Context, params DEXCommandListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DEXCommandListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

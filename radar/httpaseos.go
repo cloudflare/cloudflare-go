@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPAseOSService(opts ...option.RequestOption) (r *HTTPAseOSService) {
 // operating system.
 func (r *HTTPAseOSService) Get(ctx context.Context, os HTTPAseOSGetParamsOS, query HTTPAseOSGetParams, opts ...option.RequestOption) (res *HTTPAseOSGetResponse, err error) {
 	var env HTTPAseOSGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/ases/os/%v", os)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewMonitorGroupService(opts ...option.RequestOption) (r *MonitorGroupServic
 // Create a new monitor group.
 func (r *MonitorGroupService) New(ctx context.Context, params MonitorGroupNewParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *MonitorGroupService) New(ctx context.Context, params MonitorGroupNewPar
 // Modify a configured monitor group.
 func (r *MonitorGroupService) Update(ctx context.Context, monitorGroupID string, params MonitorGroupUpdateParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,7 +78,7 @@ func (r *MonitorGroupService) Update(ctx context.Context, monitorGroupID string,
 // List configured monitor groups.
 func (r *MonitorGroupService) List(ctx context.Context, query MonitorGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MonitorGroup], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -104,7 +105,7 @@ func (r *MonitorGroupService) ListAutoPaging(ctx context.Context, query MonitorG
 // Delete a configured monitor group.
 func (r *MonitorGroupService) Delete(ctx context.Context, monitorGroupID string, body MonitorGroupDeleteParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,7 +126,7 @@ func (r *MonitorGroupService) Delete(ctx context.Context, monitorGroupID string,
 // Apply changes to an existing monitor group, overwriting the supplied properties.
 func (r *MonitorGroupService) Edit(ctx context.Context, monitorGroupID string, params MonitorGroupEditParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -146,7 +147,7 @@ func (r *MonitorGroupService) Edit(ctx context.Context, monitorGroupID string, p
 // Fetch a single configured monitor group.
 func (r *MonitorGroupService) Get(ctx context.Context, monitorGroupID string, query MonitorGroupGetParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
