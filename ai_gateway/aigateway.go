@@ -177,6 +177,7 @@ type AIGatewayNewResponse struct {
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
+	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
 }
 
@@ -202,6 +203,7 @@ type aiGatewayNewResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -366,6 +368,50 @@ func (r AIGatewayNewResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayNewResponseStripe struct {
+	Authorization string                                 `json:"authorization,required"`
+	UsageEvents   []AIGatewayNewResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayNewResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayNewResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayNewResponseStripe]
+type aiGatewayNewResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayNewResponseStripeUsageEvent struct {
+	Payload string                                   `json:"payload,required"`
+	JSON    aiGatewayNewResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayNewResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayNewResponseStripeUsageEvent]
+type aiGatewayNewResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayUpdateResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
@@ -387,6 +433,7 @@ type AIGatewayUpdateResponse struct {
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
+	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
@@ -412,6 +459,7 @@ type aiGatewayUpdateResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -577,6 +625,50 @@ func (r AIGatewayUpdateResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayUpdateResponseStripe struct {
+	Authorization string                                    `json:"authorization,required"`
+	UsageEvents   []AIGatewayUpdateResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayUpdateResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayUpdateResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayUpdateResponseStripe]
+type aiGatewayUpdateResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayUpdateResponseStripeUsageEvent struct {
+	Payload string                                      `json:"payload,required"`
+	JSON    aiGatewayUpdateResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayUpdateResponseStripeUsageEvent]
+type aiGatewayUpdateResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayListResponse struct {
 	// gateway id
 	ID                      string                                     `json:"id,required"`
@@ -598,6 +690,7 @@ type AIGatewayListResponse struct {
 	Logpush                 bool                                       `json:"logpush"`
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	StoreID                 string                                     `json:"store_id,nullable"`
+	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
@@ -623,6 +716,7 @@ type aiGatewayListResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -788,6 +882,50 @@ func (r AIGatewayListResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayListResponseStripe struct {
+	Authorization string                                  `json:"authorization,required"`
+	UsageEvents   []AIGatewayListResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayListResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayListResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayListResponseStripe]
+type aiGatewayListResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayListResponseStripeUsageEvent struct {
+	Payload string                                    `json:"payload,required"`
+	JSON    aiGatewayListResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayListResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayListResponseStripeUsageEvent]
+type aiGatewayListResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayDeleteResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
@@ -809,6 +947,7 @@ type AIGatewayDeleteResponse struct {
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
+	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
@@ -834,6 +973,7 @@ type aiGatewayDeleteResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -999,6 +1139,50 @@ func (r AIGatewayDeleteResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayDeleteResponseStripe struct {
+	Authorization string                                    `json:"authorization,required"`
+	UsageEvents   []AIGatewayDeleteResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayDeleteResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayDeleteResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayDeleteResponseStripe]
+type aiGatewayDeleteResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayDeleteResponseStripeUsageEvent struct {
+	Payload string                                      `json:"payload,required"`
+	JSON    aiGatewayDeleteResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayDeleteResponseStripeUsageEvent]
+type aiGatewayDeleteResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayGetResponse struct {
 	// gateway id
 	ID                      string                                    `json:"id,required"`
@@ -1020,6 +1204,7 @@ type AIGatewayGetResponse struct {
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
+	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 
@@ -1045,6 +1230,7 @@ type aiGatewayGetResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -1209,6 +1395,50 @@ func (r AIGatewayGetResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayGetResponseStripe struct {
+	Authorization string                                 `json:"authorization,required"`
+	UsageEvents   []AIGatewayGetResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayGetResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayGetResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayGetResponseStripe]
+type aiGatewayGetResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayGetResponseStripeUsageEvent struct {
+	Payload string                                   `json:"payload,required"`
+	JSON    aiGatewayGetResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayGetResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayGetResponseStripeUsageEvent]
+type aiGatewayGetResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// gateway id
@@ -1298,6 +1528,7 @@ type AIGatewayUpdateParams struct {
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
 	StoreID                 param.Field[string]                                     `json:"store_id"`
+	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1393,6 +1624,23 @@ func (r AIGatewayUpdateParamsLogManagementStrategy) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AIGatewayUpdateParamsStripe struct {
+	Authorization param.Field[string]                                  `json:"authorization,required"`
+	UsageEvents   param.Field[[]AIGatewayUpdateParamsStripeUsageEvent] `json:"usage_events,required"`
+}
+
+func (r AIGatewayUpdateParamsStripe) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsStripeUsageEvent struct {
+	Payload param.Field[string] `json:"payload,required"`
+}
+
+func (r AIGatewayUpdateParamsStripeUsageEvent) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AIGatewayUpdateResponseEnvelope struct {

@@ -86,6 +86,12 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			Logpush:               cloudflare.F(true),
 			LogpushPublicKey:      cloudflare.F("xxxxxxxxxxxxxxxx"),
 			StoreID:               cloudflare.F("store_id"),
+			Stripe: cloudflare.F(ai_gateway.AIGatewayUpdateParamsStripe{
+				Authorization: cloudflare.F("authorization"),
+				UsageEvents: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsStripeUsageEvent{{
+					Payload: cloudflare.F("payload"),
+				}}),
+			}),
 		},
 	)
 	if err != nil {
