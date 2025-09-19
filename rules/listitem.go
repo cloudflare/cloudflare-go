@@ -44,6 +44,9 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 //
 // This operation is asynchronous. To get current the operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
+//
+// There is a limit of 1 pending bulk operation per account. If an outstanding bulk
+// operation is in progress, the request will be rejected.
 func (r *ListItemService) New(ctx context.Context, listID string, params ListItemNewParams, opts ...option.RequestOption) (res *ListItemNewResponse, err error) {
 	var env ListItemNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,6 +72,9 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 //
 // This operation is asynchronous. To get current the operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
+//
+// There is a limit of 1 pending bulk operation per account. If an outstanding bulk
+// operation is in progress, the request will be rejected.
 func (r *ListItemService) Update(ctx context.Context, listID string, params ListItemUpdateParams, opts ...option.RequestOption) (res *ListItemUpdateResponse, err error) {
 	var env ListItemUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -124,6 +130,9 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 //
 // This operation is asynchronous. To get current the operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
+//
+// There is a limit of 1 pending bulk operation per account. If an outstanding bulk
+// operation is in progress, the request will be rejected.
 func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	var env ListItemDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
