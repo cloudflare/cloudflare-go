@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 // Get risk score info for all users in the account
 func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	var env RiskScoringSummaryGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

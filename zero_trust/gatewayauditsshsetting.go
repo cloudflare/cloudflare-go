@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 // an account.
 func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 // settings for an account.
 func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAu
 // through the Cloudflare SSH Proxy.
 func (r *GatewayAuditSSHSettingService) RotateSeed(ctx context.Context, body GatewayAuditSSHSettingRotateSeedParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingRotateSeedResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewResourceSharingService(opts ...option.RequestOption) (r *ResourceSharing
 // Create a new share
 func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharingNewParams, opts ...option.RequestOption) (res *ResourceSharingNewResponse, err error) {
 	var env ResourceSharingNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,7 +64,7 @@ func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharing
 // returned.
 func (r *ResourceSharingService) Update(ctx context.Context, shareID string, params ResourceSharingUpdateParams, opts ...option.RequestOption) (res *ResourceSharingUpdateResponse, err error) {
 	var env ResourceSharingUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -84,7 +85,7 @@ func (r *ResourceSharingService) Update(ctx context.Context, shareID string, par
 // Lists all account shares.
 func (r *ResourceSharingService) List(ctx context.Context, params ResourceSharingListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceSharingListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -112,7 +113,7 @@ func (r *ResourceSharingService) ListAutoPaging(ctx context.Context, params Reso
 // returned.
 func (r *ResourceSharingService) Delete(ctx context.Context, shareID string, body ResourceSharingDeleteParams, opts ...option.RequestOption) (res *ResourceSharingDeleteResponse, err error) {
 	var env ResourceSharingDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -133,7 +134,7 @@ func (r *ResourceSharingService) Delete(ctx context.Context, shareID string, bod
 // Fetches share by ID.
 func (r *ResourceSharingService) Get(ctx context.Context, shareID string, params ResourceSharingGetParams, opts ...option.RequestOption) (res *ResourceSharingGetResponse, err error) {
 	var env ResourceSharingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

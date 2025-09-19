@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewVariantService(opts ...option.RequestOption) (r *VariantService) {
 // be indicated with BYPASS cache status in the response headers.
 func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *VariantDeleteResponse, err error) {
 	var env VariantDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -63,7 +64,7 @@ func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, o
 // be indicated with BYPASS cache status in the response headers.
 func (r *VariantService) Edit(ctx context.Context, params VariantEditParams, opts ...option.RequestOption) (res *VariantEditResponse, err error) {
 	var env VariantEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -84,7 +85,7 @@ func (r *VariantService) Edit(ctx context.Context, params VariantEditParams, opt
 // be indicated with BYPASS cache status in the response headers.
 func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts ...option.RequestOption) (res *VariantGetResponse, err error) {
 	var env VariantGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

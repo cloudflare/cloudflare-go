@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/intel"
@@ -47,7 +48,7 @@ func NewInsightService(opts ...option.RequestOption) (r *InsightService) {
 // Get Security Center Insights
 func (r *InsightService) List(ctx context.Context, params InsightListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[InsightListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -87,7 +88,7 @@ func (r *InsightService) ListAutoPaging(ctx context.Context, params InsightListP
 
 // Archive Security Center Insight
 func (r *InsightService) Dismiss(ctx context.Context, issueID string, params InsightDismissParams, opts ...option.RequestOption) (res *InsightDismissResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

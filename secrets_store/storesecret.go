@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewStoreSecretService(opts ...option.RequestOption) (r *StoreSecretService)
 // Creates a secret in the account
 func (r *StoreSecretService) New(ctx context.Context, storeID string, params StoreSecretNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreSecretNewResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -71,7 +72,7 @@ func (r *StoreSecretService) NewAutoPaging(ctx context.Context, storeID string, 
 // Lists all store secrets
 func (r *StoreSecretService) List(ctx context.Context, storeID string, params StoreSecretListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[StoreSecretListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -102,7 +103,7 @@ func (r *StoreSecretService) ListAutoPaging(ctx context.Context, storeID string,
 // Deletes a single secret
 func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretID string, body StoreSecretDeleteParams, opts ...option.RequestOption) (res *StoreSecretDeleteResponse, err error) {
 	var env StoreSecretDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretI
 // Deletes one or more secrets
 func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, body StoreSecretBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreSecretBulkDeleteResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -158,7 +159,7 @@ func (r *StoreSecretService) BulkDeleteAutoPaging(ctx context.Context, storeID s
 // Duplicates the secret, keeping the value
 func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secretID string, params StoreSecretDuplicateParams, opts ...option.RequestOption) (res *StoreSecretDuplicateResponse, err error) {
 	var env StoreSecretDuplicateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -183,7 +184,7 @@ func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secr
 // Updates a single secret
 func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID string, params StoreSecretEditParams, opts ...option.RequestOption) (res *StoreSecretEditResponse, err error) {
 	var env StoreSecretEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -208,7 +209,7 @@ func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID 
 // Returns details of a single secret
 func (r *StoreSecretService) Get(ctx context.Context, storeID string, secretID string, query StoreSecretGetParams, opts ...option.RequestOption) (res *StoreSecretGetResponse, err error) {
 	var env StoreSecretGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

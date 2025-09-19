@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -44,7 +45,7 @@ func NewWorkflowService(opts ...option.RequestOption) (r *WorkflowService) {
 // Create/modify Workflow
 func (r *WorkflowService) Update(ctx context.Context, workflowName string, params WorkflowUpdateParams, opts ...option.RequestOption) (res *WorkflowUpdateResponse, err error) {
 	var env WorkflowUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -65,7 +66,7 @@ func (r *WorkflowService) Update(ctx context.Context, workflowName string, param
 // List all Workflows
 func (r *WorkflowService) List(ctx context.Context, params WorkflowListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WorkflowListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -93,7 +94,7 @@ func (r *WorkflowService) ListAutoPaging(ctx context.Context, params WorkflowLis
 // any Worker associated to this Workflow or bounded to it.
 func (r *WorkflowService) Delete(ctx context.Context, workflowName string, body WorkflowDeleteParams, opts ...option.RequestOption) (res *WorkflowDeleteResponse, err error) {
 	var env WorkflowDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -114,7 +115,7 @@ func (r *WorkflowService) Delete(ctx context.Context, workflowName string, body 
 // Get Workflow details
 func (r *WorkflowService) Get(ctx context.Context, workflowName string, query WorkflowGetParams, opts ...option.RequestOption) (res *WorkflowGetResponse, err error) {
 	var env WorkflowGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -50,7 +51,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 // to be replaced.
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,7 +68,7 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 // Modifies a namespace's title.
 func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -88,7 +89,7 @@ func (r *NamespaceService) Update(ctx context.Context, namespaceID string, param
 // Returns the namespaces owned by an account.
 func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Namespace], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -115,7 +116,7 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 // Deletes the namespace corresponding to the given ID.
 func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	var env NamespaceDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -137,7 +138,7 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body 
 // 10,000 keys to be removed.
 func (r *NamespaceService) BulkDelete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponse, err error) {
 	var env NamespaceBulkDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -160,7 +161,7 @@ func (r *NamespaceService) BulkDelete(ctx context.Context, namespaceID string, p
 // string value. Metadata can be included if `withMetadata` is true.
 func (r *NamespaceService) BulkGet(ctx context.Context, namespaceID string, params NamespaceBulkGetParams, opts ...option.RequestOption) (res *NamespaceBulkGetResponse, err error) {
 	var env NamespaceBulkGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -186,7 +187,7 @@ func (r *NamespaceService) BulkGet(ctx context.Context, namespaceID string, para
 // size must be 100 megabytes or less.
 func (r *NamespaceService) BulkUpdate(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponse, err error) {
 	var env NamespaceBulkUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -207,7 +208,7 @@ func (r *NamespaceService) BulkUpdate(ctx context.Context, namespaceID string, p
 // Get the namespace corresponding to the given ID.
 func (r *NamespaceService) Get(ctx context.Context, namespaceID string, query NamespaceGetParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

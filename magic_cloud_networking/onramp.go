@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -46,7 +47,7 @@ func (r *OnRampService) New(ctx context.Context, params OnRampNewParams, opts ..
 	if params.Forwarded.Present {
 		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%s", params.Forwarded)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,7 +64,7 @@ func (r *OnRampService) New(ctx context.Context, params OnRampNewParams, opts ..
 // Update an On-ramp (Closed Beta).
 func (r *OnRampService) Update(ctx context.Context, onrampID string, params OnRampUpdateParams, opts ...option.RequestOption) (res *OnRampUpdateResponse, err error) {
 	var env OnRampUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -84,7 +85,7 @@ func (r *OnRampService) Update(ctx context.Context, onrampID string, params OnRa
 // List On-ramps (Closed Beta).
 func (r *OnRampService) List(ctx context.Context, params OnRampListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OnRampListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -111,7 +112,7 @@ func (r *OnRampService) ListAutoPaging(ctx context.Context, params OnRampListPar
 // Delete an On-ramp (Closed Beta).
 func (r *OnRampService) Delete(ctx context.Context, onrampID string, params OnRampDeleteParams, opts ...option.RequestOption) (res *OnRampDeleteResponse, err error) {
 	var env OnRampDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -131,7 +132,7 @@ func (r *OnRampService) Delete(ctx context.Context, onrampID string, params OnRa
 
 // Apply an On-ramp (Closed Beta).
 func (r *OnRampService) Apply(ctx context.Context, onrampID string, body OnRampApplyParams, opts ...option.RequestOption) (res *OnRampApplyResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -148,7 +149,7 @@ func (r *OnRampService) Apply(ctx context.Context, onrampID string, body OnRampA
 // Update an On-ramp (Closed Beta).
 func (r *OnRampService) Edit(ctx context.Context, onrampID string, params OnRampEditParams, opts ...option.RequestOption) (res *OnRampEditResponse, err error) {
 	var env OnRampEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -168,7 +169,7 @@ func (r *OnRampService) Edit(ctx context.Context, onrampID string, params OnRamp
 
 // Export an On-ramp to terraform ready file(s) (Closed Beta).
 func (r *OnRampService) Export(ctx context.Context, onrampID string, body OnRampExportParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/zip")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -186,7 +187,7 @@ func (r *OnRampService) Export(ctx context.Context, onrampID string, body OnRamp
 // Read an On-ramp (Closed Beta).
 func (r *OnRampService) Get(ctx context.Context, onrampID string, params OnRampGetParams, opts ...option.RequestOption) (res *OnRampGetResponse, err error) {
 	var env OnRampGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -206,7 +207,7 @@ func (r *OnRampService) Get(ctx context.Context, onrampID string, params OnRampG
 
 // Plan an On-ramp (Closed Beta).
 func (r *OnRampService) Plan(ctx context.Context, onrampID string, body OnRampPlanParams, opts ...option.RequestOption) (res *OnRampPlanResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewAITimeseriesGroupService(opts ...option.RequestOption) (r *AITimeseriesG
 // specified dimension.
 func (r *AITimeseriesGroupService) Summary(ctx context.Context, dimension AITimeseriesGroupSummaryParamsDimension, query AITimeseriesGroupSummaryParams, opts ...option.RequestOption) (res *AITimeseriesGroupSummaryResponse, err error) {
 	var env AITimeseriesGroupSummaryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/ai/bots/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,7 +53,7 @@ func (r *AITimeseriesGroupService) Summary(ctx context.Context, dimension AITime
 // Retrieves AI bots HTTP request volume over time.
 func (r *AITimeseriesGroupService) Timeseries(ctx context.Context, query AITimeseriesGroupTimeseriesParams, opts ...option.RequestOption) (res *AITimeseriesGroupTimeseriesResponse, err error) {
 	var env AITimeseriesGroupTimeseriesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ai/bots/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -66,7 +67,7 @@ func (r *AITimeseriesGroupService) Timeseries(ctx context.Context, query AITimes
 // specified dimension over time.
 func (r *AITimeseriesGroupService) TimeseriesGroups(ctx context.Context, dimension AITimeseriesGroupTimeseriesGroupsParamsDimension, query AITimeseriesGroupTimeseriesGroupsParams, opts ...option.RequestOption) (res *AITimeseriesGroupTimeseriesGroupsResponse, err error) {
 	var env AITimeseriesGroupTimeseriesGroupsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/ai/bots/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -81,7 +82,7 @@ func (r *AITimeseriesGroupService) TimeseriesGroups(ctx context.Context, dimensi
 // Deprecated: deprecated
 func (r *AITimeseriesGroupService) UserAgent(ctx context.Context, query AITimeseriesGroupUserAgentParams, opts ...option.RequestOption) (res *AITimeseriesGroupUserAgentResponse, err error) {
 	var env AITimeseriesGroupUserAgentResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ai/bots/timeseries_groups/user_agent"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

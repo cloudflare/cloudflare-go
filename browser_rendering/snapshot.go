@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -40,7 +41,7 @@ func NewSnapshotService(opts ...option.RequestOption) (r *SnapshotService) {
 // `fullPage`, `clip` and others.
 func (r *SnapshotService) New(ctx context.Context, params SnapshotNewParams, opts ...option.RequestOption) (res *SnapshotNewResponse, err error) {
 	var env SnapshotNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

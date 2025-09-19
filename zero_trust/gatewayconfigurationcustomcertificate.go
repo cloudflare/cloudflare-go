@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -37,7 +38,7 @@ func NewGatewayConfigurationCustomCertificateService(opts ...option.RequestOptio
 //
 // Deprecated: deprecated
 func (r *GatewayConfigurationCustomCertificateService) Get(ctx context.Context, query GatewayConfigurationCustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateSettings, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

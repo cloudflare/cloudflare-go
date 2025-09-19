@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewMarkdownService(opts ...option.RequestOption) (r *MarkdownService) {
 // `gotoOptions` and `waitFor*` options.
 func (r *MarkdownService) New(ctx context.Context, params MarkdownNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env MarkdownNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

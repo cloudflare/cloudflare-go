@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewHTTPSummaryService(opts ...option.RequestOption) (r *HTTPSummaryService)
 // information.
 func (r *HTTPSummaryService) BotClass(ctx context.Context, query HTTPSummaryBotClassParams, opts ...option.RequestOption) (res *HTTPSummaryBotClassResponse, err error) {
 	var env HTTPSummaryBotClassResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/bot_class"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -54,7 +55,7 @@ func (r *HTTPSummaryService) BotClass(ctx context.Context, query HTTPSummaryBotC
 // other types of devices.
 func (r *HTTPSummaryService) DeviceType(ctx context.Context, query HTTPSummaryDeviceTypeParams, opts ...option.RequestOption) (res *HTTPSummaryDeviceTypeResponse, err error) {
 	var env HTTPSummaryDeviceTypeResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/device_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,7 +68,7 @@ func (r *HTTPSummaryService) DeviceType(ctx context.Context, query HTTPSummaryDe
 // Retrieves the distribution of HTTP requests by HTTP protocol (HTTP vs. HTTPS).
 func (r *HTTPSummaryService) HTTPProtocol(ctx context.Context, query HTTPSummaryHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPSummaryHTTPProtocolResponse, err error) {
 	var env HTTPSummaryHTTPProtocolResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/http_protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -80,7 +81,7 @@ func (r *HTTPSummaryService) HTTPProtocol(ctx context.Context, query HTTPSummary
 // Retrieves the distribution of HTTP requests by HTTP version.
 func (r *HTTPSummaryService) HTTPVersion(ctx context.Context, query HTTPSummaryHTTPVersionParams, opts ...option.RequestOption) (res *HTTPSummaryHTTPVersionResponse, err error) {
 	var env HTTPSummaryHTTPVersionResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -93,7 +94,7 @@ func (r *HTTPSummaryService) HTTPVersion(ctx context.Context, query HTTPSummaryH
 // Retrieves the distribution of HTTP requests by IP version.
 func (r *HTTPSummaryService) IPVersion(ctx context.Context, query HTTPSummaryIPVersionParams, opts ...option.RequestOption) (res *HTTPSummaryIPVersionResponse, err error) {
 	var env HTTPSummaryIPVersionResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -107,7 +108,7 @@ func (r *HTTPSummaryService) IPVersion(ctx context.Context, query HTTPSummaryIPV
 // Android, iOS, and others).
 func (r *HTTPSummaryService) OS(ctx context.Context, query HTTPSummaryOSParams, opts ...option.RequestOption) (res *HTTPSummaryOSResponse, err error) {
 	var env HTTPSummaryOSResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/os"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -120,7 +121,7 @@ func (r *HTTPSummaryService) OS(ctx context.Context, query HTTPSummaryOSParams, 
 // Retrieves the distribution of HTTP requests by post-quantum support.
 func (r *HTTPSummaryService) PostQuantum(ctx context.Context, query HTTPSummaryPostQuantumParams, opts ...option.RequestOption) (res *HTTPSummaryPostQuantumResponse, err error) {
 	var env HTTPSummaryPostQuantumResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/post_quantum"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -133,7 +134,7 @@ func (r *HTTPSummaryService) PostQuantum(ctx context.Context, query HTTPSummaryP
 // Retrieves the distribution of HTTP requests by TLS version.
 func (r *HTTPSummaryService) TLSVersion(ctx context.Context, query HTTPSummaryTLSVersionParams, opts ...option.RequestOption) (res *HTTPSummaryTLSVersionResponse, err error) {
 	var env HTTPSummaryTLSVersionResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/summary/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

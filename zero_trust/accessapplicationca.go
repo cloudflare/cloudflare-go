@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 // Generates a new short-lived certificate CA and public key.
 func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *CA, err error) {
 	var env AccessApplicationCANewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -74,7 +75,7 @@ func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body
 // Lists short-lived certificate CAs and their public keys.
 func (r *AccessApplicationCAService) List(ctx context.Context, params AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CA], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -115,7 +116,7 @@ func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, params 
 // Deletes a short-lived certificate CA.
 func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, body AccessApplicationCADeleteParams, opts ...option.RequestOption) (res *AccessApplicationCADeleteResponse, err error) {
 	var env AccessApplicationCADeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -150,7 +151,7 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, b
 // Fetches a short-lived certificate CA and its public key.
 func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *CA, err error) {
 	var env AccessApplicationCAGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

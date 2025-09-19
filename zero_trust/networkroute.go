@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewNetworkRouteService(opts ...option.RequestOption) (r *NetworkRouteServic
 // Routes a private network through a Cloudflare Tunnel.
 func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewPar
 // Lists and filters private network routes in an account.
 func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Teamnet], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -89,7 +90,7 @@ func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params Network
 // Deletes a private network route from an account.
 func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body NetworkRouteDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -111,7 +112,7 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 // meant to be updated should be provided in the body of the request.
 func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params NetworkRouteEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -132,7 +133,7 @@ func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params N
 // Get a private network route in an account.
 func (r *NetworkRouteService) Get(ctx context.Context, routeID string, query NetworkRouteGetParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

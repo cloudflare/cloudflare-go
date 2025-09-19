@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -49,7 +50,7 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 // `expiration` is ignored.
 func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponse, err error) {
 	var env NamespaceValueUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 // (for example, `:`, `!`, `%`) in the key name.
 func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponse, err error) {
 	var env NamespaceValueDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -103,7 +104,7 @@ func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, 
 // measured in seconds since the UNIX epoch will be returned in the `expiration`
 // response header.
 func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceValueGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

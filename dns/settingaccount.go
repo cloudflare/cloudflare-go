@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewSettingAccountService(opts ...option.RequestOption) (r *SettingAccountSe
 // Update DNS settings for an account
 func (r *SettingAccountService) Edit(ctx context.Context, params SettingAccountEditParams, opts ...option.RequestOption) (res *SettingAccountEditResponse, err error) {
 	var env SettingAccountEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *SettingAccountService) Edit(ctx context.Context, params SettingAccountE
 // Show DNS settings for an account
 func (r *SettingAccountService) Get(ctx context.Context, query SettingAccountGetParams, opts ...option.RequestOption) (res *SettingAccountGetResponse, err error) {
 	var env SettingAccountGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

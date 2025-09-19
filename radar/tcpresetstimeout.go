@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewTCPResetsTimeoutService(opts ...option.RequestOption) (r *TCPResetsTimeo
 // within the first 10 packets by a reset or timeout.
 func (r *TCPResetsTimeoutService) Summary(ctx context.Context, query TCPResetsTimeoutSummaryParams, opts ...option.RequestOption) (res *TCPResetsTimeoutSummaryResponse, err error) {
 	var env TCPResetsTimeoutSummaryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/tcp_resets_timeouts/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,7 +53,7 @@ func (r *TCPResetsTimeoutService) Summary(ctx context.Context, query TCPResetsTi
 // within the first 10 packets by a reset or timeout over time.
 func (r *TCPResetsTimeoutService) TimeseriesGroups(ctx context.Context, query TCPResetsTimeoutTimeseriesGroupsParams, opts ...option.RequestOption) (res *TCPResetsTimeoutTimeseriesGroupsResponse, err error) {
 	var env TCPResetsTimeoutTimeseriesGroupsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/tcp_resets_timeouts/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -53,7 +54,7 @@ func NewTunnelCloudflaredService(opts ...option.RequestOption) (r *TunnelCloudfl
 // Creates a new Cloudflare Tunnel in an account.
 func (r *TunnelCloudflaredService) New(ctx context.Context, params TunnelCloudflaredNewParams, opts ...option.RequestOption) (res *TunnelCloudflaredNewResponse, err error) {
 	var env TunnelCloudflaredNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,7 +71,7 @@ func (r *TunnelCloudflaredService) New(ctx context.Context, params TunnelCloudfl
 // Lists and filters Cloudflare Tunnels in an account.
 func (r *TunnelCloudflaredService) List(ctx context.Context, params TunnelCloudflaredListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TunnelCloudflaredListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -97,7 +98,7 @@ func (r *TunnelCloudflaredService) ListAutoPaging(ctx context.Context, params Tu
 // Deletes a Cloudflare Tunnel from an account.
 func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, body TunnelCloudflaredDeleteParams, opts ...option.RequestOption) (res *TunnelCloudflaredDeleteResponse, err error) {
 	var env TunnelCloudflaredDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -118,7 +119,7 @@ func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, 
 // Updates an existing Cloudflare Tunnel.
 func (r *TunnelCloudflaredService) Edit(ctx context.Context, tunnelID string, params TunnelCloudflaredEditParams, opts ...option.RequestOption) (res *TunnelCloudflaredEditResponse, err error) {
 	var env TunnelCloudflaredEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -139,7 +140,7 @@ func (r *TunnelCloudflaredService) Edit(ctx context.Context, tunnelID string, pa
 // Fetches a single Cloudflare Tunnel.
 func (r *TunnelCloudflaredService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredGetParams, opts ...option.RequestOption) (res *TunnelCloudflaredGetResponse, err error) {
 	var env TunnelCloudflaredGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

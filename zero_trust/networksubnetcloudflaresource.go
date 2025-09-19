@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewNetworkSubnetCloudflareSourceService(opts ...option.RequestOption) (r *N
 // Updates the Cloudflare Source subnet of the given address family
 func (r *NetworkSubnetCloudflareSourceService) Update(ctx context.Context, addressFamily NetworkSubnetCloudflareSourceUpdateParamsAddressFamily, params NetworkSubnetCloudflareSourceUpdateParams, opts ...option.RequestOption) (res *NetworkSubnetCloudflareSourceUpdateResponse, err error) {
 	var env NetworkSubnetCloudflareSourceUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

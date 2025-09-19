@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewAssetUploadService(opts ...option.RequestOption) (r *AssetUploadService)
 // https://developers.cloudflare.com/workers/static-assets/direct-upload/.
 func (r *AssetUploadService) New(ctx context.Context, params AssetUploadNewParams, opts ...option.RequestOption) (res *AssetUploadNewResponse, err error) {
 	var env AssetUploadNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

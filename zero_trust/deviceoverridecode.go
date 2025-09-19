@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -45,7 +46,7 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 // Deprecated: deprecated
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceOverrideCodeListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -85,7 +86,7 @@ func (r *DeviceOverrideCodeService) ListAutoPaging(ctx context.Context, deviceID
 // **Admin Override** setting being enabled in your device configuration.
 func (r *DeviceOverrideCodeService) Get(ctx context.Context, registrationID string, query DeviceOverrideCodeGetParams, opts ...option.RequestOption) (res *DeviceOverrideCodeGetResponse, err error) {
 	var env DeviceOverrideCodeGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

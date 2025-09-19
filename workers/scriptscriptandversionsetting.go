@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewScriptScriptAndVersionSettingService(opts ...option.RequestOption) (r *S
 // Patch metadata or config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptName string, params ScriptScriptAndVersionSettingEditParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingEditResponse, err error) {
 	var env ScriptScriptAndVersionSettingEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptN
 // Get metadata and config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptName string, query ScriptScriptAndVersionSettingGetParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingGetResponse, err error) {
 	var env ScriptScriptAndVersionSettingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

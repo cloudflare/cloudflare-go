@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewLockdownService(opts ...option.RequestOption) (r *LockdownService) {
 // Creates a new Zone Lockdown rule.
 func (r *LockdownService) New(ctx context.Context, params LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *LockdownService) New(ctx context.Context, params LockdownNewParams, opt
 // Updates an existing Zone Lockdown rule.
 func (r *LockdownService) Update(ctx context.Context, lockDownsID string, params LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -82,7 +83,7 @@ func (r *LockdownService) Update(ctx context.Context, lockDownsID string, params
 // parameters.
 func (r *LockdownService) List(ctx context.Context, params LockdownListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Lockdown], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -110,7 +111,7 @@ func (r *LockdownService) ListAutoPaging(ctx context.Context, params LockdownLis
 // Deletes an existing Zone Lockdown rule.
 func (r *LockdownService) Delete(ctx context.Context, lockDownsID string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	var env LockdownDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -131,7 +132,7 @@ func (r *LockdownService) Delete(ctx context.Context, lockDownsID string, body L
 // Fetches the details of a Zone Lockdown rule.
 func (r *LockdownService) Get(ctx context.Context, lockDownsID string, query LockdownGetParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -41,7 +42,7 @@ func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 // Add a connector to your account
 func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, opts ...option.RequestOption) (res *ConnectorNewResponse, err error) {
 	var env ConnectorNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, o
 // Replace Connector
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	var env ConnectorUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *ConnectorService) Update(ctx context.Context, connectorID string, param
 // List Connectors
 func (r *ConnectorService) List(ctx context.Context, query ConnectorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectorListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -106,7 +107,7 @@ func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorLi
 // Remove a connector from your account
 func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body ConnectorDeleteParams, opts ...option.RequestOption) (res *ConnectorDeleteResponse, err error) {
 	var env ConnectorDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body 
 // Edit Connector to update specific properties
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -148,7 +149,7 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 // Fetch Connector
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
 	var env ConnectorGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

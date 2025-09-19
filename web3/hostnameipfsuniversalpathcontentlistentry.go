@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHostnameIPFSUniversalPathContentListEntryService(opts ...option.RequestO
 // Create IPFS Universal Path Gateway Content List Entry
 func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, identifier string, params HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryNewResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Conte
 // Edit IPFS Universal Path Gateway Content List Entry
 func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, identifier string, contentListEntryIdentifier string, params HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryUpdateResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -85,7 +86,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Co
 // List IPFS Universal Path Gateway Content List Entries
 func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Context, identifier string, query HostnameIPFSUniversalPathContentListEntryListParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryListResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -106,7 +107,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Cont
 // Delete IPFS Universal Path Gateway Content List Entry
 func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryDeleteParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -131,7 +132,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Co
 // IPFS Universal Path Gateway Content List Entry Details
 func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, identifier string, contentListEntryIdentifier string, query HostnameIPFSUniversalPathContentListEntryGetParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryGetResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

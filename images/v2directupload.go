@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
@@ -47,7 +48,7 @@ func NewV2DirectUploadService(opts ...option.RequestOption) (r *V2DirectUploadSe
 // `draft: true` property is not present.
 func (r *V2DirectUploadService) New(ctx context.Context, params V2DirectUploadNewParams, opts ...option.RequestOption) (res *V2DirectUploadNewResponse, err error) {
 	var env V2DirectUploadNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

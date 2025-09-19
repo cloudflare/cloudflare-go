@@ -11,6 +11,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
@@ -47,7 +48,7 @@ func NewIndexService(opts ...option.RequestOption) (r *IndexService) {
 // Creates and returns a new Vectorize Index.
 func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	var env IndexNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,7 +65,7 @@ func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...o
 // Returns a list of Vectorize Indexes
 func (r *IndexService) List(ctx context.Context, query IndexListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CreateIndex], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -91,7 +92,7 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, query IndexListParams
 // Deletes the specified Vectorize Index.
 func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env IndexDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -112,7 +113,7 @@ func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexD
 // Delete a set of vectors from an index by their vector identifiers.
 func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params IndexDeleteByIDsParams, opts ...option.RequestOption) (res *IndexDeleteByIDsResponse, err error) {
 	var env IndexDeleteByIDsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -133,7 +134,7 @@ func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params
 // Returns the specified Vectorize Index.
 func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGetParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	var env IndexGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -154,7 +155,7 @@ func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGet
 // Get a set of vectors from an index by their vector identifiers.
 func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) (res *IndexGetByIDsResponse, err error) {
 	var env IndexGetByIDsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -175,7 +176,7 @@ func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params In
 // Get information about a vectorize index.
 func (r *IndexService) Info(ctx context.Context, indexName string, query IndexInfoParams, opts ...option.RequestOption) (res *IndexInfoResponse, err error) {
 	var env IndexInfoResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -197,7 +198,7 @@ func (r *IndexService) Info(ctx context.Context, indexName string, query IndexIn
 // to the vectors enqueued for insertion.
 func (r *IndexService) Insert(ctx context.Context, indexName string, params IndexInsertParams, opts ...option.RequestOption) (res *IndexInsertResponse, err error) {
 	var env IndexInsertResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -218,7 +219,7 @@ func (r *IndexService) Insert(ctx context.Context, indexName string, params Inde
 // Returns a paginated list of vector identifiers from the specified index.
 func (r *IndexService) ListVectors(ctx context.Context, indexName string, params IndexListVectorsParams, opts ...option.RequestOption) (res *IndexListVectorsResponse, err error) {
 	var env IndexListVectorsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -239,7 +240,7 @@ func (r *IndexService) ListVectors(ctx context.Context, indexName string, params
 // Finds vectors closest to a given vector in an index.
 func (r *IndexService) Query(ctx context.Context, indexName string, params IndexQueryParams, opts ...option.RequestOption) (res *IndexQueryResponse, err error) {
 	var env IndexQueryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -261,7 +262,7 @@ func (r *IndexService) Query(ctx context.Context, indexName string, params Index
 // returns a mutation id corresponding to the vectors enqueued for upsertion.
 func (r *IndexService) Upsert(ctx context.Context, indexName string, params IndexUpsertParams, opts ...option.RequestOption) (res *IndexUpsertResponse, err error) {
 	var env IndexUpsertResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

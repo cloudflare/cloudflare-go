@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 // Lists all webpages which have been tested.
 func (r *PageService) List(ctx context.Context, query PageListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -70,7 +71,7 @@ func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, 
 // Lists the core web vital metrics trend over time for a specific page.
 func (r *PageService) Trend(ctx context.Context, url string, params PageTrendParams, opts ...option.RequestOption) (res *Trend, err error) {
 	var env PageTrendResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

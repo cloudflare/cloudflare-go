@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -39,7 +40,7 @@ func NewDevicePolicyDefaultCertificateService(opts ...option.RequestOption) (r *
 // protected domains. This facilitates device posture without a WARP session.
 func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params DevicePolicyDefaultCertificateEditParams, opts ...option.RequestOption) (res *DevicePolicyCertificates, err error) {
 	var env DevicePolicyDefaultCertificateEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params
 // Fetches device certificate provisioning.
 func (r *DevicePolicyDefaultCertificateService) Get(ctx context.Context, query DevicePolicyDefaultCertificateGetParams, opts ...option.RequestOption) (res *DevicePolicyCertificates, err error) {
 	var env DevicePolicyDefaultCertificateGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

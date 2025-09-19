@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewHTTPLocationHTTPMethodService(opts ...option.RequestOption) (r *HTTPLoca
 // Retrieves the top locations, by HTTP requests, of the requested HTTP version.
 func (r *HTTPLocationHTTPMethodService) Get(ctx context.Context, httpVersion HTTPLocationHTTPMethodGetParamsHTTPVersion, query HTTPLocationHTTPMethodGetParams, opts ...option.RequestOption) (res *HTTPLocationHTTPMethodGetResponse, err error) {
 	var env HTTPLocationHTTPMethodGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/http_version/%v", httpVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewBotService(opts ...option.RequestOption) (r *BotService) {
 // Retrieves a list of bots.
 func (r *BotService) List(ctx context.Context, query BotListParams, opts ...option.RequestOption) (res *BotListResponse, err error) {
 	var env BotListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bots"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -54,7 +55,7 @@ func (r *BotService) List(ctx context.Context, query BotListParams, opts ...opti
 // Retrieves the requested bot information.
 func (r *BotService) Get(ctx context.Context, botSlug string, query BotGetParams, opts ...option.RequestOption) (res *BotGetResponse, err error) {
 	var env BotGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if botSlug == "" {
 		err = errors.New("missing required bot_slug parameter")
 		return
@@ -72,7 +73,7 @@ func (r *BotService) Get(ctx context.Context, botSlug string, query BotGetParams
 // dimension.
 func (r *BotService) Summary(ctx context.Context, dimension BotSummaryParamsDimension, query BotSummaryParams, opts ...option.RequestOption) (res *BotSummaryResponse, err error) {
 	var env BotSummaryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/bots/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -85,7 +86,7 @@ func (r *BotService) Summary(ctx context.Context, dimension BotSummaryParamsDime
 // Retrieves bots HTTP request volume over time.
 func (r *BotService) Timeseries(ctx context.Context, query BotTimeseriesParams, opts ...option.RequestOption) (res *BotTimeseriesResponse, err error) {
 	var env BotTimeseriesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bots/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -99,7 +100,7 @@ func (r *BotService) Timeseries(ctx context.Context, query BotTimeseriesParams, 
 // specified dimension over time.
 func (r *BotService) TimeseriesGroups(ctx context.Context, dimension BotTimeseriesGroupsParamsDimension, query BotTimeseriesGroupsParams, opts ...option.RequestOption) (res *BotTimeseriesGroupsResponse, err error) {
 	var env BotTimeseriesGroupsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/bots/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

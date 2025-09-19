@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 // specific destination address.
 func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
 	var env RuleCatchAllUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpd
 // Get information on the default catch-all routing rule.
 func (r *RuleCatchAllService) Get(ctx context.Context, query RuleCatchAllGetParams, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
 	var env RuleCatchAllGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

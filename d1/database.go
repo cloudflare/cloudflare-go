@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 // Returns the created D1 database.
 func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 // Updates the specified D1 database.
 func (r *DatabaseService) Update(ctx context.Context, databaseID string, params DatabaseUpdateParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *DatabaseService) Update(ctx context.Context, databaseID string, params 
 // Returns a list of D1 databases.
 func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DatabaseListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -106,7 +107,7 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 // Deletes the specified D1 database.
 func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponse, err error) {
 	var env DatabaseDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 // Updates partially the specified D1 database.
 func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params DatabaseEditParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -151,7 +152,7 @@ func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params Da
 // in-progress export must be continually polled or will automatically cancel.
 func (r *DatabaseService) Export(ctx context.Context, databaseID string, params DatabaseExportParams, opts ...option.RequestOption) (res *DatabaseExportResponse, err error) {
 	var env DatabaseExportResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -172,7 +173,7 @@ func (r *DatabaseService) Export(ctx context.Context, databaseID string, params 
 // Returns the specified D1 database.
 func (r *DatabaseService) Get(ctx context.Context, databaseID string, query DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -195,7 +196,7 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 // duration.
 func (r *DatabaseService) Import(ctx context.Context, databaseID string, params DatabaseImportParams, opts ...option.RequestOption) (res *DatabaseImportResponse, err error) {
 	var env DatabaseImportResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -216,7 +217,7 @@ func (r *DatabaseService) Import(ctx context.Context, databaseID string, params 
 // Returns the query result as an object.
 func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *pagination.SinglePage[QueryResult], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -248,7 +249,7 @@ func (r *DatabaseService) QueryAutoPaging(ctx context.Context, databaseID string
 // performance-optimized version of the /query endpoint.
 func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) (res *pagination.SinglePage[DatabaseRawResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

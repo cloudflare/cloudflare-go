@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewAnnotationOutageService(opts ...option.RequestOption) (r *AnnotationOuta
 // Retrieves the latest Internet outages and anomalies.
 func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutageGetParams, opts ...option.RequestOption) (res *AnnotationOutageGetResponse, err error) {
 	var env AnnotationOutageGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/annotations/outages"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,7 +51,7 @@ func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutag
 // Retrieves the number of outages by location.
 func (r *AnnotationOutageService) Locations(ctx context.Context, query AnnotationOutageLocationsParams, opts ...option.RequestOption) (res *AnnotationOutageLocationsResponse, err error) {
 	var env AnnotationOutageLocationsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/annotations/outages/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

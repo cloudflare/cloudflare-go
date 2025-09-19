@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -47,7 +48,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 // Create a new workflow instance
 func (r *InstanceService) New(ctx context.Context, workflowName string, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -68,7 +69,7 @@ func (r *InstanceService) New(ctx context.Context, workflowName string, params I
 // List of workflow instances
 func (r *InstanceService) List(ctx context.Context, workflowName string, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -99,7 +100,7 @@ func (r *InstanceService) ListAutoPaging(ctx context.Context, workflowName strin
 // Batch create new Workflow instances
 func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params InstanceBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InstanceBulkResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -130,7 +131,7 @@ func (r *InstanceService) BulkAutoPaging(ctx context.Context, workflowName strin
 // Get logs and status from instance
 func (r *InstanceService) Get(ctx context.Context, workflowName string, instanceID string, query InstanceGetParams, opts ...option.RequestOption) (res *InstanceGetResponse, err error) {
 	var env InstanceGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

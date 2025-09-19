@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/intel"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewInsightTypeService(opts ...option.RequestOption) (r *InsightTypeService)
 // Get Security Center Insight Counts by Type
 func (r *InsightTypeService) Get(ctx context.Context, params InsightTypeGetParams, opts ...option.RequestOption) (res *[]InsightTypeGetResponse, err error) {
 	var env InsightTypeGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

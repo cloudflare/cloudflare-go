@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPAseHTTPProtocolService(opts ...option.RequestOption) (r *HTTPAseHTTP
 // protocol.
 func (r *HTTPAseHTTPProtocolService) Get(ctx context.Context, httpProtocol HTTPAseHTTPProtocolGetParamsHTTPProtocol, query HTTPAseHTTPProtocolGetParams, opts ...option.RequestOption) (res *HTTPAseHTTPProtocolGetResponse, err error) {
 	var env HTTPAseHTTPProtocolGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/ases/http_protocol/%v", httpProtocol)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

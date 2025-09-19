@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewSettingTrustedDomainService(opts ...option.RequestOption) (r *SettingTru
 // Create a trusted email domain
 func (r *SettingTrustedDomainService) New(ctx context.Context, params SettingTrustedDomainNewParams, opts ...option.RequestOption) (res *SettingTrustedDomainNewResponseUnion, err error) {
 	var env SettingTrustedDomainNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *SettingTrustedDomainService) New(ctx context.Context, params SettingTru
 // Lists, searches, and sorts an account’s trusted email domains.
 func (r *SettingTrustedDomainService) List(ctx context.Context, params SettingTrustedDomainListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingTrustedDomainListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -87,7 +88,7 @@ func (r *SettingTrustedDomainService) ListAutoPaging(ctx context.Context, params
 // Delete a trusted email domain
 func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainID int64, body SettingTrustedDomainDeleteParams, opts ...option.RequestOption) (res *SettingTrustedDomainDeleteResponse, err error) {
 	var env SettingTrustedDomainDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -104,7 +105,7 @@ func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainI
 // Update a trusted email domain
 func (r *SettingTrustedDomainService) Edit(ctx context.Context, trustedDomainID int64, params SettingTrustedDomainEditParams, opts ...option.RequestOption) (res *SettingTrustedDomainEditResponse, err error) {
 	var env SettingTrustedDomainEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -121,7 +122,7 @@ func (r *SettingTrustedDomainService) Edit(ctx context.Context, trustedDomainID 
 // Get a trusted email domain
 func (r *SettingTrustedDomainService) Get(ctx context.Context, trustedDomainID int64, query SettingTrustedDomainGetParams, opts ...option.RequestOption) (res *SettingTrustedDomainGetResponse, err error) {
 	var env SettingTrustedDomainGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

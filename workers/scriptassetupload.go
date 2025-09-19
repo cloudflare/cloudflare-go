@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewScriptAssetUploadService(opts ...option.RequestOption) (r *ScriptAssetUp
 // https://developers.cloudflare.com/workers/static-assets/direct-upload/.
 func (r *ScriptAssetUploadService) New(ctx context.Context, scriptName string, params ScriptAssetUploadNewParams, opts ...option.RequestOption) (res *ScriptAssetUploadNewResponse, err error) {
 	var env ScriptAssetUploadNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

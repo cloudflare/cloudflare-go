@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewRobotsTXTTopService(opts ...option.RequestOption) (r *RobotsTXTTopServic
 // Retrieves the top domain categories by the number of robots.txt files parsed.
 func (r *RobotsTXTTopService) DomainCategories(ctx context.Context, query RobotsTXTTopDomainCategoriesParams, opts ...option.RequestOption) (res *RobotsTXTTopDomainCategoriesResponse, err error) {
 	var env RobotsTXTTopDomainCategoriesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/robots_txt/top/domain_categories"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

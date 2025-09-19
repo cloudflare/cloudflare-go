@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewHTTPLocationDeviceTypeService(opts ...option.RequestOption) (r *HTTPLoca
 // Retrieves the top locations, by HTTP requests, of the requested device type.
 func (r *HTTPLocationDeviceTypeService) Get(ctx context.Context, deviceType HTTPLocationDeviceTypeGetParamsDeviceType, query HTTPLocationDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPLocationDeviceTypeGetResponse, err error) {
 	var env HTTPLocationDeviceTypeGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

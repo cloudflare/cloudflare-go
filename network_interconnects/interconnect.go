@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewInterconnectService(opts ...option.RequestOption) (r *InterconnectServic
 
 // Create a new interconnect
 func (r *InterconnectService) New(ctx context.Context, params InterconnectNewParams, opts ...option.RequestOption) (res *InterconnectNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -51,7 +52,7 @@ func (r *InterconnectService) New(ctx context.Context, params InterconnectNewPar
 
 // List existing interconnects
 func (r *InterconnectService) List(ctx context.Context, params InterconnectListParams, opts ...option.RequestOption) (res *InterconnectListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,7 +64,7 @@ func (r *InterconnectService) List(ctx context.Context, params InterconnectListP
 
 // Delete an interconnect object
 func (r *InterconnectService) Delete(ctx context.Context, icon string, body InterconnectDeleteParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -80,7 +81,7 @@ func (r *InterconnectService) Delete(ctx context.Context, icon string, body Inte
 
 // Get information about an interconnect object
 func (r *InterconnectService) Get(ctx context.Context, icon string, query InterconnectGetParams, opts ...option.RequestOption) (res *InterconnectGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -96,7 +97,7 @@ func (r *InterconnectService) Get(ctx context.Context, icon string, query Interc
 
 // Generate the Letter of Authorization (LOA) for a given interconnect
 func (r *InterconnectService) LOA(ctx context.Context, icon string, query InterconnectLOAParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -113,7 +114,7 @@ func (r *InterconnectService) LOA(ctx context.Context, icon string, query Interc
 
 // Get the current status of an interconnect object
 func (r *InterconnectService) Status(ctx context.Context, icon string, query InterconnectStatusParams, opts ...option.RequestOption) (res *InterconnectStatusResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

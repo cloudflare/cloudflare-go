@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -40,7 +41,7 @@ func NewDEXWARPChangeEventService(opts ...option.RequestOption) (r *DEXWARPChang
 // List WARP configuration and enablement toggle change events by device.
 func (r *DEXWARPChangeEventService) Get(ctx context.Context, params DEXWARPChangeEventGetParams, opts ...option.RequestOption) (res *[]DexwarpChangeEventGetResponse, err error) {
 	var env DexwarpChangeEventGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

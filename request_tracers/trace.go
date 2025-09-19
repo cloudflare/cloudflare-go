@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewTraceService(opts ...option.RequestOption) (r *TraceService) {
 // Request Trace
 func (r *TraceService) New(ctx context.Context, params TraceNewParams, opts ...option.RequestOption) (res *TraceNewResponse, err error) {
 	var env TraceNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

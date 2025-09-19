@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewInstanceEventService(opts ...option.RequestOption) (r *InstanceEventServ
 // Send event to instance
 func (r *InstanceEventService) New(ctx context.Context, workflowName string, instanceID string, eventType string, params InstanceEventNewParams, opts ...option.RequestOption) (res *InstanceEventNewResponse, err error) {
 	var env InstanceEventNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

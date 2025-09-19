@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -41,7 +42,7 @@ func NewScriptSecretService(opts ...option.RequestOption) (r *ScriptSecretServic
 // Add a secret to a script.
 func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, params ScriptSecretUpdateParams, opts ...option.RequestOption) (res *ScriptSecretUpdateResponse, err error) {
 	var env ScriptSecretUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, par
 // List secrets bound to a script.
 func (r *ScriptSecretService) List(ctx context.Context, scriptName string, query ScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScriptSecretListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -93,7 +94,7 @@ func (r *ScriptSecretService) ListAutoPaging(ctx context.Context, scriptName str
 // Remove a secret from a script.
 func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, secretName string, params ScriptSecretDeleteParams, opts ...option.RequestOption) (res *ScriptSecretDeleteResponse, err error) {
 	var env ScriptSecretDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -118,7 +119,7 @@ func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, sec
 // Get a given secret binding (value omitted) on a script.
 func (r *ScriptSecretService) Get(ctx context.Context, scriptName string, secretName string, params ScriptSecretGetParams, opts ...option.RequestOption) (res *ScriptSecretGetResponse, err error) {
 	var env ScriptSecretGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

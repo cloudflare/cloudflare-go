@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewReceivedFieldService(opts ...option.RequestOption) (r *ReceivedFieldServ
 // Lists all fields available. The response is json object with key-value pairs,
 // where keys are field names, and values are descriptions.
 func (r *ReceivedFieldService) Get(ctx context.Context, query ReceivedFieldGetParams, opts ...option.RequestOption) (res *ReceivedFieldGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

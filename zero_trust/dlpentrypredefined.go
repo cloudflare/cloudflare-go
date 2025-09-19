@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewDLPEntryPredefinedService(opts ...option.RequestOption) (r *DLPEntryPred
 // entry This is needed for our generated terraform API
 func (r *DLPEntryPredefinedService) New(ctx context.Context, params DLPEntryPredefinedNewParams, opts ...option.RequestOption) (res *DLPEntryPredefinedNewResponse, err error) {
 	var env DLPEntryPredefinedNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *DLPEntryPredefinedService) New(ctx context.Context, params DLPEntryPred
 // Updates a DLP entry.
 func (r *DLPEntryPredefinedService) Update(ctx context.Context, entryID string, params DLPEntryPredefinedUpdateParams, opts ...option.RequestOption) (res *DLPEntryPredefinedUpdateResponse, err error) {
 	var env DLPEntryPredefinedUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *DLPEntryPredefinedService) Update(ctx context.Context, entryID string, 
 // Lists all DLP entries in an account.
 func (r *DLPEntryPredefinedService) List(ctx context.Context, query DLPEntryPredefinedListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPEntryPredefinedListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -107,7 +108,7 @@ func (r *DLPEntryPredefinedService) ListAutoPaging(ctx context.Context, query DL
 // generated terraform API
 func (r *DLPEntryPredefinedService) Delete(ctx context.Context, entryID string, body DLPEntryPredefinedDeleteParams, opts ...option.RequestOption) (res *DLPEntryPredefinedDeleteResponse, err error) {
 	var env DLPEntryPredefinedDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -128,7 +129,7 @@ func (r *DLPEntryPredefinedService) Delete(ctx context.Context, entryID string, 
 // Fetches a DLP entry by ID.
 func (r *DLPEntryPredefinedService) Get(ctx context.Context, entryID string, query DLPEntryPredefinedGetParams, opts ...option.RequestOption) (res *DLPEntryPredefinedGetResponse, err error) {
 	var env DLPEntryPredefinedGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

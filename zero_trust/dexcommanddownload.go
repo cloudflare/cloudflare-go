@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -34,7 +35,7 @@ func NewDEXCommandDownloadService(opts ...option.RequestOption) (r *DEXCommandDo
 
 // Downloads artifacts for an executed command. Bulk downloads are not supported
 func (r *DEXCommandDownloadService) Get(ctx context.Context, commandID string, filename string, query DEXCommandDownloadGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/zip")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

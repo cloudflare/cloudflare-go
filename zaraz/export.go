@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -35,7 +36,7 @@ func NewExportService(opts ...option.RequestOption) (r *ExportService) {
 // Exports full current published Zaraz configuration for a zone, secret variables
 // included.
 func (r *ExportService) Get(ctx context.Context, query ExportGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

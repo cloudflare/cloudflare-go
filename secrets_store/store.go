@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewStoreService(opts ...option.RequestOption) (r *StoreService) {
 // Creates a store in the account
 func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreNewResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -69,7 +70,7 @@ func (r *StoreService) NewAutoPaging(ctx context.Context, params StoreNewParams,
 // Lists all the stores in an account
 func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[StoreListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -96,7 +97,7 @@ func (r *StoreService) ListAutoPaging(ctx context.Context, params StoreListParam
 // Deletes a single store
 func (r *StoreService) Delete(ctx context.Context, storeID string, body StoreDeleteParams, opts ...option.RequestOption) (res *StoreDeleteResponse, err error) {
 	var env StoreDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

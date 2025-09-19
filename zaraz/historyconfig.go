@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHistoryConfigService(opts ...option.RequestOption) (r *HistoryConfigServ
 // Gets a history of published Zaraz configurations by ID(s) for a zone.
 func (r *HistoryConfigService) Get(ctx context.Context, params HistoryConfigGetParams, opts ...option.RequestOption) (res *HistoryConfigGetResponse, err error) {
 	var env HistoryConfigGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

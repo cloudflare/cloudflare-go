@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 // Creates a DLP predefined profile. Only supports enabling/disabling entries.
 func (r *DLPProfilePredefinedService) New(ctx context.Context, params DLPProfilePredefinedNewParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfilePredefinedNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,7 +54,7 @@ func (r *DLPProfilePredefinedService) New(ctx context.Context, params DLPProfile
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
 func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfilePredefinedUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 // generated terraform API
 func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID string, body DLPProfilePredefinedDeleteParams, opts ...option.RequestOption) (res *DLPProfilePredefinedDeleteResponse, err error) {
 	var env DLPProfilePredefinedDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -96,7 +97,7 @@ func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID stri
 // Fetches a predefined DLP profile by id.
 func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfilePredefinedGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

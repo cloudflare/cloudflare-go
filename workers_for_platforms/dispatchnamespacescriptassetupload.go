@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -39,7 +40,7 @@ func NewDispatchNamespaceScriptAssetUploadService(opts ...option.RequestOption) 
 // https://developers.cloudflare.com/workers/static-assets/direct-upload/.
 func (r *DispatchNamespaceScriptAssetUploadService) New(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptAssetUploadNewParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptAssetUploadNewResponse, err error) {
 	var env DispatchNamespaceScriptAssetUploadNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

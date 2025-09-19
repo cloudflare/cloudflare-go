@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewBillingHistoryService(opts ...option.RequestOption) (r *BillingHistorySe
 // Deprecated: deprecated
 func (r *BillingHistoryService) List(ctx context.Context, query BillingHistoryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[BillingHistory], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/billing/history"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

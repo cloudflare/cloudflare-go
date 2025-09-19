@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -36,7 +37,7 @@ func NewDatasetJobService(opts ...option.RequestOption) (r *DatasetJobService) {
 // Lists Logpush jobs for an account or zone for a dataset.
 func (r *DatasetJobService) Get(ctx context.Context, datasetID DatasetJobGetParamsDatasetID, query DatasetJobGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]

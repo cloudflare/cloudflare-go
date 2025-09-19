@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewAccessInfrastructureTargetService(opts ...option.RequestOption) (r *Acce
 // Create new target
 func (r *AccessInfrastructureTargetService) New(ctx context.Context, params AccessInfrastructureTargetNewParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetNewResponse, err error) {
 	var env AccessInfrastructureTargetNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *AccessInfrastructureTargetService) New(ctx context.Context, params Acce
 // Update target
 func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID string, params AccessInfrastructureTargetUpdateParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetUpdateResponse, err error) {
 	var env AccessInfrastructureTargetUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID
 // together.
 func (r *AccessInfrastructureTargetService) List(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessInfrastructureTargetListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -106,7 +107,7 @@ func (r *AccessInfrastructureTargetService) ListAutoPaging(ctx context.Context, 
 
 // Delete target
 func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID string, body AccessInfrastructureTargetDeleteParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -125,7 +126,7 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 //
 // Deprecated: deprecated
 func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -138,7 +139,7 @@ func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body
 
 // Removes one or more targets.
 func (r *AccessInfrastructureTargetService) BulkDeleteV2(ctx context.Context, params AccessInfrastructureTargetBulkDeleteV2Params, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -152,7 +153,7 @@ func (r *AccessInfrastructureTargetService) BulkDeleteV2(ctx context.Context, pa
 // Adds one or more targets.
 func (r *AccessInfrastructureTargetService) BulkUpdate(ctx context.Context, params AccessInfrastructureTargetBulkUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessInfrastructureTargetBulkUpdateResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -179,7 +180,7 @@ func (r *AccessInfrastructureTargetService) BulkUpdateAutoPaging(ctx context.Con
 // Get target
 func (r *AccessInfrastructureTargetService) Get(ctx context.Context, targetID string, query AccessInfrastructureTargetGetParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetGetResponse, err error) {
 	var env AccessInfrastructureTargetGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // Create Web3 Hostname
 func (r *HostnameService) New(ctx context.Context, params HostnameNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	var env HostnameNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *HostnameService) New(ctx context.Context, params HostnameNewParams, opt
 // List Web3 Hostnames
 func (r *HostnameService) List(ctx context.Context, query HostnameListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hostname], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -85,7 +86,7 @@ func (r *HostnameService) ListAutoPaging(ctx context.Context, query HostnameList
 // Delete Web3 Hostname
 func (r *HostnameService) Delete(ctx context.Context, identifier string, body HostnameDeleteParams, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
 	var env HostnameDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -106,7 +107,7 @@ func (r *HostnameService) Delete(ctx context.Context, identifier string, body Ho
 // Edit Web3 Hostname
 func (r *HostnameService) Edit(ctx context.Context, identifier string, params HostnameEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	var env HostnameEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *HostnameService) Edit(ctx context.Context, identifier string, params Ho
 // Web3 Hostname Details
 func (r *HostnameService) Get(ctx context.Context, identifier string, query HostnameGetParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	var env HostnameGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

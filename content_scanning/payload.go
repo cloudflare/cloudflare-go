@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewPayloadService(opts ...option.RequestOption) (r *PayloadService) {
 // Add custom scan expressions for Content Scanning.
 func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadNewResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -64,7 +65,7 @@ func (r *PayloadService) NewAutoPaging(ctx context.Context, params PayloadNewPar
 // Get a list of existing custom scan expressions for Content Scanning.
 func (r *PayloadService) List(ctx context.Context, query PayloadListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -91,7 +92,7 @@ func (r *PayloadService) ListAutoPaging(ctx context.Context, query PayloadListPa
 // Delete a Content Scan Custom Expression.
 func (r *PayloadService) Delete(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadDeleteResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")

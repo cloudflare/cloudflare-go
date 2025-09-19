@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -44,7 +45,7 @@ func NewDNSFirewallService(opts ...option.RequestOption) (r *DNSFirewallService)
 // Create a DNS Firewall cluster
 func (r *DNSFirewallService) New(ctx context.Context, params DNSFirewallNewParams, opts ...option.RequestOption) (res *DNSFirewallNewResponse, err error) {
 	var env DNSFirewallNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *DNSFirewallService) New(ctx context.Context, params DNSFirewallNewParam
 // List DNS Firewall clusters for an account
 func (r *DNSFirewallService) List(ctx context.Context, params DNSFirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DNSFirewallListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -88,7 +89,7 @@ func (r *DNSFirewallService) ListAutoPaging(ctx context.Context, params DNSFirew
 // Delete a DNS Firewall cluster
 func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, body DNSFirewallDeleteParams, opts ...option.RequestOption) (res *DNSFirewallDeleteResponse, err error) {
 	var env DNSFirewallDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -109,7 +110,7 @@ func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, b
 // Modify the configuration of a DNS Firewall cluster
 func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, params DNSFirewallEditParams, opts ...option.RequestOption) (res *DNSFirewallEditResponse, err error) {
 	var env DNSFirewallEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -130,7 +131,7 @@ func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, par
 // Show a single DNS Firewall cluster for an account
 func (r *DNSFirewallService) Get(ctx context.Context, dnsFirewallID string, query DNSFirewallGetParams, opts ...option.RequestOption) (res *DNSFirewallGetResponse, err error) {
 	var env DNSFirewallGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewAccessCertificateService(opts ...option.RequestOption) (r *AccessCertifi
 // Adds a new mTLS root certificate to Access.
 func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	var env AccessCertificateNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -73,7 +74,7 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 // Updates a configured mTLS certificate.
 func (r *AccessCertificateService) Update(ctx context.Context, certificateID string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	var env AccessCertificateUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -108,7 +109,7 @@ func (r *AccessCertificateService) Update(ctx context.Context, certificateID str
 // Lists all mTLS root certificates.
 func (r *AccessCertificateService) List(ctx context.Context, params AccessCertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Certificate], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -149,7 +150,7 @@ func (r *AccessCertificateService) ListAutoPaging(ctx context.Context, params Ac
 // Deletes an mTLS certificate.
 func (r *AccessCertificateService) Delete(ctx context.Context, certificateID string, body AccessCertificateDeleteParams, opts ...option.RequestOption) (res *AccessCertificateDeleteResponse, err error) {
 	var env AccessCertificateDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -184,7 +185,7 @@ func (r *AccessCertificateService) Delete(ctx context.Context, certificateID str
 // Fetches a single mTLS certificate.
 func (r *AccessCertificateService) Get(ctx context.Context, certificateID string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	var env AccessCertificateGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

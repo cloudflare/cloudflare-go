@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewUserGroupMemberService(opts ...option.RequestOption) (r *UserGroupMember
 // Add members to a User Group.
 func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, params UserGroupMemberNewParams, opts ...option.RequestOption) (res *UserGroupMemberNewResponse, err error) {
 	var env UserGroupMemberNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, pa
 // Replace the set of members attached to a User Group.
 func (r *UserGroupMemberService) Update(ctx context.Context, userGroupID string, params UserGroupMemberUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[UserGroupMemberUpdateResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -91,7 +92,7 @@ func (r *UserGroupMemberService) UpdateAutoPaging(ctx context.Context, userGroup
 // List all the members attached to a user group.
 func (r *UserGroupMemberService) List(ctx context.Context, userGroupID string, params UserGroupMemberListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserGroupMemberListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -122,7 +123,7 @@ func (r *UserGroupMemberService) ListAutoPaging(ctx context.Context, userGroupID
 // Remove a member from User Group
 func (r *UserGroupMemberService) Delete(ctx context.Context, userGroupID string, memberID string, body UserGroupMemberDeleteParams, opts ...option.RequestOption) (res *UserGroupMemberDeleteResponse, err error) {
 	var env UserGroupMemberDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

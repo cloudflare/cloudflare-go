@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 // Retrieves a list of summarised aggregate metrics over a given time period.
 func (r *AnalyticsEventSummaryService) Get(ctx context.Context, params AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponse, err error) {
 	var env AnalyticsEventSummaryGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -41,7 +42,7 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 // Add a secret to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -66,7 +67,7 @@ func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispa
 // List secrets bound to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptSecretListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -101,7 +102,7 @@ func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Contex
 // Remove a secret from a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
 	var env DispatchNamespaceScriptSecretDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -131,7 +132,7 @@ func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispa
 // Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
 	var env DispatchNamespaceScriptSecretGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

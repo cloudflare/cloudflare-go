@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewCertificatePackQuotaService(opts ...option.RequestOption) (r *Certificat
 // For a given zone, list certificate pack quotas.
 func (r *CertificatePackQuotaService) Get(ctx context.Context, query CertificatePackQuotaGetParams, opts ...option.RequestOption) (res *CertificatePackQuotaGetResponse, err error) {
 	var env CertificatePackQuotaGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

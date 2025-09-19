@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParam
 	if params.XMagicNewHcTarget.Present {
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,7 +68,7 @@ func (r *IPSECTunnelService) Update(ctx context.Context, ipsecTunnelID string, p
 	if params.XMagicNewHcTarget.Present {
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -91,7 +92,7 @@ func (r *IPSECTunnelService) List(ctx context.Context, params IPSECTunnelListPar
 	if params.XMagicNewHcTarget.Present {
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -113,7 +114,7 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, p
 	if params.XMagicNewHcTarget.Present {
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -139,7 +140,7 @@ func (r *IPSECTunnelService) BulkUpdate(ctx context.Context, params IPSECTunnelB
 	if params.XMagicNewHcTarget.Present {
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -159,7 +160,7 @@ func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, para
 	if params.XMagicNewHcTarget.Present {
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
 	}
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -184,7 +185,7 @@ func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, para
 // safe place.
 func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	var env IPSECTunnelPSKGenerateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

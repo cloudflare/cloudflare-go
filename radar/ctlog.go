@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewCtLogService(opts ...option.RequestOption) (r *CtLogService) {
 // Retrieves a list of certificate logs.
 func (r *CtLogService) List(ctx context.Context, query CtLogListParams, opts ...option.RequestOption) (res *CtLogListResponse, err error) {
 	var env CtLogListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ct/logs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,7 +53,7 @@ func (r *CtLogService) List(ctx context.Context, query CtLogListParams, opts ...
 // Retrieves the requested certificate log information.
 func (r *CtLogService) Get(ctx context.Context, logSlug string, query CtLogGetParams, opts ...option.RequestOption) (res *CtLogGetResponse, err error) {
 	var env CtLogGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if logSlug == "" {
 		err = errors.New("missing required log_slug parameter")
 		return

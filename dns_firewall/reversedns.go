@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewReverseDNSService(opts ...option.RequestOption) (r *ReverseDNSService) {
 // Update reverse DNS configuration (PTR records) for a DNS Firewall cluster
 func (r *ReverseDNSService) Edit(ctx context.Context, dnsFirewallID string, params ReverseDNSEditParams, opts ...option.RequestOption) (res *ReverseDNSEditResponse, err error) {
 	var env ReverseDNSEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *ReverseDNSService) Edit(ctx context.Context, dnsFirewallID string, para
 // Show reverse DNS configuration (PTR records) for a DNS Firewall cluster
 func (r *ReverseDNSService) Get(ctx context.Context, dnsFirewallID string, query ReverseDNSGetParams, opts ...option.RequestOption) (res *ReverseDNSGetResponse, err error) {
 	var env ReverseDNSGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

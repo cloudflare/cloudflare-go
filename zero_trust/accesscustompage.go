@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewAccessCustomPageService(opts ...option.RequestOption) (r *AccessCustomPa
 // Create a custom page
 func (r *AccessCustomPageService) New(ctx context.Context, params AccessCustomPageNewParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	var env AccessCustomPageNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *AccessCustomPageService) New(ctx context.Context, params AccessCustomPa
 // Update a custom page
 func (r *AccessCustomPageService) Update(ctx context.Context, customPageID string, params AccessCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	var env AccessCustomPageUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,7 +78,7 @@ func (r *AccessCustomPageService) Update(ctx context.Context, customPageID strin
 // List custom pages
 func (r *AccessCustomPageService) List(ctx context.Context, params AccessCustomPageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomPageWithoutHTML], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -104,7 +105,7 @@ func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, params Acc
 // Delete a custom page
 func (r *AccessCustomPageService) Delete(ctx context.Context, customPageID string, body AccessCustomPageDeleteParams, opts ...option.RequestOption) (res *AccessCustomPageDeleteResponse, err error) {
 	var env AccessCustomPageDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,7 +126,7 @@ func (r *AccessCustomPageService) Delete(ctx context.Context, customPageID strin
 // Fetches a custom page and also returns its HTML.
 func (r *AccessCustomPageService) Get(ctx context.Context, customPageID string, query AccessCustomPageGetParams, opts ...option.RequestOption) (res *CustomPage, err error) {
 	var env AccessCustomPageGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

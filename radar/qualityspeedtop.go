@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewQualitySpeedTopService(opts ...option.RequestOption) (r *QualitySpeedTop
 // loss, from the previous 90 days of Cloudflare Speed Test data.
 func (r *QualitySpeedTopService) Ases(ctx context.Context, query QualitySpeedTopAsesParams, opts ...option.RequestOption) (res *QualitySpeedTopAsesResponse, err error) {
 	var env QualitySpeedTopAsesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/quality/speed/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,7 +53,7 @@ func (r *QualitySpeedTopService) Ases(ctx context.Context, query QualitySpeedTop
 // the previous 90 days of Cloudflare Speed Test data.
 func (r *QualitySpeedTopService) Locations(ctx context.Context, query QualitySpeedTopLocationsParams, opts ...option.RequestOption) (res *QualitySpeedTopLocationsResponse, err error) {
 	var env QualitySpeedTopLocationsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/quality/speed/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

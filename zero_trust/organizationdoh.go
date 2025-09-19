@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewOrganizationDOHService(opts ...option.RequestOption) (r *OrganizationDOH
 // Updates the DoH settings for your Zero Trust organization.
 func (r *OrganizationDOHService) Update(ctx context.Context, params OrganizationDOHUpdateParams, opts ...option.RequestOption) (res *OrganizationDOHUpdateResponse, err error) {
 	var env OrganizationDOHUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *OrganizationDOHService) Update(ctx context.Context, params Organization
 // Returns the DoH settings for your Zero Trust organization.
 func (r *OrganizationDOHService) Get(ctx context.Context, query OrganizationDOHGetParams, opts ...option.RequestOption) (res *OrganizationDOHGetResponse, err error) {
 	var env OrganizationDOHGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

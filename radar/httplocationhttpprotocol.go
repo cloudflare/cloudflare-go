@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewHTTPLocationHTTPProtocolService(opts ...option.RequestOption) (r *HTTPLo
 // Retrieves the top locations, by HTTP requests, of the requested HTTP protocol.
 func (r *HTTPLocationHTTPProtocolService) Get(ctx context.Context, httpProtocol HTTPLocationHTTPProtocolGetParamsHTTPProtocol, query HTTPLocationHTTPProtocolGetParams, opts ...option.RequestOption) (res *HTTPLocationHTTPProtocolGetResponse, err error) {
 	var env HTTPLocationHTTPProtocolGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/http_protocol/%v", httpProtocol)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

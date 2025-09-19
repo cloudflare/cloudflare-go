@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewAccessUserLastSeenIdentityService(opts ...option.RequestOption) (r *Acce
 // Get last seen identity for a single user.
 func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, userID string, query AccessUserLastSeenIdentityGetParams, opts ...option.RequestOption) (res *Identity, err error) {
 	var env AccessUserLastSeenIdentityGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

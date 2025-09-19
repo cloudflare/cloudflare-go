@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewInstanceStatusService(opts ...option.RequestOption) (r *InstanceStatusSe
 // Change status of instance
 func (r *InstanceStatusService) Edit(ctx context.Context, workflowName string, instanceID string, params InstanceStatusEditParams, opts ...option.RequestOption) (res *InstanceStatusEditResponse, err error) {
 	var env InstanceStatusEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

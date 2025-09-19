@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 // Updates the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 // Resets the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDeleteParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -71,7 +72,7 @@ func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDel
 // Patches the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEditParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -88,7 +89,7 @@ func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEdi
 // Describes the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) Get(ctx context.Context, query DeviceSettingGetParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

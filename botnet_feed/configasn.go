@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewConfigASNService(opts ...option.RequestOption) (r *ConfigASNService) {
 // Delete an ASN from botnet threat feed for a given user.
 func (r *ConfigASNService) Delete(ctx context.Context, asnID int64, body ConfigASNDeleteParams, opts ...option.RequestOption) (res *ConfigASNDeleteResponse, err error) {
 	var env ConfigASNDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,7 +54,7 @@ func (r *ConfigASNService) Delete(ctx context.Context, asnID int64, body ConfigA
 // Gets a list of all ASNs registered for a user for the DDoS Botnet Feed API.
 func (r *ConfigASNService) Get(ctx context.Context, query ConfigASNGetParams, opts ...option.RequestOption) (res *ConfigASNGetResponse, err error) {
 	var env ConfigASNGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

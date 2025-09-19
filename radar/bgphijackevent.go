@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewBGPHijackEventService(opts ...option.RequestOption) (r *BGPHijackEventSe
 // Retrieves the BGP hijack events.
 func (r *BGPHijackEventService) List(ctx context.Context, query BGPHijackEventListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[BGPHijackEventListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "radar/bgp/hijacks/events"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

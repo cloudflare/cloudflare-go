@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -50,7 +51,7 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 // for full details.
 func (r *FilterService) New(ctx context.Context, params FilterNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallFilter], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -87,7 +88,7 @@ func (r *FilterService) NewAutoPaging(ctx context.Context, params FilterNewParam
 // for full details.
 func (r *FilterService) Update(ctx context.Context, filterID string, params FilterUpdateParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	var env FilterUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -114,7 +115,7 @@ func (r *FilterService) Update(ctx context.Context, filterID string, params Filt
 // for full details.
 func (r *FilterService) List(ctx context.Context, params FilterListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallFilter], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -152,7 +153,7 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, params FilterListPar
 // for full details.
 func (r *FilterService) Delete(ctx context.Context, filterID string, body FilterDeleteParams, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
 	var env FilterDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -178,7 +179,7 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 // for full details.
 func (r *FilterService) BulkDelete(ctx context.Context, params FilterBulkDeleteParams, opts ...option.RequestOption) (res *[]FilterBulkDeleteResponse, err error) {
 	var env FilterBulkDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -200,7 +201,7 @@ func (r *FilterService) BulkDelete(ctx context.Context, params FilterBulkDeleteP
 // for full details.
 func (r *FilterService) BulkUpdate(ctx context.Context, params FilterBulkUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallFilter], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -237,7 +238,7 @@ func (r *FilterService) BulkUpdateAutoPaging(ctx context.Context, params FilterB
 // for full details.
 func (r *FilterService) Get(ctx context.Context, filterID string, query FilterGetParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	var env FilterGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

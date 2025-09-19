@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewPrefixBGPPrefixService(opts ...option.RequestOption) (r *PrefixBGPPrefix
 // advertised with the Update BGP Prefix API.
 func (r *PrefixBGPPrefixService) New(ctx context.Context, prefixID string, params PrefixBGPPrefixNewParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	var env PrefixBGPPrefixNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,7 +65,7 @@ func (r *PrefixBGPPrefixService) New(ctx context.Context, prefixID string, param
 // Prefixes.
 func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) (res *pagination.SinglePage[BGPPrefix], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -99,7 +100,7 @@ func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID st
 // status (advertised or withdrawn).
 func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params PrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	var env PrefixBGPPrefixEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,7 +125,7 @@ func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpP
 // Retrieve a single BGP Prefix according to its identifier
 func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query PrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	var env PrefixBGPPrefixGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

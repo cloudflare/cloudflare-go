@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewInvestigateRawService(opts ...option.RequestOption) (r *InvestigateRawSe
 // Returns the raw eml of any non-benign message.
 func (r *InvestigateRawService) Get(ctx context.Context, postfixID string, query InvestigateRawGetParams, opts ...option.RequestOption) (res *InvestigateRawGetResponse, err error) {
 	var env InvestigateRawGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

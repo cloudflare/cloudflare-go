@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewAccessGatewayCAService(opts ...option.RequestOption) (r *AccessGatewayCA
 // Adds a new SSH Certificate Authority (CA).
 func (r *AccessGatewayCAService) New(ctx context.Context, body AccessGatewayCANewParams, opts ...option.RequestOption) (res *AccessGatewayCANewResponse, err error) {
 	var env AccessGatewayCANewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *AccessGatewayCAService) New(ctx context.Context, body AccessGatewayCANe
 // Lists SSH Certificate Authorities (CA).
 func (r *AccessGatewayCAService) List(ctx context.Context, query AccessGatewayCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessGatewayCAListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -81,7 +82,7 @@ func (r *AccessGatewayCAService) ListAutoPaging(ctx context.Context, query Acces
 // Deletes an SSH Certificate Authority.
 func (r *AccessGatewayCAService) Delete(ctx context.Context, certificateID string, body AccessGatewayCADeleteParams, opts ...option.RequestOption) (res *AccessGatewayCADeleteResponse, err error) {
 	var env AccessGatewayCADeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

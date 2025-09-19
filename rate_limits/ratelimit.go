@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -51,7 +52,7 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 // for full details.
 func (r *RateLimitService) New(ctx context.Context, params RateLimitNewParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -73,7 +74,7 @@ func (r *RateLimitService) New(ctx context.Context, params RateLimitNewParams, o
 // for full details.
 func (r *RateLimitService) List(ctx context.Context, params RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimit], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -110,7 +111,7 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, params RateLimitL
 // for full details.
 func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body RateLimitDeleteParams, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	var env RateLimitDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -136,7 +137,7 @@ func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body 
 // for full details.
 func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params RateLimitEditParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -162,7 +163,7 @@ func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params 
 // for full details.
 func (r *RateLimitService) Get(ctx context.Context, rateLimitID string, query RateLimitGetParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

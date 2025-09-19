@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -37,7 +38,7 @@ func NewEntityASNService(opts ...option.RequestOption) (r *EntityASNService) {
 // Retrieves a list of autonomous systems.
 func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, opts ...option.RequestOption) (res *EntityASNListResponse, err error) {
 	var env EntityASNListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/entities/asns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,7 +54,7 @@ func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, 
 // Population estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGetParams, opts ...option.RequestOption) (res *EntityASNGetResponse, err error) {
 	var env EntityASNGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/entities/asns/%v", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,7 +68,7 @@ func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGe
 // Population estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts ...option.RequestOption) (res *EntityAsnipResponse, err error) {
 	var env EntityAsnipResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/entities/asns/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -80,7 +81,7 @@ func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts
 // Retrieves AS-level relationship for given networks.
 func (r *EntityASNService) Rel(ctx context.Context, asn int64, query EntityASNRelParams, opts ...option.RequestOption) (res *EntityASNRelResponse, err error) {
 	var env EntityASNRelResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/entities/asns/%v/rel", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

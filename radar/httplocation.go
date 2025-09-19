@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -53,7 +54,7 @@ func NewHTTPLocationService(opts ...option.RequestOption) (r *HTTPLocationServic
 // Retrieves the top locations by HTTP requests.
 func (r *HTTPLocationService) Get(ctx context.Context, query HTTPLocationGetParams, opts ...option.RequestOption) (res *HTTPLocationGetResponse, err error) {
 	var env HTTPLocationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

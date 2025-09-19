@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewDEXCommandQuotaService(opts ...option.RequestOption) (r *DEXCommandQuota
 // specific account, including the time when the quota will reset
 func (r *DEXCommandQuotaService) Get(ctx context.Context, query DEXCommandQuotaGetParams, opts ...option.RequestOption) (res *DEXCommandQuotaGetResponse, err error) {
 	var env DEXCommandQuotaGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

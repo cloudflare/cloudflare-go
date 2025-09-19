@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -40,7 +41,7 @@ func NewObservabilityTelemetryService(opts ...option.RequestOption) (r *Observab
 // List all the keys in your telemetry events.
 func (r *ObservabilityTelemetryService) Keys(ctx context.Context, params ObservabilityTelemetryKeysParams, opts ...option.RequestOption) (res *pagination.SinglePage[ObservabilityTelemetryKeysResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -67,7 +68,7 @@ func (r *ObservabilityTelemetryService) KeysAutoPaging(ctx context.Context, para
 // Runs a temporary or saved query
 func (r *ObservabilityTelemetryService) Query(ctx context.Context, params ObservabilityTelemetryQueryParams, opts ...option.RequestOption) (res *ObservabilityTelemetryQueryResponse, err error) {
 	var env ObservabilityTelemetryQueryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -84,7 +85,7 @@ func (r *ObservabilityTelemetryService) Query(ctx context.Context, params Observ
 // List unique values found in your events
 func (r *ObservabilityTelemetryService) Values(ctx context.Context, params ObservabilityTelemetryValuesParams, opts ...option.RequestOption) (res *pagination.SinglePage[ObservabilityTelemetryValuesResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

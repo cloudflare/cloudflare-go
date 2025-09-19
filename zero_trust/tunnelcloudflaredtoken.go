@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewTunnelCloudflaredTokenService(opts ...option.RequestOption) (r *TunnelCl
 // Gets the token used to associate cloudflared with a specific tunnel.
 func (r *TunnelCloudflaredTokenService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredTokenGetParams, opts ...option.RequestOption) (res *string, err error) {
 	var env TunnelCloudflaredTokenGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

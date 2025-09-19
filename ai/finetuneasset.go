@@ -10,6 +10,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewFinetuneAssetService(opts ...option.RequestOption) (r *FinetuneAssetServ
 
 // Upload a Finetune Asset
 func (r *FinetuneAssetService) New(ctx context.Context, finetuneID string, params FinetuneAssetNewParams, opts ...option.RequestOption) (res *FinetuneAssetNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

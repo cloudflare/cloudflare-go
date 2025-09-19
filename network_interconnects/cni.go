@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -37,7 +38,7 @@ func NewCNIService(opts ...option.RequestOption) (r *CNIService) {
 
 // Create a new CNI object
 func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...option.RequestOption) (res *CNINewResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,7 +50,7 @@ func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...optio
 
 // Modify stored information about a CNI object
 func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdateParams, opts ...option.RequestOption) (res *CNIUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -65,7 +66,7 @@ func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdatePar
 
 // List existing CNI objects
 func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...option.RequestOption) (res *CNIListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,7 +78,7 @@ func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...opt
 
 // Delete a specified CNI object
 func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -94,7 +95,7 @@ func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParam
 
 // Get information about a CNI object
 func (r *CNIService) Get(ctx context.Context, cni string, query CNIGetParams, opts ...option.RequestOption) (res *CNIGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewZoneTransferIncomingService(opts ...option.RequestOption) (r *ZoneTransf
 // Create secondary zone configuration for incoming zone transfers.
 func (r *ZoneTransferIncomingService) New(ctx context.Context, params ZoneTransferIncomingNewParams, opts ...option.RequestOption) (res *ZoneTransferIncomingNewResponse, err error) {
 	var env ZoneTransferIncomingNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,7 +54,7 @@ func (r *ZoneTransferIncomingService) New(ctx context.Context, params ZoneTransf
 // Update secondary zone configuration for incoming zone transfers.
 func (r *ZoneTransferIncomingService) Update(ctx context.Context, params ZoneTransferIncomingUpdateParams, opts ...option.RequestOption) (res *ZoneTransferIncomingUpdateResponse, err error) {
 	var env ZoneTransferIncomingUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -70,7 +71,7 @@ func (r *ZoneTransferIncomingService) Update(ctx context.Context, params ZoneTra
 // Delete secondary zone configuration for incoming zone transfers.
 func (r *ZoneTransferIncomingService) Delete(ctx context.Context, body ZoneTransferIncomingDeleteParams, opts ...option.RequestOption) (res *ZoneTransferIncomingDeleteResponse, err error) {
 	var env ZoneTransferIncomingDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -87,7 +88,7 @@ func (r *ZoneTransferIncomingService) Delete(ctx context.Context, body ZoneTrans
 // Get secondary zone configuration for incoming zone transfers.
 func (r *ZoneTransferIncomingService) Get(ctx context.Context, query ZoneTransferIncomingGetParams, opts ...option.RequestOption) (res *ZoneTransferIncomingGetResponse, err error) {
 	var env ZoneTransferIncomingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

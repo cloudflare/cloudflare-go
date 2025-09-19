@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
@@ -47,7 +48,7 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 // Creates or updates a snippet belonging to the zone.
 func (r *SnippetService) Update(ctx context.Context, snippetName string, params SnippetUpdateParams, opts ...option.RequestOption) (res *SnippetUpdateResponse, err error) {
 	var env SnippetUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -68,7 +69,7 @@ func (r *SnippetService) Update(ctx context.Context, snippetName string, params 
 // Fetches all snippets belonging to the zone.
 func (r *SnippetService) List(ctx context.Context, params SnippetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SnippetListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -95,7 +96,7 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, params SnippetListP
 // Deletes a snippet belonging to the zone.
 func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SnippetDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -116,7 +117,7 @@ func (r *SnippetService) Delete(ctx context.Context, snippetName string, body Sn
 // Fetches a snippet belonging to the zone.
 func (r *SnippetService) Get(ctx context.Context, snippetName string, query SnippetGetParams, opts ...option.RequestOption) (res *SnippetGetResponse, err error) {
 	var env SnippetGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewMonitorPreviewService(opts ...option.RequestOption) (r *MonitorPreviewSe
 // returned preview_id can be used in the preview endpoint to retrieve the results.
 func (r *MonitorPreviewService) New(ctx context.Context, monitorID string, params MonitorPreviewNewParams, opts ...option.RequestOption) (res *MonitorPreviewNewResponse, err error) {
 	var env MonitorPreviewNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
