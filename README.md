@@ -31,7 +31,7 @@ go get -u 'github.com/cloudflare/cloudflare-go/v6@v6.0.1'
 
 ## Requirements
 
-This library requires Go 1.18+.
+This library requires Go 1.22+.
 
 ## Usage
 
