@@ -298,6 +298,73 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 	return
 }
 
+// Retrieves the list of DNS records discovered up to this point by the
+// asynchronous scan. These records are temporary until explicitly accepted or
+// rejected via `POST /scan/review`. Additional records may be discovered by the
+// scan later.
+func (r *RecordService) ScanList(ctx context.Context, query RecordScanListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RecordResponse], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/dns_records/scan/review", query.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Retrieves the list of DNS records discovered up to this point by the
+// asynchronous scan. These records are temporary until explicitly accepted or
+// rejected via `POST /scan/review`. Additional records may be discovered by the
+// scan later.
+func (r *RecordService) ScanListAutoPaging(ctx context.Context, query RecordScanListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RecordResponse] {
+	return pagination.NewSinglePageAutoPager(r.ScanList(ctx, query, opts...))
+}
+
+// Accept or reject DNS records found by the DNS records scan. Accepted records
+// will be permanently added to the zone, while rejected records will be
+// permanently deleted.
+func (r *RecordService) ScanReview(ctx context.Context, params RecordScanReviewParams, opts ...option.RequestOption) (res *RecordScanReviewResponse, err error) {
+	var env RecordScanReviewResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/dns_records/scan/review", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Initiates an asynchronous scan for common DNS records on your domain. Note that
+// this **does not** automatically add records to your zone. The scan runs in the
+// background, and results can be reviewed later using the `/scan/review`
+// endpoints. Useful if you haven't updated your nameservers yet.
+func (r *RecordService) ScanTrigger(ctx context.Context, body RecordScanTriggerParams, opts ...option.RequestOption) (res *RecordScanTriggerResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/dns_records/scan/trigger", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	return
+}
+
 type ARecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name,required"`
@@ -424,6 +491,8 @@ func (r ARecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r ARecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r ARecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r ARecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Settings for the DNS record.
 type ARecordSettingsParam struct {
@@ -570,6 +639,8 @@ func (r AAAARecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r AAAARecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r AAAARecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r AAAARecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Settings for the DNS record.
 type AAAARecordSettingsParam struct {
@@ -1386,6 +1457,8 @@ func (r CAARecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r CAARecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r CAARecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a CAA record.
 type CAARecordDataParam struct {
 	// Flags for the CAA record.
@@ -1580,6 +1653,8 @@ func (r CERTRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r CERTRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r CERTRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a CERT record.
 type CERTRecordDataParam struct {
 	// Algorithm.
@@ -1747,6 +1822,8 @@ func (r CNAMERecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r CNAMERecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r CNAMERecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r CNAMERecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Settings for the DNS record.
 type CNAMERecordSettingsParam struct {
@@ -1933,6 +2010,8 @@ func (r DNSKEYRecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r DNSKEYRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r DNSKEYRecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r DNSKEYRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Components of a DNSKEY record.
 type DNSKEYRecordDataParam struct {
@@ -2130,6 +2209,8 @@ func (r DSRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r DSRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r DSRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a DS record.
 type DSRecordDataParam struct {
 	// Algorithm.
@@ -2322,6 +2403,8 @@ func (r HTTPSRecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r HTTPSRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r HTTPSRecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r HTTPSRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Components of a HTTPS record.
 type HTTPSRecordDataParam struct {
@@ -2573,6 +2656,8 @@ func (r LOCRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r LOCRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r LOCRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a LOC record.
 type LOCRecordDataParam struct {
 	// Altitude of location in meters.
@@ -2757,6 +2842,8 @@ func (r MXRecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r MXRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r MXRecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r MXRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Settings for the DNS record.
 type MXRecordSettingsParam struct {
@@ -2944,6 +3031,8 @@ func (r NAPTRRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r NAPTRRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r NAPTRRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a NAPTR record.
 type NAPTRRecordDataParam struct {
 	// Flags.
@@ -3110,6 +3199,8 @@ func (r NSRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r NSRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r NSRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Settings for the DNS record.
 type NSRecordSettingsParam struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -3255,6 +3346,8 @@ func (r PTRRecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r PTRRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r PTRRecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r PTRRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Settings for the DNS record.
 type PTRRecordSettingsParam struct {
@@ -4666,6 +4759,8 @@ func (r SMIMEARecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r SMIMEARecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r SMIMEARecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a SMIMEA record.
 type SMIMEARecordDataParam struct {
 	// Certificate.
@@ -4864,6 +4959,8 @@ func (r SRVRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r SRVRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r SRVRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a SRV record.
 type SRVRecordDataParam struct {
 	// The port of the service.
@@ -5058,6 +5155,8 @@ func (r SSHFPRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r SSHFPRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r SSHFPRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a SSHFP record.
 type SSHFPRecordDataParam struct {
 	// Algorithm.
@@ -5248,6 +5347,8 @@ func (r SVCBRecordParam) implementsRecordUpdateParamsBodyUnion() {}
 func (r SVCBRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r SVCBRecordParam) implementsRecordEditParamsBodyUnion() {}
+
+func (r SVCBRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Components of a SVCB record.
 type SVCBRecordDataParam struct {
@@ -5443,6 +5544,8 @@ func (r TLSARecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r TLSARecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r TLSARecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a TLSA record.
 type TLSARecordDataParam struct {
 	// Certificate.
@@ -5632,6 +5735,8 @@ func (r TXTRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r TXTRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r TXTRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Settings for the DNS record.
 type TXTRecordSettingsParam struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -5813,6 +5918,8 @@ func (r URIRecordParam) implementsRecordBatchParamsPostUnion() {}
 
 func (r URIRecordParam) implementsRecordEditParamsBodyUnion() {}
 
+func (r URIRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
+
 // Components of a URI record.
 type URIRecordDataParam struct {
 	// The record content.
@@ -5940,6 +6047,166 @@ func (r *RecordScanResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r recordScanResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type RecordScanReviewResponse struct {
+	Accepts []RecordResponse             `json:"accepts"`
+	Rejects []string                     `json:"rejects"`
+	JSON    recordScanReviewResponseJSON `json:"-"`
+}
+
+// recordScanReviewResponseJSON contains the JSON metadata for the struct
+// [RecordScanReviewResponse]
+type recordScanReviewResponseJSON struct {
+	Accepts     apijson.Field
+	Rejects     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanReviewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanReviewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanTriggerResponse struct {
+	Errors   []RecordScanTriggerResponseError   `json:"errors,required"`
+	Messages []RecordScanTriggerResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
+	Success RecordScanTriggerResponseSuccess `json:"success,required"`
+	JSON    recordScanTriggerResponseJSON    `json:"-"`
+}
+
+// recordScanTriggerResponseJSON contains the JSON metadata for the struct
+// [RecordScanTriggerResponse]
+type recordScanTriggerResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanTriggerResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanTriggerResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanTriggerResponseError struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           RecordScanTriggerResponseErrorsSource `json:"source"`
+	JSON             recordScanTriggerResponseErrorJSON    `json:"-"`
+}
+
+// recordScanTriggerResponseErrorJSON contains the JSON metadata for the struct
+// [RecordScanTriggerResponseError]
+type recordScanTriggerResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanTriggerResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanTriggerResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanTriggerResponseErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    recordScanTriggerResponseErrorsSourceJSON `json:"-"`
+}
+
+// recordScanTriggerResponseErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordScanTriggerResponseErrorsSource]
+type recordScanTriggerResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanTriggerResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanTriggerResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanTriggerResponseMessage struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordScanTriggerResponseMessagesSource `json:"source"`
+	JSON             recordScanTriggerResponseMessageJSON    `json:"-"`
+}
+
+// recordScanTriggerResponseMessageJSON contains the JSON metadata for the struct
+// [RecordScanTriggerResponseMessage]
+type recordScanTriggerResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanTriggerResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanTriggerResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanTriggerResponseMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordScanTriggerResponseMessagesSourceJSON `json:"-"`
+}
+
+// recordScanTriggerResponseMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordScanTriggerResponseMessagesSource]
+type recordScanTriggerResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanTriggerResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanTriggerResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type RecordScanTriggerResponseSuccess bool
+
+const (
+	RecordScanTriggerResponseSuccessTrue RecordScanTriggerResponseSuccess = true
+)
+
+func (r RecordScanTriggerResponseSuccess) IsKnown() bool {
+	switch r {
+	case RecordScanTriggerResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type RecordNewParams struct {
@@ -7835,4 +8102,315 @@ func (r RecordScanResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RecordScanListParams struct {
+	// Identifier.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type RecordScanReviewParams struct {
+	// Identifier.
+	ZoneID  param.Field[string]                              `path:"zone_id,required"`
+	Accepts param.Field[[]RecordScanReviewParamsAcceptUnion] `json:"accepts"`
+	Rejects param.Field[[]RecordScanReviewParamsReject]      `json:"rejects"`
+}
+
+func (r RecordScanReviewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RecordScanReviewParamsAccept struct {
+	// Complete DNS record name, including the zone name, in Punycode.
+	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
+	// Record type.
+	Type param.Field[RecordScanReviewParamsAcceptsType] `json:"type,required"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A valid IPv4 address.
+	Content param.Field[string]      `json:"content" format:"ipv4"`
+	Data    param.Field[interface{}] `json:"data"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied  param.Field[bool]        `json:"proxied"`
+	Settings param.Field[interface{}] `json:"settings"`
+	Tags     param.Field[interface{}] `json:"tags"`
+}
+
+func (r RecordScanReviewParamsAccept) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordScanReviewParamsAccept) implementsRecordScanReviewParamsAcceptUnion() {}
+
+// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CNAMERecordParam],
+// [dns.MXRecordParam], [dns.NSRecordParam],
+// [dns.RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecord],
+// [dns.PTRRecordParam], [dns.TXTRecordParam], [dns.CAARecordParam],
+// [dns.CERTRecordParam], [dns.DNSKEYRecordParam], [dns.DSRecordParam],
+// [dns.HTTPSRecordParam], [dns.LOCRecordParam], [dns.NAPTRRecordParam],
+// [dns.SMIMEARecordParam], [dns.SRVRecordParam], [dns.SSHFPRecordParam],
+// [dns.SVCBRecordParam], [dns.TLSARecordParam], [dns.URIRecordParam],
+// [RecordScanReviewParamsAccept].
+type RecordScanReviewParamsAcceptUnion interface {
+	implementsRecordScanReviewParamsAcceptUnion()
+}
+
+type RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecord struct {
+	// Complete DNS record name, including the zone name, in Punycode.
+	Name param.Field[string] `json:"name,required"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl,required"`
+	// Record type.
+	Type param.Field[RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordSettings] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+}
+
+func (r RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecord) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecord) implementsRecordScanReviewParamsAcceptUnion() {
+}
+
+// Record type.
+type RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordType string
+
+const (
+	RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+)
+
+func (r RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+	switch r {
+	case RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+// Settings for the DNS record.
+type RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Record type.
+type RecordScanReviewParamsAcceptsType string
+
+const (
+	RecordScanReviewParamsAcceptsTypeA          RecordScanReviewParamsAcceptsType = "A"
+	RecordScanReviewParamsAcceptsTypeAAAA       RecordScanReviewParamsAcceptsType = "AAAA"
+	RecordScanReviewParamsAcceptsTypeCNAME      RecordScanReviewParamsAcceptsType = "CNAME"
+	RecordScanReviewParamsAcceptsTypeMX         RecordScanReviewParamsAcceptsType = "MX"
+	RecordScanReviewParamsAcceptsTypeNS         RecordScanReviewParamsAcceptsType = "NS"
+	RecordScanReviewParamsAcceptsTypeOpenpgpkey RecordScanReviewParamsAcceptsType = "OPENPGPKEY"
+	RecordScanReviewParamsAcceptsTypePTR        RecordScanReviewParamsAcceptsType = "PTR"
+	RecordScanReviewParamsAcceptsTypeTXT        RecordScanReviewParamsAcceptsType = "TXT"
+	RecordScanReviewParamsAcceptsTypeCAA        RecordScanReviewParamsAcceptsType = "CAA"
+	RecordScanReviewParamsAcceptsTypeCERT       RecordScanReviewParamsAcceptsType = "CERT"
+	RecordScanReviewParamsAcceptsTypeDNSKEY     RecordScanReviewParamsAcceptsType = "DNSKEY"
+	RecordScanReviewParamsAcceptsTypeDS         RecordScanReviewParamsAcceptsType = "DS"
+	RecordScanReviewParamsAcceptsTypeHTTPS      RecordScanReviewParamsAcceptsType = "HTTPS"
+	RecordScanReviewParamsAcceptsTypeLOC        RecordScanReviewParamsAcceptsType = "LOC"
+	RecordScanReviewParamsAcceptsTypeNAPTR      RecordScanReviewParamsAcceptsType = "NAPTR"
+	RecordScanReviewParamsAcceptsTypeSMIMEA     RecordScanReviewParamsAcceptsType = "SMIMEA"
+	RecordScanReviewParamsAcceptsTypeSRV        RecordScanReviewParamsAcceptsType = "SRV"
+	RecordScanReviewParamsAcceptsTypeSSHFP      RecordScanReviewParamsAcceptsType = "SSHFP"
+	RecordScanReviewParamsAcceptsTypeSVCB       RecordScanReviewParamsAcceptsType = "SVCB"
+	RecordScanReviewParamsAcceptsTypeTLSA       RecordScanReviewParamsAcceptsType = "TLSA"
+	RecordScanReviewParamsAcceptsTypeURI        RecordScanReviewParamsAcceptsType = "URI"
+)
+
+func (r RecordScanReviewParamsAcceptsType) IsKnown() bool {
+	switch r {
+	case RecordScanReviewParamsAcceptsTypeA, RecordScanReviewParamsAcceptsTypeAAAA, RecordScanReviewParamsAcceptsTypeCNAME, RecordScanReviewParamsAcceptsTypeMX, RecordScanReviewParamsAcceptsTypeNS, RecordScanReviewParamsAcceptsTypeOpenpgpkey, RecordScanReviewParamsAcceptsTypePTR, RecordScanReviewParamsAcceptsTypeTXT, RecordScanReviewParamsAcceptsTypeCAA, RecordScanReviewParamsAcceptsTypeCERT, RecordScanReviewParamsAcceptsTypeDNSKEY, RecordScanReviewParamsAcceptsTypeDS, RecordScanReviewParamsAcceptsTypeHTTPS, RecordScanReviewParamsAcceptsTypeLOC, RecordScanReviewParamsAcceptsTypeNAPTR, RecordScanReviewParamsAcceptsTypeSMIMEA, RecordScanReviewParamsAcceptsTypeSRV, RecordScanReviewParamsAcceptsTypeSSHFP, RecordScanReviewParamsAcceptsTypeSVCB, RecordScanReviewParamsAcceptsTypeTLSA, RecordScanReviewParamsAcceptsTypeURI:
+		return true
+	}
+	return false
+}
+
+type RecordScanReviewParamsReject struct {
+	// Identifier.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r RecordScanReviewParamsReject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RecordScanReviewResponseEnvelope struct {
+	Errors   []RecordScanReviewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordScanReviewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success RecordScanReviewResponseEnvelopeSuccess `json:"success,required"`
+	Result  RecordScanReviewResponse                `json:"result"`
+	JSON    recordScanReviewResponseEnvelopeJSON    `json:"-"`
+}
+
+// recordScanReviewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RecordScanReviewResponseEnvelope]
+type recordScanReviewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanReviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanReviewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanReviewResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           RecordScanReviewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordScanReviewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordScanReviewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RecordScanReviewResponseEnvelopeErrors]
+type recordScanReviewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanReviewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanReviewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanReviewResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    recordScanReviewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordScanReviewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RecordScanReviewResponseEnvelopeErrorsSource]
+type recordScanReviewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanReviewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanReviewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanReviewResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           RecordScanReviewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordScanReviewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordScanReviewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordScanReviewResponseEnvelopeMessages]
+type recordScanReviewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanReviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanReviewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanReviewResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    recordScanReviewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordScanReviewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [RecordScanReviewResponseEnvelopeMessagesSource]
+type recordScanReviewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanReviewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanReviewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type RecordScanReviewResponseEnvelopeSuccess bool
+
+const (
+	RecordScanReviewResponseEnvelopeSuccessTrue RecordScanReviewResponseEnvelopeSuccess = true
+)
+
+func (r RecordScanReviewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordScanReviewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RecordScanTriggerParams struct {
+	// Identifier.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
