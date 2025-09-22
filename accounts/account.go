@@ -26,12 +26,14 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAccountService] method instead.
 type AccountService struct {
-	Options       []option.RequestOption
-	Members       *MemberService
-	Roles         *RoleService
-	Subscriptions *SubscriptionService
-	Tokens        *TokenService
-	Logs          *LogService
+	Options              []option.RequestOption
+	AccountOrganizations *AccountOrganizationService
+	AccountProfile       *AccountProfileService
+	Members              *MemberService
+	Roles                *RoleService
+	Subscriptions        *SubscriptionService
+	Tokens               *TokenService
+	Logs                 *LogService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -40,6 +42,8 @@ type AccountService struct {
 func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r = &AccountService{}
 	r.Options = opts
+	r.AccountOrganizations = NewAccountOrganizationService(opts...)
+	r.AccountProfile = NewAccountProfileService(opts...)
 	r.Members = NewMemberService(opts...)
 	r.Roles = NewRoleService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
