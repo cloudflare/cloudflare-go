@@ -124,10 +124,7 @@ type TunnelCloudflaredConfigurationUpdateResponseConfig struct {
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
 	OriginRequest TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest `json:"originRequest"`
-	// Enable private network access from WARP users to private network routes. This is
-	// enabled if the tunnel has an assigned route.
-	WARPRouting TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting `json:"warp-routing"`
-	JSON        tunnelCloudflaredConfigurationUpdateResponseConfigJSON        `json:"-"`
+	JSON          tunnelCloudflaredConfigurationUpdateResponseConfigJSON          `json:"-"`
 }
 
 // tunnelCloudflaredConfigurationUpdateResponseConfigJSON contains the JSON
@@ -135,7 +132,6 @@ type TunnelCloudflaredConfigurationUpdateResponseConfig struct {
 type tunnelCloudflaredConfigurationUpdateResponseConfigJSON struct {
 	Ingress       apijson.Field
 	OriginRequest apijson.Field
-	WARPRouting   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -398,30 +394,6 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSO
 	return r.raw
 }
 
-// Enable private network access from WARP users to private network routes. This is
-// enabled if the tunnel has an assigned route.
-type TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting struct {
-	Enabled bool                                                              `json:"enabled"`
-	JSON    tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON `json:"-"`
-}
-
-// tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON contains the
-// JSON metadata for the struct
-// [TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting]
-type tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel's configuration on the Zero Trust dashboard.
@@ -487,10 +459,7 @@ type TunnelCloudflaredConfigurationGetResponseConfig struct {
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
 	OriginRequest TunnelCloudflaredConfigurationGetResponseConfigOriginRequest `json:"originRequest"`
-	// Enable private network access from WARP users to private network routes. This is
-	// enabled if the tunnel has an assigned route.
-	WARPRouting TunnelCloudflaredConfigurationGetResponseConfigWARPRouting `json:"warp-routing"`
-	JSON        tunnelCloudflaredConfigurationGetResponseConfigJSON        `json:"-"`
+	JSON          tunnelCloudflaredConfigurationGetResponseConfigJSON          `json:"-"`
 }
 
 // tunnelCloudflaredConfigurationGetResponseConfigJSON contains the JSON metadata
@@ -498,7 +467,6 @@ type TunnelCloudflaredConfigurationGetResponseConfig struct {
 type tunnelCloudflaredConfigurationGetResponseConfigJSON struct {
 	Ingress       apijson.Field
 	OriginRequest apijson.Field
-	WARPRouting   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -760,30 +728,6 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON) 
 	return r.raw
 }
 
-// Enable private network access from WARP users to private network routes. This is
-// enabled if the tunnel has an assigned route.
-type TunnelCloudflaredConfigurationGetResponseConfigWARPRouting struct {
-	Enabled bool                                                           `json:"enabled"`
-	JSON    tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON `json:"-"`
-}
-
-// tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON contains the JSON
-// metadata for the struct
-// [TunnelCloudflaredConfigurationGetResponseConfigWARPRouting]
-type tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelCloudflaredConfigurationGetResponseConfigWARPRouting) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel's configuration on the Zero Trust dashboard.
@@ -971,16 +915,6 @@ type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess struct 
 }
 
 func (r TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Enable private network access from WARP users to private network routes. This is
-// enabled if the tunnel has an assigned route.
-type TunnelCloudflaredConfigurationUpdateParamsConfigWARPRouting struct {
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r TunnelCloudflaredConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
