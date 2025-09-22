@@ -9,6 +9,8 @@ echo "==> Detecting breaking changes"
 TEST_PATHS=(
 	client_test.go
 	accounts/account_test.go
+	accounts/accountorganization_test.go
+	accounts/accountprofile_test.go
 	accounts/member_test.go
 	accounts/role_test.go
 	accounts/subscription_test.go
@@ -16,6 +18,10 @@ TEST_PATHS=(
 	accounts/tokenpermissiongroup_test.go
 	accounts/tokenvalue_test.go
 	accounts/logaudit_test.go
+	organizations/organization_test.go
+	organizations/organizationaccount_test.go
+	organizations/organizationprofile_test.go
+	organizations/member_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
