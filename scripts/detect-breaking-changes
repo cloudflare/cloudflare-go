@@ -55,10 +55,6 @@ TEST_PATHS=(
 	load_balancers/region_test.go
 	load_balancers/search_test.go
 	cache/cache_test.go
-	cache/cachereserve_test.go
-	cache/smarttieredcache_test.go
-	cache/variant_test.go
-	cache/regionaltieredcache_test.go
 	ssl/analyze_test.go
 	ssl/certificatepack_test.go
 	ssl/certificatepackquota_test.go
@@ -67,7 +63,6 @@ TEST_PATHS=(
 	ssl/verification_test.go
 	acm/totaltls_test.go
 	argo/smartrouting_test.go
-	argo/tieredcaching_test.go
 	certificate_authorities/hostnameassociation_test.go
 	client_certificates/clientcertificate_test.go
 	custom_certificates/customcertificate_test.go
@@ -557,7 +552,6 @@ TEST_PATHS=(
 	radar/leakedcredentialsummary_test.go
 	radar/leakedcredentialtimeseriesgroup_test.go
 	bot_management/botmanagement_test.go
-	origin_post_quantum_encryption/originpostquantumencryption_test.go
 	zaraz/zaraz_test.go
 	zaraz/config_test.go
 	zaraz/default_test.go
