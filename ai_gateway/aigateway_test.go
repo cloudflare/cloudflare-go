@@ -85,7 +85,14 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			LogManagementStrategy: cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
 			Logpush:               cloudflare.F(true),
 			LogpushPublicKey:      cloudflare.F("xxxxxxxxxxxxxxxx"),
-			StoreID:               cloudflare.F("store_id"),
+			Otel: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsOtel{{
+				Authorization: cloudflare.F("authorization"),
+				Headers: cloudflare.F(map[string]string{
+					"foo": "string",
+				}),
+				URL: cloudflare.F("url"),
+			}}),
+			StoreID: cloudflare.F("store_id"),
 			Stripe: cloudflare.F(ai_gateway.AIGatewayUpdateParamsStripe{
 				Authorization: cloudflare.F("authorization"),
 				UsageEvents: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsStripeUsageEvent{{
