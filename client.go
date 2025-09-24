@@ -88,6 +88,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/secrets_store"
 	"github.com/cloudflare/cloudflare-go/v6/security_center"
 	"github.com/cloudflare/cloudflare-go/v6/security_txt"
+	"github.com/cloudflare/cloudflare-go/v6/smart_shield"
 	"github.com/cloudflare/cloudflare-go/v6/snippets"
 	"github.com/cloudflare/cloudflare-go/v6/spectrum"
 	"github.com/cloudflare/cloudflare-go/v6/speed"
@@ -151,6 +152,7 @@ type Client struct {
 	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 	// for full details.
 	RateLimits                  *rate_limits.RateLimitService
+	SmartShield                 *smart_shield.SmartShieldService
 	WaitingRooms                *waiting_rooms.WaitingRoomService
 	Web3                        *web3.Web3Service
 	Workers                     *workers.WorkerService
@@ -282,6 +284,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.OriginTLSClientAuth = origin_tls_client_auth.NewOriginTLSClientAuthService(opts...)
 	r.PageRules = page_rules.NewPageRuleService(opts...)
 	r.RateLimits = rate_limits.NewRateLimitService(opts...)
+	r.SmartShield = smart_shield.NewSmartShieldService(opts...)
 	r.WaitingRooms = waiting_rooms.NewWaitingRoomService(opts...)
 	r.Web3 = web3.NewWeb3Service(opts...)
 	r.Workers = workers.NewWorkerService(opts...)

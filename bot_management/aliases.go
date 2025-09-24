@@ -275,6 +275,12 @@ type ResponseInfo = shared.ResponseInfo
 type ResponseInfoSource = shared.ResponseInfoSource
 
 // This is an alias to an internal type.
+type ResponseInfoParam = shared.ResponseInfoParam
+
+// This is an alias to an internal type.
+type ResponseInfoSourceParam = shared.ResponseInfoSourceParam
+
+// This is an alias to an internal type.
 type Role = shared.Role
 
 // This is an alias to an internal type.
