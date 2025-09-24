@@ -38,6 +38,8 @@ func NewHTTPTimeseriesGroupService(opts ...option.RequestOption) (r *HTTPTimeser
 // Retrieves the distribution of HTTP requests classified as automated or human
 // over time. Visit https://developers.cloudflare.com/radar/concepts/bot-classes/
 // for more information.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBotClassResponse, err error) {
 	var env HTTPTimeseriesGroupBotClassResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,6 +53,8 @@ func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTim
 }
 
 // Retrieves the distribution of HTTP requests by user agent over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTimeseriesGroupBrowserParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserResponse, err error) {
 	var env HTTPTimeseriesGroupBrowserResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -64,6 +68,8 @@ func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTime
 }
 
 // Retrieves the distribution of HTTP requests by user agent family over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HTTPTimeseriesGroupBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserFamilyResponse, err error) {
 	var env HTTPTimeseriesGroupBrowserFamilyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -77,6 +83,8 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 }
 
 // Retrieves the distribution of HTTP requests by device type over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPTimeseriesGroupDeviceTypeParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupDeviceTypeResponse, err error) {
 	var env HTTPTimeseriesGroupDeviceTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -91,6 +99,8 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 
 // Retrieves the distribution of HTTP requests by HTTP protocol (HTTP vs. HTTPS)
 // over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTTPTimeseriesGroupHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPProtocolResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -104,6 +114,8 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 }
 
 // Retrieves the distribution of HTTP requests by HTTP version over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTPTimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -117,6 +129,8 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 }
 
 // Retrieves the distribution of HTTP requests by IP version over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupIPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -130,6 +144,8 @@ func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTi
 }
 
 // Retrieves the distribution of HTTP requests by operating system over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeseriesGroupOSParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupOSResponse, err error) {
 	var env HTTPTimeseriesGroupOSResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -143,6 +159,8 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 }
 
 // Retrieves the distribution of HTTP requests by post-quantum support over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
 	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -156,6 +174,8 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 }
 
 // Retrieves the distribution of HTTP requests by TLS version over time.
+//
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
 	var env HTTPTimeseriesGroupTLSVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -2603,6 +2623,11 @@ type HTTPTimeseriesGroupBotClassParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupBotClassParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupBotClassParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupBotClassParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -2837,6 +2862,11 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupBrowserParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupBrowserParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupBrowserParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -3088,6 +3118,11 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupBrowserFamilyParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -3322,6 +3357,11 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupDeviceTypeParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -3555,6 +3595,11 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupHTTPProtocolParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersion] `query:"httpVersion"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
@@ -3787,6 +3832,11 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupHTTPVersionParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
@@ -4018,6 +4068,11 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupIPVersionParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupIPVersionParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupIPVersionParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -4250,6 +4305,11 @@ type HTTPTimeseriesGroupOSParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupOSParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupOSParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupOSParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -4477,6 +4537,11 @@ type HTTPTimeseriesGroupPostQuantumParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupPostQuantumParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupPostQuantumParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -4726,6 +4791,11 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 	DeviceType param.Field[[]HTTPTimeseriesGroupTLSVersionParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupTLSVersionParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupTLSVersionParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

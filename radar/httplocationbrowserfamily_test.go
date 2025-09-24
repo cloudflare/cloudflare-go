@@ -40,6 +40,7 @@ func TestHTTPLocationBrowserFamilyGetWithOptionalParams(t *testing.T) {
 			DateStart:    cloudflare.F([]time.Time{time.Now()}),
 			DeviceType:   cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsDeviceType{radar.HTTPLocationBrowserFamilyGetParamsDeviceTypeDesktop}),
 			Format:       cloudflare.F(radar.HTTPLocationBrowserFamilyGetParamsFormatJson),
+			GeoID:        cloudflare.F([]string{"string"}),
 			HTTPProtocol: cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsHTTPProtocol{radar.HTTPLocationBrowserFamilyGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:  cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsHTTPVersion{radar.HTTPLocationBrowserFamilyGetParamsHTTPVersionHttPv1}),
 			IPVersion:    cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsIPVersion{radar.HTTPLocationBrowserFamilyGetParamsIPVersionIPv4}),
