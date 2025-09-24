@@ -142,6 +142,7 @@ TEST_PATHS=(
 	origin_tls_client_auth/setting_test.go
 	page_rules/pagerule_test.go
 	rate_limits/ratelimit_test.go
+	smart_shield/smartshield_test.go
 	waiting_rooms/waitingroom_test.go
 	waiting_rooms/page_test.go
 	waiting_rooms/event_test.go

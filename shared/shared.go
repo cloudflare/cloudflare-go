@@ -923,6 +923,25 @@ func (r responseInfoSourceJSON) RawJSON() string {
 	return r.raw
 }
 
+type ResponseInfoParam struct {
+	Code             param.Field[int64]                   `json:"code,required"`
+	Message          param.Field[string]                  `json:"message,required"`
+	DocumentationURL param.Field[string]                  `json:"documentation_url"`
+	Source           param.Field[ResponseInfoSourceParam] `json:"source"`
+}
+
+func (r ResponseInfoParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ResponseInfoSourceParam struct {
+	Pointer param.Field[string] `json:"pointer"`
+}
+
+func (r ResponseInfoSourceParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type Role struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`

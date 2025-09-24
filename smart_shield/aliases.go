@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package url_scanner
+package smart_shield
 
 import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/apierror"
