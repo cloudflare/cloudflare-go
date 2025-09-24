@@ -120,6 +120,7 @@ func (r SearchGlobalParams) URLQuery() (v url.Values) {
 type SearchGlobalParamsExclude string
 
 const (
+	SearchGlobalParamsExcludeAdm1S                  SearchGlobalParamsExclude = "ADM1S"
 	SearchGlobalParamsExcludeASNs                   SearchGlobalParamsExclude = "ASNS"
 	SearchGlobalParamsExcludeBots                   SearchGlobalParamsExclude = "BOTS"
 	SearchGlobalParamsExcludeCertificateAuthorities SearchGlobalParamsExclude = "CERTIFICATE_AUTHORITIES"
@@ -133,7 +134,7 @@ const (
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
+	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
 		return true
 	}
 	return false
@@ -158,6 +159,7 @@ func (r SearchGlobalParamsFormat) IsKnown() bool {
 type SearchGlobalParamsInclude string
 
 const (
+	SearchGlobalParamsIncludeAdm1S                  SearchGlobalParamsInclude = "ADM1S"
 	SearchGlobalParamsIncludeASNs                   SearchGlobalParamsInclude = "ASNS"
 	SearchGlobalParamsIncludeBots                   SearchGlobalParamsInclude = "BOTS"
 	SearchGlobalParamsIncludeCertificateAuthorities SearchGlobalParamsInclude = "CERTIFICATE_AUTHORITIES"
@@ -171,7 +173,7 @@ const (
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
+	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
 		return true
 	}
 	return false

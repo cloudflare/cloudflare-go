@@ -41,6 +41,7 @@ func TestHTTPLocationHTTPProtocolGetWithOptionalParams(t *testing.T) {
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			DeviceType:    cloudflare.F([]radar.HTTPLocationHTTPProtocolGetParamsDeviceType{radar.HTTPLocationHTTPProtocolGetParamsDeviceTypeDesktop}),
 			Format:        cloudflare.F(radar.HTTPLocationHTTPProtocolGetParamsFormatJson),
+			GeoID:         cloudflare.F([]string{"string"}),
 			HTTPVersion:   cloudflare.F([]radar.HTTPLocationHTTPProtocolGetParamsHTTPVersion{radar.HTTPLocationHTTPProtocolGetParamsHTTPVersionHttPv1}),
 			IPVersion:     cloudflare.F([]radar.HTTPLocationHTTPProtocolGetParamsIPVersion{radar.HTTPLocationHTTPProtocolGetParamsIPVersionIPv4}),
 			Limit:         cloudflare.F(int64(5)),

@@ -292,6 +292,11 @@ type HTTPAseHTTPMethodGetParams struct {
 	DeviceType param.Field[[]HTTPAseHTTPMethodGetParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPAseHTTPMethodGetParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPAseHTTPMethodGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by IP version (Ipv4 vs. IPv6).

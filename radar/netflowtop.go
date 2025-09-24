@@ -510,6 +510,11 @@ type NetflowTopAsesParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[NetflowTopAsesParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
@@ -587,6 +592,11 @@ type NetflowTopLocationsParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[NetflowTopLocationsParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.

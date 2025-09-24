@@ -39,6 +39,8 @@ func NewNetflowService(opts ...option.RequestOption) (r *NetflowService) {
 
 // Retrieves the distribution of network traffic (NetFlows) by HTTP vs other
 // protocols.
+//
+// Deprecated: deprecated
 func (r *NetflowService) Summary(ctx context.Context, query NetflowSummaryParams, opts ...option.RequestOption) (res *NetflowSummaryResponse, err error) {
 	var env NetflowSummaryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -534,6 +536,11 @@ type NetflowSummaryParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[NetflowSummaryParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
@@ -613,6 +620,11 @@ type NetflowTimeseriesParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[NetflowTimeseriesParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.

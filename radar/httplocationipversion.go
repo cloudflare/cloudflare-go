@@ -291,6 +291,11 @@ type HTTPLocationIPVersionGetParams struct {
 	DeviceType param.Field[[]HTTPLocationIPVersionGetParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPLocationIPVersionGetParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPLocationIPVersionGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

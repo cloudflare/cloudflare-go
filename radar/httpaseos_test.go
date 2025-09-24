@@ -41,6 +41,7 @@ func TestHTTPAseOSGetWithOptionalParams(t *testing.T) {
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			DeviceType:    cloudflare.F([]radar.HTTPAseOSGetParamsDeviceType{radar.HTTPAseOSGetParamsDeviceTypeDesktop}),
 			Format:        cloudflare.F(radar.HTTPAseOSGetParamsFormatJson),
+			GeoID:         cloudflare.F([]string{"string"}),
 			HTTPProtocol:  cloudflare.F([]radar.HTTPAseOSGetParamsHTTPProtocol{radar.HTTPAseOSGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:   cloudflare.F([]radar.HTTPAseOSGetParamsHTTPVersion{radar.HTTPAseOSGetParamsHTTPVersionHttPv1}),
 			IPVersion:     cloudflare.F([]radar.HTTPAseOSGetParamsIPVersion{radar.HTTPAseOSGetParamsIPVersionIPv4}),
