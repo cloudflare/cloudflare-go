@@ -451,6 +451,7 @@ TEST_PATHS=(
 	zero_trust/networkvirtualnetwork_test.go
 	zero_trust/networksubnet_test.go
 	zero_trust/networksubnetcloudflaresource_test.go
+	zero_trust/networkhostnameroute_test.go
 	zero_trust/riskscoring_test.go
 	zero_trust/riskscoringbehaviour_test.go
 	zero_trust/riskscoringsummary_test.go
