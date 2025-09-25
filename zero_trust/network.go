@@ -17,6 +17,7 @@ type NetworkService struct {
 	Routes          *NetworkRouteService
 	VirtualNetworks *NetworkVirtualNetworkService
 	Subnets         *NetworkSubnetService
+	HostnameRoutes  *NetworkHostnameRouteService
 }
 
 // NewNetworkService generates a new service that applies the given options to each
@@ -28,5 +29,6 @@ func NewNetworkService(opts ...option.RequestOption) (r *NetworkService) {
 	r.Routes = NewNetworkRouteService(opts...)
 	r.VirtualNetworks = NewNetworkVirtualNetworkService(opts...)
 	r.Subnets = NewNetworkSubnetService(opts...)
+	r.HostnameRoutes = NewNetworkHostnameRouteService(opts...)
 	return
 }
