@@ -251,7 +251,6 @@ TEST_PATHS=(
 	intel/indicatorfeed_test.go
 	intel/indicatorfeedsnapshot_test.go
 	intel/indicatorfeedpermission_test.go
-	intel/indicatorfeeddownload_test.go
 	intel/sinkhole_test.go
 	intel/attacksurfacereportissuetype_test.go
 	intel/attacksurfacereportissue_test.go
