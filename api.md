@@ -3630,14 +3630,6 @@ Methods:
 
 ### Downloads
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel#IndicatorFeedDownloadGetResponse">IndicatorFeedDownloadGetResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/intel/indicator_feeds/{feed_id}/download">client.Intel.IndicatorFeeds.Downloads.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel#IndicatorFeedDownloadService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, feedID <a href="https://pkg.go.dev/builtin#int64">int64</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel#IndicatorFeedDownloadGetParams">IndicatorFeedDownloadGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/intel#IndicatorFeedDownloadGetResponse">IndicatorFeedDownloadGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Sinkholes
 
 Response Types:
