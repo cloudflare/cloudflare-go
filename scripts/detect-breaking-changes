@@ -289,6 +289,10 @@ TEST_PATHS=(
 	network_interconnects/slot_test.go
 	mtls_certificates/mtlscertificate_test.go
 	mtls_certificates/association_test.go
+	pages/project_test.go
+	pages/projectdeployment_test.go
+	pages/projectdeploymenthistorylog_test.go
+	pages/projectdomain_test.go
 	registrar/domain_test.go
 	request_tracers/trace_test.go
 	rules/list_test.go
