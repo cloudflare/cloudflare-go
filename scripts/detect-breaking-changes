@@ -631,6 +631,7 @@ TEST_PATHS=(
 	ai/task_test.go
 	ai/model_test.go
 	ai/modelschema_test.go
+	ai/tomarkdown_test.go
 	security_center/insight_test.go
 	security_center/insightclass_test.go
 	security_center/insightseverity_test.go
