@@ -9078,6 +9078,16 @@ Methods:
 
 - <code title="get /accounts/{account_id}/ai/models/schema">client.AI.Models.Schema.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ModelSchemaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ModelSchemaGetParams">ModelSchemaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ModelSchemaGetResponse">ModelSchemaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## ToMarkdown
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownTransformResponse">ToMarkdownTransformResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/ai/tomarkdown">client.AI.ToMarkdown.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownService.Transform">Transform</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/builtin#io.Reader">io.Reader</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownTransformParams">ToMarkdownTransformParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownTransformResponse">ToMarkdownTransformResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # SecurityCenter
 
 ## Insights
