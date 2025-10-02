@@ -9,13 +9,11 @@ Full Changelog: [v6.0.1...v6.1.0](https://github.com/cloudflare/cloudflare-go/co
 * Add load balancer monitor groups endpoints ([13e12e5](https://github.com/cloudflare/cloudflare-go/commit/13e12e5271b831f9d123ee32d9025094644968ce))
 * Add Radar AS-SET lookup endpoint ([a0017de](https://github.com/cloudflare/cloudflare-go/commit/a0017debb3d0cd76197e6a59a4d2812b8840fe6a))
 * Add organizations and account-specific profile & orgs APIs ([5022bf1](https://github.com/cloudflare/cloudflare-go/commit/5022bf1e9d76b785d77a1fb4fd37403b4135d299))
-* Add Smart Shield support ([e6adc0a](https://github.com/cloudflare/cloudflare-go/commit/e6adc0a911769363e1da75925c2029c486964ea0))
 * Add to_markdown subresource to AI resource ([7626bca](https://github.com/cloudflare/cloudflare-go/commit/7626bca90b3f268c6788f13732d416f57d31e0a0))
 * Add Zero Trust network hostname route endpoints ([4390272](https://github.com/cloudflare/cloudflare-go/commit/4390272d3aa7af755056a5e4e38c74c4e9bffddd))
 * Rename duplicate parameter in the to_markdown subresource ([07b0d52](https://github.com/cloudflare/cloudflare-go/commit/07b0d523679069cd0044b0416b5338faca466d40))
 * Deprecate Radar AI inference and leaked credential endpoints ([a96e487](https://github.com/cloudflare/cloudflare-go/commit/a96e4872df0d33d238ef4bf60dac0d1930904ca6))
 * Remove created_at and updated_at fields from Zero Trust organization ([9c36264](https://github.com/cloudflare/cloudflare-go/commit/9c36264367802c285a6b48b4e516bddb49dc10ed))
-* Revert Smart Shield support ([09d6bdd](https://github.com/cloudflare/cloudflare-go/commit/09d6bddf83120477eddb692fb1828f01b4c22fe1))
 
 
 ### Bug Fixes
