@@ -541,8 +541,13 @@ func (r BrotliEditable) IsKnown() bool {
 type BrowserCacheTTL struct {
 	// Control how long resources cached by client browsers remain valid.
 	ID BrowserCacheTTLID `json:"id"`
-	// The number of seconds to cache resources for. Setting this to 0 enables "Respect
-	// Existing Headers".
+	// The number of seconds to cache resources for. Minimum values by plan:
+	//
+	//   - Free: 7200 seconds (2 hours)
+	//   - Pro: 3600 seconds (1 hour)
+	//   - Business: 1 second
+	//   - Enterprise: 1 second Setting this to 0 enables "Respect Existing Headers" and
+	//     is allowed for all plans.
 	Value int64               `json:"value"`
 	JSON  browserCacheTTLJSON `json:"-"`
 }
@@ -583,8 +588,13 @@ func (r BrowserCacheTTLID) IsKnown() bool {
 type BrowserCacheTTLParam struct {
 	// Control how long resources cached by client browsers remain valid.
 	ID param.Field[BrowserCacheTTLID] `json:"id"`
-	// The number of seconds to cache resources for. Setting this to 0 enables "Respect
-	// Existing Headers".
+	// The number of seconds to cache resources for. Minimum values by plan:
+	//
+	//   - Free: 7200 seconds (2 hours)
+	//   - Pro: 3600 seconds (1 hour)
+	//   - Business: 1 second
+	//   - Enterprise: 1 second Setting this to 0 enables "Respect Existing Headers" and
+	//     is allowed for all plans.
 	Value param.Field[int64] `json:"value"`
 }
 
@@ -2696,8 +2706,6 @@ func (r PseudoIPV4Editable) IsKnown() bool {
 	return false
 }
 
-// Deprecated: This page rule is deprecated. This functionality is no longer
-// supported.
 type ResponseBuffering struct {
 	// Turn on or off whether Cloudflare should wait for an entire file from the origin
 	// server before forwarding it to the site visitor. By default, Cloudflare sends
@@ -2760,8 +2768,6 @@ func (r ResponseBufferingValue) IsKnown() bool {
 	return false
 }
 
-// Deprecated: This page rule is deprecated. This functionality is no longer
-// supported.
 type ResponseBufferingParam struct {
 	// Turn on or off whether Cloudflare should wait for an entire file from the origin
 	// server before forwarding it to the site visitor. By default, Cloudflare sends
@@ -6032,9 +6038,6 @@ func (r SettingEditResponseZonesReplaceInsecureJSEditable) IsKnown() bool {
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-//
-// Deprecated: This zone setting is deprecated. This functionality is no longer
-// supported.
 type SettingEditResponseZonesSchemasResponseBuffering struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSchemasResponseBufferingID `json:"id,required"`
@@ -9243,9 +9246,6 @@ func (r SettingGetResponseZonesReplaceInsecureJSEditable) IsKnown() bool {
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-//
-// Deprecated: This zone setting is deprecated. This functionality is no longer
-// supported.
 type SettingGetResponseZonesSchemasResponseBuffering struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSchemasResponseBufferingID `json:"id,required"`

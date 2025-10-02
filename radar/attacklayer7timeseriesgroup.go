@@ -36,8 +36,6 @@ func NewAttackLayer7TimeseriesGroupService(opts ...option.RequestOption) (r *Att
 }
 
 // Retrieves the distribution of layer 7 attacks by HTTP method over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPMethodResponse, err error) {
 	var env AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,8 +49,6 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, que
 }
 
 // Retrieves the distribution of layer 7 attacks by HTTP version over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPVersionResponse, err error) {
 	var env AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -66,8 +62,6 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, qu
 }
 
 // Retrieves the distribution of layer 7 attacks by targeted industry over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer7TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIndustryResponse, err error) {
 	var env AttackLayer7TimeseriesGroupIndustryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -81,8 +75,6 @@ func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query
 }
 
 // Retrieves the distribution of layer 7 attacks by IP version used over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIPVersionResponse, err error) {
 	var env AttackLayer7TimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -96,8 +88,6 @@ func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, quer
 }
 
 // Retrieves the distribution of layer 7 attacks by managed rules over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, query AttackLayer7TimeseriesGroupManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupManagedRulesResponse, err error) {
 	var env AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -111,8 +101,6 @@ func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, q
 }
 
 // Retrieves the distribution of layer 7 attacks by mitigation product over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Context, query AttackLayer7TimeseriesGroupMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupMitigationProductResponse, err error) {
 	var env AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -126,8 +114,6 @@ func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Conte
 }
 
 // Retrieves the distribution of layer 7 attacks by targeted vertical over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer7TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer7TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupVerticalResponse, err error) {
 	var env AttackLayer7TimeseriesGroupVerticalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
