@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package accounts_test
+package cloudforce_one_test
 
 import (
 	"context"
@@ -9,12 +9,13 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/accounts"
+	"github.com/cloudflare/cloudflare-go/v6/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestAccountOrganizationNew(t *testing.T) {
+func TestThreatEventIndicatorTypeList(t *testing.T) {
+	t.Skip("TODO: HTTP 401 from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,9 +28,8 @@ func TestAccountOrganizationNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Accounts.AccountOrganizations.New(context.TODO(), accounts.AccountOrganizationNewParams{
-		AccountID:                 cloudflare.F("account_id"),
-		DestinationOrganizationID: cloudflare.F("destination_organization_id"),
+	_, err := client.CloudforceOne.ThreatEvents.IndicatorTypes.List(context.TODO(), cloudforce_one.ThreatEventIndicatorTypeListParams{
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

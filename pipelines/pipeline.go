@@ -38,10 +38,7 @@ func NewPipelineService(opts ...option.RequestOption) (r *PipelineService) {
 	return
 }
 
-// [DEPRECATED] Create a new pipeline. Use the new /pipelines/v1/pipelines endpoint
-// instead.
-//
-// Deprecated: deprecated
+// Create a new pipeline.
 func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opts ...option.RequestOption) (res *PipelineNewResponse, err error) {
 	var env PipelineNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,10 +55,7 @@ func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opt
 	return
 }
 
-// [DEPRECATED] Update an existing pipeline. Use the new /pipelines/v1/pipelines
-// endpoint instead.
-//
-// Deprecated: deprecated
+// Update an existing pipeline.
 func (r *PipelineService) Update(ctx context.Context, pipelineName string, params PipelineUpdateParams, opts ...option.RequestOption) (res *PipelineUpdateResponse, err error) {
 	var env PipelineUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,10 +76,7 @@ func (r *PipelineService) Update(ctx context.Context, pipelineName string, param
 	return
 }
 
-// [DEPRECATED] List, filter, and paginate pipelines in an account. Use the new
-// /pipelines/v1/pipelines endpoint instead.
-//
-// Deprecated: deprecated
+// List, filter, and paginate pipelines in an account.
 func (r *PipelineService) List(ctx context.Context, params PipelineListParams, opts ...option.RequestOption) (res *PipelineListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -97,10 +88,7 @@ func (r *PipelineService) List(ctx context.Context, params PipelineListParams, o
 	return
 }
 
-// [DEPRECATED] Delete a pipeline. Use the new /pipelines/v1/pipelines endpoint
-// instead.
-//
-// Deprecated: deprecated
+// Delete a pipeline.
 func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body PipelineDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
@@ -117,10 +105,7 @@ func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body 
 	return
 }
 
-// [DEPRECATED] Get configuration of a pipeline. Use the new
-// /pipelines/v1/pipelines endpoint instead.
-//
-// Deprecated: deprecated
+// Get configuration of a pipeline.
 func (r *PipelineService) Get(ctx context.Context, pipelineName string, query PipelineGetParams, opts ...option.RequestOption) (res *PipelineGetResponse, err error) {
 	var env PipelineGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -141,10 +126,7 @@ func (r *PipelineService) Get(ctx context.Context, pipelineName string, query Pi
 	return
 }
 
-// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-// streams/sinks/pipelines API instead.
-//
-// Deprecated: deprecated
+// Describes the configuration of a pipeline.
 type PipelineNewResponse struct {
 	// Specifies the pipeline identifier.
 	ID          string                         `json:"id,required"`
@@ -339,7 +321,6 @@ func (r PipelineNewResponseDestinationType) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineNewResponseSource struct {
 	// Specifies the format of source data.
 	Format PipelineNewResponseSourceFormat `json:"format,required"`
@@ -387,8 +368,6 @@ func (r PipelineNewResponseSource) AsUnion() PipelineNewResponseSourceUnion {
 	return r.union
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
 // Union satisfied by
 // [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource] or
 // [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
@@ -411,9 +390,6 @@ func init() {
 	)
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
-// Deprecated: deprecated
 type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
 	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
@@ -485,10 +461,6 @@ func (r pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCO
 	return r.raw
 }
 
-// [DEPRECATED] Worker binding source configuration. Use the new streams API
-// instead.
-//
-// Deprecated: deprecated
 type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
 	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
@@ -547,10 +519,7 @@ func (r PipelineNewResponseSourceFormat) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-// streams/sinks/pipelines API instead.
-//
-// Deprecated: deprecated
+// Describes the configuration of a pipeline.
 type PipelineUpdateResponse struct {
 	// Specifies the pipeline identifier.
 	ID          string                            `json:"id,required"`
@@ -745,7 +714,6 @@ func (r PipelineUpdateResponseDestinationType) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineUpdateResponseSource struct {
 	// Specifies the format of source data.
 	Format PipelineUpdateResponseSourceFormat `json:"format,required"`
@@ -793,8 +761,6 @@ func (r PipelineUpdateResponseSource) AsUnion() PipelineUpdateResponseSourceUnio
 	return r.union
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
 // Union satisfied by
 // [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource] or
 // [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
@@ -817,9 +783,6 @@ func init() {
 	)
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
-// Deprecated: deprecated
 type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
 	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
@@ -891,10 +854,6 @@ func (r pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourc
 	return r.raw
 }
 
-// [DEPRECATED] Worker binding source configuration. Use the new streams API
-// instead.
-//
-// Deprecated: deprecated
 type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
 	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
@@ -1010,10 +969,7 @@ func (r pipelineListResponseResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-// streams/sinks/pipelines API instead.
-//
-// Deprecated: deprecated
+// Describes the configuration of a pipeline.
 type PipelineListResponseResult struct {
 	// Specifies the pipeline identifier.
 	ID          string                                 `json:"id,required"`
@@ -1208,7 +1164,6 @@ func (r PipelineListResponseResultsDestinationType) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineListResponseResultsSource struct {
 	// Specifies the format of source data.
 	Format PipelineListResponseResultsSourceFormat `json:"format,required"`
@@ -1256,8 +1211,6 @@ func (r PipelineListResponseResultsSource) AsUnion() PipelineListResponseResults
 	return r.union
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
 // Union satisfied by
 // [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
 // or
@@ -1281,9 +1234,6 @@ func init() {
 	)
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
-// Deprecated: deprecated
 type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
 	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
@@ -1355,10 +1305,6 @@ func (r pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTP
 	return r.raw
 }
 
-// [DEPRECATED] Worker binding source configuration. Use the new streams API
-// instead.
-//
-// Deprecated: deprecated
 type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
 	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
@@ -1417,10 +1363,7 @@ func (r PipelineListResponseResultsSourceFormat) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-// streams/sinks/pipelines API instead.
-//
-// Deprecated: deprecated
+// Describes the configuration of a pipeline.
 type PipelineGetResponse struct {
 	// Specifies the pipeline identifier.
 	ID          string                         `json:"id,required"`
@@ -1615,7 +1558,6 @@ func (r PipelineGetResponseDestinationType) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineGetResponseSource struct {
 	// Specifies the format of source data.
 	Format PipelineGetResponseSourceFormat `json:"format,required"`
@@ -1663,8 +1605,6 @@ func (r PipelineGetResponseSource) AsUnion() PipelineGetResponseSourceUnion {
 	return r.union
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
 // Union satisfied by
 // [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource] or
 // [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
@@ -1687,9 +1627,6 @@ func init() {
 	)
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
-// Deprecated: deprecated
 type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
 	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
@@ -1761,10 +1698,6 @@ func (r pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCO
 	return r.raw
 }
 
-// [DEPRECATED] Worker binding source configuration. Use the new streams API
-// instead.
-//
-// Deprecated: deprecated
 type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
 	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
@@ -1948,7 +1881,6 @@ func (r PipelineNewParamsDestinationType) IsKnown() bool {
 	return false
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineNewParamsSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineNewParamsSourceFormat] `json:"format,required"`
@@ -1964,8 +1896,6 @@ func (r PipelineNewParamsSource) MarshalJSON() (data []byte, err error) {
 
 func (r PipelineNewParamsSource) implementsPipelineNewParamsSourceUnion() {}
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
 // Satisfied by
 // [pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
 // [pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource],
@@ -1974,9 +1904,6 @@ type PipelineNewParamsSourceUnion interface {
 	implementsPipelineNewParamsSourceUnion()
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
-// Deprecated: deprecated
 type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
@@ -2017,10 +1944,6 @@ func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS
 	return apijson.MarshalRoot(r)
 }
 
-// [DEPRECATED] Worker binding source configuration. Use the new streams API
-// instead.
-//
-// Deprecated: deprecated
 type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
@@ -2065,10 +1988,7 @@ func (r PipelineNewParamsSourceFormat) IsKnown() bool {
 }
 
 type PipelineNewResponseEnvelope struct {
-	// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-	// streams/sinks/pipelines API instead.
-	//
-	// Deprecated: deprecated
+	// Describes the configuration of a pipeline.
 	Result PipelineNewResponse `json:"result,required"`
 	// Indicates whether the API call was successful.
 	Success bool                            `json:"success,required"`
@@ -2217,7 +2137,6 @@ func (r PipelineUpdateParamsDestinationCredentials) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineUpdateParamsSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineUpdateParamsSourceFormat] `json:"format,required"`
@@ -2233,8 +2152,6 @@ func (r PipelineUpdateParamsSource) MarshalJSON() (data []byte, err error) {
 
 func (r PipelineUpdateParamsSource) implementsPipelineUpdateParamsSourceUnion() {}
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
 // Satisfied by
 // [pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
 // [pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource],
@@ -2243,9 +2160,6 @@ type PipelineUpdateParamsSourceUnion interface {
 	implementsPipelineUpdateParamsSourceUnion()
 }
 
-// [DEPRECATED] HTTP source configuration. Use the new streams API instead.
-//
-// Deprecated: deprecated
 type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
@@ -2286,10 +2200,6 @@ func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceC
 	return apijson.MarshalRoot(r)
 }
 
-// [DEPRECATED] Worker binding source configuration. Use the new streams API
-// instead.
-//
-// Deprecated: deprecated
 type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
@@ -2334,10 +2244,7 @@ func (r PipelineUpdateParamsSourceFormat) IsKnown() bool {
 }
 
 type PipelineUpdateResponseEnvelope struct {
-	// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-	// streams/sinks/pipelines API instead.
-	//
-	// Deprecated: deprecated
+	// Describes the configuration of a pipeline.
 	Result PipelineUpdateResponse `json:"result,required"`
 	// Indicates whether the API call was successful.
 	Success bool                               `json:"success,required"`
@@ -2391,10 +2298,7 @@ type PipelineGetParams struct {
 }
 
 type PipelineGetResponseEnvelope struct {
-	// [DEPRECATED] Describes the configuration of a pipeline. Use the new
-	// streams/sinks/pipelines API instead.
-	//
-	// Deprecated: deprecated
+	// Describes the configuration of a pipeline.
 	Result PipelineGetResponse `json:"result,required"`
 	// Indicates whether the API call was successful.
 	Success bool                            `json:"success,required"`

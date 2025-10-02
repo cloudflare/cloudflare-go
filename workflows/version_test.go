@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package workflows_test
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v6/workflows"
 )
 
-func TestDEXFleetStatusLive(t *testing.T) {
+func TestVersionListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,15 @@ func TestDEXFleetStatusLive(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DEX.FleetStatus.Live(context.TODO(), zero_trust.DEXFleetStatusLiveParams{
-		AccountID:    cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		SinceMinutes: cloudflare.F(10.000000),
-	})
+	_, err := client.Workflows.Versions.List(
+		context.TODO(),
+		"x",
+		workflows.VersionListParams{
+			AccountID: cloudflare.F("account_id"),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(1.000000),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -40,7 +45,7 @@ func TestDEXFleetStatusLive(t *testing.T) {
 	}
 }
 
-func TestDEXFleetStatusOverTimeWithOptionalParams(t *testing.T) {
+func TestVersionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,13 +58,14 @@ func TestDEXFleetStatusOverTimeWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.ZeroTrust.DEX.FleetStatus.OverTime(context.TODO(), zero_trust.DEXFleetStatusOverTimeParams{
-		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		From:      cloudflare.F("2023-10-11T00:00:00Z"),
-		To:        cloudflare.F("2023-10-11T00:00:00Z"),
-		Colo:      cloudflare.F("SJC"),
-		DeviceID:  cloudflare.F("cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"),
-	})
+	_, err := client.Workflows.Versions.Get(
+		context.TODO(),
+		"x",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		workflows.VersionGetParams{
+			AccountID: cloudflare.F("account_id"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
