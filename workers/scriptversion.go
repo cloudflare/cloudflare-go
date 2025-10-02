@@ -4630,6 +4630,8 @@ func (r ScriptVersionNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptVersionNewParamsMetadataAnnotations struct {
+	// Associated alias for a version.
+	WorkersAlias param.Field[string] `json:"workers/alias"`
 	// Human-readable message about the version. Truncated to 100 bytes.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 	// User-provided identifier for the version.

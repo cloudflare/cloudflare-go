@@ -949,11 +949,13 @@ func (r SuperSlurperJobNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SuperSlurperJobNewParamsSource struct {
-	Bucket       param.Field[string]                                     `json:"bucket"`
+	Bucket       param.Field[string]                                     `json:"bucket,required"`
+	Secret       param.Field[interface{}]                                `json:"secret,required"`
+	Vendor       param.Field[SuperSlurperJobNewParamsSourceVendor]       `json:"vendor,required"`
 	Endpoint     param.Field[string]                                     `json:"endpoint"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceJurisdiction] `json:"jurisdiction"`
-	Secret       param.Field[interface{}]                                `json:"secret"`
-	Vendor       param.Field[SuperSlurperJobNewParamsSourceVendor]       `json:"vendor"`
+	PathPrefix   param.Field[string]                                     `json:"pathPrefix"`
+	Region       param.Field[string]                                     `json:"region"`
 }
 
 func (r SuperSlurperJobNewParamsSource) MarshalJSON() (data []byte, err error) {
@@ -971,10 +973,12 @@ type SuperSlurperJobNewParamsSourceUnion interface {
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema struct {
-	Bucket   param.Field[string]                                                      `json:"bucket"`
-	Endpoint param.Field[string]                                                      `json:"endpoint"`
-	Secret   param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret"`
-	Vendor   param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor"`
+	Bucket     param.Field[string]                                                      `json:"bucket,required"`
+	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret,required"`
+	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor,required"`
+	Endpoint   param.Field[string]                                                      `json:"endpoint"`
+	PathPrefix param.Field[string]                                                      `json:"pathPrefix"`
+	Region     param.Field[string]                                                      `json:"region"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema) MarshalJSON() (data []byte, err error) {
@@ -985,8 +989,8 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema) implementsSuperSl
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
+	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -1008,9 +1012,10 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor) IsKnown() b
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchema struct {
-	Bucket param.Field[string]                                                       `json:"bucket"`
-	Secret param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret] `json:"secret"`
-	Vendor param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor] `json:"vendor"`
+	Bucket     param.Field[string]                                                       `json:"bucket,required"`
+	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret] `json:"secret,required"`
+	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor] `json:"vendor,required"`
+	PathPrefix param.Field[string]                                                       `json:"pathPrefix"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchema) MarshalJSON() (data []byte, err error) {
@@ -1021,8 +1026,8 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchema) implementsSuperS
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret struct {
-	ClientEmail param.Field[string] `json:"clientEmail"`
-	PrivateKey  param.Field[string] `json:"privateKey"`
+	ClientEmail param.Field[string] `json:"clientEmail,required"`
+	PrivateKey  param.Field[string] `json:"privateKey,required"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -1044,10 +1049,11 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor) IsKnown() 
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema struct {
-	Bucket       param.Field[string]                                                            `json:"bucket"`
+	Bucket       param.Field[string]                                                            `json:"bucket,required"`
+	Secret       param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret]       `json:"secret,required"`
+	Vendor       param.Field[Provider]                                                          `json:"vendor,required"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdiction] `json:"jurisdiction"`
-	Secret       param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret]       `json:"secret"`
-	Vendor       param.Field[Provider]                                                          `json:"vendor"`
+	PathPrefix   param.Field[string]                                                            `json:"pathPrefix"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema) MarshalJSON() (data []byte, err error) {
@@ -1055,6 +1061,15 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema) MarshalJSON() (da
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema) implementsSuperSlurperJobNewParamsSourceUnion() {
+}
+
+type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret struct {
+	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+}
+
+func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdiction string
@@ -1068,31 +1083,6 @@ const (
 func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdiction) IsKnown() bool {
 	switch r {
 	case SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdictionDefault, SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdictionEu, SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdictionFedramp:
-		return true
-	}
-	return false
-}
-
-type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
-}
-
-func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SuperSlurperJobNewParamsSourceJurisdiction string
-
-const (
-	SuperSlurperJobNewParamsSourceJurisdictionDefault SuperSlurperJobNewParamsSourceJurisdiction = "default"
-	SuperSlurperJobNewParamsSourceJurisdictionEu      SuperSlurperJobNewParamsSourceJurisdiction = "eu"
-	SuperSlurperJobNewParamsSourceJurisdictionFedramp SuperSlurperJobNewParamsSourceJurisdiction = "fedramp"
-)
-
-func (r SuperSlurperJobNewParamsSourceJurisdiction) IsKnown() bool {
-	switch r {
-	case SuperSlurperJobNewParamsSourceJurisdictionDefault, SuperSlurperJobNewParamsSourceJurisdictionEu, SuperSlurperJobNewParamsSourceJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -1114,14 +1104,39 @@ func (r SuperSlurperJobNewParamsSourceVendor) IsKnown() bool {
 	return false
 }
 
+type SuperSlurperJobNewParamsSourceJurisdiction string
+
+const (
+	SuperSlurperJobNewParamsSourceJurisdictionDefault SuperSlurperJobNewParamsSourceJurisdiction = "default"
+	SuperSlurperJobNewParamsSourceJurisdictionEu      SuperSlurperJobNewParamsSourceJurisdiction = "eu"
+	SuperSlurperJobNewParamsSourceJurisdictionFedramp SuperSlurperJobNewParamsSourceJurisdiction = "fedramp"
+)
+
+func (r SuperSlurperJobNewParamsSourceJurisdiction) IsKnown() bool {
+	switch r {
+	case SuperSlurperJobNewParamsSourceJurisdictionDefault, SuperSlurperJobNewParamsSourceJurisdictionEu, SuperSlurperJobNewParamsSourceJurisdictionFedramp:
+		return true
+	}
+	return false
+}
+
 type SuperSlurperJobNewParamsTarget struct {
-	Bucket       param.Field[string]                                     `json:"bucket"`
+	Bucket       param.Field[string]                                     `json:"bucket,required"`
+	Secret       param.Field[SuperSlurperJobNewParamsTargetSecret]       `json:"secret,required"`
+	Vendor       param.Field[Provider]                                   `json:"vendor,required"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsTargetJurisdiction] `json:"jurisdiction"`
-	Secret       param.Field[SuperSlurperJobNewParamsTargetSecret]       `json:"secret"`
-	Vendor       param.Field[Provider]                                   `json:"vendor"`
 }
 
 func (r SuperSlurperJobNewParamsTarget) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SuperSlurperJobNewParamsTargetSecret struct {
+	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+}
+
+func (r SuperSlurperJobNewParamsTargetSecret) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1139,15 +1154,6 @@ func (r SuperSlurperJobNewParamsTargetJurisdiction) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type SuperSlurperJobNewParamsTargetSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
-}
-
-func (r SuperSlurperJobNewParamsTargetSecret) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SuperSlurperJobNewResponseEnvelope struct {

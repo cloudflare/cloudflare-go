@@ -34,13 +34,13 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(alerting.MechanismParam{
 			Email: cloudflare.F([]alerting.MechanismEmailParam{{
-				ID: cloudflare.F("test@example.com"),
+				ID: cloudflare.F("id"),
 			}}),
 			Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{
-				ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
+				ID: cloudflare.F("f174e90afafe4643bbbc4a0ed4fc8415"),
 			}}),
 			Webhooks: cloudflare.F([]alerting.MechanismWebhookParam{{
-				ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
+				ID: cloudflare.F("f174e90afafe4643bbbc4a0ed4fc8415"),
 			}}),
 		}),
 		Name:          cloudflare.F("SSL Notification Event Policy"),
@@ -116,7 +116,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Alerting.Policies.Update(
 		context.TODO(),
-		"0da2b59e-f118-439d-8097-bdfb215203c9",
+		"0da2b59ef118439d8097bdfb215203c9",
 		alerting.PolicyUpdateParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AlertInterval: cloudflare.F("30m"),
@@ -169,13 +169,13 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Mechanisms: cloudflare.F(alerting.MechanismParam{
 				Email: cloudflare.F([]alerting.MechanismEmailParam{{
-					ID: cloudflare.F("test@example.com"),
+					ID: cloudflare.F("id"),
 				}}),
 				Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{
-					ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
+					ID: cloudflare.F("f174e90afafe4643bbbc4a0ed4fc8415"),
 				}}),
 				Webhooks: cloudflare.F([]alerting.MechanismWebhookParam{{
-					ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
+					ID: cloudflare.F("f174e90afafe4643bbbc4a0ed4fc8415"),
 				}}),
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
@@ -230,7 +230,7 @@ func TestPolicyDelete(t *testing.T) {
 	)
 	_, err := client.Alerting.Policies.Delete(
 		context.TODO(),
-		"0da2b59e-f118-439d-8097-bdfb215203c9",
+		"0da2b59ef118439d8097bdfb215203c9",
 		alerting.PolicyDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -260,7 +260,7 @@ func TestPolicyGet(t *testing.T) {
 	)
 	_, err := client.Alerting.Policies.Get(
 		context.TODO(),
-		"0da2b59e-f118-439d-8097-bdfb215203c9",
+		"0da2b59ef118439d8097bdfb215203c9",
 		alerting.PolicyGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
