@@ -184,7 +184,7 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	Jurisdiction DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -783,7 +783,7 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindData
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
@@ -2450,7 +2450,7 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	Jurisdiction DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -3048,7 +3048,7 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDataB
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
@@ -4713,7 +4713,7 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
@@ -4979,7 +4979,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
