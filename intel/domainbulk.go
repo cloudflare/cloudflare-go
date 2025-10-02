@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewDomainBulkService(opts ...option.RequestOption) (r *DomainBulkService) {
 // Same as summary.
 func (r *DomainBulkService) Get(ctx context.Context, params DomainBulkGetParams, opts ...option.RequestOption) (res *[]DomainBulkGetResponse, err error) {
 	var env DomainBulkGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

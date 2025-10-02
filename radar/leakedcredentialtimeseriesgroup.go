@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -36,9 +37,11 @@ func NewLeakedCredentialTimeseriesGroupService(opts ...option.RequestOption) (r 
 
 // Retrieves the distribution of HTTP authentication requests by bot class over
 // time.
+//
+// Deprecated: deprecated
 func (r *LeakedCredentialTimeseriesGroupService) BotClass(ctx context.Context, query LeakedCredentialTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *LeakedCredentialTimeseriesGroupBotClassResponse, err error) {
 	var env LeakedCredentialTimeseriesGroupBotClassResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/leaked_credential_checks/timeseries_groups/bot_class"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,9 +53,11 @@ func (r *LeakedCredentialTimeseriesGroupService) BotClass(ctx context.Context, q
 
 // Retrieves the distribution of HTTP authentication requests by compromised
 // credential status over time.
+//
+// Deprecated: deprecated
 func (r *LeakedCredentialTimeseriesGroupService) Compromised(ctx context.Context, query LeakedCredentialTimeseriesGroupCompromisedParams, opts ...option.RequestOption) (res *LeakedCredentialTimeseriesGroupCompromisedResponse, err error) {
 	var env LeakedCredentialTimeseriesGroupCompromisedResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/leaked_credential_checks/timeseries_groups/compromised"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewAnnotationService(opts ...option.RequestOption) (r *AnnotationService) {
 // Retrieves the latest annotations.
 func (r *AnnotationService) List(ctx context.Context, query AnnotationListParams, opts ...option.RequestOption) (res *AnnotationListResponse, err error) {
 	var env AnnotationListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/annotations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

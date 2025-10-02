@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewPlanService(opts ...option.RequestOption) (r *PlanService) {
 // Lists available plans the zone can subscribe to.
 func (r *PlanService) List(ctx context.Context, query PlanListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AvailableRatePlan], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -65,7 +66,7 @@ func (r *PlanService) ListAutoPaging(ctx context.Context, query PlanListParams, 
 // Details of the available plan that the zone can subscribe to.
 func (r *PlanService) Get(ctx context.Context, planIdentifier string, query PlanGetParams, opts ...option.RequestOption) (res *AvailableRatePlan, err error) {
 	var env PlanGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

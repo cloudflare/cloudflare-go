@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewPoolService(opts ...option.RequestOption) (r *PoolService) {
 // Create a new pool.
 func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *Pool, err error) {
 	var env PoolNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 // Modify a configured pool.
 func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *Pool, err error) {
 	var env PoolUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -83,7 +84,7 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 // List configured pools.
 func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Pool], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -110,7 +111,7 @@ func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams,
 // Delete a configured pool.
 func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDeleteParams, opts ...option.RequestOption) (res *PoolDeleteResponse, err error) {
 	var env PoolDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -134,7 +135,7 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDelete
 // `limit`/`offset` or `per_page`/`page`.
 func (r *PoolService) BulkEdit(ctx context.Context, params PoolBulkEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[Pool], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -164,7 +165,7 @@ func (r *PoolService) BulkEditAutoPaging(ctx context.Context, params PoolBulkEdi
 // Apply changes to an existing pool, overwriting the supplied properties.
 func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
 	var env PoolEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -185,7 +186,7 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 // Fetch a single configured pool.
 func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *Pool, err error) {
 	var env PoolGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -234,6 +235,9 @@ type Pool struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor string `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup string `json:"monitor_group"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name string `json:"name"`
@@ -271,6 +275,7 @@ type poolJSON struct {
 	MinimumOrigins     apijson.Field
 	ModifiedOn         apijson.Field
 	Monitor            apijson.Field
+	MonitorGroup       apijson.Field
 	Name               apijson.Field
 	Networks           apijson.Field
 	NotificationEmail  apijson.Field
@@ -340,6 +345,9 @@ type PoolNewParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup param.Field[string] `json:"monitor_group"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -434,6 +442,9 @@ type PoolUpdateParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup param.Field[string] `json:"monitor_group"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -616,6 +627,9 @@ type PoolEditParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `json:"monitor"`
+	// The ID of the Monitor Group to use for checking the health of origins within
+	// this pool.
+	MonitorGroup param.Field[string] `json:"monitor_group"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name"`

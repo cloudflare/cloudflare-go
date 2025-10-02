@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -44,7 +45,7 @@ func NewBrandProtectionService(opts ...option.RequestOption) (r *BrandProtection
 
 // Return new URL submissions
 func (r *BrandProtectionService) Submit(ctx context.Context, body BrandProtectionSubmitParams, opts ...option.RequestOption) (res *BrandProtectionSubmitResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *BrandProtectionService) Submit(ctx context.Context, body BrandProtectio
 // Return submitted URLs based on ID
 func (r *BrandProtectionService) URLInfo(ctx context.Context, query BrandProtectionURLInfoParams, opts ...option.RequestOption) (res *pagination.SinglePage[BrandProtectionURLInfoResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

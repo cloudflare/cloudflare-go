@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,10 +38,10 @@ func NewGatewayAppTypeService(opts ...option.RequestOption) (r *GatewayAppTypeSe
 	return
 }
 
-// Fetches all application and application type mappings.
+// List all application and application type mappings.
 func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AppType], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -59,21 +60,21 @@ func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeLi
 	return res, nil
 }
 
-// Fetches all application and application type mappings.
+// List all application and application type mappings.
 func (r *GatewayAppTypeService) ListAutoPaging(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AppType] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type AppType struct {
-	// The identifier for this application. There is only one application per ID.
+	// Identify this application. Only one application per ID.
 	ID int64 `json:"id"`
-	// The identifier for the type of this application. There can be many applications
-	// with the same type. This refers to the `id` of a returned application type.
+	// Identify the type of this application. Multiple applications can share the same
+	// type. Refers to the `id` of a returned application type.
 	ApplicationTypeID int64     `json:"application_type_id"`
 	CreatedAt         time.Time `json:"created_at" format:"date-time"`
-	// A short summary of applications with this type.
+	// Provide a short summary of applications with this type.
 	Description string `json:"description"`
-	// The name of the application or application type.
+	// Specify the name of the application or application type.
 	Name  string      `json:"name"`
 	JSON  appTypeJSON `json:"-"`
 	union AppTypeUnion
@@ -134,13 +135,13 @@ func init() {
 }
 
 type AppTypeZeroTrustGatewayApplication struct {
-	// The identifier for this application. There is only one application per ID.
+	// Identify this application. Only one application per ID.
 	ID int64 `json:"id"`
-	// The identifier for the type of this application. There can be many applications
-	// with the same type. This refers to the `id` of a returned application type.
+	// Identify the type of this application. Multiple applications can share the same
+	// type. Refers to the `id` of a returned application type.
 	ApplicationTypeID int64     `json:"application_type_id"`
 	CreatedAt         time.Time `json:"created_at" format:"date-time"`
-	// The name of the application or application type.
+	// Specify the name of the application or application type.
 	Name string                                 `json:"name"`
 	JSON appTypeZeroTrustGatewayApplicationJSON `json:"-"`
 }
@@ -167,13 +168,13 @@ func (r appTypeZeroTrustGatewayApplicationJSON) RawJSON() string {
 func (r AppTypeZeroTrustGatewayApplication) implementsAppType() {}
 
 type AppTypeZeroTrustGatewayApplicationType struct {
-	// The identifier for the type of this application. There can be many applications
-	// with the same type. This refers to the `id` of a returned application type.
+	// Identify the type of this application. Multiple applications can share the same
+	// type. Refers to the `id` of a returned application type.
 	ID        int64     `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// A short summary of applications with this type.
+	// Provide a short summary of applications with this type.
 	Description string `json:"description"`
-	// The name of the application or application type.
+	// Specify the name of the application or application type.
 	Name string                                     `json:"name"`
 	JSON appTypeZeroTrustGatewayApplicationTypeJSON `json:"-"`
 }
@@ -200,6 +201,6 @@ func (r appTypeZeroTrustGatewayApplicationTypeJSON) RawJSON() string {
 func (r AppTypeZeroTrustGatewayApplicationType) implementsAppType() {}
 
 type GatewayAppTypeListParams struct {
-	// Identifier.
+	// Provide the identifier string.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

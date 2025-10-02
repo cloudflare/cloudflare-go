@@ -7,12 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // AvailableAlertService contains methods and other services that help with
@@ -37,7 +37,7 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 // Gets a list of all alert types for which an account is eligible.
 func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponse, err error) {
 	var env AvailableAlertListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -91,13 +91,12 @@ type AvailableAlertListParams struct {
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AvailableAlertListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AvailableAlertListResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success    AvailableAlertListResponseEnvelopeSuccess    `json:"success,required"`
-	Result     AvailableAlertListResponse                   `json:"result"`
-	ResultInfo AvailableAlertListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       availableAlertListResponseEnvelopeJSON       `json:"-"`
+	Success AvailableAlertListResponseEnvelopeSuccess `json:"success,required"`
+	Result  AvailableAlertListResponse                `json:"result"`
+	JSON    availableAlertListResponseEnvelopeJSON    `json:"-"`
 }
 
 // availableAlertListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -107,7 +106,6 @@ type availableAlertListResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -117,6 +115,52 @@ func (r *AvailableAlertListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r availableAlertListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AvailableAlertListResponseEnvelopeErrors struct {
+	Message string                                       `json:"message,required"`
+	Code    int64                                        `json:"code"`
+	JSON    availableAlertListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// availableAlertListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AvailableAlertListResponseEnvelopeErrors]
+type availableAlertListResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailableAlertListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availableAlertListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AvailableAlertListResponseEnvelopeMessages struct {
+	Message string                                         `json:"message,required"`
+	Code    int64                                          `json:"code"`
+	JSON    availableAlertListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// availableAlertListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AvailableAlertListResponseEnvelopeMessages]
+type availableAlertListResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailableAlertListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availableAlertListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -133,35 +177,4 @@ func (r AvailableAlertListResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AvailableAlertListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                          `json:"total_count"`
-	JSON       availableAlertListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// availableAlertListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [AvailableAlertListResponseEnvelopeResultInfo]
-type availableAlertListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AvailableAlertListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r availableAlertListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

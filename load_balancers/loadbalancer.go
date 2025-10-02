@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -24,12 +25,13 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewLoadBalancerService] method instead.
 type LoadBalancerService struct {
-	Options  []option.RequestOption
-	Monitors *MonitorService
-	Pools    *PoolService
-	Previews *PreviewService
-	Regions  *RegionService
-	Searches *SearchService
+	Options       []option.RequestOption
+	Monitors      *MonitorService
+	MonitorGroups *MonitorGroupService
+	Pools         *PoolService
+	Previews      *PreviewService
+	Regions       *RegionService
+	Searches      *SearchService
 }
 
 // NewLoadBalancerService generates a new service that applies the given options to
@@ -39,6 +41,7 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 	r = &LoadBalancerService{}
 	r.Options = opts
 	r.Monitors = NewMonitorService(opts...)
+	r.MonitorGroups = NewMonitorGroupService(opts...)
 	r.Pools = NewPoolService(opts...)
 	r.Previews = NewPreviewService(opts...)
 	r.Regions = NewRegionService(opts...)
@@ -49,7 +52,7 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 // Create a new load balancer.
 func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,7 +69,7 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 // Update a configured load balancer.
 func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -87,7 +90,7 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 // List configured load balancers.
 func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancer], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -114,7 +117,7 @@ func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBala
 // Delete a configured load balancer.
 func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	var env LoadBalancerDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -135,7 +138,7 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 // Apply changes to an existing load balancer, overwriting the supplied properties.
 func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -156,7 +159,7 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 // Fetch a single configured load balancer.
 func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

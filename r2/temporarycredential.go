@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewTemporaryCredentialService(opts ...option.RequestOption) (r *TemporaryCr
 // to prefixes or objects.
 func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCredentialNewParams, opts ...option.RequestOption) (res *TemporaryCredentialNewResponse, err error) {
 	var env TemporaryCredentialNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

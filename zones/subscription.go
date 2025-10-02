@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 // Create a zone subscription, either plan or add-ons.
 func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 // Updates zone subscriptions, either plan or add-ons.
 func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -71,7 +72,7 @@ func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpd
 // Lists zone subscription details.
 func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

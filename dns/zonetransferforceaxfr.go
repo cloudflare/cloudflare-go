@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewZoneTransferForceAXFRService(opts ...option.RequestOption) (r *ZoneTrans
 // Sends AXFR zone transfer request to primary nameserver(s).
 func (r *ZoneTransferForceAXFRService) New(ctx context.Context, params ZoneTransferForceAXFRNewParams, opts ...option.RequestOption) (res *ForceAXFR, err error) {
 	var env ZoneTransferForceAXFRNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

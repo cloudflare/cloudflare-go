@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -41,7 +42,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
 func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...optio
 // required for Email Routing to work.
 func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[DNSRecord], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -87,7 +88,7 @@ func (r *DNSService) DeleteAutoPaging(ctx context.Context, body DNSDeleteParams,
 // Unlock MX Records previously locked by Email Routing.
 func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -103,7 +104,7 @@ func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...opt
 
 // Show the DNS records needed to configure your Email Routing zone.
 func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *DNSGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -696,7 +697,7 @@ type DNSNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Domain of your zone.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name"`
 }
 
 func (r DNSNewParams) MarshalJSON() (data []byte, err error) {
@@ -851,7 +852,7 @@ type DNSEditParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Domain of your zone.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name"`
 }
 
 func (r DNSEditParams) MarshalJSON() (data []byte, err error) {

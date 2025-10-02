@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 // Acknowledge + Retry messages from a Queue
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
 	var env MessageAckResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 
 // Push a batch of message to a Queue
 func (r *MessageService) BulkPush(ctx context.Context, queueID string, params MessageBulkPushParams, opts ...option.RequestOption) (res *MessageBulkPushResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -74,7 +75,7 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 // Pull a batch of messages from a Queue
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *MessagePullResponse, err error) {
 	var env MessagePullResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -94,7 +95,7 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 
 // Push a message to a Queue
 func (r *MessageService) Push(ctx context.Context, queueID string, params MessagePushParams, opts ...option.RequestOption) (res *MessagePushResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

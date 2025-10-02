@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -34,10 +35,10 @@ func NewGatewayCategoryService(opts ...option.RequestOption) (r *GatewayCategory
 	return
 }
 
-// Fetches a list of all categories.
+// List all categories.
 func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Category], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -56,26 +57,25 @@ func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategory
 	return res, nil
 }
 
-// Fetches a list of all categories.
+// List all categories.
 func (r *GatewayCategoryService) ListAutoPaging(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Category] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type Category struct {
-	// The identifier for this category. There is only one category per ID.
+	// Identify this category. Only one category per ID.
 	ID int64 `json:"id"`
-	// True if the category is in beta and subject to change.
+	// Indicate whether the category is in beta and subject to change.
 	Beta bool `json:"beta"`
-	// Which account types are allowed to create policies based on this category.
-	// `blocked` categories are blocked unconditionally for all accounts.
-	// `removalPending` categories can be removed from policies but not added.
-	// `noBlock` categories cannot be blocked.
+	// Specify which account types can create policies for this category. `blocked`
+	// Blocks unconditionally for all accounts. `removalPending` Allows removal from
+	// policies but disables addition. `noBlock` Prevents blocking.
 	Class CategoryClass `json:"class"`
-	// A short summary of domains in the category.
+	// Provide a short summary of domains in the category.
 	Description string `json:"description"`
-	// The name of the category.
+	// Specify the category name.
 	Name string `json:"name"`
-	// All subcategories for this category.
+	// Provide all subcategories for this category.
 	Subcategories []CategorySubcategory `json:"subcategories"`
 	JSON          categoryJSON          `json:"-"`
 }
@@ -100,10 +100,9 @@ func (r categoryJSON) RawJSON() string {
 	return r.raw
 }
 
-// Which account types are allowed to create policies based on this category.
-// `blocked` categories are blocked unconditionally for all accounts.
-// `removalPending` categories can be removed from policies but not added.
-// `noBlock` categories cannot be blocked.
+// Specify which account types can create policies for this category. `blocked`
+// Blocks unconditionally for all accounts. `removalPending` Allows removal from
+// policies but disables addition. `noBlock` Prevents blocking.
 type CategoryClass string
 
 const (
@@ -123,18 +122,17 @@ func (r CategoryClass) IsKnown() bool {
 }
 
 type CategorySubcategory struct {
-	// The identifier for this category. There is only one category per ID.
+	// Identify this category. Only one category per ID.
 	ID int64 `json:"id"`
-	// True if the category is in beta and subject to change.
+	// Indicate whether the category is in beta and subject to change.
 	Beta bool `json:"beta"`
-	// Which account types are allowed to create policies based on this category.
-	// `blocked` categories are blocked unconditionally for all accounts.
-	// `removalPending` categories can be removed from policies but not added.
-	// `noBlock` categories cannot be blocked.
+	// Specify which account types can create policies for this category. `blocked`
+	// Blocks unconditionally for all accounts. `removalPending` Allows removal from
+	// policies but disables addition. `noBlock` Prevents blocking.
 	Class CategorySubcategoriesClass `json:"class"`
-	// A short summary of domains in the category.
+	// Provide a short summary of domains in the category.
 	Description string `json:"description"`
-	// The name of the category.
+	// Specify the category name.
 	Name string                  `json:"name"`
 	JSON categorySubcategoryJSON `json:"-"`
 }
@@ -159,10 +157,9 @@ func (r categorySubcategoryJSON) RawJSON() string {
 	return r.raw
 }
 
-// Which account types are allowed to create policies based on this category.
-// `blocked` categories are blocked unconditionally for all accounts.
-// `removalPending` categories can be removed from policies but not added.
-// `noBlock` categories cannot be blocked.
+// Specify which account types can create policies for this category. `blocked`
+// Blocks unconditionally for all accounts. `removalPending` Allows removal from
+// policies but disables addition. `noBlock` Prevents blocking.
 type CategorySubcategoriesClass string
 
 const (
@@ -182,6 +179,6 @@ func (r CategorySubcategoriesClass) IsKnown() bool {
 }
 
 type GatewayCategoryListParams struct {
-	// Identifier.
+	// Provide the identifier string.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

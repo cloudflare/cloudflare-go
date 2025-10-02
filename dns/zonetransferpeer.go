@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewZoneTransferPeerService(opts ...option.RequestOption) (r *ZoneTransferPe
 // Create Peer.
 func (r *ZoneTransferPeerService) New(ctx context.Context, params ZoneTransferPeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
 	var env ZoneTransferPeerNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *ZoneTransferPeerService) New(ctx context.Context, params ZoneTransferPe
 // Modify Peer.
 func (r *ZoneTransferPeerService) Update(ctx context.Context, peerID string, params ZoneTransferPeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
 	var env ZoneTransferPeerUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *ZoneTransferPeerService) Update(ctx context.Context, peerID string, par
 // List Peers.
 func (r *ZoneTransferPeerService) List(ctx context.Context, query ZoneTransferPeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Peer], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -102,7 +103,7 @@ func (r *ZoneTransferPeerService) ListAutoPaging(ctx context.Context, query Zone
 // Delete Peer.
 func (r *ZoneTransferPeerService) Delete(ctx context.Context, peerID string, body ZoneTransferPeerDeleteParams, opts ...option.RequestOption) (res *ZoneTransferPeerDeleteResponse, err error) {
 	var env ZoneTransferPeerDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,7 +124,7 @@ func (r *ZoneTransferPeerService) Delete(ctx context.Context, peerID string, bod
 // Get Peer.
 func (r *ZoneTransferPeerService) Get(ctx context.Context, peerID string, query ZoneTransferPeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
 	var env ZoneTransferPeerGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

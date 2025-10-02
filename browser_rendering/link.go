@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,7 +39,7 @@ func NewLinkService(opts ...option.RequestOption) (r *LinkService) {
 // Get links from a web page.
 func (r *LinkService) New(ctx context.Context, params LinkNewParams, opts ...option.RequestOption) (res *[]string, err error) {
 	var env LinkNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -76,8 +77,9 @@ type LinkNewParams struct {
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]LinkNewParamsCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                `json:"emulateMediaType"`
+	Cookies              param.Field[[]LinkNewParamsCookie] `json:"cookies"`
+	EmulateMediaType     param.Field[string]                `json:"emulateMediaType"`
+	ExcludeExternalLinks param.Field[bool]                  `json:"excludeExternalLinks"`
 	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
 	GotoOptions param.Field[LinkNewParamsGotoOptions] `json:"gotoOptions"`
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or

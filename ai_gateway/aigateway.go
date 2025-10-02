@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -16,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/tidwall/gjson"
 )
 
 // AIGatewayService contains methods and other services that help with interacting
@@ -50,7 +53,7 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 // Create a new Gateway
 func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, opts ...option.RequestOption) (res *AIGatewayNewResponse, err error) {
 	var env AIGatewayNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,7 +70,7 @@ func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, o
 // Update a Gateway
 func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatewayUpdateParams, opts ...option.RequestOption) (res *AIGatewayUpdateResponse, err error) {
 	var env AIGatewayUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -88,7 +91,7 @@ func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatew
 // List Gateways
 func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AIGatewayListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -115,7 +118,7 @@ func (r *AIGatewayService) ListAutoPaging(ctx context.Context, params AIGatewayL
 // Delete a Gateway
 func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGatewayDeleteParams, opts ...option.RequestOption) (res *AIGatewayDeleteResponse, err error) {
 	var env AIGatewayDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -136,7 +139,7 @@ func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGateway
 // Fetch a Gateway
 func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGetParams, opts ...option.RequestOption) (res *AIGatewayGetResponse, err error) {
 	var env AIGatewayGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -174,7 +177,9 @@ type AIGatewayNewResponse struct {
 	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
+	Otel                    []AIGatewayNewResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
+	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
 }
 
@@ -199,7 +204,9 @@ type aiGatewayNewResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	Otel                    apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -228,15 +235,80 @@ func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
 }
 
 type AIGatewayNewResponseDLP struct {
-	Action   AIGatewayNewResponseDLPAction `json:"action,required"`
-	Enabled  bool                          `json:"enabled,required"`
-	Profiles []string                      `json:"profiles,required"`
-	JSON     aiGatewayNewResponseDLPJSON   `json:"-"`
+	Enabled bool                          `json:"enabled,required"`
+	Action  AIGatewayNewResponseDLPAction `json:"action"`
+	// This field can have the runtime type of [[]AIGatewayNewResponseDLPObjectPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of [[]string].
+	Profiles interface{}                 `json:"profiles"`
+	JSON     aiGatewayNewResponseDLPJSON `json:"-"`
+	union    AIGatewayNewResponseDLPUnion
 }
 
 // aiGatewayNewResponseDLPJSON contains the JSON metadata for the struct
 // [AIGatewayNewResponseDLP]
 type aiGatewayNewResponseDLPJSON struct {
+	Enabled     apijson.Field
+	Action      apijson.Field
+	Policies    apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayNewResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayNewResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayNewResponseDLP{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayNewResponseDLPUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [AIGatewayNewResponseDLPObject],
+// [AIGatewayNewResponseDLPObject].
+func (r AIGatewayNewResponseDLP) AsUnion() AIGatewayNewResponseDLPUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayNewResponseDLPObject] or
+// [AIGatewayNewResponseDLPObject].
+type AIGatewayNewResponseDLPUnion interface {
+	implementsAIGatewayNewResponseDLP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayNewResponseDLPUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayNewResponseDLPObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayNewResponseDLPObject{}),
+		},
+	)
+}
+
+type AIGatewayNewResponseDLPObject struct {
+	Action   AIGatewayNewResponseDLPObjectAction `json:"action,required"`
+	Enabled  bool                                `json:"enabled,required"`
+	Profiles []string                            `json:"profiles,required"`
+	JSON     aiGatewayNewResponseDLPObjectJSON   `json:"-"`
+}
+
+// aiGatewayNewResponseDLPObjectJSON contains the JSON metadata for the struct
+// [AIGatewayNewResponseDLPObject]
+type aiGatewayNewResponseDLPObjectJSON struct {
 	Action      apijson.Field
 	Enabled     apijson.Field
 	Profiles    apijson.Field
@@ -244,12 +316,29 @@ type aiGatewayNewResponseDLPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIGatewayNewResponseDLP) UnmarshalJSON(data []byte) (err error) {
+func (r *AIGatewayNewResponseDLPObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiGatewayNewResponseDLPJSON) RawJSON() string {
+func (r aiGatewayNewResponseDLPObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AIGatewayNewResponseDLPObject) implementsAIGatewayNewResponseDLP() {}
+
+type AIGatewayNewResponseDLPObjectAction string
+
+const (
+	AIGatewayNewResponseDLPObjectActionBlock AIGatewayNewResponseDLPObjectAction = "BLOCK"
+	AIGatewayNewResponseDLPObjectActionFlag  AIGatewayNewResponseDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayNewResponseDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseDLPObjectActionBlock, AIGatewayNewResponseDLPObjectActionFlag:
+		return true
+	}
+	return false
 }
 
 type AIGatewayNewResponseDLPAction string
@@ -282,6 +371,75 @@ func (r AIGatewayNewResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayNewResponseOtel struct {
+	Authorization string                       `json:"authorization,required"`
+	Headers       map[string]string            `json:"headers,required"`
+	URL           string                       `json:"url,required"`
+	JSON          aiGatewayNewResponseOtelJSON `json:"-"`
+}
+
+// aiGatewayNewResponseOtelJSON contains the JSON metadata for the struct
+// [AIGatewayNewResponseOtel]
+type aiGatewayNewResponseOtelJSON struct {
+	Authorization apijson.Field
+	Headers       apijson.Field
+	URL           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseOtel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseOtelJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayNewResponseStripe struct {
+	Authorization string                                 `json:"authorization,required"`
+	UsageEvents   []AIGatewayNewResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayNewResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayNewResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayNewResponseStripe]
+type aiGatewayNewResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayNewResponseStripeUsageEvent struct {
+	Payload string                                   `json:"payload,required"`
+	JSON    aiGatewayNewResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayNewResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayNewResponseStripeUsageEvent]
+type aiGatewayNewResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayUpdateResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
@@ -302,7 +460,9 @@ type AIGatewayUpdateResponse struct {
 	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
+	Otel                    []AIGatewayUpdateResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
+	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
@@ -327,7 +487,9 @@ type aiGatewayUpdateResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	Otel                    apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -356,15 +518,81 @@ func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
 }
 
 type AIGatewayUpdateResponseDLP struct {
-	Action   AIGatewayUpdateResponseDLPAction `json:"action,required"`
-	Enabled  bool                             `json:"enabled,required"`
-	Profiles []string                         `json:"profiles,required"`
-	JSON     aiGatewayUpdateResponseDLPJSON   `json:"-"`
+	Enabled bool                             `json:"enabled,required"`
+	Action  AIGatewayUpdateResponseDLPAction `json:"action"`
+	// This field can have the runtime type of
+	// [[]AIGatewayUpdateResponseDLPObjectPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of [[]string].
+	Profiles interface{}                    `json:"profiles"`
+	JSON     aiGatewayUpdateResponseDLPJSON `json:"-"`
+	union    AIGatewayUpdateResponseDLPUnion
 }
 
 // aiGatewayUpdateResponseDLPJSON contains the JSON metadata for the struct
 // [AIGatewayUpdateResponseDLP]
 type aiGatewayUpdateResponseDLPJSON struct {
+	Enabled     apijson.Field
+	Action      apijson.Field
+	Policies    apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayUpdateResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayUpdateResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayUpdateResponseDLP{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayUpdateResponseDLPUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [AIGatewayUpdateResponseDLPObject],
+// [AIGatewayUpdateResponseDLPObject].
+func (r AIGatewayUpdateResponseDLP) AsUnion() AIGatewayUpdateResponseDLPUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayUpdateResponseDLPObject] or
+// [AIGatewayUpdateResponseDLPObject].
+type AIGatewayUpdateResponseDLPUnion interface {
+	implementsAIGatewayUpdateResponseDLP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayUpdateResponseDLPUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseDLPObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseDLPObject{}),
+		},
+	)
+}
+
+type AIGatewayUpdateResponseDLPObject struct {
+	Action   AIGatewayUpdateResponseDLPObjectAction `json:"action,required"`
+	Enabled  bool                                   `json:"enabled,required"`
+	Profiles []string                               `json:"profiles,required"`
+	JSON     aiGatewayUpdateResponseDLPObjectJSON   `json:"-"`
+}
+
+// aiGatewayUpdateResponseDLPObjectJSON contains the JSON metadata for the struct
+// [AIGatewayUpdateResponseDLPObject]
+type aiGatewayUpdateResponseDLPObjectJSON struct {
 	Action      apijson.Field
 	Enabled     apijson.Field
 	Profiles    apijson.Field
@@ -372,12 +600,29 @@ type aiGatewayUpdateResponseDLPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIGatewayUpdateResponseDLP) UnmarshalJSON(data []byte) (err error) {
+func (r *AIGatewayUpdateResponseDLPObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiGatewayUpdateResponseDLPJSON) RawJSON() string {
+func (r aiGatewayUpdateResponseDLPObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AIGatewayUpdateResponseDLPObject) implementsAIGatewayUpdateResponseDLP() {}
+
+type AIGatewayUpdateResponseDLPObjectAction string
+
+const (
+	AIGatewayUpdateResponseDLPObjectActionBlock AIGatewayUpdateResponseDLPObjectAction = "BLOCK"
+	AIGatewayUpdateResponseDLPObjectActionFlag  AIGatewayUpdateResponseDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayUpdateResponseDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseDLPObjectActionBlock, AIGatewayUpdateResponseDLPObjectActionFlag:
+		return true
+	}
+	return false
 }
 
 type AIGatewayUpdateResponseDLPAction string
@@ -410,6 +655,75 @@ func (r AIGatewayUpdateResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayUpdateResponseOtel struct {
+	Authorization string                          `json:"authorization,required"`
+	Headers       map[string]string               `json:"headers,required"`
+	URL           string                          `json:"url,required"`
+	JSON          aiGatewayUpdateResponseOtelJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseOtelJSON contains the JSON metadata for the struct
+// [AIGatewayUpdateResponseOtel]
+type aiGatewayUpdateResponseOtelJSON struct {
+	Authorization apijson.Field
+	Headers       apijson.Field
+	URL           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseOtel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseOtelJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayUpdateResponseStripe struct {
+	Authorization string                                    `json:"authorization,required"`
+	UsageEvents   []AIGatewayUpdateResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayUpdateResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayUpdateResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayUpdateResponseStripe]
+type aiGatewayUpdateResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayUpdateResponseStripeUsageEvent struct {
+	Payload string                                      `json:"payload,required"`
+	JSON    aiGatewayUpdateResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayUpdateResponseStripeUsageEvent]
+type aiGatewayUpdateResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayListResponse struct {
 	// gateway id
 	ID                      string                                     `json:"id,required"`
@@ -430,7 +744,9 @@ type AIGatewayListResponse struct {
 	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                       `json:"logpush"`
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
+	Otel                    []AIGatewayListResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                     `json:"store_id,nullable"`
+	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
@@ -455,7 +771,9 @@ type aiGatewayListResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	Otel                    apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -484,15 +802,81 @@ func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
 }
 
 type AIGatewayListResponseDLP struct {
-	Action   AIGatewayListResponseDLPAction `json:"action,required"`
-	Enabled  bool                           `json:"enabled,required"`
-	Profiles []string                       `json:"profiles,required"`
-	JSON     aiGatewayListResponseDLPJSON   `json:"-"`
+	Enabled bool                           `json:"enabled,required"`
+	Action  AIGatewayListResponseDLPAction `json:"action"`
+	// This field can have the runtime type of
+	// [[]AIGatewayListResponseDLPObjectPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of [[]string].
+	Profiles interface{}                  `json:"profiles"`
+	JSON     aiGatewayListResponseDLPJSON `json:"-"`
+	union    AIGatewayListResponseDLPUnion
 }
 
 // aiGatewayListResponseDLPJSON contains the JSON metadata for the struct
 // [AIGatewayListResponseDLP]
 type aiGatewayListResponseDLPJSON struct {
+	Enabled     apijson.Field
+	Action      apijson.Field
+	Policies    apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayListResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayListResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayListResponseDLP{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayListResponseDLPUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [AIGatewayListResponseDLPObject],
+// [AIGatewayListResponseDLPObject].
+func (r AIGatewayListResponseDLP) AsUnion() AIGatewayListResponseDLPUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayListResponseDLPObject] or
+// [AIGatewayListResponseDLPObject].
+type AIGatewayListResponseDLPUnion interface {
+	implementsAIGatewayListResponseDLP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayListResponseDLPUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayListResponseDLPObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayListResponseDLPObject{}),
+		},
+	)
+}
+
+type AIGatewayListResponseDLPObject struct {
+	Action   AIGatewayListResponseDLPObjectAction `json:"action,required"`
+	Enabled  bool                                 `json:"enabled,required"`
+	Profiles []string                             `json:"profiles,required"`
+	JSON     aiGatewayListResponseDLPObjectJSON   `json:"-"`
+}
+
+// aiGatewayListResponseDLPObjectJSON contains the JSON metadata for the struct
+// [AIGatewayListResponseDLPObject]
+type aiGatewayListResponseDLPObjectJSON struct {
 	Action      apijson.Field
 	Enabled     apijson.Field
 	Profiles    apijson.Field
@@ -500,12 +884,29 @@ type aiGatewayListResponseDLPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIGatewayListResponseDLP) UnmarshalJSON(data []byte) (err error) {
+func (r *AIGatewayListResponseDLPObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiGatewayListResponseDLPJSON) RawJSON() string {
+func (r aiGatewayListResponseDLPObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AIGatewayListResponseDLPObject) implementsAIGatewayListResponseDLP() {}
+
+type AIGatewayListResponseDLPObjectAction string
+
+const (
+	AIGatewayListResponseDLPObjectActionBlock AIGatewayListResponseDLPObjectAction = "BLOCK"
+	AIGatewayListResponseDLPObjectActionFlag  AIGatewayListResponseDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayListResponseDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseDLPObjectActionBlock, AIGatewayListResponseDLPObjectActionFlag:
+		return true
+	}
+	return false
 }
 
 type AIGatewayListResponseDLPAction string
@@ -538,6 +939,75 @@ func (r AIGatewayListResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayListResponseOtel struct {
+	Authorization string                        `json:"authorization,required"`
+	Headers       map[string]string             `json:"headers,required"`
+	URL           string                        `json:"url,required"`
+	JSON          aiGatewayListResponseOtelJSON `json:"-"`
+}
+
+// aiGatewayListResponseOtelJSON contains the JSON metadata for the struct
+// [AIGatewayListResponseOtel]
+type aiGatewayListResponseOtelJSON struct {
+	Authorization apijson.Field
+	Headers       apijson.Field
+	URL           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseOtel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseOtelJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayListResponseStripe struct {
+	Authorization string                                  `json:"authorization,required"`
+	UsageEvents   []AIGatewayListResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayListResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayListResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayListResponseStripe]
+type aiGatewayListResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayListResponseStripeUsageEvent struct {
+	Payload string                                    `json:"payload,required"`
+	JSON    aiGatewayListResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayListResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayListResponseStripeUsageEvent]
+type aiGatewayListResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayDeleteResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
@@ -558,7 +1028,9 @@ type AIGatewayDeleteResponse struct {
 	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
+	Otel                    []AIGatewayDeleteResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
+	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
@@ -583,7 +1055,9 @@ type aiGatewayDeleteResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	Otel                    apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -612,15 +1086,81 @@ func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
 }
 
 type AIGatewayDeleteResponseDLP struct {
-	Action   AIGatewayDeleteResponseDLPAction `json:"action,required"`
-	Enabled  bool                             `json:"enabled,required"`
-	Profiles []string                         `json:"profiles,required"`
-	JSON     aiGatewayDeleteResponseDLPJSON   `json:"-"`
+	Enabled bool                             `json:"enabled,required"`
+	Action  AIGatewayDeleteResponseDLPAction `json:"action"`
+	// This field can have the runtime type of
+	// [[]AIGatewayDeleteResponseDLPObjectPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of [[]string].
+	Profiles interface{}                    `json:"profiles"`
+	JSON     aiGatewayDeleteResponseDLPJSON `json:"-"`
+	union    AIGatewayDeleteResponseDLPUnion
 }
 
 // aiGatewayDeleteResponseDLPJSON contains the JSON metadata for the struct
 // [AIGatewayDeleteResponseDLP]
 type aiGatewayDeleteResponseDLPJSON struct {
+	Enabled     apijson.Field
+	Action      apijson.Field
+	Policies    apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayDeleteResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayDeleteResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayDeleteResponseDLP{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayDeleteResponseDLPUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [AIGatewayDeleteResponseDLPObject],
+// [AIGatewayDeleteResponseDLPObject].
+func (r AIGatewayDeleteResponseDLP) AsUnion() AIGatewayDeleteResponseDLPUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayDeleteResponseDLPObject] or
+// [AIGatewayDeleteResponseDLPObject].
+type AIGatewayDeleteResponseDLPUnion interface {
+	implementsAIGatewayDeleteResponseDLP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayDeleteResponseDLPUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseDLPObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseDLPObject{}),
+		},
+	)
+}
+
+type AIGatewayDeleteResponseDLPObject struct {
+	Action   AIGatewayDeleteResponseDLPObjectAction `json:"action,required"`
+	Enabled  bool                                   `json:"enabled,required"`
+	Profiles []string                               `json:"profiles,required"`
+	JSON     aiGatewayDeleteResponseDLPObjectJSON   `json:"-"`
+}
+
+// aiGatewayDeleteResponseDLPObjectJSON contains the JSON metadata for the struct
+// [AIGatewayDeleteResponseDLPObject]
+type aiGatewayDeleteResponseDLPObjectJSON struct {
 	Action      apijson.Field
 	Enabled     apijson.Field
 	Profiles    apijson.Field
@@ -628,12 +1168,29 @@ type aiGatewayDeleteResponseDLPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIGatewayDeleteResponseDLP) UnmarshalJSON(data []byte) (err error) {
+func (r *AIGatewayDeleteResponseDLPObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiGatewayDeleteResponseDLPJSON) RawJSON() string {
+func (r aiGatewayDeleteResponseDLPObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AIGatewayDeleteResponseDLPObject) implementsAIGatewayDeleteResponseDLP() {}
+
+type AIGatewayDeleteResponseDLPObjectAction string
+
+const (
+	AIGatewayDeleteResponseDLPObjectActionBlock AIGatewayDeleteResponseDLPObjectAction = "BLOCK"
+	AIGatewayDeleteResponseDLPObjectActionFlag  AIGatewayDeleteResponseDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayDeleteResponseDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseDLPObjectActionBlock, AIGatewayDeleteResponseDLPObjectActionFlag:
+		return true
+	}
+	return false
 }
 
 type AIGatewayDeleteResponseDLPAction string
@@ -666,6 +1223,75 @@ func (r AIGatewayDeleteResponseLogManagementStrategy) IsKnown() bool {
 	return false
 }
 
+type AIGatewayDeleteResponseOtel struct {
+	Authorization string                          `json:"authorization,required"`
+	Headers       map[string]string               `json:"headers,required"`
+	URL           string                          `json:"url,required"`
+	JSON          aiGatewayDeleteResponseOtelJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseOtelJSON contains the JSON metadata for the struct
+// [AIGatewayDeleteResponseOtel]
+type aiGatewayDeleteResponseOtelJSON struct {
+	Authorization apijson.Field
+	Headers       apijson.Field
+	URL           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseOtel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseOtelJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayDeleteResponseStripe struct {
+	Authorization string                                    `json:"authorization,required"`
+	UsageEvents   []AIGatewayDeleteResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayDeleteResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayDeleteResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayDeleteResponseStripe]
+type aiGatewayDeleteResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayDeleteResponseStripeUsageEvent struct {
+	Payload string                                      `json:"payload,required"`
+	JSON    aiGatewayDeleteResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayDeleteResponseStripeUsageEvent]
+type aiGatewayDeleteResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIGatewayGetResponse struct {
 	// gateway id
 	ID                      string                                    `json:"id,required"`
@@ -686,7 +1312,9 @@ type AIGatewayGetResponse struct {
 	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
+	Otel                    []AIGatewayGetResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
+	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 
@@ -711,7 +1339,9 @@ type aiGatewayGetResponseJSON struct {
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
+	Otel                    apijson.Field
 	StoreID                 apijson.Field
+	Stripe                  apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -740,15 +1370,80 @@ func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
 }
 
 type AIGatewayGetResponseDLP struct {
-	Action   AIGatewayGetResponseDLPAction `json:"action,required"`
-	Enabled  bool                          `json:"enabled,required"`
-	Profiles []string                      `json:"profiles,required"`
-	JSON     aiGatewayGetResponseDLPJSON   `json:"-"`
+	Enabled bool                          `json:"enabled,required"`
+	Action  AIGatewayGetResponseDLPAction `json:"action"`
+	// This field can have the runtime type of [[]AIGatewayGetResponseDLPObjectPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of [[]string].
+	Profiles interface{}                 `json:"profiles"`
+	JSON     aiGatewayGetResponseDLPJSON `json:"-"`
+	union    AIGatewayGetResponseDLPUnion
 }
 
 // aiGatewayGetResponseDLPJSON contains the JSON metadata for the struct
 // [AIGatewayGetResponseDLP]
 type aiGatewayGetResponseDLPJSON struct {
+	Enabled     apijson.Field
+	Action      apijson.Field
+	Policies    apijson.Field
+	Profiles    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayGetResponseDLPJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayGetResponseDLP) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayGetResponseDLP{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayGetResponseDLPUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [AIGatewayGetResponseDLPObject],
+// [AIGatewayGetResponseDLPObject].
+func (r AIGatewayGetResponseDLP) AsUnion() AIGatewayGetResponseDLPUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayGetResponseDLPObject] or
+// [AIGatewayGetResponseDLPObject].
+type AIGatewayGetResponseDLPUnion interface {
+	implementsAIGatewayGetResponseDLP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayGetResponseDLPUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayGetResponseDLPObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayGetResponseDLPObject{}),
+		},
+	)
+}
+
+type AIGatewayGetResponseDLPObject struct {
+	Action   AIGatewayGetResponseDLPObjectAction `json:"action,required"`
+	Enabled  bool                                `json:"enabled,required"`
+	Profiles []string                            `json:"profiles,required"`
+	JSON     aiGatewayGetResponseDLPObjectJSON   `json:"-"`
+}
+
+// aiGatewayGetResponseDLPObjectJSON contains the JSON metadata for the struct
+// [AIGatewayGetResponseDLPObject]
+type aiGatewayGetResponseDLPObjectJSON struct {
 	Action      apijson.Field
 	Enabled     apijson.Field
 	Profiles    apijson.Field
@@ -756,12 +1451,29 @@ type aiGatewayGetResponseDLPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIGatewayGetResponseDLP) UnmarshalJSON(data []byte) (err error) {
+func (r *AIGatewayGetResponseDLPObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiGatewayGetResponseDLPJSON) RawJSON() string {
+func (r aiGatewayGetResponseDLPObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AIGatewayGetResponseDLPObject) implementsAIGatewayGetResponseDLP() {}
+
+type AIGatewayGetResponseDLPObjectAction string
+
+const (
+	AIGatewayGetResponseDLPObjectActionBlock AIGatewayGetResponseDLPObjectAction = "BLOCK"
+	AIGatewayGetResponseDLPObjectActionFlag  AIGatewayGetResponseDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayGetResponseDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseDLPObjectActionBlock, AIGatewayGetResponseDLPObjectActionFlag:
+		return true
+	}
+	return false
 }
 
 type AIGatewayGetResponseDLPAction string
@@ -792,6 +1504,75 @@ func (r AIGatewayGetResponseLogManagementStrategy) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AIGatewayGetResponseOtel struct {
+	Authorization string                       `json:"authorization,required"`
+	Headers       map[string]string            `json:"headers,required"`
+	URL           string                       `json:"url,required"`
+	JSON          aiGatewayGetResponseOtelJSON `json:"-"`
+}
+
+// aiGatewayGetResponseOtelJSON contains the JSON metadata for the struct
+// [AIGatewayGetResponseOtel]
+type aiGatewayGetResponseOtelJSON struct {
+	Authorization apijson.Field
+	Headers       apijson.Field
+	URL           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseOtel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseOtelJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayGetResponseStripe struct {
+	Authorization string                                 `json:"authorization,required"`
+	UsageEvents   []AIGatewayGetResponseStripeUsageEvent `json:"usage_events,required"`
+	JSON          aiGatewayGetResponseStripeJSON         `json:"-"`
+}
+
+// aiGatewayGetResponseStripeJSON contains the JSON metadata for the struct
+// [AIGatewayGetResponseStripe]
+type aiGatewayGetResponseStripeJSON struct {
+	Authorization apijson.Field
+	UsageEvents   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseStripe) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseStripeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayGetResponseStripeUsageEvent struct {
+	Payload string                                   `json:"payload,required"`
+	JSON    aiGatewayGetResponseStripeUsageEventJSON `json:"-"`
+}
+
+// aiGatewayGetResponseStripeUsageEventJSON contains the JSON metadata for the
+// struct [AIGatewayGetResponseStripeUsageEvent]
+type aiGatewayGetResponseStripeUsageEventJSON struct {
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseStripeUsageEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseStripeUsageEventJSON) RawJSON() string {
+	return r.raw
 }
 
 type AIGatewayNewParams struct {
@@ -877,12 +1658,14 @@ type AIGatewayUpdateParams struct {
 	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                       `json:"authentication"`
-	DLP                     param.Field[AIGatewayUpdateParamsDLP]                   `json:"dlp"`
+	DLP                     param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
+	Otel                    param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
 	StoreID                 param.Field[string]                                     `json:"store_id"`
+	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -905,13 +1688,49 @@ func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
 }
 
 type AIGatewayUpdateParamsDLP struct {
-	Action   param.Field[AIGatewayUpdateParamsDLPAction] `json:"action,required"`
 	Enabled  param.Field[bool]                           `json:"enabled,required"`
-	Profiles param.Field[[]string]                       `json:"profiles,required"`
+	Action   param.Field[AIGatewayUpdateParamsDLPAction] `json:"action"`
+	Policies param.Field[interface{}]                    `json:"policies"`
+	Profiles param.Field[interface{}]                    `json:"profiles"`
 }
 
 func (r AIGatewayUpdateParamsDLP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsDLP) implementsAIGatewayUpdateParamsDLPUnion() {}
+
+// Satisfied by [ai_gateway.AIGatewayUpdateParamsDLPObject],
+// [ai_gateway.AIGatewayUpdateParamsDLPObject], [AIGatewayUpdateParamsDLP].
+type AIGatewayUpdateParamsDLPUnion interface {
+	implementsAIGatewayUpdateParamsDLPUnion()
+}
+
+type AIGatewayUpdateParamsDLPObject struct {
+	Action   param.Field[AIGatewayUpdateParamsDLPObjectAction] `json:"action,required"`
+	Enabled  param.Field[bool]                                 `json:"enabled,required"`
+	Profiles param.Field[[]string]                             `json:"profiles,required"`
+}
+
+func (r AIGatewayUpdateParamsDLPObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsDLPObject) implementsAIGatewayUpdateParamsDLPUnion() {}
+
+type AIGatewayUpdateParamsDLPObjectAction string
+
+const (
+	AIGatewayUpdateParamsDLPObjectActionBlock AIGatewayUpdateParamsDLPObjectAction = "BLOCK"
+	AIGatewayUpdateParamsDLPObjectActionFlag  AIGatewayUpdateParamsDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayUpdateParamsDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsDLPObjectActionBlock, AIGatewayUpdateParamsDLPObjectActionFlag:
+		return true
+	}
+	return false
 }
 
 type AIGatewayUpdateParamsDLPAction string
@@ -942,6 +1761,33 @@ func (r AIGatewayUpdateParamsLogManagementStrategy) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AIGatewayUpdateParamsOtel struct {
+	Authorization param.Field[string]            `json:"authorization,required"`
+	Headers       param.Field[map[string]string] `json:"headers,required"`
+	URL           param.Field[string]            `json:"url,required"`
+}
+
+func (r AIGatewayUpdateParamsOtel) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsStripe struct {
+	Authorization param.Field[string]                                  `json:"authorization,required"`
+	UsageEvents   param.Field[[]AIGatewayUpdateParamsStripeUsageEvent] `json:"usage_events,required"`
+}
+
+func (r AIGatewayUpdateParamsStripe) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsStripeUsageEvent struct {
+	Payload param.Field[string] `json:"payload,required"`
+}
+
+func (r AIGatewayUpdateParamsStripeUsageEvent) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AIGatewayUpdateResponseEnvelope struct {

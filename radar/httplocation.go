@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -53,7 +54,7 @@ func NewHTTPLocationService(opts ...option.RequestOption) (r *HTTPLocationServic
 // Retrieves the top locations by HTTP requests.
 func (r *HTTPLocationService) Get(ctx context.Context, query HTTPLocationGetParams, opts ...option.RequestOption) (res *HTTPLocationGetResponse, err error) {
 	var env HTTPLocationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -304,6 +305,11 @@ type HTTPLocationGetParams struct {
 	DeviceType param.Field[[]HTTPLocationGetParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPLocationGetParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPLocationGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewControlRetentionService(opts ...option.RequestOption) (r *ControlRetenti
 // Updates log retention flag for Logpull API.
 func (r *ControlRetentionService) New(ctx context.Context, params ControlRetentionNewParams, opts ...option.RequestOption) (res *ControlRetentionNewResponse, err error) {
 	var env ControlRetentionNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,7 +54,7 @@ func (r *ControlRetentionService) New(ctx context.Context, params ControlRetenti
 // Gets log retention flag for Logpull API.
 func (r *ControlRetentionService) Get(ctx context.Context, query ControlRetentionGetParams, opts ...option.RequestOption) (res *ControlRetentionGetResponse, err error) {
 	var env ControlRetentionGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

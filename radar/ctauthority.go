@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,7 +39,7 @@ func NewCtAuthorityService(opts ...option.RequestOption) (r *CtAuthorityService)
 // Retrieves a list of certificate authorities.
 func (r *CtAuthorityService) List(ctx context.Context, query CtAuthorityListParams, opts ...option.RequestOption) (res *CtAuthorityListResponse, err error) {
 	var env CtAuthorityListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ct/authorities"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,7 +52,7 @@ func (r *CtAuthorityService) List(ctx context.Context, query CtAuthorityListPara
 // Retrieves the requested CA information.
 func (r *CtAuthorityService) Get(ctx context.Context, caSlug string, query CtAuthorityGetParams, opts ...option.RequestOption) (res *CtAuthorityGetResponse, err error) {
 	var env CtAuthorityGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if caSlug == "" {
 		err = errors.New("missing required ca_slug parameter")
 		return

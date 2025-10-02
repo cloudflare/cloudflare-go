@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -37,7 +38,7 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 // certificate authorities, industries and verticals
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/search/global"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -119,6 +120,7 @@ func (r SearchGlobalParams) URLQuery() (v url.Values) {
 type SearchGlobalParamsExclude string
 
 const (
+	SearchGlobalParamsExcludeAdm1S                  SearchGlobalParamsExclude = "ADM1S"
 	SearchGlobalParamsExcludeASNs                   SearchGlobalParamsExclude = "ASNS"
 	SearchGlobalParamsExcludeBots                   SearchGlobalParamsExclude = "BOTS"
 	SearchGlobalParamsExcludeCertificateAuthorities SearchGlobalParamsExclude = "CERTIFICATE_AUTHORITIES"
@@ -132,7 +134,7 @@ const (
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
+	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
 		return true
 	}
 	return false
@@ -157,6 +159,7 @@ func (r SearchGlobalParamsFormat) IsKnown() bool {
 type SearchGlobalParamsInclude string
 
 const (
+	SearchGlobalParamsIncludeAdm1S                  SearchGlobalParamsInclude = "ADM1S"
 	SearchGlobalParamsIncludeASNs                   SearchGlobalParamsInclude = "ASNS"
 	SearchGlobalParamsIncludeBots                   SearchGlobalParamsInclude = "BOTS"
 	SearchGlobalParamsIncludeCertificateAuthorities SearchGlobalParamsInclude = "CERTIFICATE_AUTHORITIES"
@@ -170,7 +173,7 @@ const (
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
+	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
 		return true
 	}
 	return false

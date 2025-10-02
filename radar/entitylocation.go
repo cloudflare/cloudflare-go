@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,7 +39,7 @@ func NewEntityLocationService(opts ...option.RequestOption) (r *EntityLocationSe
 // Retrieves a list of locations.
 func (r *EntityLocationService) List(ctx context.Context, query EntityLocationListParams, opts ...option.RequestOption) (res *EntityLocationListResponse, err error) {
 	var env EntityLocationListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/entities/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,7 +54,7 @@ func (r *EntityLocationService) List(ctx context.Context, query EntityLocationLi
 // because Cloudflare has a small amount of traffic from/to this location).
 func (r *EntityLocationService) Get(ctx context.Context, location string, query EntityLocationGetParams, opts ...option.RequestOption) (res *EntityLocationGetResponse, err error) {
 	var env EntityLocationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if location == "" {
 		err = errors.New("missing required location parameter")
 		return

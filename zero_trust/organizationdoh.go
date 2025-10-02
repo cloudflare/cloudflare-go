@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewOrganizationDOHService(opts ...option.RequestOption) (r *OrganizationDOH
 // Updates the DoH settings for your Zero Trust organization.
 func (r *OrganizationDOHService) Update(ctx context.Context, params OrganizationDOHUpdateParams, opts ...option.RequestOption) (res *OrganizationDOHUpdateResponse, err error) {
 	var env OrganizationDOHUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *OrganizationDOHService) Update(ctx context.Context, params Organization
 // Returns the DoH settings for your Zero Trust organization.
 func (r *OrganizationDOHService) Get(ctx context.Context, query OrganizationDOHGetParams, opts ...option.RequestOption) (res *OrganizationDOHGetResponse, err error) {
 	var env OrganizationDOHGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -73,8 +74,7 @@ type OrganizationDOHUpdateResponse struct {
 	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ClientID string `json:"client_id"`
 	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
@@ -83,13 +83,11 @@ type OrganizationDOHUpdateResponse struct {
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
-	Duration   string    `json:"duration"`
-	ExpiresAt  time.Time `json:"expires_at" format:"date-time"`
-	LastSeenAt time.Time `json:"last_seen_at" format:"date-time"`
+	Duration  string    `json:"duration"`
+	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
-	Name      string                            `json:"name"`
-	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
-	JSON      organizationDOHUpdateResponseJSON `json:"-"`
+	Name string                            `json:"name"`
+	JSON organizationDOHUpdateResponseJSON `json:"-"`
 }
 
 // organizationDOHUpdateResponseJSON contains the JSON metadata for the struct
@@ -97,13 +95,10 @@ type OrganizationDOHUpdateResponse struct {
 type organizationDOHUpdateResponseJSON struct {
 	ID             apijson.Field
 	ClientID       apijson.Field
-	CreatedAt      apijson.Field
 	DOHJWTDuration apijson.Field
 	Duration       apijson.Field
 	ExpiresAt      apijson.Field
-	LastSeenAt     apijson.Field
 	Name           apijson.Field
-	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -121,8 +116,7 @@ type OrganizationDOHGetResponse struct {
 	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ClientID string `json:"client_id"`
 	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
@@ -130,13 +124,11 @@ type OrganizationDOHGetResponse struct {
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
-	Duration   string    `json:"duration"`
-	ExpiresAt  time.Time `json:"expires_at" format:"date-time"`
-	LastSeenAt time.Time `json:"last_seen_at" format:"date-time"`
+	Duration  string    `json:"duration"`
+	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
-	Name      string                         `json:"name"`
-	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
-	JSON      organizationDOHGetResponseJSON `json:"-"`
+	Name string                         `json:"name"`
+	JSON organizationDOHGetResponseJSON `json:"-"`
 }
 
 // organizationDOHGetResponseJSON contains the JSON metadata for the struct
@@ -144,13 +136,10 @@ type OrganizationDOHGetResponse struct {
 type organizationDOHGetResponseJSON struct {
 	ID             apijson.Field
 	ClientID       apijson.Field
-	CreatedAt      apijson.Field
 	DOHJWTDuration apijson.Field
 	Duration       apijson.Field
 	ExpiresAt      apijson.Field
-	LastSeenAt     apijson.Field
 	Name           apijson.Field
-	UpdatedAt      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }

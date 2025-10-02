@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -40,7 +40,7 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 // Deprecated: deprecated
 func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, params AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,7 +63,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 // Deprecated: deprecated
 func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, params AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -86,7 +86,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, p
 // Deprecated: deprecated
 func (r *AccessBookmarkService) List(ctx context.Context, query AccessBookmarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Bookmark], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -117,7 +117,7 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, query Access
 // Deprecated: deprecated
 func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	var env AccessBookmarkDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -140,7 +140,7 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, b
 // Deprecated: deprecated
 func (r *AccessBookmarkService) Get(ctx context.Context, bookmarkID string, query AccessBookmarkGetParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -162,27 +162,23 @@ type Bookmark struct {
 	// The unique identifier for the Bookmark application.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
-	AppLauncherVisible bool      `json:"app_launcher_visible"`
-	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// The domain of the Bookmark application.
 	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the Bookmark application.
-	Name      string       `json:"name"`
-	UpdatedAt time.Time    `json:"updated_at" format:"date-time"`
-	JSON      bookmarkJSON `json:"-"`
+	Name string       `json:"name"`
+	JSON bookmarkJSON `json:"-"`
 }
 
 // bookmarkJSON contains the JSON metadata for the struct [Bookmark]
 type bookmarkJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
-	CreatedAt          apijson.Field
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
-	UpdatedAt          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }

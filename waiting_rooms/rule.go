@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // waiting room.
 func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -72,7 +73,7 @@ func (r *RuleService) NewAutoPaging(ctx context.Context, waitingRoomID string, p
 // for a waiting room.
 func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -104,7 +105,7 @@ func (r *RuleService) UpdateAutoPaging(ctx context.Context, waitingRoomID string
 // Deletes a rule for a waiting room.
 func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -139,7 +140,7 @@ func (r *RuleService) DeleteAutoPaging(ctx context.Context, waitingRoomID string
 // Patches a rule for a waiting room.
 func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -174,7 +175,7 @@ func (r *RuleService) EditAutoPaging(ctx context.Context, waitingRoomID string, 
 // Lists rules for a waiting room.
 func (r *RuleService) Get(ctx context.Context, waitingRoomID string, query RuleGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")

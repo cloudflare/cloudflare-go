@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewCookieService(opts ...option.RequestOption) (r *CookieService) {
 // Lists all cookies collected by Page Shield.
 func (r *CookieService) List(ctx context.Context, params CookieListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CookieListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -68,7 +69,7 @@ func (r *CookieService) ListAutoPaging(ctx context.Context, params CookieListPar
 // Fetches a cookie collected by Page Shield by cookie ID.
 func (r *CookieService) Get(ctx context.Context, cookieID string, query CookieGetParams, opts ...option.RequestOption) (res *CookieGetResponse, err error) {
 	var env CookieGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -251,7 +252,7 @@ type CookieListParams struct {
 	Direction param.Field[CookieListParamsDirection] `query:"direction"`
 	// Filters the returned cookies that match the specified domain attribute
 	Domain param.Field[string] `query:"domain"`
-	// Export the list of cookies as a file.
+	// Export the list of cookies as a file, limited to 50000 entries.
 	Export param.Field[CookieListParamsExport] `query:"export"`
 	// Includes cookies that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -317,7 +318,7 @@ func (r CookieListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of cookies as a file.
+// Export the list of cookies as a file, limited to 50000 entries.
 type CookieListParamsExport string
 
 const (

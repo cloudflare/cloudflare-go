@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewQualitySpeedService(opts ...option.RequestOption) (r *QualitySpeedServic
 // split into fixed bandwidth (Mbps), latency (ms), or jitter (ms) buckets.
 func (r *QualitySpeedService) Histogram(ctx context.Context, query QualitySpeedHistogramParams, opts ...option.RequestOption) (res *QualitySpeedHistogramResponse, err error) {
 	var env QualitySpeedHistogramResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/quality/speed/histogram"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -54,7 +55,7 @@ func (r *QualitySpeedService) Histogram(ctx context.Context, query QualitySpeedH
 // previous 90 days of Cloudflare Speed Test data.
 func (r *QualitySpeedService) Summary(ctx context.Context, query QualitySpeedSummaryParams, opts ...option.RequestOption) (res *QualitySpeedSummaryResponse, err error) {
 	var env QualitySpeedSummaryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/quality/speed/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

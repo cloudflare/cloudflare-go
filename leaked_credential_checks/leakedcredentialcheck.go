@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -39,7 +40,7 @@ func NewLeakedCredentialCheckService(opts ...option.RequestOption) (r *LeakedCre
 // Updates the current status of Leaked Credential Checks.
 func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCredentialCheckNewParams, opts ...option.RequestOption) (res *LeakedCredentialCheckNewResponse, err error) {
 	var env LeakedCredentialCheckNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCre
 // Retrieves the current status of Leaked Credential Checks.
 func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCredentialCheckGetParams, opts ...option.RequestOption) (res *LeakedCredentialCheckGetResponse, err error) {
 	var env LeakedCredentialCheckGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

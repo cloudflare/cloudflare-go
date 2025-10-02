@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 // Create a New Request Message
 func (r *RequestMessageService) New(ctx context.Context, requestID string, params RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *RequestMessageService) New(ctx context.Context, requestID string, param
 // Update a Request Message
 func (r *RequestMessageService) Update(ctx context.Context, requestID string, messageID int64, params RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *RequestMessageService) Update(ctx context.Context, requestID string, me
 
 // Delete a Request Message
 func (r *RequestMessageService) Delete(ctx context.Context, requestID string, messageID int64, body RequestMessageDeleteParams, opts ...option.RequestOption) (res *RequestMessageDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -96,7 +97,7 @@ func (r *RequestMessageService) Delete(ctx context.Context, requestID string, me
 // List Request Messages
 func (r *RequestMessageService) Get(ctx context.Context, requestID string, params RequestMessageGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Message], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

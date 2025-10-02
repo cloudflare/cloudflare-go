@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewCertificatePackCertificateService(opts ...option.RequestOption) (r *Cert
 // certificate with another ECDSA certificate.
 func (r *CertificatePackCertificateService) Update(ctx context.Context, customHostnameID string, certificatePackID string, certificateID string, params CertificatePackCertificateUpdateParams, opts ...option.RequestOption) (res *CertificatePackCertificateUpdateResponse, err error) {
 	var env CertificatePackCertificateUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -72,7 +73,7 @@ func (r *CertificatePackCertificateService) Update(ctx context.Context, customHo
 // cannot delete a certificate if it is the only remaining certificate in the pack.
 // At least one certificate must remain in the pack.
 func (r *CertificatePackCertificateService) Delete(ctx context.Context, customHostnameID string, certificatePackID string, certificateID string, body CertificatePackCertificateDeleteParams, opts ...option.RequestOption) (res *CertificatePackCertificateDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

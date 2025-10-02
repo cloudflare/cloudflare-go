@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 // Deprecated: deprecated
 func (r *ProfileService) Get(ctx context.Context, query ProfileGetParams, opts ...option.RequestOption) (res *ProfileGetResponse, err error) {
 	var env ProfileGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

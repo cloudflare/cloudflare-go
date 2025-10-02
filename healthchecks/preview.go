@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 // Create a new preview health check.
 func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env PreviewNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts 
 // Delete a health check.
 func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body PreviewDeleteParams, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
 	var env PreviewDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body 
 // Fetch a single configured health check preview.
 func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query PreviewGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env PreviewGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -129,7 +130,7 @@ type PreviewNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -153,7 +154,7 @@ func (r previewNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewNewResponseEnvelopeSuccess bool
 
 const (
@@ -177,7 +178,7 @@ type PreviewDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PreviewDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -201,7 +202,7 @@ func (r previewDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -225,7 +226,7 @@ type PreviewGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -249,7 +250,7 @@ func (r previewGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PreviewGetResponseEnvelopeSuccess bool
 
 const (

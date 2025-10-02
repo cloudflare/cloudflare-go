@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewScriptScriptAndVersionSettingService(opts ...option.RequestOption) (r *S
 // Patch metadata or config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptName string, params ScriptScriptAndVersionSettingEditParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingEditResponse, err error) {
 	var env ScriptScriptAndVersionSettingEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptN
 // Get metadata and config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptName string, query ScriptScriptAndVersionSettingGetParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingGetResponse, err error) {
 	var env ScriptScriptAndVersionSettingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -101,7 +102,7 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingEditResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers.
+	// Tags associated with the Worker.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
@@ -145,6 +146,10 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
+	// This field can have the runtime type of [[]string].
+	AllowedDestinationAddresses interface{} `json:"allowed_destination_addresses"`
+	// This field can have the runtime type of [[]string].
+	AllowedSenderAddresses interface{} `json:"allowed_sender_addresses"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -153,6 +158,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	ClassName string `json:"class_name"`
 	// The name of the dataset to bind to.
 	Dataset string `json:"dataset"`
+	// Destination address for the email.
+	DestinationAddress string `json:"destination_address" format:"email"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -162,15 +169,26 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName string `json:"old_name"`
 	// This field can have the runtime type of
 	// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
@@ -189,6 +207,10 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	// This field can have the runtime type of
 	// [[]ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID string `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName string                                               `json:"workflow_name"`
 	JSON         scriptScriptAndVersionSettingEditResponseBindingJSON `json:"-"`
@@ -198,33 +220,40 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 // scriptScriptAndVersionSettingEditResponseBindingJSON contains the JSON metadata
 // for the struct [ScriptScriptAndVersionSettingEditResponseBinding]
 type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
-	Name          apijson.Field
-	Type          apijson.Field
-	ID            apijson.Field
-	Algorithm     apijson.Field
-	BucketName    apijson.Field
-	CertificateID apijson.Field
-	ClassName     apijson.Field
-	Dataset       apijson.Field
-	Environment   apijson.Field
-	Format        apijson.Field
-	IndexName     apijson.Field
-	Json          apijson.Field
-	KeyJwk        apijson.Field
-	Namespace     apijson.Field
-	NamespaceID   apijson.Field
-	Outbound      apijson.Field
-	Pipeline      apijson.Field
-	QueueName     apijson.Field
-	ScriptName    apijson.Field
-	SecretName    apijson.Field
-	Service       apijson.Field
-	StoreID       apijson.Field
-	Text          apijson.Field
-	Usages        apijson.Field
-	WorkflowName  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	Name                        apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	Algorithm                   apijson.Field
+	AllowedDestinationAddresses apijson.Field
+	AllowedSenderAddresses      apijson.Field
+	BucketName                  apijson.Field
+	CertificateID               apijson.Field
+	ClassName                   apijson.Field
+	Dataset                     apijson.Field
+	DestinationAddress          apijson.Field
+	Environment                 apijson.Field
+	Format                      apijson.Field
+	IndexName                   apijson.Field
+	Json                        apijson.Field
+	Jurisdiction                apijson.Field
+	KeyJwk                      apijson.Field
+	Namespace                   apijson.Field
+	NamespaceID                 apijson.Field
+	OldName                     apijson.Field
+	Outbound                    apijson.Field
+	Part                        apijson.Field
+	Pipeline                    apijson.Field
+	QueueName                   apijson.Field
+	ScriptName                  apijson.Field
+	SecretName                  apijson.Field
+	Service                     apijson.Field
+	StoreID                     apijson.Field
+	Text                        apijson.Field
+	Usages                      apijson.Field
+	VersionID                   apijson.Field
+	WorkflowName                apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r scriptScriptAndVersionSettingEditResponseBindingJSON) RawJSON() string {
@@ -249,9 +278,12 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
@@ -260,13 +292,16 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -279,9 +314,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
@@ -290,14 +328,16 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey]
-// or
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow] or
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -333,6 +373,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob{}),
+			DiscriminatorValue: "data_blob",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
@@ -345,6 +390,16 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
 			DiscriminatorValue: "hyperdrive",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit{}),
+			DiscriminatorValue: "inherit",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages{}),
+			DiscriminatorValue: "images",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -388,6 +443,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail{}),
+			DiscriminatorValue: "send_email",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
 		},
@@ -395,6 +455,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "tail_consumer",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob{}),
+			DiscriminatorValue: "text_blob",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -420,6 +485,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow{}),
 			DiscriminatorValue: "workflow",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule{}),
+			DiscriminatorValue: "wasm_module",
 		},
 	)
 }
@@ -650,6 +720,56 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Typ
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlob) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobTypeDataBlob ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobType = "data_blob"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDataBlobTypeDataBlob:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -854,6 +974,104 @@ const (
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit struct {
+	// The name of the inherited binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritType `json:"type,required"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName string `json:"old_name"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID string                                                                         `json:"version_id"`
+	JSON      scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	OldName     apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInherit) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritTypeInherit ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritType = "inherit"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindInheritTypeInherit:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImages) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesTypeImages ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesType = "images"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImagesTypeImages:
 		return true
 	}
 	return false
@@ -1148,18 +1366,23 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType `json:"type,required"`
-	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJSON `json:"-"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction `json:"jurisdiction"`
+	JSON         scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJSON         `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	BucketName   apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
@@ -1183,6 +1406,24 @@ const (
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -1232,26 +1473,79 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecre
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailType `json:"type,required"`
+	// List of allowed destination addresses.
+	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
+	// List of allowed sender addresses.
+	AllowedSenderAddresses []string `json:"allowed_sender_addresses" format:"email"`
+	// Destination address for the email.
+	DestinationAddress string                                                                           `json:"destination_address" format:"email"`
+	JSON               scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailJSON struct {
+	Name                        apijson.Field
+	Type                        apijson.Field
+	AllowedDestinationAddresses apijson.Field
+	AllowedSenderAddresses      apijson.Field
+	DestinationAddress          apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmail) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailTypeSendEmail ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailType = "send_email"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSendEmailTypeSendEmail:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService struct {
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
-	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
+	// Optional environment if the Worker utilizes one.
+	Environment string                                                                         `json:"environment"`
+	JSON        scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceJSON struct {
-	Environment apijson.Field
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1324,6 +1618,56 @@ const (
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the text content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlob) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobTypeTextBlob ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobType = "text_blob"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTextBlobTypeTextBlob:
 		return true
 	}
 	return false
@@ -1621,6 +1965,56 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkf
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the WebAssembly module content. Only accepted
+	// for `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleTypeWasmModule ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleType = "wasm_module"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModuleTypeWasmModule:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditResponseBindingsType string
 
@@ -1630,9 +2024,12 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsType = "assets"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser                ScriptScriptAndVersionSettingEditResponseBindingsType = "browser"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsType = "d1"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob               ScriptScriptAndVersionSettingEditResponseBindingsType = "data_blob"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsType = "durable_object_namespace"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsType = "hyperdrive"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit                ScriptScriptAndVersionSettingEditResponseBindingsType = "inherit"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeImages                 ScriptScriptAndVersionSettingEditResponseBindingsType = "images"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsType = "json"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsType = "kv_namespace"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsType = "mtls_certificate"
@@ -1641,18 +2038,21 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsType = "queue"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsType = "r2_bucket"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsType = "secret_text"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail              ScriptScriptAndVersionSettingEditResponseBindingsType = "send_email"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeService                ScriptScriptAndVersionSettingEditResponseBindingsType = "service"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsType = "tail_consumer"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob               ScriptScriptAndVersionSettingEditResponseBindingsType = "text_blob"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsType = "vectorize"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsType = "version_metadata"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingEditResponseBindingsType = "secrets_store_secret"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditResponseBindingsType = "secret_key"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditResponseBindingsType = "workflow"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule             ScriptScriptAndVersionSettingEditResponseBindingsType = "wasm_module"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule:
 		return true
 	}
 	return false
@@ -1672,6 +2072,24 @@ const (
 func (r ScriptScriptAndVersionSettingEditResponseBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditResponseBindingsFormatRaw, ScriptScriptAndVersionSettingEditResponseBindingsFormatPkcs8, ScriptScriptAndVersionSettingEditResponseBindingsFormatSpki, ScriptScriptAndVersionSettingEditResponseBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionEu      ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedramp ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "fedramp"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionEu, ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -1837,9 +2255,13 @@ type ScriptScriptAndVersionSettingEditResponseObservabilityLogs struct {
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
 	InvocationLogs bool `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64                                                        `json:"head_sampling_rate,nullable"`
-	JSON             scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                                                           `json:"persist"`
+	JSON    scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON contains the JSON
@@ -1848,7 +2270,9 @@ type ScriptScriptAndVersionSettingEditResponseObservabilityLogs struct {
 type scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON struct {
 	Enabled          apijson.Field
 	InvocationLogs   apijson.Field
+	Destinations     apijson.Field
 	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1940,7 +2364,7 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingGetResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers.
+	// Tags associated with the Worker.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
@@ -1984,6 +2408,10 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
+	// This field can have the runtime type of [[]string].
+	AllowedDestinationAddresses interface{} `json:"allowed_destination_addresses"`
+	// This field can have the runtime type of [[]string].
+	AllowedSenderAddresses interface{} `json:"allowed_sender_addresses"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -1992,6 +2420,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	ClassName string `json:"class_name"`
 	// The name of the dataset to bind to.
 	Dataset string `json:"dataset"`
+	// Destination address for the email.
+	DestinationAddress string `json:"destination_address" format:"email"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -2001,15 +2431,26 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName string `json:"old_name"`
 	// This field can have the runtime type of
 	// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part"`
 	// Name of the Pipeline to bind to.
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
@@ -2028,6 +2469,10 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	// This field can have the runtime type of
 	// [[]ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID string `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName string                                              `json:"workflow_name"`
 	JSON         scriptScriptAndVersionSettingGetResponseBindingJSON `json:"-"`
@@ -2037,33 +2482,40 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 // scriptScriptAndVersionSettingGetResponseBindingJSON contains the JSON metadata
 // for the struct [ScriptScriptAndVersionSettingGetResponseBinding]
 type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
-	Name          apijson.Field
-	Type          apijson.Field
-	ID            apijson.Field
-	Algorithm     apijson.Field
-	BucketName    apijson.Field
-	CertificateID apijson.Field
-	ClassName     apijson.Field
-	Dataset       apijson.Field
-	Environment   apijson.Field
-	Format        apijson.Field
-	IndexName     apijson.Field
-	Json          apijson.Field
-	KeyJwk        apijson.Field
-	Namespace     apijson.Field
-	NamespaceID   apijson.Field
-	Outbound      apijson.Field
-	Pipeline      apijson.Field
-	QueueName     apijson.Field
-	ScriptName    apijson.Field
-	SecretName    apijson.Field
-	Service       apijson.Field
-	StoreID       apijson.Field
-	Text          apijson.Field
-	Usages        apijson.Field
-	WorkflowName  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	Name                        apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	Algorithm                   apijson.Field
+	AllowedDestinationAddresses apijson.Field
+	AllowedSenderAddresses      apijson.Field
+	BucketName                  apijson.Field
+	CertificateID               apijson.Field
+	ClassName                   apijson.Field
+	Dataset                     apijson.Field
+	DestinationAddress          apijson.Field
+	Environment                 apijson.Field
+	Format                      apijson.Field
+	IndexName                   apijson.Field
+	Json                        apijson.Field
+	Jurisdiction                apijson.Field
+	KeyJwk                      apijson.Field
+	Namespace                   apijson.Field
+	NamespaceID                 apijson.Field
+	OldName                     apijson.Field
+	Outbound                    apijson.Field
+	Part                        apijson.Field
+	Pipeline                    apijson.Field
+	QueueName                   apijson.Field
+	ScriptName                  apijson.Field
+	SecretName                  apijson.Field
+	Service                     apijson.Field
+	StoreID                     apijson.Field
+	Text                        apijson.Field
+	Usages                      apijson.Field
+	VersionID                   apijson.Field
+	WorkflowName                apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r scriptScriptAndVersionSettingGetResponseBindingJSON) RawJSON() string {
@@ -2088,9 +2540,12 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
@@ -2099,13 +2554,16 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2118,9 +2576,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
@@ -2129,13 +2590,16 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey] or
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow] or
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -2171,6 +2635,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob{}),
+			DiscriminatorValue: "data_blob",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
@@ -2183,6 +2652,16 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
 			DiscriminatorValue: "hyperdrive",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit{}),
+			DiscriminatorValue: "inherit",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages{}),
+			DiscriminatorValue: "images",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2226,6 +2705,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail{}),
+			DiscriminatorValue: "send_email",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
 		},
@@ -2233,6 +2717,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "tail_consumer",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob{}),
+			DiscriminatorValue: "text_blob",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2258,6 +2747,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow{}),
 			DiscriminatorValue: "workflow",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule{}),
+			DiscriminatorValue: "wasm_module",
 		},
 	)
 }
@@ -2488,6 +2982,56 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type
 	return false
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlob) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobTypeDataBlob ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobType = "data_blob"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDataBlobTypeDataBlob:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -2692,6 +3236,104 @@ const (
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit struct {
+	// The name of the inherited binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritType `json:"type,required"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName string `json:"old_name"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID string                                                                        `json:"version_id"`
+	JSON      scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	OldName     apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInherit) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritTypeInherit ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritType = "inherit"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindInheritTypeInherit:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesTypeImages ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesType = "images"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImagesTypeImages:
 		return true
 	}
 	return false
@@ -2986,18 +3628,23 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket 
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType `json:"type,required"`
-	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJSON `json:"-"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction `json:"jurisdiction"`
+	JSON         scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJSON         `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	BucketName   apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket) UnmarshalJSON(data []byte) (err error) {
@@ -3021,6 +3668,24 @@ const (
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -3070,26 +3735,79 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecret
 	return false
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailType `json:"type,required"`
+	// List of allowed destination addresses.
+	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
+	// List of allowed sender addresses.
+	AllowedSenderAddresses []string `json:"allowed_sender_addresses" format:"email"`
+	// Destination address for the email.
+	DestinationAddress string                                                                          `json:"destination_address" format:"email"`
+	JSON               scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailJSON struct {
+	Name                        apijson.Field
+	Type                        apijson.Field
+	AllowedDestinationAddresses apijson.Field
+	AllowedSenderAddresses      apijson.Field
+	DestinationAddress          apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmail) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailTypeSendEmail ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailType = "send_email"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSendEmailTypeSendEmail:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService struct {
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of Worker to bind to.
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
-	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
+	// Optional environment if the Worker utilizes one.
+	Environment string                                                                        `json:"environment"`
+	JSON        scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceJSON struct {
-	Environment apijson.Field
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3162,6 +3880,56 @@ const (
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the text content. Only accepted for
+	// `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlob) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobTypeTextBlob ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobType = "text_blob"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTextBlobTypeTextBlob:
 		return true
 	}
 	return false
@@ -3459,6 +4227,56 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkfl
 	return false
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The name of the file containing the WebAssembly module content. Only accepted
+	// for `service worker syntax` Workers.
+	Part string `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleJSON struct {
+	Name        apijson.Field
+	Part        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleTypeWasmModule ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleType = "wasm_module"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModuleTypeWasmModule:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingGetResponseBindingsType string
 
@@ -3468,9 +4286,12 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsType = "assets"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser                ScriptScriptAndVersionSettingGetResponseBindingsType = "browser"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsType = "d1"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob               ScriptScriptAndVersionSettingGetResponseBindingsType = "data_blob"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsType = "durable_object_namespace"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsType = "hyperdrive"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit                ScriptScriptAndVersionSettingGetResponseBindingsType = "inherit"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeImages                 ScriptScriptAndVersionSettingGetResponseBindingsType = "images"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsType = "json"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsType = "kv_namespace"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsType = "mtls_certificate"
@@ -3479,18 +4300,21 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsType = "queue"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsType = "r2_bucket"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsType = "secret_text"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail              ScriptScriptAndVersionSettingGetResponseBindingsType = "send_email"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeService                ScriptScriptAndVersionSettingGetResponseBindingsType = "service"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsType = "tail_consumer"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob               ScriptScriptAndVersionSettingGetResponseBindingsType = "text_blob"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsType = "vectorize"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsType = "version_metadata"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingGetResponseBindingsType = "secrets_store_secret"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingGetResponseBindingsType = "secret_key"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingGetResponseBindingsType = "workflow"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule             ScriptScriptAndVersionSettingGetResponseBindingsType = "wasm_module"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule:
 		return true
 	}
 	return false
@@ -3510,6 +4334,24 @@ const (
 func (r ScriptScriptAndVersionSettingGetResponseBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingGetResponseBindingsFormatRaw, ScriptScriptAndVersionSettingGetResponseBindingsFormatPkcs8, ScriptScriptAndVersionSettingGetResponseBindingsFormatSpki, ScriptScriptAndVersionSettingGetResponseBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionEu      ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "eu"
+	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedramp ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "fedramp"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionEu, ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -3675,9 +4517,13 @@ type ScriptScriptAndVersionSettingGetResponseObservabilityLogs struct {
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
 	InvocationLogs bool `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64                                                       `json:"head_sampling_rate,nullable"`
-	JSON             scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                                                          `json:"persist"`
+	JSON    scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON contains the JSON
@@ -3686,7 +4532,9 @@ type ScriptScriptAndVersionSettingGetResponseObservabilityLogs struct {
 type scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON struct {
 	Enabled          apijson.Field
 	InvocationLogs   apijson.Field
+	Destinations     apijson.Field
 	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3801,7 +4649,7 @@ type ScriptScriptAndVersionSettingEditParamsSettings struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacement] `json:"placement"`
-	// Tags to help you manage your Workers.
+	// Tags associated with the Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
@@ -3820,8 +4668,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsType] `json:"type,required"`
 	// Identifier of the D1 database to bind to.
-	ID        param.Field[string]      `json:"id"`
-	Algorithm param.Field[interface{}] `json:"algorithm"`
+	ID                          param.Field[string]      `json:"id"`
+	Algorithm                   param.Field[interface{}] `json:"algorithm"`
+	AllowedDestinationAddresses param.Field[interface{}] `json:"allowed_destination_addresses"`
+	AllowedSenderAddresses      param.Field[interface{}] `json:"allowed_sender_addresses"`
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -3830,6 +4680,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	ClassName param.Field[string] `json:"class_name"`
 	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset"`
+	// Destination address for the email.
+	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Data format of the key.
@@ -3839,14 +4691,25 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
 	Json param.Field[string] `json:"json"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction] `json:"jurisdiction"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
-	NamespaceID param.Field[string]      `json:"namespace_id"`
-	Outbound    param.Field[interface{}] `json:"outbound"`
+	NamespaceID param.Field[string] `json:"namespace_id"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName  param.Field[string]      `json:"old_name"`
+	Outbound param.Field[interface{}] `json:"outbound"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part param.Field[string] `json:"part"`
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
@@ -3863,6 +4726,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// The text value to use.
 	Text   param.Field[string]      `json:"text"`
 	Usages param.Field[interface{}] `json:"usages"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID param.Field[string] `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name"`
 }
@@ -3882,9 +4749,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssets],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowser],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlob],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespace],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInherit],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImages],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJson],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificate],
@@ -3893,13 +4763,16 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueue],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2Bucket],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretText],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmail],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindService],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumer],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlob],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorize],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule],
 // [ScriptScriptAndVersionSettingEditParamsSettingsBinding].
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion interface {
 	implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion()
@@ -4054,6 +4927,40 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlob struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The name of the file containing the data content. Only accepted for
+	// `service worker syntax` Workers.
+	Part param.Field[string] `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobType] `json:"type,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlob) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlob) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobTypeDataBlob ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobType = "data_blob"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobTypeDataBlob:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -4176,6 +5083,72 @@ const (
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInherit struct {
+	// The name of the inherited binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInheritType] `json:"type,required"`
+	// The old name of the inherited binding. If set, the binding will be renamed from
+	// `old_name` to `name` in the new version. If not set, the binding will keep the
+	// same name between versions.
+	OldName param.Field[string] `json:"old_name"`
+	// Identifier for the version to inherit the binding from, which can be the version
+	// ID or the literal "latest" to inherit from the latest version. Defaults to
+	// inheriting the binding from the latest version.
+	VersionID param.Field[string] `json:"version_id"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInherit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInherit) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInheritType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInheritTypeInherit ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInheritType = "inherit"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInheritType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindInheritTypeInherit:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImages struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImagesType] `json:"type,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImages) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImages) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImagesType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImagesTypeImages ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImagesType = "images"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImagesType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindImagesTypeImages:
 		return true
 	}
 	return false
@@ -4374,6 +5347,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	// The
+	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+	// of the R2 bucket.
+	Jurisdiction param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction] `json:"jurisdiction"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2Bucket) MarshalJSON() (data []byte, err error) {
@@ -4393,6 +5370,24 @@ const (
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -4429,15 +5424,50 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmail struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailType] `json:"type,required"`
+	// List of allowed destination addresses.
+	AllowedDestinationAddresses param.Field[[]string] `json:"allowed_destination_addresses" format:"email"`
+	// List of allowed sender addresses.
+	AllowedSenderAddresses param.Field[[]string] `json:"allowed_sender_addresses" format:"email"`
+	// Destination address for the email.
+	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmail) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmail) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailTypeSendEmail ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailType = "send_email"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailTypeSendEmail:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindService struct {
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of Worker to bind to.
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindService) MarshalJSON() (data []byte, err error) {
@@ -4488,6 +5518,40 @@ const (
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlob struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The name of the file containing the text content. Only accepted for
+	// `service worker syntax` Workers.
+	Part param.Field[string] `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobType] `json:"type,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlob) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlob) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobTypeTextBlob ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobType = "text_blob"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobTypeTextBlob:
 		return true
 	}
 	return false
@@ -4707,6 +5771,40 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The name of the file containing the WebAssembly module content. Only accepted
+	// for `service worker syntax` Workers.
+	Part param.Field[string] `json:"part,required"`
+	// The kind of resource that the binding provides.
+	//
+	// Deprecated: deprecated
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleType] `json:"type,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleTypeWasmModule ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleType = "wasm_module"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleTypeWasmModule:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsType string
 
@@ -4716,9 +5814,12 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "assets"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser                ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "browser"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "d1"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "data_blob"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "durable_object_namespace"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "hyperdrive"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit                ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "inherit"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "images"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "json"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "kv_namespace"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "mtls_certificate"
@@ -4727,18 +5828,21 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "queue"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "r2_bucket"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secret_text"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "send_email"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "service"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "tail_consumer"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "text_blob"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "vectorize"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "version_metadata"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secrets_store_secret"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secret_key"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "workflow"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "wasm_module"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule:
 		return true
 	}
 	return false
@@ -4758,6 +5862,24 @@ const (
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatRaw, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatPkcs8, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatSpki, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The
+// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
+// of the R2 bucket.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionEu      ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedramp ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "fedramp"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionEu, ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -4844,8 +5966,12 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs struct {
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
 	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether log persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs) MarshalJSON() (data []byte, err error) {

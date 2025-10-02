@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
 // Retrieves a list of datasets.
 func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts ...option.RequestOption) (res *DatasetListResponse, err error) {
 	var env DatasetListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/datasets"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,7 +53,7 @@ func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts
 // Retrieves an URL to download a single dataset.
 func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadParams, opts ...option.RequestOption) (res *DatasetDownloadResponse, err error) {
 	var env DatasetDownloadResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/datasets/download"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -66,7 +67,7 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 // content by alias the latest dataset is returned, optionally filtered by the
 // latest available at a given date.
 func (r *DatasetService) Get(ctx context.Context, alias string, opts ...option.RequestOption) (res *string, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
 	if alias == "" {
 		err = errors.New("missing required alias parameter")

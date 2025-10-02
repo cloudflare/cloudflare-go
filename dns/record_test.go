@@ -414,3 +414,94 @@ func TestRecordScan(t *testing.T) {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
 }
+
+func TestRecordScanList(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.DNS.Records.ScanList(context.TODO(), dns.RecordScanListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRecordScanReviewWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.DNS.Records.ScanReview(context.TODO(), dns.RecordScanReviewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Accepts: cloudflare.F([]dns.RecordScanReviewParamsAcceptUnion{dns.ARecordParam{
+			Name:    cloudflare.F("example.com"),
+			TTL:     cloudflare.F(dns.TTL1),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+			Comment: cloudflare.F("Domain verification record"),
+			Content: cloudflare.F("198.51.100.4"),
+			Proxied: cloudflare.F(true),
+			Settings: cloudflare.F(dns.ARecordSettingsParam{
+				IPV4Only: cloudflare.F(true),
+				IPV6Only: cloudflare.F(true),
+			}),
+			Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+		}}),
+		Rejects: cloudflare.F([]dns.RecordScanReviewParamsReject{{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRecordScanTrigger(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.DNS.Records.ScanTrigger(context.TODO(), dns.RecordScanTriggerParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}

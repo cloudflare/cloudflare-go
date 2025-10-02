@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -53,7 +54,7 @@ func NewHTTPAseService(opts ...option.RequestOption) (r *HTTPAseService) {
 // Retrieves the top autonomous systems by HTTP requests.
 func (r *HTTPAseService) Get(ctx context.Context, query HTTPAseGetParams, opts ...option.RequestOption) (res *HTTPAseGetResponse, err error) {
 	var env HTTPAseGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -304,6 +305,11 @@ type HTTPAseGetParams struct {
 	DeviceType param.Field[[]HTTPAseGetParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPAseGetParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPAseGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewAttackLayer7SummaryService(opts ...option.RequestOption) (r *AttackLayer
 // Retrieves the distribution of layer 7 attacks by HTTP method.
 func (r *AttackLayer7SummaryService) HTTPMethod(ctx context.Context, query AttackLayer7SummaryHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7SummaryHTTPMethodResponse, err error) {
 	var env AttackLayer7SummaryHTTPMethodResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/http_method"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,7 +51,7 @@ func (r *AttackLayer7SummaryService) HTTPMethod(ctx context.Context, query Attac
 // Retrieves the distribution of layer 7 attacks by HTTP version.
 func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query AttackLayer7SummaryHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryHTTPVersionResponse, err error) {
 	var env AttackLayer7SummaryHTTPVersionResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -63,7 +64,7 @@ func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query Atta
 // Retrieves the distribution of layer 7 attacks by targeted industry.
 func (r *AttackLayer7SummaryService) Industry(ctx context.Context, query AttackLayer7SummaryIndustryParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIndustryResponse, err error) {
 	var env AttackLayer7SummaryIndustryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/industry"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -76,7 +77,7 @@ func (r *AttackLayer7SummaryService) Industry(ctx context.Context, query AttackL
 // Retrieves the distribution of layer 7 attacks by IP version.
 func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query AttackLayer7SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIPVersionResponse, err error) {
 	var env AttackLayer7SummaryIPVersionResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -89,7 +90,7 @@ func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query Attack
 // Retrieves the distribution of layer 7 attacks by managed rules.
 func (r *AttackLayer7SummaryService) ManagedRules(ctx context.Context, query AttackLayer7SummaryManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7SummaryManagedRulesResponse, err error) {
 	var env AttackLayer7SummaryManagedRulesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/managed_rules"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -102,7 +103,7 @@ func (r *AttackLayer7SummaryService) ManagedRules(ctx context.Context, query Att
 // Retrieves the distribution of layer 7 attacks by mitigation product.
 func (r *AttackLayer7SummaryService) MitigationProduct(ctx context.Context, query AttackLayer7SummaryMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7SummaryMitigationProductResponse, err error) {
 	var env AttackLayer7SummaryMitigationProductResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/mitigation_product"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -115,7 +116,7 @@ func (r *AttackLayer7SummaryService) MitigationProduct(ctx context.Context, quer
 // Retrieves the distribution of layer 7 attacks by targeted vertical.
 func (r *AttackLayer7SummaryService) Vertical(ctx context.Context, query AttackLayer7SummaryVerticalParams, opts ...option.RequestOption) (res *AttackLayer7SummaryVerticalResponse, err error) {
 	var env AttackLayer7SummaryVerticalResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/attacks/layer7/summary/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

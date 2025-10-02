@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -36,7 +37,7 @@ func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 // Retrieves all ASes in the current global routing tables with routing statistics.
 func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, opts ...option.RequestOption) (res *BGPRouteAsesResponse, err error) {
 	var env BGPRouteAsesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/routes/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,7 +50,7 @@ func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, op
 // Retrieves all Multi-Origin AS (MOAS) prefixes in the global routing tables.
 func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, opts ...option.RequestOption) (res *BGPRouteMoasResponse, err error) {
 	var env BGPRouteMoasResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/routes/moas"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,7 +63,7 @@ func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, op
 // Retrieves the prefix-to-ASN mapping from global routing tables.
 func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams, opts ...option.RequestOption) (res *BGPRoutePfx2asResponse, err error) {
 	var env BGPRoutePfx2asResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/routes/pfx2as"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -76,7 +77,7 @@ func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams
 // collectors (RouteViews and RIPE RIS).
 func (r *BGPRouteService) Realtime(ctx context.Context, query BGPRouteRealtimeParams, opts ...option.RequestOption) (res *BGPRouteRealtimeResponse, err error) {
 	var env BGPRouteRealtimeResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/routes/realtime"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -89,7 +90,7 @@ func (r *BGPRouteService) Realtime(ctx context.Context, query BGPRouteRealtimePa
 // Retrieves the BGP routing table stats.
 func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, opts ...option.RequestOption) (res *BGPRouteStatsResponse, err error) {
 	var env BGPRouteStatsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/routes/stats"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

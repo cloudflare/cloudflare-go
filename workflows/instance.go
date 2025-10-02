@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -47,7 +48,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 // Create a new workflow instance
 func (r *InstanceService) New(ctx context.Context, workflowName string, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -68,7 +69,7 @@ func (r *InstanceService) New(ctx context.Context, workflowName string, params I
 // List of workflow instances
 func (r *InstanceService) List(ctx context.Context, workflowName string, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -99,7 +100,7 @@ func (r *InstanceService) ListAutoPaging(ctx context.Context, workflowName strin
 // Batch create new Workflow instances
 func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params InstanceBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InstanceBulkResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -130,7 +131,7 @@ func (r *InstanceService) BulkAutoPaging(ctx context.Context, workflowName strin
 // Get logs and status from instance
 func (r *InstanceService) Get(ctx context.Context, workflowName string, instanceID string, query InstanceGetParams, opts ...option.RequestOption) (res *InstanceGetResponse, err error) {
 	var env InstanceGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -827,7 +828,7 @@ type InstanceNewResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
-	NextCursor string                                    `json:"next_cursor"`
+	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -838,7 +839,7 @@ type instanceNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -860,6 +861,9 @@ type InstanceListParams struct {
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
+	// should only be used when `cursor` is used, defines a new direction for the
+	// cursor
+	Direction param.Field[InstanceListParamsDirection] `query:"direction"`
 	// `page` and `cursor` are mutually exclusive, use one or the other.
 	Page    param.Field[float64]                  `query:"page"`
 	PerPage param.Field[float64]                  `query:"per_page"`
@@ -872,6 +876,23 @@ func (r InstanceListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// should only be used when `cursor` is used, defines a new direction for the
+// cursor
+type InstanceListParamsDirection string
+
+const (
+	InstanceListParamsDirectionAsc  InstanceListParamsDirection = "asc"
+	InstanceListParamsDirectionDesc InstanceListParamsDirection = "desc"
+)
+
+func (r InstanceListParamsDirection) IsKnown() bool {
+	switch r {
+	case InstanceListParamsDirectionAsc, InstanceListParamsDirectionDesc:
+		return true
+	}
+	return false
 }
 
 type InstanceListParamsStatus string
@@ -1011,7 +1032,7 @@ type InstanceGetResponseEnvelopeResultInfo struct {
 	Count      float64                                   `json:"count,required"`
 	PerPage    float64                                   `json:"per_page,required"`
 	TotalCount float64                                   `json:"total_count,required"`
-	NextCursor string                                    `json:"next_cursor"`
+	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -1022,7 +1043,7 @@ type instanceGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

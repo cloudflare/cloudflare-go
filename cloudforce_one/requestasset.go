@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewRequestAssetService(opts ...option.RequestOption) (r *RequestAssetServic
 // List Request Assets
 func (r *RequestAssetService) New(ctx context.Context, requestID string, params RequestAssetNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetNewResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -69,7 +70,7 @@ func (r *RequestAssetService) NewAutoPaging(ctx context.Context, requestID strin
 // Update a Request Asset
 func (r *RequestAssetService) Update(ctx context.Context, requestID string, assetID string, params RequestAssetUpdateParams, opts ...option.RequestOption) (res *RequestAssetUpdateResponse, err error) {
 	var env RequestAssetUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -93,7 +94,7 @@ func (r *RequestAssetService) Update(ctx context.Context, requestID string, asse
 
 // Delete a Request Asset
 func (r *RequestAssetService) Delete(ctx context.Context, requestID string, assetID string, body RequestAssetDeleteParams, opts ...option.RequestOption) (res *RequestAssetDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -114,7 +115,7 @@ func (r *RequestAssetService) Delete(ctx context.Context, requestID string, asse
 // Get a Request Asset
 func (r *RequestAssetService) Get(ctx context.Context, requestID string, assetID string, query RequestAssetGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetGetResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

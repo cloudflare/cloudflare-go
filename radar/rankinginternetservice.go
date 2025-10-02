@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewRankingInternetServiceService(opts ...option.RequestOption) (r *RankingI
 // Retrieves the list of Internet services categories.
 func (r *RankingInternetServiceService) Categories(ctx context.Context, query RankingInternetServiceCategoriesParams, opts ...option.RequestOption) (res *RankingInternetServiceCategoriesResponse, err error) {
 	var env RankingInternetServiceCategoriesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ranking/internet_services/categories"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,7 +54,7 @@ func (r *RankingInternetServiceService) Categories(ctx context.Context, query Ra
 // Retrieves Internet Services rank update changes over time.
 func (r *RankingInternetServiceService) TimeseriesGroups(ctx context.Context, query RankingInternetServiceTimeseriesGroupsParams, opts ...option.RequestOption) (res *RankingInternetServiceTimeseriesGroupsResponse, err error) {
 	var env RankingInternetServiceTimeseriesGroupsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ranking/internet_services/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -66,7 +67,7 @@ func (r *RankingInternetServiceService) TimeseriesGroups(ctx context.Context, qu
 // Retrieves top Internet services based on their rank.
 func (r *RankingInternetServiceService) Top(ctx context.Context, query RankingInternetServiceTopParams, opts ...option.RequestOption) (res *RankingInternetServiceTopResponse, err error) {
 	var env RankingInternetServiceTopResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ranking/internet_services/top"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -43,7 +44,7 @@ func NewListBulkOperationService(opts ...option.RequestOption) (r *ListBulkOpera
 // property will contain a message describing the error.
 func (r *ListBulkOperationService) Get(ctx context.Context, operationID string, query ListBulkOperationGetParams, opts ...option.RequestOption) (res *ListBulkOperationGetResponse, err error) {
 	var env ListBulkOperationGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/filters"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -54,7 +55,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // for full details.
 func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -91,7 +92,7 @@ func (r *RuleService) NewAutoPaging(ctx context.Context, params RuleNewParams, o
 // for full details.
 func (r *RuleService) Update(ctx context.Context, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -118,7 +119,7 @@ func (r *RuleService) Update(ctx context.Context, ruleID string, params RuleUpda
 // for full details.
 func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -156,7 +157,7 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams,
 // for full details.
 func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -182,7 +183,7 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 // for full details.
 func (r *RuleService) BulkDelete(ctx context.Context, body RuleBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -219,7 +220,7 @@ func (r *RuleService) BulkDeleteAutoPaging(ctx context.Context, body RuleBulkDel
 // for full details.
 func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -256,7 +257,7 @@ func (r *RuleService) BulkEditAutoPaging(ctx context.Context, params RuleBulkEdi
 // for full details.
 func (r *RuleService) BulkUpdate(ctx context.Context, params RuleBulkUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -293,7 +294,7 @@ func (r *RuleService) BulkUpdateAutoPaging(ctx context.Context, params RuleBulkU
 // for full details.
 func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -334,7 +335,7 @@ func (r *RuleService) EditAutoPaging(ctx context.Context, ruleID string, body Ru
 // for full details.
 func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

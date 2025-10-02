@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewHTTPLocationTLSVersionService(opts ...option.RequestOption) (r *HTTPLoca
 // version.
 func (r *HTTPLocationTLSVersionService) Get(ctx context.Context, tlsVersion HTTPLocationTLSVersionGetParamsTLSVersion, query HTTPLocationTLSVersionGetParams, opts ...option.RequestOption) (res *HTTPLocationTLSVersionGetResponse, err error) {
 	var env HTTPLocationTLSVersionGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/tls_version/%v", tlsVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -291,6 +292,11 @@ type HTTPLocationTLSVersionGetParams struct {
 	DeviceType param.Field[[]HTTPLocationTLSVersionGetParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPLocationTLSVersionGetParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPLocationTLSVersionGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

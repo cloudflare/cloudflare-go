@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewAccessApplicationSettingService(opts ...option.RequestOption) (r *Access
 // Updates Access application settings.
 func (r *AccessApplicationSettingService) Update(ctx context.Context, appID AppIDParam, params AccessApplicationSettingUpdateParams, opts ...option.RequestOption) (res *AccessApplicationSettingUpdateResponse, err error) {
 	var env AccessApplicationSettingUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -71,7 +72,7 @@ func (r *AccessApplicationSettingService) Update(ctx context.Context, appID AppI
 // Updates Access application settings.
 func (r *AccessApplicationSettingService) Edit(ctx context.Context, appID AppIDParam, params AccessApplicationSettingEditParams, opts ...option.RequestOption) (res *AccessApplicationSettingEditResponse, err error) {
 	var env AccessApplicationSettingEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

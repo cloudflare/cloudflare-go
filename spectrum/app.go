@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 // origin.
 func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...option.RequestOption) (res *AppNewResponse, err error) {
 	var env AppNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...optio
 // the origin.
 func (r *AppService) Update(ctx context.Context, appID string, params AppUpdateParams, opts ...option.RequestOption) (res *AppUpdateResponse, err error) {
 	var env AppUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -82,7 +83,7 @@ func (r *AppService) Update(ctx context.Context, appID string, params AppUpdateP
 // Retrieves a list of currently existing Spectrum applications inside a zone.
 func (r *AppService) List(ctx context.Context, params AppListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AppListResponseUnion], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -109,7 +110,7 @@ func (r *AppService) ListAutoPaging(ctx context.Context, params AppListParams, o
 // Deletes a previously existing application.
 func (r *AppService) Delete(ctx context.Context, appID string, body AppDeleteParams, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
 	var env AppDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -130,7 +131,7 @@ func (r *AppService) Delete(ctx context.Context, appID string, body AppDeletePar
 // Gets the application configuration of a specific application inside a zone.
 func (r *AppService) Get(ctx context.Context, appID string, query AppGetParams, opts ...option.RequestOption) (res *AppGetResponse, err error) {
 	var env AppGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

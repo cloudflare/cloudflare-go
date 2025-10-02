@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewPurgeService(opts ...option.RequestOption) (r *PurgeService) {
 // Deletes all messages from the Queue.
 func (r *PurgeService) Start(ctx context.Context, queueID string, params PurgeStartParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env PurgeStartResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *PurgeService) Start(ctx context.Context, queueID string, params PurgeSt
 // Get details about a Queue's purge status.
 func (r *PurgeService) Status(ctx context.Context, queueID string, query PurgeStatusParams, opts ...option.RequestOption) (res *PurgeStatusResponse, err error) {
 	var env PurgeStatusResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

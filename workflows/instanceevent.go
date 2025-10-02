@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewInstanceEventService(opts ...option.RequestOption) (r *InstanceEventServ
 // Send event to instance
 func (r *InstanceEventService) New(ctx context.Context, workflowName string, instanceID string, eventType string, params InstanceEventNewParams, opts ...option.RequestOption) (res *InstanceEventNewResponse, err error) {
 	var env InstanceEventNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -166,7 +167,7 @@ type InstanceEventNewResponseEnvelopeResultInfo struct {
 	Count      float64                                        `json:"count,required"`
 	PerPage    float64                                        `json:"per_page,required"`
 	TotalCount float64                                        `json:"total_count,required"`
-	NextCursor string                                         `json:"next_cursor"`
+	Cursor     string                                         `json:"cursor"`
 	Page       float64                                        `json:"page"`
 	JSON       instanceEventNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -177,7 +178,7 @@ type instanceEventNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

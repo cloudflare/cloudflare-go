@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -35,9 +36,11 @@ func NewLeakedCredentialSummaryService(opts ...option.RequestOption) (r *LeakedC
 }
 
 // Retrieves the distribution of HTTP authentication requests by bot class.
+//
+// Deprecated: deprecated
 func (r *LeakedCredentialSummaryService) BotClass(ctx context.Context, query LeakedCredentialSummaryBotClassParams, opts ...option.RequestOption) (res *LeakedCredentialSummaryBotClassResponse, err error) {
 	var env LeakedCredentialSummaryBotClassResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/leaked_credential_checks/summary/bot_class"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,9 +52,11 @@ func (r *LeakedCredentialSummaryService) BotClass(ctx context.Context, query Lea
 
 // Retrieves the distribution of HTTP authentication requests by compromised
 // credential status.
+//
+// Deprecated: deprecated
 func (r *LeakedCredentialSummaryService) Compromised(ctx context.Context, query LeakedCredentialSummaryCompromisedParams, opts ...option.RequestOption) (res *LeakedCredentialSummaryCompromisedResponse, err error) {
 	var env LeakedCredentialSummaryCompromisedResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/leaked_credential_checks/summary/compromised"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

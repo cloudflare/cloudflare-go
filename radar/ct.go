@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewCtService(opts ...option.RequestOption) (r *CtService) {
 // dimension.
 func (r *CtService) Summary(ctx context.Context, dimension CtSummaryParamsDimension, query CtSummaryParams, opts ...option.RequestOption) (res *CtSummaryResponse, err error) {
 	var env CtSummaryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/ct/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -58,7 +59,7 @@ func (r *CtService) Summary(ctx context.Context, dimension CtSummaryParamsDimens
 // Retrieves certificate volume over time.
 func (r *CtService) Timeseries(ctx context.Context, query CtTimeseriesParams, opts ...option.RequestOption) (res *CtTimeseriesResponse, err error) {
 	var env CtTimeseriesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/ct/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -72,7 +73,7 @@ func (r *CtService) Timeseries(ctx context.Context, query CtTimeseriesParams, op
 // dimension over time.
 func (r *CtService) TimeseriesGroups(ctx context.Context, dimension CtTimeseriesGroupsParamsDimension, query CtTimeseriesGroupsParams, opts ...option.RequestOption) (res *CtTimeseriesGroupsResponse, err error) {
 	var env CtTimeseriesGroupsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/ct/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

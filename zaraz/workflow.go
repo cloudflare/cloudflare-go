@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewWorkflowService(opts ...option.RequestOption) (r *WorkflowService) {
 // Gets Zaraz workflow for a zone.
 func (r *WorkflowService) Get(ctx context.Context, query WorkflowGetParams, opts ...option.RequestOption) (res *Workflow, err error) {
 	var env WorkflowGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

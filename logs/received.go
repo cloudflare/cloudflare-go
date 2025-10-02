@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -47,7 +48,7 @@ func NewReceivedService(opts ...option.RequestOption) (r *ReceivedService) {
 // will be handled properly.
 func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env apijson.UnionUnmarshaler[interface{}]
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opt
 }
 
 type ReceivedGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Sets the (exclusive) end of the requested time frame. This can be a unix
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to

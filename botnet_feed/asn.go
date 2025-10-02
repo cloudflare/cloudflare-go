@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 // previous day.
 func (r *ASNService) DayReport(ctx context.Context, asnID int64, params ASNDayReportParams, opts ...option.RequestOption) (res *ASNDayReportResponse, err error) {
 	var env ASNDayReportResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *ASNService) DayReport(ctx context.Context, asnID int64, params ASNDayRe
 // registered to user account.
 func (r *ASNService) FullReport(ctx context.Context, asnID int64, query ASNFullReportParams, opts ...option.RequestOption) (res *ASNFullReportResponse, err error) {
 	var env ASNFullReportResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

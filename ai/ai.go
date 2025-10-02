@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -24,11 +25,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIService] method instead.
 type AIService struct {
-	Options   []option.RequestOption
-	Finetunes *FinetuneService
-	Authors   *AuthorService
-	Tasks     *TaskService
-	Models    *ModelService
+	Options    []option.RequestOption
+	Finetunes  *FinetuneService
+	Authors    *AuthorService
+	Tasks      *TaskService
+	Models     *ModelService
+	ToMarkdown *ToMarkdownService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -41,6 +43,7 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r.Authors = NewAuthorService(opts...)
 	r.Tasks = NewTaskService(opts...)
 	r.Models = NewModelService(opts...)
+	r.ToMarkdown = NewToMarkdownService(opts...)
 	return
 }
 
@@ -55,7 +58,7 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 // [Cloudflare Docs](https://developers.cloudflare.com/workers-ai/models/).
 func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponseUnion, err error) {
 	var env AIRunResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

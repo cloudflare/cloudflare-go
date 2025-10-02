@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewAccessApplicationPolicyTestService(opts ...option.RequestOption) (r *Acc
 // Starts an Access policy test.
 func (r *AccessApplicationPolicyTestService) New(ctx context.Context, params AccessApplicationPolicyTestNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyTestNewResponse, err error) {
 	var env AccessApplicationPolicyTestNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *AccessApplicationPolicyTestService) New(ctx context.Context, params Acc
 // Fetches the current status of a given Access policy test.
 func (r *AccessApplicationPolicyTestService) Get(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyTestGetResponse, err error) {
 	var env AccessApplicationPolicyTestGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

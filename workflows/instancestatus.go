@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewInstanceStatusService(opts ...option.RequestOption) (r *InstanceStatusSe
 // Change status of instance
 func (r *InstanceStatusService) Edit(ctx context.Context, workflowName string, instanceID string, params InstanceStatusEditParams, opts ...option.RequestOption) (res *InstanceStatusEditResponse, err error) {
 	var env InstanceStatusEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -224,7 +225,7 @@ type InstanceStatusEditResponseEnvelopeResultInfo struct {
 	Count      float64                                          `json:"count,required"`
 	PerPage    float64                                          `json:"per_page,required"`
 	TotalCount float64                                          `json:"total_count,required"`
-	NextCursor string                                           `json:"next_cursor"`
+	Cursor     string                                           `json:"cursor"`
 	Page       float64                                          `json:"page"`
 	JSON       instanceStatusEditResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -235,7 +236,7 @@ type instanceStatusEditResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	NextCursor  apijson.Field
+	Cursor      apijson.Field
 	Page        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

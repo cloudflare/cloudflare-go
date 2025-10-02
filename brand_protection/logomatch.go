@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -37,7 +38,7 @@ func NewLogoMatchService(opts ...option.RequestOption) (r *LogoMatchService) {
 
 // Return matches as CSV for logo queries based on ID
 func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloadParams, opts ...option.RequestOption) (res *LogoMatchDownloadResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,7 +50,7 @@ func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloa
 
 // Return matches for logo queries based on ID
 func (r *LogoMatchService) Get(ctx context.Context, params LogoMatchGetParams, opts ...option.RequestOption) (res *LogoMatchGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

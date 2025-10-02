@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -47,7 +48,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
 func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponse, err error) {
 	var env AccessRuleNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -80,7 +81,7 @@ func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams,
 // parameters.
 func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessRuleListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -125,7 +126,7 @@ func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRul
 // Note: This operation will affect all zones in the account or zone.
 func (r *AccessRuleService) Delete(ctx context.Context, ruleID string, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
 	var env AccessRuleDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -162,7 +163,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, ruleID string, body Acce
 // Note: This operation will affect all zones in the account or zone.
 func (r *AccessRuleService) Edit(ctx context.Context, ruleID string, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponse, err error) {
 	var env AccessRuleEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -197,7 +198,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, ruleID string, params Acce
 // Fetches the details of an IP Access rule defined.
 func (r *AccessRuleService) Get(ctx context.Context, ruleID string, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponse, err error) {
 	var env AccessRuleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

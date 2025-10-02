@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -46,7 +47,7 @@ func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 // Add a new prefix under the account.
 func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	var env PrefixNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -63,7 +64,7 @@ func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ..
 // List all prefixes owned by the account.
 func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Prefix], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -89,7 +90,7 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 
 // Delete an unapproved prefix owned by the account.
 func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -106,7 +107,7 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, body Prefix
 // Modify the description for a prefix owned by the account.
 func (r *PrefixService) Edit(ctx context.Context, prefixID string, params PrefixEditParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	var env PrefixEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *PrefixService) Edit(ctx context.Context, prefixID string, params Prefix
 // List a particular prefix owned by the account.
 func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGetParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	var env PrefixGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -152,9 +153,19 @@ type Prefix struct {
 	AccountID string `json:"account_id"`
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
+	//
+	// Deprecated: Prefer the
+	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
+	// instead, which allows for advertising multiple BGP routes within a single IP
+	// Prefix.
 	Advertised bool `json:"advertised,nullable"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
+	//
+	// Deprecated: Prefer the
+	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
+	// instead, which allows for advertising multiple BGP routes within a single IP
+	// Prefix.
 	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
@@ -170,9 +181,19 @@ type Prefix struct {
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
+	//
+	// Deprecated: Prefer the
+	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
+	// instead, which allows for advertising multiple BGP routes within a single IP
+	// Prefix.
 	OnDemandEnabled bool `json:"on_demand_enabled"`
 	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
+	//
+	// Deprecated: Prefer the
+	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
+	// instead, which allows for advertising multiple BGP routes within a single IP
+	// Prefix.
 	OnDemandLocked bool       `json:"on_demand_locked"`
 	JSON           prefixJSON `json:"-"`
 }

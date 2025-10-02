@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -39,7 +40,7 @@ func NewJsonService(opts ...option.RequestOption) (r *JsonService) {
 // in the body. Control page loading with `gotoOptions` and `waitFor*` options.
 func (r *JsonService) New(ctx context.Context, params JsonNewParams, opts ...option.RequestOption) (res *JsonNewResponse, err error) {
 	var env JsonNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -359,11 +360,24 @@ type JsonNewParamsResponseFormat struct {
 	Type param.Field[string] `json:"type,required"`
 	// Schema for the response format. More information here:
 	// https://developers.cloudflare.com/workers-ai/json-mode/
-	Schema param.Field[map[string]interface{}] `json:"schema"`
+	JsonSchema param.Field[map[string]JsonNewParamsResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
 func (r JsonNewParamsResponseFormat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
+// [browser_rendering.JsonNewParamsResponseFormatJsonSchemaArray].
+//
+// Use [Raw()] to specify an arbitrary value for this param
+type JsonNewParamsResponseFormatJsonSchemaUnion interface {
+	ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()
+}
+
+type JsonNewParamsResponseFormatJsonSchemaArray []string
+
+func (r JsonNewParamsResponseFormatJsonSchemaArray) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion() {
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).

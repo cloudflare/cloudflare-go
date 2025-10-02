@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewHTTPLocationBotClassService(opts ...option.RequestOption) (r *HTTPLocati
 // Retrieves the top locations, by HTTP requests, of the requested bot class.
 func (r *HTTPLocationBotClassService) Get(ctx context.Context, botClass HTTPLocationBotClassGetParamsBotClass, query HTTPLocationBotClassGetParams, opts ...option.RequestOption) (res *HTTPLocationBotClassGetResponse, err error) {
 	var env HTTPLocationBotClassGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/http/top/locations/bot_class/%v", botClass)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -287,6 +288,11 @@ type HTTPLocationBotClassGetParams struct {
 	DeviceType param.Field[[]HTTPLocationBotClassGetParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPLocationBotClassGetParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPLocationBotClassGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

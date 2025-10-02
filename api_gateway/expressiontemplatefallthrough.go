@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewExpressionTemplateFallthroughService(opts ...option.RequestOption) (r *E
 // Generate fallthrough WAF expression template from a set of API hosts
 func (r *ExpressionTemplateFallthroughService) New(ctx context.Context, params ExpressionTemplateFallthroughNewParams, opts ...option.RequestOption) (res *ExpressionTemplateFallthroughNewResponse, err error) {
 	var env ExpressionTemplateFallthroughNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

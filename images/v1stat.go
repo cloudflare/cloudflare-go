@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -34,10 +35,12 @@ func NewV1StatService(opts ...option.RequestOption) (r *V1StatService) {
 	return
 }
 
-// Fetch usage statistics details for Cloudflare Images.
+// Fetch image statistics details for Cloudflare Images. The returned statistics
+// detail storage usage, including the current image count vs this account's
+// allowance.
 func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...option.RequestOption) (res *Stat, err error) {
 	var env V1StatGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

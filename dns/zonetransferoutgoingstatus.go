@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewZoneTransferOutgoingStatusService(opts ...option.RequestOption) (r *Zone
 // Get primary zone transfer status.
 func (r *ZoneTransferOutgoingStatusService) Get(ctx context.Context, query ZoneTransferOutgoingStatusGetParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	var env ZoneTransferOutgoingStatusGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

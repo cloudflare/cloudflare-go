@@ -29,7 +29,7 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Beta.Workers.Versions.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"worker_id",
 		workers.BetaWorkerVersionNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Version: workers.VersionParam{
@@ -82,6 +82,7 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 				}),
 				UsageModel: cloudflare.F(workers.VersionUsageModelStandard),
 			},
+			Deploy: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -108,7 +109,7 @@ func TestBetaWorkerVersionListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Beta.Workers.Versions.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"worker_id",
 		workers.BetaWorkerVersionListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Page:      cloudflare.F(int64(1)),
@@ -139,8 +140,8 @@ func TestBetaWorkerVersionDelete(t *testing.T) {
 	)
 	_, err := client.Workers.Beta.Workers.Versions.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		workers.BetaWorkerVersionDeleteParamsVersionIDLatest,
+		"worker_id",
+		"version_id",
 		workers.BetaWorkerVersionDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -169,8 +170,8 @@ func TestBetaWorkerVersionGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Beta.Workers.Versions.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		workers.BetaWorkerVersionGetParamsVersionIDLatest,
+		"worker_id",
+		"version_id",
 		workers.BetaWorkerVersionGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Include:   cloudflare.F(workers.BetaWorkerVersionGetParamsIncludeModules),

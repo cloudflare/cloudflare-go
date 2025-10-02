@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewHTTPTopService(opts ...option.RequestOption) (r *HTTPTopService) {
 // Retrieves the top user agents by HTTP requests.
 func (r *HTTPTopService) Browser(ctx context.Context, query HTTPTopBrowserParams, opts ...option.RequestOption) (res *HTTPTopBrowserResponse, err error) {
 	var env HTTPTopBrowserResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/top/browser"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,7 +51,7 @@ func (r *HTTPTopService) Browser(ctx context.Context, query HTTPTopBrowserParams
 // Retrieves the top user agents, aggregated in families, by HTTP requests.
 func (r *HTTPTopService) BrowserFamily(ctx context.Context, query HTTPTopBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTopBrowserFamilyResponse, err error) {
 	var env HTTPTopBrowserFamilyResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/http/top/browser_family"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -510,6 +511,11 @@ type HTTPTopBrowserParams struct {
 	DeviceType param.Field[[]HTTPTopBrowserParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTopBrowserParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTopBrowserParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.
@@ -734,6 +740,11 @@ type HTTPTopBrowserFamilyParams struct {
 	DeviceType param.Field[[]HTTPTopBrowserFamilyParamsDeviceType] `query:"deviceType"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTopBrowserFamilyParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTopBrowserFamilyParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filters results by HTTP version.

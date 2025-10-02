@@ -7,12 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // DestinationEligibleService contains methods and other services that help with
@@ -37,7 +37,7 @@ func NewDestinationEligibleService(opts ...option.RequestOption) (r *Destination
 // Get a list of all delivery mechanism types for which an account is eligible.
 func (r *DestinationEligibleService) Get(ctx context.Context, query DestinationEligibleGetParams, opts ...option.RequestOption) (res *DestinationEligibleGetResponse, err error) {
 	var env DestinationEligibleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -105,13 +105,12 @@ type DestinationEligibleGetParams struct {
 }
 
 type DestinationEligibleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DestinationEligibleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DestinationEligibleGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success    DestinationEligibleGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     DestinationEligibleGetResponse                   `json:"result"`
-	ResultInfo DestinationEligibleGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       destinationEligibleGetResponseEnvelopeJSON       `json:"-"`
+	Success DestinationEligibleGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DestinationEligibleGetResponse                `json:"result"`
+	JSON    destinationEligibleGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // destinationEligibleGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -121,7 +120,6 @@ type destinationEligibleGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -131,6 +129,52 @@ func (r *DestinationEligibleGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r destinationEligibleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DestinationEligibleGetResponseEnvelopeErrors struct {
+	Message string                                           `json:"message,required"`
+	Code    int64                                            `json:"code"`
+	JSON    destinationEligibleGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// destinationEligibleGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DestinationEligibleGetResponseEnvelopeErrors]
+type destinationEligibleGetResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DestinationEligibleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r destinationEligibleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DestinationEligibleGetResponseEnvelopeMessages struct {
+	Message string                                             `json:"message,required"`
+	Code    int64                                              `json:"code"`
+	JSON    destinationEligibleGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// destinationEligibleGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DestinationEligibleGetResponseEnvelopeMessages]
+type destinationEligibleGetResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DestinationEligibleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r destinationEligibleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -147,35 +191,4 @@ func (r DestinationEligibleGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type DestinationEligibleGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       destinationEligibleGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// destinationEligibleGetResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [DestinationEligibleGetResponseEnvelopeResultInfo]
-type destinationEligibleGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationEligibleGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationEligibleGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

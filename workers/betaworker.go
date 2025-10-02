@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewBetaWorkerService(opts ...option.RequestOption) (r *BetaWorkerService) {
 // Create a new Worker.
 func (r *BetaWorkerService) New(ctx context.Context, params BetaWorkerNewParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,10 +57,13 @@ func (r *BetaWorkerService) New(ctx context.Context, params BetaWorkerNewParams,
 	return
 }
 
-// Update an existing Worker.
+// Perform a complete replacement of a Worker, where omitted properties are set to
+// their default values. This is the exact same as the Create Worker endpoint, but
+// operates on an existing Worker. To perform a partial update instead, use the
+// Edit Worker endpoint.
 func (r *BetaWorkerService) Update(ctx context.Context, workerID string, params BetaWorkerUpdateParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -80,7 +84,7 @@ func (r *BetaWorkerService) Update(ctx context.Context, workerID string, params 
 // List all Workers for an account.
 func (r *BetaWorkerService) List(ctx context.Context, params BetaWorkerListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Worker], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -106,7 +110,7 @@ func (r *BetaWorkerService) ListAutoPaging(ctx context.Context, params BetaWorke
 
 // Delete a Worker and all its associated resources (versions, deployments, etc.).
 func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body BetaWorkerDeleteParams, opts ...option.RequestOption) (res *BetaWorkerDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -120,10 +124,32 @@ func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body Be
 	return
 }
 
+// Perform a partial update on a Worker, where omitted properties are left
+// unchanged from their current values.
+func (r *BetaWorkerService) Edit(ctx context.Context, workerID string, params BetaWorkerEditParams, opts ...option.RequestOption) (res *Worker, err error) {
+	var env BetaWorkerEditResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if workerID == "" {
+		err = errors.New("missing required worker_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/workers/%s", params.AccountID, workerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get details about a specific Worker.
 func (r *BetaWorkerService) Get(ctx context.Context, workerID string, query BetaWorkerGetParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -142,38 +168,38 @@ func (r *BetaWorkerService) Get(ctx context.Context, workerID string, query Beta
 }
 
 type Worker struct {
-	// Identifier.
+	// Immutable ID of the Worker.
 	ID string `json:"id,required"`
 	// When the Worker was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Whether logpush is enabled for the Worker.
+	Logpush bool `json:"logpush,required"`
 	// Name of the Worker.
 	Name string `json:"name,required"`
-	// When the Worker was most recently updated.
-	UpdatedOn time.Time `json:"updated_on,required" format:"date-time"`
-	// Whether logpush is enabled for the Worker.
-	Logpush bool `json:"logpush"`
 	// Observability settings for the Worker.
-	Observability WorkerObservability `json:"observability"`
+	Observability WorkerObservability `json:"observability,required"`
 	// Subdomain settings for the Worker.
-	Subdomain WorkerSubdomain `json:"subdomain"`
+	Subdomain WorkerSubdomain `json:"subdomain,required"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,required"`
 	// Other Workers that should consume logs from the Worker.
-	TailConsumers []WorkerTailConsumer `json:"tail_consumers"`
-	JSON          workerJSON           `json:"-"`
+	TailConsumers []WorkerTailConsumer `json:"tail_consumers,required"`
+	// When the Worker was most recently updated.
+	UpdatedOn time.Time  `json:"updated_on,required" format:"date-time"`
+	JSON      workerJSON `json:"-"`
 }
 
 // workerJSON contains the JSON metadata for the struct [Worker]
 type workerJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
-	Name          apijson.Field
-	UpdatedOn     apijson.Field
 	Logpush       apijson.Field
+	Name          apijson.Field
 	Observability apijson.Field
 	Subdomain     apijson.Field
 	Tags          apijson.Field
 	TailConsumers apijson.Field
+	UpdatedOn     apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -296,18 +322,18 @@ func (r workerTailConsumerJSON) RawJSON() string {
 }
 
 type WorkerParam struct {
+	// Whether logpush is enabled for the Worker.
+	Logpush param.Field[bool] `json:"logpush,required"`
 	// Name of the Worker.
 	Name param.Field[string] `json:"name,required"`
-	// Whether logpush is enabled for the Worker.
-	Logpush param.Field[bool] `json:"logpush"`
 	// Observability settings for the Worker.
-	Observability param.Field[WorkerObservabilityParam] `json:"observability"`
+	Observability param.Field[WorkerObservabilityParam] `json:"observability,required"`
 	// Subdomain settings for the Worker.
-	Subdomain param.Field[WorkerSubdomainParam] `json:"subdomain"`
+	Subdomain param.Field[WorkerSubdomainParam] `json:"subdomain,required"`
 	// Tags associated with the Worker.
-	Tags param.Field[[]string] `json:"tags"`
+	Tags param.Field[[]string] `json:"tags,required"`
 	// Other Workers that should consume logs from the Worker.
-	TailConsumers param.Field[[]WorkerTailConsumerParam] `json:"tail_consumers"`
+	TailConsumers param.Field[[]WorkerTailConsumerParam] `json:"tail_consumers,required"`
 }
 
 func (r WorkerParam) MarshalJSON() (data []byte, err error) {
@@ -822,6 +848,155 @@ func (r BetaWorkerListParams) URLQuery() (v url.Values) {
 type BetaWorkerDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type BetaWorkerEditParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+	Worker    WorkerParam         `json:"worker,required"`
+}
+
+func (r BetaWorkerEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Worker)
+}
+
+type BetaWorkerEditResponseEnvelope struct {
+	Errors   []BetaWorkerEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BetaWorkerEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   Worker                                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success BetaWorkerEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    betaWorkerEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// betaWorkerEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [BetaWorkerEditResponseEnvelope]
+type betaWorkerEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BetaWorkerEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r betaWorkerEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BetaWorkerEditResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           BetaWorkerEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             betaWorkerEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// betaWorkerEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [BetaWorkerEditResponseEnvelopeErrors]
+type betaWorkerEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BetaWorkerEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r betaWorkerEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BetaWorkerEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    betaWorkerEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// betaWorkerEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [BetaWorkerEditResponseEnvelopeErrorsSource]
+type betaWorkerEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BetaWorkerEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r betaWorkerEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BetaWorkerEditResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           BetaWorkerEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             betaWorkerEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// betaWorkerEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [BetaWorkerEditResponseEnvelopeMessages]
+type betaWorkerEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BetaWorkerEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r betaWorkerEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BetaWorkerEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    betaWorkerEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// betaWorkerEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [BetaWorkerEditResponseEnvelopeMessagesSource]
+type betaWorkerEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BetaWorkerEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r betaWorkerEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type BetaWorkerEditResponseEnvelopeSuccess bool
+
+const (
+	BetaWorkerEditResponseEnvelopeSuccessTrue BetaWorkerEditResponseEnvelopeSuccess = true
+)
+
+func (r BetaWorkerEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BetaWorkerEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type BetaWorkerGetParams struct {

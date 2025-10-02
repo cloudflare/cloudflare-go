@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -45,7 +46,7 @@ func NewDevicePolicyDefaultService(opts ...option.RequestOption) (r *DevicePolic
 // Updates the default device settings profile for an account.
 func (r *DevicePolicyDefaultService) Edit(ctx context.Context, params DevicePolicyDefaultEditParams, opts ...option.RequestOption) (res *DevicePolicyDefaultEditResponse, err error) {
 	var env DevicePolicyDefaultEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *DevicePolicyDefaultService) Edit(ctx context.Context, params DevicePoli
 // Fetches the default device settings profile for an account.
 func (r *DevicePolicyDefaultService) Get(ctx context.Context, query DevicePolicyDefaultGetParams, opts ...option.RequestOption) (res *DevicePolicyDefaultGetResponse, err error) {
 	var env DevicePolicyDefaultGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewBGPTopAseService(opts ...option.RequestOption) (r *BGPTopAseService) {
 // Retrieves the top autonomous systems by BGP updates (announcements only).
 func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, opts ...option.RequestOption) (res *BGPTopAseGetResponse, err error) {
 	var env BGPTopAseGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,7 +53,7 @@ func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, op
 // archives and updates every 2 hours.
 func (r *BGPTopAseService) Prefixes(ctx context.Context, query BGPTopAsePrefixesParams, opts ...option.RequestOption) (res *BGPTopAsePrefixesResponse, err error) {
 	var env BGPTopAsePrefixesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/bgp/top/ases/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

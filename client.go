@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/abuse_reports"
 	"github.com/cloudflare/cloudflare-go/v6/accounts"
@@ -65,6 +66,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/mtls_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/network_interconnects"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/organizations"
 	"github.com/cloudflare/cloudflare-go/v6/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/origin_post_quantum_encryption"
 	"github.com/cloudflare/cloudflare-go/v6/origin_tls_client_auth"
@@ -112,6 +114,7 @@ import (
 type Client struct {
 	Options                []option.RequestOption
 	Accounts               *accounts.AccountService
+	Organizations          *organizations.OrganizationService
 	OriginCACertificates   *origin_ca_certificates.OriginCACertificateService
 	IPs                    *ips.IPService
 	Memberships            *memberships.MembershipService
@@ -250,6 +253,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r = &Client{Options: opts}
 
 	r.Accounts = accounts.NewAccountService(opts...)
+	r.Organizations = organizations.NewOrganizationService(opts...)
 	r.OriginCACertificates = origin_ca_certificates.NewOriginCACertificateService(opts...)
 	r.IPs = ips.NewIPService(opts...)
 	r.Memberships = memberships.NewMembershipService(opts...)
@@ -380,7 +384,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 // For even greater flexibility, see [option.WithResponseInto] and
 // [option.WithResponseBodyInto].
 func (r *Client) Execute(ctx context.Context, method string, path string, params interface{}, res interface{}, opts ...option.RequestOption) error {
-	opts = append(r.Options, opts...)
+	opts = slices.Concat(r.Options, opts)
 	return requestconfig.ExecuteNewRequest(ctx, method, path, params, res, opts...)
 }
 

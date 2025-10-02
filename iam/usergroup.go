@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -42,7 +43,7 @@ func NewUserGroupService(opts ...option.RequestOption) (r *UserGroupService) {
 // Create a new user group under the specified account.
 func (r *UserGroupService) New(ctx context.Context, params UserGroupNewParams, opts ...option.RequestOption) (res *UserGroupNewResponse, err error) {
 	var env UserGroupNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *UserGroupService) New(ctx context.Context, params UserGroupNewParams, o
 // Modify an existing user group.
 func (r *UserGroupService) Update(ctx context.Context, userGroupID string, params UserGroupUpdateParams, opts ...option.RequestOption) (res *UserGroupUpdateResponse, err error) {
 	var env UserGroupUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -80,7 +81,7 @@ func (r *UserGroupService) Update(ctx context.Context, userGroupID string, param
 // List all the user groups for an account.
 func (r *UserGroupService) List(ctx context.Context, params UserGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserGroupListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -107,7 +108,7 @@ func (r *UserGroupService) ListAutoPaging(ctx context.Context, params UserGroupL
 // Remove a user group from an account.
 func (r *UserGroupService) Delete(ctx context.Context, userGroupID string, body UserGroupDeleteParams, opts ...option.RequestOption) (res *UserGroupDeleteResponse, err error) {
 	var env UserGroupDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -128,7 +129,7 @@ func (r *UserGroupService) Delete(ctx context.Context, userGroupID string, body 
 // Get information about a specific user group in an account.
 func (r *UserGroupService) Get(ctx context.Context, userGroupID string, query UserGroupGetParams, opts ...option.RequestOption) (res *UserGroupGetResponse, err error) {
 	var env UserGroupGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

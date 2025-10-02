@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -33,10 +34,11 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 	return
 }
 
-// Creates a download for a video when a video is ready to view.
+// Creates a download for a video when a video is ready to view. Use
+// `/downloads/{download_type}` instead for type-specific downloads.
 func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
 	var env DownloadNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,10 +56,11 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 	return
 }
 
-// Delete the downloads for a video.
+// Delete the downloads for a video. Use `/downloads/{download_type}` instead for
+// type-specific downloads.
 func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env DownloadDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -78,7 +81,7 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 // Lists the downloads created for a video.
 func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponse, err error) {
 	var env DownloadGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

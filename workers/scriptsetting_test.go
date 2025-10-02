@@ -40,9 +40,12 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 					Logs: cloudflare.F(workers.ScriptSettingObservabilityLogsParam{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
 						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
 					}),
 				}),
+				Tags: cloudflare.F([]string{"my-team", "my-public-api"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),

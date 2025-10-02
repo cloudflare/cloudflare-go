@@ -79,7 +79,7 @@ func TestDispatchNamespaceScriptSecretList(t *testing.T) {
 	}
 }
 
-func TestDispatchNamespaceScriptSecretDelete(t *testing.T) {
+func TestDispatchNamespaceScriptSecretDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,7 +98,8 @@ func TestDispatchNamespaceScriptSecretDelete(t *testing.T) {
 		"this-is_my_script-01",
 		"mySecret",
 		workers_for_platforms.DispatchNamespaceScriptSecretDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			URLEncoded: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -110,7 +111,7 @@ func TestDispatchNamespaceScriptSecretDelete(t *testing.T) {
 	}
 }
 
-func TestDispatchNamespaceScriptSecretGet(t *testing.T) {
+func TestDispatchNamespaceScriptSecretGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -129,7 +130,8 @@ func TestDispatchNamespaceScriptSecretGet(t *testing.T) {
 		"this-is_my_script-01",
 		"mySecret",
 		workers_for_platforms.DispatchNamespaceScriptSecretGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			URLEncoded: cloudflare.F(true),
 		},
 	)
 	if err != nil {

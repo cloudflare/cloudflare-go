@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -40,7 +41,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 // Get all available roles for an account.
 func (r *RoleService) List(ctx context.Context, params RoleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Role], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -67,7 +68,7 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, params RoleListParams,
 // Get information about a specific role for an account.
 func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *shared.Role, err error) {
 	var env RoleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

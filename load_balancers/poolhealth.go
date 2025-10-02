@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewPoolHealthService(opts ...option.RequestOption) (r *PoolHealthService) {
 // be used in the preview endpoint to retrieve the results.
 func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolHealthNewParams, opts ...option.RequestOption) (res *PoolHealthNewResponse, err error) {
 	var env PoolHealthNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolH
 // Fetch the latest pool health status for a single pool.
 func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponse, err error) {
 	var env PoolHealthGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

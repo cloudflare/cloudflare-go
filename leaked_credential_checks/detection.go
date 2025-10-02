@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewDetectionService(opts ...option.RequestOption) (r *DetectionService) {
 // Create user-defined detection pattern for Leaked Credential Checks.
 func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, opts ...option.RequestOption) (res *DetectionNewResponse, err error) {
 	var env DetectionNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, o
 // Update user-defined detection pattern for Leaked Credential Checks.
 func (r *DetectionService) Update(ctx context.Context, detectionID string, params DetectionUpdateParams, opts ...option.RequestOption) (res *DetectionUpdateResponse, err error) {
 	var env DetectionUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -76,7 +77,7 @@ func (r *DetectionService) Update(ctx context.Context, detectionID string, param
 // List user-defined detection patterns for Leaked Credential Checks.
 func (r *DetectionService) List(ctx context.Context, query DetectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DetectionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -103,7 +104,7 @@ func (r *DetectionService) ListAutoPaging(ctx context.Context, query DetectionLi
 // Remove user-defined detection pattern for Leaked Credential Checks.
 func (r *DetectionService) Delete(ctx context.Context, detectionID string, body DetectionDeleteParams, opts ...option.RequestOption) (res *DetectionDeleteResponse, err error) {
 	var env DetectionDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

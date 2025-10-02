@@ -9,6 +9,8 @@ echo "==> Detecting breaking changes"
 TEST_PATHS=(
 	client_test.go
 	accounts/account_test.go
+	accounts/accountorganization_test.go
+	accounts/accountprofile_test.go
 	accounts/member_test.go
 	accounts/role_test.go
 	accounts/subscription_test.go
@@ -16,6 +18,10 @@ TEST_PATHS=(
 	accounts/tokenpermissiongroup_test.go
 	accounts/tokenvalue_test.go
 	accounts/logaudit_test.go
+	organizations/organization_test.go
+	organizations/organizationaccount_test.go
+	organizations/organizationprofile_test.go
+	organizations/member_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
@@ -41,6 +47,7 @@ TEST_PATHS=(
 	load_balancers/monitor_test.go
 	load_balancers/monitorpreview_test.go
 	load_balancers/monitorreference_test.go
+	load_balancers/monitorgroup_test.go
 	load_balancers/pool_test.go
 	load_balancers/poolhealth_test.go
 	load_balancers/poolreference_test.go
@@ -244,7 +251,6 @@ TEST_PATHS=(
 	intel/indicatorfeed_test.go
 	intel/indicatorfeedsnapshot_test.go
 	intel/indicatorfeedpermission_test.go
-	intel/indicatorfeeddownload_test.go
 	intel/sinkhole_test.go
 	intel/attacksurfacereportissuetype_test.go
 	intel/attacksurfacereportissue_test.go
@@ -447,6 +453,7 @@ TEST_PATHS=(
 	zero_trust/networkvirtualnetwork_test.go
 	zero_trust/networksubnet_test.go
 	zero_trust/networksubnetcloudflaresource_test.go
+	zero_trust/networkhostnameroute_test.go
 	zero_trust/riskscoring_test.go
 	zero_trust/riskscoringbehaviour_test.go
 	zero_trust/riskscoringsummary_test.go
@@ -581,9 +588,7 @@ TEST_PATHS=(
 	cloudforce_one/threateventattacker_test.go
 	cloudforce_one/threateventcategory_test.go
 	cloudforce_one/threateventcountry_test.go
-	cloudforce_one/threateventcron_test.go
 	cloudforce_one/threateventdataset_test.go
-	cloudforce_one/threateventdatasethealth_test.go
 	cloudforce_one/threateventindicatortype_test.go
 	cloudforce_one/threateventraw_test.go
 	cloudforce_one/threateventrelate_test.go
@@ -626,6 +631,7 @@ TEST_PATHS=(
 	ai/task_test.go
 	ai/model_test.go
 	ai/modelschema_test.go
+	ai/tomarkdown_test.go
 	security_center/insight_test.go
 	security_center/insightclass_test.go
 	security_center/insightseverity_test.go

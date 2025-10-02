@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewEndpointHealthcheckService(opts ...option.RequestOption) (r *EndpointHea
 // Create Endpoint Health Check.
 func (r *EndpointHealthcheckService) New(ctx context.Context, params EndpointHealthcheckNewParams, opts ...option.RequestOption) (res *EndpointHealthcheckNewResponse, err error) {
 	var env EndpointHealthcheckNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,7 +54,7 @@ func (r *EndpointHealthcheckService) New(ctx context.Context, params EndpointHea
 // Update a Endpoint Health Check.
 func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, params EndpointHealthcheckUpdateParams, opts ...option.RequestOption) (res *EndpointHealthcheckUpdateResponse, err error) {
 	var env EndpointHealthcheckUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -74,7 +75,7 @@ func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, para
 // List Endpoint Health Checks.
 func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHealthcheckListParams, opts ...option.RequestOption) (res *EndpointHealthcheckListResponse, err error) {
 	var env EndpointHealthcheckListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -90,7 +91,7 @@ func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHea
 
 // Delete Endpoint Health Check.
 func (r *EndpointHealthcheckService) Delete(ctx context.Context, id string, body EndpointHealthcheckDeleteParams, opts ...option.RequestOption) (res *EndpointHealthcheckDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -107,7 +108,7 @@ func (r *EndpointHealthcheckService) Delete(ctx context.Context, id string, body
 // Get a single Endpoint Health Check.
 func (r *EndpointHealthcheckService) Get(ctx context.Context, id string, query EndpointHealthcheckGetParams, opts ...option.RequestOption) (res *EndpointHealthcheckGetResponse, err error) {
 	var env EndpointHealthcheckGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

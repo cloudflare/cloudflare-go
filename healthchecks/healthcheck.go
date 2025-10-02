@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -43,7 +44,7 @@ func NewHealthcheckService(opts ...option.RequestOption) (r *HealthcheckService)
 // Create a new health check.
 func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParam
 // Update a configured health check.
 func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, params HealthcheckUpdateParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -81,7 +82,7 @@ func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, p
 // List configured health checks.
 func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Healthcheck], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -108,7 +109,7 @@ func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params Healthch
 // Delete a health check.
 func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, body HealthcheckDeleteParams, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
 	var env HealthcheckDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -129,7 +130,7 @@ func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, b
 // Patch a configured health check.
 func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, params HealthcheckEditParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -150,7 +151,7 @@ func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, par
 // Fetch a single configured health check.
 func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, query HealthcheckGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -518,7 +519,7 @@ type HealthcheckNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -542,7 +543,7 @@ func (r healthcheckNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type HealthcheckNewResponseEnvelopeSuccess bool
 
 const (
@@ -571,7 +572,7 @@ type HealthcheckUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -595,7 +596,7 @@ func (r healthcheckUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type HealthcheckUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -636,7 +637,7 @@ type HealthcheckDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo     `json:"errors,required"`
 	Messages []shared.ResponseInfo     `json:"messages,required"`
 	Result   HealthcheckDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success HealthcheckDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -660,7 +661,7 @@ func (r healthcheckDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type HealthcheckDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -689,7 +690,7 @@ type HealthcheckEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success HealthcheckEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -713,7 +714,7 @@ func (r healthcheckEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type HealthcheckEditResponseEnvelopeSuccess bool
 
 const (
@@ -737,7 +738,7 @@ type HealthcheckGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Healthcheck           `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success HealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -761,7 +762,7 @@ func (r healthcheckGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type HealthcheckGetResponseEnvelopeSuccess bool
 
 const (

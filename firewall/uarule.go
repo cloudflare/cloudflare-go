@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -40,7 +41,7 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 // Creates a new User Agent Blocking rule in a zone.
 func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponse, err error) {
 	var env UARuleNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ..
 // Updates an existing User Agent Blocking rule.
 func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponse, err error) {
 	var env UARuleUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARu
 // several optional parameters.
 func (r *UARuleService) List(ctx context.Context, params UARuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UARuleListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -107,7 +108,7 @@ func (r *UARuleService) ListAutoPaging(ctx context.Context, params UARuleListPar
 // Deletes an existing User Agent Blocking rule.
 func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARuleDeleteParams, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
 	var env UARuleDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -128,7 +129,7 @@ func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARule
 // Fetches the details of a User Agent Blocking rule.
 func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGetParams, opts ...option.RequestOption) (res *UARuleGetResponse, err error) {
 	var env UARuleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -48,7 +49,7 @@ func NewZarazService(opts ...option.RequestOption) (r *ZarazService) {
 // Updates Zaraz workflow for a zone.
 func (r *ZarazService) Update(ctx context.Context, params ZarazUpdateParams, opts ...option.RequestOption) (res *Workflow, err error) {
 	var env ZarazUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

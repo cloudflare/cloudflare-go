@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -35,7 +36,7 @@ func NewThreatEventCountryService(opts ...option.RequestOption) (r *ThreatEventC
 
 // Retrieves countries information for all countries
 func (r *ThreatEventCountryService) List(ctx context.Context, query ThreatEventCountryListParams, opts ...option.RequestOption) (res *[]ThreatEventCountryListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -37,8 +38,21 @@ func NewEntityASNService(opts ...option.RequestOption) (r *EntityASNService) {
 // Retrieves a list of autonomous systems.
 func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, opts ...option.RequestOption) (res *EntityASNListResponse, err error) {
 	var env EntityASNListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/entities/asns"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Retrieves Internet Routing Registry AS-SETs that an AS is a member of.
+func (r *EntityASNService) AsSet(ctx context.Context, asn int64, query EntityASNAsSetParams, opts ...option.RequestOption) (res *EntityASNAsSetResponse, err error) {
+	var env EntityASNAsSetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	path := fmt.Sprintf("radar/entities/asns/%v/as_set", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -53,7 +67,7 @@ func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, 
 // Population estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGetParams, opts ...option.RequestOption) (res *EntityASNGetResponse, err error) {
 	var env EntityASNGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/entities/asns/%v", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,7 +81,7 @@ func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGe
 // Population estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts ...option.RequestOption) (res *EntityAsnipResponse, err error) {
 	var env EntityAsnipResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/entities/asns/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -80,7 +94,7 @@ func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts
 // Retrieves AS-level relationship for given networks.
 func (r *EntityASNService) Rel(ctx context.Context, asn int64, query EntityASNRelParams, opts ...option.RequestOption) (res *EntityASNRelResponse, err error) {
 	var env EntityASNRelResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/entities/asns/%v/rel", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -141,6 +155,70 @@ func (r *EntityASNListResponseASN) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r entityASNListResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNAsSetResponse struct {
+	AsSets []EntityASNAsSetResponseAsSet `json:"as_sets,required"`
+	// Paths from the AS-SET that include the given AS to its upstreams recursively
+	Paths [][]string                 `json:"paths,required"`
+	JSON  entityASNAsSetResponseJSON `json:"-"`
+}
+
+// entityASNAsSetResponseJSON contains the JSON metadata for the struct
+// [EntityASNAsSetResponse]
+type entityASNAsSetResponseJSON struct {
+	AsSets      apijson.Field
+	Paths       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNAsSetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNAsSetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNAsSetResponseAsSet struct {
+	// The number of AS members in the AS-SET
+	AsMembersCount int64 `json:"as_members_count,required"`
+	// The number of AS-SET members in the AS-SET
+	AsSetMembersCount int64 `json:"as_set_members_count,required"`
+	// The number of recursive upstream AS-SETs
+	AsSetUpstreamsCount int64 `json:"as_set_upstreams_count,required"`
+	// The number of unique ASNs in the AS-SETs recursive downstream
+	ASNConeSize int64 `json:"asn_cone_size,required"`
+	// The IRR sources of the AS-SET
+	IrrSources []string `json:"irr_sources,required"`
+	// The name of the AS-SET
+	Name string `json:"name,required"`
+	// The inferred AS number of the AS-SET
+	ASN  int64                           `json:"asn"`
+	JSON entityASNAsSetResponseAsSetJSON `json:"-"`
+}
+
+// entityASNAsSetResponseAsSetJSON contains the JSON metadata for the struct
+// [EntityASNAsSetResponseAsSet]
+type entityASNAsSetResponseAsSetJSON struct {
+	AsMembersCount      apijson.Field
+	AsSetMembersCount   apijson.Field
+	AsSetUpstreamsCount apijson.Field
+	ASNConeSize         apijson.Field
+	IrrSources          apijson.Field
+	Name                apijson.Field
+	ASN                 apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *EntityASNAsSetResponseAsSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNAsSetResponseAsSetJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -581,6 +659,58 @@ func (r *EntityASNListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r entityASNListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNAsSetParams struct {
+	// Format in which results will be returned.
+	Format param.Field[EntityASNAsSetParamsFormat] `query:"format"`
+}
+
+// URLQuery serializes [EntityASNAsSetParams]'s query parameters as `url.Values`.
+func (r EntityASNAsSetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Format in which results will be returned.
+type EntityASNAsSetParamsFormat string
+
+const (
+	EntityASNAsSetParamsFormatJson EntityASNAsSetParamsFormat = "JSON"
+	EntityASNAsSetParamsFormatCsv  EntityASNAsSetParamsFormat = "CSV"
+)
+
+func (r EntityASNAsSetParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityASNAsSetParamsFormatJson, EntityASNAsSetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type EntityASNAsSetResponseEnvelope struct {
+	Result  EntityASNAsSetResponse             `json:"result,required"`
+	Success bool                               `json:"success,required"`
+	JSON    entityASNAsSetResponseEnvelopeJSON `json:"-"`
+}
+
+// entityASNAsSetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [EntityASNAsSetResponseEnvelope]
+type entityASNAsSetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNAsSetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNAsSetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 

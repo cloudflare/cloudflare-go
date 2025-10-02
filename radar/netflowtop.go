@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -37,7 +38,7 @@ func NewNetflowTopService(opts ...option.RequestOption) (r *NetflowTopService) {
 // Retrieves the top autonomous systems by network traffic (NetFlows).
 func (r *NetflowTopService) Ases(ctx context.Context, query NetflowTopAsesParams, opts ...option.RequestOption) (res *NetflowTopAsesResponse, err error) {
 	var env NetflowTopAsesResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/netflows/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,7 +51,7 @@ func (r *NetflowTopService) Ases(ctx context.Context, query NetflowTopAsesParams
 // Retrieves the top locations by network traffic (NetFlows).
 func (r *NetflowTopService) Locations(ctx context.Context, query NetflowTopLocationsParams, opts ...option.RequestOption) (res *NetflowTopLocationsResponse, err error) {
 	var env NetflowTopLocationsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "radar/netflows/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -509,6 +510,11 @@ type NetflowTopAsesParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[NetflowTopAsesParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
@@ -586,6 +592,11 @@ type NetflowTopLocationsParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[NetflowTopLocationsParamsFormat] `query:"format"`
+	// Filters results by Geolocation. Specify a comma-separated list of GeoNames IDs.
+	// Prefix with `-` to exclude geoIds from results. For example, `-2267056,360689`
+	// excludes results from the 2267056 (Lisbon), but includes results from 5128638
+	// (New York).
+	GeoID param.Field[[]string] `query:"geoId"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewDevicePolicyDefaultExcludeService(opts ...option.RequestOption) (r *Devi
 // Sets the list of routes excluded from the WARP client's tunnel.
 func (r *DevicePolicyDefaultExcludeService) Update(ctx context.Context, params DevicePolicyDefaultExcludeUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelExclude], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -64,7 +65,7 @@ func (r *DevicePolicyDefaultExcludeService) UpdateAutoPaging(ctx context.Context
 // Fetches the list of routes excluded from the WARP client's tunnel.
 func (r *DevicePolicyDefaultExcludeService) Get(ctx context.Context, query DevicePolicyDefaultExcludeGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelExclude], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -34,7 +35,7 @@ func NewPCAPDownloadService(opts ...option.RequestOption) (r *PCAPDownloadServic
 
 // Download PCAP information into a file. Response is a binary PCAP file.
 func (r *PCAPDownloadService) Get(ctx context.Context, pcapID string, query PCAPDownloadGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/vnd.tcpdump.pcap")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -50,6 +51,6 @@ func (r *PCAPDownloadService) Get(ctx context.Context, pcapID string, query PCAP
 }
 
 type PCAPDownloadGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

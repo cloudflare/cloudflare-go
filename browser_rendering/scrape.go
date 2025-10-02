@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,7 +39,7 @@ func NewScrapeService(opts ...option.RequestOption) (r *ScrapeService) {
 // Get meta attributes like height, width, text and others of selected elements.
 func (r *ScrapeService) New(ctx context.Context, params ScrapeNewParams, opts ...option.RequestOption) (res *[]ScrapeNewResponse, err error) {
 	var env ScrapeNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

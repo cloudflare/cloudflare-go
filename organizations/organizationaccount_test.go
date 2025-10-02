@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudforce_one_test
+package organizations_test
 
 import (
 	"context"
@@ -9,13 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/organizations"
 )
 
-func TestThreatEventDatasetHealthGet(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestOrganizationAccountGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,11 +27,22 @@ func TestThreatEventDatasetHealthGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Datasets.Health.Get(
+	_, err := client.Organizations.OrganizationAccounts.Get(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		cloudforce_one.ThreatEventDatasetHealthGetParams{
-			AccountID: cloudflare.F("account_id"),
+		"organization_id",
+		organizations.OrganizationAccountGetParams{
+			AccountPubname: cloudflare.F(organizations.OrganizationAccountGetParamsAccountPubname{
+				Contains:   cloudflare.F("contains"),
+				EndsWith:   cloudflare.F("endsWith"),
+				StartsWith: cloudflare.F("startsWith"),
+			}),
+			Name: cloudflare.F(organizations.OrganizationAccountGetParamsName{
+				Contains:   cloudflare.F("contains"),
+				EndsWith:   cloudflare.F("endsWith"),
+				StartsWith: cloudflare.F("startsWith"),
+			}),
+			PageSize:  cloudflare.F(int64(0)),
+			PageToken: cloudflare.F("page_token"),
 		},
 	)
 	if err != nil {

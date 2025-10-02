@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 // need to be verified before they can be used.
 func (r *AddressService) New(ctx context.Context, params AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *AddressService) New(ctx context.Context, params AddressNewParams, opts 
 // Lists existing destination addresses.
 func (r *AddressService) List(ctx context.Context, params AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Address], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -85,7 +86,7 @@ func (r *AddressService) ListAutoPaging(ctx context.Context, params AddressListP
 // Deletes a specific destination address.
 func (r *AddressService) Delete(ctx context.Context, destinationAddressIdentifier string, body AddressDeleteParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -106,7 +107,7 @@ func (r *AddressService) Delete(ctx context.Context, destinationAddressIdentifie
 // Gets information for a specific destination email already created.
 func (r *AddressService) Get(ctx context.Context, destinationAddressIdentifier string, query AddressGetParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

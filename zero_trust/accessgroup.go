@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewAccessGroupService(opts ...option.RequestOption) (r *AccessGroupService)
 // Creates a new Access group.
 func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParams, opts ...option.RequestOption) (res *AccessGroupNewResponse, err error) {
 	var env AccessGroupNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -71,7 +72,7 @@ func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParam
 // Updates a configured Access group.
 func (r *AccessGroupService) Update(ctx context.Context, groupID string, params AccessGroupUpdateParams, opts ...option.RequestOption) (res *AccessGroupUpdateResponse, err error) {
 	var env AccessGroupUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -106,7 +107,7 @@ func (r *AccessGroupService) Update(ctx context.Context, groupID string, params 
 // Lists all Access groups.
 func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessGroupListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -147,7 +148,7 @@ func (r *AccessGroupService) ListAutoPaging(ctx context.Context, params AccessGr
 // Deletes an Access group.
 func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body AccessGroupDeleteParams, opts ...option.RequestOption) (res *AccessGroupDeleteResponse, err error) {
 	var env AccessGroupDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -182,7 +183,7 @@ func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body Ac
 // Fetches a single Access group.
 func (r *AccessGroupService) Get(ctx context.Context, groupID string, query AccessGroupGetParams, opts ...option.RequestOption) (res *AccessGroupGetResponse, err error) {
 	var env AccessGroupGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -275,8 +276,7 @@ func (r zeroTrustGroupMetaJSON) RawJSON() string {
 
 type AccessGroupNewResponse struct {
 	// UUID.
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -290,22 +290,19 @@ type AccessGroupNewResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require   []AccessRule               `json:"require"`
-	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
-	JSON      accessGroupNewResponseJSON `json:"-"`
+	Require []AccessRule               `json:"require"`
+	JSON    accessGroupNewResponseJSON `json:"-"`
 }
 
 // accessGroupNewResponseJSON contains the JSON metadata for the struct
 // [AccessGroupNewResponse]
 type accessGroupNewResponseJSON struct {
 	ID          apijson.Field
-	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
-	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -320,8 +317,7 @@ func (r accessGroupNewResponseJSON) RawJSON() string {
 
 type AccessGroupUpdateResponse struct {
 	// UUID.
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -335,22 +331,19 @@ type AccessGroupUpdateResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require   []AccessRule                  `json:"require"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      accessGroupUpdateResponseJSON `json:"-"`
+	Require []AccessRule                  `json:"require"`
+	JSON    accessGroupUpdateResponseJSON `json:"-"`
 }
 
 // accessGroupUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessGroupUpdateResponse]
 type accessGroupUpdateResponseJSON struct {
 	ID          apijson.Field
-	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
-	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -365,8 +358,7 @@ func (r accessGroupUpdateResponseJSON) RawJSON() string {
 
 type AccessGroupListResponse struct {
 	// UUID.
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -380,22 +372,19 @@ type AccessGroupListResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require   []AccessRule                `json:"require"`
-	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
-	JSON      accessGroupListResponseJSON `json:"-"`
+	Require []AccessRule                `json:"require"`
+	JSON    accessGroupListResponseJSON `json:"-"`
 }
 
 // accessGroupListResponseJSON contains the JSON metadata for the struct
 // [AccessGroupListResponse]
 type accessGroupListResponseJSON struct {
 	ID          apijson.Field
-	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
-	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -432,8 +421,7 @@ func (r accessGroupDeleteResponseJSON) RawJSON() string {
 
 type AccessGroupGetResponse struct {
 	// UUID.
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude []AccessRule `json:"exclude"`
@@ -447,22 +435,19 @@ type AccessGroupGetResponse struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require   []AccessRule               `json:"require"`
-	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
-	JSON      accessGroupGetResponseJSON `json:"-"`
+	Require []AccessRule               `json:"require"`
+	JSON    accessGroupGetResponseJSON `json:"-"`
 }
 
 // accessGroupGetResponseJSON contains the JSON metadata for the struct
 // [AccessGroupGetResponse]
 type accessGroupGetResponseJSON struct {
 	ID          apijson.Field
-	CreatedAt   apijson.Field
 	Exclude     apijson.Field
 	Include     apijson.Field
 	IsDefault   apijson.Field
 	Name        apijson.Field
 	Require     apijson.Field
-	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

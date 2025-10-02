@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewDefaultService(opts ...option.RequestOption) (r *DefaultService) {
 // Gets default Zaraz configuration for a zone.
 func (r *DefaultService) Get(ctx context.Context, query DefaultGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env DefaultGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

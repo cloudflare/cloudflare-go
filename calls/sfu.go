@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewSFUService(opts ...option.RequestOption) (r *SFUService) {
 // Session can access all Tracks within the app.
 func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...option.RequestOption) (res *SFUNewResponse, err error) {
 	var env SFUNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,7 +57,7 @@ func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...optio
 // Edit details for a single app.
 func (r *SFUService) Update(ctx context.Context, appID string, params SFUUpdateParams, opts ...option.RequestOption) (res *SFUUpdateResponse, err error) {
 	var env SFUUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,7 +78,7 @@ func (r *SFUService) Update(ctx context.Context, appID string, params SFUUpdateP
 // Lists all apps in the Cloudflare account
 func (r *SFUService) List(ctx context.Context, query SFUListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SFUListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -104,7 +105,7 @@ func (r *SFUService) ListAutoPaging(ctx context.Context, query SFUListParams, op
 // Deletes an app from Cloudflare Calls
 func (r *SFUService) Delete(ctx context.Context, appID string, body SFUDeleteParams, opts ...option.RequestOption) (res *SFUDeleteResponse, err error) {
 	var env SFUDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,7 +126,7 @@ func (r *SFUService) Delete(ctx context.Context, appID string, body SFUDeletePar
 // Fetches details for a single Calls app.
 func (r *SFUService) Get(ctx context.Context, appID string, query SFUGetParams, opts ...option.RequestOption) (res *SFUGetResponse, err error) {
 	var env SFUGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

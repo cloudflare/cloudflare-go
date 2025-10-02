@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -106,7 +107,7 @@ func NewBotManagementService(opts ...option.RequestOption) (r *BotManagementServ
 // ```
 func (r *BotManagementService) Update(ctx context.Context, params BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
 	var env BotManagementUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -123,7 +124,7 @@ func (r *BotManagementService) Update(ctx context.Context, params BotManagementU
 // Retrieve a zone's Bot Management Config
 func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetParams, opts ...option.RequestOption) (res *BotManagementGetResponse, err error) {
 	var env BotManagementGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -141,6 +142,8 @@ type BotFightModeConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers. Please note the value
 	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant BotFightModeConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotFightModeConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -164,6 +167,7 @@ type BotFightModeConfiguration struct {
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
 	AIBotsProtection       apijson.Field
+	CfRobotsVariant        apijson.Field
 	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	FightMode              apijson.Field
@@ -199,6 +203,22 @@ const (
 func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled, BotFightModeConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Specifies the Robots Access Control License variant to use.
+type BotFightModeConfigurationCfRobotsVariant string
+
+const (
+	BotFightModeConfigurationCfRobotsVariantOff        BotFightModeConfigurationCfRobotsVariant = "off"
+	BotFightModeConfigurationCfRobotsVariantPolicyOnly BotFightModeConfigurationCfRobotsVariant = "policy_only"
+)
+
+func (r BotFightModeConfigurationCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationCfRobotsVariantOff, BotFightModeConfigurationCfRobotsVariantPolicyOnly:
 		return true
 	}
 	return false
@@ -265,6 +285,8 @@ type BotFightModeConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers. Please note the value
 	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant param.Field[BotFightModeConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[BotFightModeConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -317,6 +339,8 @@ type SubscriptionConfiguration struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant SubscriptionConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SubscriptionConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -343,6 +367,7 @@ type subscriptionConfigurationJSON struct {
 	AIBotsProtection       apijson.Field
 	AutoUpdateModel        apijson.Field
 	BmCookieEnabled        apijson.Field
+	CfRobotsVariant        apijson.Field
 	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	IsRobotsTXTManaged     apijson.Field
@@ -378,6 +403,22 @@ const (
 func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled, SubscriptionConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Specifies the Robots Access Control License variant to use.
+type SubscriptionConfigurationCfRobotsVariant string
+
+const (
+	SubscriptionConfigurationCfRobotsVariantOff        SubscriptionConfigurationCfRobotsVariant = "off"
+	SubscriptionConfigurationCfRobotsVariantPolicyOnly SubscriptionConfigurationCfRobotsVariant = "policy_only"
+)
+
+func (r SubscriptionConfigurationCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationCfRobotsVariantOff, SubscriptionConfigurationCfRobotsVariantPolicyOnly:
 		return true
 	}
 	return false
@@ -451,6 +492,8 @@ type SubscriptionConfigurationParam struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant param.Field[SubscriptionConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SubscriptionConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -497,6 +540,8 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers. Please note the value
 	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant SuperBotFightModeDefinitelyConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SuperBotFightModeDefinitelyConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -528,6 +573,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
+	CfRobotsVariant              apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
@@ -566,6 +612,22 @@ const (
 func (r SuperBotFightModeDefinitelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Specifies the Robots Access Control License variant to use.
+type SuperBotFightModeDefinitelyConfigurationCfRobotsVariant string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationCfRobotsVariantOff        SuperBotFightModeDefinitelyConfigurationCfRobotsVariant = "off"
+	SuperBotFightModeDefinitelyConfigurationCfRobotsVariantPolicyOnly SuperBotFightModeDefinitelyConfigurationCfRobotsVariant = "policy_only"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationCfRobotsVariantOff, SuperBotFightModeDefinitelyConfigurationCfRobotsVariantPolicyOnly:
 		return true
 	}
 	return false
@@ -653,6 +715,8 @@ type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers. Please note the value
 	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant param.Field[SuperBotFightModeDefinitelyConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SuperBotFightModeDefinitelyConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -698,6 +762,8 @@ type SuperBotFightModeLikelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers. Please note the value
 	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant SuperBotFightModeLikelyConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SuperBotFightModeLikelyConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -731,6 +797,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
+	CfRobotsVariant              apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
@@ -770,6 +837,22 @@ const (
 func (r SuperBotFightModeLikelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeLikelyConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Specifies the Robots Access Control License variant to use.
+type SuperBotFightModeLikelyConfigurationCfRobotsVariant string
+
+const (
+	SuperBotFightModeLikelyConfigurationCfRobotsVariantOff        SuperBotFightModeLikelyConfigurationCfRobotsVariant = "off"
+	SuperBotFightModeLikelyConfigurationCfRobotsVariantPolicyOnly SuperBotFightModeLikelyConfigurationCfRobotsVariant = "policy_only"
+)
+
+func (r SuperBotFightModeLikelyConfigurationCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationCfRobotsVariantOff, SuperBotFightModeLikelyConfigurationCfRobotsVariantPolicyOnly:
 		return true
 	}
 	return false
@@ -870,6 +953,8 @@ type SuperBotFightModeLikelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers. Please note the value
 	// `only_on_ad_pages` is currently not available for Enterprise customers.
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant param.Field[SuperBotFightModeLikelyConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SuperBotFightModeLikelyConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -920,6 +1005,8 @@ type BotManagementUpdateResponse struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant BotManagementUpdateResponseCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotManagementUpdateResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -964,6 +1051,7 @@ type botManagementUpdateResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
+	CfRobotsVariant              apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
@@ -1051,6 +1139,22 @@ func (r BotManagementUpdateResponseAIBotsProtection) IsKnown() bool {
 	return false
 }
 
+// Specifies the Robots Access Control License variant to use.
+type BotManagementUpdateResponseCfRobotsVariant string
+
+const (
+	BotManagementUpdateResponseCfRobotsVariantOff        BotManagementUpdateResponseCfRobotsVariant = "off"
+	BotManagementUpdateResponseCfRobotsVariantPolicyOnly BotManagementUpdateResponseCfRobotsVariant = "policy_only"
+)
+
+func (r BotManagementUpdateResponseCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseCfRobotsVariantOff, BotManagementUpdateResponseCfRobotsVariantPolicyOnly:
+		return true
+	}
+	return false
+}
+
 // Enable rule to punish AI Scrapers and Crawlers via a link maze.
 type BotManagementUpdateResponseCrawlerProtection string
 
@@ -1128,6 +1232,8 @@ type BotManagementGetResponse struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant BotManagementGetResponseCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotManagementGetResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1172,6 +1278,7 @@ type botManagementGetResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
+	CfRobotsVariant              apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
@@ -1254,6 +1361,22 @@ const (
 func (r BotManagementGetResponseAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled, BotManagementGetResponseAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Specifies the Robots Access Control License variant to use.
+type BotManagementGetResponseCfRobotsVariant string
+
+const (
+	BotManagementGetResponseCfRobotsVariantOff        BotManagementGetResponseCfRobotsVariant = "off"
+	BotManagementGetResponseCfRobotsVariantPolicyOnly BotManagementGetResponseCfRobotsVariant = "policy_only"
+)
+
+func (r BotManagementGetResponseCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseCfRobotsVariantOff, BotManagementGetResponseCfRobotsVariantPolicyOnly:
 		return true
 	}
 	return false
@@ -1346,6 +1469,8 @@ type BotManagementUpdateParamsBody struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
+	// Specifies the Robots Access Control License variant to use.
+	CfRobotsVariant param.Field[BotManagementUpdateParamsBodyCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[BotManagementUpdateParamsBodyCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1402,6 +1527,22 @@ const (
 func (r BotManagementUpdateParamsBodyAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled, BotManagementUpdateParamsBodyAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Specifies the Robots Access Control License variant to use.
+type BotManagementUpdateParamsBodyCfRobotsVariant string
+
+const (
+	BotManagementUpdateParamsBodyCfRobotsVariantOff        BotManagementUpdateParamsBodyCfRobotsVariant = "off"
+	BotManagementUpdateParamsBodyCfRobotsVariantPolicyOnly BotManagementUpdateParamsBodyCfRobotsVariant = "policy_only"
+)
+
+func (r BotManagementUpdateParamsBodyCfRobotsVariant) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyCfRobotsVariantOff, BotManagementUpdateParamsBodyCfRobotsVariantPolicyOnly:
 		return true
 	}
 	return false

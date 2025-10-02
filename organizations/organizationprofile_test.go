@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudforce_one_test
+package organizations_test
 
 import (
 	"context"
@@ -9,13 +9,13 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v6/accounts"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/organizations"
 )
 
-func TestThreatEventCronList(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestOrganizationProfileUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,9 +28,19 @@ func TestThreatEventCronList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Crons.List(context.TODO(), cloudforce_one.ThreatEventCronListParams{
-		AccountID: cloudflare.F("account_id"),
-	})
+	err := client.Organizations.OrganizationProfile.Update(
+		context.TODO(),
+		"organization_id",
+		organizations.OrganizationProfileUpdateParams{
+			AccountProfile: accounts.AccountProfileParam{
+				BusinessAddress:  cloudflare.F("business_address"),
+				BusinessEmail:    cloudflare.F("business_email"),
+				BusinessName:     cloudflare.F("business_name"),
+				BusinessPhone:    cloudflare.F("business_phone"),
+				ExternalMetadata: cloudflare.F("external_metadata"),
+			},
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -40,8 +50,7 @@ func TestThreatEventCronList(t *testing.T) {
 	}
 }
 
-func TestThreatEventCronEdit(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestOrganizationProfileGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,9 +63,7 @@ func TestThreatEventCronEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.Crons.Edit(context.TODO(), cloudforce_one.ThreatEventCronEditParams{
-		AccountID: cloudflare.F("account_id"),
-	})
+	_, err := client.Organizations.OrganizationProfile.Get(context.TODO(), "organization_id")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,7 +39,7 @@ func NewZoneTransferOutgoingService(opts ...option.RequestOption) (r *ZoneTransf
 // Create primary zone configuration for outgoing zone transfers.
 func (r *ZoneTransferOutgoingService) New(ctx context.Context, params ZoneTransferOutgoingNewParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingNewResponse, err error) {
 	var env ZoneTransferOutgoingNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *ZoneTransferOutgoingService) New(ctx context.Context, params ZoneTransf
 // Update primary zone configuration for outgoing zone transfers.
 func (r *ZoneTransferOutgoingService) Update(ctx context.Context, params ZoneTransferOutgoingUpdateParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingUpdateResponse, err error) {
 	var env ZoneTransferOutgoingUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -72,7 +73,7 @@ func (r *ZoneTransferOutgoingService) Update(ctx context.Context, params ZoneTra
 // Delete primary zone configuration for outgoing zone transfers.
 func (r *ZoneTransferOutgoingService) Delete(ctx context.Context, body ZoneTransferOutgoingDeleteParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingDeleteResponse, err error) {
 	var env ZoneTransferOutgoingDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -90,7 +91,7 @@ func (r *ZoneTransferOutgoingService) Delete(ctx context.Context, body ZoneTrans
 // primary zone.
 func (r *ZoneTransferOutgoingService) Disable(ctx context.Context, params ZoneTransferOutgoingDisableParams, opts ...option.RequestOption) (res *DisableTransfer, err error) {
 	var env ZoneTransferOutgoingDisableResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -107,7 +108,7 @@ func (r *ZoneTransferOutgoingService) Disable(ctx context.Context, params ZoneTr
 // Enable outgoing zone transfers for primary zone.
 func (r *ZoneTransferOutgoingService) Enable(ctx context.Context, params ZoneTransferOutgoingEnableParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	var env ZoneTransferOutgoingEnableResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -124,7 +125,7 @@ func (r *ZoneTransferOutgoingService) Enable(ctx context.Context, params ZoneTra
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
 func (r *ZoneTransferOutgoingService) ForceNotify(ctx context.Context, params ZoneTransferOutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ZoneTransferOutgoingForceNotifyResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -141,7 +142,7 @@ func (r *ZoneTransferOutgoingService) ForceNotify(ctx context.Context, params Zo
 // Get primary zone configuration for outgoing zone transfers.
 func (r *ZoneTransferOutgoingService) Get(ctx context.Context, query ZoneTransferOutgoingGetParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingGetResponse, err error) {
 	var env ZoneTransferOutgoingGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

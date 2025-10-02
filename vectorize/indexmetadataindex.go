@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -37,7 +38,7 @@ func NewIndexMetadataIndexService(opts ...option.RequestOption) (r *IndexMetadat
 // Enable metadata filtering based on metadata property. Limited to 10 properties.
 func (r *IndexMetadataIndexService) New(ctx context.Context, indexName string, params IndexMetadataIndexNewParams, opts ...option.RequestOption) (res *IndexMetadataIndexNewResponse, err error) {
 	var env IndexMetadataIndexNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *IndexMetadataIndexService) New(ctx context.Context, indexName string, p
 // List Metadata Indexes for the specified Vectorize Index.
 func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, query IndexMetadataIndexListParams, opts ...option.RequestOption) (res *IndexMetadataIndexListResponse, err error) {
 	var env IndexMetadataIndexListResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, 
 // Allow Vectorize to delete the specified metadata index.
 func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string, params IndexMetadataIndexDeleteParams, opts ...option.RequestOption) (res *IndexMetadataIndexDeleteResponse, err error) {
 	var env IndexMetadataIndexDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

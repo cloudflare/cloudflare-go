@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 // Create a new access token.
 func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "user/tokens"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -58,7 +59,7 @@ func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...opt
 // Update an existing token.
 func (r *TokenService) Update(ctx context.Context, tokenID string, body TokenUpdateParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if tokenID == "" {
 		err = errors.New("missing required token_id parameter")
 		return
@@ -75,7 +76,7 @@ func (r *TokenService) Update(ctx context.Context, tokenID string, body TokenUpd
 // List all access tokens you created.
 func (r *TokenService) List(ctx context.Context, query TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Token], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/tokens"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -98,7 +99,7 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, query TokenListParams
 // Destroy a token.
 func (r *TokenService) Delete(ctx context.Context, tokenID string, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if tokenID == "" {
 		err = errors.New("missing required token_id parameter")
 		return
@@ -115,7 +116,7 @@ func (r *TokenService) Delete(ctx context.Context, tokenID string, opts ...optio
 // Get information about a specific token.
 func (r *TokenService) Get(ctx context.Context, tokenID string, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if tokenID == "" {
 		err = errors.New("missing required token_id parameter")
 		return
@@ -132,7 +133,7 @@ func (r *TokenService) Get(ctx context.Context, tokenID string, opts ...option.R
 // Test whether a token works.
 func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption) (res *TokenVerifyResponse, err error) {
 	var env TokenVerifyResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "user/tokens/verify"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

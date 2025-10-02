@@ -31,6 +31,7 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: bot_management.BotFightModeConfigurationParam{
 			AIBotsProtection:   cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionDisabled),
+			CfRobotsVariant:    cloudflare.F(bot_management.BotFightModeConfigurationCfRobotsVariantOff),
 			CrawlerProtection:  cloudflare.F(bot_management.BotFightModeConfigurationCrawlerProtectionDisabled),
 			EnableJS:           cloudflare.F(true),
 			FightMode:          cloudflare.F(true),

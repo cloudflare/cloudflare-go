@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -38,7 +39,7 @@ func NewBGPLeakEventService(opts ...option.RequestOption) (r *BGPLeakEventServic
 // Retrieves the BGP route leak events.
 func (r *BGPLeakEventService) List(ctx context.Context, query BGPLeakEventListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[BGPLeakEventListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "radar/bgp/leaks/events"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

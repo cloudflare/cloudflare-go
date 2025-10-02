@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -39,7 +40,7 @@ func NewBotWebCrawlerService(opts ...option.RequestOption) (r *BotWebCrawlerServ
 // specified dimension.
 func (r *BotWebCrawlerService) Summary(ctx context.Context, dimension BotWebCrawlerSummaryParamsDimension, query BotWebCrawlerSummaryParams, opts ...option.RequestOption) (res *BotWebCrawlerSummaryResponse, err error) {
 	var env BotWebCrawlerSummaryResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/bots/crawlers/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,7 +54,7 @@ func (r *BotWebCrawlerService) Summary(ctx context.Context, dimension BotWebCraw
 // specified dimension over time.
 func (r *BotWebCrawlerService) TimeseriesGroups(ctx context.Context, dimension BotWebCrawlerTimeseriesGroupsParamsDimension, query BotWebCrawlerTimeseriesGroupsParams, opts ...option.RequestOption) (res *BotWebCrawlerTimeseriesGroupsResponse, err error) {
 	var env BotWebCrawlerTimeseriesGroupsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/bots/crawlers/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

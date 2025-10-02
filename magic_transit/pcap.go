@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -45,7 +46,7 @@ func NewPCAPService(opts ...option.RequestOption) (r *PCAPService) {
 // Create new PCAP request for account.
 func (r *PCAPService) New(ctx context.Context, params PCAPNewParams, opts ...option.RequestOption) (res *PCAPNewResponse, err error) {
 	var env PCAPNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *PCAPService) New(ctx context.Context, params PCAPNewParams, opts ...opt
 // Lists all packet capture requests for an account.
 func (r *PCAPService) List(ctx context.Context, query PCAPListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PCAPListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -89,7 +90,7 @@ func (r *PCAPService) ListAutoPaging(ctx context.Context, query PCAPListParams, 
 // Get information for a PCAP request by id.
 func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParams, opts ...option.RequestOption) (res *PCAPGetResponse, err error) {
 	var env PCAPGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -107,9 +108,9 @@ func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParam
 	return
 }
 
-// Stop full PCAP
+// Stop full PCAP.
 func (r *PCAPService) Stop(ctx context.Context, pcapID string, body PCAPStopParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -1113,7 +1114,7 @@ func (r PCAPGetResponseType) IsKnown() bool {
 }
 
 type PCAPNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]    `path:"account_id,required"`
 	Body      PCAPNewParamsBodyUnion `json:"body,required"`
 }
@@ -1314,7 +1315,7 @@ type PCAPNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PCAPNewResponse       `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PCAPNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1338,7 +1339,7 @@ func (r pcapNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PCAPNewResponseEnvelopeSuccess bool
 
 const (
@@ -1354,12 +1355,12 @@ func (r PCAPNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PCAPListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PCAPGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -1367,7 +1368,7 @@ type PCAPGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PCAPGetResponse       `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success PCAPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1391,7 +1392,7 @@ func (r pcapGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type PCAPGetResponseEnvelopeSuccess bool
 
 const (
@@ -1407,6 +1408,6 @@ func (r PCAPGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PCAPStopParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

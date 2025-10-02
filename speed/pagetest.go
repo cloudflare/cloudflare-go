@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewPageTestService(opts ...option.RequestOption) (r *PageTestService) {
 // Starts a test for a specific webpage, in a specific region.
 func (r *PageTestService) New(ctx context.Context, url string, params PageTestNewParams, opts ...option.RequestOption) (res *Test, err error) {
 	var env PageTestNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *PageTestService) New(ctx context.Context, url string, params PageTestNe
 // Test history (list of tests) for a specific webpage.
 func (r *PageTestService) List(ctx context.Context, url string, params PageTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Test], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -94,7 +95,7 @@ func (r *PageTestService) ListAutoPaging(ctx context.Context, url string, params
 // are still counted as part of the quota.
 func (r *PageTestService) Delete(ctx context.Context, url string, params PageTestDeleteParams, opts ...option.RequestOption) (res *PageTestDeleteResponse, err error) {
 	var env PageTestDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -115,7 +116,7 @@ func (r *PageTestService) Delete(ctx context.Context, url string, params PageTes
 // Retrieves the result of a specific test.
 func (r *PageTestService) Get(ctx context.Context, url string, testID string, query PageTestGetParams, opts ...option.RequestOption) (res *Test, err error) {
 	var env PageTestGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

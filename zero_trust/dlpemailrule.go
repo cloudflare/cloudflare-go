@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewDLPEmailRuleService(opts ...option.RequestOption) (r *DLPEmailRuleServic
 // Create email scanner rule
 func (r *DLPEmailRuleService) New(ctx context.Context, params DLPEmailRuleNewParams, opts ...option.RequestOption) (res *DLPEmailRuleNewResponse, err error) {
 	var env DLPEmailRuleNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *DLPEmailRuleService) New(ctx context.Context, params DLPEmailRuleNewPar
 // Update email scanner rule
 func (r *DLPEmailRuleService) Update(ctx context.Context, ruleID string, params DLPEmailRuleUpdateParams, opts ...option.RequestOption) (res *DLPEmailRuleUpdateResponse, err error) {
 	var env DLPEmailRuleUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *DLPEmailRuleService) Update(ctx context.Context, ruleID string, params 
 // Lists all email scanner rules for an account.
 func (r *DLPEmailRuleService) List(ctx context.Context, query DLPEmailRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPEmailRuleListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -106,7 +107,7 @@ func (r *DLPEmailRuleService) ListAutoPaging(ctx context.Context, query DLPEmail
 // Delete email scanner rule
 func (r *DLPEmailRuleService) Delete(ctx context.Context, ruleID string, body DLPEmailRuleDeleteParams, opts ...option.RequestOption) (res *DLPEmailRuleDeleteResponse, err error) {
 	var env DLPEmailRuleDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *DLPEmailRuleService) Delete(ctx context.Context, ruleID string, body DL
 // Update email scanner rule priorities
 func (r *DLPEmailRuleService) BulkEdit(ctx context.Context, params DLPEmailRuleBulkEditParams, opts ...option.RequestOption) (res *DLPEmailRuleBulkEditResponse, err error) {
 	var env DLPEmailRuleBulkEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -144,7 +145,7 @@ func (r *DLPEmailRuleService) BulkEdit(ctx context.Context, params DLPEmailRuleB
 // Get an email scanner rule
 func (r *DLPEmailRuleService) Get(ctx context.Context, ruleID string, query DLPEmailRuleGetParams, opts ...option.RequestOption) (res *DLPEmailRuleGetResponse, err error) {
 	var env DLPEmailRuleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +41,7 @@ func NewSettingAccountViewService(opts ...option.RequestOption) (r *SettingAccou
 // Create Internal DNS View for an account
 func (r *SettingAccountViewService) New(ctx context.Context, params SettingAccountViewNewParams, opts ...option.RequestOption) (res *SettingAccountViewNewResponse, err error) {
 	var env SettingAccountViewNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,7 +58,7 @@ func (r *SettingAccountViewService) New(ctx context.Context, params SettingAccou
 // List DNS Internal Views for an Account
 func (r *SettingAccountViewService) List(ctx context.Context, params SettingAccountViewListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingAccountViewListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -84,7 +85,7 @@ func (r *SettingAccountViewService) ListAutoPaging(ctx context.Context, params S
 // Delete an existing Internal DNS View
 func (r *SettingAccountViewService) Delete(ctx context.Context, viewID string, body SettingAccountViewDeleteParams, opts ...option.RequestOption) (res *SettingAccountViewDeleteResponse, err error) {
 	var env SettingAccountViewDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -105,7 +106,7 @@ func (r *SettingAccountViewService) Delete(ctx context.Context, viewID string, b
 // Update an existing Internal DNS View
 func (r *SettingAccountViewService) Edit(ctx context.Context, viewID string, params SettingAccountViewEditParams, opts ...option.RequestOption) (res *SettingAccountViewEditResponse, err error) {
 	var env SettingAccountViewEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -126,7 +127,7 @@ func (r *SettingAccountViewService) Edit(ctx context.Context, viewID string, par
 // Get DNS Internal View
 func (r *SettingAccountViewService) Get(ctx context.Context, viewID string, query SettingAccountViewGetParams, opts ...option.RequestOption) (res *SettingAccountViewGetResponse, err error) {
 	var env SettingAccountViewGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewValidateService(opts ...option.RequestOption) (r *ValidateService) {
 // Validates destination.
 func (r *ValidateService) Destination(ctx context.Context, params ValidateDestinationParams, opts ...option.RequestOption) (res *ValidateDestinationResponse, err error) {
 	var env ValidateDestinationResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -67,7 +68,7 @@ func (r *ValidateService) Destination(ctx context.Context, params ValidateDestin
 // Checks if there is an existing job with a destination.
 func (r *ValidateService) DestinationExists(ctx context.Context, params ValidateDestinationExistsParams, opts ...option.RequestOption) (res *ValidateDestinationExistsResponse, err error) {
 	var env ValidateDestinationExistsResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -98,7 +99,7 @@ func (r *ValidateService) DestinationExists(ctx context.Context, params Validate
 // Validates logpull origin with logpull_options.
 func (r *ValidateService) Origin(ctx context.Context, params ValidateOriginParams, opts ...option.RequestOption) (res *ValidateOriginResponse, err error) {
 	var env ValidateOriginResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

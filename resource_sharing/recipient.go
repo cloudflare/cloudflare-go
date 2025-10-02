@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -41,7 +42,7 @@ func NewRecipientService(opts ...option.RequestOption) (r *RecipientService) {
 // Create a new share recipient
 func (r *RecipientService) New(ctx context.Context, shareID string, params RecipientNewParams, opts ...option.RequestOption) (res *RecipientNewResponse, err error) {
 	var env RecipientNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *RecipientService) New(ctx context.Context, shareID string, params Recip
 // List share recipients by share ID.
 func (r *RecipientService) List(ctx context.Context, shareID string, params RecipientListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RecipientListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -94,7 +95,7 @@ func (r *RecipientService) ListAutoPaging(ctx context.Context, shareID string, p
 // will be returned.
 func (r *RecipientService) Delete(ctx context.Context, shareID string, recipientID string, body RecipientDeleteParams, opts ...option.RequestOption) (res *RecipientDeleteResponse, err error) {
 	var env RecipientDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -117,10 +118,10 @@ func (r *RecipientService) Delete(ctx context.Context, shareID string, recipient
 }
 
 // Get share recipient by ID.
-func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID string, query RecipientGetParams, opts ...option.RequestOption) (res *RecipientGetResponse, err error) {
+func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID string, params RecipientGetParams, opts ...option.RequestOption) (res *RecipientGetResponse, err error) {
 	var env RecipientGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -132,8 +133,8 @@ func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID 
 		err = errors.New("missing required recipient_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/shares/%s/recipients/%s", query.AccountID, shareID, recipientID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/shares/%s/recipients/%s", params.AccountID, shareID, recipientID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -153,8 +154,9 @@ type RecipientNewResponse struct {
 	// When the share was modified.
 	Modified time.Time `json:"modified,required" format:"date-time"`
 	// Share Recipient status message.
-	StatusMessage string                   `json:"status_message,required"`
-	JSON          recipientNewResponseJSON `json:"-"`
+	StatusMessage string                         `json:"status_message,required"`
+	Resources     []RecipientNewResponseResource `json:"resources"`
+	JSON          recipientNewResponseJSON       `json:"-"`
 }
 
 // recipientNewResponseJSON contains the JSON metadata for the struct
@@ -166,6 +168,7 @@ type recipientNewResponseJSON struct {
 	Created           apijson.Field
 	Modified          apijson.Field
 	StatusMessage     apijson.Field
+	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -196,6 +199,34 @@ func (r RecipientNewResponseAssociationStatus) IsKnown() bool {
 	return false
 }
 
+type RecipientNewResponseResource struct {
+	// Share Recipient error message.
+	Error string `json:"error,required"`
+	// Share Resource identifier.
+	ResourceID string `json:"resource_id,required"`
+	// Resource Version.
+	ResourceVersion int64                            `json:"resource_version,required"`
+	JSON            recipientNewResponseResourceJSON `json:"-"`
+}
+
+// recipientNewResponseResourceJSON contains the JSON metadata for the struct
+// [RecipientNewResponseResource]
+type recipientNewResponseResourceJSON struct {
+	Error           apijson.Field
+	ResourceID      apijson.Field
+	ResourceVersion apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RecipientNewResponseResource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recipientNewResponseResourceJSON) RawJSON() string {
+	return r.raw
+}
+
 type RecipientListResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id,required"`
@@ -208,8 +239,9 @@ type RecipientListResponse struct {
 	// When the share was modified.
 	Modified time.Time `json:"modified,required" format:"date-time"`
 	// Share Recipient status message.
-	StatusMessage string                    `json:"status_message,required"`
-	JSON          recipientListResponseJSON `json:"-"`
+	StatusMessage string                          `json:"status_message,required"`
+	Resources     []RecipientListResponseResource `json:"resources"`
+	JSON          recipientListResponseJSON       `json:"-"`
 }
 
 // recipientListResponseJSON contains the JSON metadata for the struct
@@ -221,6 +253,7 @@ type recipientListResponseJSON struct {
 	Created           apijson.Field
 	Modified          apijson.Field
 	StatusMessage     apijson.Field
+	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -251,6 +284,34 @@ func (r RecipientListResponseAssociationStatus) IsKnown() bool {
 	return false
 }
 
+type RecipientListResponseResource struct {
+	// Share Recipient error message.
+	Error string `json:"error,required"`
+	// Share Resource identifier.
+	ResourceID string `json:"resource_id,required"`
+	// Resource Version.
+	ResourceVersion int64                             `json:"resource_version,required"`
+	JSON            recipientListResponseResourceJSON `json:"-"`
+}
+
+// recipientListResponseResourceJSON contains the JSON metadata for the struct
+// [RecipientListResponseResource]
+type recipientListResponseResourceJSON struct {
+	Error           apijson.Field
+	ResourceID      apijson.Field
+	ResourceVersion apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RecipientListResponseResource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recipientListResponseResourceJSON) RawJSON() string {
+	return r.raw
+}
+
 type RecipientDeleteResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id,required"`
@@ -263,8 +324,9 @@ type RecipientDeleteResponse struct {
 	// When the share was modified.
 	Modified time.Time `json:"modified,required" format:"date-time"`
 	// Share Recipient status message.
-	StatusMessage string                      `json:"status_message,required"`
-	JSON          recipientDeleteResponseJSON `json:"-"`
+	StatusMessage string                            `json:"status_message,required"`
+	Resources     []RecipientDeleteResponseResource `json:"resources"`
+	JSON          recipientDeleteResponseJSON       `json:"-"`
 }
 
 // recipientDeleteResponseJSON contains the JSON metadata for the struct
@@ -276,6 +338,7 @@ type recipientDeleteResponseJSON struct {
 	Created           apijson.Field
 	Modified          apijson.Field
 	StatusMessage     apijson.Field
+	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -306,6 +369,34 @@ func (r RecipientDeleteResponseAssociationStatus) IsKnown() bool {
 	return false
 }
 
+type RecipientDeleteResponseResource struct {
+	// Share Recipient error message.
+	Error string `json:"error,required"`
+	// Share Resource identifier.
+	ResourceID string `json:"resource_id,required"`
+	// Resource Version.
+	ResourceVersion int64                               `json:"resource_version,required"`
+	JSON            recipientDeleteResponseResourceJSON `json:"-"`
+}
+
+// recipientDeleteResponseResourceJSON contains the JSON metadata for the struct
+// [RecipientDeleteResponseResource]
+type recipientDeleteResponseResourceJSON struct {
+	Error           apijson.Field
+	ResourceID      apijson.Field
+	ResourceVersion apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RecipientDeleteResponseResource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recipientDeleteResponseResourceJSON) RawJSON() string {
+	return r.raw
+}
+
 type RecipientGetResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id,required"`
@@ -318,8 +409,9 @@ type RecipientGetResponse struct {
 	// When the share was modified.
 	Modified time.Time `json:"modified,required" format:"date-time"`
 	// Share Recipient status message.
-	StatusMessage string                   `json:"status_message,required"`
-	JSON          recipientGetResponseJSON `json:"-"`
+	StatusMessage string                         `json:"status_message,required"`
+	Resources     []RecipientGetResponseResource `json:"resources"`
+	JSON          recipientGetResponseJSON       `json:"-"`
 }
 
 // recipientGetResponseJSON contains the JSON metadata for the struct
@@ -331,6 +423,7 @@ type recipientGetResponseJSON struct {
 	Created           apijson.Field
 	Modified          apijson.Field
 	StatusMessage     apijson.Field
+	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -359,6 +452,34 @@ func (r RecipientGetResponseAssociationStatus) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RecipientGetResponseResource struct {
+	// Share Recipient error message.
+	Error string `json:"error,required"`
+	// Share Resource identifier.
+	ResourceID string `json:"resource_id,required"`
+	// Resource Version.
+	ResourceVersion int64                            `json:"resource_version,required"`
+	JSON            recipientGetResponseResourceJSON `json:"-"`
+}
+
+// recipientGetResponseResourceJSON contains the JSON metadata for the struct
+// [RecipientGetResponseResource]
+type recipientGetResponseResourceJSON struct {
+	Error           apijson.Field
+	ResourceID      apijson.Field
+	ResourceVersion apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RecipientGetResponseResource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recipientGetResponseResourceJSON) RawJSON() string {
+	return r.raw
 }
 
 type RecipientNewParams struct {
@@ -403,6 +524,8 @@ func (r recipientNewResponseEnvelopeJSON) RawJSON() string {
 type RecipientListParams struct {
 	// Account identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Include resources in the response.
+	IncludeResources param.Field[bool] `query:"include_resources"`
 	// Page number.
 	Page param.Field[int64] `query:"page"`
 	// Number of objects to return per page.
@@ -451,6 +574,16 @@ func (r recipientDeleteResponseEnvelopeJSON) RawJSON() string {
 type RecipientGetParams struct {
 	// Account identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Include resources in the response.
+	IncludeResources param.Field[bool] `query:"include_resources"`
+}
+
+// URLQuery serializes [RecipientGetParams]'s query parameters as `url.Values`.
+func (r RecipientGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type RecipientGetResponseEnvelope struct {
