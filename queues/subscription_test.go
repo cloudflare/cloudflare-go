@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/queues"
 )
 
-func TestMessageAckWithOptionalParams(t *testing.T) {
+func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,18 +27,53 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Ack(
+	_, err := client.Queues.Subscriptions.New(context.TODO(), queues.SubscriptionNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Destination: cloudflare.F(queues.SubscriptionNewParamsDestination{
+			QueueID: cloudflare.F("queue_id"),
+			Type:    cloudflare.F(queues.SubscriptionNewParamsDestinationTypeQueuesQueue),
+		}),
+		Enabled: cloudflare.F(true),
+		Events:  cloudflare.F([]string{"string"}),
+		Name:    cloudflare.F("name"),
+		Source: cloudflare.F[queues.SubscriptionNewParamsSourceUnion](queues.SubscriptionNewParamsSourceMqEventSourceImages{
+			Type: cloudflare.F(queues.SubscriptionNewParamsSourceMqEventSourceImagesTypeImages),
+		}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Queues.Subscriptions.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessageAckParams{
+		queues.SubscriptionUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Acks: cloudflare.F([]queues.MessageAckParamsAck{{
-				LeaseID: cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}}),
-			Retries: cloudflare.F([]queues.MessageAckParamsRetry{{
-				DelaySeconds: cloudflare.F(10.000000),
-				LeaseID:      cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}}),
+			Destination: cloudflare.F(queues.SubscriptionUpdateParamsDestination{
+				QueueID: cloudflare.F("queue_id"),
+				Type:    cloudflare.F(queues.SubscriptionUpdateParamsDestinationTypeQueuesQueue),
+			}),
+			Enabled: cloudflare.F(true),
+			Events:  cloudflare.F([]string{"string"}),
+			Name:    cloudflare.F("name"),
 		},
 	)
 	if err != nil {
@@ -50,7 +85,7 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessageBulkPushWithOptionalParams(t *testing.T) {
+func TestSubscriptionListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -63,19 +98,13 @@ func TestMessageBulkPushWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.BulkPush(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessageBulkPushParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			DelaySeconds: cloudflare.F(0.000000),
-			Messages: cloudflare.F([]queues.MessageBulkPushParamsMessageUnion{queues.MessageBulkPushParamsMessagesMqQueueMessageText{
-				Body:         cloudflare.F("body"),
-				ContentType:  cloudflare.F(queues.MessageBulkPushParamsMessagesMqQueueMessageTextContentTypeText),
-				DelaySeconds: cloudflare.F(0.000000),
-			}}),
-		},
-	)
+	_, err := client.Queues.Subscriptions.List(context.TODO(), queues.SubscriptionListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction: cloudflare.F(queues.SubscriptionListParamsDirectionAsc),
+		Order:     cloudflare.F(queues.SubscriptionListParamsOrderCreatedAt),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -85,7 +114,7 @@ func TestMessageBulkPushWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessagePullWithOptionalParams(t *testing.T) {
+func TestSubscriptionDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,47 +127,11 @@ func TestMessagePullWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Pull(
+	_, err := client.Queues.Subscriptions.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessagePullParams{
-			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BatchSize:           cloudflare.F(50.000000),
-			VisibilityTimeoutMs: cloudflare.F(6000.000000),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestMessagePushWithOptionalParams(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Queues.Messages.Push(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessagePushParams{
+		queues.SubscriptionDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.MessagePushParamsBodyMqQueueMessageText{
-				Body:         cloudflare.F("body"),
-				ContentType:  cloudflare.F(queues.MessagePushParamsBodyMqQueueMessageTextContentTypeText),
-				DelaySeconds: cloudflare.F(0.000000),
-			},
 		},
 	)
 	if err != nil {

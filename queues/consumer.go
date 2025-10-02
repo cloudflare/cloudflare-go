@@ -135,6 +135,31 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 	return
 }
 
+// Fetches the consumer for a queue by consumer id
+func (r *ConsumerService) Get(ctx context.Context, queueID string, consumerID string, query ConsumerGetParams, opts ...option.RequestOption) (res *Consumer, err error) {
+	var env ConsumerGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	if consumerID == "" {
+		err = errors.New("missing required consumer_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", query.AccountID, queueID, consumerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type Consumer struct {
 	// A Resource identifier.
 	ConsumerID string `json:"consumer_id"`
@@ -874,4 +899,52 @@ type ConsumerListParams struct {
 type ConsumerDeleteParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ConsumerGetParams struct {
+	// A Resource identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ConsumerGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Consumer              `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success ConsumerGetResponseEnvelopeSuccess `json:"success"`
+	JSON    consumerGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// consumerGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ConsumerGetResponseEnvelope]
+type consumerGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type ConsumerGetResponseEnvelopeSuccess bool
+
+const (
+	ConsumerGetResponseEnvelopeSuccessTrue ConsumerGetResponseEnvelopeSuccess = true
+)
+
+func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

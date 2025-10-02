@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package logs_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/logs"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
-func TestDEXFleetStatusLive(t *testing.T) {
+func TestControlRetentionNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,9 +27,9 @@ func TestDEXFleetStatusLive(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DEX.FleetStatus.Live(context.TODO(), zero_trust.DEXFleetStatusLiveParams{
-		AccountID:    cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		SinceMinutes: cloudflare.F(10.000000),
+	_, err := client.Logs.Control.Retention.New(context.TODO(), logs.ControlRetentionNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Flag:   cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +40,7 @@ func TestDEXFleetStatusLive(t *testing.T) {
 	}
 }
 
-func TestDEXFleetStatusOverTimeWithOptionalParams(t *testing.T) {
+func TestControlRetentionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,12 +53,8 @@ func TestDEXFleetStatusOverTimeWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.ZeroTrust.DEX.FleetStatus.OverTime(context.TODO(), zero_trust.DEXFleetStatusOverTimeParams{
-		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		From:      cloudflare.F("2023-10-11T00:00:00Z"),
-		To:        cloudflare.F("2023-10-11T00:00:00Z"),
-		Colo:      cloudflare.F("SJC"),
-		DeviceID:  cloudflare.F("cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"),
+	_, err := client.Logs.Control.Retention.Get(context.TODO(), logs.ControlRetentionGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package queues_test
+package leaked_credential_checks_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v6/leaked_credential_checks"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/queues"
 )
 
-func TestMessageAckWithOptionalParams(t *testing.T) {
+func TestDetectionNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,18 +27,40 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Ack(
+	_, err := client.LeakedCredentialChecks.Detections.New(context.TODO(), leaked_credential_checks.DetectionNewParams{
+		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Password: cloudflare.F(`lookup_json_string(http.request.body.raw, "secret")`),
+		Username: cloudflare.F(`lookup_json_string(http.request.body.raw, "user")`),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDetectionUpdateWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.LeakedCredentialChecks.Detections.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessageAckParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Acks: cloudflare.F([]queues.MessageAckParamsAck{{
-				LeaseID: cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}}),
-			Retries: cloudflare.F([]queues.MessageAckParamsRetry{{
-				DelaySeconds: cloudflare.F(10.000000),
-				LeaseID:      cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}}),
+		"18a14bafaa8eb1df04ce683ec18c765e",
+		leaked_credential_checks.DetectionUpdateParams{
+			ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Password: cloudflare.F(`lookup_json_string(http.request.body.raw, "secret")`),
+			Username: cloudflare.F(`lookup_json_string(http.request.body.raw, "user")`),
 		},
 	)
 	if err != nil {
@@ -50,7 +72,7 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessageBulkPushWithOptionalParams(t *testing.T) {
+func TestDetectionList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -63,19 +85,9 @@ func TestMessageBulkPushWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.BulkPush(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessageBulkPushParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			DelaySeconds: cloudflare.F(0.000000),
-			Messages: cloudflare.F([]queues.MessageBulkPushParamsMessageUnion{queues.MessageBulkPushParamsMessagesMqQueueMessageText{
-				Body:         cloudflare.F("body"),
-				ContentType:  cloudflare.F(queues.MessageBulkPushParamsMessagesMqQueueMessageTextContentTypeText),
-				DelaySeconds: cloudflare.F(0.000000),
-			}}),
-		},
-	)
+	_, err := client.LeakedCredentialChecks.Detections.List(context.TODO(), leaked_credential_checks.DetectionListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -85,7 +97,7 @@ func TestMessageBulkPushWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMessagePullWithOptionalParams(t *testing.T) {
+func TestDetectionDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,47 +110,11 @@ func TestMessagePullWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Messages.Pull(
+	_, err := client.LeakedCredentialChecks.Detections.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessagePullParams{
-			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BatchSize:           cloudflare.F(50.000000),
-			VisibilityTimeoutMs: cloudflare.F(6000.000000),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestMessagePushWithOptionalParams(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Queues.Messages.Push(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.MessagePushParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.MessagePushParamsBodyMqQueueMessageText{
-				Body:         cloudflare.F("body"),
-				ContentType:  cloudflare.F(queues.MessagePushParamsBodyMqQueueMessageTextContentTypeText),
-				DelaySeconds: cloudflare.F(0.000000),
-			},
+		"18a14bafaa8eb1df04ce683ec18c765e",
+		leaked_credential_checks.DetectionDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

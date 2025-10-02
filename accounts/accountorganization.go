@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // AccountOrganizationService contains methods and other services that help with
@@ -37,45 +36,16 @@ func NewAccountOrganizationService(opts ...option.RequestOption) (r *AccountOrga
 
 // Move an account within an organization hierarchy or an account outside an
 // organization.
-func (r *AccountOrganizationService) New(ctx context.Context, params AccountOrganizationNewParams, opts ...option.RequestOption) (res *AccountOrganizationNewResponse, err error) {
-	var env AccountOrganizationNewResponseEnvelope
+func (r *AccountOrganizationService) New(ctx context.Context, params AccountOrganizationNewParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/move", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
 	return
-}
-
-type AccountOrganizationNewResponse struct {
-	AccountID                 string                             `json:"account_id,required"`
-	DestinationOrganizationID string                             `json:"destination_organization_id,required"`
-	SourceOrganizationID      string                             `json:"source_organization_id,required"`
-	JSON                      accountOrganizationNewResponseJSON `json:"-"`
-}
-
-// accountOrganizationNewResponseJSON contains the JSON metadata for the struct
-// [AccountOrganizationNewResponse]
-type accountOrganizationNewResponseJSON struct {
-	AccountID                 apijson.Field
-	DestinationOrganizationID apijson.Field
-	SourceOrganizationID      apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *AccountOrganizationNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountOrganizationNewResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccountOrganizationNewParams struct {
@@ -85,45 +55,4 @@ type AccountOrganizationNewParams struct {
 
 func (r AccountOrganizationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type AccountOrganizationNewResponseEnvelope struct {
-	Errors   []interface{}                                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   AccountOrganizationNewResponse                `json:"result,required"`
-	Success  AccountOrganizationNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON     accountOrganizationNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// accountOrganizationNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccountOrganizationNewResponseEnvelope]
-type accountOrganizationNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountOrganizationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountOrganizationNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountOrganizationNewResponseEnvelopeSuccess bool
-
-const (
-	AccountOrganizationNewResponseEnvelopeSuccessTrue AccountOrganizationNewResponseEnvelopeSuccess = true
-)
-
-func (r AccountOrganizationNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccountOrganizationNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package accounts_test
+package workflows_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/accounts"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/workflows"
 )
 
-func TestAccountOrganizationNew(t *testing.T) {
+func TestInstanceEventNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,16 @@ func TestAccountOrganizationNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Accounts.AccountOrganizations.New(context.TODO(), accounts.AccountOrganizationNewParams{
-		AccountID:                 cloudflare.F("account_id"),
-		DestinationOrganizationID: cloudflare.F("destination_organization_id"),
-	})
+	_, err := client.Workflows.Instances.Events.New(
+		context.TODO(),
+		"x",
+		"x",
+		"x",
+		workflows.InstanceEventNewParams{
+			AccountID: cloudflare.F("account_id"),
+			Body:      map[string]interface{}{},
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
