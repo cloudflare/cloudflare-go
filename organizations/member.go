@@ -83,23 +83,6 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, organizationID strin
 	return pagination.NewSinglePageAutoPager(r.List(ctx, organizationID, query, opts...))
 }
 
-// Delete a membership to a particular Organization.
-func (r *MemberService) Delete(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	if organizationID == "" {
-		err = errors.New("missing required organization_id parameter")
-		return
-	}
-	if memberID == "" {
-		err = errors.New("missing required member_id parameter")
-		return
-	}
-	path := fmt.Sprintf("organizations/%s/members/%s", organizationID, memberID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
-}
-
 // Retrieve a single membership from an Organization.
 func (r *MemberService) Get(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (res *OrganizationMember, err error) {
 	var env MemberGetResponseEnvelope
@@ -122,7 +105,6 @@ func (r *MemberService) Get(ctx context.Context, organizationID string, memberID
 }
 
 type OrganizationMember struct {
-	// Organization Member ID
 	ID         string                   `json:"id,required"`
 	CreateTime time.Time                `json:"create_time,required" format:"date-time"`
 	Meta       map[string]interface{}   `json:"meta,required"`

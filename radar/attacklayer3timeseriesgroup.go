@@ -36,8 +36,6 @@ func NewAttackLayer3TimeseriesGroupService(opts ...option.RequestOption) (r *Att
 }
 
 // Retrieves the distribution of layer 3 attacks by bitrate over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) Bitrate(ctx context.Context, query AttackLayer3TimeseriesGroupBitrateParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupBitrateResponse, err error) {
 	var env AttackLayer3TimeseriesGroupBitrateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,8 +49,6 @@ func (r *AttackLayer3TimeseriesGroupService) Bitrate(ctx context.Context, query 
 }
 
 // Retrieves the distribution of layer 3 attacks by duration over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) Duration(ctx context.Context, query AttackLayer3TimeseriesGroupDurationParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupDurationResponse, err error) {
 	var env AttackLayer3TimeseriesGroupDurationResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -66,8 +62,6 @@ func (r *AttackLayer3TimeseriesGroupService) Duration(ctx context.Context, query
 }
 
 // Retrieves the distribution of layer 3 attacks by targeted industry over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer3TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupIndustryResponse, err error) {
 	var env AttackLayer3TimeseriesGroupIndustryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -81,8 +75,6 @@ func (r *AttackLayer3TimeseriesGroupService) Industry(ctx context.Context, query
 }
 
 // Retrieves the distribution of layer 3 attacks by IP version over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) IPVersion(ctx context.Context, query AttackLayer3TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupIPVersionResponse, err error) {
 	var env AttackLayer3TimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -96,8 +88,6 @@ func (r *AttackLayer3TimeseriesGroupService) IPVersion(ctx context.Context, quer
 }
 
 // Retrieves the distribution of layer 3 attacks by protocol over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) Protocol(ctx context.Context, query AttackLayer3TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupProtocolResponse, err error) {
 	var env AttackLayer3TimeseriesGroupProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -111,8 +101,6 @@ func (r *AttackLayer3TimeseriesGroupService) Protocol(ctx context.Context, query
 }
 
 // Retrieves the distribution of layer 3 attacks by vector over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) Vector(ctx context.Context, query AttackLayer3TimeseriesGroupVectorParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupVectorResponse, err error) {
 	var env AttackLayer3TimeseriesGroupVectorResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -126,8 +114,6 @@ func (r *AttackLayer3TimeseriesGroupService) Vector(ctx context.Context, query A
 }
 
 // Retrieves the distribution of layer 3 attacks by targeted vertical over time.
-//
-// Deprecated: deprecated
 func (r *AttackLayer3TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer3TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupVerticalResponse, err error) {
 	var env AttackLayer3TimeseriesGroupVerticalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
