@@ -489,6 +489,8 @@ type PolicyFilter struct {
 	// Usage depends on specific alert type
 	TunnelName []string `json:"tunnel_name"`
 	// Usage depends on specific alert type
+	Type []string `json:"type"`
+	// Usage depends on specific alert type
 	Where []string `json:"where"`
 	// Usage depends on specific alert type
 	Zones []string         `json:"zones"`
@@ -537,6 +539,7 @@ type policyFilterJSON struct {
 	TrafficExclusions            apijson.Field
 	TunnelID                     apijson.Field
 	TunnelName                   apijson.Field
+	Type                         apijson.Field
 	Where                        apijson.Field
 	Zones                        apijson.Field
 	raw                          string
@@ -666,6 +669,8 @@ type PolicyFilterParam struct {
 	TunnelID param.Field[[]string] `json:"tunnel_id"`
 	// Usage depends on specific alert type
 	TunnelName param.Field[[]string] `json:"tunnel_name"`
+	// Usage depends on specific alert type
+	Type param.Field[[]string] `json:"type"`
 	// Usage depends on specific alert type
 	Where param.Field[[]string] `json:"where"`
 	// Usage depends on specific alert type
