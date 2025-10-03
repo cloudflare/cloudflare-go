@@ -37,8 +37,6 @@ func NewEmailSecuritySummaryService(opts ...option.RequestOption) (r *EmailSecur
 
 // Retrieves the distribution of emails by ARC (Authenticated Received Chain)
 // validation.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuritySummaryARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryARCResponse, err error) {
 	var env EmailSecuritySummaryARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,8 +51,6 @@ func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuri
 
 // Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
 // validation.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecuritySummaryDKIMParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDKIMResponse, err error) {
 	var env EmailSecuritySummaryDKIMResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,8 +65,6 @@ func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecur
 
 // Retrieves the distribution of emails by DMARC (Domain-based Message
 // Authentication, Reporting and Conformance) validation.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecuritySummaryDMARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDMARCResponse, err error) {
 	var env EmailSecuritySummaryDMARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -84,8 +78,6 @@ func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecu
 }
 
 // Retrieves the distribution of emails by malicious classification.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query EmailSecuritySummaryMaliciousParams, opts ...option.RequestOption) (res *EmailSecuritySummaryMaliciousResponse, err error) {
 	var env EmailSecuritySummaryMaliciousResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -99,8 +91,6 @@ func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query Email
 }
 
 // Retrieves the proportion of emails by spam classification (spam vs. non-spam).
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecuritySummarySpamParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpamResponse, err error) {
 	var env EmailSecuritySummarySpamResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -115,8 +105,6 @@ func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecur
 
 // Retrieves the distribution of emails by SPF (Sender Policy Framework)
 // validation.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuritySummarySPFParams, opts ...option.RequestOption) (res *EmailSecuritySummarySPFResponse, err error) {
 	var env EmailSecuritySummarySPFResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -131,8 +119,6 @@ func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuri
 
 // Retrieves the proportion of emails by spoof classification (spoof vs.
 // non-spoof).
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecuritySummarySpoofParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpoofResponse, err error) {
 	var env EmailSecuritySummarySpoofResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -146,8 +132,6 @@ func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecu
 }
 
 // Retrieves the distribution of emails by threat categories.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query EmailSecuritySummaryThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecuritySummaryThreatCategoryResponse, err error) {
 	var env EmailSecuritySummaryThreatCategoryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -161,8 +145,6 @@ func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query 
 }
 
 // Retrieves the distribution of emails by TLS version.
-//
-// Deprecated: deprecated
 func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query EmailSecuritySummaryTLSVersionParams, opts ...option.RequestOption) (res *EmailSecuritySummaryTLSVersionResponse, err error) {
 	var env EmailSecuritySummaryTLSVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
