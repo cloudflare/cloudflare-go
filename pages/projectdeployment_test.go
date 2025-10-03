@@ -3,8 +3,10 @@
 package pages_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -32,8 +34,20 @@ func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is-my-project-01",
 		pages.ProjectDeploymentNewParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Branch:    cloudflare.F("staging"),
+			AccountID:                          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Headers:                            cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			Redirects:                          cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			RoutesJson:                         cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			WorkerBundle:                       cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			WorkerJS:                           cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			Branch:                             cloudflare.F("staging"),
+			CommitDirty:                        cloudflare.F(pages.ProjectDeploymentNewParamsCommitDirtyFalse),
+			CommitHash:                         cloudflare.F("a1b2c3d4e5f6"),
+			CommitMessage:                      cloudflare.F("Update homepage"),
+			FunctionsFilepathRoutingConfigJson: cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			Manifest:                           cloudflare.F(`{"index.html": "abc123", "style.css": "def456"}`),
+			PagesBuildOutputDir:                cloudflare.F("dist"),
+			WranglerConfigHash:                 cloudflare.F("wrangler_config_hash"),
 		},
 	)
 	if err != nil {
