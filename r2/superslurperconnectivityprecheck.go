@@ -151,11 +151,13 @@ func (r SuperSlurperConnectivityPrecheckSourceParams) MarshalJSON() (data []byte
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBody struct {
-	Bucket       param.Field[string]                                                       `json:"bucket"`
+	Bucket       param.Field[string]                                                       `json:"bucket,required"`
+	Secret       param.Field[interface{}]                                                  `json:"secret,required"`
+	Vendor       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyVendor]       `json:"vendor,required"`
 	Endpoint     param.Field[string]                                                       `json:"endpoint"`
 	Jurisdiction param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdiction] `json:"jurisdiction"`
-	Secret       param.Field[interface{}]                                                  `json:"secret"`
-	Vendor       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyVendor]       `json:"vendor"`
+	PathPrefix   param.Field[string]                                                       `json:"pathPrefix"`
+	Region       param.Field[string]                                                       `json:"region"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBody) MarshalJSON() (data []byte, err error) {
@@ -175,10 +177,12 @@ type SuperSlurperConnectivityPrecheckSourceParamsBodyUnion interface {
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema struct {
-	Bucket   param.Field[string]                                                                        `json:"bucket"`
-	Endpoint param.Field[string]                                                                        `json:"endpoint"`
-	Secret   param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret] `json:"secret"`
-	Vendor   param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendor] `json:"vendor"`
+	Bucket     param.Field[string]                                                                        `json:"bucket,required"`
+	Secret     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret] `json:"secret,required"`
+	Vendor     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendor] `json:"vendor,required"`
+	Endpoint   param.Field[string]                                                                        `json:"endpoint"`
+	PathPrefix param.Field[string]                                                                        `json:"pathPrefix"`
+	Region     param.Field[string]                                                                        `json:"region"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema) MarshalJSON() (data []byte, err error) {
@@ -189,8 +193,8 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema)
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
+	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -212,9 +216,10 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaV
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchema struct {
-	Bucket param.Field[string]                                                                         `json:"bucket"`
-	Secret param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaSecret] `json:"secret"`
-	Vendor param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaVendor] `json:"vendor"`
+	Bucket     param.Field[string]                                                                         `json:"bucket,required"`
+	Secret     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaSecret] `json:"secret,required"`
+	Vendor     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaVendor] `json:"vendor,required"`
+	PathPrefix param.Field[string]                                                                         `json:"pathPrefix"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchema) MarshalJSON() (data []byte, err error) {
@@ -225,8 +230,8 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchema
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaSecret struct {
-	ClientEmail param.Field[string] `json:"clientEmail"`
-	PrivateKey  param.Field[string] `json:"privateKey"`
+	ClientEmail param.Field[string] `json:"clientEmail,required"`
+	PrivateKey  param.Field[string] `json:"privateKey,required"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -248,10 +253,11 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchema
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchema struct {
-	Bucket       param.Field[string]                                                                              `json:"bucket"`
+	Bucket       param.Field[string]                                                                              `json:"bucket,required"`
+	Secret       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret]       `json:"secret,required"`
+	Vendor       param.Field[Provider]                                                                            `json:"vendor,required"`
 	Jurisdiction param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaJurisdiction] `json:"jurisdiction"`
-	Secret       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret]       `json:"secret"`
-	Vendor       param.Field[Provider]                                                                            `json:"vendor"`
+	PathPrefix   param.Field[string]                                                                              `json:"pathPrefix"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchema) MarshalJSON() (data []byte, err error) {
@@ -259,6 +265,15 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchema)
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchema) implementsSuperSlurperConnectivityPrecheckSourceParamsBodyUnion() {
+}
+
+type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret struct {
+	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+}
+
+func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaJurisdiction string
@@ -277,13 +292,20 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaJ
 	return false
 }
 
-type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
-}
+type SuperSlurperConnectivityPrecheckSourceParamsBodyVendor string
 
-func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+const (
+	SuperSlurperConnectivityPrecheckSourceParamsBodyVendorS3  SuperSlurperConnectivityPrecheckSourceParamsBodyVendor = "s3"
+	SuperSlurperConnectivityPrecheckSourceParamsBodyVendorGcs SuperSlurperConnectivityPrecheckSourceParamsBodyVendor = "gcs"
+	SuperSlurperConnectivityPrecheckSourceParamsBodyVendorR2  SuperSlurperConnectivityPrecheckSourceParamsBodyVendor = "r2"
+)
+
+func (r SuperSlurperConnectivityPrecheckSourceParamsBodyVendor) IsKnown() bool {
+	switch r {
+	case SuperSlurperConnectivityPrecheckSourceParamsBodyVendorS3, SuperSlurperConnectivityPrecheckSourceParamsBodyVendorGcs, SuperSlurperConnectivityPrecheckSourceParamsBodyVendorR2:
+		return true
+	}
+	return false
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdiction string
@@ -297,22 +319,6 @@ const (
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdiction) IsKnown() bool {
 	switch r {
 	case SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdictionDefault, SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdictionEu, SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdictionFedramp:
-		return true
-	}
-	return false
-}
-
-type SuperSlurperConnectivityPrecheckSourceParamsBodyVendor string
-
-const (
-	SuperSlurperConnectivityPrecheckSourceParamsBodyVendorS3  SuperSlurperConnectivityPrecheckSourceParamsBodyVendor = "s3"
-	SuperSlurperConnectivityPrecheckSourceParamsBodyVendorGcs SuperSlurperConnectivityPrecheckSourceParamsBodyVendor = "gcs"
-	SuperSlurperConnectivityPrecheckSourceParamsBodyVendorR2  SuperSlurperConnectivityPrecheckSourceParamsBodyVendor = "r2"
-)
-
-func (r SuperSlurperConnectivityPrecheckSourceParamsBodyVendor) IsKnown() bool {
-	switch r {
-	case SuperSlurperConnectivityPrecheckSourceParamsBodyVendorS3, SuperSlurperConnectivityPrecheckSourceParamsBodyVendorGcs, SuperSlurperConnectivityPrecheckSourceParamsBodyVendorR2:
 		return true
 	}
 	return false
@@ -363,13 +369,22 @@ func (r SuperSlurperConnectivityPrecheckSourceResponseEnvelopeSuccess) IsKnown()
 
 type SuperSlurperConnectivityPrecheckTargetParams struct {
 	AccountID    param.Field[string]                                                   `path:"account_id,required"`
-	Bucket       param.Field[string]                                                   `json:"bucket"`
+	Bucket       param.Field[string]                                                   `json:"bucket,required"`
+	Secret       param.Field[SuperSlurperConnectivityPrecheckTargetParamsSecret]       `json:"secret,required"`
+	Vendor       param.Field[Provider]                                                 `json:"vendor,required"`
 	Jurisdiction param.Field[SuperSlurperConnectivityPrecheckTargetParamsJurisdiction] `json:"jurisdiction"`
-	Secret       param.Field[SuperSlurperConnectivityPrecheckTargetParamsSecret]       `json:"secret"`
-	Vendor       param.Field[Provider]                                                 `json:"vendor"`
 }
 
 func (r SuperSlurperConnectivityPrecheckTargetParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SuperSlurperConnectivityPrecheckTargetParamsSecret struct {
+	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+}
+
+func (r SuperSlurperConnectivityPrecheckTargetParamsSecret) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -387,15 +402,6 @@ func (r SuperSlurperConnectivityPrecheckTargetParamsJurisdiction) IsKnown() bool
 		return true
 	}
 	return false
-}
-
-type SuperSlurperConnectivityPrecheckTargetParamsSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
-}
-
-func (r SuperSlurperConnectivityPrecheckTargetParamsSecret) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SuperSlurperConnectivityPrecheckTargetResponseEnvelope struct {
