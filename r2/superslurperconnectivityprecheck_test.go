@@ -30,13 +30,15 @@ func TestSuperSlurperConnectivityPrecheckSourceWithOptionalParams(t *testing.T) 
 	_, err := client.R2.SuperSlurper.ConnectivityPrecheck.Source(context.TODO(), r2.SuperSlurperConnectivityPrecheckSourceParams{
 		AccountID: cloudflare.F("account_id"),
 		Body: r2.SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema{
-			Bucket:   cloudflare.F("bucket"),
-			Endpoint: cloudflare.F("endpoint"),
+			Bucket: cloudflare.F("bucket"),
 			Secret: cloudflare.F(r2.SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret{
 				AccessKeyID:     cloudflare.F("accessKeyId"),
 				SecretAccessKey: cloudflare.F("secretAccessKey"),
 			}),
-			Vendor: cloudflare.F(r2.SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendorS3),
+			Vendor:     cloudflare.F(r2.SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendorS3),
+			Endpoint:   cloudflare.F("endpoint"),
+			PathPrefix: cloudflare.F("pathPrefix"),
+			Region:     cloudflare.F("region"),
 		},
 	})
 	if err != nil {
@@ -62,14 +64,14 @@ func TestSuperSlurperConnectivityPrecheckTargetWithOptionalParams(t *testing.T) 
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.SuperSlurper.ConnectivityPrecheck.Target(context.TODO(), r2.SuperSlurperConnectivityPrecheckTargetParams{
-		AccountID:    cloudflare.F("account_id"),
-		Bucket:       cloudflare.F("bucket"),
-		Jurisdiction: cloudflare.F(r2.SuperSlurperConnectivityPrecheckTargetParamsJurisdictionDefault),
+		AccountID: cloudflare.F("account_id"),
+		Bucket:    cloudflare.F("bucket"),
 		Secret: cloudflare.F(r2.SuperSlurperConnectivityPrecheckTargetParamsSecret{
 			AccessKeyID:     cloudflare.F("accessKeyId"),
 			SecretAccessKey: cloudflare.F("secretAccessKey"),
 		}),
-		Vendor: cloudflare.F(r2.ProviderR2),
+		Vendor:       cloudflare.F(r2.ProviderR2),
+		Jurisdiction: cloudflare.F(r2.SuperSlurperConnectivityPrecheckTargetParamsJurisdictionDefault),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

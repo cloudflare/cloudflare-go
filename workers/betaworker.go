@@ -178,6 +178,8 @@ type Worker struct {
 	Name string `json:"name,required"`
 	// Observability settings for the Worker.
 	Observability WorkerObservability `json:"observability,required"`
+	// Other resources that reference the Worker and depend on it existing.
+	References WorkerReferences `json:"references,required"`
 	// Subdomain settings for the Worker.
 	Subdomain WorkerSubdomain `json:"subdomain,required"`
 	// Tags associated with the Worker.
@@ -196,6 +198,7 @@ type workerJSON struct {
 	Logpush       apijson.Field
 	Name          apijson.Field
 	Observability apijson.Field
+	References    apijson.Field
 	Subdomain     apijson.Field
 	Tags          apijson.Field
 	TailConsumers apijson.Field
@@ -269,6 +272,191 @@ func (r *WorkerObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workerObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Other resources that reference the Worker and depend on it existing.
+type WorkerReferences struct {
+	// Other Workers that reference the Worker as an outbound for a dispatch namespace.
+	DispatchNamespaceOutbounds []WorkerReferencesDispatchNamespaceOutbound `json:"dispatch_namespace_outbounds,required"`
+	// Custom domains connected to the Worker.
+	Domains []WorkerReferencesDomain `json:"domains,required"`
+	// Other Workers that reference Durable Object classes implemented by the Worker.
+	DurableObjects []WorkerReferencesDurableObject `json:"durable_objects,required"`
+	// Queues that send messages to the Worker.
+	Queues []WorkerReferencesQueue `json:"queues,required"`
+	// Other Workers that reference the Worker using
+	// [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/).
+	Workers []WorkerReferencesWorker `json:"workers,required"`
+	JSON    workerReferencesJSON     `json:"-"`
+}
+
+// workerReferencesJSON contains the JSON metadata for the struct
+// [WorkerReferences]
+type workerReferencesJSON struct {
+	DispatchNamespaceOutbounds apijson.Field
+	Domains                    apijson.Field
+	DurableObjects             apijson.Field
+	Queues                     apijson.Field
+	Workers                    apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
+}
+
+func (r *WorkerReferences) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerReferencesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkerReferencesDispatchNamespaceOutbound struct {
+	// ID of the dispatch namespace.
+	NamespaceID string `json:"namespace_id,required"`
+	// Name of the dispatch namespace.
+	NamespaceName string `json:"namespace_name,required"`
+	// ID of the Worker using the dispatch namespace.
+	WorkerID string `json:"worker_id,required"`
+	// Name of the Worker using the dispatch namespace.
+	WorkerName string                                        `json:"worker_name,required"`
+	JSON       workerReferencesDispatchNamespaceOutboundJSON `json:"-"`
+}
+
+// workerReferencesDispatchNamespaceOutboundJSON contains the JSON metadata for the
+// struct [WorkerReferencesDispatchNamespaceOutbound]
+type workerReferencesDispatchNamespaceOutboundJSON struct {
+	NamespaceID   apijson.Field
+	NamespaceName apijson.Field
+	WorkerID      apijson.Field
+	WorkerName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *WorkerReferencesDispatchNamespaceOutbound) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerReferencesDispatchNamespaceOutboundJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkerReferencesDomain struct {
+	// ID of the custom domain.
+	ID string `json:"id,required"`
+	// ID of the TLS certificate issued for the custom domain.
+	CertificateID string `json:"certificate_id,required"`
+	// Full hostname of the custom domain, including the zone name.
+	Hostname string `json:"hostname,required"`
+	// ID of the zone.
+	ZoneID string `json:"zone_id,required"`
+	// Name of the zone.
+	ZoneName string                     `json:"zone_name,required"`
+	JSON     workerReferencesDomainJSON `json:"-"`
+}
+
+// workerReferencesDomainJSON contains the JSON metadata for the struct
+// [WorkerReferencesDomain]
+type workerReferencesDomainJSON struct {
+	ID            apijson.Field
+	CertificateID apijson.Field
+	Hostname      apijson.Field
+	ZoneID        apijson.Field
+	ZoneName      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *WorkerReferencesDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerReferencesDomainJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkerReferencesDurableObject struct {
+	// ID of the Durable Object namespace being used.
+	NamespaceID string `json:"namespace_id,required"`
+	// Name of the Durable Object namespace being used.
+	NamespaceName string `json:"namespace_name,required"`
+	// ID of the Worker using the Durable Object implementation.
+	WorkerID string `json:"worker_id,required"`
+	// Name of the Worker using the Durable Object implementation.
+	WorkerName string                            `json:"worker_name,required"`
+	JSON       workerReferencesDurableObjectJSON `json:"-"`
+}
+
+// workerReferencesDurableObjectJSON contains the JSON metadata for the struct
+// [WorkerReferencesDurableObject]
+type workerReferencesDurableObjectJSON struct {
+	NamespaceID   apijson.Field
+	NamespaceName apijson.Field
+	WorkerID      apijson.Field
+	WorkerName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *WorkerReferencesDurableObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerReferencesDurableObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkerReferencesQueue struct {
+	// ID of the queue consumer configuration.
+	QueueConsumerID string `json:"queue_consumer_id,required"`
+	// ID of the queue.
+	QueueID string `json:"queue_id,required"`
+	// Name of the queue.
+	QueueName string                    `json:"queue_name,required"`
+	JSON      workerReferencesQueueJSON `json:"-"`
+}
+
+// workerReferencesQueueJSON contains the JSON metadata for the struct
+// [WorkerReferencesQueue]
+type workerReferencesQueueJSON struct {
+	QueueConsumerID apijson.Field
+	QueueID         apijson.Field
+	QueueName       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WorkerReferencesQueue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerReferencesQueueJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkerReferencesWorker struct {
+	// ID of the referencing Worker.
+	ID string `json:"id,required"`
+	// Name of the referencing Worker.
+	Name string                     `json:"name,required"`
+	JSON workerReferencesWorkerJSON `json:"-"`
+}
+
+// workerReferencesWorkerJSON contains the JSON metadata for the struct
+// [WorkerReferencesWorker]
+type workerReferencesWorkerJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerReferencesWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerReferencesWorkerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -367,6 +555,96 @@ type WorkerObservabilityLogsParam struct {
 }
 
 func (r WorkerObservabilityLogsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Other resources that reference the Worker and depend on it existing.
+type WorkerReferencesParam struct {
+	// Other Workers that reference the Worker as an outbound for a dispatch namespace.
+	DispatchNamespaceOutbounds param.Field[[]WorkerReferencesDispatchNamespaceOutboundParam] `json:"dispatch_namespace_outbounds,required"`
+	// Custom domains connected to the Worker.
+	Domains param.Field[[]WorkerReferencesDomainParam] `json:"domains,required"`
+	// Other Workers that reference Durable Object classes implemented by the Worker.
+	DurableObjects param.Field[[]WorkerReferencesDurableObjectParam] `json:"durable_objects,required"`
+	// Queues that send messages to the Worker.
+	Queues param.Field[[]WorkerReferencesQueueParam] `json:"queues,required"`
+	// Other Workers that reference the Worker using
+	// [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/).
+	Workers param.Field[[]WorkerReferencesWorkerParam] `json:"workers,required"`
+}
+
+func (r WorkerReferencesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkerReferencesDispatchNamespaceOutboundParam struct {
+	// ID of the dispatch namespace.
+	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	// Name of the dispatch namespace.
+	NamespaceName param.Field[string] `json:"namespace_name,required"`
+	// ID of the Worker using the dispatch namespace.
+	WorkerID param.Field[string] `json:"worker_id,required"`
+	// Name of the Worker using the dispatch namespace.
+	WorkerName param.Field[string] `json:"worker_name,required"`
+}
+
+func (r WorkerReferencesDispatchNamespaceOutboundParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkerReferencesDomainParam struct {
+	// ID of the custom domain.
+	ID param.Field[string] `json:"id,required"`
+	// ID of the TLS certificate issued for the custom domain.
+	CertificateID param.Field[string] `json:"certificate_id,required"`
+	// Full hostname of the custom domain, including the zone name.
+	Hostname param.Field[string] `json:"hostname,required"`
+	// ID of the zone.
+	ZoneID param.Field[string] `json:"zone_id,required"`
+	// Name of the zone.
+	ZoneName param.Field[string] `json:"zone_name,required"`
+}
+
+func (r WorkerReferencesDomainParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkerReferencesDurableObjectParam struct {
+	// ID of the Durable Object namespace being used.
+	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	// Name of the Durable Object namespace being used.
+	NamespaceName param.Field[string] `json:"namespace_name,required"`
+	// ID of the Worker using the Durable Object implementation.
+	WorkerID param.Field[string] `json:"worker_id,required"`
+	// Name of the Worker using the Durable Object implementation.
+	WorkerName param.Field[string] `json:"worker_name,required"`
+}
+
+func (r WorkerReferencesDurableObjectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkerReferencesQueueParam struct {
+	// ID of the queue consumer configuration.
+	QueueConsumerID param.Field[string] `json:"queue_consumer_id,required"`
+	// ID of the queue.
+	QueueID param.Field[string] `json:"queue_id,required"`
+	// Name of the queue.
+	QueueName param.Field[string] `json:"queue_name,required"`
+}
+
+func (r WorkerReferencesQueueParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkerReferencesWorkerParam struct {
+	// ID of the referencing Worker.
+	ID param.Field[string] `json:"id,required"`
+	// Name of the referencing Worker.
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r WorkerReferencesWorkerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

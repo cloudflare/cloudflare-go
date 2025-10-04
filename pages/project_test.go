@@ -217,7 +217,7 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestProjectList(t *testing.T) {
+func TestProjectListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -232,6 +232,8 @@ func TestProjectList(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.List(context.TODO(), pages.ProjectListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(10)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

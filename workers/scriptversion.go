@@ -218,7 +218,7 @@ type ScriptVersionNewResponseResourcesBinding struct {
 	Jurisdiction ScriptVersionNewResponseResourcesBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -816,7 +816,7 @@ func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDataBlobType)
 type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
@@ -2481,7 +2481,7 @@ type ScriptVersionGetResponseResourcesBinding struct {
 	Jurisdiction ScriptVersionGetResponseResourcesBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -3079,7 +3079,7 @@ func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDataBlobType)
 type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
@@ -4630,6 +4630,8 @@ func (r ScriptVersionNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptVersionNewParamsMetadataAnnotations struct {
+	// Associated alias for a version.
+	WorkersAlias param.Field[string] `json:"workers/alias"`
 	// Human-readable message about the version. Truncated to 100 bytes.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 	// User-provided identifier for the version.
@@ -4677,7 +4679,7 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
@@ -4943,7 +4945,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDataBlobType) Is
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`

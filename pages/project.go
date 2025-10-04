@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -61,16 +63,16 @@ func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts 
 }
 
 // Fetch a list of all user projects.
-func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Deployment], err error) {
+func (r *ProjectService) List(ctx context.Context, params ProjectListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Deployment], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/pages/projects", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,8 +85,8 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 }
 
 // Fetch a list of all user projects.
-func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Deployment] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ProjectService) ListAutoPaging(ctx context.Context, params ProjectListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Deployment] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a project by name.
@@ -2655,6 +2657,18 @@ func (r ProjectNewResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Which page of projects to fetch.
+	Page param.Field[int64] `query:"page"`
+	// How many project to return per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [ProjectListParams]'s query parameters as `url.Values`.
+func (r ProjectListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ProjectDeleteParams struct {

@@ -264,7 +264,7 @@ func (r bucketLifecycleGetResponseRulesDeleteObjectsTransitionJSON) RawJSON() st
 // seconds.
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition struct {
 	Type   BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionType `json:"type,required"`
-	Date   time.Time                                                           `json:"date" format:"date"`
+	Date   time.Time                                                           `json:"date" format:"date-time"`
 	MaxAge int64                                                               `json:"maxAge"`
 	JSON   bucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionJSON `json:"-"`
 	union  BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionUnion
@@ -376,7 +376,7 @@ func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2Lifecyc
 
 // Condition for lifecycle transitions to apply on a specific date.
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition struct {
-	Date time.Time                                                                                   `json:"date,required" format:"date"`
+	Date time.Time                                                                                   `json:"date,required" format:"date-time"`
 	Type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateConditionType `json:"type,required"`
 	JSON bucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateConditionJSON `json:"-"`
 }
@@ -460,7 +460,7 @@ func (r bucketLifecycleGetResponseRulesStorageClassTransitionJSON) RawJSON() str
 // seconds.
 type BucketLifecycleGetResponseRulesStorageClassTransitionsCondition struct {
 	Type   BucketLifecycleGetResponseRulesStorageClassTransitionsConditionType `json:"type,required"`
-	Date   time.Time                                                           `json:"date" format:"date"`
+	Date   time.Time                                                           `json:"date" format:"date-time"`
 	MaxAge int64                                                               `json:"maxAge"`
 	JSON   bucketLifecycleGetResponseRulesStorageClassTransitionsConditionJSON `json:"-"`
 	union  BucketLifecycleGetResponseRulesStorageClassTransitionsConditionUnion
@@ -572,7 +572,7 @@ func (r BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2Lifecyc
 
 // Condition for lifecycle transitions to apply on a specific date.
 type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition struct {
-	Date time.Time                                                                                   `json:"date,required" format:"date"`
+	Date time.Time                                                                                   `json:"date,required" format:"date-time"`
 	Type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateConditionType `json:"type,required"`
 	JSON bucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateConditionJSON `json:"-"`
 }
@@ -735,7 +735,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransition) MarshalJSON() (
 // seconds.
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition struct {
 	Type   param.Field[BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionType] `json:"type,required"`
-	Date   param.Field[time.Time]                                                            `json:"date" format:"date"`
+	Date   param.Field[time.Time]                                                            `json:"date" format:"date-time"`
 	MaxAge param.Field[int64]                                                                `json:"maxAge"`
 }
 
@@ -787,7 +787,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2Lifecy
 
 // Condition for lifecycle transitions to apply on a specific date.
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition struct {
-	Date param.Field[time.Time]                                                                                    `json:"date,required" format:"date"`
+	Date param.Field[time.Time]                                                                                    `json:"date,required" format:"date-time"`
 	Type param.Field[BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleDateConditionType] `json:"type,required"`
 }
 
@@ -842,7 +842,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransition) MarshalJSON() (d
 // seconds.
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition struct {
 	Type   param.Field[BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionType] `json:"type,required"`
-	Date   param.Field[time.Time]                                                            `json:"date" format:"date"`
+	Date   param.Field[time.Time]                                                            `json:"date" format:"date-time"`
 	MaxAge param.Field[int64]                                                                `json:"maxAge"`
 }
 
@@ -894,7 +894,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2Lifecy
 
 // Condition for lifecycle transitions to apply on a specific date.
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleDateCondition struct {
-	Date param.Field[time.Time]                                                                                    `json:"date,required" format:"date"`
+	Date param.Field[time.Time]                                                                                    `json:"date,required" format:"date-time"`
 	Type param.Field[BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleDateConditionType] `json:"type,required"`
 }
 

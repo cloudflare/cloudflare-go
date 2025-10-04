@@ -38,6 +38,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 			Metadata: cloudflare.F(workers.ScriptVersionNewParamsMetadata{
 				MainModule: cloudflare.F("worker.js"),
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
+					WorkersAlias:   cloudflare.F("staging"),
 					WorkersMessage: cloudflare.F("Fixed worker code."),
 					WorkersTag:     cloudflare.F("workers/tag"),
 				}),

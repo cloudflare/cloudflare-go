@@ -29,7 +29,7 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.Members.New(
 		context.TODO(),
-		"organization_id",
+		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
 		organizations.MemberNewParams{
 			Member: cloudflare.F(organizations.MemberNewParamsMember{
 				User: cloudflare.F(organizations.MemberNewParamsMemberUser{
@@ -63,7 +63,7 @@ func TestMemberListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.Members.List(
 		context.TODO(),
-		"organization_id",
+		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
 		organizations.MemberListParams{
 			PageSize:  cloudflare.F(int64(0)),
 			PageToken: cloudflare.F("page_token"),
@@ -72,6 +72,33 @@ func TestMemberListWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F("email"),
 			}),
 		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestMemberDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	err := client.Organizations.Members.Delete(
+		context.TODO(),
+		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -97,8 +124,8 @@ func TestMemberGet(t *testing.T) {
 	)
 	_, err := client.Organizations.Members.Get(
 		context.TODO(),
-		"organization_id",
-		"member_id",
+		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

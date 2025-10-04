@@ -1,5 +1,24 @@
 # Changelog
 
+## 6.1.1 (2025-10-04)
+
+Full Changelog: [v6.1.0...v6.1.1](https://github.com/cloudflare/cloudflare-go/compare/v6.1.0...v6.1.1)
+
+### Chores
+
+* **api:** update composite API spec ([4fa18b7](https://github.com/cloudflare/cloudflare-go/commit/4fa18b71ebac684140ce7a7d79a4c711b72f9de0))
+* **api:** update composite API spec ([e5dbb78](https://github.com/cloudflare/cloudflare-go/commit/e5dbb78cee584a70b7442d307b8d6b887ab3d397))
+* **api:** update composite API spec ([2a3084d](https://github.com/cloudflare/cloudflare-go/commit/2a3084d99eed240351398271505df348d03d884a))
+* **api:** update composite API spec ([3a28705](https://github.com/cloudflare/cloudflare-go/commit/3a28705e70e3226821f8bbb51fb7f1f1f42aa948))
+* **api:** update composite API spec ([0e3d223](https://github.com/cloudflare/cloudflare-go/commit/0e3d223b1a723e84d1c56c6aa28a0909db26912e))
+* **api:** update composite API spec ([d184702](https://github.com/cloudflare/cloudflare-go/commit/d18470233a5bc070423bb1c4576c2ae34b0fd0e4))
+* **api:** update composite API spec ([32b3ed1](https://github.com/cloudflare/cloudflare-go/commit/32b3ed1d3e8ac065d9c71873863671e146838400))
+* **api:** update composite API spec ([da50735](https://github.com/cloudflare/cloudflare-go/commit/da50735711bb749c4b415e2f7a5f42a65e3b6a25))
+* **api:** update composite API spec ([c308671](https://github.com/cloudflare/cloudflare-go/commit/c308671336a8d1a796c17bf16b86e0a4de2db2bf))
+* **api:** update composite API spec ([8f9e027](https://github.com/cloudflare/cloudflare-go/commit/8f9e027dc85b6c86f2ea4f6c9fe0771a44cb06ab))
+* **api:** update composite API spec ([5fc3d87](https://github.com/cloudflare/cloudflare-go/commit/5fc3d878e3841ae66e925d6e182122077cf12935))
+* **api:** update composite API spec ([1bfcb55](https://github.com/cloudflare/cloudflare-go/commit/1bfcb554abc2667e8086352158002ba68c4ed397))
+
 ## 6.1.0 (2025-09-30)
 
 Full Changelog: [v6.0.1...v6.1.0](https://github.com/cloudflare/cloudflare-go/compare/v6.0.1...v6.1.0)
