@@ -186,7 +186,7 @@ type Deployment struct {
 	// Info about what caused the deployment.
 	DeploymentTrigger DeploymentDeploymentTrigger `json:"deployment_trigger"`
 	// Environment variables used for builds and Pages Functions.
-	EnvVars map[string]DeploymentEnvVar `json:"env_vars"`
+	EnvVars map[string]DeploymentEnvVar `json:"env_vars,nullable"`
 	// Type of deploy.
 	Environment DeploymentEnvironment `json:"environment"`
 	// If the deployment has been skipped.
@@ -528,8 +528,9 @@ func (r DeploymentEnvironment) IsKnown() bool {
 
 type DeploymentSource struct {
 	Config DeploymentSourceConfig `json:"config"`
-	Type   string                 `json:"type"`
-	JSON   deploymentSourceJSON   `json:"-"`
+	// The source control management provider.
+	Type DeploymentSourceType `json:"type"`
+	JSON deploymentSourceJSON `json:"-"`
 }
 
 // deploymentSourceJSON contains the JSON metadata for the struct
@@ -550,18 +551,40 @@ func (r deploymentSourceJSON) RawJSON() string {
 }
 
 type DeploymentSourceConfig struct {
-	DeploymentsEnabled           bool                                           `json:"deployments_enabled"`
-	Owner                        string                                         `json:"owner"`
-	PathExcludes                 []string                                       `json:"path_excludes"`
-	PathIncludes                 []string                                       `json:"path_includes"`
-	PrCommentsEnabled            bool                                           `json:"pr_comments_enabled"`
-	PreviewBranchExcludes        []string                                       `json:"preview_branch_excludes"`
-	PreviewBranchIncludes        []string                                       `json:"preview_branch_includes"`
-	PreviewDeploymentSetting     DeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
-	ProductionBranch             string                                         `json:"production_branch"`
-	ProductionDeploymentsEnabled bool                                           `json:"production_deployments_enabled"`
-	RepoName                     string                                         `json:"repo_name"`
-	JSON                         deploymentSourceConfigJSON                     `json:"-"`
+	// Whether to enable automatic deployments when pushing to the source repository.
+	// When disabled, no deployments (production or preview) will be triggered
+	// automatically.
+	//
+	// Deprecated: Use `production_deployments_enabled` and
+	// `preview_deployment_setting` for more granular control.
+	DeploymentsEnabled bool `json:"deployments_enabled"`
+	// The owner of the repository.
+	Owner string `json:"owner"`
+	// A list of paths that should be excluded from triggering a preview deployment.
+	// Wildcard syntax (`*`) is supported.
+	PathExcludes []string `json:"path_excludes"`
+	// A list of paths that should be watched to trigger a preview deployment. Wildcard
+	// syntax (`*`) is supported.
+	PathIncludes []string `json:"path_includes"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled"`
+	// A list of branches that should not trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	// A list of branches that should trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	// Controls whether commits to preview branches trigger a preview deployment.
+	PreviewDeploymentSetting DeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch"`
+	// Whether to trigger a production deployment on commits to the production branch.
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	// The name of the repository.
+	RepoName string                     `json:"repo_name"`
+	JSON     deploymentSourceConfigJSON `json:"-"`
 }
 
 // deploymentSourceConfigJSON contains the JSON metadata for the struct
@@ -590,6 +613,7 @@ func (r deploymentSourceConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls whether commits to preview branches trigger a preview deployment.
 type DeploymentSourceConfigPreviewDeploymentSetting string
 
 const (
@@ -601,6 +625,22 @@ const (
 func (r DeploymentSourceConfigPreviewDeploymentSetting) IsKnown() bool {
 	switch r {
 	case DeploymentSourceConfigPreviewDeploymentSettingAll, DeploymentSourceConfigPreviewDeploymentSettingNone, DeploymentSourceConfigPreviewDeploymentSettingCustom:
+		return true
+	}
+	return false
+}
+
+// The source control management provider.
+type DeploymentSourceType string
+
+const (
+	DeploymentSourceTypeGitHub DeploymentSourceType = "github"
+	DeploymentSourceTypeGitlab DeploymentSourceType = "gitlab"
+)
+
+func (r DeploymentSourceType) IsKnown() bool {
+	switch r {
+	case DeploymentSourceTypeGitHub, DeploymentSourceTypeGitlab:
 		return true
 	}
 	return false
@@ -705,7 +745,8 @@ func (r DeploymentEnvVarsPagesSecretTextEnvVarParam) implementsDeploymentEnvVars
 
 type DeploymentSourceParam struct {
 	Config param.Field[DeploymentSourceConfigParam] `json:"config"`
-	Type   param.Field[string]                      `json:"type"`
+	// The source control management provider.
+	Type param.Field[DeploymentSourceType] `json:"type"`
 }
 
 func (r DeploymentSourceParam) MarshalJSON() (data []byte, err error) {
@@ -713,17 +754,39 @@ func (r DeploymentSourceParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeploymentSourceConfigParam struct {
-	DeploymentsEnabled           param.Field[bool]                                           `json:"deployments_enabled"`
-	Owner                        param.Field[string]                                         `json:"owner"`
-	PathExcludes                 param.Field[[]string]                                       `json:"path_excludes"`
-	PathIncludes                 param.Field[[]string]                                       `json:"path_includes"`
-	PrCommentsEnabled            param.Field[bool]                                           `json:"pr_comments_enabled"`
-	PreviewBranchExcludes        param.Field[[]string]                                       `json:"preview_branch_excludes"`
-	PreviewBranchIncludes        param.Field[[]string]                                       `json:"preview_branch_includes"`
-	PreviewDeploymentSetting     param.Field[DeploymentSourceConfigPreviewDeploymentSetting] `json:"preview_deployment_setting"`
-	ProductionBranch             param.Field[string]                                         `json:"production_branch"`
-	ProductionDeploymentsEnabled param.Field[bool]                                           `json:"production_deployments_enabled"`
-	RepoName                     param.Field[string]                                         `json:"repo_name"`
+	// Whether to enable automatic deployments when pushing to the source repository.
+	// When disabled, no deployments (production or preview) will be triggered
+	// automatically.
+	//
+	// Deprecated: Use `production_deployments_enabled` and
+	// `preview_deployment_setting` for more granular control.
+	DeploymentsEnabled param.Field[bool] `json:"deployments_enabled"`
+	// The owner of the repository.
+	Owner param.Field[string] `json:"owner"`
+	// A list of paths that should be excluded from triggering a preview deployment.
+	// Wildcard syntax (`*`) is supported.
+	PathExcludes param.Field[[]string] `json:"path_excludes"`
+	// A list of paths that should be watched to trigger a preview deployment. Wildcard
+	// syntax (`*`) is supported.
+	PathIncludes param.Field[[]string] `json:"path_includes"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled param.Field[bool] `json:"pr_comments_enabled"`
+	// A list of branches that should not trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchExcludes param.Field[[]string] `json:"preview_branch_excludes"`
+	// A list of branches that should trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchIncludes param.Field[[]string] `json:"preview_branch_includes"`
+	// Controls whether commits to preview branches trigger a preview deployment.
+	PreviewDeploymentSetting param.Field[DeploymentSourceConfigPreviewDeploymentSetting] `json:"preview_deployment_setting"`
+	// The production branch of the repository.
+	ProductionBranch param.Field[string] `json:"production_branch"`
+	// Whether to trigger a production deployment on commits to the production branch.
+	ProductionDeploymentsEnabled param.Field[bool] `json:"production_deployments_enabled"`
+	// The name of the repository.
+	RepoName param.Field[string] `json:"repo_name"`
 }
 
 func (r DeploymentSourceConfigParam) MarshalJSON() (data []byte, err error) {
@@ -731,45 +794,60 @@ func (r DeploymentSourceConfigParam) MarshalJSON() (data []byte, err error) {
 }
 
 type Project struct {
-	// Id of the project.
-	ID string `json:"id"`
+	// ID of the project.
+	ID string `json:"id,required"`
+	// Name of the project.
+	Name string `json:"name,required"`
+	// Production branch of the project. Used to identify production deployments.
+	ProductionBranch string `json:"production_branch,required"`
 	// Configs for the project build process.
-	BuildConfig ProjectBuildConfig `json:"build_config"`
-	// Most recent deployment to the repo.
+	BuildConfig ProjectBuildConfig `json:"build_config,nullable"`
+	// Most recent production deployment of the project.
 	CanonicalDeployment Deployment `json:"canonical_deployment,nullable"`
 	// When the project was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Configs for deployments in a project.
-	DeploymentConfigs ProjectDeploymentConfigs `json:"deployment_configs"`
+	DeploymentConfigs ProjectDeploymentConfigs `json:"deployment_configs,nullable"`
 	// A list of associated custom domains for the project.
 	Domains []string `json:"domains"`
-	// Most recent deployment to the repo.
+	// Framework the project is using.
+	Framework string `json:"framework"`
+	// Version of the framework the project is using.
+	FrameworkVersion string `json:"framework_version"`
+	// Most recent deployment of the project.
 	LatestDeployment Deployment `json:"latest_deployment,nullable"`
-	// Name of the project.
-	Name string `json:"name"`
-	// Production branch of the project. Used to identify production deployments.
-	ProductionBranch string        `json:"production_branch"`
-	Source           ProjectSource `json:"source"`
+	// Name of the preview script.
+	PreviewScriptName string `json:"preview_script_name"`
+	// Name of the production script.
+	ProductionScriptName string        `json:"production_script_name"`
+	Source               ProjectSource `json:"source"`
 	// The Cloudflare subdomain associated with the project.
-	Subdomain string      `json:"subdomain"`
-	JSON      projectJSON `json:"-"`
+	Subdomain string `json:"subdomain"`
+	// Whether the project uses functions.
+	UsesFunctions bool        `json:"uses_functions"`
+	JSON          projectJSON `json:"-"`
 }
 
 // projectJSON contains the JSON metadata for the struct [Project]
 type projectJSON struct {
-	ID                  apijson.Field
-	BuildConfig         apijson.Field
-	CanonicalDeployment apijson.Field
-	CreatedOn           apijson.Field
-	DeploymentConfigs   apijson.Field
-	Domains             apijson.Field
-	LatestDeployment    apijson.Field
-	Name                apijson.Field
-	ProductionBranch    apijson.Field
-	Source              apijson.Field
-	Subdomain           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	ID                   apijson.Field
+	Name                 apijson.Field
+	ProductionBranch     apijson.Field
+	BuildConfig          apijson.Field
+	CanonicalDeployment  apijson.Field
+	CreatedOn            apijson.Field
+	DeploymentConfigs    apijson.Field
+	Domains              apijson.Field
+	Framework            apijson.Field
+	FrameworkVersion     apijson.Field
+	LatestDeployment     apijson.Field
+	PreviewScriptName    apijson.Field
+	ProductionScriptName apijson.Field
+	Source               apijson.Field
+	Subdomain            apijson.Field
+	UsesFunctions        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *Project) UnmarshalJSON(data []byte) (err error) {
@@ -821,9 +899,9 @@ func (r projectBuildConfigJSON) RawJSON() string {
 // Configs for deployments in a project.
 type ProjectDeploymentConfigs struct {
 	// Configs for preview deploys.
-	Preview ProjectDeploymentConfigsPreview `json:"preview"`
+	Preview ProjectDeploymentConfigsPreview `json:"preview,nullable"`
 	// Configs for production deploys.
-	Production ProjectDeploymentConfigsProduction `json:"production"`
+	Production ProjectDeploymentConfigsProduction `json:"production,nullable"`
 	JSON       projectDeploymentConfigsJSON       `json:"-"`
 }
 
@@ -848,24 +926,32 @@ func (r projectDeploymentConfigsJSON) RawJSON() string {
 type ProjectDeploymentConfigsPreview struct {
 	// Constellation bindings used for Pages Functions.
 	AIBindings map[string]ProjectDeploymentConfigsPreviewAIBinding `json:"ai_bindings,nullable"`
+	// Whether to always use the latest compatibility date for Pages Functions.
+	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date"`
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets map[string]ProjectDeploymentConfigsPreviewAnalyticsEngineDataset `json:"analytics_engine_datasets,nullable"`
 	// Browser bindings used for Pages Functions.
 	Browsers map[string]ProjectDeploymentConfigsPreviewBrowser `json:"browsers,nullable"`
+	// The major version of the build image to use for Pages Functions.
+	BuildImageMajorVersion int64 `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
-	CompatibilityFlags []string `json:"compatibility_flags"`
+	CompatibilityFlags []string `json:"compatibility_flags,nullable"`
 	// D1 databases used for Pages Functions.
 	D1Databases map[string]ProjectDeploymentConfigsPreviewD1Database `json:"d1_databases,nullable"`
 	// Durable Object namespaces used for Pages Functions.
 	DurableObjectNamespaces map[string]ProjectDeploymentConfigsPreviewDurableObjectNamespace `json:"durable_object_namespaces,nullable"`
 	// Environment variables used for builds and Pages Functions.
-	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars"`
+	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars,nullable"`
+	// Whether to fail open when the deployment config cannot be applied.
+	FailOpen bool `json:"fail_open"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings map[string]ProjectDeploymentConfigsPreviewHyperdriveBinding `json:"hyperdrive_bindings,nullable"`
 	// KV namespaces used for Pages Functions.
 	KVNamespaces map[string]ProjectDeploymentConfigsPreviewKVNamespace `json:"kv_namespaces,nullable"`
+	// Limits for Pages Functions.
+	Limits ProjectDeploymentConfigsPreviewLimits `json:"limits,nullable"`
 	// mTLS bindings used for Pages Functions.
 	MTLSCertificates map[string]ProjectDeploymentConfigsPreviewMTLSCertificate `json:"mtls_certificates,nullable"`
 	// Placement setting used for Pages Functions.
@@ -876,32 +962,44 @@ type ProjectDeploymentConfigsPreview struct {
 	R2Buckets map[string]ProjectDeploymentConfigsPreviewR2Bucket `json:"r2_buckets,nullable"`
 	// Services used for Pages Functions.
 	Services map[string]ProjectDeploymentConfigsPreviewService `json:"services,nullable"`
+	// The usage model for Pages Functions.
+	//
+	// Deprecated: All new projects now use the Standard usage model.
+	UsageModel ProjectDeploymentConfigsPreviewUsageModel `json:"usage_model"`
 	// Vectorize bindings used for Pages Functions.
 	VectorizeBindings map[string]ProjectDeploymentConfigsPreviewVectorizeBinding `json:"vectorize_bindings,nullable"`
-	JSON              projectDeploymentConfigsPreviewJSON                        `json:"-"`
+	// Hash of the Wrangler configuration used for the deployment.
+	WranglerConfigHash string                              `json:"wrangler_config_hash"`
+	JSON               projectDeploymentConfigsPreviewJSON `json:"-"`
 }
 
 // projectDeploymentConfigsPreviewJSON contains the JSON metadata for the struct
 // [ProjectDeploymentConfigsPreview]
 type projectDeploymentConfigsPreviewJSON struct {
-	AIBindings              apijson.Field
-	AnalyticsEngineDatasets apijson.Field
-	Browsers                apijson.Field
-	CompatibilityDate       apijson.Field
-	CompatibilityFlags      apijson.Field
-	D1Databases             apijson.Field
-	DurableObjectNamespaces apijson.Field
-	EnvVars                 apijson.Field
-	HyperdriveBindings      apijson.Field
-	KVNamespaces            apijson.Field
-	MTLSCertificates        apijson.Field
-	Placement               apijson.Field
-	QueueProducers          apijson.Field
-	R2Buckets               apijson.Field
-	Services                apijson.Field
-	VectorizeBindings       apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	AIBindings                       apijson.Field
+	AlwaysUseLatestCompatibilityDate apijson.Field
+	AnalyticsEngineDatasets          apijson.Field
+	Browsers                         apijson.Field
+	BuildImageMajorVersion           apijson.Field
+	CompatibilityDate                apijson.Field
+	CompatibilityFlags               apijson.Field
+	D1Databases                      apijson.Field
+	DurableObjectNamespaces          apijson.Field
+	EnvVars                          apijson.Field
+	FailOpen                         apijson.Field
+	HyperdriveBindings               apijson.Field
+	KVNamespaces                     apijson.Field
+	Limits                           apijson.Field
+	MTLSCertificates                 apijson.Field
+	Placement                        apijson.Field
+	QueueProducers                   apijson.Field
+	R2Buckets                        apijson.Field
+	Services                         apijson.Field
+	UsageModel                       apijson.Field
+	VectorizeBindings                apijson.Field
+	WranglerConfigHash               apijson.Field
+	raw                              string
+	ExtraFields                      map[string]apijson.Field
 }
 
 func (r *ProjectDeploymentConfigsPreview) UnmarshalJSON(data []byte) (err error) {
@@ -1235,6 +1333,29 @@ func (r projectDeploymentConfigsPreviewKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
+// Limits for Pages Functions.
+type ProjectDeploymentConfigsPreviewLimits struct {
+	// CPU time limit in milliseconds.
+	CPUMs int64                                     `json:"cpu_ms"`
+	JSON  projectDeploymentConfigsPreviewLimitsJSON `json:"-"`
+}
+
+// projectDeploymentConfigsPreviewLimitsJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewLimits]
+type projectDeploymentConfigsPreviewLimitsJSON struct {
+	CPUMs       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsPreviewLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsPreviewLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
 // mTLS binding.
 type ProjectDeploymentConfigsPreviewMTLSCertificate struct {
 	CertificateID string                                             `json:"certificate_id"`
@@ -1358,6 +1479,23 @@ func (r projectDeploymentConfigsPreviewServiceJSON) RawJSON() string {
 	return r.raw
 }
 
+// The usage model for Pages Functions.
+type ProjectDeploymentConfigsPreviewUsageModel string
+
+const (
+	ProjectDeploymentConfigsPreviewUsageModelStandard ProjectDeploymentConfigsPreviewUsageModel = "standard"
+	ProjectDeploymentConfigsPreviewUsageModelBundled  ProjectDeploymentConfigsPreviewUsageModel = "bundled"
+	ProjectDeploymentConfigsPreviewUsageModelUnbound  ProjectDeploymentConfigsPreviewUsageModel = "unbound"
+)
+
+func (r ProjectDeploymentConfigsPreviewUsageModel) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentConfigsPreviewUsageModelStandard, ProjectDeploymentConfigsPreviewUsageModelBundled, ProjectDeploymentConfigsPreviewUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
 // Vectorize binding.
 type ProjectDeploymentConfigsPreviewVectorizeBinding struct {
 	IndexName string                                              `json:"index_name"`
@@ -1384,24 +1522,32 @@ func (r projectDeploymentConfigsPreviewVectorizeBindingJSON) RawJSON() string {
 type ProjectDeploymentConfigsProduction struct {
 	// Constellation bindings used for Pages Functions.
 	AIBindings map[string]ProjectDeploymentConfigsProductionAIBinding `json:"ai_bindings,nullable"`
+	// Whether to always use the latest compatibility date for Pages Functions.
+	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date"`
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets map[string]ProjectDeploymentConfigsProductionAnalyticsEngineDataset `json:"analytics_engine_datasets,nullable"`
 	// Browser bindings used for Pages Functions.
 	Browsers map[string]ProjectDeploymentConfigsProductionBrowser `json:"browsers,nullable"`
+	// The major version of the build image to use for Pages Functions.
+	BuildImageMajorVersion int64 `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
-	CompatibilityFlags []string `json:"compatibility_flags"`
+	CompatibilityFlags []string `json:"compatibility_flags,nullable"`
 	// D1 databases used for Pages Functions.
 	D1Databases map[string]ProjectDeploymentConfigsProductionD1Database `json:"d1_databases,nullable"`
 	// Durable Object namespaces used for Pages Functions.
 	DurableObjectNamespaces map[string]ProjectDeploymentConfigsProductionDurableObjectNamespace `json:"durable_object_namespaces,nullable"`
 	// Environment variables used for builds and Pages Functions.
-	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars"`
+	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars,nullable"`
+	// Whether to fail open when the deployment config cannot be applied.
+	FailOpen bool `json:"fail_open"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings map[string]ProjectDeploymentConfigsProductionHyperdriveBinding `json:"hyperdrive_bindings,nullable"`
 	// KV namespaces used for Pages Functions.
 	KVNamespaces map[string]ProjectDeploymentConfigsProductionKVNamespace `json:"kv_namespaces,nullable"`
+	// Limits for Pages Functions.
+	Limits ProjectDeploymentConfigsProductionLimits `json:"limits,nullable"`
 	// mTLS bindings used for Pages Functions.
 	MTLSCertificates map[string]ProjectDeploymentConfigsProductionMTLSCertificate `json:"mtls_certificates,nullable"`
 	// Placement setting used for Pages Functions.
@@ -1412,32 +1558,44 @@ type ProjectDeploymentConfigsProduction struct {
 	R2Buckets map[string]ProjectDeploymentConfigsProductionR2Bucket `json:"r2_buckets,nullable"`
 	// Services used for Pages Functions.
 	Services map[string]ProjectDeploymentConfigsProductionService `json:"services,nullable"`
+	// The usage model for Pages Functions.
+	//
+	// Deprecated: All new projects now use the Standard usage model.
+	UsageModel ProjectDeploymentConfigsProductionUsageModel `json:"usage_model"`
 	// Vectorize bindings used for Pages Functions.
 	VectorizeBindings map[string]ProjectDeploymentConfigsProductionVectorizeBinding `json:"vectorize_bindings,nullable"`
-	JSON              projectDeploymentConfigsProductionJSON                        `json:"-"`
+	// Hash of the Wrangler configuration used for the deployment.
+	WranglerConfigHash string                                 `json:"wrangler_config_hash"`
+	JSON               projectDeploymentConfigsProductionJSON `json:"-"`
 }
 
 // projectDeploymentConfigsProductionJSON contains the JSON metadata for the struct
 // [ProjectDeploymentConfigsProduction]
 type projectDeploymentConfigsProductionJSON struct {
-	AIBindings              apijson.Field
-	AnalyticsEngineDatasets apijson.Field
-	Browsers                apijson.Field
-	CompatibilityDate       apijson.Field
-	CompatibilityFlags      apijson.Field
-	D1Databases             apijson.Field
-	DurableObjectNamespaces apijson.Field
-	EnvVars                 apijson.Field
-	HyperdriveBindings      apijson.Field
-	KVNamespaces            apijson.Field
-	MTLSCertificates        apijson.Field
-	Placement               apijson.Field
-	QueueProducers          apijson.Field
-	R2Buckets               apijson.Field
-	Services                apijson.Field
-	VectorizeBindings       apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	AIBindings                       apijson.Field
+	AlwaysUseLatestCompatibilityDate apijson.Field
+	AnalyticsEngineDatasets          apijson.Field
+	Browsers                         apijson.Field
+	BuildImageMajorVersion           apijson.Field
+	CompatibilityDate                apijson.Field
+	CompatibilityFlags               apijson.Field
+	D1Databases                      apijson.Field
+	DurableObjectNamespaces          apijson.Field
+	EnvVars                          apijson.Field
+	FailOpen                         apijson.Field
+	HyperdriveBindings               apijson.Field
+	KVNamespaces                     apijson.Field
+	Limits                           apijson.Field
+	MTLSCertificates                 apijson.Field
+	Placement                        apijson.Field
+	QueueProducers                   apijson.Field
+	R2Buckets                        apijson.Field
+	Services                         apijson.Field
+	UsageModel                       apijson.Field
+	VectorizeBindings                apijson.Field
+	WranglerConfigHash               apijson.Field
+	raw                              string
+	ExtraFields                      map[string]apijson.Field
 }
 
 func (r *ProjectDeploymentConfigsProduction) UnmarshalJSON(data []byte) (err error) {
@@ -1774,6 +1932,29 @@ func (r projectDeploymentConfigsProductionKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
+// Limits for Pages Functions.
+type ProjectDeploymentConfigsProductionLimits struct {
+	// CPU time limit in milliseconds.
+	CPUMs int64                                        `json:"cpu_ms"`
+	JSON  projectDeploymentConfigsProductionLimitsJSON `json:"-"`
+}
+
+// projectDeploymentConfigsProductionLimitsJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsProductionLimits]
+type projectDeploymentConfigsProductionLimitsJSON struct {
+	CPUMs       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsProductionLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsProductionLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
 // mTLS binding.
 type ProjectDeploymentConfigsProductionMTLSCertificate struct {
 	CertificateID string                                                `json:"certificate_id"`
@@ -1897,6 +2078,23 @@ func (r projectDeploymentConfigsProductionServiceJSON) RawJSON() string {
 	return r.raw
 }
 
+// The usage model for Pages Functions.
+type ProjectDeploymentConfigsProductionUsageModel string
+
+const (
+	ProjectDeploymentConfigsProductionUsageModelStandard ProjectDeploymentConfigsProductionUsageModel = "standard"
+	ProjectDeploymentConfigsProductionUsageModelBundled  ProjectDeploymentConfigsProductionUsageModel = "bundled"
+	ProjectDeploymentConfigsProductionUsageModelUnbound  ProjectDeploymentConfigsProductionUsageModel = "unbound"
+)
+
+func (r ProjectDeploymentConfigsProductionUsageModel) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentConfigsProductionUsageModelStandard, ProjectDeploymentConfigsProductionUsageModelBundled, ProjectDeploymentConfigsProductionUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
 // Vectorize binding.
 type ProjectDeploymentConfigsProductionVectorizeBinding struct {
 	IndexName string                                                 `json:"index_name"`
@@ -1921,8 +2119,9 @@ func (r projectDeploymentConfigsProductionVectorizeBindingJSON) RawJSON() string
 
 type ProjectSource struct {
 	Config ProjectSourceConfig `json:"config"`
-	Type   string              `json:"type"`
-	JSON   projectSourceJSON   `json:"-"`
+	// The source control management provider.
+	Type ProjectSourceType `json:"type"`
+	JSON projectSourceJSON `json:"-"`
 }
 
 // projectSourceJSON contains the JSON metadata for the struct [ProjectSource]
@@ -1942,18 +2141,40 @@ func (r projectSourceJSON) RawJSON() string {
 }
 
 type ProjectSourceConfig struct {
-	DeploymentsEnabled           bool                                        `json:"deployments_enabled"`
-	Owner                        string                                      `json:"owner"`
-	PathExcludes                 []string                                    `json:"path_excludes"`
-	PathIncludes                 []string                                    `json:"path_includes"`
-	PrCommentsEnabled            bool                                        `json:"pr_comments_enabled"`
-	PreviewBranchExcludes        []string                                    `json:"preview_branch_excludes"`
-	PreviewBranchIncludes        []string                                    `json:"preview_branch_includes"`
-	PreviewDeploymentSetting     ProjectSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
-	ProductionBranch             string                                      `json:"production_branch"`
-	ProductionDeploymentsEnabled bool                                        `json:"production_deployments_enabled"`
-	RepoName                     string                                      `json:"repo_name"`
-	JSON                         projectSourceConfigJSON                     `json:"-"`
+	// Whether to enable automatic deployments when pushing to the source repository.
+	// When disabled, no deployments (production or preview) will be triggered
+	// automatically.
+	//
+	// Deprecated: Use `production_deployments_enabled` and
+	// `preview_deployment_setting` for more granular control.
+	DeploymentsEnabled bool `json:"deployments_enabled"`
+	// The owner of the repository.
+	Owner string `json:"owner"`
+	// A list of paths that should be excluded from triggering a preview deployment.
+	// Wildcard syntax (`*`) is supported.
+	PathExcludes []string `json:"path_excludes"`
+	// A list of paths that should be watched to trigger a preview deployment. Wildcard
+	// syntax (`*`) is supported.
+	PathIncludes []string `json:"path_includes"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled"`
+	// A list of branches that should not trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	// A list of branches that should trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	// Controls whether commits to preview branches trigger a preview deployment.
+	PreviewDeploymentSetting ProjectSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch"`
+	// Whether to trigger a production deployment on commits to the production branch.
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	// The name of the repository.
+	RepoName string                  `json:"repo_name"`
+	JSON     projectSourceConfigJSON `json:"-"`
 }
 
 // projectSourceConfigJSON contains the JSON metadata for the struct
@@ -1982,6 +2203,7 @@ func (r projectSourceConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls whether commits to preview branches trigger a preview deployment.
 type ProjectSourceConfigPreviewDeploymentSetting string
 
 const (
@@ -1998,16 +2220,32 @@ func (r ProjectSourceConfigPreviewDeploymentSetting) IsKnown() bool {
 	return false
 }
 
+// The source control management provider.
+type ProjectSourceType string
+
+const (
+	ProjectSourceTypeGitHub ProjectSourceType = "github"
+	ProjectSourceTypeGitlab ProjectSourceType = "gitlab"
+)
+
+func (r ProjectSourceType) IsKnown() bool {
+	switch r {
+	case ProjectSourceTypeGitHub, ProjectSourceTypeGitlab:
+		return true
+	}
+	return false
+}
+
 type ProjectParam struct {
+	// Name of the project.
+	Name param.Field[string] `json:"name,required"`
+	// Production branch of the project. Used to identify production deployments.
+	ProductionBranch param.Field[string] `json:"production_branch,required"`
 	// Configs for the project build process.
 	BuildConfig param.Field[ProjectBuildConfigParam] `json:"build_config"`
 	// Configs for deployments in a project.
 	DeploymentConfigs param.Field[ProjectDeploymentConfigsParam] `json:"deployment_configs"`
-	// Name of the project.
-	Name param.Field[string] `json:"name"`
-	// Production branch of the project. Used to identify production deployments.
-	ProductionBranch param.Field[string]             `json:"production_branch"`
-	Source           param.Field[ProjectSourceParam] `json:"source"`
+	Source            param.Field[ProjectSourceParam]            `json:"source"`
 }
 
 func (r ProjectParam) MarshalJSON() (data []byte, err error) {
@@ -2050,10 +2288,14 @@ func (r ProjectDeploymentConfigsParam) MarshalJSON() (data []byte, err error) {
 type ProjectDeploymentConfigsPreviewParam struct {
 	// Constellation bindings used for Pages Functions.
 	AIBindings param.Field[map[string]ProjectDeploymentConfigsPreviewAIBindingParam] `json:"ai_bindings"`
+	// Whether to always use the latest compatibility date for Pages Functions.
+	AlwaysUseLatestCompatibilityDate param.Field[bool] `json:"always_use_latest_compatibility_date"`
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets param.Field[map[string]ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
 	Browsers param.Field[map[string]ProjectDeploymentConfigsPreviewBrowserParam] `json:"browsers"`
+	// The major version of the build image to use for Pages Functions.
+	BuildImageMajorVersion param.Field[int64] `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -2064,10 +2306,14 @@ type ProjectDeploymentConfigsPreviewParam struct {
 	DurableObjectNamespaces param.Field[map[string]ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam] `json:"durable_object_namespaces"`
 	// Environment variables used for builds and Pages Functions.
 	EnvVars param.Field[map[string]ProjectDeploymentConfigsPreviewEnvVarsUnionParam] `json:"env_vars"`
+	// Whether to fail open when the deployment config cannot be applied.
+	FailOpen param.Field[bool] `json:"fail_open"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings param.Field[map[string]ProjectDeploymentConfigsPreviewHyperdriveBindingParam] `json:"hyperdrive_bindings"`
 	// KV namespaces used for Pages Functions.
 	KVNamespaces param.Field[map[string]ProjectDeploymentConfigsPreviewKVNamespaceParam] `json:"kv_namespaces"`
+	// Limits for Pages Functions.
+	Limits param.Field[ProjectDeploymentConfigsPreviewLimitsParam] `json:"limits"`
 	// mTLS bindings used for Pages Functions.
 	MTLSCertificates param.Field[map[string]ProjectDeploymentConfigsPreviewMTLSCertificateParam] `json:"mtls_certificates"`
 	// Placement setting used for Pages Functions.
@@ -2078,8 +2324,14 @@ type ProjectDeploymentConfigsPreviewParam struct {
 	R2Buckets param.Field[map[string]ProjectDeploymentConfigsPreviewR2BucketParam] `json:"r2_buckets"`
 	// Services used for Pages Functions.
 	Services param.Field[map[string]ProjectDeploymentConfigsPreviewServiceParam] `json:"services"`
+	// The usage model for Pages Functions.
+	//
+	// Deprecated: All new projects now use the Standard usage model.
+	UsageModel param.Field[ProjectDeploymentConfigsPreviewUsageModel] `json:"usage_model"`
 	// Vectorize bindings used for Pages Functions.
 	VectorizeBindings param.Field[map[string]ProjectDeploymentConfigsPreviewVectorizeBindingParam] `json:"vectorize_bindings"`
+	// Hash of the Wrangler configuration used for the deployment.
+	WranglerConfigHash param.Field[string] `json:"wrangler_config_hash"`
 }
 
 func (r ProjectDeploymentConfigsPreviewParam) MarshalJSON() (data []byte, err error) {
@@ -2204,6 +2456,16 @@ func (r ProjectDeploymentConfigsPreviewKVNamespaceParam) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
+// Limits for Pages Functions.
+type ProjectDeploymentConfigsPreviewLimitsParam struct {
+	// CPU time limit in milliseconds.
+	CPUMs param.Field[int64] `json:"cpu_ms"`
+}
+
+func (r ProjectDeploymentConfigsPreviewLimitsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // mTLS binding.
 type ProjectDeploymentConfigsPreviewMTLSCertificateParam struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
@@ -2272,10 +2534,14 @@ func (r ProjectDeploymentConfigsPreviewVectorizeBindingParam) MarshalJSON() (dat
 type ProjectDeploymentConfigsProductionParam struct {
 	// Constellation bindings used for Pages Functions.
 	AIBindings param.Field[map[string]ProjectDeploymentConfigsProductionAIBindingParam] `json:"ai_bindings"`
+	// Whether to always use the latest compatibility date for Pages Functions.
+	AlwaysUseLatestCompatibilityDate param.Field[bool] `json:"always_use_latest_compatibility_date"`
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets param.Field[map[string]ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
 	Browsers param.Field[map[string]ProjectDeploymentConfigsProductionBrowserParam] `json:"browsers"`
+	// The major version of the build image to use for Pages Functions.
+	BuildImageMajorVersion param.Field[int64] `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -2286,10 +2552,14 @@ type ProjectDeploymentConfigsProductionParam struct {
 	DurableObjectNamespaces param.Field[map[string]ProjectDeploymentConfigsProductionDurableObjectNamespaceParam] `json:"durable_object_namespaces"`
 	// Environment variables used for builds and Pages Functions.
 	EnvVars param.Field[map[string]ProjectDeploymentConfigsProductionEnvVarsUnionParam] `json:"env_vars"`
+	// Whether to fail open when the deployment config cannot be applied.
+	FailOpen param.Field[bool] `json:"fail_open"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings param.Field[map[string]ProjectDeploymentConfigsProductionHyperdriveBindingParam] `json:"hyperdrive_bindings"`
 	// KV namespaces used for Pages Functions.
 	KVNamespaces param.Field[map[string]ProjectDeploymentConfigsProductionKVNamespaceParam] `json:"kv_namespaces"`
+	// Limits for Pages Functions.
+	Limits param.Field[ProjectDeploymentConfigsProductionLimitsParam] `json:"limits"`
 	// mTLS bindings used for Pages Functions.
 	MTLSCertificates param.Field[map[string]ProjectDeploymentConfigsProductionMTLSCertificateParam] `json:"mtls_certificates"`
 	// Placement setting used for Pages Functions.
@@ -2300,8 +2570,14 @@ type ProjectDeploymentConfigsProductionParam struct {
 	R2Buckets param.Field[map[string]ProjectDeploymentConfigsProductionR2BucketParam] `json:"r2_buckets"`
 	// Services used for Pages Functions.
 	Services param.Field[map[string]ProjectDeploymentConfigsProductionServiceParam] `json:"services"`
+	// The usage model for Pages Functions.
+	//
+	// Deprecated: All new projects now use the Standard usage model.
+	UsageModel param.Field[ProjectDeploymentConfigsProductionUsageModel] `json:"usage_model"`
 	// Vectorize bindings used for Pages Functions.
 	VectorizeBindings param.Field[map[string]ProjectDeploymentConfigsProductionVectorizeBindingParam] `json:"vectorize_bindings"`
+	// Hash of the Wrangler configuration used for the deployment.
+	WranglerConfigHash param.Field[string] `json:"wrangler_config_hash"`
 }
 
 func (r ProjectDeploymentConfigsProductionParam) MarshalJSON() (data []byte, err error) {
@@ -2426,6 +2702,16 @@ func (r ProjectDeploymentConfigsProductionKVNamespaceParam) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
+// Limits for Pages Functions.
+type ProjectDeploymentConfigsProductionLimitsParam struct {
+	// CPU time limit in milliseconds.
+	CPUMs param.Field[int64] `json:"cpu_ms"`
+}
+
+func (r ProjectDeploymentConfigsProductionLimitsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // mTLS binding.
 type ProjectDeploymentConfigsProductionMTLSCertificateParam struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
@@ -2492,7 +2778,8 @@ func (r ProjectDeploymentConfigsProductionVectorizeBindingParam) MarshalJSON() (
 
 type ProjectSourceParam struct {
 	Config param.Field[ProjectSourceConfigParam] `json:"config"`
-	Type   param.Field[string]                   `json:"type"`
+	// The source control management provider.
+	Type param.Field[ProjectSourceType] `json:"type"`
 }
 
 func (r ProjectSourceParam) MarshalJSON() (data []byte, err error) {
@@ -2500,17 +2787,39 @@ func (r ProjectSourceParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectSourceConfigParam struct {
-	DeploymentsEnabled           param.Field[bool]                                        `json:"deployments_enabled"`
-	Owner                        param.Field[string]                                      `json:"owner"`
-	PathExcludes                 param.Field[[]string]                                    `json:"path_excludes"`
-	PathIncludes                 param.Field[[]string]                                    `json:"path_includes"`
-	PrCommentsEnabled            param.Field[bool]                                        `json:"pr_comments_enabled"`
-	PreviewBranchExcludes        param.Field[[]string]                                    `json:"preview_branch_excludes"`
-	PreviewBranchIncludes        param.Field[[]string]                                    `json:"preview_branch_includes"`
-	PreviewDeploymentSetting     param.Field[ProjectSourceConfigPreviewDeploymentSetting] `json:"preview_deployment_setting"`
-	ProductionBranch             param.Field[string]                                      `json:"production_branch"`
-	ProductionDeploymentsEnabled param.Field[bool]                                        `json:"production_deployments_enabled"`
-	RepoName                     param.Field[string]                                      `json:"repo_name"`
+	// Whether to enable automatic deployments when pushing to the source repository.
+	// When disabled, no deployments (production or preview) will be triggered
+	// automatically.
+	//
+	// Deprecated: Use `production_deployments_enabled` and
+	// `preview_deployment_setting` for more granular control.
+	DeploymentsEnabled param.Field[bool] `json:"deployments_enabled"`
+	// The owner of the repository.
+	Owner param.Field[string] `json:"owner"`
+	// A list of paths that should be excluded from triggering a preview deployment.
+	// Wildcard syntax (`*`) is supported.
+	PathExcludes param.Field[[]string] `json:"path_excludes"`
+	// A list of paths that should be watched to trigger a preview deployment. Wildcard
+	// syntax (`*`) is supported.
+	PathIncludes param.Field[[]string] `json:"path_includes"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled param.Field[bool] `json:"pr_comments_enabled"`
+	// A list of branches that should not trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchExcludes param.Field[[]string] `json:"preview_branch_excludes"`
+	// A list of branches that should trigger a preview deployment. Wildcard syntax
+	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
+	// `custom`.
+	PreviewBranchIncludes param.Field[[]string] `json:"preview_branch_includes"`
+	// Controls whether commits to preview branches trigger a preview deployment.
+	PreviewDeploymentSetting param.Field[ProjectSourceConfigPreviewDeploymentSetting] `json:"preview_deployment_setting"`
+	// The production branch of the repository.
+	ProductionBranch param.Field[string] `json:"production_branch"`
+	// Whether to trigger a production deployment on commits to the production branch.
+	ProductionDeploymentsEnabled param.Field[bool] `json:"production_deployments_enabled"`
+	// The name of the repository.
+	RepoName param.Field[string] `json:"repo_name"`
 }
 
 func (r ProjectSourceConfigParam) MarshalJSON() (data []byte, err error) {
