@@ -297,7 +297,7 @@ type GatewayRule struct {
 	// Specify whether the rule is enabled.
 	Enabled bool `json:"enabled,required"`
 	// Specify the protocol or layer to evaluate the traffic, identity, and device
-	// posture expressions.
+	// posture expressions. Can only contain a single value.
 	Filters []GatewayFilter `json:"filters,required"`
 	// Specify the rule name.
 	Name string `json:"name,required"`
@@ -1628,7 +1628,7 @@ type GatewayRuleNewParams struct {
 	// apply to HTTP or network policies. Settable only for `dns` rules.
 	Expiration param.Field[GatewayRuleNewParamsExpiration] `json:"expiration"`
 	// Specify the protocol or layer to evaluate the traffic, identity, and device
-	// posture expressions.
+	// posture expressions. Can only contain a single value.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// Specify the wirefilter expression used for identity matching. The API
 	// automatically formats and sanitizes expressions before storing them. To prevent
@@ -1776,7 +1776,7 @@ type GatewayRuleUpdateParams struct {
 	// apply to HTTP or network policies. Settable only for `dns` rules.
 	Expiration param.Field[GatewayRuleUpdateParamsExpiration] `json:"expiration"`
 	// Specify the protocol or layer to evaluate the traffic, identity, and device
-	// posture expressions.
+	// posture expressions. Can only contain a single value.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
 	// Specify the wirefilter expression used for identity matching. The API
 	// automatically formats and sanitizes expressions before storing them. To prevent
