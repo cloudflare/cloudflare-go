@@ -144,6 +144,35 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	return
 }
 
+// List Zero Trust Gateway rules for the parent account of an account in the MSP
+// configuration.
+func (r *GatewayRuleService) ListTenant(ctx context.Context, query GatewayRuleListTenantParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/rules/tenant", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Zero Trust Gateway rules for the parent account of an account in the MSP
+// configuration.
+func (r *GatewayRuleService) ListTenantAutoPaging(ctx context.Context, query GatewayRuleListTenantParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayRule] {
+	return pagination.NewSinglePageAutoPager(r.ListTenant(ctx, query, opts...))
+}
+
 // Resets the expiration of a Zero Trust Gateway Rule if its duration elapsed and
 // it has a default duration. The Zero Trust Gateway Rule must have values for both
 // `expiration.expires_at` and `expiration.duration`.
@@ -1999,6 +2028,10 @@ func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type GatewayRuleListTenantParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayRuleResetExpirationParams struct {
