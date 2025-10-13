@@ -142,6 +142,22 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 	return
 }
 
+// Reads an event
+func (r *ThreatEventService) Get(ctx context.Context, eventID string, query ThreatEventGetParams, opts ...option.RequestOption) (res *ThreatEventGetResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", query.AccountID, eventID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 type ThreatEventNewResponse struct {
 	Attacker        string                     `json:"attacker,required"`
 	AttackerCountry string                     `json:"attackerCountry,required"`
@@ -364,6 +380,73 @@ func (r threatEventEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type ThreatEventGetResponse struct {
+	Attacker        string                     `json:"attacker,required"`
+	AttackerCountry string                     `json:"attackerCountry,required"`
+	Category        string                     `json:"category,required"`
+	Date            string                     `json:"date,required"`
+	Event           string                     `json:"event,required"`
+	Indicator       string                     `json:"indicator,required"`
+	IndicatorType   string                     `json:"indicatorType,required"`
+	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
+	KillChain       float64                    `json:"killChain,required"`
+	MitreAttack     []string                   `json:"mitreAttack,required"`
+	NumReferenced   float64                    `json:"numReferenced,required"`
+	NumReferences   float64                    `json:"numReferences,required"`
+	RawID           string                     `json:"rawId,required"`
+	Referenced      []string                   `json:"referenced,required"`
+	ReferencedIDs   []float64                  `json:"referencedIds,required"`
+	References      []string                   `json:"references,required"`
+	ReferencesIDs   []float64                  `json:"referencesIds,required"`
+	Tags            []string                   `json:"tags,required"`
+	TargetCountry   string                     `json:"targetCountry,required"`
+	TargetIndustry  string                     `json:"targetIndustry,required"`
+	TLP             string                     `json:"tlp,required"`
+	UUID            string                     `json:"uuid,required"`
+	Insight         string                     `json:"insight"`
+	ReleasabilityID string                     `json:"releasabilityId"`
+	JSON            threatEventGetResponseJSON `json:"-"`
+}
+
+// threatEventGetResponseJSON contains the JSON metadata for the struct
+// [ThreatEventGetResponse]
+type threatEventGetResponseJSON struct {
+	Attacker        apijson.Field
+	AttackerCountry apijson.Field
+	Category        apijson.Field
+	Date            apijson.Field
+	Event           apijson.Field
+	Indicator       apijson.Field
+	IndicatorType   apijson.Field
+	IndicatorTypeID apijson.Field
+	KillChain       apijson.Field
+	MitreAttack     apijson.Field
+	NumReferenced   apijson.Field
+	NumReferences   apijson.Field
+	RawID           apijson.Field
+	Referenced      apijson.Field
+	ReferencedIDs   apijson.Field
+	References      apijson.Field
+	ReferencesIDs   apijson.Field
+	Tags            apijson.Field
+	TargetCountry   apijson.Field
+	TargetIndustry  apijson.Field
+	TLP             apijson.Field
+	UUID            apijson.Field
+	Insight         apijson.Field
+	ReleasabilityID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ThreatEventGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ThreatEventNewParams struct {
 	// Account ID.
 	PathAccountID   param.Field[string]                  `path:"account_id,required"`
@@ -565,4 +648,9 @@ type ThreatEventEditParamsRaw struct {
 
 func (r ThreatEventEditParamsRaw) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventGetParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
