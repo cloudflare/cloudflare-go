@@ -5376,6 +5376,10 @@ Methods:
 
 ## Access
 
+### AIControls
+
+#### Mcp
+
 ### GatewayCA
 
 Response Types:
