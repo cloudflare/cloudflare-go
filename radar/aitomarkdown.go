@@ -40,6 +40,10 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 }
 
 // Convert Files into Markdown
+//
+// Deprecated: Use
+// [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
+// instead.
 func (r *AIToMarkdownService) New(ctx context.Context, file io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -62,6 +66,10 @@ func (r *AIToMarkdownService) New(ctx context.Context, file io.Reader, body AITo
 }
 
 // Convert Files into Markdown
+//
+// Deprecated: Use
+// [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
+// instead.
 func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, file io.Reader, body AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, file, body, opts...))
 }
