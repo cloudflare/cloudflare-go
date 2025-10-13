@@ -27,7 +27,7 @@ func TestAccountOrganizationNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Accounts.AccountOrganizations.New(context.TODO(), accounts.AccountOrganizationNewParams{
+	err := client.Accounts.AccountOrganizations.New(context.TODO(), accounts.AccountOrganizationNewParams{
 		AccountID:                 cloudflare.F("account_id"),
 		DestinationOrganizationID: cloudflare.F("destination_organization_id"),
 	})

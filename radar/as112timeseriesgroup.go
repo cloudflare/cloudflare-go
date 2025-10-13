@@ -37,8 +37,6 @@ func NewAS112TimeseriesGroupService(opts ...option.RequestOption) (r *AS112Times
 
 // Retrieves the distribution of AS112 DNS queries by DNSSEC (DNS Security
 // Extensions) support over time.
-//
-// Deprecated: deprecated
 func (r *AS112TimeseriesGroupService) DNSSEC(ctx context.Context, query AS112TimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupDNSSECResponse, err error) {
 	var env AS112TimeseriesGroupDNSSECResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,8 +51,6 @@ func (r *AS112TimeseriesGroupService) DNSSEC(ctx context.Context, query AS112Tim
 
 // Retrieves the distribution of AS112 DNS queries by EDNS (Extension Mechanisms
 // for DNS) support over time.
-//
-// Deprecated: deprecated
 func (r *AS112TimeseriesGroupService) Edns(ctx context.Context, query AS112TimeseriesGroupEdnsParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupEdnsResponse, err error) {
 	var env AS112TimeseriesGroupEdnsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -68,8 +64,6 @@ func (r *AS112TimeseriesGroupService) Edns(ctx context.Context, query AS112Times
 }
 
 // Retrieves the distribution of AS112 DNS queries by IP version over time.
-//
-// Deprecated: deprecated
 func (r *AS112TimeseriesGroupService) IPVersion(ctx context.Context, query AS112TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupIPVersionResponse, err error) {
 	var env AS112TimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -84,8 +78,6 @@ func (r *AS112TimeseriesGroupService) IPVersion(ctx context.Context, query AS112
 
 // Retrieves the distribution of AS112 DNS requests classified by protocol over
 // time.
-//
-// Deprecated: deprecated
 func (r *AS112TimeseriesGroupService) Protocol(ctx context.Context, query AS112TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupProtocolResponse, err error) {
 	var env AS112TimeseriesGroupProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -99,8 +91,6 @@ func (r *AS112TimeseriesGroupService) Protocol(ctx context.Context, query AS112T
 }
 
 // Retrieves the distribution of AS112 DNS queries by type over time.
-//
-// Deprecated: deprecated
 func (r *AS112TimeseriesGroupService) QueryType(ctx context.Context, query AS112TimeseriesGroupQueryTypeParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupQueryTypeResponse, err error) {
 	var env AS112TimeseriesGroupQueryTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -115,8 +105,6 @@ func (r *AS112TimeseriesGroupService) QueryType(ctx context.Context, query AS112
 
 // Retrieves the distribution of AS112 DNS requests classified by response code
 // over time.
-//
-// Deprecated: deprecated
 func (r *AS112TimeseriesGroupService) ResponseCodes(ctx context.Context, query AS112TimeseriesGroupResponseCodesParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupResponseCodesResponse, err error) {
 	var env AS112TimeseriesGroupResponseCodesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
