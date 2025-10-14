@@ -232,6 +232,7 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmail],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlob],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
@@ -267,6 +268,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmail],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlob],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
@@ -386,6 +388,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
+			DiscriminatorValue: "tail_consumer",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1507,6 +1514,53 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType) 
 	return false
 }
 
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of Tail Worker to bind to.
+	Service string `json:"service,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType `json:"type,required"`
+	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerJSON struct {
+	Name        apijson.Field
+	Service     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeTailConsumer DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "tail_consumer"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1924,6 +1978,7 @@ const (
 	DispatchNamespaceScriptBindingGetResponseTypeSecretText             DispatchNamespaceScriptBindingGetResponseType = "secret_text"
 	DispatchNamespaceScriptBindingGetResponseTypeSendEmail              DispatchNamespaceScriptBindingGetResponseType = "send_email"
 	DispatchNamespaceScriptBindingGetResponseTypeService                DispatchNamespaceScriptBindingGetResponseType = "service"
+	DispatchNamespaceScriptBindingGetResponseTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseType = "tail_consumer"
 	DispatchNamespaceScriptBindingGetResponseTypeTextBlob               DispatchNamespaceScriptBindingGetResponseType = "text_blob"
 	DispatchNamespaceScriptBindingGetResponseTypeVectorize              DispatchNamespaceScriptBindingGetResponseType = "vectorize"
 	DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseType = "version_metadata"
@@ -1935,7 +1990,7 @@ const (
 
 func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDataBlob, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeInherit, DispatchNamespaceScriptBindingGetResponseTypeImages, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeSendEmail, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTextBlob, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow, DispatchNamespaceScriptBindingGetResponseTypeWasmModule:
+	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDataBlob, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeInherit, DispatchNamespaceScriptBindingGetResponseTypeImages, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeSendEmail, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeTextBlob, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow, DispatchNamespaceScriptBindingGetResponseTypeWasmModule:
 		return true
 	}
 	return false

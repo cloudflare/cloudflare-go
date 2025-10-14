@@ -99,19 +99,15 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 
 // Delete an organization. The organization MUST be empty before deleting. It must
 // not contain any sub-organizations, accounts, members or users.
-func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
-	var env OrganizationDeleteResponseEnvelope
+func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
 		return
 	}
 	path := fmt.Sprintf("organizations/%s", organizationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -282,27 +278,6 @@ type OrganizationParentParam struct {
 
 func (r OrganizationParentParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type OrganizationDeleteResponse struct {
-	ID   string                         `json:"id,required"`
-	JSON organizationDeleteResponseJSON `json:"-"`
-}
-
-// organizationDeleteResponseJSON contains the JSON metadata for the struct
-// [OrganizationDeleteResponse]
-type organizationDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationDeleteResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type OrganizationNewParams struct {
@@ -510,47 +485,6 @@ const (
 func (r OrganizationListParamsParentID) IsKnown() bool {
 	switch r {
 	case OrganizationListParamsParentIDNull:
-		return true
-	}
-	return false
-}
-
-type OrganizationDeleteResponseEnvelope struct {
-	Errors   []interface{}                             `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   OrganizationDeleteResponse                `json:"result,required"`
-	Success  OrganizationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON     organizationDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// organizationDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [OrganizationDeleteResponseEnvelope]
-type organizationDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationDeleteResponseEnvelopeSuccess bool
-
-const (
-	OrganizationDeleteResponseEnvelopeSuccessTrue OrganizationDeleteResponseEnvelopeSuccess = true
-)
-
-func (r OrganizationDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OrganizationDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -45,7 +45,7 @@ func TestConfigurationUpdate(t *testing.T) {
 	}
 }
 
-func TestConfigurationGet(t *testing.T) {
+func TestConfigurationGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,7 +59,8 @@ func TestConfigurationGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Configurations.Get(context.TODO(), api_gateway.ConfigurationGetParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Properties: cloudflare.F([]api_gateway.ConfigurationGetParamsProperty{api_gateway.ConfigurationGetParamsPropertyAuthIDCharacteristics}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
