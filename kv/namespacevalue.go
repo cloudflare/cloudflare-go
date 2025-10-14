@@ -3,16 +3,13 @@
 package kv
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"net/url"
 	"slices"
 
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -162,17 +159,18 @@ func (r namespaceValueDeleteResponseJSON) RawJSON() string {
 }
 
 type NamespaceValueUpdateParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Arbitrary JSON to be associated with a key/value pair.
+	Metadata param.Field[string] `json:"metadata,required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
 	Value param.Field[string] `json:"value,required"`
-	// Expires the key at a certain time, measured in number of seconds since the UNIX
-	// epoch.
+	// The time, measured in number of seconds since the UNIX epoch, at which the key
+	// should expire.
 	Expiration param.Field[float64] `query:"expiration"`
-	// Expires the key after a number of seconds. Must be at least 60.
+	// The number of seconds for which the key should be visible before it expires. At
+	// least 60.
 	ExpirationTTL param.Field[float64] `query:"expiration_ttl"`
-	// Associates arbitrary JSON data with a key/value pair.
-	Metadata param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceValueUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -202,7 +200,7 @@ func (r NamespaceValueUpdateParams) URLQuery() (v url.Values) {
 type NamespaceValueUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success NamespaceValueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceValueUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceValueUpdateResponseEnvelopeJSON    `json:"-"`
@@ -227,7 +225,7 @@ func (r namespaceValueUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type NamespaceValueUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -243,14 +241,14 @@ func (r NamespaceValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceValueDeleteParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type NamespaceValueDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success NamespaceValueDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceValueDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceValueDeleteResponseEnvelopeJSON    `json:"-"`
@@ -275,7 +273,7 @@ func (r namespaceValueDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type NamespaceValueDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -291,6 +289,6 @@ func (r NamespaceValueDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceValueGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -4,6 +4,7 @@ package radar
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/url"
 	"slices"
@@ -41,6 +42,19 @@ func NewAttackLayer7Service(opts ...option.RequestOption) (r *AttackLayer7Servic
 	return
 }
 
+// Retrieves the distribution of layer 7 attacks by the specified dimension.
+func (r *AttackLayer7Service) SummaryV2(ctx context.Context, dimension AttackLayer7SummaryV2ParamsDimension, query AttackLayer7SummaryV2Params, opts ...option.RequestOption) (res *AttackLayer7SummaryV2Response, err error) {
+	var env AttackLayer7SummaryV2ResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	path := fmt.Sprintf("radar/attacks/layer7/summary/%v", dimension)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves layer 7 attacks over time.
 func (r *AttackLayer7Service) Timeseries(ctx context.Context, query AttackLayer7TimeseriesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesResponse, err error) {
 	var env AttackLayer7TimeseriesResponseEnvelope
@@ -52,6 +66,208 @@ func (r *AttackLayer7Service) Timeseries(ctx context.Context, query AttackLayer7
 	}
 	res = &env.Result
 	return
+}
+
+// Retrieves the distribution of layer 7 attacks grouped by dimension over time.
+func (r *AttackLayer7Service) TimeseriesGroupsV2(ctx context.Context, dimension AttackLayer7TimeseriesGroupsV2ParamsDimension, query AttackLayer7TimeseriesGroupsV2Params, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupsV2Response, err error) {
+	var env AttackLayer7TimeseriesGroupsV2ResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	path := fmt.Sprintf("radar/attacks/layer7/timeseries_groups/%v", dimension)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type AttackLayer7SummaryV2Response struct {
+	// Metadata for the results.
+	Meta     AttackLayer7SummaryV2ResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                 `json:"summary_0,required"`
+	JSON     attackLayer7SummaryV2ResponseJSON `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseJSON contains the JSON metadata for the struct
+// [AttackLayer7SummaryV2Response]
+type attackLayer7SummaryV2ResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type AttackLayer7SummaryV2ResponseMeta struct {
+	ConfidenceInfo AttackLayer7SummaryV2ResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []AttackLayer7SummaryV2ResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AttackLayer7SummaryV2ResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AttackLayer7SummaryV2ResponseMetaUnit `json:"units,required"`
+	JSON  attackLayer7SummaryV2ResponseMetaJSON   `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseMetaJSON contains the JSON metadata for the struct
+// [AttackLayer7SummaryV2ResponseMeta]
+type attackLayer7SummaryV2ResponseMetaJSON struct {
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2ResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryV2ResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                               `json:"level,required"`
+	JSON  attackLayer7SummaryV2ResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [AttackLayer7SummaryV2ResponseMetaConfidenceInfo]
+type attackLayer7SummaryV2ResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2ResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AttackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
+	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
+	JSON            attackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [AttackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotation]
+type attackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndDate         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartDate       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryV2ResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer7SummaryV2ResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [AttackLayer7SummaryV2ResponseMetaDateRange]
+type attackLayer7SummaryV2ResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2ResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7SummaryV2ResponseMetaNormalization string
+
+const (
+	AttackLayer7SummaryV2ResponseMetaNormalizationPercentage           AttackLayer7SummaryV2ResponseMetaNormalization = "PERCENTAGE"
+	AttackLayer7SummaryV2ResponseMetaNormalizationMin0Max              AttackLayer7SummaryV2ResponseMetaNormalization = "MIN0_MAX"
+	AttackLayer7SummaryV2ResponseMetaNormalizationMinMax               AttackLayer7SummaryV2ResponseMetaNormalization = "MIN_MAX"
+	AttackLayer7SummaryV2ResponseMetaNormalizationRawValues            AttackLayer7SummaryV2ResponseMetaNormalization = "RAW_VALUES"
+	AttackLayer7SummaryV2ResponseMetaNormalizationPercentageChange     AttackLayer7SummaryV2ResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AttackLayer7SummaryV2ResponseMetaNormalizationRollingAverage       AttackLayer7SummaryV2ResponseMetaNormalization = "ROLLING_AVERAGE"
+	AttackLayer7SummaryV2ResponseMetaNormalizationOverlappedPercentage AttackLayer7SummaryV2ResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7SummaryV2ResponseMetaNormalizationRatio                AttackLayer7SummaryV2ResponseMetaNormalization = "RATIO"
+)
+
+func (r AttackLayer7SummaryV2ResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ResponseMetaNormalizationPercentage, AttackLayer7SummaryV2ResponseMetaNormalizationMin0Max, AttackLayer7SummaryV2ResponseMetaNormalizationMinMax, AttackLayer7SummaryV2ResponseMetaNormalizationRawValues, AttackLayer7SummaryV2ResponseMetaNormalizationPercentageChange, AttackLayer7SummaryV2ResponseMetaNormalizationRollingAverage, AttackLayer7SummaryV2ResponseMetaNormalizationOverlappedPercentage, AttackLayer7SummaryV2ResponseMetaNormalizationRatio:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryV2ResponseMetaUnit struct {
+	Name  string                                    `json:"name,required"`
+	Value string                                    `json:"value,required"`
+	JSON  attackLayer7SummaryV2ResponseMetaUnitJSON `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseMetaUnitJSON contains the JSON metadata for the
+// struct [AttackLayer7SummaryV2ResponseMetaUnit]
+type attackLayer7SummaryV2ResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2ResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
 }
 
 type AttackLayer7TimeseriesResponse struct {
@@ -292,6 +508,463 @@ func (r attackLayer7TimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
+type AttackLayer7TimeseriesGroupsV2Response struct {
+	// Metadata for the results.
+	Meta   AttackLayer7TimeseriesGroupsV2ResponseMeta   `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupsV2ResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupsV2ResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseJSON contains the JSON metadata for the
+// struct [AttackLayer7TimeseriesGroupsV2Response]
+type attackLayer7TimeseriesGroupsV2ResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Metadata for the results.
+type AttackLayer7TimeseriesGroupsV2ResponseMeta struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval    AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []AttackLayer7TimeseriesGroupsV2ResponseMetaDateRange    `json:"dateRange,required"`
+	// Timestamp of the last dataset update.
+	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization `json:"normalization,required"`
+	// Measurement units for the results.
+	Units []AttackLayer7TimeseriesGroupsV2ResponseMetaUnit `json:"units,required"`
+	JSON  attackLayer7TimeseriesGroupsV2ResponseMetaJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseMetaJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupsV2ResponseMeta]
+type attackLayer7TimeseriesGroupsV2ResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	ConfidenceInfo apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	Units          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalFifteenMinutes AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneHour        AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval = "ONE_HOUR"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneDay         AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval = "ONE_DAY"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneWeek        AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval = "ONE_WEEK"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneMonth       AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval = "ONE_MONTH"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ResponseMetaAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalFifteenMinutes, AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneHour, AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneDay, AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneWeek, AttackLayer7TimeseriesGroupsV2ResponseMetaAggIntervalOneMonth:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	// Provides an indication of how much confidence Cloudflare has in the data.
+	Level int64                                                        `json:"level,required"`
+	JSON  attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfo]
+type attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotation associated with the result (e.g. outage or other type of event).
+type AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation struct {
+	DataSource  string    `json:"dataSource,required"`
+	Description string    `json:"description,required"`
+	EndDate     time.Time `json:"endDate,required" format:"date-time"`
+	EventType   string    `json:"eventType,required"`
+	// Whether event is a single point in time or a time range.
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
+	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
+	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
+	JSON            attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation]
+type attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EndDate         apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	LinkedURL       apijson.Field
+	StartDate       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupsV2ResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer7TimeseriesGroupsV2ResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupsV2ResponseMetaDateRange]
+type attackLayer7TimeseriesGroupsV2ResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationPercentage           AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationMin0Max              AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "MIN0_MAX"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationMinMax               AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "MIN_MAX"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationRawValues            AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "RAW_VALUES"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationPercentageChange     AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationRollingAverage       AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "ROLLING_AVERAGE"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationOverlappedPercentage AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationRatio                AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization = "RATIO"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ResponseMetaNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationPercentage, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationMin0Max, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationMinMax, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationRawValues, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationPercentageChange, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationRollingAverage, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationOverlappedPercentage, AttackLayer7TimeseriesGroupsV2ResponseMetaNormalizationRatio:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ResponseMetaUnit struct {
+	Name  string                                             `json:"name,required"`
+	Value string                                             `json:"value,required"`
+	JSON  attackLayer7TimeseriesGroupsV2ResponseMetaUnitJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseMetaUnitJSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupsV2ResponseMetaUnit]
+type attackLayer7TimeseriesGroupsV2ResponseMetaUnitJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseMetaUnitJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupsV2ResponseSerie0 struct {
+	Timestamps  []time.Time                                      `json:"timestamps,required" format:"date-time"`
+	ExtraFields map[string][]string                              `json:"-,extras"`
+	JSON        attackLayer7TimeseriesGroupsV2ResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseSerie0JSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupsV2ResponseSerie0]
+type attackLayer7TimeseriesGroupsV2ResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryV2Params struct {
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Start of the date range.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format in which results will be returned.
+	Format param.Field[AttackLayer7SummaryV2ParamsFormat] `query:"format"`
+	// Filters results by HTTP method.
+	HTTPMethod param.Field[[]AttackLayer7SummaryV2ParamsHTTPMethod] `query:"httpMethod"`
+	// Filters results by HTTP version.
+	HTTPVersion param.Field[[]AttackLayer7SummaryV2ParamsHTTPVersion] `query:"httpVersion"`
+	// Filters results by IP version (Ipv4 vs. IPv6).
+	IPVersion param.Field[[]AttackLayer7SummaryV2ParamsIPVersion] `query:"ipVersion"`
+	// Limits the number of objects per group to the top items within the specified
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Filters the results by layer 7 mitigation product.
+	MitigationProduct param.Field[[]AttackLayer7SummaryV2ParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+}
+
+// URLQuery serializes [AttackLayer7SummaryV2Params]'s query parameters as
+// `url.Values`.
+func (r AttackLayer7SummaryV2Params) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Specifies the attribute by which to group the results.
+type AttackLayer7SummaryV2ParamsDimension string
+
+const (
+	AttackLayer7SummaryV2ParamsDimensionHTTPMethod        AttackLayer7SummaryV2ParamsDimension = "HTTP_METHOD"
+	AttackLayer7SummaryV2ParamsDimensionHTTPVersion       AttackLayer7SummaryV2ParamsDimension = "HTTP_VERSION"
+	AttackLayer7SummaryV2ParamsDimensionIPVersion         AttackLayer7SummaryV2ParamsDimension = "IP_VERSION"
+	AttackLayer7SummaryV2ParamsDimensionManagedRules      AttackLayer7SummaryV2ParamsDimension = "MANAGED_RULES"
+	AttackLayer7SummaryV2ParamsDimensionMitigationProduct AttackLayer7SummaryV2ParamsDimension = "MITIGATION_PRODUCT"
+	AttackLayer7SummaryV2ParamsDimensionVertical          AttackLayer7SummaryV2ParamsDimension = "VERTICAL"
+	AttackLayer7SummaryV2ParamsDimensionIndustry          AttackLayer7SummaryV2ParamsDimension = "INDUSTRY"
+)
+
+func (r AttackLayer7SummaryV2ParamsDimension) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ParamsDimensionHTTPMethod, AttackLayer7SummaryV2ParamsDimensionHTTPVersion, AttackLayer7SummaryV2ParamsDimensionIPVersion, AttackLayer7SummaryV2ParamsDimensionManagedRules, AttackLayer7SummaryV2ParamsDimensionMitigationProduct, AttackLayer7SummaryV2ParamsDimensionVertical, AttackLayer7SummaryV2ParamsDimensionIndustry:
+		return true
+	}
+	return false
+}
+
+// Format in which results will be returned.
+type AttackLayer7SummaryV2ParamsFormat string
+
+const (
+	AttackLayer7SummaryV2ParamsFormatJson AttackLayer7SummaryV2ParamsFormat = "JSON"
+	AttackLayer7SummaryV2ParamsFormatCsv  AttackLayer7SummaryV2ParamsFormat = "CSV"
+)
+
+func (r AttackLayer7SummaryV2ParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ParamsFormatJson, AttackLayer7SummaryV2ParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryV2ParamsHTTPMethod string
+
+const (
+	AttackLayer7SummaryV2ParamsHTTPMethodGet             AttackLayer7SummaryV2ParamsHTTPMethod = "GET"
+	AttackLayer7SummaryV2ParamsHTTPMethodPost            AttackLayer7SummaryV2ParamsHTTPMethod = "POST"
+	AttackLayer7SummaryV2ParamsHTTPMethodDelete          AttackLayer7SummaryV2ParamsHTTPMethod = "DELETE"
+	AttackLayer7SummaryV2ParamsHTTPMethodPut             AttackLayer7SummaryV2ParamsHTTPMethod = "PUT"
+	AttackLayer7SummaryV2ParamsHTTPMethodHead            AttackLayer7SummaryV2ParamsHTTPMethod = "HEAD"
+	AttackLayer7SummaryV2ParamsHTTPMethodPurge           AttackLayer7SummaryV2ParamsHTTPMethod = "PURGE"
+	AttackLayer7SummaryV2ParamsHTTPMethodOptions         AttackLayer7SummaryV2ParamsHTTPMethod = "OPTIONS"
+	AttackLayer7SummaryV2ParamsHTTPMethodPropfind        AttackLayer7SummaryV2ParamsHTTPMethod = "PROPFIND"
+	AttackLayer7SummaryV2ParamsHTTPMethodMkcol           AttackLayer7SummaryV2ParamsHTTPMethod = "MKCOL"
+	AttackLayer7SummaryV2ParamsHTTPMethodPatch           AttackLayer7SummaryV2ParamsHTTPMethod = "PATCH"
+	AttackLayer7SummaryV2ParamsHTTPMethodACL             AttackLayer7SummaryV2ParamsHTTPMethod = "ACL"
+	AttackLayer7SummaryV2ParamsHTTPMethodBcopy           AttackLayer7SummaryV2ParamsHTTPMethod = "BCOPY"
+	AttackLayer7SummaryV2ParamsHTTPMethodBdelete         AttackLayer7SummaryV2ParamsHTTPMethod = "BDELETE"
+	AttackLayer7SummaryV2ParamsHTTPMethodBmove           AttackLayer7SummaryV2ParamsHTTPMethod = "BMOVE"
+	AttackLayer7SummaryV2ParamsHTTPMethodBpropfind       AttackLayer7SummaryV2ParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7SummaryV2ParamsHTTPMethodBproppatch      AttackLayer7SummaryV2ParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7SummaryV2ParamsHTTPMethodCheckin         AttackLayer7SummaryV2ParamsHTTPMethod = "CHECKIN"
+	AttackLayer7SummaryV2ParamsHTTPMethodCheckout        AttackLayer7SummaryV2ParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7SummaryV2ParamsHTTPMethodConnect         AttackLayer7SummaryV2ParamsHTTPMethod = "CONNECT"
+	AttackLayer7SummaryV2ParamsHTTPMethodCopy            AttackLayer7SummaryV2ParamsHTTPMethod = "COPY"
+	AttackLayer7SummaryV2ParamsHTTPMethodLabel           AttackLayer7SummaryV2ParamsHTTPMethod = "LABEL"
+	AttackLayer7SummaryV2ParamsHTTPMethodLock            AttackLayer7SummaryV2ParamsHTTPMethod = "LOCK"
+	AttackLayer7SummaryV2ParamsHTTPMethodMerge           AttackLayer7SummaryV2ParamsHTTPMethod = "MERGE"
+	AttackLayer7SummaryV2ParamsHTTPMethodMkactivity      AttackLayer7SummaryV2ParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7SummaryV2ParamsHTTPMethodMkworkspace     AttackLayer7SummaryV2ParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7SummaryV2ParamsHTTPMethodMove            AttackLayer7SummaryV2ParamsHTTPMethod = "MOVE"
+	AttackLayer7SummaryV2ParamsHTTPMethodNotify          AttackLayer7SummaryV2ParamsHTTPMethod = "NOTIFY"
+	AttackLayer7SummaryV2ParamsHTTPMethodOrderpatch      AttackLayer7SummaryV2ParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7SummaryV2ParamsHTTPMethodPoll            AttackLayer7SummaryV2ParamsHTTPMethod = "POLL"
+	AttackLayer7SummaryV2ParamsHTTPMethodProppatch       AttackLayer7SummaryV2ParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7SummaryV2ParamsHTTPMethodReport          AttackLayer7SummaryV2ParamsHTTPMethod = "REPORT"
+	AttackLayer7SummaryV2ParamsHTTPMethodSearch          AttackLayer7SummaryV2ParamsHTTPMethod = "SEARCH"
+	AttackLayer7SummaryV2ParamsHTTPMethodSubscribe       AttackLayer7SummaryV2ParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7SummaryV2ParamsHTTPMethodTrace           AttackLayer7SummaryV2ParamsHTTPMethod = "TRACE"
+	AttackLayer7SummaryV2ParamsHTTPMethodUncheckout      AttackLayer7SummaryV2ParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7SummaryV2ParamsHTTPMethodUnlock          AttackLayer7SummaryV2ParamsHTTPMethod = "UNLOCK"
+	AttackLayer7SummaryV2ParamsHTTPMethodUnsubscribe     AttackLayer7SummaryV2ParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7SummaryV2ParamsHTTPMethodUpdate          AttackLayer7SummaryV2ParamsHTTPMethod = "UPDATE"
+	AttackLayer7SummaryV2ParamsHTTPMethodVersioncontrol  AttackLayer7SummaryV2ParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7SummaryV2ParamsHTTPMethodBaselinecontrol AttackLayer7SummaryV2ParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7SummaryV2ParamsHTTPMethodXmsenumatts     AttackLayer7SummaryV2ParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7SummaryV2ParamsHTTPMethodRpcOutData      AttackLayer7SummaryV2ParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7SummaryV2ParamsHTTPMethodRpcInData       AttackLayer7SummaryV2ParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7SummaryV2ParamsHTTPMethodJson            AttackLayer7SummaryV2ParamsHTTPMethod = "JSON"
+	AttackLayer7SummaryV2ParamsHTTPMethodCook            AttackLayer7SummaryV2ParamsHTTPMethod = "COOK"
+	AttackLayer7SummaryV2ParamsHTTPMethodTrack           AttackLayer7SummaryV2ParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7SummaryV2ParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ParamsHTTPMethodGet, AttackLayer7SummaryV2ParamsHTTPMethodPost, AttackLayer7SummaryV2ParamsHTTPMethodDelete, AttackLayer7SummaryV2ParamsHTTPMethodPut, AttackLayer7SummaryV2ParamsHTTPMethodHead, AttackLayer7SummaryV2ParamsHTTPMethodPurge, AttackLayer7SummaryV2ParamsHTTPMethodOptions, AttackLayer7SummaryV2ParamsHTTPMethodPropfind, AttackLayer7SummaryV2ParamsHTTPMethodMkcol, AttackLayer7SummaryV2ParamsHTTPMethodPatch, AttackLayer7SummaryV2ParamsHTTPMethodACL, AttackLayer7SummaryV2ParamsHTTPMethodBcopy, AttackLayer7SummaryV2ParamsHTTPMethodBdelete, AttackLayer7SummaryV2ParamsHTTPMethodBmove, AttackLayer7SummaryV2ParamsHTTPMethodBpropfind, AttackLayer7SummaryV2ParamsHTTPMethodBproppatch, AttackLayer7SummaryV2ParamsHTTPMethodCheckin, AttackLayer7SummaryV2ParamsHTTPMethodCheckout, AttackLayer7SummaryV2ParamsHTTPMethodConnect, AttackLayer7SummaryV2ParamsHTTPMethodCopy, AttackLayer7SummaryV2ParamsHTTPMethodLabel, AttackLayer7SummaryV2ParamsHTTPMethodLock, AttackLayer7SummaryV2ParamsHTTPMethodMerge, AttackLayer7SummaryV2ParamsHTTPMethodMkactivity, AttackLayer7SummaryV2ParamsHTTPMethodMkworkspace, AttackLayer7SummaryV2ParamsHTTPMethodMove, AttackLayer7SummaryV2ParamsHTTPMethodNotify, AttackLayer7SummaryV2ParamsHTTPMethodOrderpatch, AttackLayer7SummaryV2ParamsHTTPMethodPoll, AttackLayer7SummaryV2ParamsHTTPMethodProppatch, AttackLayer7SummaryV2ParamsHTTPMethodReport, AttackLayer7SummaryV2ParamsHTTPMethodSearch, AttackLayer7SummaryV2ParamsHTTPMethodSubscribe, AttackLayer7SummaryV2ParamsHTTPMethodTrace, AttackLayer7SummaryV2ParamsHTTPMethodUncheckout, AttackLayer7SummaryV2ParamsHTTPMethodUnlock, AttackLayer7SummaryV2ParamsHTTPMethodUnsubscribe, AttackLayer7SummaryV2ParamsHTTPMethodUpdate, AttackLayer7SummaryV2ParamsHTTPMethodVersioncontrol, AttackLayer7SummaryV2ParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryV2ParamsHTTPMethodXmsenumatts, AttackLayer7SummaryV2ParamsHTTPMethodRpcOutData, AttackLayer7SummaryV2ParamsHTTPMethodRpcInData, AttackLayer7SummaryV2ParamsHTTPMethodJson, AttackLayer7SummaryV2ParamsHTTPMethodCook, AttackLayer7SummaryV2ParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryV2ParamsHTTPVersion string
+
+const (
+	AttackLayer7SummaryV2ParamsHTTPVersionHttPv1 AttackLayer7SummaryV2ParamsHTTPVersion = "HTTPv1"
+	AttackLayer7SummaryV2ParamsHTTPVersionHttPv2 AttackLayer7SummaryV2ParamsHTTPVersion = "HTTPv2"
+	AttackLayer7SummaryV2ParamsHTTPVersionHttPv3 AttackLayer7SummaryV2ParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7SummaryV2ParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ParamsHTTPVersionHttPv1, AttackLayer7SummaryV2ParamsHTTPVersionHttPv2, AttackLayer7SummaryV2ParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryV2ParamsIPVersion string
+
+const (
+	AttackLayer7SummaryV2ParamsIPVersionIPv4 AttackLayer7SummaryV2ParamsIPVersion = "IPv4"
+	AttackLayer7SummaryV2ParamsIPVersionIPv6 AttackLayer7SummaryV2ParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7SummaryV2ParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ParamsIPVersionIPv4, AttackLayer7SummaryV2ParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryV2ParamsMitigationProduct string
+
+const (
+	AttackLayer7SummaryV2ParamsMitigationProductDDoS               AttackLayer7SummaryV2ParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryV2ParamsMitigationProductWAF                AttackLayer7SummaryV2ParamsMitigationProduct = "WAF"
+	AttackLayer7SummaryV2ParamsMitigationProductBotManagement      AttackLayer7SummaryV2ParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7SummaryV2ParamsMitigationProductAccessRules        AttackLayer7SummaryV2ParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7SummaryV2ParamsMitigationProductIPReputation       AttackLayer7SummaryV2ParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7SummaryV2ParamsMitigationProductAPIShield          AttackLayer7SummaryV2ParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7SummaryV2ParamsMitigationProductDataLossPrevention AttackLayer7SummaryV2ParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7SummaryV2ParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryV2ParamsMitigationProductDDoS, AttackLayer7SummaryV2ParamsMitigationProductWAF, AttackLayer7SummaryV2ParamsMitigationProductBotManagement, AttackLayer7SummaryV2ParamsMitigationProductAccessRules, AttackLayer7SummaryV2ParamsMitigationProductIPReputation, AttackLayer7SummaryV2ParamsMitigationProductAPIShield, AttackLayer7SummaryV2ParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryV2ResponseEnvelope struct {
+	Result  AttackLayer7SummaryV2Response             `json:"result,required"`
+	Success bool                                      `json:"success,required"`
+	JSON    attackLayer7SummaryV2ResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7SummaryV2ResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AttackLayer7SummaryV2ResponseEnvelope]
+type attackLayer7SummaryV2ResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryV2ResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryV2ResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AttackLayer7TimeseriesParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
@@ -527,5 +1200,268 @@ func (r *AttackLayer7TimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r attackLayer7TimeseriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupsV2Params struct {
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupsV2ParamsAggInterval] `query:"aggInterval"`
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Start of the date range.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format in which results will be returned.
+	Format param.Field[AttackLayer7TimeseriesGroupsV2ParamsFormat] `query:"format"`
+	// Filters results by HTTP method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod] `query:"httpMethod"`
+	// Filters results by HTTP version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupsV2ParamsHTTPVersion] `query:"httpVersion"`
+	// Filters results by IP version (Ipv4 vs. IPv6).
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupsV2ParamsIPVersion] `query:"ipVersion"`
+	// Limits the number of objects per group to the top items within the specified
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Filters the results by layer 7 mitigation product.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupsV2ParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupsV2Params]'s query parameters as
+// `url.Values`.
+func (r AttackLayer7TimeseriesGroupsV2Params) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Specifies the attribute by which to group the results.
+type AttackLayer7TimeseriesGroupsV2ParamsDimension string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionHTTPMethod        AttackLayer7TimeseriesGroupsV2ParamsDimension = "HTTP_METHOD"
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionHTTPVersion       AttackLayer7TimeseriesGroupsV2ParamsDimension = "HTTP_VERSION"
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionIPVersion         AttackLayer7TimeseriesGroupsV2ParamsDimension = "IP_VERSION"
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionManagedRules      AttackLayer7TimeseriesGroupsV2ParamsDimension = "MANAGED_RULES"
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionMitigationProduct AttackLayer7TimeseriesGroupsV2ParamsDimension = "MITIGATION_PRODUCT"
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionVertical          AttackLayer7TimeseriesGroupsV2ParamsDimension = "VERTICAL"
+	AttackLayer7TimeseriesGroupsV2ParamsDimensionIndustry          AttackLayer7TimeseriesGroupsV2ParamsDimension = "INDUSTRY"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsDimension) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsDimensionHTTPMethod, AttackLayer7TimeseriesGroupsV2ParamsDimensionHTTPVersion, AttackLayer7TimeseriesGroupsV2ParamsDimensionIPVersion, AttackLayer7TimeseriesGroupsV2ParamsDimensionManagedRules, AttackLayer7TimeseriesGroupsV2ParamsDimensionMitigationProduct, AttackLayer7TimeseriesGroupsV2ParamsDimensionVertical, AttackLayer7TimeseriesGroupsV2ParamsDimensionIndustry:
+		return true
+	}
+	return false
+}
+
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupsV2ParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsAggInterval15m AttackLayer7TimeseriesGroupsV2ParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupsV2ParamsAggInterval1h  AttackLayer7TimeseriesGroupsV2ParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupsV2ParamsAggInterval1d  AttackLayer7TimeseriesGroupsV2ParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupsV2ParamsAggInterval1w  AttackLayer7TimeseriesGroupsV2ParamsAggInterval = "1w"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsAggInterval15m, AttackLayer7TimeseriesGroupsV2ParamsAggInterval1h, AttackLayer7TimeseriesGroupsV2ParamsAggInterval1d, AttackLayer7TimeseriesGroupsV2ParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
+// Format in which results will be returned.
+type AttackLayer7TimeseriesGroupsV2ParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsFormatJson AttackLayer7TimeseriesGroupsV2ParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupsV2ParamsFormatCsv  AttackLayer7TimeseriesGroupsV2ParamsFormat = "CSV"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsFormatJson, AttackLayer7TimeseriesGroupsV2ParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodGet             AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPost            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPut             AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodHead            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodACL             AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodLock            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMove            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodReport          AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodJson            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCook            AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodGet, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPost, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPut, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodHead, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodACL, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodLock, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodMove, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodReport, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodJson, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodCook, AttackLayer7TimeseriesGroupsV2ParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupsV2ParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupsV2ParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupsV2ParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupsV2ParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupsV2ParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupsV2ParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsIPVersionIPv4 AttackLayer7TimeseriesGroupsV2ParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupsV2ParamsIPVersionIPv6 AttackLayer7TimeseriesGroupsV2ParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsIPVersionIPv4, AttackLayer7TimeseriesGroupsV2ParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductWAF                AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupsV2ParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupsV2ParamsMitigationProductWAF, AttackLayer7TimeseriesGroupsV2ParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupsV2ParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupsV2ParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupsV2ParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupsV2ParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupsV2ParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupsV2ParamsNormalizationPercentage AttackLayer7TimeseriesGroupsV2ParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupsV2ParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupsV2ParamsNormalization = "MIN0_MAX"
+)
+
+func (r AttackLayer7TimeseriesGroupsV2ParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupsV2ParamsNormalizationPercentage, AttackLayer7TimeseriesGroupsV2ParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesGroupsV2ResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupsV2Response             `json:"result,required"`
+	Success bool                                               `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupsV2ResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupsV2ResponseEnvelopeJSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupsV2ResponseEnvelope]
+type attackLayer7TimeseriesGroupsV2ResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupsV2ResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupsV2ResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
