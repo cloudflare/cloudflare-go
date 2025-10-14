@@ -37,7 +37,9 @@ func NewAttackLayer7SummaryService(opts ...option.RequestOption) (r *AttackLayer
 
 // Retrieves the distribution of layer 7 attacks by HTTP method.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) HTTPMethod(ctx context.Context, query AttackLayer7SummaryHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7SummaryHTTPMethodResponse, err error) {
 	var env AttackLayer7SummaryHTTPMethodResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +54,9 @@ func (r *AttackLayer7SummaryService) HTTPMethod(ctx context.Context, query Attac
 
 // Retrieves the distribution of layer 7 attacks by HTTP version.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query AttackLayer7SummaryHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryHTTPVersionResponse, err error) {
 	var env AttackLayer7SummaryHTTPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -67,7 +71,9 @@ func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query Atta
 
 // Retrieves the distribution of layer 7 attacks by targeted industry.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) Industry(ctx context.Context, query AttackLayer7SummaryIndustryParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIndustryResponse, err error) {
 	var env AttackLayer7SummaryIndustryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,7 +88,9 @@ func (r *AttackLayer7SummaryService) Industry(ctx context.Context, query AttackL
 
 // Retrieves the distribution of layer 7 attacks by IP version.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query AttackLayer7SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIPVersionResponse, err error) {
 	var env AttackLayer7SummaryIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -97,7 +105,9 @@ func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query Attack
 
 // Retrieves the distribution of layer 7 attacks by managed rules.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) ManagedRules(ctx context.Context, query AttackLayer7SummaryManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7SummaryManagedRulesResponse, err error) {
 	var env AttackLayer7SummaryManagedRulesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -112,7 +122,9 @@ func (r *AttackLayer7SummaryService) ManagedRules(ctx context.Context, query Att
 
 // Retrieves the distribution of layer 7 attacks by mitigation product.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) MitigationProduct(ctx context.Context, query AttackLayer7SummaryMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7SummaryMitigationProductResponse, err error) {
 	var env AttackLayer7SummaryMitigationProductResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,7 +139,9 @@ func (r *AttackLayer7SummaryService) MitigationProduct(ctx context.Context, quer
 
 // Retrieves the distribution of layer 7 attacks by targeted vertical.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Attacks Layer 7 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer7/methods/summary_v2/)
+// instead.
 func (r *AttackLayer7SummaryService) Vertical(ctx context.Context, query AttackLayer7SummaryVerticalParams, opts ...option.RequestOption) (res *AttackLayer7SummaryVerticalResponse, err error) {
 	var env AttackLayer7SummaryVerticalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
