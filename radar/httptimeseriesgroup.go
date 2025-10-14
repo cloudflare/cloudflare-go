@@ -39,9 +39,7 @@ func NewHTTPTimeseriesGroupService(opts ...option.RequestOption) (r *HTTPTimeser
 // over time. Visit https://developers.cloudflare.com/radar/concepts/bot-classes/
 // for more information.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBotClassResponse, err error) {
 	var env HTTPTimeseriesGroupBotClassResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,9 +54,7 @@ func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTim
 
 // Retrieves the distribution of HTTP requests by user agent over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTimeseriesGroupBrowserParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserResponse, err error) {
 	var env HTTPTimeseriesGroupBrowserResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,9 +69,7 @@ func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTime
 
 // Retrieves the distribution of HTTP requests by user agent family over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HTTPTimeseriesGroupBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserFamilyResponse, err error) {
 	var env HTTPTimeseriesGroupBrowserFamilyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -90,9 +84,7 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 
 // Retrieves the distribution of HTTP requests by device type over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPTimeseriesGroupDeviceTypeParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupDeviceTypeResponse, err error) {
 	var env HTTPTimeseriesGroupDeviceTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -108,9 +100,7 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 // Retrieves the distribution of HTTP requests by HTTP protocol (HTTP vs. HTTPS)
 // over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTTPTimeseriesGroupHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPProtocolResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,9 +115,7 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 
 // Retrieves the distribution of HTTP requests by HTTP version over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTPTimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -142,9 +130,7 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 
 // Retrieves the distribution of HTTP requests by IP version over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupIPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -159,9 +145,7 @@ func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTi
 
 // Retrieves the distribution of HTTP requests by operating system over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeseriesGroupOSParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupOSResponse, err error) {
 	var env HTTPTimeseriesGroupOSResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -176,9 +160,7 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 
 // Retrieves the distribution of HTTP requests by post-quantum support over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
 	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -193,9 +175,7 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 
 // Retrieves the distribution of HTTP requests by TLS version over time.
 //
-// Deprecated: Use
-// [Radar HTTP Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
 	var env HTTPTimeseriesGroupTLSVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
