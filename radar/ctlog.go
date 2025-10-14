@@ -198,10 +198,15 @@ func (r ctLogGetResponseJSON) RawJSON() string {
 type CtLogGetResponseCertificateLog struct {
 	// The API standard that the certificate log follows.
 	API CtLogGetResponseCertificateLogAPI `json:"api,required"`
+	// The average throughput of the CT log, measured in certificates per hour
+	// (certs/hour).
+	AvgThroughput float64 `json:"avgThroughput,required"`
 	// A brief description of the certificate log.
 	Description string `json:"description,required"`
 	// The end date and time for when the log will stop accepting certificates.
 	EndExclusive time.Time `json:"endExclusive,required" format:"date-time"`
+	// Timestamp of the most recent update to the CT log.
+	LastUpdate time.Time `json:"lastUpdate,required" format:"date-time"`
 	// The organization responsible for operating the certificate log.
 	Operator string `json:"operator,required"`
 	// Log performance metrics, including averages and per-endpoint details.
@@ -218,6 +223,12 @@ type CtLogGetResponseCertificateLog struct {
 	State CtLogGetResponseCertificateLogState `json:"state,required"`
 	// Timestamp of when the log state was last updated.
 	StateTimestamp time.Time `json:"stateTimestamp,required" format:"date-time"`
+	// Number of certificates that are eligible for inclusion to this log but have not
+	// been included yet. Based on certificates signed by trusted root CAs within the
+	// log's accepted date range.
+	SubmittableCERTCount string `json:"submittableCertCount,required,nullable"`
+	// Number of certificates already included in this CT log.
+	SubmittedCERTCount string `json:"submittedCertCount,required,nullable"`
 	// The URL for the certificate log.
 	URL  string                             `json:"url,required"`
 	JSON ctLogGetResponseCertificateLogJSON `json:"-"`
@@ -226,19 +237,23 @@ type CtLogGetResponseCertificateLog struct {
 // ctLogGetResponseCertificateLogJSON contains the JSON metadata for the struct
 // [CtLogGetResponseCertificateLog]
 type ctLogGetResponseCertificateLogJSON struct {
-	API            apijson.Field
-	Description    apijson.Field
-	EndExclusive   apijson.Field
-	Operator       apijson.Field
-	Performance    apijson.Field
-	Related        apijson.Field
-	Slug           apijson.Field
-	StartInclusive apijson.Field
-	State          apijson.Field
-	StateTimestamp apijson.Field
-	URL            apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	API                  apijson.Field
+	AvgThroughput        apijson.Field
+	Description          apijson.Field
+	EndExclusive         apijson.Field
+	LastUpdate           apijson.Field
+	Operator             apijson.Field
+	Performance          apijson.Field
+	Related              apijson.Field
+	Slug                 apijson.Field
+	StartInclusive       apijson.Field
+	State                apijson.Field
+	StateTimestamp       apijson.Field
+	SubmittableCERTCount apijson.Field
+	SubmittedCERTCount   apijson.Field
+	URL                  apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *CtLogGetResponseCertificateLog) UnmarshalJSON(data []byte) (err error) {

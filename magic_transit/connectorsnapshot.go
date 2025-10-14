@@ -143,7 +143,8 @@ type ConnectorSnapshotGetResponse struct {
 	// Time the Snapshot was recorded (seconds since the Unix epoch)
 	T float64 `json:"t,required"`
 	// Version
-	V string `json:"v,required"`
+	V     string                             `json:"v,required"`
+	Bonds []ConnectorSnapshotGetResponseBond `json:"bonds"`
 	// Count of processors/cores
 	CPUCount float64 `json:"cpu_count"`
 	// Percentage of time over a 10 second window that tasks were stalled
@@ -483,6 +484,7 @@ type connectorSnapshotGetResponseJSON struct {
 	CountTransmitFailures          apijson.Field
 	T                              apijson.Field
 	V                              apijson.Field
+	Bonds                          apijson.Field
 	CPUCount                       apijson.Field
 	CPUPressure10s                 apijson.Field
 	CPUPressure300s                apijson.Field
@@ -655,6 +657,32 @@ func (r *ConnectorSnapshotGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r connectorSnapshotGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Snapshot Bond
+type ConnectorSnapshotGetResponseBond struct {
+	// Name of the network interface
+	Name string `json:"name,required"`
+	// Current status of the network interface
+	Status string                               `json:"status,required"`
+	JSON   connectorSnapshotGetResponseBondJSON `json:"-"`
+}
+
+// connectorSnapshotGetResponseBondJSON contains the JSON metadata for the struct
+// [ConnectorSnapshotGetResponseBond]
+type connectorSnapshotGetResponseBondJSON struct {
+	Name        apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorSnapshotGetResponseBond) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorSnapshotGetResponseBondJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1013,8 +1041,10 @@ type ConnectorSnapshotGetResponseTunnel struct {
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id,required"`
 	// Connector identifier
-	ConnectorID string                                 `json:"connector_id"`
-	JSON        connectorSnapshotGetResponseTunnelJSON `json:"-"`
+	ConnectorID string `json:"connector_id"`
+	// MTU as measured between the two ends of the tunnel
+	ProbedMtu float64                                `json:"probed_mtu"`
+	JSON      connectorSnapshotGetResponseTunnelJSON `json:"-"`
 }
 
 // connectorSnapshotGetResponseTunnelJSON contains the JSON metadata for the struct
@@ -1025,6 +1055,7 @@ type connectorSnapshotGetResponseTunnelJSON struct {
 	InterfaceName apijson.Field
 	TunnelID      apijson.Field
 	ConnectorID   apijson.Field
+	ProbedMtu     apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
