@@ -37,7 +37,9 @@ func NewDNSTimeseriesGroupService(opts ...option.RequestOption) (r *DNSTimeserie
 
 // Retrieves the distribution of DNS queries by cache status over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) CacheHit(ctx context.Context, query DNSTimeseriesGroupCacheHitParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupCacheHitResponse, err error) {
 	var env DNSTimeseriesGroupCacheHitResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +55,9 @@ func (r *DNSTimeseriesGroupService) CacheHit(ctx context.Context, query DNSTimes
 // Retrieves the distribution of DNS responses by DNSSEC (DNS Security Extensions)
 // support over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) DNSSEC(ctx context.Context, query DNSTimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupDNSSECResponse, err error) {
 	var env DNSTimeseriesGroupDNSSECResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +73,9 @@ func (r *DNSTimeseriesGroupService) DNSSEC(ctx context.Context, query DNSTimeser
 // Retrieves the distribution of DNS queries by DNSSEC (DNS Security Extensions)
 // client awareness over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) DNSSECAware(ctx context.Context, query DNSTimeseriesGroupDNSSECAwareParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupDNSSECAwareResponse, err error) {
 	var env DNSTimeseriesGroupDNSSECAwareResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -85,7 +91,9 @@ func (r *DNSTimeseriesGroupService) DNSSECAware(ctx context.Context, query DNSTi
 // Retrieves the distribution of DNSSEC-validated answers by end-to-end security
 // status over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) DNSSECE2E(ctx context.Context, query DNSTimeseriesGroupDNSSECE2EParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupDnssece2EResponse, err error) {
 	var env DNSTimeseriesGroupDnssece2EResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -100,7 +108,9 @@ func (r *DNSTimeseriesGroupService) DNSSECE2E(ctx context.Context, query DNSTime
 
 // Retrieves the distribution of DNS queries by IP version over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) IPVersion(ctx context.Context, query DNSTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupIPVersionResponse, err error) {
 	var env DNSTimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -115,7 +125,9 @@ func (r *DNSTimeseriesGroupService) IPVersion(ctx context.Context, query DNSTime
 
 // Retrieves the distribution of DNS queries by matching answers over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) MatchingAnswer(ctx context.Context, query DNSTimeseriesGroupMatchingAnswerParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupMatchingAnswerResponse, err error) {
 	var env DNSTimeseriesGroupMatchingAnswerResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -130,7 +142,9 @@ func (r *DNSTimeseriesGroupService) MatchingAnswer(ctx context.Context, query DN
 
 // Retrieves the distribution of DNS queries by DNS transport protocol over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) Protocol(ctx context.Context, query DNSTimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupProtocolResponse, err error) {
 	var env DNSTimeseriesGroupProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -145,7 +159,9 @@ func (r *DNSTimeseriesGroupService) Protocol(ctx context.Context, query DNSTimes
 
 // Retrieves the distribution of DNS queries by type over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) QueryType(ctx context.Context, query DNSTimeseriesGroupQueryTypeParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupQueryTypeResponse, err error) {
 	var env DNSTimeseriesGroupQueryTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -160,7 +176,9 @@ func (r *DNSTimeseriesGroupService) QueryType(ctx context.Context, query DNSTime
 
 // Retrieves the distribution of DNS queries by response code over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) ResponseCode(ctx context.Context, query DNSTimeseriesGroupResponseCodeParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupResponseCodeResponse, err error) {
 	var env DNSTimeseriesGroupResponseCodeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -175,7 +193,9 @@ func (r *DNSTimeseriesGroupService) ResponseCode(ctx context.Context, query DNST
 
 // Retrieves the distribution of DNS queries by minimum answer TTL over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar DNS Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/timeseries_groups_v2/)
+// instead.
 func (r *DNSTimeseriesGroupService) ResponseTTL(ctx context.Context, query DNSTimeseriesGroupResponseTTLParams, opts ...option.RequestOption) (res *DNSTimeseriesGroupResponseTTLResponse, err error) {
 	var env DNSTimeseriesGroupResponseTTLResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
