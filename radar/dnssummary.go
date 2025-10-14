@@ -37,9 +37,7 @@ func NewDNSSummaryService(opts ...option.RequestOption) (r *DNSSummaryService) {
 
 // Retrieves the distribution of DNS queries by cache status.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) CacheHit(ctx context.Context, query DNSSummaryCacheHitParams, opts ...option.RequestOption) (res *DNSSummaryCacheHitResponse, err error) {
 	var env DNSSummaryCacheHitResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,9 +53,7 @@ func (r *DNSSummaryService) CacheHit(ctx context.Context, query DNSSummaryCacheH
 // Retrieves the distribution of DNS responses by DNSSEC (DNS Security Extensions)
 // support.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) DNSSEC(ctx context.Context, query DNSSummaryDNSSECParams, opts ...option.RequestOption) (res *DNSSummaryDNSSECResponse, err error) {
 	var env DNSSummaryDNSSECResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,9 +69,7 @@ func (r *DNSSummaryService) DNSSEC(ctx context.Context, query DNSSummaryDNSSECPa
 // Retrieves the distribution of DNS queries by DNSSEC (DNS Security Extensions)
 // client awareness.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) DNSSECAware(ctx context.Context, query DNSSummaryDNSSECAwareParams, opts ...option.RequestOption) (res *DNSSummaryDNSSECAwareResponse, err error) {
 	var env DNSSummaryDNSSECAwareResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -91,9 +85,7 @@ func (r *DNSSummaryService) DNSSECAware(ctx context.Context, query DNSSummaryDNS
 // Retrieves the distribution of DNSSEC-validated answers by end-to-end security
 // status.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) DNSSECE2E(ctx context.Context, query DNSSummaryDNSSECE2EParams, opts ...option.RequestOption) (res *DNSSummaryDnssece2EResponse, err error) {
 	var env DNSSummaryDnssece2EResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -108,9 +100,7 @@ func (r *DNSSummaryService) DNSSECE2E(ctx context.Context, query DNSSummaryDNSSE
 
 // Retrieves the distribution of DNS queries by IP version.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) IPVersion(ctx context.Context, query DNSSummaryIPVersionParams, opts ...option.RequestOption) (res *DNSSummaryIPVersionResponse, err error) {
 	var env DNSSummaryIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,9 +115,7 @@ func (r *DNSSummaryService) IPVersion(ctx context.Context, query DNSSummaryIPVer
 
 // Retrieves the distribution of DNS queries by matching answers.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) MatchingAnswer(ctx context.Context, query DNSSummaryMatchingAnswerParams, opts ...option.RequestOption) (res *DNSSummaryMatchingAnswerResponse, err error) {
 	var env DNSSummaryMatchingAnswerResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -142,9 +130,7 @@ func (r *DNSSummaryService) MatchingAnswer(ctx context.Context, query DNSSummary
 
 // Retrieves the distribution of DNS queries by DNS transport protocol.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) Protocol(ctx context.Context, query DNSSummaryProtocolParams, opts ...option.RequestOption) (res *DNSSummaryProtocolResponse, err error) {
 	var env DNSSummaryProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -159,9 +145,7 @@ func (r *DNSSummaryService) Protocol(ctx context.Context, query DNSSummaryProtoc
 
 // Retrieves the distribution of DNS queries by type.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) QueryType(ctx context.Context, query DNSSummaryQueryTypeParams, opts ...option.RequestOption) (res *DNSSummaryQueryTypeResponse, err error) {
 	var env DNSSummaryQueryTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -176,9 +160,7 @@ func (r *DNSSummaryService) QueryType(ctx context.Context, query DNSSummaryQuery
 
 // Retrieves the distribution of DNS queries by response code.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) ResponseCode(ctx context.Context, query DNSSummaryResponseCodeParams, opts ...option.RequestOption) (res *DNSSummaryResponseCodeResponse, err error) {
 	var env DNSSummaryResponseCodeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -193,9 +175,7 @@ func (r *DNSSummaryService) ResponseCode(ctx context.Context, query DNSSummaryRe
 
 // Retrieves the distribution of DNS queries by minimum response TTL.
 //
-// Deprecated: Use
-// [Radar DNS Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/dns/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *DNSSummaryService) ResponseTTL(ctx context.Context, query DNSSummaryResponseTTLParams, opts ...option.RequestOption) (res *DNSSummaryResponseTTLResponse, err error) {
 	var env DNSSummaryResponseTTLResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

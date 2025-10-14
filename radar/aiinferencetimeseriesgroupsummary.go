@@ -37,9 +37,7 @@ func NewAIInferenceTimeseriesGroupSummaryService(opts ...option.RequestOption) (
 
 // Retrieves the distribution of unique accounts by model over time.
 //
-// Deprecated: Use
-// [Radar AI Inference Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, query AIInferenceTimeseriesGroupSummaryModelParams, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupSummaryModelResponse, err error) {
 	var env AIInferenceTimeseriesGroupSummaryModelResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,9 +52,7 @@ func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, qu
 
 // Retrieves the distribution of unique accounts by task over time.
 //
-// Deprecated: Use
-// [Radar AI Inference Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AIInferenceTimeseriesGroupSummaryService) Task(ctx context.Context, query AIInferenceTimeseriesGroupSummaryTaskParams, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupSummaryTaskResponse, err error) {
 	var env AIInferenceTimeseriesGroupSummaryTaskResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -37,9 +37,7 @@ func NewAIInferenceSummaryService(opts ...option.RequestOption) (r *AIInferenceS
 
 // Retrieves the distribution of unique accounts by model.
 //
-// Deprecated: Use
-// [Radar AI Inference Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AIInferenceSummaryService) Model(ctx context.Context, query AIInferenceSummaryModelParams, opts ...option.RequestOption) (res *AIInferenceSummaryModelResponse, err error) {
 	var env AIInferenceSummaryModelResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,9 +52,7 @@ func (r *AIInferenceSummaryService) Model(ctx context.Context, query AIInference
 
 // Retrieves the distribution of unique accounts by task.
 //
-// Deprecated: Use
-// [Radar AI Inference Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AIInferenceSummaryService) Task(ctx context.Context, query AIInferenceSummaryTaskParams, opts ...option.RequestOption) (res *AIInferenceSummaryTaskResponse, err error) {
 	var env AIInferenceSummaryTaskResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

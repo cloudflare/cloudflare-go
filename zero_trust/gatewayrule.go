@@ -364,10 +364,12 @@ type GatewayRule struct {
 	Identity string `json:"identity"`
 	// Indicate that this rule is shared via the Orgs API and read only.
 	ReadOnly bool `json:"read_only"`
-	// Defines settings for this rule. Settings apply only to specific rule types and
-	// must use compatible selectors. If Terraform detects drift, confirm the setting
-	// supports your rule type and check whether the API modifies the value. Use
-	// API-returned values in your configuration to prevent drift.
+	// Set settings related to this rule. Each setting is only valid for specific rule
+	// types and can only be used with the appropriate selectors. If Terraform drift is
+	// observed in these setting values, verify that the setting is supported for the
+	// given rule type and that the API response reflects the requested value. If the
+	// API response returns sanitized or modified values that differ from the request,
+	// use the API-provided values in Terraform to ensure consistency.
 	RuleSettings RuleSetting `json:"rule_settings"`
 	// Defines the schedule for activating DNS policies. Settable only for `dns` and
 	// `dns_resolver` rules.
@@ -486,10 +488,12 @@ func (r gatewayRuleExpirationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Defines settings for this rule. Settings apply only to specific rule types and
-// must use compatible selectors. If Terraform detects drift, confirm the setting
-// supports your rule type and check whether the API modifies the value. Use
-// API-returned values in your configuration to prevent drift.
+// Set settings related to this rule. Each setting is only valid for specific rule
+// types and can only be used with the appropriate selectors. If Terraform drift is
+// observed in these setting values, verify that the setting is supported for the
+// given rule type and that the API response reflects the requested value. If the
+// API response returns sanitized or modified values that differ from the request,
+// use the API-provided values in Terraform to ensure consistency.
 type RuleSetting struct {
 	// Add custom headers to allowed requests as key-value pairs. Use header names as
 	// keys that map to arrays of header values. Settable only for `http` rules with
@@ -1203,10 +1207,12 @@ func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 	return false
 }
 
-// Defines settings for this rule. Settings apply only to specific rule types and
-// must use compatible selectors. If Terraform detects drift, confirm the setting
-// supports your rule type and check whether the API modifies the value. Use
-// API-returned values in your configuration to prevent drift.
+// Set settings related to this rule. Each setting is only valid for specific rule
+// types and can only be used with the appropriate selectors. If Terraform drift is
+// observed in these setting values, verify that the setting is supported for the
+// given rule type and that the API response reflects the requested value. If the
+// API response returns sanitized or modified values that differ from the request,
+// use the API-provided values in Terraform to ensure consistency.
 type RuleSettingParam struct {
 	// Add custom headers to allowed requests as key-value pairs. Use header names as
 	// keys that map to arrays of header values. Settable only for `http` rules with
@@ -1664,10 +1670,12 @@ type GatewayRuleNewParams struct {
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
 	// to manage precedence via Terraform.
 	Precedence param.Field[int64] `json:"precedence"`
-	// Defines settings for this rule. Settings apply only to specific rule types and
-	// must use compatible selectors. If Terraform detects drift, confirm the setting
-	// supports your rule type and check whether the API modifies the value. Use
-	// API-returned values in your configuration to prevent drift.
+	// Set settings related to this rule. Each setting is only valid for specific rule
+	// types and can only be used with the appropriate selectors. If Terraform drift is
+	// observed in these setting values, verify that the setting is supported for the
+	// given rule type and that the API response reflects the requested value. If the
+	// API response returns sanitized or modified values that differ from the request,
+	// use the API-provided values in Terraform to ensure consistency.
 	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
 	// Defines the schedule for activating DNS policies. Settable only for `dns` and
 	// `dns_resolver` rules.
@@ -1810,10 +1818,12 @@ type GatewayRuleUpdateParams struct {
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
 	// to manage precedence via Terraform.
 	Precedence param.Field[int64] `json:"precedence"`
-	// Defines settings for this rule. Settings apply only to specific rule types and
-	// must use compatible selectors. If Terraform detects drift, confirm the setting
-	// supports your rule type and check whether the API modifies the value. Use
-	// API-returned values in your configuration to prevent drift.
+	// Set settings related to this rule. Each setting is only valid for specific rule
+	// types and can only be used with the appropriate selectors. If Terraform drift is
+	// observed in these setting values, verify that the setting is supported for the
+	// given rule type and that the API response reflects the requested value. If the
+	// API response returns sanitized or modified values that differ from the request,
+	// use the API-provided values in Terraform to ensure consistency.
 	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
 	// Defines the schedule for activating DNS policies. Settable only for `dns` and
 	// `dns_resolver` rules.
