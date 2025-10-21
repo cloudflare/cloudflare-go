@@ -21,6 +21,7 @@ TEST_PATHS=(
 	organizations/organization_test.go
 	organizations/organizationaccount_test.go
 	organizations/organizationprofile_test.go
+	organizations/member_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
