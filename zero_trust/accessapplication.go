@@ -29382,6 +29382,8 @@ type AccessApplicationListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// Search for apps by other listed query parameters.
 	Search param.Field[string] `query:"search"`
+	// Target Criteria attributes in key=value format.
+	TargetAttributes param.Field[string] `query:"target_attributes"`
 }
 
 // URLQuery serializes [AccessApplicationListParams]'s query parameters as
