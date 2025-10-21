@@ -273,14 +273,15 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.List(context.TODO(), zero_trust.AccessApplicationListParams{
-		AccountID: cloudflare.F("account_id"),
-		AUD:       cloudflare.F("aud"),
-		Domain:    cloudflare.F("domain"),
-		Exact:     cloudflare.F(true),
-		Name:      cloudflare.F("name"),
-		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(0)),
-		Search:    cloudflare.F("search"),
+		AccountID:        cloudflare.F("account_id"),
+		AUD:              cloudflare.F("aud"),
+		Domain:           cloudflare.F("domain"),
+		Exact:            cloudflare.F(true),
+		Name:             cloudflare.F("name"),
+		Page:             cloudflare.F(int64(0)),
+		PerPage:          cloudflare.F(int64(0)),
+		Search:           cloudflare.F("search"),
+		TargetAttributes: cloudflare.F("target_attributes"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
