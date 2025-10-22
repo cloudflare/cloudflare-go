@@ -6490,6 +6490,9 @@ type SetConfigRuleActionParameters struct {
 	// Whether to enable Hotlink Protection.
 	HotlinkProtection bool `json:"hotlink_protection"`
 	// Whether to enable Mirage.
+	//
+	// Deprecated: Mirage is deprecated. More information at
+	// https://developers.cloudflare.com/speed/optimization/images/mirage/.
 	Mirage bool `json:"mirage"`
 	// Whether to enable Opportunistic Encryption.
 	OpportunisticEncryption bool `json:"opportunistic_encryption"`
@@ -6821,6 +6824,9 @@ type SetConfigRuleActionParametersParam struct {
 	// Whether to enable Hotlink Protection.
 	HotlinkProtection param.Field[bool] `json:"hotlink_protection"`
 	// Whether to enable Mirage.
+	//
+	// Deprecated: Mirage is deprecated. More information at
+	// https://developers.cloudflare.com/speed/optimization/images/mirage/.
 	Mirage param.Field[bool] `json:"mirage"`
 	// Whether to enable Opportunistic Encryption.
 	OpportunisticEncryption param.Field[bool] `json:"opportunistic_encryption"`

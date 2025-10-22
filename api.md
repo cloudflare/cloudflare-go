@@ -8585,6 +8585,7 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventListResponse">ThreatEventListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventDeleteResponse">ThreatEventDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventEditResponse">ThreatEventEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventGetResponse">ThreatEventGetResponse</a>
 
 Methods:
 
@@ -8593,6 +8594,7 @@ Methods:
 - <code title="delete /accounts/{account_id}/cloudforce-one/events/{event_id}">client.CloudforceOne.ThreatEvents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, eventID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventDeleteParams">ThreatEventDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventDeleteResponse">ThreatEventDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="post /accounts/{account_id}/cloudforce-one/events/create/bulk">client.CloudforceOne.ThreatEvents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventService.BulkNew">BulkNew</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventBulkNewParams">ThreatEventBulkNewParams</a>) (<a href="https://pkg.go.dev/builtin#float64">float64</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="patch /accounts/{account_id}/cloudforce-one/events/{event_id}">client.CloudforceOne.ThreatEvents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, eventID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventEditParams">ThreatEventEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventEditResponse">ThreatEventEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/cloudforce-one/events/{event_id}">client.CloudforceOne.ThreatEvents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, eventID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventGetParams">ThreatEventGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventGetResponse">ThreatEventGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Attackers
 
@@ -8655,6 +8657,14 @@ Methods:
 #### Health
 
 ### IndicatorTypes
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventIndicatorTypeListResponse">ThreatEventIndicatorTypeListResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/cloudforce-one/events/indicatorTypes">client.CloudforceOne.ThreatEvents.IndicatorTypes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventIndicatorTypeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventIndicatorTypeListParams">ThreatEventIndicatorTypeListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloudforce_one#ThreatEventIndicatorTypeListResponse">ThreatEventIndicatorTypeListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Raw
 
