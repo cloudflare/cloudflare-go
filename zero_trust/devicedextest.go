@@ -190,12 +190,12 @@ func (r deviceDEXTestNewResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestNewResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host"`
+	Host string `json:"host,required"`
 	// The type of test.
-	Kind string `json:"kind"`
+	Kind DeviceDEXTestNewResponseDataKind `json:"kind,required"`
 	// The HTTP request method type.
-	Method string                           `json:"method"`
-	JSON   deviceDEXTestNewResponseDataJSON `json:"-"`
+	Method DeviceDEXTestNewResponseDataMethod `json:"method"`
+	JSON   deviceDEXTestNewResponseDataJSON   `json:"-"`
 }
 
 // deviceDEXTestNewResponseDataJSON contains the JSON metadata for the struct
@@ -216,9 +216,40 @@ func (r deviceDEXTestNewResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of test.
+type DeviceDEXTestNewResponseDataKind string
+
+const (
+	DeviceDEXTestNewResponseDataKindHTTP       DeviceDEXTestNewResponseDataKind = "http"
+	DeviceDEXTestNewResponseDataKindTraceroute DeviceDEXTestNewResponseDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestNewResponseDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestNewResponseDataKindHTTP, DeviceDEXTestNewResponseDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestNewResponseDataMethod string
+
+const (
+	DeviceDEXTestNewResponseDataMethodGet DeviceDEXTestNewResponseDataMethod = "GET"
+)
+
+func (r DeviceDEXTestNewResponseDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestNewResponseDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestNewResponseTargetPolicy struct {
-	// The id of the DEX rule
-	ID string `json:"id"`
+	// API Resource UUID tag.
+	ID string `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -291,12 +322,12 @@ func (r deviceDEXTestUpdateResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestUpdateResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host"`
+	Host string `json:"host,required"`
 	// The type of test.
-	Kind string `json:"kind"`
+	Kind DeviceDEXTestUpdateResponseDataKind `json:"kind,required"`
 	// The HTTP request method type.
-	Method string                              `json:"method"`
-	JSON   deviceDEXTestUpdateResponseDataJSON `json:"-"`
+	Method DeviceDEXTestUpdateResponseDataMethod `json:"method"`
+	JSON   deviceDEXTestUpdateResponseDataJSON   `json:"-"`
 }
 
 // deviceDEXTestUpdateResponseDataJSON contains the JSON metadata for the struct
@@ -317,9 +348,40 @@ func (r deviceDEXTestUpdateResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of test.
+type DeviceDEXTestUpdateResponseDataKind string
+
+const (
+	DeviceDEXTestUpdateResponseDataKindHTTP       DeviceDEXTestUpdateResponseDataKind = "http"
+	DeviceDEXTestUpdateResponseDataKindTraceroute DeviceDEXTestUpdateResponseDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestUpdateResponseDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestUpdateResponseDataKindHTTP, DeviceDEXTestUpdateResponseDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestUpdateResponseDataMethod string
+
+const (
+	DeviceDEXTestUpdateResponseDataMethodGet DeviceDEXTestUpdateResponseDataMethod = "GET"
+)
+
+func (r DeviceDEXTestUpdateResponseDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestUpdateResponseDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestUpdateResponseTargetPolicy struct {
-	// The id of the DEX rule
-	ID string `json:"id"`
+	// API Resource UUID tag.
+	ID string `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -392,12 +454,12 @@ func (r deviceDEXTestListResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestListResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host"`
+	Host string `json:"host,required"`
 	// The type of test.
-	Kind string `json:"kind"`
+	Kind DeviceDEXTestListResponseDataKind `json:"kind,required"`
 	// The HTTP request method type.
-	Method string                            `json:"method"`
-	JSON   deviceDEXTestListResponseDataJSON `json:"-"`
+	Method DeviceDEXTestListResponseDataMethod `json:"method"`
+	JSON   deviceDEXTestListResponseDataJSON   `json:"-"`
 }
 
 // deviceDEXTestListResponseDataJSON contains the JSON metadata for the struct
@@ -418,9 +480,40 @@ func (r deviceDEXTestListResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of test.
+type DeviceDEXTestListResponseDataKind string
+
+const (
+	DeviceDEXTestListResponseDataKindHTTP       DeviceDEXTestListResponseDataKind = "http"
+	DeviceDEXTestListResponseDataKindTraceroute DeviceDEXTestListResponseDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestListResponseDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestListResponseDataKindHTTP, DeviceDEXTestListResponseDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestListResponseDataMethod string
+
+const (
+	DeviceDEXTestListResponseDataMethodGet DeviceDEXTestListResponseDataMethod = "GET"
+)
+
+func (r DeviceDEXTestListResponseDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestListResponseDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestListResponseTargetPolicy struct {
-	// The id of the DEX rule
-	ID string `json:"id"`
+	// API Resource UUID tag.
+	ID string `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -514,12 +607,12 @@ func (r deviceDEXTestDeleteResponseDEXTestJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestDeleteResponseDEXTestsData struct {
 	// The desired endpoint to test.
-	Host string `json:"host"`
+	Host string `json:"host,required"`
 	// The type of test.
-	Kind string `json:"kind"`
+	Kind DeviceDEXTestDeleteResponseDEXTestsDataKind `json:"kind,required"`
 	// The HTTP request method type.
-	Method string                                      `json:"method"`
-	JSON   deviceDEXTestDeleteResponseDEXTestsDataJSON `json:"-"`
+	Method DeviceDEXTestDeleteResponseDEXTestsDataMethod `json:"method"`
+	JSON   deviceDEXTestDeleteResponseDEXTestsDataJSON   `json:"-"`
 }
 
 // deviceDEXTestDeleteResponseDEXTestsDataJSON contains the JSON metadata for the
@@ -540,9 +633,40 @@ func (r deviceDEXTestDeleteResponseDEXTestsDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of test.
+type DeviceDEXTestDeleteResponseDEXTestsDataKind string
+
+const (
+	DeviceDEXTestDeleteResponseDEXTestsDataKindHTTP       DeviceDEXTestDeleteResponseDEXTestsDataKind = "http"
+	DeviceDEXTestDeleteResponseDEXTestsDataKindTraceroute DeviceDEXTestDeleteResponseDEXTestsDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestDeleteResponseDEXTestsDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestDeleteResponseDEXTestsDataKindHTTP, DeviceDEXTestDeleteResponseDEXTestsDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestDeleteResponseDEXTestsDataMethod string
+
+const (
+	DeviceDEXTestDeleteResponseDEXTestsDataMethodGet DeviceDEXTestDeleteResponseDEXTestsDataMethod = "GET"
+)
+
+func (r DeviceDEXTestDeleteResponseDEXTestsDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestDeleteResponseDEXTestsDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestDeleteResponseDEXTestsTargetPolicy struct {
-	// The id of the DEX rule
-	ID string `json:"id"`
+	// API Resource UUID tag.
+	ID string `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -615,12 +739,12 @@ func (r deviceDEXTestGetResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestGetResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host"`
+	Host string `json:"host,required"`
 	// The type of test.
-	Kind string `json:"kind"`
+	Kind DeviceDEXTestGetResponseDataKind `json:"kind,required"`
 	// The HTTP request method type.
-	Method string                           `json:"method"`
-	JSON   deviceDEXTestGetResponseDataJSON `json:"-"`
+	Method DeviceDEXTestGetResponseDataMethod `json:"method"`
+	JSON   deviceDEXTestGetResponseDataJSON   `json:"-"`
 }
 
 // deviceDEXTestGetResponseDataJSON contains the JSON metadata for the struct
@@ -641,9 +765,40 @@ func (r deviceDEXTestGetResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of test.
+type DeviceDEXTestGetResponseDataKind string
+
+const (
+	DeviceDEXTestGetResponseDataKindHTTP       DeviceDEXTestGetResponseDataKind = "http"
+	DeviceDEXTestGetResponseDataKindTraceroute DeviceDEXTestGetResponseDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestGetResponseDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestGetResponseDataKindHTTP, DeviceDEXTestGetResponseDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestGetResponseDataMethod string
+
+const (
+	DeviceDEXTestGetResponseDataMethodGet DeviceDEXTestGetResponseDataMethod = "GET"
+)
+
+func (r DeviceDEXTestGetResponseDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestGetResponseDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestGetResponseTargetPolicy struct {
-	// The id of the DEX rule
-	ID string `json:"id"`
+	// API Resource UUID tag.
+	ID string `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -695,20 +850,51 @@ func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
 // conduct the test.
 type DeviceDEXTestNewParamsData struct {
 	// The desired endpoint to test.
-	Host param.Field[string] `json:"host"`
+	Host param.Field[string] `json:"host,required"`
 	// The type of test.
-	Kind param.Field[string] `json:"kind"`
+	Kind param.Field[DeviceDEXTestNewParamsDataKind] `json:"kind,required"`
 	// The HTTP request method type.
-	Method param.Field[string] `json:"method"`
+	Method param.Field[DeviceDEXTestNewParamsDataMethod] `json:"method"`
 }
 
 func (r DeviceDEXTestNewParamsData) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The type of test.
+type DeviceDEXTestNewParamsDataKind string
+
+const (
+	DeviceDEXTestNewParamsDataKindHTTP       DeviceDEXTestNewParamsDataKind = "http"
+	DeviceDEXTestNewParamsDataKindTraceroute DeviceDEXTestNewParamsDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestNewParamsDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestNewParamsDataKindHTTP, DeviceDEXTestNewParamsDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestNewParamsDataMethod string
+
+const (
+	DeviceDEXTestNewParamsDataMethodGet DeviceDEXTestNewParamsDataMethod = "GET"
+)
+
+func (r DeviceDEXTestNewParamsDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestNewParamsDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestNewParamsTargetPolicy struct {
-	// The id of the DEX rule
-	ID param.Field[string] `json:"id"`
+	// API Resource UUID tag.
+	ID param.Field[string] `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default param.Field[bool] `json:"default"`
 	// The name of the DEX rule
@@ -884,20 +1070,51 @@ func (r DeviceDEXTestUpdateParams) MarshalJSON() (data []byte, err error) {
 // conduct the test.
 type DeviceDEXTestUpdateParamsData struct {
 	// The desired endpoint to test.
-	Host param.Field[string] `json:"host"`
+	Host param.Field[string] `json:"host,required"`
 	// The type of test.
-	Kind param.Field[string] `json:"kind"`
+	Kind param.Field[DeviceDEXTestUpdateParamsDataKind] `json:"kind,required"`
 	// The HTTP request method type.
-	Method param.Field[string] `json:"method"`
+	Method param.Field[DeviceDEXTestUpdateParamsDataMethod] `json:"method"`
 }
 
 func (r DeviceDEXTestUpdateParamsData) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The type of test.
+type DeviceDEXTestUpdateParamsDataKind string
+
+const (
+	DeviceDEXTestUpdateParamsDataKindHTTP       DeviceDEXTestUpdateParamsDataKind = "http"
+	DeviceDEXTestUpdateParamsDataKindTraceroute DeviceDEXTestUpdateParamsDataKind = "traceroute"
+)
+
+func (r DeviceDEXTestUpdateParamsDataKind) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestUpdateParamsDataKindHTTP, DeviceDEXTestUpdateParamsDataKindTraceroute:
+		return true
+	}
+	return false
+}
+
+// The HTTP request method type.
+type DeviceDEXTestUpdateParamsDataMethod string
+
+const (
+	DeviceDEXTestUpdateParamsDataMethodGet DeviceDEXTestUpdateParamsDataMethod = "GET"
+)
+
+func (r DeviceDEXTestUpdateParamsDataMethod) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestUpdateParamsDataMethodGet:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestUpdateParamsTargetPolicy struct {
-	// The id of the DEX rule
-	ID param.Field[string] `json:"id"`
+	// API Resource UUID tag.
+	ID param.Field[string] `json:"id,required"`
 	// Whether the DEX rule is the account default
 	Default param.Field[bool] `json:"default"`
 	// The name of the DEX rule

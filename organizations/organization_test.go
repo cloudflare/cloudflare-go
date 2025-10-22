@@ -146,7 +146,7 @@ func TestOrganizationDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Organizations.Delete(context.TODO(), "a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8")
+	err := client.Organizations.Delete(context.TODO(), "a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
