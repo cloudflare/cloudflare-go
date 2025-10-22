@@ -596,6 +596,7 @@ TEST_PATHS=(
 	cloudforce_one/threateventcategory_test.go
 	cloudforce_one/threateventcountry_test.go
 	cloudforce_one/threateventdataset_test.go
+	cloudforce_one/threateventindicatortype_test.go
 	cloudforce_one/threateventraw_test.go
 	cloudforce_one/threateventrelate_test.go
 	cloudforce_one/threateventtag_test.go
