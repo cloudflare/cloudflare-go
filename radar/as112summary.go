@@ -38,7 +38,9 @@ func NewAS112SummaryService(opts ...option.RequestOption) (r *AS112SummaryServic
 // Retrieves the distribution of DNS queries to AS112 by DNSSEC (DNS Security
 // Extensions) support.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
+// instead.
 func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSSECParams, opts ...option.RequestOption) (res *AS112SummaryDNSSECResponse, err error) {
 	var env AS112SummaryDNSSECResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +56,9 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 // Retrieves the distribution of DNS queries to AS112 by EDNS (Extension Mechanisms
 // for DNS) support.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
+// instead.
 func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsParams, opts ...option.RequestOption) (res *AS112SummaryEdnsResponse, err error) {
 	var env AS112SummaryEdnsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +73,9 @@ func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsPa
 
 // Retrieves the distribution of DNS queries to AS112 by IP version.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
+// instead.
 func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryIPVersionParams, opts ...option.RequestOption) (res *AS112SummaryIPVersionResponse, err error) {
 	var env AS112SummaryIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -84,7 +90,9 @@ func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryI
 
 // Retrieves the distribution of DNS queries to AS112 by protocol.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
+// instead.
 func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryProtocolParams, opts ...option.RequestOption) (res *AS112SummaryProtocolResponse, err error) {
 	var env AS112SummaryProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -99,7 +107,9 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 
 // Retrieves the distribution of DNS queries to AS112 by type.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
+// instead.
 func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQueryTypeParams, opts ...option.RequestOption) (res *AS112SummaryQueryTypeResponse, err error) {
 	var env AS112SummaryQueryTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -114,7 +124,9 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 
 // Retrieves the distribution of AS112 DNS requests classified by response code.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
+// instead.
 func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112SummaryResponseCodesParams, opts ...option.RequestOption) (res *AS112SummaryResponseCodesResponse, err error) {
 	var env AS112SummaryResponseCodesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
