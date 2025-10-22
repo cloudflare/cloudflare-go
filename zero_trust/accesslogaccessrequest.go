@@ -59,13 +59,6 @@ type AccessLogAccessRequestListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The chronological sorting order for the logs.
 	Direction param.Field[AccessLogAccessRequestListParamsDirection] `query:"direction"`
-	// Filter by user email. Defaults to substring matching. To force exact matching,
-	// set `email_exact=true`. Example (default): `email=@example.com` returns all
-	// events with that domain. Example (exact):
-	// `email=user@example.com&email_exact=true` returns only that user.
-	Email param.Field[string] `query:"email" format:"email"`
-	// When true, `email` is matched exactly instead of substring matching.
-	EmailExact param.Field[bool] `query:"email_exact"`
 	// The maximum number of log entries to retrieve.
 	Limit param.Field[int64] `query:"limit"`
 	// Page number of results.
@@ -76,8 +69,6 @@ type AccessLogAccessRequestListParams struct {
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// The latest event timestamp to query.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
-	// Filter by user UUID.
-	UserID param.Field[string] `query:"user_id" format:"uuid"`
 }
 
 // URLQuery serializes [AccessLogAccessRequestListParams]'s query parameters as
