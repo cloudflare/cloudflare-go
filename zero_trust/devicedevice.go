@@ -165,7 +165,10 @@ type DeviceDeviceListResponse struct {
 	// Additional operating system version data. For macOS or iOS, the Product Version
 	// Extra. For Linux, the kernel release version.
 	OSVersionExtra string `json:"os_version_extra,nullable"`
-	// The public IP address of the WARP client.
+	// **Deprecated**: IP information is provided by DEX - see
+	// https://developers.cloudflare.com/api/resources/zero_trust/subresources/dex/subresources/fleet_status/subresources/devices/methods/list/
+	//
+	// Deprecated: deprecated
 	PublicIP string `json:"public_ip,nullable"`
 	// The device serial number.
 	SerialNumber string                       `json:"serial_number,nullable"`
@@ -334,7 +337,10 @@ type DeviceDeviceGetResponse struct {
 	// Additional operating system version data. For macOS or iOS, the Product Version
 	// Extra. For Linux, the kernel release version.
 	OSVersionExtra string `json:"os_version_extra,nullable"`
-	// The public IP address of the WARP client.
+	// **Deprecated**: IP information is provided by DEX - see
+	// https://developers.cloudflare.com/api/resources/zero_trust/subresources/dex/subresources/fleet_status/subresources/devices/methods/list/
+	//
+	// Deprecated: deprecated
 	PublicIP string `json:"public_ip,nullable"`
 	// The device serial number.
 	SerialNumber string                      `json:"serial_number,nullable"`
