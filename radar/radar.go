@@ -28,6 +28,7 @@ type RadarService struct {
 	Email             *EmailService
 	Attacks           *AttackService
 	Entities          *EntityService
+	Geolocations      *GeolocationService
 	HTTP              *HTTPService
 	Quality           *QualityService
 	Ranking           *RankingService
@@ -57,6 +58,7 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.Email = NewEmailService(opts...)
 	r.Attacks = NewAttackService(opts...)
 	r.Entities = NewEntityService(opts...)
+	r.Geolocations = NewGeolocationService(opts...)
 	r.HTTP = NewHTTPService(opts...)
 	r.Quality = NewQualityService(opts...)
 	r.Ranking = NewRankingService(opts...)

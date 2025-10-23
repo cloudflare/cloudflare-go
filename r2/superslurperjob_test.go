@@ -31,22 +31,24 @@ func TestSuperSlurperJobNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("account_id"),
 		Overwrite: cloudflare.F(true),
 		Source: cloudflare.F[r2.SuperSlurperJobNewParamsSourceUnion](r2.SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema{
-			Bucket:   cloudflare.F("bucket"),
-			Endpoint: cloudflare.F("endpoint"),
+			Bucket: cloudflare.F("bucket"),
 			Secret: cloudflare.F(r2.SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret{
 				AccessKeyID:     cloudflare.F("accessKeyId"),
 				SecretAccessKey: cloudflare.F("secretAccessKey"),
 			}),
-			Vendor: cloudflare.F(r2.SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendorS3),
+			Vendor:     cloudflare.F(r2.SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendorS3),
+			Endpoint:   cloudflare.F("endpoint"),
+			PathPrefix: cloudflare.F("pathPrefix"),
+			Region:     cloudflare.F("region"),
 		}),
 		Target: cloudflare.F(r2.SuperSlurperJobNewParamsTarget{
-			Bucket:       cloudflare.F("bucket"),
-			Jurisdiction: cloudflare.F(r2.SuperSlurperJobNewParamsTargetJurisdictionDefault),
+			Bucket: cloudflare.F("bucket"),
 			Secret: cloudflare.F(r2.SuperSlurperJobNewParamsTargetSecret{
 				AccessKeyID:     cloudflare.F("accessKeyId"),
 				SecretAccessKey: cloudflare.F("secretAccessKey"),
 			}),
-			Vendor: cloudflare.F(r2.ProviderR2),
+			Vendor:       cloudflare.F(r2.ProviderR2),
+			Jurisdiction: cloudflare.F(r2.SuperSlurperJobNewParamsTargetJurisdictionDefault),
 		}),
 	})
 	if err != nil {

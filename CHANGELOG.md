@@ -1,5 +1,56 @@
 # Changelog
 
+## 6.2.0 (2025-10-22)
+
+Full Changelog: [v6.1.0...v6.2.0](https://github.com/cloudflare/cloudflare-go/compare/v6.1.0...v6.2.0)
+
+### Features
+
+* **zero_trust:** add tenant support ([511b36f](https://github.com/cloudflare/cloudflare-go/commit/511b36f7ca1f2bf66e5b9ca7843097dc221aefdb))
+* **zero_trust:** add connectivity directory service support ([eb26e21](https://github.com/cloudflare/cloudflare-go/commit/eb26e213c151222d857974559fac8c9ffc19b0d5))
+* **organizations:** SDKs for Organizations and OrganizationsProfile ([1dbce03](https://github.com/cloudflare/cloudflare-go/commit/1dbce03083292af3a9d0dfc98d2550308d19c468))
+* **zero_trust**: add MCP portals support ([6f3b557](https://github.com/cloudflare/cloudflare-go/commit/6f3b5570fef970132964799e7aa98c8533376fc8))
+* **radar**: add new group by dimension support ([1dcc5a6](https://github.com/cloudflare/cloudflare-go/commit/1dcc5a68edc8244010ebc1496963181673548972))
+* **content_scanning**: add content scanning support ([1e28d33](https://github.com/cloudflare/cloudflare-go/commit/1e28d339706999bd6880dff4e06819259ae6a9f1))
+* **abuse:** add abuse report support ([c0d3b38](https://github.com/cloudflare/cloudflare-go/commit/eaa5dd01cea097387ecfb78fddd84ffe7f78682e))
+* **queues:** add subscription read support ([3f6d26f](https://github.com/cloudflare/cloudflare-go/commit/3f6d26f82d99f2a7f62b36d0a2de3f46d176f50f))
+* **zero_trust:** add target attributes support ([3f6d26f](https://github.com/cloudflare/cloudflare-go/commit/3f6d26f82d99f2a7f62b36d0a2de3f46d176f50f))
+* **accounts:** add managed by support ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **leaked_credential_checks:** add support for user defined patterns ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **magic_transit:** add support for bonds in connector snapshots ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **organizations:** add support for deleting orgs ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **queues:** add support for reading consumers ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **queues:** add bulk message push support ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **queues:** add event subscription support ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **radar:** add new ctlog fields ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **secrets_store:** support new scopes ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **workers:** add support for observability telemetry support ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **zero_trust:** add mcp portal support ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **zero_trust:** add new fields to logs request ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **alerting:** add support for abuse reports ([da98270](https://github.com/cloudflare/cloudflare-go/commit/da98270894bda2f73999581a44913301454ee5d1))
+* **email_security:** support additional fields ([da98270](https://github.com/cloudflare/cloudflare-go/commit/da98270894bda2f73999581a44913301454ee5d1))
+* **organizations:** add list support ([da98270](https://github.com/cloudflare/cloudflare-go/commit/da98270894bda2f73999581a44913301454ee5d1))
+* **workers:** add references support ([5fc3d87](https://github.com/cloudflare/cloudflare-go/commit/5fc3d878e3841ae66e925d6e182122077cf12935))
+
+### Bug Fixes
+
+* **zero_trust:** fix return types for connectivity directory service ([fdb4538](https://github.com/cloudflare/cloudflare-go/commit/fdb453898c98dc87df97d56c7f79e861d0f7f589))
+* **custom_pages:** fix identifier types ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+
+### Chores
+
+* **radar**: deprecate to_markdown resources ([1dcc5a6](https://github.com/cloudflare/cloudflare-go/commit/1dcc5a68edc8244010ebc1496963181673548972))
+* **cloudforce_one:** deprecate threat event read support in favor of datasets ([8b1203b](https://github.com/cloudflare/cloudflare-go/commit/8b1203b5d8e5a37d8edc4c93b7ef4142f0b07ba1))
+* **rulesets:** deprecate mirage support ([8b1203b](https://github.com/cloudflare/cloudflare-go/commit/8b1203b5d8e5a37d8edc4c93b7ef4142f0b07ba1))
+* **r2:** bucket notification rules are required ([3f6d26f](https://github.com/cloudflare/cloudflare-go/commit/3f6d26f82d99f2a7f62b36d0a2de3f46d176f50f))
+* **rulesets:** deprecate Cloudflare app support ([3f6d26f](https://github.com/cloudflare/cloudflare-go/commit/3f6d26f82d99f2a7f62b36d0a2de3f46d176f50f))
+* **radar:** deprecate AI bot summary UA support ([fdb4538](https://github.com/cloudflare/cloudflare-go/commit/fdb453898c98dc87df97d56c7f79e861d0f7f589))
+* **workers:** drop tail consumer binding type ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **workers_for_platforms:** drop tail consumer binding type ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **zero_trust:** dlp profile ID is not required ([d86239b](https://github.com/cloudflare/cloudflare-go/commit/d86239be194fcd596007f96719d5ea5dd51eac55))
+* **pages:** update project types ([500840e](https://github.com/cloudflare/cloudflare-go/commit/500840e18c7c7cdbfd255ddc6b7968938a3ed4f0))
+* **pipelines:** deprecate several operations in favor of Streams API ([4fa18b7](https://github.com/cloudflare/cloudflare-go/commit/4fa18b71ebac684140ce7a7d79a4c711b72f9de0))
+
 ## 6.1.0 (2025-09-30)
 
 Full Changelog: [v6.0.1...v6.1.0](https://github.com/cloudflare/cloudflare-go/compare/v6.0.1...v6.1.0)

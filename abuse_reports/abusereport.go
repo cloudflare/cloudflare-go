@@ -35,18 +35,18 @@ func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService)
 }
 
 // Submit the Abuse Report of a particular type
-func (r *AbuseReportService) New(ctx context.Context, reportType string, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *AbuseReportService) New(ctx context.Context, reportParam string, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AbuseReportNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if reportType == "" {
-		err = errors.New("missing required report_type parameter")
+	if reportParam == "" {
+		err = errors.New("missing required report_param parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/abuse-reports/%s", params.AccountID, reportType)
+	path := fmt.Sprintf("accounts/%s/abuse-reports/%s", params.AccountID, reportParam)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -65,7 +65,7 @@ func (r AbuseReportNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AbuseReportNewParamsBody struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -175,7 +175,7 @@ type AbuseReportNewParamsBodyUnion interface {
 }
 
 type AbuseReportNewParamsBodyAbuseReportsDmcaReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportAct] `json:"act,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -243,7 +243,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsDmcaReport) MarshalJSON() (data []by
 
 func (r AbuseReportNewParamsBodyAbuseReportsDmcaReport) implementsAbuseReportNewParamsBodyUnion() {}
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsDmcaReportAct string
 
 const (
@@ -306,7 +306,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification) IsKnown
 }
 
 type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -360,7 +360,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReport) MarshalJSON() (data
 func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReport) implementsAbuseReportNewParamsBodyUnion() {
 }
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsTrademarkReportAct string
 
 const (
@@ -408,7 +408,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification) Is
 }
 
 type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -469,7 +469,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsGeneralReport) MarshalJSON() (data [
 func (r AbuseReportNewParamsBodyAbuseReportsGeneralReport) implementsAbuseReportNewParamsBodyUnion() {
 }
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsGeneralReportAct string
 
 const (
@@ -520,7 +520,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification) IsKn
 }
 
 type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -571,7 +571,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsPhishingReport) MarshalJSON() (data 
 func (r AbuseReportNewParamsBodyAbuseReportsPhishingReport) implementsAbuseReportNewParamsBodyUnion() {
 }
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsPhishingReportAct string
 
 const (
@@ -621,7 +621,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification) IsK
 }
 
 type AbuseReportNewParamsBodyAbuseReportsCsamReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsCsamReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -674,7 +674,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsCsamReport) MarshalJSON() (data []by
 
 func (r AbuseReportNewParamsBodyAbuseReportsCsamReport) implementsAbuseReportNewParamsBodyUnion() {}
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsCsamReportAct string
 
 const (
@@ -742,7 +742,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsCsamReportOwnerNotification) IsKnown
 }
 
 type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -789,7 +789,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsThreatReport) MarshalJSON() (data []
 
 func (r AbuseReportNewParamsBodyAbuseReportsThreatReport) implementsAbuseReportNewParamsBodyUnion() {}
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsThreatReportAct string
 
 const (
@@ -839,7 +839,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification) IsKno
 }
 
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -880,7 +880,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport) MarshalJSON() 
 func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport) implementsAbuseReportNewParamsBodyUnion() {
 }
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportAct string
 
 const (
@@ -914,7 +914,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificatio
 }
 
 type AbuseReportNewParamsBodyAbuseReportsNcseiReport struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportAct] `json:"act,required"`
 	// A valid email of the abuse reporter. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -962,7 +962,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsNcseiReport) MarshalJSON() (data []b
 
 func (r AbuseReportNewParamsBodyAbuseReportsNcseiReport) implementsAbuseReportNewParamsBodyUnion() {}
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAbuseReportsNcseiReportAct string
 
 const (
@@ -1012,7 +1012,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification) IsKnow
 	return false
 }
 
-// The abuse report type.
+// The report type for submitted reports.
 type AbuseReportNewParamsBodyAct string
 
 const (
@@ -1129,7 +1129,7 @@ func (r abuseReportNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AbuseReportNewResponseEnvelopeRequest struct {
-	// The abuse report type.
+	// The report type for submitted reports.
 	Act  string                                    `json:"act,required"`
 	JSON abuseReportNewResponseEnvelopeRequestJSON `json:"-"`
 }

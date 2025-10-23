@@ -418,6 +418,7 @@ TEST_PATHS=(
 	zero_trust/tunnelwarpconnector_test.go
 	zero_trust/tunnelwarpconnectortoken_test.go
 	zero_trust/connectivitysetting_test.go
+	zero_trust/connectivitydirectoryservice_test.go
 	zero_trust/dlpdataset_test.go
 	zero_trust/dlpdatasetupload_test.go
 	zero_trust/dlpdatasetversion_test.go
@@ -468,8 +469,10 @@ TEST_PATHS=(
 	url_scanner/response_test.go
 	url_scanner/scan_test.go
 	radar/aitomarkdown_test.go
+	radar/aiinference_test.go
 	radar/aiinferencesummary_test.go
 	radar/aiinferencetimeseriesgroupsummary_test.go
+	radar/aibot_test.go
 	radar/aibotsummary_test.go
 	radar/aitimeseriesgroup_test.go
 	radar/ct_test.go
@@ -499,8 +502,10 @@ TEST_PATHS=(
 	radar/as112summary_test.go
 	radar/as112timeseriesgroup_test.go
 	radar/as112top_test.go
+	radar/emailrouting_test.go
 	radar/emailroutingsummary_test.go
 	radar/emailroutingtimeseriesgroup_test.go
+	radar/emailsecurity_test.go
 	radar/emailsecuritytoptld_test.go
 	radar/emailsecuritytoptldmalicious_test.go
 	radar/emailsecuritytoptldspam_test.go
@@ -521,6 +526,7 @@ TEST_PATHS=(
 	radar/entity_test.go
 	radar/entityasn_test.go
 	radar/entitylocation_test.go
+	radar/geolocation_test.go
 	radar/http_test.go
 	radar/httplocation_test.go
 	radar/httplocationbotclass_test.go
@@ -554,6 +560,7 @@ TEST_PATHS=(
 	radar/tcpresetstimeout_test.go
 	radar/robotstxttop_test.go
 	radar/robotstxttopuseragent_test.go
+	radar/leakedcredential_test.go
 	radar/leakedcredentialsummary_test.go
 	radar/leakedcredentialtimeseriesgroup_test.go
 	bot_management/botmanagement_test.go

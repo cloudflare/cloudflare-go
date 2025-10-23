@@ -22,6 +22,7 @@ type ZeroTrustService struct {
 	DEX                  *DEXService
 	Tunnels              *TunnelService
 	ConnectivitySettings *ConnectivitySettingService
+	Connectivity         *ConnectivityService
 	DLP                  *DLPService
 	Gateway              *GatewayService
 	Networks             *NetworkService
@@ -42,6 +43,7 @@ func NewZeroTrustService(opts ...option.RequestOption) (r *ZeroTrustService) {
 	r.DEX = NewDEXService(opts...)
 	r.Tunnels = NewTunnelService(opts...)
 	r.ConnectivitySettings = NewConnectivitySettingService(opts...)
+	r.Connectivity = NewConnectivityService(opts...)
 	r.DLP = NewDLPService(opts...)
 	r.Gateway = NewGatewayService(opts...)
 	r.Networks = NewNetworkService(opts...)

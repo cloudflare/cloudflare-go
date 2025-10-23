@@ -3400,12 +3400,12 @@ type RecordResponse struct {
 	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
 	// [CNAMERecordSettings], [MXRecordSettings], [NSRecordSettings],
-	// [RecordResponseOpenpgpkeyRecordSettings], [PTRRecordSettings],
-	// [TXTRecordSettings], [CAARecordSettings], [CERTRecordSettings],
-	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
-	// [LOCRecordSettings], [NAPTRRecordSettings], [SMIMEARecordSettings],
-	// [SRVRecordSettings], [SSHFPRecordSettings], [SVCBRecordSettings],
-	// [TLSARecordSettings], [URIRecordSettings].
+	// [RecordResponseOpenpgpkeySettings], [PTRRecordSettings], [TXTRecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [DNSKEYRecordSettings],
+	// [DSRecordSettings], [HTTPSRecordSettings], [LOCRecordSettings],
+	// [NAPTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -3460,31 +3460,26 @@ func (r *RecordResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RecordResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [RecordResponseARecord],
-// [RecordResponseAAAARecord], [RecordResponseCNAMERecord],
-// [RecordResponseMXRecord], [RecordResponseNSRecord],
-// [RecordResponseOpenpgpkeyRecord], [RecordResponsePTRRecord],
-// [RecordResponseTXTRecord], [RecordResponseCAARecord],
-// [RecordResponseCERTRecord], [RecordResponseDNSKEYRecord],
-// [RecordResponseDSRecord], [RecordResponseHTTPSRecord],
-// [RecordResponseLOCRecord], [RecordResponseNAPTRRecord],
-// [RecordResponseSMIMEARecord], [RecordResponseSRVRecord],
-// [RecordResponseSSHFPRecord], [RecordResponseSVCBRecord],
-// [RecordResponseTLSARecord], [RecordResponseURIRecord].
+// Possible runtime types of the union are [RecordResponseA], [RecordResponseAAAA],
+// [RecordResponseCNAME], [RecordResponseMX], [RecordResponseNS],
+// [RecordResponseOpenpgpkey], [RecordResponsePTR], [RecordResponseTXT],
+// [RecordResponseCAA], [RecordResponseCERT], [RecordResponseDNSKEY],
+// [RecordResponseDS], [RecordResponseHTTPS], [RecordResponseLOC],
+// [RecordResponseNAPTR], [RecordResponseSMIMEA], [RecordResponseSRV],
+// [RecordResponseSSHFP], [RecordResponseSVCB], [RecordResponseTLSA],
+// [RecordResponseURI].
 func (r RecordResponse) AsUnion() RecordResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [RecordResponseARecord], [RecordResponseAAAARecord],
-// [RecordResponseCNAMERecord], [RecordResponseMXRecord], [RecordResponseNSRecord],
-// [RecordResponseOpenpgpkeyRecord], [RecordResponsePTRRecord],
-// [RecordResponseTXTRecord], [RecordResponseCAARecord],
-// [RecordResponseCERTRecord], [RecordResponseDNSKEYRecord],
-// [RecordResponseDSRecord], [RecordResponseHTTPSRecord],
-// [RecordResponseLOCRecord], [RecordResponseNAPTRRecord],
-// [RecordResponseSMIMEARecord], [RecordResponseSRVRecord],
-// [RecordResponseSSHFPRecord], [RecordResponseSVCBRecord],
-// [RecordResponseTLSARecord] or [RecordResponseURIRecord].
+// Union satisfied by [RecordResponseA], [RecordResponseAAAA],
+// [RecordResponseCNAME], [RecordResponseMX], [RecordResponseNS],
+// [RecordResponseOpenpgpkey], [RecordResponsePTR], [RecordResponseTXT],
+// [RecordResponseCAA], [RecordResponseCERT], [RecordResponseDNSKEY],
+// [RecordResponseDS], [RecordResponseHTTPS], [RecordResponseLOC],
+// [RecordResponseNAPTR], [RecordResponseSMIMEA], [RecordResponseSRV],
+// [RecordResponseSSHFP], [RecordResponseSVCB], [RecordResponseTLSA] or
+// [RecordResponseURI].
 type RecordResponseUnion interface {
 	implementsRecordResponse()
 }
@@ -3492,95 +3487,116 @@ type RecordResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordResponseUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseA{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseAAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseAAAA{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseCNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseCNAME{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseMXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseMX{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseNSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseNS{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponsePTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponsePTR{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseTXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseTXT{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseCAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseCAA{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseCERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseCERT{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseDNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseDNSKEY{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseDSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseDS{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseHTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseHTTPS{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseLOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseLOC{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseNAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseNAPTR{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseSMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseSMIMEA{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseSRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseSRV{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseSSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseSSHFP{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseSVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseSVCB{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseTLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseTLSA{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordResponseURIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordResponseURI{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordResponseARecord struct {
+type RecordResponseA struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3594,14 +3610,13 @@ type RecordResponseARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                 `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseARecordJSON `json:"-"`
+	TagsModifiedOn time.Time           `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseAJSON `json:"-"`
 	ARecord
 }
 
-// recordResponseARecordJSON contains the JSON metadata for the struct
-// [RecordResponseARecord]
-type recordResponseARecordJSON struct {
+// recordResponseAJSON contains the JSON metadata for the struct [RecordResponseA]
+type recordResponseAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3613,17 +3628,17 @@ type recordResponseARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseARecordJSON) RawJSON() string {
+func (r recordResponseAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseARecord) implementsRecordResponse() {}
+func (r RecordResponseA) implementsRecordResponse() {}
 
-type RecordResponseAAAARecord struct {
+type RecordResponseAAAA struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3637,14 +3652,14 @@ type RecordResponseAAAARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseAAAARecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseAAAAJSON `json:"-"`
 	AAAARecord
 }
 
-// recordResponseAAAARecordJSON contains the JSON metadata for the struct
-// [RecordResponseAAAARecord]
-type recordResponseAAAARecordJSON struct {
+// recordResponseAAAAJSON contains the JSON metadata for the struct
+// [RecordResponseAAAA]
+type recordResponseAAAAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3656,17 +3671,17 @@ type recordResponseAAAARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseAAAARecordJSON) RawJSON() string {
+func (r recordResponseAAAAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseAAAARecord) implementsRecordResponse() {}
+func (r RecordResponseAAAA) implementsRecordResponse() {}
 
-type RecordResponseCNAMERecord struct {
+type RecordResponseCNAME struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3680,14 +3695,14 @@ type RecordResponseCNAMERecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCNAMERecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCNAMEJSON `json:"-"`
 	CNAMERecord
 }
 
-// recordResponseCNAMERecordJSON contains the JSON metadata for the struct
-// [RecordResponseCNAMERecord]
-type recordResponseCNAMERecordJSON struct {
+// recordResponseCNAMEJSON contains the JSON metadata for the struct
+// [RecordResponseCNAME]
+type recordResponseCNAMEJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3699,17 +3714,17 @@ type recordResponseCNAMERecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCNAMERecordJSON) RawJSON() string {
+func (r recordResponseCNAMEJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCNAMERecord) implementsRecordResponse() {}
+func (r RecordResponseCNAME) implementsRecordResponse() {}
 
-type RecordResponseMXRecord struct {
+type RecordResponseMX struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3723,14 +3738,14 @@ type RecordResponseMXRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseMXRecordJSON `json:"-"`
+	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseMXJSON `json:"-"`
 	MXRecord
 }
 
-// recordResponseMXRecordJSON contains the JSON metadata for the struct
-// [RecordResponseMXRecord]
-type recordResponseMXRecordJSON struct {
+// recordResponseMXJSON contains the JSON metadata for the struct
+// [RecordResponseMX]
+type recordResponseMXJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3742,17 +3757,17 @@ type recordResponseMXRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseMXRecordJSON) RawJSON() string {
+func (r recordResponseMXJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseMXRecord) implementsRecordResponse() {}
+func (r RecordResponseMX) implementsRecordResponse() {}
 
-type RecordResponseNSRecord struct {
+type RecordResponseNS struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3766,14 +3781,14 @@ type RecordResponseNSRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNSRecordJSON `json:"-"`
+	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseNSJSON `json:"-"`
 	NSRecord
 }
 
-// recordResponseNSRecordJSON contains the JSON metadata for the struct
-// [RecordResponseNSRecord]
-type recordResponseNSRecordJSON struct {
+// recordResponseNSJSON contains the JSON metadata for the struct
+// [RecordResponseNS]
+type recordResponseNSJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3785,17 +3800,17 @@ type recordResponseNSRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseNSRecordJSON) RawJSON() string {
+func (r recordResponseNSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNSRecord) implementsRecordResponse() {}
+func (r RecordResponseNS) implementsRecordResponse() {}
 
-type RecordResponseOpenpgpkeyRecord struct {
+type RecordResponseOpenpgpkey struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3817,7 +3832,7 @@ type RecordResponseOpenpgpkeyRecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordResponseOpenpgpkeyRecordSettings `json:"settings,required"`
+	Settings RecordResponseOpenpgpkeySettings `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3825,17 +3840,17 @@ type RecordResponseOpenpgpkeyRecord struct {
 	// Enterprise zones.
 	TTL TTL `json:"ttl,required"`
 	// Record type.
-	Type RecordResponseOpenpgpkeyRecordType `json:"type,required"`
+	Type RecordResponseOpenpgpkeyType `json:"type,required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                          `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseOpenpgpkeyRecordJSON `json:"-"`
+	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseOpenpgpkeyJSON `json:"-"`
 }
 
-// recordResponseOpenpgpkeyRecordJSON contains the JSON metadata for the struct
-// [RecordResponseOpenpgpkeyRecord]
-type recordResponseOpenpgpkeyRecordJSON struct {
+// recordResponseOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordResponseOpenpgpkey]
+type recordResponseOpenpgpkeyJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
 	Content           apijson.Field
@@ -3855,18 +3870,18 @@ type recordResponseOpenpgpkeyRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseOpenpgpkeyRecord) implementsRecordResponse() {}
+func (r RecordResponseOpenpgpkey) implementsRecordResponse() {}
 
 // Settings for the DNS record.
-type RecordResponseOpenpgpkeyRecordSettings struct {
+type RecordResponseOpenpgpkeySettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
@@ -3876,43 +3891,43 @@ type RecordResponseOpenpgpkeyRecordSettings struct {
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
 	// communicates with the origin using IPv4 or IPv6.
-	IPV6Only bool                                       `json:"ipv6_only"`
-	JSON     recordResponseOpenpgpkeyRecordSettingsJSON `json:"-"`
+	IPV6Only bool                                 `json:"ipv6_only"`
+	JSON     recordResponseOpenpgpkeySettingsJSON `json:"-"`
 }
 
-// recordResponseOpenpgpkeyRecordSettingsJSON contains the JSON metadata for the
-// struct [RecordResponseOpenpgpkeyRecordSettings]
-type recordResponseOpenpgpkeyRecordSettingsJSON struct {
+// recordResponseOpenpgpkeySettingsJSON contains the JSON metadata for the struct
+// [RecordResponseOpenpgpkeySettings]
+type recordResponseOpenpgpkeySettingsJSON struct {
 	IPV4Only    apijson.Field
 	IPV6Only    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordResponseOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseOpenpgpkeySettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+func (r recordResponseOpenpgpkeySettingsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Record type.
-type RecordResponseOpenpgpkeyRecordType string
+type RecordResponseOpenpgpkeyType string
 
 const (
-	RecordResponseOpenpgpkeyRecordTypeOpenpgpkey RecordResponseOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordResponseOpenpgpkeyTypeOpenpgpkey RecordResponseOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordResponseOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordResponseOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordResponseOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordResponseOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
 }
 
-type RecordResponsePTRRecord struct {
+type RecordResponsePTR struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3926,14 +3941,14 @@ type RecordResponsePTRRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponsePTRRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponsePTRJSON `json:"-"`
 	PTRRecord
 }
 
-// recordResponsePTRRecordJSON contains the JSON metadata for the struct
-// [RecordResponsePTRRecord]
-type recordResponsePTRRecordJSON struct {
+// recordResponsePTRJSON contains the JSON metadata for the struct
+// [RecordResponsePTR]
+type recordResponsePTRJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3945,17 +3960,17 @@ type recordResponsePTRRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponsePTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponsePTRRecordJSON) RawJSON() string {
+func (r recordResponsePTRJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponsePTRRecord) implementsRecordResponse() {}
+func (r RecordResponsePTR) implementsRecordResponse() {}
 
-type RecordResponseTXTRecord struct {
+type RecordResponseTXT struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3969,14 +3984,14 @@ type RecordResponseTXTRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTXTRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseTXTJSON `json:"-"`
 	TXTRecord
 }
 
-// recordResponseTXTRecordJSON contains the JSON metadata for the struct
-// [RecordResponseTXTRecord]
-type recordResponseTXTRecordJSON struct {
+// recordResponseTXTJSON contains the JSON metadata for the struct
+// [RecordResponseTXT]
+type recordResponseTXTJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3988,17 +4003,17 @@ type recordResponseTXTRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseTXTRecordJSON) RawJSON() string {
+func (r recordResponseTXTJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTXTRecord) implementsRecordResponse() {}
+func (r RecordResponseTXT) implementsRecordResponse() {}
 
-type RecordResponseCAARecord struct {
+type RecordResponseCAA struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4012,14 +4027,14 @@ type RecordResponseCAARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCAARecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCAAJSON `json:"-"`
 	CAARecord
 }
 
-// recordResponseCAARecordJSON contains the JSON metadata for the struct
-// [RecordResponseCAARecord]
-type recordResponseCAARecordJSON struct {
+// recordResponseCAAJSON contains the JSON metadata for the struct
+// [RecordResponseCAA]
+type recordResponseCAAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4031,17 +4046,17 @@ type recordResponseCAARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCAARecordJSON) RawJSON() string {
+func (r recordResponseCAAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCAARecord) implementsRecordResponse() {}
+func (r RecordResponseCAA) implementsRecordResponse() {}
 
-type RecordResponseCERTRecord struct {
+type RecordResponseCERT struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4055,14 +4070,14 @@ type RecordResponseCERTRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCERTRecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCERTJSON `json:"-"`
 	CERTRecord
 }
 
-// recordResponseCERTRecordJSON contains the JSON metadata for the struct
-// [RecordResponseCERTRecord]
-type recordResponseCERTRecordJSON struct {
+// recordResponseCERTJSON contains the JSON metadata for the struct
+// [RecordResponseCERT]
+type recordResponseCERTJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4074,17 +4089,17 @@ type recordResponseCERTRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCERTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCERT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCERTRecordJSON) RawJSON() string {
+func (r recordResponseCERTJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCERTRecord) implementsRecordResponse() {}
+func (r RecordResponseCERT) implementsRecordResponse() {}
 
-type RecordResponseDNSKEYRecord struct {
+type RecordResponseDNSKEY struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4098,14 +4113,14 @@ type RecordResponseDNSKEYRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                      `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDNSKEYRecordJSON `json:"-"`
+	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseDNSKEYJSON `json:"-"`
 	DNSKEYRecord
 }
 
-// recordResponseDNSKEYRecordJSON contains the JSON metadata for the struct
-// [RecordResponseDNSKEYRecord]
-type recordResponseDNSKEYRecordJSON struct {
+// recordResponseDNSKEYJSON contains the JSON metadata for the struct
+// [RecordResponseDNSKEY]
+type recordResponseDNSKEYJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4117,17 +4132,17 @@ type recordResponseDNSKEYRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseDNSKEYRecordJSON) RawJSON() string {
+func (r recordResponseDNSKEYJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDNSKEYRecord) implementsRecordResponse() {}
+func (r RecordResponseDNSKEY) implementsRecordResponse() {}
 
-type RecordResponseDSRecord struct {
+type RecordResponseDS struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4141,14 +4156,14 @@ type RecordResponseDSRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDSRecordJSON `json:"-"`
+	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseDSJSON `json:"-"`
 	DSRecord
 }
 
-// recordResponseDSRecordJSON contains the JSON metadata for the struct
-// [RecordResponseDSRecord]
-type recordResponseDSRecordJSON struct {
+// recordResponseDSJSON contains the JSON metadata for the struct
+// [RecordResponseDS]
+type recordResponseDSJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4160,17 +4175,17 @@ type recordResponseDSRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseDSRecordJSON) RawJSON() string {
+func (r recordResponseDSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDSRecord) implementsRecordResponse() {}
+func (r RecordResponseDS) implementsRecordResponse() {}
 
-type RecordResponseHTTPSRecord struct {
+type RecordResponseHTTPS struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4184,14 +4199,14 @@ type RecordResponseHTTPSRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseHTTPSRecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseHTTPSJSON `json:"-"`
 	HTTPSRecord
 }
 
-// recordResponseHTTPSRecordJSON contains the JSON metadata for the struct
-// [RecordResponseHTTPSRecord]
-type recordResponseHTTPSRecordJSON struct {
+// recordResponseHTTPSJSON contains the JSON metadata for the struct
+// [RecordResponseHTTPS]
+type recordResponseHTTPSJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4203,17 +4218,17 @@ type recordResponseHTTPSRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseHTTPSRecordJSON) RawJSON() string {
+func (r recordResponseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseHTTPSRecord) implementsRecordResponse() {}
+func (r RecordResponseHTTPS) implementsRecordResponse() {}
 
-type RecordResponseLOCRecord struct {
+type RecordResponseLOC struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4227,14 +4242,14 @@ type RecordResponseLOCRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseLOCRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseLOCJSON `json:"-"`
 	LOCRecord
 }
 
-// recordResponseLOCRecordJSON contains the JSON metadata for the struct
-// [RecordResponseLOCRecord]
-type recordResponseLOCRecordJSON struct {
+// recordResponseLOCJSON contains the JSON metadata for the struct
+// [RecordResponseLOC]
+type recordResponseLOCJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4246,17 +4261,17 @@ type recordResponseLOCRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseLOCRecordJSON) RawJSON() string {
+func (r recordResponseLOCJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseLOCRecord) implementsRecordResponse() {}
+func (r RecordResponseLOC) implementsRecordResponse() {}
 
-type RecordResponseNAPTRRecord struct {
+type RecordResponseNAPTR struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4270,14 +4285,14 @@ type RecordResponseNAPTRRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNAPTRRecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseNAPTRJSON `json:"-"`
 	NAPTRRecord
 }
 
-// recordResponseNAPTRRecordJSON contains the JSON metadata for the struct
-// [RecordResponseNAPTRRecord]
-type recordResponseNAPTRRecordJSON struct {
+// recordResponseNAPTRJSON contains the JSON metadata for the struct
+// [RecordResponseNAPTR]
+type recordResponseNAPTRJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4289,17 +4304,17 @@ type recordResponseNAPTRRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseNAPTRRecordJSON) RawJSON() string {
+func (r recordResponseNAPTRJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNAPTRRecord) implementsRecordResponse() {}
+func (r RecordResponseNAPTR) implementsRecordResponse() {}
 
-type RecordResponseSMIMEARecord struct {
+type RecordResponseSMIMEA struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4313,14 +4328,14 @@ type RecordResponseSMIMEARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                      `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSMIMEARecordJSON `json:"-"`
+	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSMIMEAJSON `json:"-"`
 	SMIMEARecord
 }
 
-// recordResponseSMIMEARecordJSON contains the JSON metadata for the struct
-// [RecordResponseSMIMEARecord]
-type recordResponseSMIMEARecordJSON struct {
+// recordResponseSMIMEAJSON contains the JSON metadata for the struct
+// [RecordResponseSMIMEA]
+type recordResponseSMIMEAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4332,17 +4347,17 @@ type recordResponseSMIMEARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSMIMEARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSMIMEA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSMIMEARecordJSON) RawJSON() string {
+func (r recordResponseSMIMEAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSMIMEARecord) implementsRecordResponse() {}
+func (r RecordResponseSMIMEA) implementsRecordResponse() {}
 
-type RecordResponseSRVRecord struct {
+type RecordResponseSRV struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4356,14 +4371,14 @@ type RecordResponseSRVRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSRVRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSRVJSON `json:"-"`
 	SRVRecord
 }
 
-// recordResponseSRVRecordJSON contains the JSON metadata for the struct
-// [RecordResponseSRVRecord]
-type recordResponseSRVRecordJSON struct {
+// recordResponseSRVJSON contains the JSON metadata for the struct
+// [RecordResponseSRV]
+type recordResponseSRVJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4375,17 +4390,17 @@ type recordResponseSRVRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSRVRecordJSON) RawJSON() string {
+func (r recordResponseSRVJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSRVRecord) implementsRecordResponse() {}
+func (r RecordResponseSRV) implementsRecordResponse() {}
 
-type RecordResponseSSHFPRecord struct {
+type RecordResponseSSHFP struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4399,14 +4414,14 @@ type RecordResponseSSHFPRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSSHFPRecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSSHFPJSON `json:"-"`
 	SSHFPRecord
 }
 
-// recordResponseSSHFPRecordJSON contains the JSON metadata for the struct
-// [RecordResponseSSHFPRecord]
-type recordResponseSSHFPRecordJSON struct {
+// recordResponseSSHFPJSON contains the JSON metadata for the struct
+// [RecordResponseSSHFP]
+type recordResponseSSHFPJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4418,17 +4433,17 @@ type recordResponseSSHFPRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSSHFPRecordJSON) RawJSON() string {
+func (r recordResponseSSHFPJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSSHFPRecord) implementsRecordResponse() {}
+func (r RecordResponseSSHFP) implementsRecordResponse() {}
 
-type RecordResponseSVCBRecord struct {
+type RecordResponseSVCB struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4442,14 +4457,14 @@ type RecordResponseSVCBRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSVCBRecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSVCBJSON `json:"-"`
 	SVCBRecord
 }
 
-// recordResponseSVCBRecordJSON contains the JSON metadata for the struct
-// [RecordResponseSVCBRecord]
-type recordResponseSVCBRecordJSON struct {
+// recordResponseSVCBJSON contains the JSON metadata for the struct
+// [RecordResponseSVCB]
+type recordResponseSVCBJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4461,17 +4476,17 @@ type recordResponseSVCBRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSVCBRecordJSON) RawJSON() string {
+func (r recordResponseSVCBJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSVCBRecord) implementsRecordResponse() {}
+func (r RecordResponseSVCB) implementsRecordResponse() {}
 
-type RecordResponseTLSARecord struct {
+type RecordResponseTLSA struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4485,14 +4500,14 @@ type RecordResponseTLSARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTLSARecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseTLSAJSON `json:"-"`
 	TLSARecord
 }
 
-// recordResponseTLSARecordJSON contains the JSON metadata for the struct
-// [RecordResponseTLSARecord]
-type recordResponseTLSARecordJSON struct {
+// recordResponseTLSAJSON contains the JSON metadata for the struct
+// [RecordResponseTLSA]
+type recordResponseTLSAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4504,17 +4519,17 @@ type recordResponseTLSARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseTLSARecordJSON) RawJSON() string {
+func (r recordResponseTLSAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTLSARecord) implementsRecordResponse() {}
+func (r RecordResponseTLSA) implementsRecordResponse() {}
 
-type RecordResponseURIRecord struct {
+type RecordResponseURI struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4528,14 +4543,14 @@ type RecordResponseURIRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseURIRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseURIJSON `json:"-"`
 	URIRecord
 }
 
-// recordResponseURIRecordJSON contains the JSON metadata for the struct
-// [RecordResponseURIRecord]
-type recordResponseURIRecordJSON struct {
+// recordResponseURIJSON contains the JSON metadata for the struct
+// [RecordResponseURI]
+type recordResponseURIJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4547,15 +4562,15 @@ type recordResponseURIRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseURIRecordJSON) RawJSON() string {
+func (r recordResponseURIJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseURIRecord) implementsRecordResponse() {}
+func (r RecordResponseURI) implementsRecordResponse() {}
 
 // Record type.
 type RecordResponseType string

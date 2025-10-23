@@ -38,6 +38,10 @@ func NewAITimeseriesGroupService(opts ...option.RequestOption) (r *AITimeseriesG
 
 // Retrieves an aggregated summary of AI bots HTTP requests grouped by the
 // specified dimension.
+//
+// Deprecated: Use
+// [Radar > AI > Bots > Summary](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/bots/methods/summary_v2/)
+// instead.
 func (r *AITimeseriesGroupService) Summary(ctx context.Context, dimension AITimeseriesGroupSummaryParamsDimension, query AITimeseriesGroupSummaryParams, opts ...option.RequestOption) (res *AITimeseriesGroupSummaryResponse, err error) {
 	var env AITimeseriesGroupSummaryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,6 +55,10 @@ func (r *AITimeseriesGroupService) Summary(ctx context.Context, dimension AITime
 }
 
 // Retrieves AI bots HTTP request volume over time.
+//
+// Deprecated: Use
+// [Radar > AI > Bots > Timeseries](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/bots/methods/timeseries/)
+// instead.
 func (r *AITimeseriesGroupService) Timeseries(ctx context.Context, query AITimeseriesGroupTimeseriesParams, opts ...option.RequestOption) (res *AITimeseriesGroupTimeseriesResponse, err error) {
 	var env AITimeseriesGroupTimeseriesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,6 +73,10 @@ func (r *AITimeseriesGroupService) Timeseries(ctx context.Context, query AITimes
 
 // Retrieves the distribution of HTTP requests from AI bots, grouped by chosen the
 // specified dimension over time.
+//
+// Deprecated: Use
+// [Radar > AI > Bots > Timeseries Groups](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/bots/methods/timeseries_groups/)
+// instead.
 func (r *AITimeseriesGroupService) TimeseriesGroups(ctx context.Context, dimension AITimeseriesGroupTimeseriesGroupsParamsDimension, query AITimeseriesGroupTimeseriesGroupsParams, opts ...option.RequestOption) (res *AITimeseriesGroupTimeseriesGroupsResponse, err error) {
 	var env AITimeseriesGroupTimeseriesGroupsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +91,9 @@ func (r *AITimeseriesGroupService) TimeseriesGroups(ctx context.Context, dimensi
 
 // Retrieves the distribution of traffic by AI user agent over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar AI Bots Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/bots/methods/timeseries_groups/)
+// instead.
 func (r *AITimeseriesGroupService) UserAgent(ctx context.Context, query AITimeseriesGroupUserAgentParams, opts ...option.RequestOption) (res *AITimeseriesGroupUserAgentResponse, err error) {
 	var env AITimeseriesGroupUserAgentResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

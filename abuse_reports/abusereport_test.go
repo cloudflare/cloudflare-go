@@ -30,7 +30,7 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AbuseReports.New(
 		context.TODO(),
-		"report_type",
+		"report_param",
 		abuse_reports.AbuseReportNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReport{

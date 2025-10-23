@@ -144,7 +144,7 @@ func (r bucketLockGetResponseRuleJSON) RawJSON() string {
 // Condition to apply a lock rule to an object for how long in seconds.
 type BucketLockGetResponseRulesCondition struct {
 	Type          BucketLockGetResponseRulesConditionType `json:"type,required"`
-	Date          time.Time                               `json:"date" format:"date"`
+	Date          time.Time                               `json:"date" format:"date-time"`
 	MaxAgeSeconds int64                                   `json:"maxAgeSeconds"`
 	JSON          bucketLockGetResponseRulesConditionJSON `json:"-"`
 	union         BucketLockGetResponseRulesConditionUnion
@@ -256,7 +256,7 @@ func (r BucketLockGetResponseRulesConditionR2LockRuleAgeConditionType) IsKnown()
 
 // Condition to apply a lock rule to an object until a specific date.
 type BucketLockGetResponseRulesConditionR2LockRuleDateCondition struct {
-	Date time.Time                                                      `json:"date,required" format:"date"`
+	Date time.Time                                                      `json:"date,required" format:"date-time"`
 	Type BucketLockGetResponseRulesConditionR2LockRuleDateConditionType `json:"type,required"`
 	JSON bucketLockGetResponseRulesConditionR2LockRuleDateConditionJSON `json:"-"`
 }
@@ -383,7 +383,7 @@ func (r BucketLockUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 // Condition to apply a lock rule to an object for how long in seconds.
 type BucketLockUpdateParamsRulesCondition struct {
 	Type          param.Field[BucketLockUpdateParamsRulesConditionType] `json:"type,required"`
-	Date          param.Field[time.Time]                                `json:"date" format:"date"`
+	Date          param.Field[time.Time]                                `json:"date" format:"date-time"`
 	MaxAgeSeconds param.Field[int64]                                    `json:"maxAgeSeconds"`
 }
 
@@ -432,7 +432,7 @@ func (r BucketLockUpdateParamsRulesConditionR2LockRuleAgeConditionType) IsKnown(
 
 // Condition to apply a lock rule to an object until a specific date.
 type BucketLockUpdateParamsRulesConditionR2LockRuleDateCondition struct {
-	Date param.Field[time.Time]                                                       `json:"date,required" format:"date"`
+	Date param.Field[time.Time]                                                       `json:"date,required" format:"date-time"`
 	Type param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleDateConditionType] `json:"type,required"`
 }
 
