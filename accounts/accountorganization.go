@@ -36,7 +36,8 @@ func NewAccountOrganizationService(opts ...option.RequestOption) (r *AccountOrga
 }
 
 // Move an account within an organization hierarchy or an account outside an
-// organization.
+// organization. (Currently in Closed Beta - see
+// https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *AccountOrganizationService) New(ctx context.Context, params AccountOrganizationNewParams, opts ...option.RequestOption) (res *AccountOrganizationNewResponse, err error) {
 	var env AccountOrganizationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
