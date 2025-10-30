@@ -42,7 +42,7 @@ func TestHTTPAseGetWithOptionalParams(t *testing.T) {
 		HTTPProtocol:  cloudflare.F([]radar.HTTPAseGetParamsHTTPProtocol{radar.HTTPAseGetParamsHTTPProtocolHTTP}),
 		HTTPVersion:   cloudflare.F([]radar.HTTPAseGetParamsHTTPVersion{radar.HTTPAseGetParamsHTTPVersionHttPv1}),
 		IPVersion:     cloudflare.F([]radar.HTTPAseGetParamsIPVersion{radar.HTTPAseGetParamsIPVersionIPv4}),
-		Limit:         cloudflare.F(int64(1)),
+		Limit:         cloudflare.F(int64(5)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
 		OS:            cloudflare.F([]radar.HTTPAseGetParamsOS{radar.HTTPAseGetParamsOSWindows}),

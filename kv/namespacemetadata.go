@@ -62,17 +62,17 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 	return
 }
 
-type NamespaceMetadataGetResponse = interface{}
+type NamespaceMetadataGetResponse map[string]interface{}
 
 type NamespaceMetadataGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type NamespaceMetadataGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
 	// Arbitrary JSON that is associated with a key.
 	Result NamespaceMetadataGetResponse             `json:"result"`
@@ -98,7 +98,7 @@ func (r namespaceMetadataGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type NamespaceMetadataGetResponseEnvelopeSuccess bool
 
 const (

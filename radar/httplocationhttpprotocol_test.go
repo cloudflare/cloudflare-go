@@ -44,7 +44,7 @@ func TestHTTPLocationHTTPProtocolGetWithOptionalParams(t *testing.T) {
 			GeoID:         cloudflare.F([]string{"string"}),
 			HTTPVersion:   cloudflare.F([]radar.HTTPLocationHTTPProtocolGetParamsHTTPVersion{radar.HTTPLocationHTTPProtocolGetParamsHTTPVersionHttPv1}),
 			IPVersion:     cloudflare.F([]radar.HTTPLocationHTTPProtocolGetParamsIPVersion{radar.HTTPLocationHTTPProtocolGetParamsIPVersionIPv4}),
-			Limit:         cloudflare.F(int64(1)),
+			Limit:         cloudflare.F(int64(5)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
 			OS:            cloudflare.F([]radar.HTTPLocationHTTPProtocolGetParamsOS{radar.HTTPLocationHTTPProtocolGetParamsOSWindows}),
