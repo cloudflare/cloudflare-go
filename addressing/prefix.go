@@ -170,12 +170,17 @@ type Prefix struct {
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN int64 `json:"asn,nullable"`
+	ASN int64 `json:"asn"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether Cloudflare is allowed to generate the LOA document on behalf of the
+	// prefix owner.
+	DelegateLOACreation bool `json:"delegate_loa_creation"`
 	// Description of the prefix.
 	Description string `json:"description"`
+	// State of one kind of validation for an IP prefix.
+	IrrValidationState string `json:"irr_validation_state"`
 	// Identifier for the uploaded LOA document.
 	LOADocumentID string    `json:"loa_document_id,nullable"`
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
@@ -194,27 +199,38 @@ type Prefix struct {
 	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
 	// instead, which allows for advertising multiple BGP routes within a single IP
 	// Prefix.
-	OnDemandLocked bool       `json:"on_demand_locked"`
-	JSON           prefixJSON `json:"-"`
+	OnDemandLocked bool `json:"on_demand_locked"`
+	// State of one kind of validation for an IP prefix.
+	OwnershipValidationState string `json:"ownership_validation_state"`
+	// Token provided to demonstrate ownership of the prefix.
+	OwnershipValidationToken string `json:"ownership_validation_token"`
+	// State of one kind of validation for an IP prefix.
+	RPKIValidationState string     `json:"rpki_validation_state"`
+	JSON                prefixJSON `json:"-"`
 }
 
 // prefixJSON contains the JSON metadata for the struct [Prefix]
 type prefixJSON struct {
-	ID                   apijson.Field
-	AccountID            apijson.Field
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	Approved             apijson.Field
-	ASN                  apijson.Field
-	CIDR                 apijson.Field
-	CreatedAt            apijson.Field
-	Description          apijson.Field
-	LOADocumentID        apijson.Field
-	ModifiedAt           apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	ID                       apijson.Field
+	AccountID                apijson.Field
+	Advertised               apijson.Field
+	AdvertisedModifiedAt     apijson.Field
+	Approved                 apijson.Field
+	ASN                      apijson.Field
+	CIDR                     apijson.Field
+	CreatedAt                apijson.Field
+	DelegateLOACreation      apijson.Field
+	Description              apijson.Field
+	IrrValidationState       apijson.Field
+	LOADocumentID            apijson.Field
+	ModifiedAt               apijson.Field
+	OnDemandEnabled          apijson.Field
+	OnDemandLocked           apijson.Field
+	OwnershipValidationState apijson.Field
+	OwnershipValidationToken apijson.Field
+	RPKIValidationState      apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *Prefix) UnmarshalJSON(data []byte) (err error) {
@@ -229,9 +245,8 @@ type PrefixDeleteResponse struct {
 	Errors   []PrefixDeleteResponseError   `json:"errors,required"`
 	Messages []PrefixDeleteResponseMessage `json:"messages,required"`
 	// Whether the API call was successful.
-	Success    PrefixDeleteResponseSuccess    `json:"success,required"`
-	ResultInfo PrefixDeleteResponseResultInfo `json:"result_info"`
-	JSON       prefixDeleteResponseJSON       `json:"-"`
+	Success PrefixDeleteResponseSuccess `json:"success,required"`
+	JSON    prefixDeleteResponseJSON    `json:"-"`
 }
 
 // prefixDeleteResponseJSON contains the JSON metadata for the struct
@@ -240,7 +255,6 @@ type prefixDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -364,37 +378,6 @@ func (r PrefixDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
-type PrefixDeleteResponseResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                            `json:"total_count"`
-	JSON       prefixDeleteResponseResultInfoJSON `json:"-"`
-}
-
-// prefixDeleteResponseResultInfoJSON contains the JSON metadata for the struct
-// [PrefixDeleteResponseResultInfo]
-type prefixDeleteResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDeleteResponseResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type PrefixNewParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -402,8 +385,11 @@ type PrefixNewParams struct {
 	ASN param.Field[int64] `json:"asn,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR param.Field[string] `json:"cidr,required"`
-	// Identifier for the uploaded LOA document.
-	LOADocumentID param.Field[string] `json:"loa_document_id,required"`
+	// Whether Cloudflare is allowed to generate the LOA document on behalf of the
+	// prefix owner.
+	DelegateLOACreation param.Field[bool] `json:"delegate_loa_creation"`
+	// Description of the prefix.
+	Description param.Field[string] `json:"description"`
 }
 
 func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {

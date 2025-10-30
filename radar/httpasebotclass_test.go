@@ -44,7 +44,7 @@ func TestHTTPAseBotClassGetWithOptionalParams(t *testing.T) {
 			HTTPProtocol:  cloudflare.F([]radar.HTTPAseBotClassGetParamsHTTPProtocol{radar.HTTPAseBotClassGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:   cloudflare.F([]radar.HTTPAseBotClassGetParamsHTTPVersion{radar.HTTPAseBotClassGetParamsHTTPVersionHttPv1}),
 			IPVersion:     cloudflare.F([]radar.HTTPAseBotClassGetParamsIPVersion{radar.HTTPAseBotClassGetParamsIPVersionIPv4}),
-			Limit:         cloudflare.F(int64(5)),
+			Limit:         cloudflare.F(int64(1)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
 			OS:            cloudflare.F([]radar.HTTPAseBotClassGetParamsOS{radar.HTTPAseBotClassGetParamsOSWindows}),
