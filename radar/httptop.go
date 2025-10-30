@@ -36,10 +36,6 @@ func NewHTTPTopService(opts ...option.RequestOption) (r *HTTPTopService) {
 }
 
 // Retrieves the top user agents by HTTP requests.
-//
-// Deprecated: Use
-// [Radar HTTP Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/summary_v2/)
-// instead.
 func (r *HTTPTopService) Browser(ctx context.Context, query HTTPTopBrowserParams, opts ...option.RequestOption) (res *HTTPTopBrowserResponse, err error) {
 	var env HTTPTopBrowserResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,10 +49,6 @@ func (r *HTTPTopService) Browser(ctx context.Context, query HTTPTopBrowserParams
 }
 
 // Retrieves the top user agents, aggregated in families, by HTTP requests.
-//
-// Deprecated: Use
-// [Radar HTTP Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/http/methods/summary_v2/)
-// instead.
 func (r *HTTPTopService) BrowserFamily(ctx context.Context, query HTTPTopBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTopBrowserFamilyResponse, err error) {
 	var env HTTPTopBrowserFamilyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

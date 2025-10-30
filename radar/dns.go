@@ -725,8 +725,6 @@ type DNSSummaryV2Params struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filters results based on cache status.
-	CacheHit param.Field[[]bool] `query:"cacheHit"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -739,16 +737,8 @@ type DNSSummaryV2Params struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filters results based on DNSSEC (DNS Security Extensions) support.
-	DNSSEC param.Field[[]DNSSummaryV2ParamsDNSSEC] `query:"dnssec"`
-	// Filters results based on DNSSEC (DNS Security Extensions) client awareness.
-	DNSSECAware param.Field[[]DNSSummaryV2ParamsDNSSECAware] `query:"dnssecAware"`
-	// Filters results based on DNSSEC-validated answers by end-to-end security status.
-	DNSSECE2E param.Field[[]bool] `query:"dnssecE2e"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryV2ParamsFormat] `query:"format"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]DNSSummaryV2ParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
@@ -757,21 +747,17 @@ type DNSSummaryV2Params struct {
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Filters results based on whether the queries have a matching answer.
-	MatchingAnswer param.Field[[]bool] `query:"matchingAnswer"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[[]bool] `query:"nodata"`
+	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]DNSSummaryV2ParamsProtocol] `query:"protocol"`
+	Protocol param.Field[DNSSummaryV2ParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]DNSSummaryV2ParamsQueryType] `query:"queryType"`
+	QueryType param.Field[DNSSummaryV2ParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]DNSSummaryV2ParamsResponseCode] `query:"responseCode"`
-	// Filters results by DNS response TTL.
-	ResponseTTL param.Field[[]DNSSummaryV2ParamsResponseTTL] `query:"responseTtl"`
-	// Filters results by top-level domain.
+	ResponseCode param.Field[DNSSummaryV2ParamsResponseCode] `query:"responseCode"`
+	// Filters results by country code top-level domain (ccTLD).
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -787,55 +773,21 @@ func (r DNSSummaryV2Params) URLQuery() (v url.Values) {
 type DNSSummaryV2ParamsDimension string
 
 const (
-	DNSSummaryV2ParamsDimensionIPVersion       DNSSummaryV2ParamsDimension = "IP_VERSION"
-	DNSSummaryV2ParamsDimensionCacheHit        DNSSummaryV2ParamsDimension = "CACHE_HIT"
-	DNSSummaryV2ParamsDimensionDNSSEC          DNSSummaryV2ParamsDimension = "DNSSEC"
-	DNSSummaryV2ParamsDimensionDNSSECAware     DNSSummaryV2ParamsDimension = "DNSSEC_AWARE"
-	DNSSummaryV2ParamsDimensionDNSSECE2E       DNSSummaryV2ParamsDimension = "DNSSEC_E2E"
-	DNSSummaryV2ParamsDimensionMatchingAnswer  DNSSummaryV2ParamsDimension = "MATCHING_ANSWER"
-	DNSSummaryV2ParamsDimensionProtocol        DNSSummaryV2ParamsDimension = "PROTOCOL"
-	DNSSummaryV2ParamsDimensionQueryType       DNSSummaryV2ParamsDimension = "QUERY_TYPE"
-	DNSSummaryV2ParamsDimensionResponseCode    DNSSummaryV2ParamsDimension = "RESPONSE_CODE"
-	DNSSummaryV2ParamsDimensionResponseTTL     DNSSummaryV2ParamsDimension = "RESPONSE_TTL"
-	DNSSummaryV2ParamsDimensionTld             DNSSummaryV2ParamsDimension = "TLD"
-	DNSSummaryV2ParamsDimensionTldDNSMagnitude DNSSummaryV2ParamsDimension = "TLD_DNS_MAGNITUDE"
+	DNSSummaryV2ParamsDimensionIPVersion      DNSSummaryV2ParamsDimension = "IP_VERSION"
+	DNSSummaryV2ParamsDimensionCacheHit       DNSSummaryV2ParamsDimension = "CACHE_HIT"
+	DNSSummaryV2ParamsDimensionDNSSEC         DNSSummaryV2ParamsDimension = "DNSSEC"
+	DNSSummaryV2ParamsDimensionDNSSECAware    DNSSummaryV2ParamsDimension = "DNSSEC_AWARE"
+	DNSSummaryV2ParamsDimensionDNSSECE2E      DNSSummaryV2ParamsDimension = "DNSSEC_E2E"
+	DNSSummaryV2ParamsDimensionMatchingAnswer DNSSummaryV2ParamsDimension = "MATCHING_ANSWER"
+	DNSSummaryV2ParamsDimensionProtocol       DNSSummaryV2ParamsDimension = "PROTOCOL"
+	DNSSummaryV2ParamsDimensionQueryType      DNSSummaryV2ParamsDimension = "QUERY_TYPE"
+	DNSSummaryV2ParamsDimensionResponseCode   DNSSummaryV2ParamsDimension = "RESPONSE_CODE"
+	DNSSummaryV2ParamsDimensionResponseTTL    DNSSummaryV2ParamsDimension = "RESPONSE_TTL"
 )
 
 func (r DNSSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case DNSSummaryV2ParamsDimensionIPVersion, DNSSummaryV2ParamsDimensionCacheHit, DNSSummaryV2ParamsDimensionDNSSEC, DNSSummaryV2ParamsDimensionDNSSECAware, DNSSummaryV2ParamsDimensionDNSSECE2E, DNSSummaryV2ParamsDimensionMatchingAnswer, DNSSummaryV2ParamsDimensionProtocol, DNSSummaryV2ParamsDimensionQueryType, DNSSummaryV2ParamsDimensionResponseCode, DNSSummaryV2ParamsDimensionResponseTTL, DNSSummaryV2ParamsDimensionTld, DNSSummaryV2ParamsDimensionTldDNSMagnitude:
-		return true
-	}
-	return false
-}
-
-type DNSSummaryV2ParamsDNSSEC string
-
-const (
-	DNSSummaryV2ParamsDNSSECInvalid  DNSSummaryV2ParamsDNSSEC = "INVALID"
-	DNSSummaryV2ParamsDNSSECInsecure DNSSummaryV2ParamsDNSSEC = "INSECURE"
-	DNSSummaryV2ParamsDNSSECSecure   DNSSummaryV2ParamsDNSSEC = "SECURE"
-	DNSSummaryV2ParamsDNSSECOther    DNSSummaryV2ParamsDNSSEC = "OTHER"
-)
-
-func (r DNSSummaryV2ParamsDNSSEC) IsKnown() bool {
-	switch r {
-	case DNSSummaryV2ParamsDNSSECInvalid, DNSSummaryV2ParamsDNSSECInsecure, DNSSummaryV2ParamsDNSSECSecure, DNSSummaryV2ParamsDNSSECOther:
-		return true
-	}
-	return false
-}
-
-type DNSSummaryV2ParamsDNSSECAware string
-
-const (
-	DNSSummaryV2ParamsDNSSECAwareSupported    DNSSummaryV2ParamsDNSSECAware = "SUPPORTED"
-	DNSSummaryV2ParamsDNSSECAwareNotSupported DNSSummaryV2ParamsDNSSECAware = "NOT_SUPPORTED"
-)
-
-func (r DNSSummaryV2ParamsDNSSECAware) IsKnown() bool {
-	switch r {
-	case DNSSummaryV2ParamsDNSSECAwareSupported, DNSSummaryV2ParamsDNSSECAwareNotSupported:
+	case DNSSummaryV2ParamsDimensionIPVersion, DNSSummaryV2ParamsDimensionCacheHit, DNSSummaryV2ParamsDimensionDNSSEC, DNSSummaryV2ParamsDimensionDNSSECAware, DNSSummaryV2ParamsDimensionDNSSECE2E, DNSSummaryV2ParamsDimensionMatchingAnswer, DNSSummaryV2ParamsDimensionProtocol, DNSSummaryV2ParamsDimensionQueryType, DNSSummaryV2ParamsDimensionResponseCode, DNSSummaryV2ParamsDimensionResponseTTL:
 		return true
 	}
 	return false
@@ -857,21 +809,7 @@ func (r DNSSummaryV2ParamsFormat) IsKnown() bool {
 	return false
 }
 
-type DNSSummaryV2ParamsIPVersion string
-
-const (
-	DNSSummaryV2ParamsIPVersionIPv4 DNSSummaryV2ParamsIPVersion = "IPv4"
-	DNSSummaryV2ParamsIPVersionIPv6 DNSSummaryV2ParamsIPVersion = "IPv6"
-)
-
-func (r DNSSummaryV2ParamsIPVersion) IsKnown() bool {
-	switch r {
-	case DNSSummaryV2ParamsIPVersionIPv4, DNSSummaryV2ParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
+// Filters results by DNS transport protocol.
 type DNSSummaryV2ParamsProtocol string
 
 const (
@@ -889,6 +827,7 @@ func (r DNSSummaryV2ParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type DNSSummaryV2ParamsQueryType string
 
 const (
@@ -990,6 +929,7 @@ func (r DNSSummaryV2ParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type DNSSummaryV2ParamsResponseCode string
 
 const (
@@ -1017,26 +957,6 @@ const (
 func (r DNSSummaryV2ParamsResponseCode) IsKnown() bool {
 	switch r {
 	case DNSSummaryV2ParamsResponseCodeNoerror, DNSSummaryV2ParamsResponseCodeFormerr, DNSSummaryV2ParamsResponseCodeServfail, DNSSummaryV2ParamsResponseCodeNxdomain, DNSSummaryV2ParamsResponseCodeNotimp, DNSSummaryV2ParamsResponseCodeRefused, DNSSummaryV2ParamsResponseCodeYxdomain, DNSSummaryV2ParamsResponseCodeYxrrset, DNSSummaryV2ParamsResponseCodeNxrrset, DNSSummaryV2ParamsResponseCodeNotauth, DNSSummaryV2ParamsResponseCodeNotzone, DNSSummaryV2ParamsResponseCodeBadsig, DNSSummaryV2ParamsResponseCodeBadkey, DNSSummaryV2ParamsResponseCodeBadtime, DNSSummaryV2ParamsResponseCodeBadmode, DNSSummaryV2ParamsResponseCodeBadname, DNSSummaryV2ParamsResponseCodeBadalg, DNSSummaryV2ParamsResponseCodeBadtrunc, DNSSummaryV2ParamsResponseCodeBadcookie:
-		return true
-	}
-	return false
-}
-
-type DNSSummaryV2ParamsResponseTTL string
-
-const (
-	DNSSummaryV2ParamsResponseTTLLte1M      DNSSummaryV2ParamsResponseTTL = "LTE_1M"
-	DNSSummaryV2ParamsResponseTTLGt1MLte5M  DNSSummaryV2ParamsResponseTTL = "GT_1M_LTE_5M"
-	DNSSummaryV2ParamsResponseTTLGt5MLte15M DNSSummaryV2ParamsResponseTTL = "GT_5M_LTE_15M"
-	DNSSummaryV2ParamsResponseTTLGt15MLte1H DNSSummaryV2ParamsResponseTTL = "GT_15M_LTE_1H"
-	DNSSummaryV2ParamsResponseTTLGt1HLte1D  DNSSummaryV2ParamsResponseTTL = "GT_1H_LTE_1D"
-	DNSSummaryV2ParamsResponseTTLGt1DLte1W  DNSSummaryV2ParamsResponseTTL = "GT_1D_LTE_1W"
-	DNSSummaryV2ParamsResponseTTLGt1W       DNSSummaryV2ParamsResponseTTL = "GT_1W"
-)
-
-func (r DNSSummaryV2ParamsResponseTTL) IsKnown() bool {
-	switch r {
-	case DNSSummaryV2ParamsResponseTTLLte1M, DNSSummaryV2ParamsResponseTTLGt1MLte5M, DNSSummaryV2ParamsResponseTTLGt5MLte15M, DNSSummaryV2ParamsResponseTTLGt15MLte1H, DNSSummaryV2ParamsResponseTTLGt1HLte1D, DNSSummaryV2ParamsResponseTTLGt1DLte1W, DNSSummaryV2ParamsResponseTTLGt1W:
 		return true
 	}
 	return false
@@ -1075,8 +995,6 @@ type DNSTimeseriesParams struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filters results based on cache status.
-	CacheHit param.Field[[]bool] `query:"cacheHit"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1089,35 +1007,23 @@ type DNSTimeseriesParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filters results based on DNSSEC (DNS Security Extensions) support.
-	DNSSEC param.Field[[]DNSTimeseriesParamsDNSSEC] `query:"dnssec"`
-	// Filters results based on DNSSEC (DNS Security Extensions) client awareness.
-	DNSSECAware param.Field[[]DNSTimeseriesParamsDNSSECAware] `query:"dnssecAware"`
-	// Filters results based on DNSSEC-validated answers by end-to-end security status.
-	DNSSECE2E param.Field[[]bool] `query:"dnssecE2e"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesParamsFormat] `query:"format"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]DNSTimeseriesParamsIPVersion] `query:"ipVersion"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Filters results based on whether the queries have a matching answer.
-	MatchingAnswer param.Field[[]bool] `query:"matchingAnswer"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[[]bool] `query:"nodata"`
+	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]DNSTimeseriesParamsProtocol] `query:"protocol"`
+	Protocol param.Field[DNSTimeseriesParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]DNSTimeseriesParamsQueryType] `query:"queryType"`
+	QueryType param.Field[DNSTimeseriesParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]DNSTimeseriesParamsResponseCode] `query:"responseCode"`
-	// Filters results by DNS response TTL.
-	ResponseTTL param.Field[[]DNSTimeseriesParamsResponseTTL] `query:"responseTtl"`
-	// Filters results by top-level domain.
+	ResponseCode param.Field[DNSTimeseriesParamsResponseCode] `query:"responseCode"`
+	// Filters results by country code top-level domain (ccTLD).
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -1149,38 +1055,6 @@ func (r DNSTimeseriesParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-type DNSTimeseriesParamsDNSSEC string
-
-const (
-	DNSTimeseriesParamsDNSSECInvalid  DNSTimeseriesParamsDNSSEC = "INVALID"
-	DNSTimeseriesParamsDNSSECInsecure DNSTimeseriesParamsDNSSEC = "INSECURE"
-	DNSTimeseriesParamsDNSSECSecure   DNSTimeseriesParamsDNSSEC = "SECURE"
-	DNSTimeseriesParamsDNSSECOther    DNSTimeseriesParamsDNSSEC = "OTHER"
-)
-
-func (r DNSTimeseriesParamsDNSSEC) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesParamsDNSSECInvalid, DNSTimeseriesParamsDNSSECInsecure, DNSTimeseriesParamsDNSSECSecure, DNSTimeseriesParamsDNSSECOther:
-		return true
-	}
-	return false
-}
-
-type DNSTimeseriesParamsDNSSECAware string
-
-const (
-	DNSTimeseriesParamsDNSSECAwareSupported    DNSTimeseriesParamsDNSSECAware = "SUPPORTED"
-	DNSTimeseriesParamsDNSSECAwareNotSupported DNSTimeseriesParamsDNSSECAware = "NOT_SUPPORTED"
-)
-
-func (r DNSTimeseriesParamsDNSSECAware) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesParamsDNSSECAwareSupported, DNSTimeseriesParamsDNSSECAwareNotSupported:
-		return true
-	}
-	return false
-}
-
 // Format in which results will be returned.
 type DNSTimeseriesParamsFormat string
 
@@ -1197,21 +1071,7 @@ func (r DNSTimeseriesParamsFormat) IsKnown() bool {
 	return false
 }
 
-type DNSTimeseriesParamsIPVersion string
-
-const (
-	DNSTimeseriesParamsIPVersionIPv4 DNSTimeseriesParamsIPVersion = "IPv4"
-	DNSTimeseriesParamsIPVersionIPv6 DNSTimeseriesParamsIPVersion = "IPv6"
-)
-
-func (r DNSTimeseriesParamsIPVersion) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesParamsIPVersionIPv4, DNSTimeseriesParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
+// Filters results by DNS transport protocol.
 type DNSTimeseriesParamsProtocol string
 
 const (
@@ -1229,6 +1089,7 @@ func (r DNSTimeseriesParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type DNSTimeseriesParamsQueryType string
 
 const (
@@ -1330,6 +1191,7 @@ func (r DNSTimeseriesParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type DNSTimeseriesParamsResponseCode string
 
 const (
@@ -1357,26 +1219,6 @@ const (
 func (r DNSTimeseriesParamsResponseCode) IsKnown() bool {
 	switch r {
 	case DNSTimeseriesParamsResponseCodeNoerror, DNSTimeseriesParamsResponseCodeFormerr, DNSTimeseriesParamsResponseCodeServfail, DNSTimeseriesParamsResponseCodeNxdomain, DNSTimeseriesParamsResponseCodeNotimp, DNSTimeseriesParamsResponseCodeRefused, DNSTimeseriesParamsResponseCodeYxdomain, DNSTimeseriesParamsResponseCodeYxrrset, DNSTimeseriesParamsResponseCodeNxrrset, DNSTimeseriesParamsResponseCodeNotauth, DNSTimeseriesParamsResponseCodeNotzone, DNSTimeseriesParamsResponseCodeBadsig, DNSTimeseriesParamsResponseCodeBadkey, DNSTimeseriesParamsResponseCodeBadtime, DNSTimeseriesParamsResponseCodeBadmode, DNSTimeseriesParamsResponseCodeBadname, DNSTimeseriesParamsResponseCodeBadalg, DNSTimeseriesParamsResponseCodeBadtrunc, DNSTimeseriesParamsResponseCodeBadcookie:
-		return true
-	}
-	return false
-}
-
-type DNSTimeseriesParamsResponseTTL string
-
-const (
-	DNSTimeseriesParamsResponseTTLLte1M      DNSTimeseriesParamsResponseTTL = "LTE_1M"
-	DNSTimeseriesParamsResponseTTLGt1MLte5M  DNSTimeseriesParamsResponseTTL = "GT_1M_LTE_5M"
-	DNSTimeseriesParamsResponseTTLGt5MLte15M DNSTimeseriesParamsResponseTTL = "GT_5M_LTE_15M"
-	DNSTimeseriesParamsResponseTTLGt15MLte1H DNSTimeseriesParamsResponseTTL = "GT_15M_LTE_1H"
-	DNSTimeseriesParamsResponseTTLGt1HLte1D  DNSTimeseriesParamsResponseTTL = "GT_1H_LTE_1D"
-	DNSTimeseriesParamsResponseTTLGt1DLte1W  DNSTimeseriesParamsResponseTTL = "GT_1D_LTE_1W"
-	DNSTimeseriesParamsResponseTTLGt1W       DNSTimeseriesParamsResponseTTL = "GT_1W"
-)
-
-func (r DNSTimeseriesParamsResponseTTL) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesParamsResponseTTLLte1M, DNSTimeseriesParamsResponseTTLGt1MLte5M, DNSTimeseriesParamsResponseTTLGt5MLte15M, DNSTimeseriesParamsResponseTTLGt15MLte1H, DNSTimeseriesParamsResponseTTLGt1HLte1D, DNSTimeseriesParamsResponseTTLGt1DLte1W, DNSTimeseriesParamsResponseTTLGt1W:
 		return true
 	}
 	return false
@@ -1415,8 +1257,6 @@ type DNSTimeseriesGroupsV2Params struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filters results based on cache status.
-	CacheHit param.Field[[]bool] `query:"cacheHit"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1429,16 +1269,8 @@ type DNSTimeseriesGroupsV2Params struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filters results based on DNSSEC (DNS Security Extensions) support.
-	DNSSEC param.Field[[]DNSTimeseriesGroupsV2ParamsDNSSEC] `query:"dnssec"`
-	// Filters results based on DNSSEC (DNS Security Extensions) client awareness.
-	DNSSECAware param.Field[[]DNSTimeseriesGroupsV2ParamsDNSSECAware] `query:"dnssecAware"`
-	// Filters results based on DNSSEC-validated answers by end-to-end security status.
-	DNSSECE2E param.Field[[]bool] `query:"dnssecE2e"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupsV2ParamsFormat] `query:"format"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]DNSTimeseriesGroupsV2ParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
 	// an "other" category.
@@ -1447,24 +1279,17 @@ type DNSTimeseriesGroupsV2Params struct {
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Filters results based on whether the queries have a matching answer.
-	MatchingAnswer param.Field[[]bool] `query:"matchingAnswer"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[[]bool] `query:"nodata"`
-	// Normalization method applied to the results. Refer to
-	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization param.Field[DNSTimeseriesGroupsV2ParamsNormalization] `query:"normalization"`
+	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]DNSTimeseriesGroupsV2ParamsProtocol] `query:"protocol"`
+	Protocol param.Field[DNSTimeseriesGroupsV2ParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]DNSTimeseriesGroupsV2ParamsQueryType] `query:"queryType"`
+	QueryType param.Field[DNSTimeseriesGroupsV2ParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]DNSTimeseriesGroupsV2ParamsResponseCode] `query:"responseCode"`
-	// Filters results by DNS response TTL.
-	ResponseTTL param.Field[[]DNSTimeseriesGroupsV2ParamsResponseTTL] `query:"responseTtl"`
-	// Filters results by top-level domain.
+	ResponseCode param.Field[DNSTimeseriesGroupsV2ParamsResponseCode] `query:"responseCode"`
+	// Filters results by country code top-level domain (ccTLD).
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -1491,12 +1316,11 @@ const (
 	DNSTimeseriesGroupsV2ParamsDimensionQueryType      DNSTimeseriesGroupsV2ParamsDimension = "QUERY_TYPE"
 	DNSTimeseriesGroupsV2ParamsDimensionResponseCode   DNSTimeseriesGroupsV2ParamsDimension = "RESPONSE_CODE"
 	DNSTimeseriesGroupsV2ParamsDimensionResponseTTL    DNSTimeseriesGroupsV2ParamsDimension = "RESPONSE_TTL"
-	DNSTimeseriesGroupsV2ParamsDimensionTld            DNSTimeseriesGroupsV2ParamsDimension = "TLD"
 )
 
 func (r DNSTimeseriesGroupsV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupsV2ParamsDimensionIPVersion, DNSTimeseriesGroupsV2ParamsDimensionCacheHit, DNSTimeseriesGroupsV2ParamsDimensionDNSSEC, DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware, DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E, DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer, DNSTimeseriesGroupsV2ParamsDimensionProtocol, DNSTimeseriesGroupsV2ParamsDimensionQueryType, DNSTimeseriesGroupsV2ParamsDimensionResponseCode, DNSTimeseriesGroupsV2ParamsDimensionResponseTTL, DNSTimeseriesGroupsV2ParamsDimensionTld:
+	case DNSTimeseriesGroupsV2ParamsDimensionIPVersion, DNSTimeseriesGroupsV2ParamsDimensionCacheHit, DNSTimeseriesGroupsV2ParamsDimensionDNSSEC, DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware, DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E, DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer, DNSTimeseriesGroupsV2ParamsDimensionProtocol, DNSTimeseriesGroupsV2ParamsDimensionQueryType, DNSTimeseriesGroupsV2ParamsDimensionResponseCode, DNSTimeseriesGroupsV2ParamsDimensionResponseTTL:
 		return true
 	}
 	return false
@@ -1522,38 +1346,6 @@ func (r DNSTimeseriesGroupsV2ParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-type DNSTimeseriesGroupsV2ParamsDNSSEC string
-
-const (
-	DNSTimeseriesGroupsV2ParamsDNSSECInvalid  DNSTimeseriesGroupsV2ParamsDNSSEC = "INVALID"
-	DNSTimeseriesGroupsV2ParamsDNSSECInsecure DNSTimeseriesGroupsV2ParamsDNSSEC = "INSECURE"
-	DNSTimeseriesGroupsV2ParamsDNSSECSecure   DNSTimeseriesGroupsV2ParamsDNSSEC = "SECURE"
-	DNSTimeseriesGroupsV2ParamsDNSSECOther    DNSTimeseriesGroupsV2ParamsDNSSEC = "OTHER"
-)
-
-func (r DNSTimeseriesGroupsV2ParamsDNSSEC) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesGroupsV2ParamsDNSSECInvalid, DNSTimeseriesGroupsV2ParamsDNSSECInsecure, DNSTimeseriesGroupsV2ParamsDNSSECSecure, DNSTimeseriesGroupsV2ParamsDNSSECOther:
-		return true
-	}
-	return false
-}
-
-type DNSTimeseriesGroupsV2ParamsDNSSECAware string
-
-const (
-	DNSTimeseriesGroupsV2ParamsDNSSECAwareSupported    DNSTimeseriesGroupsV2ParamsDNSSECAware = "SUPPORTED"
-	DNSTimeseriesGroupsV2ParamsDNSSECAwareNotSupported DNSTimeseriesGroupsV2ParamsDNSSECAware = "NOT_SUPPORTED"
-)
-
-func (r DNSTimeseriesGroupsV2ParamsDNSSECAware) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesGroupsV2ParamsDNSSECAwareSupported, DNSTimeseriesGroupsV2ParamsDNSSECAwareNotSupported:
-		return true
-	}
-	return false
-}
-
 // Format in which results will be returned.
 type DNSTimeseriesGroupsV2ParamsFormat string
 
@@ -1570,38 +1362,7 @@ func (r DNSTimeseriesGroupsV2ParamsFormat) IsKnown() bool {
 	return false
 }
 
-type DNSTimeseriesGroupsV2ParamsIPVersion string
-
-const (
-	DNSTimeseriesGroupsV2ParamsIPVersionIPv4 DNSTimeseriesGroupsV2ParamsIPVersion = "IPv4"
-	DNSTimeseriesGroupsV2ParamsIPVersionIPv6 DNSTimeseriesGroupsV2ParamsIPVersion = "IPv6"
-)
-
-func (r DNSTimeseriesGroupsV2ParamsIPVersion) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesGroupsV2ParamsIPVersionIPv4, DNSTimeseriesGroupsV2ParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
-// Normalization method applied to the results. Refer to
-// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type DNSTimeseriesGroupsV2ParamsNormalization string
-
-const (
-	DNSTimeseriesGroupsV2ParamsNormalizationPercentage DNSTimeseriesGroupsV2ParamsNormalization = "PERCENTAGE"
-	DNSTimeseriesGroupsV2ParamsNormalizationMin0Max    DNSTimeseriesGroupsV2ParamsNormalization = "MIN0_MAX"
-)
-
-func (r DNSTimeseriesGroupsV2ParamsNormalization) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesGroupsV2ParamsNormalizationPercentage, DNSTimeseriesGroupsV2ParamsNormalizationMin0Max:
-		return true
-	}
-	return false
-}
-
+// Filters results by DNS transport protocol.
 type DNSTimeseriesGroupsV2ParamsProtocol string
 
 const (
@@ -1619,6 +1380,7 @@ func (r DNSTimeseriesGroupsV2ParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type DNSTimeseriesGroupsV2ParamsQueryType string
 
 const (
@@ -1720,6 +1482,7 @@ func (r DNSTimeseriesGroupsV2ParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type DNSTimeseriesGroupsV2ParamsResponseCode string
 
 const (
@@ -1747,26 +1510,6 @@ const (
 func (r DNSTimeseriesGroupsV2ParamsResponseCode) IsKnown() bool {
 	switch r {
 	case DNSTimeseriesGroupsV2ParamsResponseCodeNoerror, DNSTimeseriesGroupsV2ParamsResponseCodeFormerr, DNSTimeseriesGroupsV2ParamsResponseCodeServfail, DNSTimeseriesGroupsV2ParamsResponseCodeNxdomain, DNSTimeseriesGroupsV2ParamsResponseCodeNotimp, DNSTimeseriesGroupsV2ParamsResponseCodeRefused, DNSTimeseriesGroupsV2ParamsResponseCodeYxdomain, DNSTimeseriesGroupsV2ParamsResponseCodeYxrrset, DNSTimeseriesGroupsV2ParamsResponseCodeNxrrset, DNSTimeseriesGroupsV2ParamsResponseCodeNotauth, DNSTimeseriesGroupsV2ParamsResponseCodeNotzone, DNSTimeseriesGroupsV2ParamsResponseCodeBadsig, DNSTimeseriesGroupsV2ParamsResponseCodeBadkey, DNSTimeseriesGroupsV2ParamsResponseCodeBadtime, DNSTimeseriesGroupsV2ParamsResponseCodeBadmode, DNSTimeseriesGroupsV2ParamsResponseCodeBadname, DNSTimeseriesGroupsV2ParamsResponseCodeBadalg, DNSTimeseriesGroupsV2ParamsResponseCodeBadtrunc, DNSTimeseriesGroupsV2ParamsResponseCodeBadcookie:
-		return true
-	}
-	return false
-}
-
-type DNSTimeseriesGroupsV2ParamsResponseTTL string
-
-const (
-	DNSTimeseriesGroupsV2ParamsResponseTTLLte1M      DNSTimeseriesGroupsV2ParamsResponseTTL = "LTE_1M"
-	DNSTimeseriesGroupsV2ParamsResponseTTLGt1MLte5M  DNSTimeseriesGroupsV2ParamsResponseTTL = "GT_1M_LTE_5M"
-	DNSTimeseriesGroupsV2ParamsResponseTTLGt5MLte15M DNSTimeseriesGroupsV2ParamsResponseTTL = "GT_5M_LTE_15M"
-	DNSTimeseriesGroupsV2ParamsResponseTTLGt15MLte1H DNSTimeseriesGroupsV2ParamsResponseTTL = "GT_15M_LTE_1H"
-	DNSTimeseriesGroupsV2ParamsResponseTTLGt1HLte1D  DNSTimeseriesGroupsV2ParamsResponseTTL = "GT_1H_LTE_1D"
-	DNSTimeseriesGroupsV2ParamsResponseTTLGt1DLte1W  DNSTimeseriesGroupsV2ParamsResponseTTL = "GT_1D_LTE_1W"
-	DNSTimeseriesGroupsV2ParamsResponseTTLGt1W       DNSTimeseriesGroupsV2ParamsResponseTTL = "GT_1W"
-)
-
-func (r DNSTimeseriesGroupsV2ParamsResponseTTL) IsKnown() bool {
-	switch r {
-	case DNSTimeseriesGroupsV2ParamsResponseTTLLte1M, DNSTimeseriesGroupsV2ParamsResponseTTLGt1MLte5M, DNSTimeseriesGroupsV2ParamsResponseTTLGt5MLte15M, DNSTimeseriesGroupsV2ParamsResponseTTLGt15MLte1H, DNSTimeseriesGroupsV2ParamsResponseTTLGt1HLte1D, DNSTimeseriesGroupsV2ParamsResponseTTLGt1DLte1W, DNSTimeseriesGroupsV2ParamsResponseTTLGt1W:
 		return true
 	}
 	return false

@@ -6474,8 +6474,6 @@ type SetConfigRuleActionParameters struct {
 	// Whether to enable Browser Integrity Check (BIC).
 	BIC bool `json:"bic"`
 	// Whether to disable Cloudflare Apps.
-	//
-	// Deprecated: Cloudflare Apps are deprected.
 	DisableApps SetConfigRuleActionParametersDisableApps `json:"disable_apps"`
 	// Whether to disable Pay Per Crawl.
 	DisablePayPerCrawl SetConfigRuleActionParametersDisablePayPerCrawl `json:"disable_pay_per_crawl"`
@@ -6490,9 +6488,6 @@ type SetConfigRuleActionParameters struct {
 	// Whether to enable Hotlink Protection.
 	HotlinkProtection bool `json:"hotlink_protection"`
 	// Whether to enable Mirage.
-	//
-	// Deprecated: Mirage is deprecated. More information at
-	// https://developers.cloudflare.com/speed/optimization/images/mirage/.
 	Mirage bool `json:"mirage"`
 	// Whether to enable Opportunistic Encryption.
 	OpportunisticEncryption bool `json:"opportunistic_encryption"`
@@ -6808,8 +6803,6 @@ type SetConfigRuleActionParametersParam struct {
 	// Whether to enable Browser Integrity Check (BIC).
 	BIC param.Field[bool] `json:"bic"`
 	// Whether to disable Cloudflare Apps.
-	//
-	// Deprecated: Cloudflare Apps are deprected.
 	DisableApps param.Field[SetConfigRuleActionParametersDisableApps] `json:"disable_apps"`
 	// Whether to disable Pay Per Crawl.
 	DisablePayPerCrawl param.Field[SetConfigRuleActionParametersDisablePayPerCrawl] `json:"disable_pay_per_crawl"`
@@ -6824,9 +6817,6 @@ type SetConfigRuleActionParametersParam struct {
 	// Whether to enable Hotlink Protection.
 	HotlinkProtection param.Field[bool] `json:"hotlink_protection"`
 	// Whether to enable Mirage.
-	//
-	// Deprecated: Mirage is deprecated. More information at
-	// https://developers.cloudflare.com/speed/optimization/images/mirage/.
 	Mirage param.Field[bool] `json:"mirage"`
 	// Whether to enable Opportunistic Encryption.
 	OpportunisticEncryption param.Field[bool] `json:"opportunistic_encryption"`

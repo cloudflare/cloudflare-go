@@ -32,7 +32,6 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 		AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ActionLog:        cloudflare.F(true),
 		AlertID:          cloudflare.F("alert_id"),
-		Cursor:           cloudflare.F("cursor"),
 		DetectionsOnly:   cloudflare.F(true),
 		Domain:           cloudflare.F("domain"),
 		End:              cloudflare.F(time.Now()),

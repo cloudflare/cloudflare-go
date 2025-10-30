@@ -39,7 +39,7 @@ func TestEmailSecurityTopTldMaliciousGetWithOptionalParams(t *testing.T) {
 			DKIM:        cloudflare.F([]radar.EmailSecurityTopTldMaliciousGetParamsDKIM{radar.EmailSecurityTopTldMaliciousGetParamsDKIMPass}),
 			DMARC:       cloudflare.F([]radar.EmailSecurityTopTldMaliciousGetParamsDMARC{radar.EmailSecurityTopTldMaliciousGetParamsDMARCPass}),
 			Format:      cloudflare.F(radar.EmailSecurityTopTldMaliciousGetParamsFormatJson),
-			Limit:       cloudflare.F(int64(1)),
+			Limit:       cloudflare.F(int64(5)),
 			Name:        cloudflare.F([]string{"main_series"}),
 			SPF:         cloudflare.F([]radar.EmailSecurityTopTldMaliciousGetParamsSPF{radar.EmailSecurityTopTldMaliciousGetParamsSPFPass}),
 			TldCategory: cloudflare.F(radar.EmailSecurityTopTldMaliciousGetParamsTldCategoryClassic),
