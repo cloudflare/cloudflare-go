@@ -29,7 +29,7 @@ func TestCtLogListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Ct.Logs.List(context.TODO(), radar.CtLogListParams{
 		Format: cloudflare.F(radar.CtLogListParamsFormatJson),
-		Limit:  cloudflare.F(int64(5)),
+		Limit:  cloudflare.F(int64(1)),
 		Offset: cloudflare.F(int64(0)),
 	})
 	if err != nil {
