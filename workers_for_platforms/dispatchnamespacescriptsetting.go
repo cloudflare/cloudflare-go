@@ -112,9 +112,9 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement DispatchNamespaceScriptSettingEditResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
+	TailConsumers []workers.ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel DispatchNamespaceScriptSettingEditResponseUsageModel `json:"usage_model"`
 	JSON       dispatchNamespaceScriptSettingEditResponseJSON       `json:"-"`
@@ -2323,9 +2323,9 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement DispatchNamespaceScriptSettingGetResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
+	TailConsumers []workers.ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel DispatchNamespaceScriptSettingGetResponseUsageModel `json:"usage_model"`
 	JSON       dispatchNamespaceScriptSettingGetResponseJSON       `json:"-"`
