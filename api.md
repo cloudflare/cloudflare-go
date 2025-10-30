@@ -5318,6 +5318,10 @@ Methods:
 
 #### Mcp
 
+##### Portals
+
+##### Servers
+
 ### GatewayCA
 
 Response Types:
