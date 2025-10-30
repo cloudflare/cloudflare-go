@@ -38,7 +38,9 @@ func NewEmailRoutingTimeseriesGroupService(opts ...option.RequestOption) (r *Ema
 // Retrieves the distribution of emails by ARC (Authenticated Received Chain)
 // validation over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Email Routing Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/timeseries_groups_v2/)
+// instead.
 func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query EmailRoutingTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupARCResponse, err error) {
 	var env EmailRoutingTimeseriesGroupARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +56,9 @@ func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query Emai
 // Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
 // validation over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Email Routing Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/timeseries_groups_v2/)
+// instead.
 func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query EmailRoutingTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDKIMResponse, err error) {
 	var env EmailRoutingTimeseriesGroupDKIMResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -70,7 +74,9 @@ func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query Ema
 // Retrieves the distribution of emails by DMARC (Domain-based Message
 // Authentication, Reporting and Conformance) validation over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Email Routing Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/timeseries_groups_v2/)
+// instead.
 func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query EmailRoutingTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDMARCResponse, err error) {
 	var env EmailRoutingTimeseriesGroupDMARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -86,7 +92,9 @@ func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query Em
 // Retrieves the distribution of emails by encryption status (encrypted vs.
 // not-encrypted) over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Email Routing Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/timeseries_groups_v2/)
+// instead.
 func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, query EmailRoutingTimeseriesGroupEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupEncryptedResponse, err error) {
 	var env EmailRoutingTimeseriesGroupEncryptedResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -101,7 +109,9 @@ func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, quer
 
 // Retrieves the distribution of emails by IP version over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Email Routing Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/timeseries_groups_v2/)
+// instead.
 func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, query EmailRoutingTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupIPVersionResponse, err error) {
 	var env EmailRoutingTimeseriesGroupIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -117,7 +127,9 @@ func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, quer
 // Retrieves the distribution of emails by SPF (Sender Policy Framework) validation
 // over time.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Radar Email Routing Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/timeseries_groups_v2/)
+// instead.
 func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query EmailRoutingTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupSPFResponse, err error) {
 	var env EmailRoutingTimeseriesGroupSPFResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
