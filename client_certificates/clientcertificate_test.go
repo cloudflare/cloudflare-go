@@ -100,7 +100,7 @@ func TestClientCertificateDelete(t *testing.T) {
 	}
 }
 
-func TestClientCertificateEdit(t *testing.T) {
+func TestClientCertificateEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,7 +117,8 @@ func TestClientCertificateEdit(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		client_certificates.ClientCertificateEditParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Reactivate: cloudflare.F(true),
 		},
 	)
 	if err != nil {
