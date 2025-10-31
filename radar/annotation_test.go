@@ -34,7 +34,7 @@ func TestAnnotationListWithOptionalParams(t *testing.T) {
 		DateRange: cloudflare.F("7d"),
 		DateStart: cloudflare.F(time.Now()),
 		Format:    cloudflare.F(radar.AnnotationListParamsFormatJson),
-		Limit:     cloudflare.F(int64(5)),
+		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F("US"),
 		Offset:    cloudflare.F(int64(0)),
 	})

@@ -2349,14 +2349,14 @@ type DNSSummaryCacheHitParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryCacheHitParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryCacheHitParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryCacheHitParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryCacheHitParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryCacheHitParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryCacheHitParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -2385,7 +2385,6 @@ func (r DNSSummaryCacheHitParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryCacheHitParamsProtocol string
 
 const (
@@ -2403,7 +2402,6 @@ func (r DNSSummaryCacheHitParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryCacheHitParamsQueryType string
 
 const (
@@ -2505,7 +2503,6 @@ func (r DNSSummaryCacheHitParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryCacheHitParamsResponseCode string
 
 const (
@@ -2588,14 +2585,14 @@ type DNSSummaryDNSSECParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryDNSSECParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryDNSSECParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryDNSSECParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryDNSSECParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryDNSSECParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryDNSSECParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -2623,7 +2620,6 @@ func (r DNSSummaryDNSSECParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryDNSSECParamsProtocol string
 
 const (
@@ -2641,7 +2637,6 @@ func (r DNSSummaryDNSSECParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryDNSSECParamsQueryType string
 
 const (
@@ -2743,7 +2738,6 @@ func (r DNSSummaryDNSSECParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryDNSSECParamsResponseCode string
 
 const (
@@ -2826,14 +2820,14 @@ type DNSSummaryDNSSECAwareParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryDNSSECAwareParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryDNSSECAwareParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryDNSSECAwareParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryDNSSECAwareParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryDNSSECAwareParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryDNSSECAwareParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -2862,7 +2856,6 @@ func (r DNSSummaryDNSSECAwareParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryDNSSECAwareParamsProtocol string
 
 const (
@@ -2880,7 +2873,6 @@ func (r DNSSummaryDNSSECAwareParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryDNSSECAwareParamsQueryType string
 
 const (
@@ -2982,7 +2974,6 @@ func (r DNSSummaryDNSSECAwareParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryDNSSECAwareParamsResponseCode string
 
 const (
@@ -3065,14 +3056,14 @@ type DNSSummaryDNSSECE2EParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryDnssece2EParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryDnssece2EParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryDnssece2EParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryDnssece2EParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryDnssece2EParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryDnssece2EParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -3101,7 +3092,6 @@ func (r DNSSummaryDnssece2EParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryDnssece2EParamsProtocol string
 
 const (
@@ -3119,7 +3109,6 @@ func (r DNSSummaryDnssece2EParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryDnssece2EParamsQueryType string
 
 const (
@@ -3221,7 +3210,6 @@ func (r DNSSummaryDnssece2EParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryDnssece2EParamsResponseCode string
 
 const (
@@ -3304,14 +3292,14 @@ type DNSSummaryIPVersionParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryIPVersionParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryIPVersionParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryIPVersionParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryIPVersionParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryIPVersionParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryIPVersionParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -3340,7 +3328,6 @@ func (r DNSSummaryIPVersionParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryIPVersionParamsProtocol string
 
 const (
@@ -3358,7 +3345,6 @@ func (r DNSSummaryIPVersionParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryIPVersionParamsQueryType string
 
 const (
@@ -3460,7 +3446,6 @@ func (r DNSSummaryIPVersionParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryIPVersionParamsResponseCode string
 
 const (
@@ -3543,14 +3528,14 @@ type DNSSummaryMatchingAnswerParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryMatchingAnswerParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryMatchingAnswerParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryMatchingAnswerParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryMatchingAnswerParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryMatchingAnswerParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryMatchingAnswerParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -3579,7 +3564,6 @@ func (r DNSSummaryMatchingAnswerParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryMatchingAnswerParamsProtocol string
 
 const (
@@ -3597,7 +3581,6 @@ func (r DNSSummaryMatchingAnswerParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryMatchingAnswerParamsQueryType string
 
 const (
@@ -3699,7 +3682,6 @@ func (r DNSSummaryMatchingAnswerParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryMatchingAnswerParamsResponseCode string
 
 const (
@@ -3782,12 +3764,12 @@ type DNSSummaryProtocolParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryProtocolParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryProtocolParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryProtocolParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryProtocolParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -3816,7 +3798,6 @@ func (r DNSSummaryProtocolParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryProtocolParamsQueryType string
 
 const (
@@ -3918,7 +3899,6 @@ func (r DNSSummaryProtocolParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryProtocolParamsResponseCode string
 
 const (
@@ -4005,12 +3985,12 @@ type DNSSummaryQueryTypeParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryQueryTypeParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryQueryTypeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryQueryTypeParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryQueryTypeParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -4039,7 +4019,6 @@ func (r DNSSummaryQueryTypeParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryQueryTypeParamsProtocol string
 
 const (
@@ -4057,7 +4036,6 @@ func (r DNSSummaryQueryTypeParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryQueryTypeParamsResponseCode string
 
 const (
@@ -4144,12 +4122,12 @@ type DNSSummaryResponseCodeParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryResponseCodeParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryResponseCodeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryResponseCodeParamsQueryType] `query:"queryType"`
-	// Filters results by country code top-level domain (ccTLD).
+	QueryType param.Field[[]DNSSummaryResponseCodeParamsQueryType] `query:"queryType"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -4178,7 +4156,6 @@ func (r DNSSummaryResponseCodeParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryResponseCodeParamsProtocol string
 
 const (
@@ -4196,7 +4173,6 @@ func (r DNSSummaryResponseCodeParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryResponseCodeParamsQueryType string
 
 const (
@@ -4348,14 +4324,14 @@ type DNSSummaryResponseTTLParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[bool] `query:"nodata"`
+	Nodata param.Field[[]bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[DNSSummaryResponseTTLParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]DNSSummaryResponseTTLParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[DNSSummaryResponseTTLParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]DNSSummaryResponseTTLParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[DNSSummaryResponseTTLParamsResponseCode] `query:"responseCode"`
-	// Filters results by country code top-level domain (ccTLD).
+	ResponseCode param.Field[[]DNSSummaryResponseTTLParamsResponseCode] `query:"responseCode"`
+	// Filters results by top-level domain.
 	Tld param.Field[[]string] `query:"tld"`
 }
 
@@ -4384,7 +4360,6 @@ func (r DNSSummaryResponseTTLParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type DNSSummaryResponseTTLParamsProtocol string
 
 const (
@@ -4402,7 +4377,6 @@ func (r DNSSummaryResponseTTLParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type DNSSummaryResponseTTLParamsQueryType string
 
 const (
@@ -4504,7 +4478,6 @@ func (r DNSSummaryResponseTTLParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type DNSSummaryResponseTTLParamsResponseCode string
 
 const (

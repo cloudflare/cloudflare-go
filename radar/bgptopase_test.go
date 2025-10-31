@@ -34,9 +34,9 @@ func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
 		DateRange:  cloudflare.F([]string{"7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopAseGetParamsFormatJson),
-		Limit:      cloudflare.F(int64(5)),
+		Limit:      cloudflare.F(int64(1)),
 		Name:       cloudflare.F([]string{"main_series"}),
-		Prefix:     cloudflare.F([]string{"1.1.1.0/24"}),
+		Prefix:     cloudflare.F([]string{"string"}),
 		UpdateType: cloudflare.F([]radar.BGPTopAseGetParamsUpdateType{radar.BGPTopAseGetParamsUpdateTypeAnnouncement}),
 	})
 	if err != nil {

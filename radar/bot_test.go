@@ -34,7 +34,7 @@ func TestBotListWithOptionalParams(t *testing.T) {
 		BotVerificationStatus: cloudflare.F(radar.BotListParamsBotVerificationStatusVerified),
 		Format:                cloudflare.F(radar.BotListParamsFormatJson),
 		Kind:                  cloudflare.F(radar.BotListParamsKindAgent),
-		Limit:                 cloudflare.F(int64(5)),
+		Limit:                 cloudflare.F(int64(1)),
 		Offset:                cloudflare.F(int64(0)),
 	})
 	if err != nil {

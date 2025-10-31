@@ -775,8 +775,7 @@ type BGPRouteMoasParams struct {
 	// Lookup only RPKI invalid MOASes.
 	InvalidOnly param.Field[bool] `query:"invalid_only"`
 	// Lookup MOASes originated by the given ASN.
-	Origin param.Field[int64] `query:"origin"`
-	// Network prefix, IPv4 or IPv6.
+	Origin param.Field[int64]  `query:"origin"`
 	Prefix param.Field[string] `query:"prefix"`
 }
 
@@ -834,8 +833,7 @@ type BGPRoutePfx2asParams struct {
 	// example, specify a /32 prefix to lookup the origin ASN for an IPv4 address.
 	LongestPrefixMatch param.Field[bool] `query:"longestPrefixMatch"`
 	// Lookup prefixes originated by the given ASN.
-	Origin param.Field[int64] `query:"origin"`
-	// Network prefix, IPv4 or IPv6.
+	Origin param.Field[int64]  `query:"origin"`
 	Prefix param.Field[string] `query:"prefix"`
 	// Return only results with matching rpki status: valid, invalid or unknown.
 	RPKIStatus param.Field[BGPRoutePfx2asParamsRPKIStatus] `query:"rpkiStatus"`
@@ -908,8 +906,7 @@ func (r bgpRoutePfx2asResponseEnvelopeJSON) RawJSON() string {
 type BGPRouteRealtimeParams struct {
 	// Format in which results will be returned.
 	Format param.Field[BGPRouteRealtimeParamsFormat] `query:"format"`
-	// Network prefix, IPv4 or IPv6.
-	Prefix param.Field[string] `query:"prefix"`
+	Prefix param.Field[string]                       `query:"prefix"`
 }
 
 // URLQuery serializes [BGPRouteRealtimeParams]'s query parameters as `url.Values`.

@@ -151,7 +151,7 @@ type InsightListResponseIssue struct {
 	Dismissed   bool                              `json:"dismissed"`
 	IssueClass  string                            `json:"issue_class"`
 	IssueType   intel.IssueType                   `json:"issue_type"`
-	Payload     interface{}                       `json:"payload"`
+	Payload     InsightListResponseIssuesPayload  `json:"payload"`
 	ResolveLink string                            `json:"resolve_link"`
 	ResolveText string                            `json:"resolve_text"`
 	Severity    InsightListResponseIssuesSeverity `json:"severity"`
@@ -184,6 +184,30 @@ func (r *InsightListResponseIssue) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r insightListResponseIssueJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightListResponseIssuesPayload struct {
+	// Method used to detect insight
+	DetectionMethod string                               `json:"detection_method"`
+	ZoneTag         string                               `json:"zone_tag"`
+	JSON            insightListResponseIssuesPayloadJSON `json:"-"`
+}
+
+// insightListResponseIssuesPayloadJSON contains the JSON metadata for the struct
+// [InsightListResponseIssuesPayload]
+type insightListResponseIssuesPayloadJSON struct {
+	DetectionMethod apijson.Field
+	ZoneTag         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *InsightListResponseIssuesPayload) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightListResponseIssuesPayloadJSON) RawJSON() string {
 	return r.raw
 }
 

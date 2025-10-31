@@ -33,7 +33,7 @@ func TestRobotsTXTTopUserAgentDirectiveWithOptionalParams(t *testing.T) {
 		Directive:         cloudflare.F(radar.RobotsTXTTopUserAgentDirectiveParamsDirectiveAllow),
 		DomainCategory:    cloudflare.F([]string{"string"}),
 		Format:            cloudflare.F(radar.RobotsTXTTopUserAgentDirectiveParamsFormatJson),
-		Limit:             cloudflare.F(int64(5)),
+		Limit:             cloudflare.F(int64(1)),
 		Name:              cloudflare.F([]string{"main_series"}),
 		UserAgentCategory: cloudflare.F(radar.RobotsTXTTopUserAgentDirectiveParamsUserAgentCategoryAI),
 	})

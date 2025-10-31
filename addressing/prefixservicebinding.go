@@ -36,10 +36,11 @@ func NewPrefixServiceBindingService(opts ...option.RequestOption) (r *PrefixServ
 }
 
 // Creates a new Service Binding, routing traffic to IPs within the given CIDR to a
-// service running on Cloudflare's network. **Note:** This API may only be used on
-// prefixes currently configured with a Magic Transit/Cloudflare CDN/Cloudflare
-// Spectrum service binding, and only allows creating upgrade service bindings for
-// the Cloudflare CDN or Cloudflare Spectrum.
+// service running on Cloudflare's network. **NOTE:** The first Service Binding
+// created for an IP Prefix must exactly match the IP Prefix's CIDR. Subsequent
+// Service Bindings may be created with a more-specific CIDR. Refer to the
+// [Service Bindings Documentation](https://developers.cloudflare.com/byoip/service-bindings/)
+// for compatibility details.
 func (r *PrefixServiceBindingService) New(ctx context.Context, prefixID string, params PrefixServiceBindingNewParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
 	var env PrefixServiceBindingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -362,10 +363,10 @@ type PrefixServiceBindingNewParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr"`
+	CIDR param.Field[string] `json:"cidr,required"`
 	// Identifier of a Service on the Cloudflare network. Available services and their
 	// IDs may be found in the **List Services** endpoint.
-	ServiceID param.Field[string] `json:"service_id"`
+	ServiceID param.Field[string] `json:"service_id,required"`
 }
 
 func (r PrefixServiceBindingNewParams) MarshalJSON() (data []byte, err error) {
