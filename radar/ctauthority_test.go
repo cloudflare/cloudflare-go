@@ -29,7 +29,7 @@ func TestCtAuthorityListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Ct.Authorities.List(context.TODO(), radar.CtAuthorityListParams{
 		Format: cloudflare.F(radar.CtAuthorityListParamsFormatJson),
-		Limit:  cloudflare.F(int64(1)),
+		Limit:  cloudflare.F(int64(5)),
 		Offset: cloudflare.F(int64(0)),
 	})
 	if err != nil {

@@ -1511,97 +1511,25 @@ func (r DatabaseImportResponseEnvelopeSuccess) IsKnown() bool {
 type DatabaseQueryParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A single query object or an array of query objects.
-	Body DatabaseQueryParamsBodyUnion `json:"body,required"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
 }
 
 func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-// A single query object or an array of query objects.
-//
-// Satisfied by [d1.DatabaseQueryParamsBodyD1Query],
-// [d1.DatabaseQueryParamsBodyMultipleQueries].
-type DatabaseQueryParamsBodyUnion interface {
-	implementsDatabaseQueryParamsBodyUnion()
-}
-
-// A single query with or without parameters
-type DatabaseQueryParamsBodyD1Query struct {
-	// Your SQL query. Supports multiple statements, joined by semicolons, which will
-	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
-	Params param.Field[[]string] `json:"params"`
-}
-
-func (r DatabaseQueryParamsBodyD1Query) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DatabaseQueryParamsBodyD1Query) implementsDatabaseQueryParamsBodyUnion() {}
-
-type DatabaseQueryParamsBodyMultipleQueries []DatabaseQueryParamsBodyMultipleQuery
-
-func (r DatabaseQueryParamsBodyMultipleQueries) implementsDatabaseQueryParamsBodyUnion() {}
-
-// A single query with or without parameters
-type DatabaseQueryParamsBodyMultipleQuery struct {
-	// Your SQL query. Supports multiple statements, joined by semicolons, which will
-	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
-	Params param.Field[[]string] `json:"params"`
-}
-
-func (r DatabaseQueryParamsBodyMultipleQuery) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type DatabaseRawParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A single query object or an array of query objects.
-	Body DatabaseRawParamsBodyUnion `json:"body,required"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
 }
 
 func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-// A single query object or an array of query objects.
-//
-// Satisfied by [d1.DatabaseRawParamsBodyD1Query],
-// [d1.DatabaseRawParamsBodyMultipleQueries].
-type DatabaseRawParamsBodyUnion interface {
-	implementsDatabaseRawParamsBodyUnion()
-}
-
-// A single query with or without parameters
-type DatabaseRawParamsBodyD1Query struct {
-	// Your SQL query. Supports multiple statements, joined by semicolons, which will
-	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
-	Params param.Field[[]string] `json:"params"`
-}
-
-func (r DatabaseRawParamsBodyD1Query) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DatabaseRawParamsBodyD1Query) implementsDatabaseRawParamsBodyUnion() {}
-
-type DatabaseRawParamsBodyMultipleQueries []DatabaseRawParamsBodyMultipleQuery
-
-func (r DatabaseRawParamsBodyMultipleQueries) implementsDatabaseRawParamsBodyUnion() {}
-
-// A single query with or without parameters
-type DatabaseRawParamsBodyMultipleQuery struct {
-	// Your SQL query. Supports multiple statements, joined by semicolons, which will
-	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
-	Params param.Field[[]string] `json:"params"`
-}
-
-func (r DatabaseRawParamsBodyMultipleQuery) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

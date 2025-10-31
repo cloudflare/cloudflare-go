@@ -78,9 +78,6 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				PortRange:  cloudflare.F("port_range"),
 				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
 				VnetID:     cloudflare.F("vnet_id"),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination{
-				McpServerID: cloudflare.F("mcp-server-1"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal),
 			}}),
 			EnableBindingCookie:     cloudflare.F(true),
 			HTTPOnlyCookieAttribute: cloudflare.F(true),
@@ -201,9 +198,6 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					PortRange:  cloudflare.F("port_range"),
 					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
 					VnetID:     cloudflare.F("vnet_id"),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination{
-					McpServerID: cloudflare.F("mcp-server-1"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal),
 				}}),
 				EnableBindingCookie:     cloudflare.F(true),
 				HTTPOnlyCookieAttribute: cloudflare.F(true),
@@ -273,15 +267,14 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.List(context.TODO(), zero_trust.AccessApplicationListParams{
-		AccountID:        cloudflare.F("account_id"),
-		AUD:              cloudflare.F("aud"),
-		Domain:           cloudflare.F("domain"),
-		Exact:            cloudflare.F(true),
-		Name:             cloudflare.F("name"),
-		Page:             cloudflare.F(int64(0)),
-		PerPage:          cloudflare.F(int64(0)),
-		Search:           cloudflare.F("search"),
-		TargetAttributes: cloudflare.F("target_attributes"),
+		AccountID: cloudflare.F("account_id"),
+		AUD:       cloudflare.F("aud"),
+		Domain:    cloudflare.F("domain"),
+		Exact:     cloudflare.F(true),
+		Name:      cloudflare.F("name"),
+		Page:      cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(0)),
+		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

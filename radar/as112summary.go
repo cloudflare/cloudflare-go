@@ -38,9 +38,7 @@ func NewAS112SummaryService(opts ...option.RequestOption) (r *AS112SummaryServic
 // Retrieves the distribution of DNS queries to AS112 by DNSSEC (DNS Security
 // Extensions) support.
 //
-// Deprecated: Use
-// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSSECParams, opts ...option.RequestOption) (res *AS112SummaryDNSSECResponse, err error) {
 	var env AS112SummaryDNSSECResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,9 +54,7 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 // Retrieves the distribution of DNS queries to AS112 by EDNS (Extension Mechanisms
 // for DNS) support.
 //
-// Deprecated: Use
-// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsParams, opts ...option.RequestOption) (res *AS112SummaryEdnsResponse, err error) {
 	var env AS112SummaryEdnsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,9 +69,7 @@ func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsPa
 
 // Retrieves the distribution of DNS queries to AS112 by IP version.
 //
-// Deprecated: Use
-// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryIPVersionParams, opts ...option.RequestOption) (res *AS112SummaryIPVersionResponse, err error) {
 	var env AS112SummaryIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -90,9 +84,7 @@ func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryI
 
 // Retrieves the distribution of DNS queries to AS112 by protocol.
 //
-// Deprecated: Use
-// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryProtocolParams, opts ...option.RequestOption) (res *AS112SummaryProtocolResponse, err error) {
 	var env AS112SummaryProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -107,9 +99,7 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 
 // Retrieves the distribution of DNS queries to AS112 by type.
 //
-// Deprecated: Use
-// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQueryTypeParams, opts ...option.RequestOption) (res *AS112SummaryQueryTypeResponse, err error) {
 	var env AS112SummaryQueryTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -124,9 +114,7 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 
 // Retrieves the distribution of AS112 DNS requests classified by response code.
 //
-// Deprecated: Use
-// [Radar AS112 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/as112/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112SummaryResponseCodesParams, opts ...option.RequestOption) (res *AS112SummaryResponseCodesResponse, err error) {
 	var env AS112SummaryResponseCodesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -1399,11 +1387,11 @@ type AS112SummaryDNSSECParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]AS112SummaryDNSSECParamsProtocol] `query:"protocol"`
+	Protocol param.Field[AS112SummaryDNSSECParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]AS112SummaryDNSSECParamsQueryType] `query:"queryType"`
+	QueryType param.Field[AS112SummaryDNSSECParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]AS112SummaryDNSSECParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[AS112SummaryDNSSECParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112SummaryDNSSECParams]'s query parameters as
@@ -1431,6 +1419,7 @@ func (r AS112SummaryDNSSECParamsFormat) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS transport protocol.
 type AS112SummaryDNSSECParamsProtocol string
 
 const (
@@ -1448,6 +1437,7 @@ func (r AS112SummaryDNSSECParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type AS112SummaryDNSSECParamsQueryType string
 
 const (
@@ -1549,6 +1539,7 @@ func (r AS112SummaryDNSSECParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type AS112SummaryDNSSECParamsResponseCode string
 
 const (
@@ -1626,11 +1617,11 @@ type AS112SummaryEdnsParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]AS112SummaryEdnsParamsProtocol] `query:"protocol"`
+	Protocol param.Field[AS112SummaryEdnsParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]AS112SummaryEdnsParamsQueryType] `query:"queryType"`
+	QueryType param.Field[AS112SummaryEdnsParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]AS112SummaryEdnsParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[AS112SummaryEdnsParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112SummaryEdnsParams]'s query parameters as `url.Values`.
@@ -1657,6 +1648,7 @@ func (r AS112SummaryEdnsParamsFormat) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS transport protocol.
 type AS112SummaryEdnsParamsProtocol string
 
 const (
@@ -1674,6 +1666,7 @@ func (r AS112SummaryEdnsParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type AS112SummaryEdnsParamsQueryType string
 
 const (
@@ -1775,6 +1768,7 @@ func (r AS112SummaryEdnsParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type AS112SummaryEdnsParamsResponseCode string
 
 const (
@@ -1852,11 +1846,11 @@ type AS112SummaryIPVersionParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]AS112SummaryIPVersionParamsProtocol] `query:"protocol"`
+	Protocol param.Field[AS112SummaryIPVersionParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]AS112SummaryIPVersionParamsQueryType] `query:"queryType"`
+	QueryType param.Field[AS112SummaryIPVersionParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]AS112SummaryIPVersionParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[AS112SummaryIPVersionParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112SummaryIPVersionParams]'s query parameters as
@@ -1884,6 +1878,7 @@ func (r AS112SummaryIPVersionParamsFormat) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS transport protocol.
 type AS112SummaryIPVersionParamsProtocol string
 
 const (
@@ -1901,6 +1896,7 @@ func (r AS112SummaryIPVersionParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type AS112SummaryIPVersionParamsQueryType string
 
 const (
@@ -2002,6 +1998,7 @@ func (r AS112SummaryIPVersionParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type AS112SummaryIPVersionParamsResponseCode string
 
 const (
@@ -2079,9 +2076,9 @@ type AS112SummaryProtocolParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]AS112SummaryProtocolParamsQueryType] `query:"queryType"`
+	QueryType param.Field[AS112SummaryProtocolParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]AS112SummaryProtocolParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[AS112SummaryProtocolParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112SummaryProtocolParams]'s query parameters as
@@ -2109,6 +2106,7 @@ func (r AS112SummaryProtocolParamsFormat) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type AS112SummaryProtocolParamsQueryType string
 
 const (
@@ -2210,6 +2208,7 @@ func (r AS112SummaryProtocolParamsQueryType) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type AS112SummaryProtocolParamsResponseCode string
 
 const (
@@ -2291,9 +2290,9 @@ type AS112SummaryQueryTypeParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]AS112SummaryQueryTypeParamsProtocol] `query:"protocol"`
+	Protocol param.Field[AS112SummaryQueryTypeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[[]AS112SummaryQueryTypeParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[AS112SummaryQueryTypeParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112SummaryQueryTypeParams]'s query parameters as
@@ -2321,6 +2320,7 @@ func (r AS112SummaryQueryTypeParamsFormat) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS transport protocol.
 type AS112SummaryQueryTypeParamsProtocol string
 
 const (
@@ -2338,6 +2338,7 @@ func (r AS112SummaryQueryTypeParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS response code.
 type AS112SummaryQueryTypeParamsResponseCode string
 
 const (
@@ -2419,9 +2420,9 @@ type AS112SummaryResponseCodesParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]AS112SummaryResponseCodesParamsProtocol] `query:"protocol"`
+	Protocol param.Field[AS112SummaryResponseCodesParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[[]AS112SummaryResponseCodesParamsQueryType] `query:"queryType"`
+	QueryType param.Field[AS112SummaryResponseCodesParamsQueryType] `query:"queryType"`
 }
 
 // URLQuery serializes [AS112SummaryResponseCodesParams]'s query parameters as
@@ -2449,6 +2450,7 @@ func (r AS112SummaryResponseCodesParamsFormat) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS transport protocol.
 type AS112SummaryResponseCodesParamsProtocol string
 
 const (
@@ -2466,6 +2468,7 @@ func (r AS112SummaryResponseCodesParamsProtocol) IsKnown() bool {
 	return false
 }
 
+// Filters results by DNS query type.
 type AS112SummaryResponseCodesParamsQueryType string
 
 const (

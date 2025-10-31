@@ -37,9 +37,7 @@ func NewAttackLayer3SummaryService(opts ...option.RequestOption) (r *AttackLayer
 
 // Retrieves the distribution of layer 3 attacks by bitrate.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) Bitrate(ctx context.Context, query AttackLayer3SummaryBitrateParams, opts ...option.RequestOption) (res *AttackLayer3SummaryBitrateResponse, err error) {
 	var env AttackLayer3SummaryBitrateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,9 +52,7 @@ func (r *AttackLayer3SummaryService) Bitrate(ctx context.Context, query AttackLa
 
 // Retrieves the distribution of layer 3 attacks by duration.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackLayer3SummaryDurationParams, opts ...option.RequestOption) (res *AttackLayer3SummaryDurationResponse, err error) {
 	var env AttackLayer3SummaryDurationResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -71,9 +67,7 @@ func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackL
 
 // Retrieves the distribution of layer 3 attacks by targeted industry.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) Industry(ctx context.Context, query AttackLayer3SummaryIndustryParams, opts ...option.RequestOption) (res *AttackLayer3SummaryIndustryResponse, err error) {
 	var env AttackLayer3SummaryIndustryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -88,9 +82,7 @@ func (r *AttackLayer3SummaryService) Industry(ctx context.Context, query AttackL
 
 // Retrieves the distribution of layer 3 attacks by IP version.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query AttackLayer3SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer3SummaryIPVersionResponse, err error) {
 	var env AttackLayer3SummaryIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -105,9 +97,7 @@ func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query Attack
 
 // Retrieves the distribution of layer 3 attacks by protocol.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) Protocol(ctx context.Context, query AttackLayer3SummaryProtocolParams, opts ...option.RequestOption) (res *AttackLayer3SummaryProtocolResponse, err error) {
 	var env AttackLayer3SummaryProtocolResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,9 +112,7 @@ func (r *AttackLayer3SummaryService) Protocol(ctx context.Context, query AttackL
 
 // Retrieves the distribution of layer 3 attacks by vector.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) Vector(ctx context.Context, query AttackLayer3SummaryVectorParams, opts ...option.RequestOption) (res *AttackLayer3SummaryVectorResponse, err error) {
 	var env AttackLayer3SummaryVectorResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -139,9 +127,7 @@ func (r *AttackLayer3SummaryService) Vector(ctx context.Context, query AttackLay
 
 // Retrieves the distribution of layer 3 attacks by targeted vertical.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3SummaryService) Vertical(ctx context.Context, query AttackLayer3SummaryVerticalParams, opts ...option.RequestOption) (res *AttackLayer3SummaryVerticalResponse, err error) {
 	var env AttackLayer3SummaryVerticalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

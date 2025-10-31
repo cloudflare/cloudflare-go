@@ -211,8 +211,9 @@ type BGPHijackEventListParams struct {
 	// Current page number, starting from 1.
 	Page param.Field[int64] `query:"page"`
 	// Number of entries per page.
-	PerPage param.Field[int64]  `query:"per_page"`
-	Prefix  param.Field[string] `query:"prefix"`
+	PerPage param.Field[int64] `query:"per_page"`
+	// Network prefix, IPv4 or IPv6.
+	Prefix param.Field[string] `query:"prefix"`
 	// Sorts results by the specified field.
 	SortBy param.Field[BGPHijackEventListParamsSortBy] `query:"sortBy"`
 	// Sort order.

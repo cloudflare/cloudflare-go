@@ -228,7 +228,7 @@ type BGPPrefixOnDemand struct {
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
 	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether the advertisement status of the prefix is locked, meaning it cannot be
+	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
 	OnDemandLocked bool                  `json:"on_demand_locked"`
 	JSON           bgpPrefixOnDemandJSON `json:"-"`
@@ -257,7 +257,7 @@ type PrefixBGPPrefixNewParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr"`
 }
 
 func (r PrefixBGPPrefixNewParams) MarshalJSON() (data []byte, err error) {

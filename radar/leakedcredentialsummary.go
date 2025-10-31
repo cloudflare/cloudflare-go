@@ -37,9 +37,7 @@ func NewLeakedCredentialSummaryService(opts ...option.RequestOption) (r *LeakedC
 
 // Retrieves the distribution of HTTP authentication requests by bot class.
 //
-// Deprecated: Use
-// [Radar Leaked Credentials Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/leaked_credentials/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *LeakedCredentialSummaryService) BotClass(ctx context.Context, query LeakedCredentialSummaryBotClassParams, opts ...option.RequestOption) (res *LeakedCredentialSummaryBotClassResponse, err error) {
 	var env LeakedCredentialSummaryBotClassResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,9 +53,7 @@ func (r *LeakedCredentialSummaryService) BotClass(ctx context.Context, query Lea
 // Retrieves the distribution of HTTP authentication requests by compromised
 // credential status.
 //
-// Deprecated: Use
-// [Radar Leaked Credentials Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/leaked_credentials/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *LeakedCredentialSummaryService) Compromised(ctx context.Context, query LeakedCredentialSummaryCompromisedParams, opts ...option.RequestOption) (res *LeakedCredentialSummaryCompromisedResponse, err error) {
 	var env LeakedCredentialSummaryCompromisedResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

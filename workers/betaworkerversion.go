@@ -544,6 +544,7 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindSecretText],
 // [VersionBindingsWorkersBindingKindSendEmail],
 // [VersionBindingsWorkersBindingKindService],
+// [VersionBindingsWorkersBindingKindTailConsumer],
 // [VersionBindingsWorkersBindingKindTextBlob],
 // [VersionBindingsWorkersBindingKindVectorize],
 // [VersionBindingsWorkersBindingKindVersionMetadata],
@@ -578,6 +579,7 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindSecretText],
 // [VersionBindingsWorkersBindingKindSendEmail],
 // [VersionBindingsWorkersBindingKindService],
+// [VersionBindingsWorkersBindingKindTailConsumer],
 // [VersionBindingsWorkersBindingKindTextBlob],
 // [VersionBindingsWorkersBindingKindVectorize],
 // [VersionBindingsWorkersBindingKindVersionMetadata],
@@ -697,6 +699,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindService{}),
 			DiscriminatorValue: "service",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindTailConsumer{}),
+			DiscriminatorValue: "tail_consumer",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1777,6 +1784,51 @@ func (r VersionBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindTailConsumer struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of Tail Worker to bind to.
+	Service string `json:"service,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindTailConsumerType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindTailConsumerJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindTailConsumerJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindTailConsumer]
+type versionBindingsWorkersBindingKindTailConsumerJSON struct {
+	Name        apijson.Field
+	Service     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindTailConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindTailConsumerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindTailConsumer) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindTailConsumerType string
+
+const (
+	VersionBindingsWorkersBindingKindTailConsumerTypeTailConsumer VersionBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
+)
+
+func (r VersionBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
 type VersionBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -2180,6 +2232,7 @@ const (
 	VersionBindingsTypeSecretText             VersionBindingsType = "secret_text"
 	VersionBindingsTypeSendEmail              VersionBindingsType = "send_email"
 	VersionBindingsTypeService                VersionBindingsType = "service"
+	VersionBindingsTypeTailConsumer           VersionBindingsType = "tail_consumer"
 	VersionBindingsTypeTextBlob               VersionBindingsType = "text_blob"
 	VersionBindingsTypeVectorize              VersionBindingsType = "vectorize"
 	VersionBindingsTypeVersionMetadata        VersionBindingsType = "version_metadata"
@@ -2191,7 +2244,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule:
+	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTailConsumer, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule:
 		return true
 	}
 	return false
@@ -2656,6 +2709,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindSecretTextParam],
 // [workers.VersionBindingsWorkersBindingKindSendEmailParam],
 // [workers.VersionBindingsWorkersBindingKindServiceParam],
+// [workers.VersionBindingsWorkersBindingKindTailConsumerParam],
 // [workers.VersionBindingsWorkersBindingKindTextBlobParam],
 // [workers.VersionBindingsWorkersBindingKindVectorizeParam],
 // [workers.VersionBindingsWorkersBindingKindVersionMetadataParam],
@@ -3031,6 +3085,21 @@ func (r VersionBindingsWorkersBindingKindServiceParam) MarshalJSON() (data []byt
 }
 
 func (r VersionBindingsWorkersBindingKindServiceParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindTailConsumerParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of Tail Worker to bind to.
+	Service param.Field[string] `json:"service,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindTailConsumerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindTailConsumerParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindTextBlobParam struct {
 	// A JavaScript variable name for the binding.
