@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -203,37 +202,9 @@ type ProjectDeploymentDeleteResponse = interface{}
 type ProjectDeploymentNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Headers configuration file for the deployment.
-	Headers param.Field[io.Reader] `json:"_headers" format:"binary"`
-	// Redirects configuration file for the deployment.
-	Redirects param.Field[io.Reader] `json:"_redirects" format:"binary"`
-	// Routes configuration file defining routing rules.
-	RoutesJson param.Field[io.Reader] `json:"_routes.json" format:"binary"`
-	// Worker bundle file in multipart/form-data format. Mutually exclusive with
-	// `_worker.js`. Cannot specify both `_worker.js` and `_worker.bundle` in the same
-	// request. Maximum size: 25 MiB.
-	WorkerBundle param.Field[io.Reader] `json:"_worker.bundle" format:"binary"`
-	// Worker JavaScript file. Mutually exclusive with `_worker.bundle`. Cannot specify
-	// both `_worker.js` and `_worker.bundle` in the same request.
-	WorkerJS param.Field[io.Reader] `json:"_worker.js" format:"binary"`
 	// The branch to build the new deployment from. The `HEAD` of the branch will be
 	// used. If omitted, the production branch will be used by default.
 	Branch param.Field[string] `json:"branch"`
-	// Boolean string indicating if the working directory has uncommitted changes.
-	CommitDirty param.Field[ProjectDeploymentNewParamsCommitDirty] `json:"commit_dirty"`
-	// Git commit SHA associated with this deployment.
-	CommitHash param.Field[string] `json:"commit_hash"`
-	// Git commit message associated with this deployment.
-	CommitMessage param.Field[string] `json:"commit_message"`
-	// Functions routing configuration file.
-	FunctionsFilepathRoutingConfigJson param.Field[io.Reader] `json:"functions-filepath-routing-config.json" format:"binary"`
-	// JSON string containing a manifest of files to deploy. Maps file paths to their
-	// content hashes. Required for direct upload deployments. Maximum 20,000 entries.
-	Manifest param.Field[string] `json:"manifest"`
-	// The build output directory path.
-	PagesBuildOutputDir param.Field[string] `json:"pages_build_output_dir"`
-	// Hash of the Wrangler configuration file used for this deployment.
-	WranglerConfigHash param.Field[string] `json:"wrangler_config_hash"`
 }
 
 func (r ProjectDeploymentNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -249,22 +220,6 @@ func (r ProjectDeploymentNewParams) MarshalMultipart() (data []byte, contentType
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
-}
-
-// Boolean string indicating if the working directory has uncommitted changes.
-type ProjectDeploymentNewParamsCommitDirty string
-
-const (
-	ProjectDeploymentNewParamsCommitDirtyTrue  ProjectDeploymentNewParamsCommitDirty = "true"
-	ProjectDeploymentNewParamsCommitDirtyFalse ProjectDeploymentNewParamsCommitDirty = "false"
-)
-
-func (r ProjectDeploymentNewParamsCommitDirty) IsKnown() bool {
-	switch r {
-	case ProjectDeploymentNewParamsCommitDirtyTrue, ProjectDeploymentNewParamsCommitDirtyFalse:
-		return true
-	}
-	return false
 }
 
 type ProjectDeploymentNewResponseEnvelope struct {

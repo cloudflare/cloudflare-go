@@ -59,7 +59,7 @@ func TestDestinationWebhookUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Alerting.Destinations.Webhooks.Update(
 		context.TODO(),
-		"b115d5ec15c641ee8b7692c449b5227b",
+		"b115d5ec-15c6-41ee-8b76-92c449b5227b",
 		alerting.DestinationWebhookUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("Slack Webhook"),
@@ -116,7 +116,7 @@ func TestDestinationWebhookDelete(t *testing.T) {
 	)
 	_, err := client.Alerting.Destinations.Webhooks.Delete(
 		context.TODO(),
-		"b115d5ec15c641ee8b7692c449b5227b",
+		"b115d5ec-15c6-41ee-8b76-92c449b5227b",
 		alerting.DestinationWebhookDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -146,7 +146,7 @@ func TestDestinationWebhookGet(t *testing.T) {
 	)
 	_, err := client.Alerting.Destinations.Webhooks.Get(
 		context.TODO(),
-		"b115d5ec15c641ee8b7692c449b5227b",
+		"b115d5ec-15c6-41ee-8b76-92c449b5227b",
 		alerting.DestinationWebhookGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

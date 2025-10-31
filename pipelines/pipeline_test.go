@@ -28,7 +28,7 @@ func TestPipelineNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pipelines.New(context.TODO(), pipelines.PipelineNewParams{
-		AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Destination: cloudflare.F(pipelines.PipelineNewParamsDestination{
 			Batch: cloudflare.F(pipelines.PipelineNewParamsDestinationBatch{
 				MaxBytes:     cloudflare.F(int64(1000)),
@@ -88,7 +88,7 @@ func TestPipelineUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"sample_pipeline",
 		pipelines.PipelineUpdateParams{
-			AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Destination: cloudflare.F(pipelines.PipelineUpdateParamsDestination{
 				Batch: cloudflare.F(pipelines.PipelineUpdateParamsDestinationBatch{
 					MaxBytes:     cloudflare.F(int64(1000)),
@@ -146,7 +146,7 @@ func TestPipelineListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pipelines.List(context.TODO(), pipelines.PipelineListParams{
-		AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F("page"),
 		PerPage:   cloudflare.F("per_page"),
 		Search:    cloudflare.F("search"),
@@ -177,7 +177,7 @@ func TestPipelineDelete(t *testing.T) {
 		context.TODO(),
 		"sample_pipeline",
 		pipelines.PipelineDeleteParams{
-			AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -206,7 +206,7 @@ func TestPipelineGet(t *testing.T) {
 		context.TODO(),
 		"sample_pipeline",
 		pipelines.PipelineGetParams{
-			AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
