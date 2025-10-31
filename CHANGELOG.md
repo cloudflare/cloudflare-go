@@ -1,5 +1,26 @@
 # Changelog
 
+## 6.3.0 (2025-10-31)
+
+Full Changelog: [v6.2.0...v6.3.0](https://github.com/cloudflare/cloudflare-go/compare/v6.2.0...v6.3.0)
+
+### Features
+
+* feat(iam): Add SSO Connectors resource to SDKs ([a6cadb2](https://github.com/cloudflare/cloudflare-go/commit/a6cadb24eeea454504765ada844b698e3d52b499))
+* feat(mcp_portals): enable sdks generation ([c582b3d](https://github.com/cloudflare/cloudflare-go/commit/c582b3da5933c3932e7dd50bfa7be0a9eccf83f4))
+
+
+### Chores
+
+* **api:** update composite API spec ([3d6daa1](https://github.com/cloudflare/cloudflare-go/commit/3d6daa1d2abb25ef93cd6be54f9713d1922b25e8))
+* **api:** update composite API spec ([fe3eb4e](https://github.com/cloudflare/cloudflare-go/commit/fe3eb4e360dc715031a4294c0c116e84614e4a11))
+* **api:** update composite API spec ([38a87ce](https://github.com/cloudflare/cloudflare-go/commit/38a87ce86ee190c77fbab67c247b4da89ec7f75d))
+* **api:** update composite API spec ([b5bbbe9](https://github.com/cloudflare/cloudflare-go/commit/b5bbbe97dcc98454fad97c2672eefe26b9bcb074))
+* **api:** update composite API spec ([8675c4c](https://github.com/cloudflare/cloudflare-go/commit/8675c4c8e156664c3cf495d6bf596a8c727ab007))
+* **api:** update composite API spec ([1505c81](https://github.com/cloudflare/cloudflare-go/commit/1505c81baec1e4be2e16e05c204a84c849b25725))
+* **api:** update composite API spec ([9d98e16](https://github.com/cloudflare/cloudflare-go/commit/9d98e1621f22266729f5e94de46429db089a845c))
+* **api:** update composite API spec ([dbd3501](https://github.com/cloudflare/cloudflare-go/commit/dbd35015cac4b71bdae28ae3397984af212c0ccb))
+
 ## 6.2.0 (2025-10-22)
 
 Full Changelog: [v6.1.0...v6.2.0](https://github.com/cloudflare/cloudflare-go/compare/v6.1.0...v6.2.0)
