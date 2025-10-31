@@ -614,6 +614,7 @@ TEST_PATHS=(
 	iam/resourcegroup_test.go
 	iam/usergroup_test.go
 	iam/usergroupmember_test.go
+	iam/sso_test.go
 	cloud_connector/rule_test.go
 	botnet_feed/asn_test.go
 	botnet_feed/configasn_test.go
