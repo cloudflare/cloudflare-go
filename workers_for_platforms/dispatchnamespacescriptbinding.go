@@ -113,7 +113,7 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Jurisdiction DispatchNamespaceScriptBindingGetResponseJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -711,7 +711,7 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDataBlobType)
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// The name of the dispatch namespace.
+	// Namespace to bind to.
 	Namespace string `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType `json:"type,required"`

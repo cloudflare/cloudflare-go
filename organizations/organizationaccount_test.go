@@ -29,7 +29,7 @@ func TestOrganizationAccountGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.OrganizationAccounts.Get(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"organization_id",
 		organizations.OrganizationAccountGetParams{
 			AccountPubname: cloudflare.F(organizations.OrganizationAccountGetParamsAccountPubname{
 				Contains:   cloudflare.F("contains"),
