@@ -370,6 +370,8 @@ TEST_PATHS=(
 	zero_trust/organization_test.go
 	zero_trust/organizationdoh_test.go
 	zero_trust/seat_test.go
+	portals/accessaicontrolmcpportal_test.go
+	servers/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
@@ -502,8 +504,10 @@ TEST_PATHS=(
 	radar/as112summary_test.go
 	radar/as112timeseriesgroup_test.go
 	radar/as112top_test.go
+	radar/emailrouting_test.go
 	radar/emailroutingsummary_test.go
 	radar/emailroutingtimeseriesgroup_test.go
+	radar/emailsecurity_test.go
 	radar/emailsecuritytoptld_test.go
 	radar/emailsecuritytoptldmalicious_test.go
 	radar/emailsecuritytoptldspam_test.go
@@ -628,6 +632,7 @@ TEST_PATHS=(
 	content_scanning/contentscanning_test.go
 	content_scanning/payload_test.go
 	content_scanning/setting_test.go
+	abuse_reports/abusereport_test.go
 	ai/ai_test.go
 	ai/finetune_test.go
 	ai/finetuneasset_test.go

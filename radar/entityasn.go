@@ -195,9 +195,13 @@ type EntityASNAsSetResponseAsSet struct {
 	IrrSources []string `json:"irr_sources,required"`
 	// The name of the AS-SET
 	Name string `json:"name,required"`
+	// The AS number following hierarchical AS-SET name
+	HierarchicalASN int64 `json:"hierarchical_asn"`
 	// The inferred AS number of the AS-SET
-	ASN  int64                           `json:"asn"`
-	JSON entityASNAsSetResponseAsSetJSON `json:"-"`
+	InferredASN int64 `json:"inferred_asn"`
+	// The AS number matching PeeringDB record
+	PeeringdbASN int64                           `json:"peeringdb_asn"`
+	JSON         entityASNAsSetResponseAsSetJSON `json:"-"`
 }
 
 // entityASNAsSetResponseAsSetJSON contains the JSON metadata for the struct
@@ -209,7 +213,9 @@ type entityASNAsSetResponseAsSetJSON struct {
 	ASNConeSize         apijson.Field
 	IrrSources          apijson.Field
 	Name                apijson.Field
-	ASN                 apijson.Field
+	HierarchicalASN     apijson.Field
+	InferredASN         apijson.Field
+	PeeringdbASN        apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }

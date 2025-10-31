@@ -28,9 +28,10 @@ func TestSSONewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.IAM.SSO.New(context.TODO(), iam.SSONewParams{
-		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		EmailDomain:       cloudflare.F("example.com"),
-		BeginVerification: cloudflare.F(true),
+		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		EmailDomain:        cloudflare.F("example.com"),
+		BeginVerification:  cloudflare.F(true),
+		UseFedrampLanguage: cloudflare.F(false),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +42,7 @@ func TestSSONewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSSOUpdate(t *testing.T) {
+func TestSSOUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,8 +59,9 @@ func TestSSOUpdate(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.SSOUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Enabled:   cloudflare.F(true),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Enabled:            cloudflare.F(true),
+			UseFedrampLanguage: cloudflare.F(false),
 		},
 	)
 	if err != nil {

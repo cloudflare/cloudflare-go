@@ -41,7 +41,9 @@ func NewNetflowService(opts ...option.RequestOption) (r *NetflowService) {
 // Retrieves the distribution of network traffic (NetFlows) by HTTP vs other
 // protocols.
 //
-// Deprecated: deprecated
+// Deprecated: Use
+// [Get Network Traffic Distribution By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/netflows/methods/summary_v2/)
+// instead.
 func (r *NetflowService) Summary(ctx context.Context, query NetflowSummaryParams, opts ...option.RequestOption) (res *NetflowSummaryResponse, err error) {
 	var env NetflowSummaryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -167,21 +167,24 @@ type SSONewResponse struct {
 	EmailDomain string    `json:"email_domain"`
 	Enabled     bool      `json:"enabled"`
 	// Timestamp for the last update of the SSO connector
-	UpdatedOn    time.Time                  `json:"updated_on" format:"date-time"`
-	Verification SSONewResponseVerification `json:"verification"`
-	JSON         ssoNewResponseJSON         `json:"-"`
+	UpdatedOn time.Time `json:"updated_on" format:"date-time"`
+	// Controls the display of FedRAMP language to the user during SSO login
+	UseFedrampLanguage bool                       `json:"use_fedramp_language"`
+	Verification       SSONewResponseVerification `json:"verification"`
+	JSON               ssoNewResponseJSON         `json:"-"`
 }
 
 // ssoNewResponseJSON contains the JSON metadata for the struct [SSONewResponse]
 type ssoNewResponseJSON struct {
-	ID           apijson.Field
-	CreatedOn    apijson.Field
-	EmailDomain  apijson.Field
-	Enabled      apijson.Field
-	UpdatedOn    apijson.Field
-	Verification apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	EmailDomain        apijson.Field
+	Enabled            apijson.Field
+	UpdatedOn          apijson.Field
+	UseFedrampLanguage apijson.Field
+	Verification       apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *SSONewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -244,22 +247,25 @@ type SSOUpdateResponse struct {
 	EmailDomain string    `json:"email_domain"`
 	Enabled     bool      `json:"enabled"`
 	// Timestamp for the last update of the SSO connector
-	UpdatedOn    time.Time                     `json:"updated_on" format:"date-time"`
-	Verification SSOUpdateResponseVerification `json:"verification"`
-	JSON         ssoUpdateResponseJSON         `json:"-"`
+	UpdatedOn time.Time `json:"updated_on" format:"date-time"`
+	// Controls the display of FedRAMP language to the user during SSO login
+	UseFedrampLanguage bool                          `json:"use_fedramp_language"`
+	Verification       SSOUpdateResponseVerification `json:"verification"`
+	JSON               ssoUpdateResponseJSON         `json:"-"`
 }
 
 // ssoUpdateResponseJSON contains the JSON metadata for the struct
 // [SSOUpdateResponse]
 type ssoUpdateResponseJSON struct {
-	ID           apijson.Field
-	CreatedOn    apijson.Field
-	EmailDomain  apijson.Field
-	Enabled      apijson.Field
-	UpdatedOn    apijson.Field
-	Verification apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	EmailDomain        apijson.Field
+	Enabled            apijson.Field
+	UpdatedOn          apijson.Field
+	UseFedrampLanguage apijson.Field
+	Verification       apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *SSOUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -322,21 +328,24 @@ type SSOListResponse struct {
 	EmailDomain string    `json:"email_domain"`
 	Enabled     bool      `json:"enabled"`
 	// Timestamp for the last update of the SSO connector
-	UpdatedOn    time.Time                   `json:"updated_on" format:"date-time"`
-	Verification SSOListResponseVerification `json:"verification"`
-	JSON         ssoListResponseJSON         `json:"-"`
+	UpdatedOn time.Time `json:"updated_on" format:"date-time"`
+	// Controls the display of FedRAMP language to the user during SSO login
+	UseFedrampLanguage bool                        `json:"use_fedramp_language"`
+	Verification       SSOListResponseVerification `json:"verification"`
+	JSON               ssoListResponseJSON         `json:"-"`
 }
 
 // ssoListResponseJSON contains the JSON metadata for the struct [SSOListResponse]
 type ssoListResponseJSON struct {
-	ID           apijson.Field
-	CreatedOn    apijson.Field
-	EmailDomain  apijson.Field
-	Enabled      apijson.Field
-	UpdatedOn    apijson.Field
-	Verification apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	EmailDomain        apijson.Field
+	Enabled            apijson.Field
+	UpdatedOn          apijson.Field
+	UseFedrampLanguage apijson.Field
+	Verification       apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *SSOListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -558,21 +567,24 @@ type SSOGetResponse struct {
 	EmailDomain string    `json:"email_domain"`
 	Enabled     bool      `json:"enabled"`
 	// Timestamp for the last update of the SSO connector
-	UpdatedOn    time.Time                  `json:"updated_on" format:"date-time"`
-	Verification SSOGetResponseVerification `json:"verification"`
-	JSON         ssoGetResponseJSON         `json:"-"`
+	UpdatedOn time.Time `json:"updated_on" format:"date-time"`
+	// Controls the display of FedRAMP language to the user during SSO login
+	UseFedrampLanguage bool                       `json:"use_fedramp_language"`
+	Verification       SSOGetResponseVerification `json:"verification"`
+	JSON               ssoGetResponseJSON         `json:"-"`
 }
 
 // ssoGetResponseJSON contains the JSON metadata for the struct [SSOGetResponse]
 type ssoGetResponseJSON struct {
-	ID           apijson.Field
-	CreatedOn    apijson.Field
-	EmailDomain  apijson.Field
-	Enabled      apijson.Field
-	UpdatedOn    apijson.Field
-	Verification apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	EmailDomain        apijson.Field
+	Enabled            apijson.Field
+	UpdatedOn          apijson.Field
+	UseFedrampLanguage apijson.Field
+	Verification       apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *SSOGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -634,6 +646,8 @@ type SSONewParams struct {
 	EmailDomain param.Field[string] `json:"email_domain,required"`
 	// Begin the verification process after creation
 	BeginVerification param.Field[bool] `json:"begin_verification"`
+	// Controls the display of FedRAMP language to the user during SSO login
+	UseFedrampLanguage param.Field[bool] `json:"use_fedramp_language"`
 }
 
 func (r SSONewParams) MarshalJSON() (data []byte, err error) {
@@ -783,7 +797,9 @@ type SSOUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// SSO Connector enabled state
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// Controls the display of FedRAMP language to the user during SSO login
+	UseFedrampLanguage param.Field[bool] `json:"use_fedramp_language"`
 }
 
 func (r SSOUpdateParams) MarshalJSON() (data []byte, err error) {
