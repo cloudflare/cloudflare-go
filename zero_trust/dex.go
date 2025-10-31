@@ -43,6 +43,7 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 }
 
 type DigitalExperienceMonitor struct {
+	// API Resource UUID tag.
 	ID string `json:"id,required"`
 	// Whether the policy is the default for the account
 	Default bool                         `json:"default,required"`

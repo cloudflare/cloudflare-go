@@ -35,8 +35,7 @@ func NewOrganizationProfileService(opts ...option.RequestOption) (r *Organizatio
 	return
 }
 
-// Modify organization profile. (Currently in Closed Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Modify organization profile
 func (r *OrganizationProfileService) Update(ctx context.Context, organizationID string, body OrganizationProfileUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
@@ -49,8 +48,7 @@ func (r *OrganizationProfileService) Update(ctx context.Context, organizationID 
 	return
 }
 
-// Get an organizations profile if it exists. (Currently in Closed Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Get an organizations profile if it exists.
 func (r *OrganizationProfileService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *accounts.AccountProfile, err error) {
 	var env OrganizationProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

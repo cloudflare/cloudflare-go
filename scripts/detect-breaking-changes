@@ -131,11 +131,6 @@ TEST_PATHS=(
 	logpush/job_test.go
 	logpush/ownership_test.go
 	logpush/validate_test.go
-	logs/controlretention_test.go
-	logs/controlcmbconfig_test.go
-	logs/rayid_test.go
-	logs/received_test.go
-	logs/receivedfield_test.go
 	origin_tls_client_auth/origintlsclientauth_test.go
 	origin_tls_client_auth/hostname_test.go
 	origin_tls_client_auth/hostnamecertificate_test.go
@@ -170,7 +165,6 @@ TEST_PATHS=(
 	workers/accountsetting_test.go
 	workers/domain_test.go
 	workers/subdomain_test.go
-	workers/observabilitytelemetry_test.go
 	kv/namespace_test.go
 	kv/namespacekey_test.go
 	kv/namespacemetadata_test.go
@@ -181,7 +175,6 @@ TEST_PATHS=(
 	queues/message_test.go
 	queues/purge_test.go
 	queues/consumer_test.go
-	queues/subscription_test.go
 	api_gateway/configuration_test.go
 	api_gateway/discovery_test.go
 	api_gateway/discoveryoperation_test.go
@@ -370,8 +363,6 @@ TEST_PATHS=(
 	zero_trust/organization_test.go
 	zero_trust/organizationdoh_test.go
 	zero_trust/seat_test.go
-	portals/accessaicontrolmcpportal_test.go
-	servers/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
@@ -598,7 +589,6 @@ TEST_PATHS=(
 	cloudforce_one/threateventcategory_test.go
 	cloudforce_one/threateventcountry_test.go
 	cloudforce_one/threateventdataset_test.go
-	cloudforce_one/threateventindicatortype_test.go
 	cloudforce_one/threateventraw_test.go
 	cloudforce_one/threateventrelate_test.go
 	cloudforce_one/threateventtag_test.go
@@ -619,20 +609,12 @@ TEST_PATHS=(
 	botnet_feed/asn_test.go
 	botnet_feed/configasn_test.go
 	security_txt/securitytxt_test.go
-	workflows/workflow_test.go
-	workflows/instance_test.go
-	workflows/instancestatus_test.go
-	workflows/instanceevent_test.go
-	workflows/version_test.go
 	resource_sharing/resourcesharing_test.go
 	resource_sharing/recipient_test.go
 	resource_sharing/resource_test.go
-	leaked_credential_checks/leakedcredentialcheck_test.go
-	leaked_credential_checks/detection_test.go
 	content_scanning/contentscanning_test.go
 	content_scanning/payload_test.go
 	content_scanning/setting_test.go
-	abuse_reports/abusereport_test.go
 	ai/ai_test.go
 	ai/finetune_test.go
 	ai/finetuneasset_test.go

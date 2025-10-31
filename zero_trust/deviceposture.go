@@ -379,7 +379,7 @@ type DeviceInput struct {
 	// Version of OS Distribution (linux only).
 	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the distribution name and version. (Mac, iOS, and Linux only).
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra string `json:"os_version_extra"`
 	// Overall.
 	Overall string `json:"overall"`
@@ -1121,7 +1121,7 @@ type DeviceInputParam struct {
 	// Version of OS Distribution (linux only).
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the distribution name and version. (Mac, iOS, and Linux only).
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 	// Overall.
 	Overall param.Field[string] `json:"overall"`
@@ -1759,7 +1759,7 @@ type OSVersionInput struct {
 	// Version of OS Distribution (linux only).
 	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the distribution name and version. (Mac, iOS, and Linux only).
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra string             `json:"os_version_extra"`
 	JSON           osVersionInputJSON `json:"-"`
 }
@@ -1832,7 +1832,7 @@ type OSVersionInputParam struct {
 	// Version of OS Distribution (linux only).
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
-	// the distribution name and version. (Mac, iOS, and Linux only).
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
 

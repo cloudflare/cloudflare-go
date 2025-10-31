@@ -142,10 +142,7 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 	return
 }
 
-// This Method is deprecated. Please use
-// /events/dataset/:dataset_id/events/:event_id instead.
-//
-// Deprecated: deprecated
+// Reads an event
 func (r *ThreatEventService) Get(ctx context.Context, eventID string, query ThreatEventGetParams, opts ...option.RequestOption) (res *ThreatEventGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
