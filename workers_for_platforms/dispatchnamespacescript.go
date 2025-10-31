@@ -164,7 +164,7 @@ func (r scriptJSON) RawJSON() string {
 
 type DispatchNamespaceScriptUpdateResponse struct {
 	StartupTimeMs int64 `json:"startup_time_ms,required"`
-	// The id of the script in the Workers system. Usually the script name.
+	// The name used to identify the script.
 	ID string `json:"id"`
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
 	// fixes to the runtime following this date will not affect this Worker.
@@ -175,6 +175,8 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// When the script was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// The entry point for the script.
+	EntryPoint string `json:"entry_point"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
 	// The names of handlers exported as part of the default export.
@@ -195,6 +197,8 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	// Named exports, such as Durable Object class implementations and named
 	// entrypoints.
 	NamedHandlers []DispatchNamespaceScriptUpdateResponseNamedHandler `json:"named_handlers"`
+	// Observability settings for the Worker.
+	Observability DispatchNamespaceScriptUpdateResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement DispatchNamespaceScriptUpdateResponsePlacement `json:"placement"`
@@ -202,8 +206,12 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	PlacementMode DispatchNamespaceScriptUpdateResponsePlacementMode `json:"placement_mode"`
 	// Deprecated: deprecated
 	PlacementStatus DispatchNamespaceScriptUpdateResponsePlacementStatus `json:"placement_status"`
+	// The immutable ID of the script.
+	Tag string `json:"tag"`
+	// Tags associated with the Worker.
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
+	TailConsumers []workers.ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel DispatchNamespaceScriptUpdateResponseUsageModel `json:"usage_model"`
 	JSON       dispatchNamespaceScriptUpdateResponseJSON       `json:"-"`
@@ -217,6 +225,7 @@ type dispatchNamespaceScriptUpdateResponseJSON struct {
 	CompatibilityDate  apijson.Field
 	CompatibilityFlags apijson.Field
 	CreatedOn          apijson.Field
+	EntryPoint         apijson.Field
 	Etag               apijson.Field
 	Handlers           apijson.Field
 	HasAssets          apijson.Field
@@ -226,9 +235,12 @@ type dispatchNamespaceScriptUpdateResponseJSON struct {
 	MigrationTag       apijson.Field
 	ModifiedOn         apijson.Field
 	NamedHandlers      apijson.Field
+	Observability      apijson.Field
 	Placement          apijson.Field
 	PlacementMode      apijson.Field
 	PlacementStatus    apijson.Field
+	Tag                apijson.Field
+	Tags               apijson.Field
 	TailConsumers      apijson.Field
 	UsageModel         apijson.Field
 	raw                string
@@ -265,6 +277,73 @@ func (r *DispatchNamespaceScriptUpdateResponseNamedHandler) UnmarshalJSON(data [
 }
 
 func (r dispatchNamespaceScriptUpdateResponseNamedHandlerJSON) RawJSON() string {
+	return r.raw
+}
+
+// Observability settings for the Worker.
+type DispatchNamespaceScriptUpdateResponseObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs DispatchNamespaceScriptUpdateResponseObservabilityLogs `json:"logs,nullable"`
+	JSON dispatchNamespaceScriptUpdateResponseObservabilityJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseObservabilityJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptUpdateResponseObservability]
+type dispatchNamespaceScriptUpdateResponseObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type DispatchNamespaceScriptUpdateResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                                                       `json:"persist"`
+	JSON    dispatchNamespaceScriptUpdateResponseObservabilityLogsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseObservabilityLogsJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptUpdateResponseObservabilityLogs]
+type dispatchNamespaceScriptUpdateResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	Destinations     apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -565,7 +644,7 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
@@ -632,7 +711,6 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmail],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlob],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
@@ -831,7 +909,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDat
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
-	// Namespace to bind to.
+	// The name of the dispatch namespace.
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
@@ -1359,37 +1437,6 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSer
 	return false
 }
 
-type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer struct {
-	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
-	// Name of Tail Worker to bind to.
-	Service param.Field[string] `json:"service,required"`
-	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType string
-
-const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-)
-
-func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
-		return true
-	}
-	return false
-}
-
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -1697,7 +1744,6 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secret_text"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "send_email"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "tail_consumer"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob               DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "text_blob"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "vectorize"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "version_metadata"
@@ -1709,7 +1755,7 @@ const (
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule:
 		return true
 	}
 	return false

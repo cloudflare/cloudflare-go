@@ -34,7 +34,10 @@ func NewThreatEventIndicatorTypeService(opts ...option.RequestOption) (r *Threat
 	return
 }
 
-// Lists all indicator types
+// This Method is deprecated. Please use /events/dataset/:dataset_id/indicatorTypes
+// instead.
+//
+// Deprecated: deprecated
 func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, query ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

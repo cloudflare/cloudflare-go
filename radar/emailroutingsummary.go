@@ -37,6 +37,10 @@ func NewEmailRoutingSummaryService(opts ...option.RequestOption) (r *EmailRoutin
 
 // Retrieves the distribution of emails by ARC (Authenticated Received Chain)
 // validation.
+//
+// Deprecated: Use
+// [Radar Email Routing Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/summary_v2/)
+// instead.
 func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRoutingSummaryARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryARCResponse, err error) {
 	var env EmailRoutingSummaryARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,6 +55,10 @@ func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRouting
 
 // Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
 // validation.
+//
+// Deprecated: Use
+// [Radar Email Routing Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/summary_v2/)
+// instead.
 func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutingSummaryDKIMParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDKIMResponse, err error) {
 	var env EmailRoutingSummaryDKIMResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,6 +73,10 @@ func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutin
 
 // Retrieves the distribution of emails by DMARC (Domain-based Message
 // Authentication, Reporting and Conformance) validation.
+//
+// Deprecated: Use
+// [Radar Email Routing Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/summary_v2/)
+// instead.
 func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRoutingSummaryDMARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDMARCResponse, err error) {
 	var env EmailRoutingSummaryDMARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,6 +91,10 @@ func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRouti
 
 // Retrieves the distribution of emails by encryption status (encrypted vs.
 // not-encrypted).
+//
+// Deprecated: Use
+// [Radar Email Routing Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/summary_v2/)
+// instead.
 func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailRoutingSummaryEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingSummaryEncryptedResponse, err error) {
 	var env EmailRoutingSummaryEncryptedResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -92,6 +108,10 @@ func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailR
 }
 
 // Retrieves the distribution of emails by IP version.
+//
+// Deprecated: Use
+// [Radar Email Routing Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/summary_v2/)
+// instead.
 func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailRoutingSummaryIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingSummaryIPVersionResponse, err error) {
 	var env EmailRoutingSummaryIPVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -106,6 +126,10 @@ func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailR
 
 // Retrieves the distribution of emails by SPF (Sender Policy Framework)
 // validation.
+//
+// Deprecated: Use
+// [Radar Email Routing Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/routing/methods/summary_v2/)
+// instead.
 func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRoutingSummarySPFParams, opts ...option.RequestOption) (res *EmailRoutingSummarySPFResponse, err error) {
 	var env EmailRoutingSummarySPFResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

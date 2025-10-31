@@ -37,11 +37,11 @@ func TestDNSSummaryCacheHitWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryCacheHitParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryCacheHitParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryCacheHitParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryCacheHitParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryCacheHitParamsProtocol{radar.DNSSummaryCacheHitParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryCacheHitParamsQueryType{radar.DNSSummaryCacheHitParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryCacheHitParamsResponseCode{radar.DNSSummaryCacheHitParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -74,11 +74,11 @@ func TestDNSSummaryDNSSECWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryDNSSECParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryDNSSECParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryDNSSECParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryDNSSECParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryDNSSECParamsProtocol{radar.DNSSummaryDNSSECParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryDNSSECParamsQueryType{radar.DNSSummaryDNSSECParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryDNSSECParamsResponseCode{radar.DNSSummaryDNSSECParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -111,11 +111,11 @@ func TestDNSSummaryDNSSECAwareWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryDNSSECAwareParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryDNSSECAwareParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryDNSSECAwareParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryDNSSECAwareParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryDNSSECAwareParamsProtocol{radar.DNSSummaryDNSSECAwareParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryDNSSECAwareParamsQueryType{radar.DNSSummaryDNSSECAwareParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryDNSSECAwareParamsResponseCode{radar.DNSSummaryDNSSECAwareParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -148,11 +148,11 @@ func TestDNSSummaryDNSSECE2EWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryDnssece2EParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryDnssece2EParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryDnssece2EParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryDnssece2EParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryDnssece2EParamsProtocol{radar.DNSSummaryDnssece2EParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryDnssece2EParamsQueryType{radar.DNSSummaryDnssece2EParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryDnssece2EParamsResponseCode{radar.DNSSummaryDnssece2EParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -185,11 +185,11 @@ func TestDNSSummaryIPVersionWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryIPVersionParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryIPVersionParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryIPVersionParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryIPVersionParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryIPVersionParamsProtocol{radar.DNSSummaryIPVersionParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryIPVersionParamsQueryType{radar.DNSSummaryIPVersionParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryIPVersionParamsResponseCode{radar.DNSSummaryIPVersionParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -222,11 +222,11 @@ func TestDNSSummaryMatchingAnswerWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryMatchingAnswerParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryMatchingAnswerParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryMatchingAnswerParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryMatchingAnswerParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryMatchingAnswerParamsProtocol{radar.DNSSummaryMatchingAnswerParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryMatchingAnswerParamsQueryType{radar.DNSSummaryMatchingAnswerParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryMatchingAnswerParamsResponseCode{radar.DNSSummaryMatchingAnswerParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -259,10 +259,10 @@ func TestDNSSummaryProtocolWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryProtocolParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		QueryType:    cloudflare.F(radar.DNSSummaryProtocolParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryProtocolParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryProtocolParamsQueryType{radar.DNSSummaryProtocolParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryProtocolParamsResponseCode{radar.DNSSummaryProtocolParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -296,10 +296,10 @@ func TestDNSSummaryQueryTypeWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Nodata:        cloudflare.F(true),
-		Protocol:      cloudflare.F(radar.DNSSummaryQueryTypeParamsProtocolUdp),
-		ResponseCode:  cloudflare.F(radar.DNSSummaryQueryTypeParamsResponseCodeNoerror),
-		Tld:           cloudflare.F([]string{"string"}),
+		Nodata:        cloudflare.F([]bool{true}),
+		Protocol:      cloudflare.F([]radar.DNSSummaryQueryTypeParamsProtocol{radar.DNSSummaryQueryTypeParamsProtocolUdp}),
+		ResponseCode:  cloudflare.F([]radar.DNSSummaryQueryTypeParamsResponseCode{radar.DNSSummaryQueryTypeParamsResponseCodeNoerror}),
+		Tld:           cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -333,10 +333,10 @@ func TestDNSSummaryResponseCodeWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Nodata:        cloudflare.F(true),
-		Protocol:      cloudflare.F(radar.DNSSummaryResponseCodeParamsProtocolUdp),
-		QueryType:     cloudflare.F(radar.DNSSummaryResponseCodeParamsQueryTypeA),
-		Tld:           cloudflare.F([]string{"string"}),
+		Nodata:        cloudflare.F([]bool{true}),
+		Protocol:      cloudflare.F([]radar.DNSSummaryResponseCodeParamsProtocol{radar.DNSSummaryResponseCodeParamsProtocolUdp}),
+		QueryType:     cloudflare.F([]radar.DNSSummaryResponseCodeParamsQueryType{radar.DNSSummaryResponseCodeParamsQueryTypeA}),
+		Tld:           cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -369,11 +369,11 @@ func TestDNSSummaryResponseTTLWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.DNSSummaryResponseTTLParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Nodata:       cloudflare.F(true),
-		Protocol:     cloudflare.F(radar.DNSSummaryResponseTTLParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.DNSSummaryResponseTTLParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.DNSSummaryResponseTTLParamsResponseCodeNoerror),
-		Tld:          cloudflare.F([]string{"string"}),
+		Nodata:       cloudflare.F([]bool{true}),
+		Protocol:     cloudflare.F([]radar.DNSSummaryResponseTTLParamsProtocol{radar.DNSSummaryResponseTTLParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.DNSSummaryResponseTTLParamsQueryType{radar.DNSSummaryResponseTTLParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.DNSSummaryResponseTTLParamsResponseCode{radar.DNSSummaryResponseTTLParamsResponseCodeNoerror}),
+		Tld:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

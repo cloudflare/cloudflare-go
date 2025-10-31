@@ -286,17 +286,29 @@ func (r InvestigateListResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateListResponseFinding struct {
-	Detail string                             `json:"detail,nullable"`
-	Name   string                             `json:"name,nullable"`
-	Value  string                             `json:"value,nullable"`
-	JSON   investigateListResponseFindingJSON `json:"-"`
+	Attachment string                                   `json:"attachment,nullable"`
+	Detail     string                                   `json:"detail,nullable"`
+	Detection  InvestigateListResponseFindingsDetection `json:"detection,nullable"`
+	Field      string                                   `json:"field,nullable"`
+	Name       string                                   `json:"name,nullable"`
+	Portion    string                                   `json:"portion,nullable"`
+	Reason     string                                   `json:"reason,nullable"`
+	Score      float64                                  `json:"score,nullable"`
+	Value      string                                   `json:"value,nullable"`
+	JSON       investigateListResponseFindingJSON       `json:"-"`
 }
 
 // investigateListResponseFindingJSON contains the JSON metadata for the struct
 // [InvestigateListResponseFinding]
 type investigateListResponseFindingJSON struct {
+	Attachment  apijson.Field
 	Detail      apijson.Field
+	Detection   apijson.Field
+	Field       apijson.Field
 	Name        apijson.Field
+	Portion     apijson.Field
+	Reason      apijson.Field
+	Score       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -308,6 +320,29 @@ func (r *InvestigateListResponseFinding) UnmarshalJSON(data []byte) (err error) 
 
 func (r investigateListResponseFindingJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateListResponseFindingsDetection string
+
+const (
+	InvestigateListResponseFindingsDetectionMalicious    InvestigateListResponseFindingsDetection = "MALICIOUS"
+	InvestigateListResponseFindingsDetectionMaliciousBec InvestigateListResponseFindingsDetection = "MALICIOUS-BEC"
+	InvestigateListResponseFindingsDetectionSuspicious   InvestigateListResponseFindingsDetection = "SUSPICIOUS"
+	InvestigateListResponseFindingsDetectionSpoof        InvestigateListResponseFindingsDetection = "SPOOF"
+	InvestigateListResponseFindingsDetectionSpam         InvestigateListResponseFindingsDetection = "SPAM"
+	InvestigateListResponseFindingsDetectionBulk         InvestigateListResponseFindingsDetection = "BULK"
+	InvestigateListResponseFindingsDetectionEncrypted    InvestigateListResponseFindingsDetection = "ENCRYPTED"
+	InvestigateListResponseFindingsDetectionExternal     InvestigateListResponseFindingsDetection = "EXTERNAL"
+	InvestigateListResponseFindingsDetectionUnknown      InvestigateListResponseFindingsDetection = "UNKNOWN"
+	InvestigateListResponseFindingsDetectionNone         InvestigateListResponseFindingsDetection = "NONE"
+)
+
+func (r InvestigateListResponseFindingsDetection) IsKnown() bool {
+	switch r {
+	case InvestigateListResponseFindingsDetectionMalicious, InvestigateListResponseFindingsDetectionMaliciousBec, InvestigateListResponseFindingsDetectionSuspicious, InvestigateListResponseFindingsDetectionSpoof, InvestigateListResponseFindingsDetectionSpam, InvestigateListResponseFindingsDetectionBulk, InvestigateListResponseFindingsDetectionEncrypted, InvestigateListResponseFindingsDetectionExternal, InvestigateListResponseFindingsDetectionUnknown, InvestigateListResponseFindingsDetectionNone:
+		return true
+	}
+	return false
 }
 
 type InvestigateListResponseValidation struct {
@@ -576,17 +611,29 @@ func (r InvestigateGetResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateGetResponseFinding struct {
-	Detail string                            `json:"detail,nullable"`
-	Name   string                            `json:"name,nullable"`
-	Value  string                            `json:"value,nullable"`
-	JSON   investigateGetResponseFindingJSON `json:"-"`
+	Attachment string                                  `json:"attachment,nullable"`
+	Detail     string                                  `json:"detail,nullable"`
+	Detection  InvestigateGetResponseFindingsDetection `json:"detection,nullable"`
+	Field      string                                  `json:"field,nullable"`
+	Name       string                                  `json:"name,nullable"`
+	Portion    string                                  `json:"portion,nullable"`
+	Reason     string                                  `json:"reason,nullable"`
+	Score      float64                                 `json:"score,nullable"`
+	Value      string                                  `json:"value,nullable"`
+	JSON       investigateGetResponseFindingJSON       `json:"-"`
 }
 
 // investigateGetResponseFindingJSON contains the JSON metadata for the struct
 // [InvestigateGetResponseFinding]
 type investigateGetResponseFindingJSON struct {
+	Attachment  apijson.Field
 	Detail      apijson.Field
+	Detection   apijson.Field
+	Field       apijson.Field
 	Name        apijson.Field
+	Portion     apijson.Field
+	Reason      apijson.Field
+	Score       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -598,6 +645,29 @@ func (r *InvestigateGetResponseFinding) UnmarshalJSON(data []byte) (err error) {
 
 func (r investigateGetResponseFindingJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateGetResponseFindingsDetection string
+
+const (
+	InvestigateGetResponseFindingsDetectionMalicious    InvestigateGetResponseFindingsDetection = "MALICIOUS"
+	InvestigateGetResponseFindingsDetectionMaliciousBec InvestigateGetResponseFindingsDetection = "MALICIOUS-BEC"
+	InvestigateGetResponseFindingsDetectionSuspicious   InvestigateGetResponseFindingsDetection = "SUSPICIOUS"
+	InvestigateGetResponseFindingsDetectionSpoof        InvestigateGetResponseFindingsDetection = "SPOOF"
+	InvestigateGetResponseFindingsDetectionSpam         InvestigateGetResponseFindingsDetection = "SPAM"
+	InvestigateGetResponseFindingsDetectionBulk         InvestigateGetResponseFindingsDetection = "BULK"
+	InvestigateGetResponseFindingsDetectionEncrypted    InvestigateGetResponseFindingsDetection = "ENCRYPTED"
+	InvestigateGetResponseFindingsDetectionExternal     InvestigateGetResponseFindingsDetection = "EXTERNAL"
+	InvestigateGetResponseFindingsDetectionUnknown      InvestigateGetResponseFindingsDetection = "UNKNOWN"
+	InvestigateGetResponseFindingsDetectionNone         InvestigateGetResponseFindingsDetection = "NONE"
+)
+
+func (r InvestigateGetResponseFindingsDetection) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseFindingsDetectionMalicious, InvestigateGetResponseFindingsDetectionMaliciousBec, InvestigateGetResponseFindingsDetectionSuspicious, InvestigateGetResponseFindingsDetectionSpoof, InvestigateGetResponseFindingsDetectionSpam, InvestigateGetResponseFindingsDetectionBulk, InvestigateGetResponseFindingsDetectionEncrypted, InvestigateGetResponseFindingsDetectionExternal, InvestigateGetResponseFindingsDetectionUnknown, InvestigateGetResponseFindingsDetectionNone:
+		return true
+	}
+	return false
 }
 
 type InvestigateGetResponseValidation struct {
@@ -687,6 +757,7 @@ type InvestigateListParams struct {
 	// Determines if the message action log is included in the response.
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
+	Cursor    param.Field[string] `query:"cursor"`
 	// Determines if the search results will include detections or not.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
 	// The sender domains the search filters by.
@@ -699,7 +770,7 @@ type InvestigateListParams struct {
 	MessageAction param.Field[InvestigateListParamsMessageAction] `query:"message_action"`
 	MessageID     param.Field[string]                             `query:"message_id"`
 	Metric        param.Field[string]                             `query:"metric"`
-	// The page number of paginated results.
+	// Deprecated: Use cursor pagination instead.
 	Page param.Field[int64] `query:"page"`
 	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
