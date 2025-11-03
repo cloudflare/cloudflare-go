@@ -34,7 +34,7 @@ func TestBGPTopPrefixesWithOptionalParams(t *testing.T) {
 		DateRange:  cloudflare.F([]string{"7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopPrefixesParamsFormatJson),
-		Limit:      cloudflare.F(int64(1)),
+		Limit:      cloudflare.F(int64(5)),
 		Name:       cloudflare.F([]string{"main_series"}),
 		UpdateType: cloudflare.F([]radar.BGPTopPrefixesParamsUpdateType{radar.BGPTopPrefixesParamsUpdateTypeAnnouncement}),
 	})

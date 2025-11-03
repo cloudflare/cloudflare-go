@@ -31,7 +31,7 @@ func TestRobotsTXTTopDomainCategoriesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.RobotsTXT.Top.DomainCategories(context.TODO(), radar.RobotsTXTTopDomainCategoriesParams{
 		Date:              cloudflare.F([]time.Time{time.Now()}),
 		Format:            cloudflare.F(radar.RobotsTXTTopDomainCategoriesParamsFormatJson),
-		Limit:             cloudflare.F(int64(1)),
+		Limit:             cloudflare.F(int64(5)),
 		Name:              cloudflare.F([]string{"main_series"}),
 		UserAgentCategory: cloudflare.F(radar.RobotsTXTTopDomainCategoriesParamsUserAgentCategoryAI),
 	})
