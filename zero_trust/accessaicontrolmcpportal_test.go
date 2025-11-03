@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package portals_test
+package zero_trust_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/portals"
+	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
 func TestAccessAIControlMcpPortalNewWithOptionalParams(t *testing.T) {
@@ -27,22 +27,22 @@ func TestAccessAIControlMcpPortalNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.New(context.TODO(), portals.AccessAIControlMcpPortalNewParams{
+	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.New(context.TODO(), zero_trust.AccessAIControlMcpPortalNewParams{
 		AccountID:   cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		ID:          cloudflare.F("my-mcp-portal"),
 		Hostname:    cloudflare.F("exmaple.com"),
 		Name:        cloudflare.F("My MCP Portal"),
 		Description: cloudflare.F("This is my custom MCP Portal"),
-		Servers: cloudflare.F([]portals.AccessAIControlMcpPortalNewParamsServer{{
+		Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServer{{
 			ServerID:        cloudflare.F("my-mcp-server"),
 			DefaultDisabled: cloudflare.F(true),
 			OnBehalf:        cloudflare.F(true),
-			UpdatedPrompts: cloudflare.F([]portals.AccessAIControlMcpPortalNewParamsServersUpdatedPrompt{{
+			UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServersUpdatedPrompt{{
 				Name:        cloudflare.F("name"),
 				Description: cloudflare.F("description"),
 				Enabled:     cloudflare.F(true),
 			}}),
-			UpdatedTools: cloudflare.F([]portals.AccessAIControlMcpPortalNewParamsServersUpdatedTool{{
+			UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServersUpdatedTool{{
 				Name:        cloudflare.F("name"),
 				Description: cloudflare.F("description"),
 				Enabled:     cloudflare.F(true),
@@ -74,21 +74,21 @@ func TestAccessAIControlMcpPortalUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.Update(
 		context.TODO(),
 		"my-mcp-portal",
-		portals.AccessAIControlMcpPortalUpdateParams{
+		zero_trust.AccessAIControlMcpPortalUpdateParams{
 			AccountID:   cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 			Description: cloudflare.F("This is my custom MCP Portal"),
 			Hostname:    cloudflare.F("exmaple.com"),
 			Name:        cloudflare.F("My MCP Portal"),
-			Servers: cloudflare.F([]portals.AccessAIControlMcpPortalUpdateParamsServer{{
+			Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServer{{
 				ServerID:        cloudflare.F("my-mcp-server"),
 				DefaultDisabled: cloudflare.F(true),
 				OnBehalf:        cloudflare.F(true),
-				UpdatedPrompts: cloudflare.F([]portals.AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt{{
+				UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt{{
 					Name:        cloudflare.F("name"),
 					Description: cloudflare.F("description"),
 					Enabled:     cloudflare.F(true),
 				}}),
-				UpdatedTools: cloudflare.F([]portals.AccessAIControlMcpPortalUpdateParamsServersUpdatedTool{{
+				UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServersUpdatedTool{{
 					Name:        cloudflare.F("name"),
 					Description: cloudflare.F("description"),
 					Enabled:     cloudflare.F(true),
@@ -118,7 +118,7 @@ func TestAccessAIControlMcpPortalListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.List(context.TODO(), portals.AccessAIControlMcpPortalListParams{
+	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.List(context.TODO(), zero_trust.AccessAIControlMcpPortalListParams{
 		AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(1)),
@@ -149,7 +149,7 @@ func TestAccessAIControlMcpPortalDelete(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.Delete(
 		context.TODO(),
 		"my-mcp-portal",
-		portals.AccessAIControlMcpPortalDeleteParams{
+		zero_trust.AccessAIControlMcpPortalDeleteParams{
 			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		},
 	)
@@ -178,7 +178,7 @@ func TestAccessAIControlMcpPortalRead(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.Read(
 		context.TODO(),
 		"my-mcp-portal",
-		portals.AccessAIControlMcpPortalReadParams{
+		zero_trust.AccessAIControlMcpPortalReadParams{
 			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		},
 	)
