@@ -44,7 +44,7 @@ func TestHTTPLocationBotClassGetWithOptionalParams(t *testing.T) {
 			HTTPProtocol:  cloudflare.F([]radar.HTTPLocationBotClassGetParamsHTTPProtocol{radar.HTTPLocationBotClassGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:   cloudflare.F([]radar.HTTPLocationBotClassGetParamsHTTPVersion{radar.HTTPLocationBotClassGetParamsHTTPVersionHttPv1}),
 			IPVersion:     cloudflare.F([]radar.HTTPLocationBotClassGetParamsIPVersion{radar.HTTPLocationBotClassGetParamsIPVersionIPv4}),
-			Limit:         cloudflare.F(int64(5)),
+			Limit:         cloudflare.F(int64(1)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
 			OS:            cloudflare.F([]radar.HTTPLocationBotClassGetParamsOS{radar.HTTPLocationBotClassGetParamsOSWindows}),
