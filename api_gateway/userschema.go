@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -21,6 +20,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/schema_validation"
 )
 
 // UserSchemaService contains methods and other services that help with interacting
@@ -72,7 +72,7 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
+func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[schema_validation.PublicSchema], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -98,7 +98,7 @@ func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParam
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
+func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[schema_validation.PublicSchema] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -127,7 +127,7 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
+func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *schema_validation.PublicSchema, err error) {
 	var env UserSchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -152,7 +152,7 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
+func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *schema_validation.PublicSchema, err error) {
 	var env UserSchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -221,60 +221,10 @@ func (r messageItemSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type PublicSchema struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// Kind of schema
-	Kind PublicSchemaKind `json:"kind,required"`
-	// Name of the schema
-	Name string `json:"name,required"`
-	// UUID.
-	SchemaID string `json:"schema_id,required"`
-	// Source of the schema
-	Source string `json:"source"`
-	// Flag whether schema is enabled for validation.
-	ValidationEnabled bool             `json:"validation_enabled"`
-	JSON              publicSchemaJSON `json:"-"`
-}
-
-// publicSchemaJSON contains the JSON metadata for the struct [PublicSchema]
-type publicSchemaJSON struct {
-	CreatedAt         apijson.Field
-	Kind              apijson.Field
-	Name              apijson.Field
-	SchemaID          apijson.Field
-	Source            apijson.Field
-	ValidationEnabled apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *PublicSchema) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r publicSchemaJSON) RawJSON() string {
-	return r.raw
-}
-
-// Kind of schema
-type PublicSchemaKind string
-
-const (
-	PublicSchemaKindOpenAPIV3 PublicSchemaKind = "openapi_v3"
-)
-
-func (r PublicSchemaKind) IsKnown() bool {
-	switch r {
-	case PublicSchemaKindOpenAPIV3:
-		return true
-	}
-	return false
-}
-
 type SchemaUpload struct {
-	Schema        PublicSchema              `json:"schema,required"`
-	UploadDetails SchemaUploadUploadDetails `json:"upload_details"`
-	JSON          schemaUploadJSON          `json:"-"`
+	Schema        schema_validation.PublicSchema `json:"schema,required"`
+	UploadDetails SchemaUploadUploadDetails      `json:"upload_details"`
+	JSON          schemaUploadJSON               `json:"-"`
 }
 
 // schemaUploadJSON contains the JSON metadata for the struct [SchemaUpload]
@@ -542,9 +492,9 @@ func (r UserSchemaEditParamsValidationEnabled) IsKnown() bool {
 }
 
 type UserSchemaEditResponseEnvelope struct {
-	Errors   Message      `json:"errors,required"`
-	Messages Message      `json:"messages,required"`
-	Result   PublicSchema `json:"result,required"`
+	Errors   Message                        `json:"errors,required"`
+	Messages Message                        `json:"messages,required"`
+	Result   schema_validation.PublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success UserSchemaEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaEditResponseEnvelopeJSON    `json:"-"`
@@ -600,9 +550,9 @@ func (r UserSchemaGetParams) URLQuery() (v url.Values) {
 }
 
 type UserSchemaGetResponseEnvelope struct {
-	Errors   Message      `json:"errors,required"`
-	Messages Message      `json:"messages,required"`
-	Result   PublicSchema `json:"result,required"`
+	Errors   Message                        `json:"errors,required"`
+	Messages Message                        `json:"messages,required"`
+	Result   schema_validation.PublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success UserSchemaGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaGetResponseEnvelopeJSON    `json:"-"`

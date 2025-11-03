@@ -146,6 +146,56 @@ func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaG
 	return
 }
 
+type PublicSchema struct {
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Kind of schema
+	Kind PublicSchemaKind `json:"kind,required"`
+	// Name of the schema
+	Name string `json:"name,required"`
+	// UUID.
+	SchemaID string `json:"schema_id,required"`
+	// Source of the schema
+	Source string `json:"source"`
+	// Flag whether schema is enabled for validation.
+	ValidationEnabled bool             `json:"validation_enabled"`
+	JSON              publicSchemaJSON `json:"-"`
+}
+
+// publicSchemaJSON contains the JSON metadata for the struct [PublicSchema]
+type publicSchemaJSON struct {
+	CreatedAt         apijson.Field
+	Kind              apijson.Field
+	Name              apijson.Field
+	SchemaID          apijson.Field
+	Source            apijson.Field
+	ValidationEnabled apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *PublicSchema) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r publicSchemaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Kind of schema
+type PublicSchemaKind string
+
+const (
+	PublicSchemaKindOpenAPIV3 PublicSchemaKind = "openapi_v3"
+)
+
+func (r PublicSchemaKind) IsKnown() bool {
+	switch r {
+	case PublicSchemaKindOpenAPIV3:
+		return true
+	}
+	return false
+}
+
 // A schema used in schema validation
 type SchemaNewResponse struct {
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
