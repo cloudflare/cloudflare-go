@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/token_validation"
 )
 
-func TestConfigurationNewWithOptionalParams(t *testing.T) {
+func TestConfigurationNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,10 +30,11 @@ func TestConfigurationNewWithOptionalParams(t *testing.T) {
 	_, err := client.TokenValidation.Configuration.New(context.TODO(), token_validation.ConfigurationNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Credentials: cloudflare.F(token_validation.ConfigurationNewParamsCredentials{
-			Keys: cloudflare.F([]token_validation.ConfigurationNewParamsCredentialsKeyUnion{token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEc{
-				Alg: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs256),
+			Keys: cloudflare.F([]token_validation.ConfigurationNewParamsCredentialsKeyUnion{token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256{
+				Alg: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256),
+				Crv: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256),
 				Kid: cloudflare.F("38013f13-c266-4eec-a72a-92ec92779f21"),
-				Kty: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKtyEc),
+				Kty: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc),
 				X:   cloudflare.F("KN53JRwN3wCjm2o39bvZUX2VdrsHzS8pxOAGjm8m7EQ"),
 				Y:   cloudflare.F("lnkkzIxaveggz-HFhcMWW15nxvOj0Z_uQsXbpK0GFcY"),
 			}}),
