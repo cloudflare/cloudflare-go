@@ -40,7 +40,7 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 }
 
 // Upload a schema
-func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ...option.RequestOption) (res *SchemaNewResponse, err error) {
+func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -57,7 +57,7 @@ func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ..
 }
 
 // List all uploaded schemas
-func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SchemaListResponse], err error) {
+func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts 
 }
 
 // List all uploaded schemas
-func (r *SchemaService) ListAutoPaging(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SchemaListResponse] {
+func (r *SchemaService) ListAutoPaging(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -105,7 +105,7 @@ func (r *SchemaService) Delete(ctx context.Context, schemaID string, body Schema
 }
 
 // Edit details of a schema to enable validation
-func (r *SchemaService) Edit(ctx context.Context, schemaID string, params SchemaEditParams, opts ...option.RequestOption) (res *SchemaEditResponse, err error) {
+func (r *SchemaService) Edit(ctx context.Context, schemaID string, params SchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -126,7 +126,7 @@ func (r *SchemaService) Edit(ctx context.Context, schemaID string, params Schema
 }
 
 // Get details of a schema
-func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaGetParams, opts ...option.RequestOption) (res *SchemaGetResponse, err error) {
+func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -146,17 +146,18 @@ func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaG
 	return
 }
 
+// A schema used in schema validation
 type PublicSchema struct {
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// Kind of schema
+	// The kind of the schema
 	Kind PublicSchemaKind `json:"kind,required"`
-	// Name of the schema
+	// A human-readable name for the schema
 	Name string `json:"name,required"`
-	// UUID.
-	SchemaID string `json:"schema_id,required"`
-	// Source of the schema
-	Source string `json:"source"`
-	// Flag whether schema is enabled for validation.
+	// A unique identifier of this schema
+	SchemaID string `json:"schema_id,required" format:"uuid"`
+	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
+	Source string `json:"source,required"`
+	// An indicator if this schema is enabled
 	ValidationEnabled bool             `json:"validation_enabled"`
 	JSON              publicSchemaJSON `json:"-"`
 }
@@ -181,7 +182,7 @@ func (r publicSchemaJSON) RawJSON() string {
 	return r.raw
 }
 
-// Kind of schema
+// The kind of the schema
 type PublicSchemaKind string
 
 const (
@@ -191,110 +192,6 @@ const (
 func (r PublicSchemaKind) IsKnown() bool {
 	switch r {
 	case PublicSchemaKindOpenAPIV3:
-		return true
-	}
-	return false
-}
-
-// A schema used in schema validation
-type SchemaNewResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// The kind of the schema
-	Kind SchemaNewResponseKind `json:"kind,required"`
-	// A human-readable name for the schema
-	Name string `json:"name,required"`
-	// A unique identifier of this schema
-	SchemaID string `json:"schema_id,required" format:"uuid"`
-	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
-	Source string `json:"source,required"`
-	// An indicator if this schema is enabled
-	ValidationEnabled bool                  `json:"validation_enabled"`
-	JSON              schemaNewResponseJSON `json:"-"`
-}
-
-// schemaNewResponseJSON contains the JSON metadata for the struct
-// [SchemaNewResponse]
-type schemaNewResponseJSON struct {
-	CreatedAt         apijson.Field
-	Kind              apijson.Field
-	Name              apijson.Field
-	SchemaID          apijson.Field
-	Source            apijson.Field
-	ValidationEnabled apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SchemaNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r schemaNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The kind of the schema
-type SchemaNewResponseKind string
-
-const (
-	SchemaNewResponseKindOpenAPIV3 SchemaNewResponseKind = "openapi_v3"
-)
-
-func (r SchemaNewResponseKind) IsKnown() bool {
-	switch r {
-	case SchemaNewResponseKindOpenAPIV3:
-		return true
-	}
-	return false
-}
-
-// A schema used in schema validation
-type SchemaListResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// The kind of the schema
-	Kind SchemaListResponseKind `json:"kind,required"`
-	// A human-readable name for the schema
-	Name string `json:"name,required"`
-	// A unique identifier of this schema
-	SchemaID string `json:"schema_id,required" format:"uuid"`
-	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
-	Source string `json:"source,required"`
-	// An indicator if this schema is enabled
-	ValidationEnabled bool                   `json:"validation_enabled"`
-	JSON              schemaListResponseJSON `json:"-"`
-}
-
-// schemaListResponseJSON contains the JSON metadata for the struct
-// [SchemaListResponse]
-type schemaListResponseJSON struct {
-	CreatedAt         apijson.Field
-	Kind              apijson.Field
-	Name              apijson.Field
-	SchemaID          apijson.Field
-	Source            apijson.Field
-	ValidationEnabled apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SchemaListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r schemaListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The kind of the schema
-type SchemaListResponseKind string
-
-const (
-	SchemaListResponseKindOpenAPIV3 SchemaListResponseKind = "openapi_v3"
-)
-
-func (r SchemaListResponseKind) IsKnown() bool {
-	switch r {
-	case SchemaListResponseKindOpenAPIV3:
 		return true
 	}
 	return false
@@ -320,110 +217,6 @@ func (r *SchemaDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r schemaDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// A schema used in schema validation
-type SchemaEditResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// The kind of the schema
-	Kind SchemaEditResponseKind `json:"kind,required"`
-	// A human-readable name for the schema
-	Name string `json:"name,required"`
-	// A unique identifier of this schema
-	SchemaID string `json:"schema_id,required" format:"uuid"`
-	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
-	Source string `json:"source,required"`
-	// An indicator if this schema is enabled
-	ValidationEnabled bool                   `json:"validation_enabled"`
-	JSON              schemaEditResponseJSON `json:"-"`
-}
-
-// schemaEditResponseJSON contains the JSON metadata for the struct
-// [SchemaEditResponse]
-type schemaEditResponseJSON struct {
-	CreatedAt         apijson.Field
-	Kind              apijson.Field
-	Name              apijson.Field
-	SchemaID          apijson.Field
-	Source            apijson.Field
-	ValidationEnabled apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SchemaEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r schemaEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The kind of the schema
-type SchemaEditResponseKind string
-
-const (
-	SchemaEditResponseKindOpenAPIV3 SchemaEditResponseKind = "openapi_v3"
-)
-
-func (r SchemaEditResponseKind) IsKnown() bool {
-	switch r {
-	case SchemaEditResponseKindOpenAPIV3:
-		return true
-	}
-	return false
-}
-
-// A schema used in schema validation
-type SchemaGetResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// The kind of the schema
-	Kind SchemaGetResponseKind `json:"kind,required"`
-	// A human-readable name for the schema
-	Name string `json:"name,required"`
-	// A unique identifier of this schema
-	SchemaID string `json:"schema_id,required" format:"uuid"`
-	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
-	Source string `json:"source,required"`
-	// An indicator if this schema is enabled
-	ValidationEnabled bool                  `json:"validation_enabled"`
-	JSON              schemaGetResponseJSON `json:"-"`
-}
-
-// schemaGetResponseJSON contains the JSON metadata for the struct
-// [SchemaGetResponse]
-type schemaGetResponseJSON struct {
-	CreatedAt         apijson.Field
-	Kind              apijson.Field
-	Name              apijson.Field
-	SchemaID          apijson.Field
-	Source            apijson.Field
-	ValidationEnabled apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SchemaGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r schemaGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The kind of the schema
-type SchemaGetResponseKind string
-
-const (
-	SchemaGetResponseKindOpenAPIV3 SchemaGetResponseKind = "openapi_v3"
-)
-
-func (r SchemaGetResponseKind) IsKnown() bool {
-	switch r {
-	case SchemaGetResponseKindOpenAPIV3:
-		return true
-	}
-	return false
 }
 
 type SchemaNewParams struct {
@@ -462,7 +255,7 @@ type SchemaNewResponseEnvelope struct {
 	Errors   []SchemaNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SchemaNewResponseEnvelopeMessages `json:"messages,required"`
 	// A schema used in schema validation
-	Result SchemaNewResponse `json:"result,required"`
+	Result PublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success SchemaNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    schemaNewResponseEnvelopeJSON    `json:"-"`
@@ -698,7 +491,7 @@ type SchemaEditResponseEnvelope struct {
 	Errors   api_gateway.Message `json:"errors,required"`
 	Messages api_gateway.Message `json:"messages,required"`
 	// A schema used in schema validation
-	Result SchemaEditResponse `json:"result,required"`
+	Result PublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success SchemaEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    schemaEditResponseEnvelopeJSON    `json:"-"`
@@ -757,7 +550,7 @@ type SchemaGetResponseEnvelope struct {
 	Errors   api_gateway.Message `json:"errors,required"`
 	Messages api_gateway.Message `json:"messages,required"`
 	// A schema used in schema validation
-	Result SchemaGetResponse `json:"result,required"`
+	Result PublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success SchemaGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    schemaGetResponseEnvelopeJSON    `json:"-"`

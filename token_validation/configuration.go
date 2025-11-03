@@ -152,14 +152,14 @@ func (r *ConfigurationService) Get(ctx context.Context, configID string, query C
 
 type TokenConfig struct {
 	// UUID.
-	ID           string                 `json:"id"`
-	CreatedAt    time.Time              `json:"created_at" format:"date-time"`
-	Credentials  TokenConfigCredentials `json:"credentials"`
-	Description  string                 `json:"description"`
-	LastUpdated  time.Time              `json:"last_updated" format:"date-time"`
-	Title        string                 `json:"title"`
-	TokenSources []string               `json:"token_sources"`
-	TokenType    TokenConfigTokenType   `json:"token_type"`
+	ID           string                 `json:"id,required"`
+	CreatedAt    time.Time              `json:"created_at,required" format:"date-time"`
+	Credentials  TokenConfigCredentials `json:"credentials,required"`
+	Description  string                 `json:"description,required"`
+	LastUpdated  time.Time              `json:"last_updated,required" format:"date-time"`
+	Title        string                 `json:"title,required"`
+	TokenSources []string               `json:"token_sources,required"`
+	TokenType    TokenConfigTokenType   `json:"token_type,required"`
 	JSON         tokenConfigJSON        `json:"-"`
 }
 
@@ -186,7 +186,7 @@ func (r tokenConfigJSON) RawJSON() string {
 }
 
 type TokenConfigCredentials struct {
-	Keys []TokenConfigCredentialsKey `json:"keys"`
+	Keys []TokenConfigCredentialsKey `json:"keys,required"`
 	JSON tokenConfigCredentialsJSON  `json:"-"`
 }
 
@@ -214,6 +214,8 @@ type TokenConfigCredentialsKey struct {
 	Kid string `json:"kid,required"`
 	// Key Type
 	Kty TokenConfigCredentialsKeysKty `json:"kty,required"`
+	// Curve
+	Crv TokenConfigCredentialsKeysCrv `json:"crv"`
 	// RSA exponent
 	E string `json:"e"`
 	// RSA modulus
@@ -232,6 +234,7 @@ type tokenConfigCredentialsKeyJSON struct {
 	Alg         apijson.Field
 	Kid         apijson.Field
 	Kty         apijson.Field
+	Crv         apijson.Field
 	E           apijson.Field
 	N           apijson.Field
 	X           apijson.Field
@@ -257,16 +260,18 @@ func (r *TokenConfigCredentialsKey) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc],
-// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA].
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA],
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256],
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384].
 func (r TokenConfigCredentialsKey) AsUnion() TokenConfigCredentialsKeysUnion {
 	return r.union
 }
 
 // JSON representation of a JWKS key.
 //
-// Union satisfied by [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc] or
-// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA].
+// Union satisfied by [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA],
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256] or
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384].
 type TokenConfigCredentialsKeysUnion interface {
 	implementsTokenConfigCredentialsKey()
 }
@@ -277,85 +282,20 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc{}),
+			Type:       reflect.TypeOf(TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA{}),
+			Type:       reflect.TypeOf(TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384{}),
 		},
 	)
 }
 
-// Common properties of a JWT key.
-type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc struct {
-	// Algorithm
-	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg `json:"alg,required"`
-	// Key ID
-	Kid string `json:"kid,required"`
-	// Key Type
-	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcKty `json:"kty,required"`
-	// X EC coordinate
-	X string `json:"x,required"`
-	// Y EC coordinate
-	Y    string                                                     `json:"y,required"`
-	JSON tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcJSON `json:"-"`
-}
-
-// tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcJSON contains the JSON
-// metadata for the struct [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc]
-type tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcJSON struct {
-	Alg         apijson.Field
-	Kid         apijson.Field
-	Kty         apijson.Field
-	X           apijson.Field
-	Y           apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEc) implementsTokenConfigCredentialsKey() {
-}
-
-// Algorithm
-type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg string
-
-const (
-	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs256 TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg = "ES256"
-	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs384 TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg = "ES384"
-)
-
-func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg) IsKnown() bool {
-	switch r {
-	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs256, TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs384:
-		return true
-	}
-	return false
-}
-
-// Key Type
-type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcKty string
-
-const (
-	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcKtyEc TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcKty = "EC"
-)
-
-func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcKty) IsKnown() bool {
-	switch r {
-	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcKtyEc:
-		return true
-	}
-	return false
-}
-
-// Common properties of a JWT key.
+// JSON representation of an RSA key.
 type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA struct {
 	// Algorithm
 	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlg `json:"alg,required"`
@@ -429,23 +369,197 @@ func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty) IsKnown() bo
 	return false
 }
 
+// JSON representation of an ES256 key
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256 struct {
+	// Algorithm
+	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg `json:"alg,required"`
+	// Curve
+	Crv TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv `json:"crv,required"`
+	// Key ID
+	Kid string `json:"kid,required"`
+	// Key Type
+	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty `json:"kty,required"`
+	// X EC coordinate
+	X string `json:"x,required"`
+	// Y EC coordinate
+	Y    string                                                          `json:"y,required"`
+	JSON tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256JSON `json:"-"`
+}
+
+// tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256JSON contains the
+// JSON metadata for the struct
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256]
+type tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256JSON struct {
+	Alg         apijson.Field
+	Crv         apijson.Field
+	Kid         apijson.Field
+	Kty         apijson.Field
+	X           apijson.Field
+	Y           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256) implementsTokenConfigCredentialsKey() {
+}
+
+// Algorithm
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg string
+
+const (
+	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256 TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg = "ES256"
+)
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256:
+		return true
+	}
+	return false
+}
+
+// Curve
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv string
+
+const (
+	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256 TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv = "P-256"
+)
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256:
+		return true
+	}
+	return false
+}
+
+// Key Type
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty string
+
+const (
+	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty = "EC"
+)
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc:
+		return true
+	}
+	return false
+}
+
+// JSON representation of an ES384 key
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384 struct {
+	// Algorithm
+	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg `json:"alg,required"`
+	// Curve
+	Crv TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv `json:"crv,required"`
+	// Key ID
+	Kid string `json:"kid,required"`
+	// Key Type
+	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty `json:"kty,required"`
+	// X EC coordinate
+	X string `json:"x,required"`
+	// Y EC coordinate
+	Y    string                                                          `json:"y,required"`
+	JSON tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384JSON `json:"-"`
+}
+
+// tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384JSON contains the
+// JSON metadata for the struct
+// [TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384]
+type tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384JSON struct {
+	Alg         apijson.Field
+	Crv         apijson.Field
+	Kid         apijson.Field
+	Kty         apijson.Field
+	X           apijson.Field
+	Y           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384) implementsTokenConfigCredentialsKey() {
+}
+
+// Algorithm
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg string
+
+const (
+	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384AlgEs384 TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg = "ES384"
+)
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384AlgEs384:
+		return true
+	}
+	return false
+}
+
+// Curve
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv string
+
+const (
+	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384CrvP384 TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv = "P-384"
+)
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384CrvP384:
+		return true
+	}
+	return false
+}
+
+// Key Type
+type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty string
+
+const (
+	TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384KtyEc TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty = "EC"
+)
+
+func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384KtyEc:
+		return true
+	}
+	return false
+}
+
 // Algorithm
 type TokenConfigCredentialsKeysAlg string
 
 const (
-	TokenConfigCredentialsKeysAlgEs256 TokenConfigCredentialsKeysAlg = "ES256"
-	TokenConfigCredentialsKeysAlgEs384 TokenConfigCredentialsKeysAlg = "ES384"
 	TokenConfigCredentialsKeysAlgRs256 TokenConfigCredentialsKeysAlg = "RS256"
 	TokenConfigCredentialsKeysAlgRs384 TokenConfigCredentialsKeysAlg = "RS384"
 	TokenConfigCredentialsKeysAlgRs512 TokenConfigCredentialsKeysAlg = "RS512"
 	TokenConfigCredentialsKeysAlgPs256 TokenConfigCredentialsKeysAlg = "PS256"
 	TokenConfigCredentialsKeysAlgPs384 TokenConfigCredentialsKeysAlg = "PS384"
 	TokenConfigCredentialsKeysAlgPs512 TokenConfigCredentialsKeysAlg = "PS512"
+	TokenConfigCredentialsKeysAlgEs256 TokenConfigCredentialsKeysAlg = "ES256"
+	TokenConfigCredentialsKeysAlgEs384 TokenConfigCredentialsKeysAlg = "ES384"
 )
 
 func (r TokenConfigCredentialsKeysAlg) IsKnown() bool {
 	switch r {
-	case TokenConfigCredentialsKeysAlgEs256, TokenConfigCredentialsKeysAlgEs384, TokenConfigCredentialsKeysAlgRs256, TokenConfigCredentialsKeysAlgRs384, TokenConfigCredentialsKeysAlgRs512, TokenConfigCredentialsKeysAlgPs256, TokenConfigCredentialsKeysAlgPs384, TokenConfigCredentialsKeysAlgPs512:
+	case TokenConfigCredentialsKeysAlgRs256, TokenConfigCredentialsKeysAlgRs384, TokenConfigCredentialsKeysAlgRs512, TokenConfigCredentialsKeysAlgPs256, TokenConfigCredentialsKeysAlgPs384, TokenConfigCredentialsKeysAlgPs512, TokenConfigCredentialsKeysAlgEs256, TokenConfigCredentialsKeysAlgEs384:
 		return true
 	}
 	return false
@@ -455,13 +569,29 @@ func (r TokenConfigCredentialsKeysAlg) IsKnown() bool {
 type TokenConfigCredentialsKeysKty string
 
 const (
-	TokenConfigCredentialsKeysKtyEc  TokenConfigCredentialsKeysKty = "EC"
 	TokenConfigCredentialsKeysKtyRSA TokenConfigCredentialsKeysKty = "RSA"
+	TokenConfigCredentialsKeysKtyEc  TokenConfigCredentialsKeysKty = "EC"
 )
 
 func (r TokenConfigCredentialsKeysKty) IsKnown() bool {
 	switch r {
-	case TokenConfigCredentialsKeysKtyEc, TokenConfigCredentialsKeysKtyRSA:
+	case TokenConfigCredentialsKeysKtyRSA, TokenConfigCredentialsKeysKtyEc:
+		return true
+	}
+	return false
+}
+
+// Curve
+type TokenConfigCredentialsKeysCrv string
+
+const (
+	TokenConfigCredentialsKeysCrvP256 TokenConfigCredentialsKeysCrv = "P-256"
+	TokenConfigCredentialsKeysCrvP384 TokenConfigCredentialsKeysCrv = "P-384"
+)
+
+func (r TokenConfigCredentialsKeysCrv) IsKnown() bool {
+	switch r {
+	case TokenConfigCredentialsKeysCrvP256, TokenConfigCredentialsKeysCrvP384:
 		return true
 	}
 	return false
@@ -483,14 +613,14 @@ func (r TokenConfigTokenType) IsKnown() bool {
 
 type ConfigurationDeleteResponse struct {
 	// UUID.
-	ConfigID string                          `json:"config_id"`
-	JSON     configurationDeleteResponseJSON `json:"-"`
+	ID   string                          `json:"id"`
+	JSON configurationDeleteResponseJSON `json:"-"`
 }
 
 // configurationDeleteResponseJSON contains the JSON metadata for the struct
 // [ConfigurationDeleteResponse]
 type configurationDeleteResponseJSON struct {
-	ConfigID    apijson.Field
+	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -543,7 +673,7 @@ func (r ConfigurationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigurationNewParamsCredentials struct {
-	Keys param.Field[[]ConfigurationNewParamsCredentialsKeyUnion] `json:"keys"`
+	Keys param.Field[[]ConfigurationNewParamsCredentialsKeyUnion] `json:"keys,required"`
 }
 
 func (r ConfigurationNewParamsCredentials) MarshalJSON() (data []byte, err error) {
@@ -558,6 +688,8 @@ type ConfigurationNewParamsCredentialsKey struct {
 	Kid param.Field[string] `json:"kid,required"`
 	// Key Type
 	Kty param.Field[ConfigurationNewParamsCredentialsKeysKty] `json:"kty,required"`
+	// Curve
+	Crv param.Field[ConfigurationNewParamsCredentialsKeysCrv] `json:"crv"`
 	// RSA exponent
 	E param.Field[string] `json:"e"`
 	// RSA modulus
@@ -577,66 +709,15 @@ func (r ConfigurationNewParamsCredentialsKey) implementsConfigurationNewParamsCr
 // JSON representation of a JWKS key.
 //
 // Satisfied by
-// [token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEc],
 // [token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSA],
+// [token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256],
+// [token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384],
 // [ConfigurationNewParamsCredentialsKey].
 type ConfigurationNewParamsCredentialsKeyUnion interface {
 	implementsConfigurationNewParamsCredentialsKeyUnion()
 }
 
-// Common properties of a JWT key.
-type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEc struct {
-	// Algorithm
-	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg] `json:"alg,required"`
-	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
-	// Key Type
-	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKty] `json:"kty,required"`
-	// X EC coordinate
-	X param.Field[string] `json:"x,required"`
-	// Y EC coordinate
-	Y param.Field[string] `json:"y,required"`
-}
-
-func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEc) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEc) implementsConfigurationNewParamsCredentialsKeyUnion() {
-}
-
-// Algorithm
-type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg string
-
-const (
-	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs256 ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg = "ES256"
-	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs384 ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg = "ES384"
-)
-
-func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlg) IsKnown() bool {
-	switch r {
-	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs256, ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcAlgEs384:
-		return true
-	}
-	return false
-}
-
-// Key Type
-type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKty string
-
-const (
-	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKtyEc ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKty = "EC"
-)
-
-func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKty) IsKnown() bool {
-	switch r {
-	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcKtyEc:
-		return true
-	}
-	return false
-}
-
-// Common properties of a JWT key.
+// JSON representation of an RSA key.
 type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSA struct {
 	// Algorithm
 	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlg] `json:"alg,required"`
@@ -692,23 +773,159 @@ func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty) I
 	return false
 }
 
+// JSON representation of an ES256 key
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256 struct {
+	// Algorithm
+	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg] `json:"alg,required"`
+	// Curve
+	Crv param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv] `json:"crv,required"`
+	// Key ID
+	Kid param.Field[string] `json:"kid,required"`
+	// Key Type
+	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty] `json:"kty,required"`
+	// X EC coordinate
+	X param.Field[string] `json:"x,required"`
+	// Y EC coordinate
+	Y param.Field[string] `json:"y,required"`
+}
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256) implementsConfigurationNewParamsCredentialsKeyUnion() {
+}
+
+// Algorithm
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg string
+
+const (
+	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256 ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg = "ES256"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256:
+		return true
+	}
+	return false
+}
+
+// Curve
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv string
+
+const (
+	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256 ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv = "P-256"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256:
+		return true
+	}
+	return false
+}
+
+// Key Type
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty string
+
+const (
+	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty = "EC"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc:
+		return true
+	}
+	return false
+}
+
+// JSON representation of an ES384 key
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384 struct {
+	// Algorithm
+	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg] `json:"alg,required"`
+	// Curve
+	Crv param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv] `json:"crv,required"`
+	// Key ID
+	Kid param.Field[string] `json:"kid,required"`
+	// Key Type
+	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty] `json:"kty,required"`
+	// X EC coordinate
+	X param.Field[string] `json:"x,required"`
+	// Y EC coordinate
+	Y param.Field[string] `json:"y,required"`
+}
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384) implementsConfigurationNewParamsCredentialsKeyUnion() {
+}
+
+// Algorithm
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg string
+
+const (
+	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384AlgEs384 ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg = "ES384"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384AlgEs384:
+		return true
+	}
+	return false
+}
+
+// Curve
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv string
+
+const (
+	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384CrvP384 ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv = "P-384"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384CrvP384:
+		return true
+	}
+	return false
+}
+
+// Key Type
+type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty string
+
+const (
+	ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384KtyEc ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty = "EC"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384KtyEc:
+		return true
+	}
+	return false
+}
+
 // Algorithm
 type ConfigurationNewParamsCredentialsKeysAlg string
 
 const (
-	ConfigurationNewParamsCredentialsKeysAlgEs256 ConfigurationNewParamsCredentialsKeysAlg = "ES256"
-	ConfigurationNewParamsCredentialsKeysAlgEs384 ConfigurationNewParamsCredentialsKeysAlg = "ES384"
 	ConfigurationNewParamsCredentialsKeysAlgRs256 ConfigurationNewParamsCredentialsKeysAlg = "RS256"
 	ConfigurationNewParamsCredentialsKeysAlgRs384 ConfigurationNewParamsCredentialsKeysAlg = "RS384"
 	ConfigurationNewParamsCredentialsKeysAlgRs512 ConfigurationNewParamsCredentialsKeysAlg = "RS512"
 	ConfigurationNewParamsCredentialsKeysAlgPs256 ConfigurationNewParamsCredentialsKeysAlg = "PS256"
 	ConfigurationNewParamsCredentialsKeysAlgPs384 ConfigurationNewParamsCredentialsKeysAlg = "PS384"
 	ConfigurationNewParamsCredentialsKeysAlgPs512 ConfigurationNewParamsCredentialsKeysAlg = "PS512"
+	ConfigurationNewParamsCredentialsKeysAlgEs256 ConfigurationNewParamsCredentialsKeysAlg = "ES256"
+	ConfigurationNewParamsCredentialsKeysAlgEs384 ConfigurationNewParamsCredentialsKeysAlg = "ES384"
 )
 
 func (r ConfigurationNewParamsCredentialsKeysAlg) IsKnown() bool {
 	switch r {
-	case ConfigurationNewParamsCredentialsKeysAlgEs256, ConfigurationNewParamsCredentialsKeysAlgEs384, ConfigurationNewParamsCredentialsKeysAlgRs256, ConfigurationNewParamsCredentialsKeysAlgRs384, ConfigurationNewParamsCredentialsKeysAlgRs512, ConfigurationNewParamsCredentialsKeysAlgPs256, ConfigurationNewParamsCredentialsKeysAlgPs384, ConfigurationNewParamsCredentialsKeysAlgPs512:
+	case ConfigurationNewParamsCredentialsKeysAlgRs256, ConfigurationNewParamsCredentialsKeysAlgRs384, ConfigurationNewParamsCredentialsKeysAlgRs512, ConfigurationNewParamsCredentialsKeysAlgPs256, ConfigurationNewParamsCredentialsKeysAlgPs384, ConfigurationNewParamsCredentialsKeysAlgPs512, ConfigurationNewParamsCredentialsKeysAlgEs256, ConfigurationNewParamsCredentialsKeysAlgEs384:
 		return true
 	}
 	return false
@@ -718,13 +935,29 @@ func (r ConfigurationNewParamsCredentialsKeysAlg) IsKnown() bool {
 type ConfigurationNewParamsCredentialsKeysKty string
 
 const (
-	ConfigurationNewParamsCredentialsKeysKtyEc  ConfigurationNewParamsCredentialsKeysKty = "EC"
 	ConfigurationNewParamsCredentialsKeysKtyRSA ConfigurationNewParamsCredentialsKeysKty = "RSA"
+	ConfigurationNewParamsCredentialsKeysKtyEc  ConfigurationNewParamsCredentialsKeysKty = "EC"
 )
 
 func (r ConfigurationNewParamsCredentialsKeysKty) IsKnown() bool {
 	switch r {
-	case ConfigurationNewParamsCredentialsKeysKtyEc, ConfigurationNewParamsCredentialsKeysKtyRSA:
+	case ConfigurationNewParamsCredentialsKeysKtyRSA, ConfigurationNewParamsCredentialsKeysKtyEc:
+		return true
+	}
+	return false
+}
+
+// Curve
+type ConfigurationNewParamsCredentialsKeysCrv string
+
+const (
+	ConfigurationNewParamsCredentialsKeysCrvP256 ConfigurationNewParamsCredentialsKeysCrv = "P-256"
+	ConfigurationNewParamsCredentialsKeysCrvP384 ConfigurationNewParamsCredentialsKeysCrv = "P-384"
+)
+
+func (r ConfigurationNewParamsCredentialsKeysCrv) IsKnown() bool {
+	switch r {
+	case ConfigurationNewParamsCredentialsKeysCrvP256, ConfigurationNewParamsCredentialsKeysCrvP384:
 		return true
 	}
 	return false

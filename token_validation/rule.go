@@ -172,7 +172,6 @@ type TokenValidationRule struct {
 	ID          string                  `json:"id"`
 	CreatedAt   time.Time               `json:"created_at" format:"date-time"`
 	LastUpdated time.Time               `json:"last_updated" format:"date-time"`
-	ModifiedBy  string                  `json:"modified_by"`
 	JSON        tokenValidationRuleJSON `json:"-"`
 }
 
@@ -188,7 +187,6 @@ type tokenValidationRuleJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	LastUpdated apijson.Field
-	ModifiedBy  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
