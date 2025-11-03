@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package servers_test
+package zero_trust_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/servers"
+	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
 func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
@@ -27,10 +27,10 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.New(context.TODO(), servers.AccessAIControlMcpServerNewParams{
+	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.New(context.TODO(), zero_trust.AccessAIControlMcpServerNewParams{
 		AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		ID:              cloudflare.F("my-mcp-server"),
-		AuthType:        cloudflare.F(servers.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
+		AuthType:        cloudflare.F(zero_trust.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
 		Hostname:        cloudflare.F("https://exmaple.com/mcp"),
 		Name:            cloudflare.F("My MCP Server"),
 		AuthCredentials: cloudflare.F("auth_credentials"),
@@ -61,7 +61,7 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Update(
 		context.TODO(),
 		"my-mcp-server",
-		servers.AccessAIControlMcpServerUpdateParams{
+		zero_trust.AccessAIControlMcpServerUpdateParams{
 			AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 			AuthCredentials: cloudflare.F("auth_credentials"),
 			Description:     cloudflare.F("This is one remote mcp server"),
@@ -90,7 +90,7 @@ func TestAccessAIControlMcpServerListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.List(context.TODO(), servers.AccessAIControlMcpServerListParams{
+	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.List(context.TODO(), zero_trust.AccessAIControlMcpServerListParams{
 		AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(1)),
@@ -121,7 +121,7 @@ func TestAccessAIControlMcpServerDelete(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Delete(
 		context.TODO(),
 		"my-mcp-server",
-		servers.AccessAIControlMcpServerDeleteParams{
+		zero_trust.AccessAIControlMcpServerDeleteParams{
 			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		},
 	)
@@ -150,7 +150,7 @@ func TestAccessAIControlMcpServerRead(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Read(
 		context.TODO(),
 		"my-mcp-server",
-		servers.AccessAIControlMcpServerReadParams{
+		zero_trust.AccessAIControlMcpServerReadParams{
 			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		},
 	)
@@ -179,7 +179,7 @@ func TestAccessAIControlMcpServerSync(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Sync(
 		context.TODO(),
 		"my-mcp-portal",
-		servers.AccessAIControlMcpServerSyncParams{
+		zero_trust.AccessAIControlMcpServerSyncParams{
 			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		},
 	)
