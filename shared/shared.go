@@ -290,26 +290,6 @@ func (r cloudflareTunnelJSON) RawJSON() string {
 
 func (r CloudflareTunnel) ImplementsTunnelListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelCloudflaredNewResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelCloudflaredListResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelCloudflaredDeleteResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelCloudflaredEditResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelCloudflaredGetResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelWARPConnectorNewResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelWARPConnectorListResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelWARPConnectorDeleteResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelWARPConnectorEditResponse() {}
-
-func (r CloudflareTunnel) ImplementsTunnelWARPConnectorGetResponse() {}
-
 // Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel on the Zero Trust dashboard.

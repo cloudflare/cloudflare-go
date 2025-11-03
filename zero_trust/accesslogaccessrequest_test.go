@@ -29,13 +29,16 @@ func TestAccessLogAccessRequestListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Logs.AccessRequests.List(context.TODO(), zero_trust.AccessLogAccessRequestListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(zero_trust.AccessLogAccessRequestListParamsDirectionDesc),
-		Limit:     cloudflare.F(int64(0)),
-		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(0)),
-		Since:     cloudflare.F(time.Now()),
-		Until:     cloudflare.F(time.Now()),
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction:  cloudflare.F(zero_trust.AccessLogAccessRequestListParamsDirectionDesc),
+		Email:      cloudflare.F("user@example.com"),
+		EmailExact: cloudflare.F(true),
+		Limit:      cloudflare.F(int64(0)),
+		Page:       cloudflare.F(int64(0)),
+		PerPage:    cloudflare.F(int64(0)),
+		Since:      cloudflare.F(time.Now()),
+		Until:      cloudflare.F(time.Now()),
+		UserID:     cloudflare.F("f757c5c3-c1b2-50f7-9126-150a099b6f7e"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

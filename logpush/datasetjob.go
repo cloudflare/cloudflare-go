@@ -93,6 +93,8 @@ const (
 	DatasetJobGetParamsDatasetIDBISOUserActions          DatasetJobGetParamsDatasetID = "biso_user_actions"
 	DatasetJobGetParamsDatasetIDCasbFindings             DatasetJobGetParamsDatasetID = "casb_findings"
 	DatasetJobGetParamsDatasetIDDevicePostureResults     DatasetJobGetParamsDatasetID = "device_posture_results"
+	DatasetJobGetParamsDatasetIDDEXApplicationTests      DatasetJobGetParamsDatasetID = "dex_application_tests"
+	DatasetJobGetParamsDatasetIDDEXDeviceStateEvents     DatasetJobGetParamsDatasetID = "dex_device_state_events"
 	DatasetJobGetParamsDatasetIDDLPForensicCopies        DatasetJobGetParamsDatasetID = "dlp_forensic_copies"
 	DatasetJobGetParamsDatasetIDDNSFirewallLogs          DatasetJobGetParamsDatasetID = "dns_firewall_logs"
 	DatasetJobGetParamsDatasetIDDNSLogs                  DatasetJobGetParamsDatasetID = "dns_logs"
@@ -102,6 +104,7 @@ const (
 	DatasetJobGetParamsDatasetIDGatewayHTTP              DatasetJobGetParamsDatasetID = "gateway_http"
 	DatasetJobGetParamsDatasetIDGatewayNetwork           DatasetJobGetParamsDatasetID = "gateway_network"
 	DatasetJobGetParamsDatasetIDHTTPRequests             DatasetJobGetParamsDatasetID = "http_requests"
+	DatasetJobGetParamsDatasetIDIPSECLogs                DatasetJobGetParamsDatasetID = "ipsec_logs"
 	DatasetJobGetParamsDatasetIDMagicIDsDetections       DatasetJobGetParamsDatasetID = "magic_ids_detections"
 	DatasetJobGetParamsDatasetIDNELReports               DatasetJobGetParamsDatasetID = "nel_reports"
 	DatasetJobGetParamsDatasetIDNetworkAnalyticsLogs     DatasetJobGetParamsDatasetID = "network_analytics_logs"
@@ -109,6 +112,8 @@ const (
 	DatasetJobGetParamsDatasetIDSinkholeHTTPLogs         DatasetJobGetParamsDatasetID = "sinkhole_http_logs"
 	DatasetJobGetParamsDatasetIDSpectrumEvents           DatasetJobGetParamsDatasetID = "spectrum_events"
 	DatasetJobGetParamsDatasetIDSSHLogs                  DatasetJobGetParamsDatasetID = "ssh_logs"
+	DatasetJobGetParamsDatasetIDWARPConfigChanges        DatasetJobGetParamsDatasetID = "warp_config_changes"
+	DatasetJobGetParamsDatasetIDWARPToggleChanges        DatasetJobGetParamsDatasetID = "warp_toggle_changes"
 	DatasetJobGetParamsDatasetIDWorkersTraceEvents       DatasetJobGetParamsDatasetID = "workers_trace_events"
 	DatasetJobGetParamsDatasetIDZarazEvents              DatasetJobGetParamsDatasetID = "zaraz_events"
 	DatasetJobGetParamsDatasetIDZeroTrustNetworkSessions DatasetJobGetParamsDatasetID = "zero_trust_network_sessions"
@@ -116,7 +121,7 @@ const (
 
 func (r DatasetJobGetParamsDatasetID) IsKnown() bool {
 	switch r {
-	case DatasetJobGetParamsDatasetIDAccessRequests, DatasetJobGetParamsDatasetIDAuditLogs, DatasetJobGetParamsDatasetIDAuditLogsV2, DatasetJobGetParamsDatasetIDBISOUserActions, DatasetJobGetParamsDatasetIDCasbFindings, DatasetJobGetParamsDatasetIDDevicePostureResults, DatasetJobGetParamsDatasetIDDLPForensicCopies, DatasetJobGetParamsDatasetIDDNSFirewallLogs, DatasetJobGetParamsDatasetIDDNSLogs, DatasetJobGetParamsDatasetIDEmailSecurityAlerts, DatasetJobGetParamsDatasetIDFirewallEvents, DatasetJobGetParamsDatasetIDGatewayDNS, DatasetJobGetParamsDatasetIDGatewayHTTP, DatasetJobGetParamsDatasetIDGatewayNetwork, DatasetJobGetParamsDatasetIDHTTPRequests, DatasetJobGetParamsDatasetIDMagicIDsDetections, DatasetJobGetParamsDatasetIDNELReports, DatasetJobGetParamsDatasetIDNetworkAnalyticsLogs, DatasetJobGetParamsDatasetIDPageShieldEvents, DatasetJobGetParamsDatasetIDSinkholeHTTPLogs, DatasetJobGetParamsDatasetIDSpectrumEvents, DatasetJobGetParamsDatasetIDSSHLogs, DatasetJobGetParamsDatasetIDWorkersTraceEvents, DatasetJobGetParamsDatasetIDZarazEvents, DatasetJobGetParamsDatasetIDZeroTrustNetworkSessions:
+	case DatasetJobGetParamsDatasetIDAccessRequests, DatasetJobGetParamsDatasetIDAuditLogs, DatasetJobGetParamsDatasetIDAuditLogsV2, DatasetJobGetParamsDatasetIDBISOUserActions, DatasetJobGetParamsDatasetIDCasbFindings, DatasetJobGetParamsDatasetIDDevicePostureResults, DatasetJobGetParamsDatasetIDDEXApplicationTests, DatasetJobGetParamsDatasetIDDEXDeviceStateEvents, DatasetJobGetParamsDatasetIDDLPForensicCopies, DatasetJobGetParamsDatasetIDDNSFirewallLogs, DatasetJobGetParamsDatasetIDDNSLogs, DatasetJobGetParamsDatasetIDEmailSecurityAlerts, DatasetJobGetParamsDatasetIDFirewallEvents, DatasetJobGetParamsDatasetIDGatewayDNS, DatasetJobGetParamsDatasetIDGatewayHTTP, DatasetJobGetParamsDatasetIDGatewayNetwork, DatasetJobGetParamsDatasetIDHTTPRequests, DatasetJobGetParamsDatasetIDIPSECLogs, DatasetJobGetParamsDatasetIDMagicIDsDetections, DatasetJobGetParamsDatasetIDNELReports, DatasetJobGetParamsDatasetIDNetworkAnalyticsLogs, DatasetJobGetParamsDatasetIDPageShieldEvents, DatasetJobGetParamsDatasetIDSinkholeHTTPLogs, DatasetJobGetParamsDatasetIDSpectrumEvents, DatasetJobGetParamsDatasetIDSSHLogs, DatasetJobGetParamsDatasetIDWARPConfigChanges, DatasetJobGetParamsDatasetIDWARPToggleChanges, DatasetJobGetParamsDatasetIDWorkersTraceEvents, DatasetJobGetParamsDatasetIDZarazEvents, DatasetJobGetParamsDatasetIDZeroTrustNetworkSessions:
 		return true
 	}
 	return false
