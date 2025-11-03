@@ -93,6 +93,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/speed"
 	"github.com/cloudflare/cloudflare-go/v6/ssl"
 	"github.com/cloudflare/cloudflare-go/v6/stream"
+	"github.com/cloudflare/cloudflare-go/v6/token_validation"
 	"github.com/cloudflare/cloudflare-go/v6/turnstile"
 	"github.com/cloudflare/cloudflare-go/v6/url_normalization"
 	"github.com/cloudflare/cloudflare-go/v6/url_scanner"
@@ -217,6 +218,7 @@ type Client struct {
 	SecretsStore                *secrets_store.SecretsStoreService
 	Pipelines                   *pipelines.PipelineService
 	SchemaValidation            *schema_validation.SchemaValidationService
+	TokenValidation             *token_validation.TokenValidationService
 }
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
@@ -348,6 +350,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
 	r.Pipelines = pipelines.NewPipelineService(opts...)
 	r.SchemaValidation = schema_validation.NewSchemaValidationService(opts...)
+	r.TokenValidation = token_validation.NewTokenValidationService(opts...)
 
 	return
 }

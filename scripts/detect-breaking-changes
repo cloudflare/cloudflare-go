@@ -662,6 +662,9 @@ TEST_PATHS=(
 	schema_validation/schema_test.go
 	schema_validation/setting_test.go
 	schema_validation/settingoperation_test.go
+	token_validation/configuration_test.go
+	token_validation/configurationcredential_test.go
+	token_validation/rule_test.go
 	usage_test.go
 	paginationauto_test.go
 	paginationmanual_test.go
