@@ -624,7 +624,7 @@ type AccessAIControlMcpPortalListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
-	// Search by id, name
+	// Search by id, name, hostname
 	Search param.Field[string] `query:"search"`
 }
 
