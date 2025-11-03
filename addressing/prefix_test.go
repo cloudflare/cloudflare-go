@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestPrefixNewWithOptionalParams(t *testing.T) {
+func TestPrefixNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,11 +28,10 @@ func TestPrefixNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.New(context.TODO(), addressing.PrefixNewParams{
-		AccountID:           cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
-		ASN:                 cloudflare.F(int64(13335)),
-		CIDR:                cloudflare.F("192.0.2.0/24"),
-		DelegateLOACreation: cloudflare.F(true),
-		Description:         cloudflare.F("Internal test prefix"),
+		AccountID:     cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+		ASN:           cloudflare.F(int64(209242)),
+		CIDR:          cloudflare.F("192.0.2.0/24"),
+		LOADocumentID: cloudflare.F("d933b1530bc56c9953cf8ce166da8004"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

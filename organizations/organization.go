@@ -46,8 +46,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 	return
 }
 
-// Create a new organization for a user. (Currently in Closed Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Create a new organization for a user.
 func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParams, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,8 +59,7 @@ func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParam
 	return
 }
 
-// Modify organization. (Currently in Closed Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Modify organization
 func (r *OrganizationService) Update(ctx context.Context, organizationID string, body OrganizationUpdateParams, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -78,8 +76,7 @@ func (r *OrganizationService) Update(ctx context.Context, organizationID string,
 	return
 }
 
-// Retrieve a list of organizations a particular user has access to. (Currently in
-// Closed Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
+// Retrieve a list of organizations a particular user has access to.
 func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Organization], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -97,33 +94,26 @@ func (r *OrganizationService) List(ctx context.Context, query OrganizationListPa
 	return res, nil
 }
 
-// Retrieve a list of organizations a particular user has access to. (Currently in
-// Closed Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
+// Retrieve a list of organizations a particular user has access to.
 func (r *OrganizationService) ListAutoPaging(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Organization] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete an organization. The organization MUST be empty before deleting. It must
-// not contain any sub-organizations, accounts, members or users. (Currently in
-// Closed Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
-func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
-	var env OrganizationDeleteResponseEnvelope
+// not contain any sub-organizations, accounts, members or users.
+func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
 		return
 	}
 	path := fmt.Sprintf("organizations/%s", organizationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
-// Retrieve the details of a certain organization. (Currently in Closed Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Retrieve the details of a certain organization.
 func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -290,27 +280,6 @@ type OrganizationParentParam struct {
 
 func (r OrganizationParentParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type OrganizationDeleteResponse struct {
-	ID   string                         `json:"id,required"`
-	JSON organizationDeleteResponseJSON `json:"-"`
-}
-
-// organizationDeleteResponseJSON contains the JSON metadata for the struct
-// [OrganizationDeleteResponse]
-type organizationDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationDeleteResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type OrganizationNewParams struct {
@@ -518,47 +487,6 @@ const (
 func (r OrganizationListParamsParentID) IsKnown() bool {
 	switch r {
 	case OrganizationListParamsParentIDNull:
-		return true
-	}
-	return false
-}
-
-type OrganizationDeleteResponseEnvelope struct {
-	Errors   []interface{}                             `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   OrganizationDeleteResponse                `json:"result,required"`
-	Success  OrganizationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON     organizationDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// organizationDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [OrganizationDeleteResponseEnvelope]
-type organizationDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationDeleteResponseEnvelopeSuccess bool
-
-const (
-	OrganizationDeleteResponseEnvelopeSuccessTrue OrganizationDeleteResponseEnvelopeSuccess = true
-)
-
-func (r OrganizationDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OrganizationDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

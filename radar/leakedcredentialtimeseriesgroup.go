@@ -38,9 +38,7 @@ func NewLeakedCredentialTimeseriesGroupService(opts ...option.RequestOption) (r 
 // Retrieves the distribution of HTTP authentication requests by bot class over
 // time.
 //
-// Deprecated: Use
-// [Radar Leaked Credentials Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/leaked_credentials/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *LeakedCredentialTimeseriesGroupService) BotClass(ctx context.Context, query LeakedCredentialTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *LeakedCredentialTimeseriesGroupBotClassResponse, err error) {
 	var env LeakedCredentialTimeseriesGroupBotClassResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,9 +54,7 @@ func (r *LeakedCredentialTimeseriesGroupService) BotClass(ctx context.Context, q
 // Retrieves the distribution of HTTP authentication requests by compromised
 // credential status over time.
 //
-// Deprecated: Use
-// [Radar Leaked Credentials Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/leaked_credentials/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *LeakedCredentialTimeseriesGroupService) Compromised(ctx context.Context, query LeakedCredentialTimeseriesGroupCompromisedParams, opts ...option.RequestOption) (res *LeakedCredentialTimeseriesGroupCompromisedResponse, err error) {
 	var env LeakedCredentialTimeseriesGroupCompromisedResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

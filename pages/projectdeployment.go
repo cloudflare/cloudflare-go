@@ -67,7 +67,7 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Deployment], err error) {
+func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Deployment], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -93,8 +93,8 @@ func (r *ProjectDeploymentService) List(ctx context.Context, projectName string,
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Deployment] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, projectName, params, opts...))
+func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Deployment] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, projectName, params, opts...))
 }
 
 // Delete a deployment.
@@ -316,10 +316,6 @@ type ProjectDeploymentListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// What type of deployments to fetch.
 	Env param.Field[ProjectDeploymentListParamsEnv] `query:"env"`
-	// Which page of deployments to fetch.
-	Page param.Field[int64] `query:"page"`
-	// How many deployments to return per page.
-	PerPage param.Field[int64] `query:"per_page"`
 }
 
 // URLQuery serializes [ProjectDeploymentListParams]'s query parameters as

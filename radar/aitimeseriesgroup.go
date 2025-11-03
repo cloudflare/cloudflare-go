@@ -91,9 +91,7 @@ func (r *AITimeseriesGroupService) TimeseriesGroups(ctx context.Context, dimensi
 
 // Retrieves the distribution of traffic by AI user agent over time.
 //
-// Deprecated: Use
-// [Radar AI Bots Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/bots/methods/timeseries_groups/)
-// instead.
+// Deprecated: deprecated
 func (r *AITimeseriesGroupService) UserAgent(ctx context.Context, query AITimeseriesGroupUserAgentParams, opts ...option.RequestOption) (res *AITimeseriesGroupUserAgentResponse, err error) {
 	var env AITimeseriesGroupUserAgentResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -56,7 +56,7 @@ func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, o
 	return
 }
 
-// Replace Connector or Re-provision License Key
+// Replace Connector
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	var env ConnectorUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,7 +125,7 @@ func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body 
 	return
 }
 
-// Edit Connector to update specific properties or Re-provision License Key
+// Edit Connector to update specific properties
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -178,7 +178,6 @@ type ConnectorNewResponse struct {
 	Device                       ConnectorNewResponseDevice `json:"device"`
 	LastHeartbeat                string                     `json:"last_heartbeat"`
 	LastSeenVersion              string                     `json:"last_seen_version"`
-	LicenseKey                   string                     `json:"license_key"`
 	JSON                         connectorNewResponseJSON   `json:"-"`
 }
 
@@ -195,7 +194,6 @@ type connectorNewResponseJSON struct {
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
-	LicenseKey                   apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -242,7 +240,6 @@ type ConnectorUpdateResponse struct {
 	Device                       ConnectorUpdateResponseDevice `json:"device"`
 	LastHeartbeat                string                        `json:"last_heartbeat"`
 	LastSeenVersion              string                        `json:"last_seen_version"`
-	LicenseKey                   string                        `json:"license_key"`
 	JSON                         connectorUpdateResponseJSON   `json:"-"`
 }
 
@@ -259,7 +256,6 @@ type connectorUpdateResponseJSON struct {
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
-	LicenseKey                   apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -306,7 +302,6 @@ type ConnectorListResponse struct {
 	Device                       ConnectorListResponseDevice `json:"device"`
 	LastHeartbeat                string                      `json:"last_heartbeat"`
 	LastSeenVersion              string                      `json:"last_seen_version"`
-	LicenseKey                   string                      `json:"license_key"`
 	JSON                         connectorListResponseJSON   `json:"-"`
 }
 
@@ -323,7 +318,6 @@ type connectorListResponseJSON struct {
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
-	LicenseKey                   apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -370,7 +364,6 @@ type ConnectorDeleteResponse struct {
 	Device                       ConnectorDeleteResponseDevice `json:"device"`
 	LastHeartbeat                string                        `json:"last_heartbeat"`
 	LastSeenVersion              string                        `json:"last_seen_version"`
-	LicenseKey                   string                        `json:"license_key"`
 	JSON                         connectorDeleteResponseJSON   `json:"-"`
 }
 
@@ -387,7 +380,6 @@ type connectorDeleteResponseJSON struct {
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
-	LicenseKey                   apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -434,7 +426,6 @@ type ConnectorEditResponse struct {
 	Device                       ConnectorEditResponseDevice `json:"device"`
 	LastHeartbeat                string                      `json:"last_heartbeat"`
 	LastSeenVersion              string                      `json:"last_seen_version"`
-	LicenseKey                   string                      `json:"license_key"`
 	JSON                         connectorEditResponseJSON   `json:"-"`
 }
 
@@ -451,7 +442,6 @@ type connectorEditResponseJSON struct {
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
-	LicenseKey                   apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -498,7 +488,6 @@ type ConnectorGetResponse struct {
 	Device                       ConnectorGetResponseDevice `json:"device"`
 	LastHeartbeat                string                     `json:"last_heartbeat"`
 	LastSeenVersion              string                     `json:"last_seen_version"`
-	LicenseKey                   string                     `json:"license_key"`
 	JSON                         connectorGetResponseJSON   `json:"-"`
 }
 
@@ -515,7 +504,6 @@ type connectorGetResponseJSON struct {
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
-	LicenseKey                   apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -553,8 +541,7 @@ func (r connectorGetResponseDeviceJSON) RawJSON() string {
 
 type ConnectorNewParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// Exactly one of id, serial_number, or provision_license must be provided.
+	AccountID                    param.Field[string]                   `path:"account_id,required"`
 	Device                       param.Field[ConnectorNewParamsDevice] `json:"device,required"`
 	Activated                    param.Field[bool]                     `json:"activated"`
 	InterruptWindowDurationHours param.Field[float64]                  `json:"interrupt_window_duration_hours"`
@@ -567,12 +554,9 @@ func (r ConnectorNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Exactly one of id, serial_number, or provision_license must be provided.
 type ConnectorNewParamsDevice struct {
-	ID param.Field[string] `json:"id"`
-	// When true, create and provision a new licence key for the connector.
-	ProvisionLicense param.Field[bool]   `json:"provision_license"`
-	SerialNumber     param.Field[string] `json:"serial_number"`
+	ID           param.Field[string] `json:"id"`
+	SerialNumber param.Field[string] `json:"serial_number"`
 }
 
 func (r ConnectorNewParamsDevice) MarshalJSON() (data []byte, err error) {
@@ -659,9 +643,7 @@ type ConnectorUpdateParams struct {
 	InterruptWindowDurationHours param.Field[float64] `json:"interrupt_window_duration_hours"`
 	InterruptWindowHourOfDay     param.Field[float64] `json:"interrupt_window_hour_of_day"`
 	Notes                        param.Field[string]  `json:"notes"`
-	// When true, regenerate license key for the connector.
-	ProvisionLicense param.Field[bool]   `json:"provision_license"`
-	Timezone         param.Field[string] `json:"timezone"`
+	Timezone                     param.Field[string]  `json:"timezone"`
 }
 
 func (r ConnectorUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -831,9 +813,7 @@ type ConnectorEditParams struct {
 	InterruptWindowDurationHours param.Field[float64] `json:"interrupt_window_duration_hours"`
 	InterruptWindowHourOfDay     param.Field[float64] `json:"interrupt_window_hour_of_day"`
 	Notes                        param.Field[string]  `json:"notes"`
-	// When true, regenerate license key for the connector.
-	ProvisionLicense param.Field[bool]   `json:"provision_license"`
-	Timezone         param.Field[string] `json:"timezone"`
+	Timezone                     param.Field[string]  `json:"timezone"`
 }
 
 func (r ConnectorEditParams) MarshalJSON() (data []byte, err error) {
