@@ -172,8 +172,8 @@ type AccessAIControlMcpServerNewResponse struct {
 	AuthType    AccessAIControlMcpServerNewResponseAuthType `json:"auth_type,required"`
 	Hostname    string                                      `json:"hostname,required" format:"uri"`
 	Name        string                                      `json:"name,required"`
-	Prompts     []interface{}                               `json:"prompts,required"`
-	Tools       []interface{}                               `json:"tools,required"`
+	Prompts     []map[string]interface{}                    `json:"prompts,required"`
+	Tools       []map[string]interface{}                    `json:"tools,required"`
 	CreatedAt   time.Time                                   `json:"created_at" format:"date-time"`
 	CreatedBy   string                                      `json:"created_by"`
 	Description string                                      `json:"description,nullable"`
@@ -236,8 +236,8 @@ type AccessAIControlMcpServerUpdateResponse struct {
 	AuthType    AccessAIControlMcpServerUpdateResponseAuthType `json:"auth_type,required"`
 	Hostname    string                                         `json:"hostname,required" format:"uri"`
 	Name        string                                         `json:"name,required"`
-	Prompts     []interface{}                                  `json:"prompts,required"`
-	Tools       []interface{}                                  `json:"tools,required"`
+	Prompts     []map[string]interface{}                       `json:"prompts,required"`
+	Tools       []map[string]interface{}                       `json:"tools,required"`
 	CreatedAt   time.Time                                      `json:"created_at" format:"date-time"`
 	CreatedBy   string                                         `json:"created_by"`
 	Description string                                         `json:"description,nullable"`
@@ -300,8 +300,8 @@ type AccessAIControlMcpServerListResponse struct {
 	AuthType    AccessAIControlMcpServerListResponseAuthType `json:"auth_type,required"`
 	Hostname    string                                       `json:"hostname,required" format:"uri"`
 	Name        string                                       `json:"name,required"`
-	Prompts     []interface{}                                `json:"prompts,required"`
-	Tools       []interface{}                                `json:"tools,required"`
+	Prompts     []map[string]interface{}                     `json:"prompts,required"`
+	Tools       []map[string]interface{}                     `json:"tools,required"`
 	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
 	CreatedBy   string                                       `json:"created_by"`
 	Description string                                       `json:"description,nullable"`
@@ -364,8 +364,8 @@ type AccessAIControlMcpServerDeleteResponse struct {
 	AuthType    AccessAIControlMcpServerDeleteResponseAuthType `json:"auth_type,required"`
 	Hostname    string                                         `json:"hostname,required" format:"uri"`
 	Name        string                                         `json:"name,required"`
-	Prompts     []interface{}                                  `json:"prompts,required"`
-	Tools       []interface{}                                  `json:"tools,required"`
+	Prompts     []map[string]interface{}                       `json:"prompts,required"`
+	Tools       []map[string]interface{}                       `json:"tools,required"`
 	CreatedAt   time.Time                                      `json:"created_at" format:"date-time"`
 	CreatedBy   string                                         `json:"created_by"`
 	Description string                                         `json:"description,nullable"`
@@ -428,8 +428,8 @@ type AccessAIControlMcpServerReadResponse struct {
 	AuthType    AccessAIControlMcpServerReadResponseAuthType `json:"auth_type,required"`
 	Hostname    string                                       `json:"hostname,required" format:"uri"`
 	Name        string                                       `json:"name,required"`
-	Prompts     []interface{}                                `json:"prompts,required"`
-	Tools       []interface{}                                `json:"tools,required"`
+	Prompts     []map[string]interface{}                     `json:"prompts,required"`
+	Tools       []map[string]interface{}                     `json:"tools,required"`
 	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
 	CreatedBy   string                                       `json:"created_by"`
 	Description string                                       `json:"description,nullable"`
