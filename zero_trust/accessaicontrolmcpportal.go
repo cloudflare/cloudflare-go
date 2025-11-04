@@ -336,8 +336,8 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	AuthType        AccessAIControlMcpPortalReadResponseServersAuthType                         `json:"auth_type,required"`
 	Hostname        string                                                                      `json:"hostname,required" format:"uri"`
 	Name            string                                                                      `json:"name,required"`
-	Prompts         []interface{}                                                               `json:"prompts,required"`
-	Tools           []interface{}                                                               `json:"tools,required"`
+	Prompts         []map[string]interface{}                                                    `json:"prompts,required"`
+	Tools           []map[string]interface{}                                                    `json:"tools,required"`
 	UpdatedPrompts  []map[string]AccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion `json:"updated_prompts,required"`
 	UpdatedTools    []map[string]AccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion   `json:"updated_tools,required"`
 	CreatedAt       time.Time                                                                   `json:"created_at" format:"date-time"`
