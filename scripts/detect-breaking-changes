@@ -420,7 +420,6 @@ TEST_PATHS=(
 	zero_trust/tunnelwarpconnector_test.go
 	zero_trust/tunnelwarpconnectortoken_test.go
 	zero_trust/connectivitysetting_test.go
-	zero_trust/connectivitydirectoryservice_test.go
 	zero_trust/dlpdataset_test.go
 	zero_trust/dlpdatasetupload_test.go
 	zero_trust/dlpdatasetversion_test.go
@@ -463,6 +462,7 @@ TEST_PATHS=(
 	zero_trust/riskscoringintegration_test.go
 	zero_trust/riskscoringintegrationreference_test.go
 	turnstile/widget_test.go
+	connectivity/directoryservice_test.go
 	hyperdrive/config_test.go
 	rum/siteinfo_test.go
 	rum/rule_test.go
