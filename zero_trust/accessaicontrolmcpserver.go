@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"slices"
 	"time"
 
@@ -18,8 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
-	"github.com/tidwall/gjson"
 )
 
 // AccessAIControlMcpServerService contains methods and other services that help
@@ -171,21 +168,21 @@ func (r *AccessAIControlMcpServerService) Sync(ctx context.Context, id string, b
 
 type AccessAIControlMcpServerNewResponse struct {
 	// server id
-	ID          string                                                       `json:"id,required"`
-	AuthType    AccessAIControlMcpServerNewResponseAuthType                  `json:"auth_type,required"`
-	Hostname    string                                                       `json:"hostname,required" format:"uri"`
-	Name        string                                                       `json:"name,required"`
-	Prompts     []map[string]AccessAIControlMcpServerNewResponsePromptsUnion `json:"prompts,required"`
-	Tools       []map[string]AccessAIControlMcpServerNewResponseToolsUnion   `json:"tools,required"`
-	CreatedAt   time.Time                                                    `json:"created_at" format:"date-time"`
-	CreatedBy   string                                                       `json:"created_by"`
-	Description string                                                       `json:"description,nullable"`
-	Error       string                                                       `json:"error"`
-	LastSynced  time.Time                                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                                       `json:"modified_by"`
-	Status      string                                                       `json:"status"`
-	JSON        accessAIControlMcpServerNewResponseJSON                      `json:"-"`
+	ID          string                                      `json:"id,required"`
+	AuthType    AccessAIControlMcpServerNewResponseAuthType `json:"auth_type,required"`
+	Hostname    string                                      `json:"hostname,required" format:"uri"`
+	Name        string                                      `json:"name,required"`
+	Prompts     []interface{}                               `json:"prompts,required"`
+	Tools       []interface{}                               `json:"tools,required"`
+	CreatedAt   time.Time                                   `json:"created_at" format:"date-time"`
+	CreatedBy   string                                      `json:"created_by"`
+	Description string                                      `json:"description,nullable"`
+	Error       string                                      `json:"error"`
+	LastSynced  time.Time                                   `json:"last_synced" format:"date-time"`
+	ModifiedAt  time.Time                                   `json:"modified_at" format:"date-time"`
+	ModifiedBy  string                                      `json:"modified_by"`
+	Status      string                                      `json:"status"`
+	JSON        accessAIControlMcpServerNewResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerNewResponseJSON contains the JSON metadata for the
@@ -233,63 +230,23 @@ func (r AccessAIControlMcpServerNewResponseAuthType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerNewResponsePromptsUnion interface {
-	ImplementsAccessAIControlMcpServerNewResponsePromptsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerNewResponsePromptsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerNewResponseToolsUnion interface {
-	ImplementsAccessAIControlMcpServerNewResponseToolsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerNewResponseToolsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type AccessAIControlMcpServerUpdateResponse struct {
 	// server id
-	ID          string                                                          `json:"id,required"`
-	AuthType    AccessAIControlMcpServerUpdateResponseAuthType                  `json:"auth_type,required"`
-	Hostname    string                                                          `json:"hostname,required" format:"uri"`
-	Name        string                                                          `json:"name,required"`
-	Prompts     []map[string]AccessAIControlMcpServerUpdateResponsePromptsUnion `json:"prompts,required"`
-	Tools       []map[string]AccessAIControlMcpServerUpdateResponseToolsUnion   `json:"tools,required"`
-	CreatedAt   time.Time                                                       `json:"created_at" format:"date-time"`
-	CreatedBy   string                                                          `json:"created_by"`
-	Description string                                                          `json:"description,nullable"`
-	Error       string                                                          `json:"error"`
-	LastSynced  time.Time                                                       `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                                       `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                                          `json:"modified_by"`
-	Status      string                                                          `json:"status"`
-	JSON        accessAIControlMcpServerUpdateResponseJSON                      `json:"-"`
+	ID          string                                         `json:"id,required"`
+	AuthType    AccessAIControlMcpServerUpdateResponseAuthType `json:"auth_type,required"`
+	Hostname    string                                         `json:"hostname,required" format:"uri"`
+	Name        string                                         `json:"name,required"`
+	Prompts     []interface{}                                  `json:"prompts,required"`
+	Tools       []interface{}                                  `json:"tools,required"`
+	CreatedAt   time.Time                                      `json:"created_at" format:"date-time"`
+	CreatedBy   string                                         `json:"created_by"`
+	Description string                                         `json:"description,nullable"`
+	Error       string                                         `json:"error"`
+	LastSynced  time.Time                                      `json:"last_synced" format:"date-time"`
+	ModifiedAt  time.Time                                      `json:"modified_at" format:"date-time"`
+	ModifiedBy  string                                         `json:"modified_by"`
+	Status      string                                         `json:"status"`
+	JSON        accessAIControlMcpServerUpdateResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerUpdateResponseJSON contains the JSON metadata for the
@@ -337,63 +294,23 @@ func (r AccessAIControlMcpServerUpdateResponseAuthType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerUpdateResponsePromptsUnion interface {
-	ImplementsAccessAIControlMcpServerUpdateResponsePromptsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerUpdateResponsePromptsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerUpdateResponseToolsUnion interface {
-	ImplementsAccessAIControlMcpServerUpdateResponseToolsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerUpdateResponseToolsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type AccessAIControlMcpServerListResponse struct {
 	// server id
-	ID          string                                                        `json:"id,required"`
-	AuthType    AccessAIControlMcpServerListResponseAuthType                  `json:"auth_type,required"`
-	Hostname    string                                                        `json:"hostname,required" format:"uri"`
-	Name        string                                                        `json:"name,required"`
-	Prompts     []map[string]AccessAIControlMcpServerListResponsePromptsUnion `json:"prompts,required"`
-	Tools       []map[string]AccessAIControlMcpServerListResponseToolsUnion   `json:"tools,required"`
-	CreatedAt   time.Time                                                     `json:"created_at" format:"date-time"`
-	CreatedBy   string                                                        `json:"created_by"`
-	Description string                                                        `json:"description,nullable"`
-	Error       string                                                        `json:"error"`
-	LastSynced  time.Time                                                     `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                                     `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                                        `json:"modified_by"`
-	Status      string                                                        `json:"status"`
-	JSON        accessAIControlMcpServerListResponseJSON                      `json:"-"`
+	ID          string                                       `json:"id,required"`
+	AuthType    AccessAIControlMcpServerListResponseAuthType `json:"auth_type,required"`
+	Hostname    string                                       `json:"hostname,required" format:"uri"`
+	Name        string                                       `json:"name,required"`
+	Prompts     []interface{}                                `json:"prompts,required"`
+	Tools       []interface{}                                `json:"tools,required"`
+	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
+	CreatedBy   string                                       `json:"created_by"`
+	Description string                                       `json:"description,nullable"`
+	Error       string                                       `json:"error"`
+	LastSynced  time.Time                                    `json:"last_synced" format:"date-time"`
+	ModifiedAt  time.Time                                    `json:"modified_at" format:"date-time"`
+	ModifiedBy  string                                       `json:"modified_by"`
+	Status      string                                       `json:"status"`
+	JSON        accessAIControlMcpServerListResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerListResponseJSON contains the JSON metadata for the
@@ -441,63 +358,23 @@ func (r AccessAIControlMcpServerListResponseAuthType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerListResponsePromptsUnion interface {
-	ImplementsAccessAIControlMcpServerListResponsePromptsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerListResponsePromptsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerListResponseToolsUnion interface {
-	ImplementsAccessAIControlMcpServerListResponseToolsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerListResponseToolsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type AccessAIControlMcpServerDeleteResponse struct {
 	// server id
-	ID          string                                                          `json:"id,required"`
-	AuthType    AccessAIControlMcpServerDeleteResponseAuthType                  `json:"auth_type,required"`
-	Hostname    string                                                          `json:"hostname,required" format:"uri"`
-	Name        string                                                          `json:"name,required"`
-	Prompts     []map[string]AccessAIControlMcpServerDeleteResponsePromptsUnion `json:"prompts,required"`
-	Tools       []map[string]AccessAIControlMcpServerDeleteResponseToolsUnion   `json:"tools,required"`
-	CreatedAt   time.Time                                                       `json:"created_at" format:"date-time"`
-	CreatedBy   string                                                          `json:"created_by"`
-	Description string                                                          `json:"description,nullable"`
-	Error       string                                                          `json:"error"`
-	LastSynced  time.Time                                                       `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                                       `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                                          `json:"modified_by"`
-	Status      string                                                          `json:"status"`
-	JSON        accessAIControlMcpServerDeleteResponseJSON                      `json:"-"`
+	ID          string                                         `json:"id,required"`
+	AuthType    AccessAIControlMcpServerDeleteResponseAuthType `json:"auth_type,required"`
+	Hostname    string                                         `json:"hostname,required" format:"uri"`
+	Name        string                                         `json:"name,required"`
+	Prompts     []interface{}                                  `json:"prompts,required"`
+	Tools       []interface{}                                  `json:"tools,required"`
+	CreatedAt   time.Time                                      `json:"created_at" format:"date-time"`
+	CreatedBy   string                                         `json:"created_by"`
+	Description string                                         `json:"description,nullable"`
+	Error       string                                         `json:"error"`
+	LastSynced  time.Time                                      `json:"last_synced" format:"date-time"`
+	ModifiedAt  time.Time                                      `json:"modified_at" format:"date-time"`
+	ModifiedBy  string                                         `json:"modified_by"`
+	Status      string                                         `json:"status"`
+	JSON        accessAIControlMcpServerDeleteResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerDeleteResponseJSON contains the JSON metadata for the
@@ -545,63 +422,23 @@ func (r AccessAIControlMcpServerDeleteResponseAuthType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerDeleteResponsePromptsUnion interface {
-	ImplementsAccessAIControlMcpServerDeleteResponsePromptsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerDeleteResponsePromptsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerDeleteResponseToolsUnion interface {
-	ImplementsAccessAIControlMcpServerDeleteResponseToolsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerDeleteResponseToolsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type AccessAIControlMcpServerReadResponse struct {
 	// server id
-	ID          string                                                        `json:"id,required"`
-	AuthType    AccessAIControlMcpServerReadResponseAuthType                  `json:"auth_type,required"`
-	Hostname    string                                                        `json:"hostname,required" format:"uri"`
-	Name        string                                                        `json:"name,required"`
-	Prompts     []map[string]AccessAIControlMcpServerReadResponsePromptsUnion `json:"prompts,required"`
-	Tools       []map[string]AccessAIControlMcpServerReadResponseToolsUnion   `json:"tools,required"`
-	CreatedAt   time.Time                                                     `json:"created_at" format:"date-time"`
-	CreatedBy   string                                                        `json:"created_by"`
-	Description string                                                        `json:"description,nullable"`
-	Error       string                                                        `json:"error"`
-	LastSynced  time.Time                                                     `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                                     `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                                        `json:"modified_by"`
-	Status      string                                                        `json:"status"`
-	JSON        accessAIControlMcpServerReadResponseJSON                      `json:"-"`
+	ID          string                                       `json:"id,required"`
+	AuthType    AccessAIControlMcpServerReadResponseAuthType `json:"auth_type,required"`
+	Hostname    string                                       `json:"hostname,required" format:"uri"`
+	Name        string                                       `json:"name,required"`
+	Prompts     []interface{}                                `json:"prompts,required"`
+	Tools       []interface{}                                `json:"tools,required"`
+	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
+	CreatedBy   string                                       `json:"created_by"`
+	Description string                                       `json:"description,nullable"`
+	Error       string                                       `json:"error"`
+	LastSynced  time.Time                                    `json:"last_synced" format:"date-time"`
+	ModifiedAt  time.Time                                    `json:"modified_at" format:"date-time"`
+	ModifiedBy  string                                       `json:"modified_by"`
+	Status      string                                       `json:"status"`
+	JSON        accessAIControlMcpServerReadResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerReadResponseJSON contains the JSON metadata for the
@@ -647,46 +484,6 @@ func (r AccessAIControlMcpServerReadResponseAuthType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerReadResponsePromptsUnion interface {
-	ImplementsAccessAIControlMcpServerReadResponsePromptsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerReadResponsePromptsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpServerReadResponseToolsUnion interface {
-	ImplementsAccessAIControlMcpServerReadResponseToolsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpServerReadResponseToolsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessAIControlMcpServerSyncResponse = interface{}

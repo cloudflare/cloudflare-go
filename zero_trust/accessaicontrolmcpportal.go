@@ -336,8 +336,8 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	AuthType        AccessAIControlMcpPortalReadResponseServersAuthType                         `json:"auth_type,required"`
 	Hostname        string                                                                      `json:"hostname,required" format:"uri"`
 	Name            string                                                                      `json:"name,required"`
-	Prompts         []map[string]AccessAIControlMcpPortalReadResponseServersPromptsUnion        `json:"prompts,required"`
-	Tools           []map[string]AccessAIControlMcpPortalReadResponseServersToolsUnion          `json:"tools,required"`
+	Prompts         []interface{}                                                               `json:"prompts,required"`
+	Tools           []interface{}                                                               `json:"tools,required"`
 	UpdatedPrompts  []map[string]AccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion `json:"updated_prompts,required"`
 	UpdatedTools    []map[string]AccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion   `json:"updated_tools,required"`
 	CreatedAt       time.Time                                                                   `json:"created_at" format:"date-time"`
@@ -400,46 +400,6 @@ func (r AccessAIControlMcpPortalReadResponseServersAuthType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpPortalReadResponseServersPromptsUnion interface {
-	ImplementsAccessAIControlMcpPortalReadResponseServersPromptsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpPortalReadResponseServersPromptsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
-type AccessAIControlMcpPortalReadResponseServersToolsUnion interface {
-	ImplementsAccessAIControlMcpPortalReadResponseServersToolsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAIControlMcpPortalReadResponseServersToolsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 // Union satisfied by [shared.UnionFloat] or [shared.UnionString].
