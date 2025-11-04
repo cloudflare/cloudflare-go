@@ -1000,7 +1000,7 @@ type IndexInsertParams struct {
 func (r IndexInsertParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRoot(r.Body, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
@@ -1232,7 +1232,7 @@ type IndexUpsertParams struct {
 func (r IndexUpsertParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRoot(r.Body, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
