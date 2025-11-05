@@ -9165,9 +9165,16 @@ Methods:
 
 # AbuseReports
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportListResponse">AbuseReportListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportGetResponse">AbuseReportGetResponse</a>
+
 Methods:
 
 - <code title="post /accounts/{account_id}/abuse-reports/{report_param}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportParam <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportNewParams">AbuseReportNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/abuse-reports">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportListParams">AbuseReportListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#V4PagePagination">V4PagePagination</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportListResponse">AbuseReportListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/abuse-reports/{report_param}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportParam <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportGetParams">AbuseReportGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/abuse_reports#AbuseReportGetResponse">AbuseReportGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # AI
 

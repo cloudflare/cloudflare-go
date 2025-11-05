@@ -135,6 +135,7 @@ func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()  
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                 {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                    {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
+func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                          {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
 func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                 {}
@@ -285,6 +286,7 @@ func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()   
 func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                     {}
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}
+func (UnionFloat) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                              {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                     {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                               {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                                 {}

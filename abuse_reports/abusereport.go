@@ -7,12 +7,18 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
+	"github.com/tidwall/gjson"
 )
 
 // AbuseReportService contains methods and other services that help with
@@ -53,6 +59,299 @@ func (r *AbuseReportService) New(ctx context.Context, reportParam string, params
 	}
 	res = &env.Result
 	return
+}
+
+// List the abuse reports for a given account.
+func (r *AbuseReportService) List(ctx context.Context, params AbuseReportListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AbuseReportListResponse], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/abuse-reports", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List the abuse reports for a given account.
+func (r *AbuseReportService) ListAutoPaging(ctx context.Context, params AbuseReportListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[AbuseReportListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
+}
+
+// Retrieve an abuse report.
+func (r *AbuseReportService) Get(ctx context.Context, reportParam string, query AbuseReportGetParams, opts ...option.RequestOption) (res *AbuseReportGetResponse, err error) {
+	var env AbuseReportGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if reportParam == "" {
+		err = errors.New("missing required report_param parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/abuse-reports/%s", query.AccountID, reportParam)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type AbuseReportListResponse struct {
+	Reports []AbuseReportListResponseReport `json:"reports,required"`
+	JSON    abuseReportListResponseJSON     `json:"-"`
+}
+
+// abuseReportListResponseJSON contains the JSON metadata for the struct
+// [AbuseReportListResponse]
+type abuseReportListResponseJSON struct {
+	Reports     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AbuseReportListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AbuseReportListResponseReport struct {
+	// Public facing ID of abuse report, aka abuse_rand.
+	ID string `json:"id,required"`
+	// Creation date of report. Time in RFC 3339 format
+	// (https://www.rfc-editor.org/rfc/rfc3339.html)
+	Cdate string `json:"cdate,required"`
+	// Domain that relates to the report.
+	Domain string `json:"domain,required"`
+	// A summary of the mitigations related to this report.
+	MitigationSummary AbuseReportListResponseReportsMitigationSummary `json:"mitigation_summary,required"`
+	// An enum value that represents the status of an abuse record
+	Status AbuseReportListResponseReportsStatus `json:"status,required"`
+	// The abuse report type
+	Type AbuseReportListResponseReportsType `json:"type,required"`
+	JSON abuseReportListResponseReportJSON  `json:"-"`
+}
+
+// abuseReportListResponseReportJSON contains the JSON metadata for the struct
+// [AbuseReportListResponseReport]
+type abuseReportListResponseReportJSON struct {
+	ID                apijson.Field
+	Cdate             apijson.Field
+	Domain            apijson.Field
+	MitigationSummary apijson.Field
+	Status            apijson.Field
+	Type              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AbuseReportListResponseReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportListResponseReportJSON) RawJSON() string {
+	return r.raw
+}
+
+// A summary of the mitigations related to this report.
+type AbuseReportListResponseReportsMitigationSummary struct {
+	// How many of the reported URLs were confirmed as abusive.
+	AcceptedURLCount int64 `json:"accepted_url_count,required"`
+	// How many mitigations are active.
+	ActiveCount int64 `json:"active_count,required"`
+	// Whether the report has been forwarded to an external hosting provider.
+	ExternalHostNotified bool `json:"external_host_notified,required"`
+	// How many mitigations are under review.
+	InReviewCount int64 `json:"in_review_count,required"`
+	// How many mitigations are pending their effective date.
+	PendingCount int64                                               `json:"pending_count,required"`
+	JSON         abuseReportListResponseReportsMitigationSummaryJSON `json:"-"`
+}
+
+// abuseReportListResponseReportsMitigationSummaryJSON contains the JSON metadata
+// for the struct [AbuseReportListResponseReportsMitigationSummary]
+type abuseReportListResponseReportsMitigationSummaryJSON struct {
+	AcceptedURLCount     apijson.Field
+	ActiveCount          apijson.Field
+	ExternalHostNotified apijson.Field
+	InReviewCount        apijson.Field
+	PendingCount         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AbuseReportListResponseReportsMitigationSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportListResponseReportsMitigationSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+// An enum value that represents the status of an abuse record
+type AbuseReportListResponseReportsStatus string
+
+const (
+	AbuseReportListResponseReportsStatusAccepted AbuseReportListResponseReportsStatus = "accepted"
+	AbuseReportListResponseReportsStatusInReview AbuseReportListResponseReportsStatus = "in_review"
+)
+
+func (r AbuseReportListResponseReportsStatus) IsKnown() bool {
+	switch r {
+	case AbuseReportListResponseReportsStatusAccepted, AbuseReportListResponseReportsStatusInReview:
+		return true
+	}
+	return false
+}
+
+// The abuse report type
+type AbuseReportListResponseReportsType string
+
+const (
+	AbuseReportListResponseReportsTypePhish   AbuseReportListResponseReportsType = "PHISH"
+	AbuseReportListResponseReportsTypeGen     AbuseReportListResponseReportsType = "GEN"
+	AbuseReportListResponseReportsTypeThreat  AbuseReportListResponseReportsType = "THREAT"
+	AbuseReportListResponseReportsTypeDmca    AbuseReportListResponseReportsType = "DMCA"
+	AbuseReportListResponseReportsTypeEmer    AbuseReportListResponseReportsType = "EMER"
+	AbuseReportListResponseReportsTypeTm      AbuseReportListResponseReportsType = "TM"
+	AbuseReportListResponseReportsTypeRegWho  AbuseReportListResponseReportsType = "REG_WHO"
+	AbuseReportListResponseReportsTypeNcsei   AbuseReportListResponseReportsType = "NCSEI"
+	AbuseReportListResponseReportsTypeNetwork AbuseReportListResponseReportsType = "NETWORK"
+)
+
+func (r AbuseReportListResponseReportsType) IsKnown() bool {
+	switch r {
+	case AbuseReportListResponseReportsTypePhish, AbuseReportListResponseReportsTypeGen, AbuseReportListResponseReportsTypeThreat, AbuseReportListResponseReportsTypeDmca, AbuseReportListResponseReportsTypeEmer, AbuseReportListResponseReportsTypeTm, AbuseReportListResponseReportsTypeRegWho, AbuseReportListResponseReportsTypeNcsei, AbuseReportListResponseReportsTypeNetwork:
+		return true
+	}
+	return false
+}
+
+type AbuseReportGetResponse struct {
+	// Public facing ID of abuse report, aka abuse_rand.
+	ID string `json:"id,required"`
+	// Creation date of report. Time in RFC 3339 format
+	// (https://www.rfc-editor.org/rfc/rfc3339.html)
+	Cdate string `json:"cdate,required"`
+	// Domain that relates to the report.
+	Domain string `json:"domain,required"`
+	// A summary of the mitigations related to this report.
+	MitigationSummary AbuseReportGetResponseMitigationSummary `json:"mitigation_summary,required"`
+	// An enum value that represents the status of an abuse record
+	Status AbuseReportGetResponseStatus `json:"status,required"`
+	// The abuse report type
+	Type AbuseReportGetResponseType `json:"type,required"`
+	JSON abuseReportGetResponseJSON `json:"-"`
+}
+
+// abuseReportGetResponseJSON contains the JSON metadata for the struct
+// [AbuseReportGetResponse]
+type abuseReportGetResponseJSON struct {
+	ID                apijson.Field
+	Cdate             apijson.Field
+	Domain            apijson.Field
+	MitigationSummary apijson.Field
+	Status            apijson.Field
+	Type              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AbuseReportGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// A summary of the mitigations related to this report.
+type AbuseReportGetResponseMitigationSummary struct {
+	// How many of the reported URLs were confirmed as abusive.
+	AcceptedURLCount int64 `json:"accepted_url_count,required"`
+	// How many mitigations are active.
+	ActiveCount int64 `json:"active_count,required"`
+	// Whether the report has been forwarded to an external hosting provider.
+	ExternalHostNotified bool `json:"external_host_notified,required"`
+	// How many mitigations are under review.
+	InReviewCount int64 `json:"in_review_count,required"`
+	// How many mitigations are pending their effective date.
+	PendingCount int64                                       `json:"pending_count,required"`
+	JSON         abuseReportGetResponseMitigationSummaryJSON `json:"-"`
+}
+
+// abuseReportGetResponseMitigationSummaryJSON contains the JSON metadata for the
+// struct [AbuseReportGetResponseMitigationSummary]
+type abuseReportGetResponseMitigationSummaryJSON struct {
+	AcceptedURLCount     apijson.Field
+	ActiveCount          apijson.Field
+	ExternalHostNotified apijson.Field
+	InReviewCount        apijson.Field
+	PendingCount         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AbuseReportGetResponseMitigationSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportGetResponseMitigationSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+// An enum value that represents the status of an abuse record
+type AbuseReportGetResponseStatus string
+
+const (
+	AbuseReportGetResponseStatusAccepted AbuseReportGetResponseStatus = "accepted"
+	AbuseReportGetResponseStatusInReview AbuseReportGetResponseStatus = "in_review"
+)
+
+func (r AbuseReportGetResponseStatus) IsKnown() bool {
+	switch r {
+	case AbuseReportGetResponseStatusAccepted, AbuseReportGetResponseStatusInReview:
+		return true
+	}
+	return false
+}
+
+// The abuse report type
+type AbuseReportGetResponseType string
+
+const (
+	AbuseReportGetResponseTypePhish   AbuseReportGetResponseType = "PHISH"
+	AbuseReportGetResponseTypeGen     AbuseReportGetResponseType = "GEN"
+	AbuseReportGetResponseTypeThreat  AbuseReportGetResponseType = "THREAT"
+	AbuseReportGetResponseTypeDmca    AbuseReportGetResponseType = "DMCA"
+	AbuseReportGetResponseTypeEmer    AbuseReportGetResponseType = "EMER"
+	AbuseReportGetResponseTypeTm      AbuseReportGetResponseType = "TM"
+	AbuseReportGetResponseTypeRegWho  AbuseReportGetResponseType = "REG_WHO"
+	AbuseReportGetResponseTypeNcsei   AbuseReportGetResponseType = "NCSEI"
+	AbuseReportGetResponseTypeNetwork AbuseReportGetResponseType = "NETWORK"
+)
+
+func (r AbuseReportGetResponseType) IsKnown() bool {
+	switch r {
+	case AbuseReportGetResponseTypePhish, AbuseReportGetResponseTypeGen, AbuseReportGetResponseTypeThreat, AbuseReportGetResponseTypeDmca, AbuseReportGetResponseTypeEmer, AbuseReportGetResponseTypeTm, AbuseReportGetResponseTypeRegWho, AbuseReportGetResponseTypeNcsei, AbuseReportGetResponseTypeNetwork:
+		return true
+	}
+	return false
 }
 
 type AbuseReportNewParams struct {
@@ -1147,5 +1446,188 @@ func (r *AbuseReportNewResponseEnvelopeRequest) UnmarshalJSON(data []byte) (err 
 }
 
 func (r abuseReportNewResponseEnvelopeRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+type AbuseReportListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Returns reports created after the specified date
+	CreatedAfter param.Field[string] `query:"created_after"`
+	// Returns reports created before the specified date
+	CreatedBefore param.Field[string] `query:"created_before"`
+	// Filter by domain name related to the abuse report
+	Domain param.Field[string] `query:"domain"`
+	// Filter reports that have any mitigations in the given status.
+	MitigationStatus param.Field[AbuseReportListParamsMitigationStatus] `query:"mitigation_status"`
+	// Where in pagination to start listing abuse reports
+	Page param.Field[int64] `query:"page"`
+	// How many abuse reports per page to list
+	PerPage param.Field[int64] `query:"per_page"`
+	// A property to sort by, followed by the order (id, cdate, domain, type, status)
+	Sort param.Field[string] `query:"sort"`
+	// Filter by the status of the report.
+	Status param.Field[AbuseReportListParamsStatus] `query:"status"`
+	// Filter by the type of the report.
+	Type param.Field[AbuseReportListParamsType] `query:"type"`
+}
+
+// URLQuery serializes [AbuseReportListParams]'s query parameters as `url.Values`.
+func (r AbuseReportListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Filter reports that have any mitigations in the given status.
+type AbuseReportListParamsMitigationStatus string
+
+const (
+	AbuseReportListParamsMitigationStatusPending   AbuseReportListParamsMitigationStatus = "pending"
+	AbuseReportListParamsMitigationStatusActive    AbuseReportListParamsMitigationStatus = "active"
+	AbuseReportListParamsMitigationStatusInReview  AbuseReportListParamsMitigationStatus = "in_review"
+	AbuseReportListParamsMitigationStatusCancelled AbuseReportListParamsMitigationStatus = "cancelled"
+	AbuseReportListParamsMitigationStatusRemoved   AbuseReportListParamsMitigationStatus = "removed"
+)
+
+func (r AbuseReportListParamsMitigationStatus) IsKnown() bool {
+	switch r {
+	case AbuseReportListParamsMitigationStatusPending, AbuseReportListParamsMitigationStatusActive, AbuseReportListParamsMitigationStatusInReview, AbuseReportListParamsMitigationStatusCancelled, AbuseReportListParamsMitigationStatusRemoved:
+		return true
+	}
+	return false
+}
+
+// Filter by the status of the report.
+type AbuseReportListParamsStatus string
+
+const (
+	AbuseReportListParamsStatusAccepted AbuseReportListParamsStatus = "accepted"
+	AbuseReportListParamsStatusInReview AbuseReportListParamsStatus = "in_review"
+)
+
+func (r AbuseReportListParamsStatus) IsKnown() bool {
+	switch r {
+	case AbuseReportListParamsStatusAccepted, AbuseReportListParamsStatusInReview:
+		return true
+	}
+	return false
+}
+
+// Filter by the type of the report.
+type AbuseReportListParamsType string
+
+const (
+	AbuseReportListParamsTypePhish   AbuseReportListParamsType = "PHISH"
+	AbuseReportListParamsTypeGen     AbuseReportListParamsType = "GEN"
+	AbuseReportListParamsTypeThreat  AbuseReportListParamsType = "THREAT"
+	AbuseReportListParamsTypeDmca    AbuseReportListParamsType = "DMCA"
+	AbuseReportListParamsTypeEmer    AbuseReportListParamsType = "EMER"
+	AbuseReportListParamsTypeTm      AbuseReportListParamsType = "TM"
+	AbuseReportListParamsTypeRegWho  AbuseReportListParamsType = "REG_WHO"
+	AbuseReportListParamsTypeNcsei   AbuseReportListParamsType = "NCSEI"
+	AbuseReportListParamsTypeNetwork AbuseReportListParamsType = "NETWORK"
+)
+
+func (r AbuseReportListParamsType) IsKnown() bool {
+	switch r {
+	case AbuseReportListParamsTypePhish, AbuseReportListParamsTypeGen, AbuseReportListParamsTypeThreat, AbuseReportListParamsTypeDmca, AbuseReportListParamsTypeEmer, AbuseReportListParamsTypeTm, AbuseReportListParamsTypeRegWho, AbuseReportListParamsTypeNcsei, AbuseReportListParamsTypeNetwork:
+		return true
+	}
+	return false
+}
+
+type AbuseReportGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AbuseReportGetResponseEnvelope struct {
+	Result   AbuseReportGetResponse                   `json:"result,required"`
+	Success  bool                                     `json:"success,required"`
+	Errors   []AbuseReportGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []AbuseReportGetResponseEnvelopeMessages `json:"messages"`
+	JSON     abuseReportGetResponseEnvelopeJSON       `json:"-"`
+}
+
+// abuseReportGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AbuseReportGetResponseEnvelope]
+type abuseReportGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AbuseReportGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AbuseReportGetResponseEnvelopeErrors struct {
+	Message string                                   `json:"message,required"`
+	Code    AbuseReportGetResponseEnvelopeErrorsCode `json:"code"`
+	JSON    abuseReportGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// abuseReportGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AbuseReportGetResponseEnvelopeErrors]
+type abuseReportGetResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AbuseReportGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
+type AbuseReportGetResponseEnvelopeErrorsCode interface {
+	ImplementsAbuseReportGetResponseEnvelopeErrorsCode()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AbuseReportGetResponseEnvelopeErrorsCode)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+	)
+}
+
+type AbuseReportGetResponseEnvelopeMessages struct {
+	Message string                                     `json:"message,required"`
+	JSON    abuseReportGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// abuseReportGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AbuseReportGetResponseEnvelopeMessages]
+type abuseReportGetResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AbuseReportGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
