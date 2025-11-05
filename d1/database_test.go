@@ -30,6 +30,7 @@ func TestDatabaseNewWithOptionalParams(t *testing.T) {
 	_, err := client.D1.Database.New(context.TODO(), d1.DatabaseNewParams{
 		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:                cloudflare.F("my-database"),
+		Jurisdiction:        cloudflare.F(d1.DatabaseNewParamsJurisdictionEu),
 		PrimaryLocationHint: cloudflare.F(d1.DatabaseNewParamsPrimaryLocationHintWnam),
 	})
 	if err != nil {
