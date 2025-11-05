@@ -61,7 +61,7 @@ func (r *AbuseReportService) New(ctx context.Context, reportParam string, params
 	return
 }
 
-// List the abuse reports for a given account.
+// List the abuse reports for a given account
 func (r *AbuseReportService) List(ctx context.Context, params AbuseReportListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AbuseReportListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -83,12 +83,12 @@ func (r *AbuseReportService) List(ctx context.Context, params AbuseReportListPar
 	return res, nil
 }
 
-// List the abuse reports for a given account.
+// List the abuse reports for a given account
 func (r *AbuseReportService) ListAutoPaging(ctx context.Context, params AbuseReportListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[AbuseReportListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Retrieve an abuse report.
+// Retrieve the details of an abuse report.
 func (r *AbuseReportService) Get(ctx context.Context, reportParam string, query AbuseReportGetParams, opts ...option.RequestOption) (res *AbuseReportGetResponse, err error) {
 	var env AbuseReportGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
