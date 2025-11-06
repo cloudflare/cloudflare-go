@@ -370,8 +370,6 @@ TEST_PATHS=(
 	zero_trust/organization_test.go
 	zero_trust/organizationdoh_test.go
 	zero_trust/seat_test.go
-	zero_trust/accessaicontrolmcpportal_test.go
-	zero_trust/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
@@ -632,7 +630,6 @@ TEST_PATHS=(
 	content_scanning/contentscanning_test.go
 	content_scanning/payload_test.go
 	content_scanning/setting_test.go
-	abuse_reports/abusereport_test.go
 	ai/ai_test.go
 	ai/finetune_test.go
 	ai/finetuneasset_test.go
@@ -662,9 +659,6 @@ TEST_PATHS=(
 	schema_validation/schema_test.go
 	schema_validation/setting_test.go
 	schema_validation/settingoperation_test.go
-	token_validation/configuration_test.go
-	token_validation/configurationcredential_test.go
-	token_validation/rule_test.go
 	usage_test.go
 	paginationauto_test.go
 	paginationmanual_test.go

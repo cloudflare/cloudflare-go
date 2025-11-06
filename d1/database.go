@@ -876,9 +876,6 @@ type DatabaseNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// D1 database name.
 	Name param.Field[string] `json:"name,required"`
-	// Specify the location to restrict the D1 database to run and store data. If this
-	// option is present, the location hint is ignored.
-	Jurisdiction param.Field[DatabaseNewParamsJurisdiction] `json:"jurisdiction"`
 	// Specify the region to create the D1 primary, if available. If this option is
 	// omitted, the D1 will be created as close as possible to the current user.
 	PrimaryLocationHint param.Field[DatabaseNewParamsPrimaryLocationHint] `json:"primary_location_hint"`
@@ -886,23 +883,6 @@ type DatabaseNewParams struct {
 
 func (r DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Specify the location to restrict the D1 database to run and store data. If this
-// option is present, the location hint is ignored.
-type DatabaseNewParamsJurisdiction string
-
-const (
-	DatabaseNewParamsJurisdictionEu      DatabaseNewParamsJurisdiction = "eu"
-	DatabaseNewParamsJurisdictionFedramp DatabaseNewParamsJurisdiction = "fedramp"
-)
-
-func (r DatabaseNewParamsJurisdiction) IsKnown() bool {
-	switch r {
-	case DatabaseNewParamsJurisdictionEu, DatabaseNewParamsJurisdictionFedramp:
-		return true
-	}
-	return false
 }
 
 // Specify the region to create the D1 primary, if available. If this option is

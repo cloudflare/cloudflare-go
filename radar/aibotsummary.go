@@ -37,9 +37,7 @@ func NewAIBotSummaryService(opts ...option.RequestOption) (r *AIBotSummaryServic
 
 // Retrieves the distribution of traffic by AI user agent.
 //
-// Deprecated: Use
-// [Radar AI Bots Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/bots/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AIBotSummaryService) UserAgent(ctx context.Context, query AIBotSummaryUserAgentParams, opts ...option.RequestOption) (res *AIBotSummaryUserAgentResponse, err error) {
 	var env AIBotSummaryUserAgentResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

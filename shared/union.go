@@ -75,8 +75,6 @@ func (UnionString) ImplementsIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHe
 func (UnionString) ImplementsIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion()         {}
 func (UnionString) ImplementsIPSECTunnelNewParamsHealthCheckTargetUnion()                      {}
 func (UnionString) ImplementsIPSECTunnelUpdateParamsHealthCheckTargetUnion()                   {}
-func (UnionString) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion()  {}
-func (UnionString) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion()    {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion()  {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodySaaSApplicationPolicyUnion()        {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion()  {}
@@ -135,7 +133,6 @@ func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()  
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                 {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                    {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
-func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                          {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
 func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                 {}
@@ -263,8 +260,6 @@ func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion(
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
 func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
 func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
-func (UnionFloat) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion()        {}
-func (UnionFloat) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion()          {}
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                            {}
 func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()             {}
 func (UnionFloat) ImplementsSettingValueUnionParam()                                                {}
@@ -286,7 +281,6 @@ func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()   
 func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                     {}
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}
-func (UnionFloat) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                              {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                     {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                               {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                                 {}
