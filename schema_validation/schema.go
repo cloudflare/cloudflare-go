@@ -199,14 +199,14 @@ func (r PublicSchemaKind) IsKnown() bool {
 
 type SchemaDeleteResponse struct {
 	// The ID of the schema that was just deleted
-	SchemaID string                   `json:"schema_id,required" format:"uuid"`
-	JSON     schemaDeleteResponseJSON `json:"-"`
+	ID   string                   `json:"id,required" format:"uuid"`
+	JSON schemaDeleteResponseJSON `json:"-"`
 }
 
 // schemaDeleteResponseJSON contains the JSON metadata for the struct
 // [SchemaDeleteResponse]
 type schemaDeleteResponseJSON struct {
-	SchemaID    apijson.Field
+	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
