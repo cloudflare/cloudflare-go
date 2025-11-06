@@ -96,7 +96,7 @@ type ThreatEventTargetIndustryListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Array of dataset IDs to query target industries from. If not provided, returns
-	// all target industries from D1 Event table.
+	// all target industries from Event tables across all datasets.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 }
 
