@@ -147,17 +147,16 @@ func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params Attac
 type IssueType string
 
 const (
-	IssueTypeComplianceViolation     IssueType = "compliance_violation"
-	IssueTypeEmailSecurity           IssueType = "email_security"
-	IssueTypeExposedInfrastructure   IssueType = "exposed_infrastructure"
-	IssueTypeInsecureConfiguration   IssueType = "insecure_configuration"
-	IssueTypeWeakAuthentication      IssueType = "weak_authentication"
-	IssueTypeConfigurationSuggestion IssueType = "configuration_suggestion"
+	IssueTypeComplianceViolation   IssueType = "compliance_violation"
+	IssueTypeEmailSecurity         IssueType = "email_security"
+	IssueTypeExposedInfrastructure IssueType = "exposed_infrastructure"
+	IssueTypeInsecureConfiguration IssueType = "insecure_configuration"
+	IssueTypeWeakAuthentication    IssueType = "weak_authentication"
 )
 
 func (r IssueType) IsKnown() bool {
 	switch r {
-	case IssueTypeComplianceViolation, IssueTypeEmailSecurity, IssueTypeExposedInfrastructure, IssueTypeInsecureConfiguration, IssueTypeWeakAuthentication, IssueTypeConfigurationSuggestion:
+	case IssueTypeComplianceViolation, IssueTypeEmailSecurity, IssueTypeExposedInfrastructure, IssueTypeInsecureConfiguration, IssueTypeWeakAuthentication:
 		return true
 	}
 	return false
@@ -214,7 +213,7 @@ type AttackSurfaceReportIssueListResponseIssue struct {
 	Dismissed   bool                                               `json:"dismissed"`
 	IssueClass  string                                             `json:"issue_class"`
 	IssueType   IssueType                                          `json:"issue_type"`
-	Payload     AttackSurfaceReportIssueListResponseIssuesPayload  `json:"payload"`
+	Payload     interface{}                                        `json:"payload"`
 	ResolveLink string                                             `json:"resolve_link"`
 	ResolveText string                                             `json:"resolve_text"`
 	Severity    AttackSurfaceReportIssueListResponseIssuesSeverity `json:"severity"`
@@ -247,30 +246,6 @@ func (r *AttackSurfaceReportIssueListResponseIssue) UnmarshalJSON(data []byte) (
 }
 
 func (r attackSurfaceReportIssueListResponseIssueJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackSurfaceReportIssueListResponseIssuesPayload struct {
-	// Method used to detect insight
-	DetectionMethod string                                                `json:"detection_method"`
-	ZoneTag         string                                                `json:"zone_tag"`
-	JSON            attackSurfaceReportIssueListResponseIssuesPayloadJSON `json:"-"`
-}
-
-// attackSurfaceReportIssueListResponseIssuesPayloadJSON contains the JSON metadata
-// for the struct [AttackSurfaceReportIssueListResponseIssuesPayload]
-type attackSurfaceReportIssueListResponseIssuesPayloadJSON struct {
-	DetectionMethod apijson.Field
-	ZoneTag         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackSurfaceReportIssueListResponseIssuesPayload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackSurfaceReportIssueListResponseIssuesPayloadJSON) RawJSON() string {
 	return r.raw
 }
 

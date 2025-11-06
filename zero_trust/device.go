@@ -165,9 +165,7 @@ type Device struct {
 	OSDistroRevision string `json:"os_distro_revision"`
 	// The operating system version.
 	OSVersion string `json:"os_version"`
-	// Additional operating system version details. For Windows, the UBR (Update Build
-	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
-	// distribution name and version.
+	// The operating system version extra parameter.
 	OSVersionExtra string `json:"os_version_extra"`
 	// When the device was revoked.
 	RevokedAt time.Time `json:"revoked_at" format:"date-time"`

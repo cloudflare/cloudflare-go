@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestThreatEventTargetIndustryListWithOptionalParams(t *testing.T) {
+func TestThreatEventTargetIndustryList(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,8 +29,7 @@ func TestThreatEventTargetIndustryListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.TargetIndustries.List(context.TODO(), cloudforce_one.ThreatEventTargetIndustryListParams{
-		AccountID:  cloudflare.F("account_id"),
-		DatasetIDs: cloudflare.F([]string{"string"}),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

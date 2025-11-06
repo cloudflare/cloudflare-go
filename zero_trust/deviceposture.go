@@ -378,9 +378,8 @@ type DeviceInput struct {
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only).
 	OSDistroRevision string `json:"os_distro_revision"`
-	// Additional operating system version details. For Windows, the UBR (Update Build
-	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
-	// distribution name and version.
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra string `json:"os_version_extra"`
 	// Overall.
 	Overall string `json:"overall"`
@@ -1121,9 +1120,8 @@ type DeviceInputParam struct {
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only).
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional operating system version details. For Windows, the UBR (Update Build
-	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
-	// distribution name and version.
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 	// Overall.
 	Overall param.Field[string] `json:"overall"`
@@ -1760,9 +1758,8 @@ type OSVersionInput struct {
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only).
 	OSDistroRevision string `json:"os_distro_revision"`
-	// Additional operating system version details. For Windows, the UBR (Update Build
-	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
-	// distribution name and version.
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra string             `json:"os_version_extra"`
 	JSON           osVersionInputJSON `json:"-"`
 }
@@ -1834,9 +1831,8 @@ type OSVersionInputParam struct {
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only).
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional operating system version details. For Windows, the UBR (Update Build
-	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
-	// distribution name and version.
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only).
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
 

@@ -496,8 +496,6 @@ type DNSTopAsesParams struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filters results based on cache status.
-	CacheHit param.Field[[]bool] `query:"cacheHit"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -510,38 +508,18 @@ type DNSTopAsesParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filters results based on DNSSEC (DNS Security Extensions) support.
-	DNSSEC param.Field[[]DNSTopAsesParamsDNSSEC] `query:"dnssec"`
-	// Filters results based on DNSSEC (DNS Security Extensions) client awareness.
-	DNSSECAware param.Field[[]DNSTopAsesParamsDNSSECAware] `query:"dnssecAware"`
-	// Filters results based on DNSSEC-validated answers by end-to-end security status.
-	DNSSECE2E param.Field[[]bool] `query:"dnssecE2e"`
 	// Filters results by domain name.
 	Domain param.Field[[]string] `query:"domain"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTopAsesParamsFormat] `query:"format"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]DNSTopAsesParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Filters results based on whether the queries have a matching answer.
-	MatchingAnswer param.Field[[]bool] `query:"matchingAnswer"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[[]bool] `query:"nodata"`
-	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]DNSTopAsesParamsProtocol] `query:"protocol"`
-	// Filters results by DNS query type.
-	QueryType param.Field[[]DNSTopAsesParamsQueryType] `query:"queryType"`
-	// Filters results by DNS response code.
-	ResponseCode param.Field[[]DNSTopAsesParamsResponseCode] `query:"responseCode"`
-	// Filters results by DNS response TTL.
-	ResponseTTL param.Field[[]DNSTopAsesParamsResponseTTL] `query:"responseTtl"`
 }
 
 // URLQuery serializes [DNSTopAsesParams]'s query parameters as `url.Values`.
@@ -550,38 +528,6 @@ func (r DNSTopAsesParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type DNSTopAsesParamsDNSSEC string
-
-const (
-	DNSTopAsesParamsDNSSECInvalid  DNSTopAsesParamsDNSSEC = "INVALID"
-	DNSTopAsesParamsDNSSECInsecure DNSTopAsesParamsDNSSEC = "INSECURE"
-	DNSTopAsesParamsDNSSECSecure   DNSTopAsesParamsDNSSEC = "SECURE"
-	DNSTopAsesParamsDNSSECOther    DNSTopAsesParamsDNSSEC = "OTHER"
-)
-
-func (r DNSTopAsesParamsDNSSEC) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsDNSSECInvalid, DNSTopAsesParamsDNSSECInsecure, DNSTopAsesParamsDNSSECSecure, DNSTopAsesParamsDNSSECOther:
-		return true
-	}
-	return false
-}
-
-type DNSTopAsesParamsDNSSECAware string
-
-const (
-	DNSTopAsesParamsDNSSECAwareSupported    DNSTopAsesParamsDNSSECAware = "SUPPORTED"
-	DNSTopAsesParamsDNSSECAwareNotSupported DNSTopAsesParamsDNSSECAware = "NOT_SUPPORTED"
-)
-
-func (r DNSTopAsesParamsDNSSECAware) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsDNSSECAwareSupported, DNSTopAsesParamsDNSSECAwareNotSupported:
-		return true
-	}
-	return false
 }
 
 // Format in which results will be returned.
@@ -595,191 +541,6 @@ const (
 func (r DNSTopAsesParamsFormat) IsKnown() bool {
 	switch r {
 	case DNSTopAsesParamsFormatJson, DNSTopAsesParamsFormatCsv:
-		return true
-	}
-	return false
-}
-
-type DNSTopAsesParamsIPVersion string
-
-const (
-	DNSTopAsesParamsIPVersionIPv4 DNSTopAsesParamsIPVersion = "IPv4"
-	DNSTopAsesParamsIPVersionIPv6 DNSTopAsesParamsIPVersion = "IPv6"
-)
-
-func (r DNSTopAsesParamsIPVersion) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsIPVersionIPv4, DNSTopAsesParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
-type DNSTopAsesParamsProtocol string
-
-const (
-	DNSTopAsesParamsProtocolUdp   DNSTopAsesParamsProtocol = "UDP"
-	DNSTopAsesParamsProtocolTCP   DNSTopAsesParamsProtocol = "TCP"
-	DNSTopAsesParamsProtocolHTTPS DNSTopAsesParamsProtocol = "HTTPS"
-	DNSTopAsesParamsProtocolTLS   DNSTopAsesParamsProtocol = "TLS"
-)
-
-func (r DNSTopAsesParamsProtocol) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsProtocolUdp, DNSTopAsesParamsProtocolTCP, DNSTopAsesParamsProtocolHTTPS, DNSTopAsesParamsProtocolTLS:
-		return true
-	}
-	return false
-}
-
-type DNSTopAsesParamsQueryType string
-
-const (
-	DNSTopAsesParamsQueryTypeA          DNSTopAsesParamsQueryType = "A"
-	DNSTopAsesParamsQueryTypeAAAA       DNSTopAsesParamsQueryType = "AAAA"
-	DNSTopAsesParamsQueryTypeA6         DNSTopAsesParamsQueryType = "A6"
-	DNSTopAsesParamsQueryTypeAfsdb      DNSTopAsesParamsQueryType = "AFSDB"
-	DNSTopAsesParamsQueryTypeAny        DNSTopAsesParamsQueryType = "ANY"
-	DNSTopAsesParamsQueryTypeApl        DNSTopAsesParamsQueryType = "APL"
-	DNSTopAsesParamsQueryTypeAtma       DNSTopAsesParamsQueryType = "ATMA"
-	DNSTopAsesParamsQueryTypeAXFR       DNSTopAsesParamsQueryType = "AXFR"
-	DNSTopAsesParamsQueryTypeCAA        DNSTopAsesParamsQueryType = "CAA"
-	DNSTopAsesParamsQueryTypeCdnskey    DNSTopAsesParamsQueryType = "CDNSKEY"
-	DNSTopAsesParamsQueryTypeCds        DNSTopAsesParamsQueryType = "CDS"
-	DNSTopAsesParamsQueryTypeCERT       DNSTopAsesParamsQueryType = "CERT"
-	DNSTopAsesParamsQueryTypeCNAME      DNSTopAsesParamsQueryType = "CNAME"
-	DNSTopAsesParamsQueryTypeCsync      DNSTopAsesParamsQueryType = "CSYNC"
-	DNSTopAsesParamsQueryTypeDhcid      DNSTopAsesParamsQueryType = "DHCID"
-	DNSTopAsesParamsQueryTypeDlv        DNSTopAsesParamsQueryType = "DLV"
-	DNSTopAsesParamsQueryTypeDname      DNSTopAsesParamsQueryType = "DNAME"
-	DNSTopAsesParamsQueryTypeDNSKEY     DNSTopAsesParamsQueryType = "DNSKEY"
-	DNSTopAsesParamsQueryTypeDoa        DNSTopAsesParamsQueryType = "DOA"
-	DNSTopAsesParamsQueryTypeDS         DNSTopAsesParamsQueryType = "DS"
-	DNSTopAsesParamsQueryTypeEid        DNSTopAsesParamsQueryType = "EID"
-	DNSTopAsesParamsQueryTypeEui48      DNSTopAsesParamsQueryType = "EUI48"
-	DNSTopAsesParamsQueryTypeEui64      DNSTopAsesParamsQueryType = "EUI64"
-	DNSTopAsesParamsQueryTypeGpos       DNSTopAsesParamsQueryType = "GPOS"
-	DNSTopAsesParamsQueryTypeGid        DNSTopAsesParamsQueryType = "GID"
-	DNSTopAsesParamsQueryTypeHinfo      DNSTopAsesParamsQueryType = "HINFO"
-	DNSTopAsesParamsQueryTypeHip        DNSTopAsesParamsQueryType = "HIP"
-	DNSTopAsesParamsQueryTypeHTTPS      DNSTopAsesParamsQueryType = "HTTPS"
-	DNSTopAsesParamsQueryTypeIpseckey   DNSTopAsesParamsQueryType = "IPSECKEY"
-	DNSTopAsesParamsQueryTypeIsdn       DNSTopAsesParamsQueryType = "ISDN"
-	DNSTopAsesParamsQueryTypeIxfr       DNSTopAsesParamsQueryType = "IXFR"
-	DNSTopAsesParamsQueryTypeKey        DNSTopAsesParamsQueryType = "KEY"
-	DNSTopAsesParamsQueryTypeKx         DNSTopAsesParamsQueryType = "KX"
-	DNSTopAsesParamsQueryTypeL32        DNSTopAsesParamsQueryType = "L32"
-	DNSTopAsesParamsQueryTypeL64        DNSTopAsesParamsQueryType = "L64"
-	DNSTopAsesParamsQueryTypeLOC        DNSTopAsesParamsQueryType = "LOC"
-	DNSTopAsesParamsQueryTypeLp         DNSTopAsesParamsQueryType = "LP"
-	DNSTopAsesParamsQueryTypeMaila      DNSTopAsesParamsQueryType = "MAILA"
-	DNSTopAsesParamsQueryTypeMailb      DNSTopAsesParamsQueryType = "MAILB"
-	DNSTopAsesParamsQueryTypeMB         DNSTopAsesParamsQueryType = "MB"
-	DNSTopAsesParamsQueryTypeMd         DNSTopAsesParamsQueryType = "MD"
-	DNSTopAsesParamsQueryTypeMf         DNSTopAsesParamsQueryType = "MF"
-	DNSTopAsesParamsQueryTypeMg         DNSTopAsesParamsQueryType = "MG"
-	DNSTopAsesParamsQueryTypeMinfo      DNSTopAsesParamsQueryType = "MINFO"
-	DNSTopAsesParamsQueryTypeMr         DNSTopAsesParamsQueryType = "MR"
-	DNSTopAsesParamsQueryTypeMX         DNSTopAsesParamsQueryType = "MX"
-	DNSTopAsesParamsQueryTypeNAPTR      DNSTopAsesParamsQueryType = "NAPTR"
-	DNSTopAsesParamsQueryTypeNb         DNSTopAsesParamsQueryType = "NB"
-	DNSTopAsesParamsQueryTypeNbstat     DNSTopAsesParamsQueryType = "NBSTAT"
-	DNSTopAsesParamsQueryTypeNid        DNSTopAsesParamsQueryType = "NID"
-	DNSTopAsesParamsQueryTypeNimloc     DNSTopAsesParamsQueryType = "NIMLOC"
-	DNSTopAsesParamsQueryTypeNinfo      DNSTopAsesParamsQueryType = "NINFO"
-	DNSTopAsesParamsQueryTypeNS         DNSTopAsesParamsQueryType = "NS"
-	DNSTopAsesParamsQueryTypeNsap       DNSTopAsesParamsQueryType = "NSAP"
-	DNSTopAsesParamsQueryTypeNsec       DNSTopAsesParamsQueryType = "NSEC"
-	DNSTopAsesParamsQueryTypeNsec3      DNSTopAsesParamsQueryType = "NSEC3"
-	DNSTopAsesParamsQueryTypeNsec3Param DNSTopAsesParamsQueryType = "NSEC3PARAM"
-	DNSTopAsesParamsQueryTypeNull       DNSTopAsesParamsQueryType = "NULL"
-	DNSTopAsesParamsQueryTypeNxt        DNSTopAsesParamsQueryType = "NXT"
-	DNSTopAsesParamsQueryTypeOpenpgpkey DNSTopAsesParamsQueryType = "OPENPGPKEY"
-	DNSTopAsesParamsQueryTypeOpt        DNSTopAsesParamsQueryType = "OPT"
-	DNSTopAsesParamsQueryTypePTR        DNSTopAsesParamsQueryType = "PTR"
-	DNSTopAsesParamsQueryTypePx         DNSTopAsesParamsQueryType = "PX"
-	DNSTopAsesParamsQueryTypeRkey       DNSTopAsesParamsQueryType = "RKEY"
-	DNSTopAsesParamsQueryTypeRp         DNSTopAsesParamsQueryType = "RP"
-	DNSTopAsesParamsQueryTypeRrsig      DNSTopAsesParamsQueryType = "RRSIG"
-	DNSTopAsesParamsQueryTypeRt         DNSTopAsesParamsQueryType = "RT"
-	DNSTopAsesParamsQueryTypeSig        DNSTopAsesParamsQueryType = "SIG"
-	DNSTopAsesParamsQueryTypeSink       DNSTopAsesParamsQueryType = "SINK"
-	DNSTopAsesParamsQueryTypeSMIMEA     DNSTopAsesParamsQueryType = "SMIMEA"
-	DNSTopAsesParamsQueryTypeSOA        DNSTopAsesParamsQueryType = "SOA"
-	DNSTopAsesParamsQueryTypeSPF        DNSTopAsesParamsQueryType = "SPF"
-	DNSTopAsesParamsQueryTypeSRV        DNSTopAsesParamsQueryType = "SRV"
-	DNSTopAsesParamsQueryTypeSSHFP      DNSTopAsesParamsQueryType = "SSHFP"
-	DNSTopAsesParamsQueryTypeSVCB       DNSTopAsesParamsQueryType = "SVCB"
-	DNSTopAsesParamsQueryTypeTa         DNSTopAsesParamsQueryType = "TA"
-	DNSTopAsesParamsQueryTypeTalink     DNSTopAsesParamsQueryType = "TALINK"
-	DNSTopAsesParamsQueryTypeTkey       DNSTopAsesParamsQueryType = "TKEY"
-	DNSTopAsesParamsQueryTypeTLSA       DNSTopAsesParamsQueryType = "TLSA"
-	DNSTopAsesParamsQueryTypeTSIG       DNSTopAsesParamsQueryType = "TSIG"
-	DNSTopAsesParamsQueryTypeTXT        DNSTopAsesParamsQueryType = "TXT"
-	DNSTopAsesParamsQueryTypeUinfo      DNSTopAsesParamsQueryType = "UINFO"
-	DNSTopAsesParamsQueryTypeUID        DNSTopAsesParamsQueryType = "UID"
-	DNSTopAsesParamsQueryTypeUnspec     DNSTopAsesParamsQueryType = "UNSPEC"
-	DNSTopAsesParamsQueryTypeURI        DNSTopAsesParamsQueryType = "URI"
-	DNSTopAsesParamsQueryTypeWks        DNSTopAsesParamsQueryType = "WKS"
-	DNSTopAsesParamsQueryTypeX25        DNSTopAsesParamsQueryType = "X25"
-	DNSTopAsesParamsQueryTypeZonemd     DNSTopAsesParamsQueryType = "ZONEMD"
-)
-
-func (r DNSTopAsesParamsQueryType) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsQueryTypeA, DNSTopAsesParamsQueryTypeAAAA, DNSTopAsesParamsQueryTypeA6, DNSTopAsesParamsQueryTypeAfsdb, DNSTopAsesParamsQueryTypeAny, DNSTopAsesParamsQueryTypeApl, DNSTopAsesParamsQueryTypeAtma, DNSTopAsesParamsQueryTypeAXFR, DNSTopAsesParamsQueryTypeCAA, DNSTopAsesParamsQueryTypeCdnskey, DNSTopAsesParamsQueryTypeCds, DNSTopAsesParamsQueryTypeCERT, DNSTopAsesParamsQueryTypeCNAME, DNSTopAsesParamsQueryTypeCsync, DNSTopAsesParamsQueryTypeDhcid, DNSTopAsesParamsQueryTypeDlv, DNSTopAsesParamsQueryTypeDname, DNSTopAsesParamsQueryTypeDNSKEY, DNSTopAsesParamsQueryTypeDoa, DNSTopAsesParamsQueryTypeDS, DNSTopAsesParamsQueryTypeEid, DNSTopAsesParamsQueryTypeEui48, DNSTopAsesParamsQueryTypeEui64, DNSTopAsesParamsQueryTypeGpos, DNSTopAsesParamsQueryTypeGid, DNSTopAsesParamsQueryTypeHinfo, DNSTopAsesParamsQueryTypeHip, DNSTopAsesParamsQueryTypeHTTPS, DNSTopAsesParamsQueryTypeIpseckey, DNSTopAsesParamsQueryTypeIsdn, DNSTopAsesParamsQueryTypeIxfr, DNSTopAsesParamsQueryTypeKey, DNSTopAsesParamsQueryTypeKx, DNSTopAsesParamsQueryTypeL32, DNSTopAsesParamsQueryTypeL64, DNSTopAsesParamsQueryTypeLOC, DNSTopAsesParamsQueryTypeLp, DNSTopAsesParamsQueryTypeMaila, DNSTopAsesParamsQueryTypeMailb, DNSTopAsesParamsQueryTypeMB, DNSTopAsesParamsQueryTypeMd, DNSTopAsesParamsQueryTypeMf, DNSTopAsesParamsQueryTypeMg, DNSTopAsesParamsQueryTypeMinfo, DNSTopAsesParamsQueryTypeMr, DNSTopAsesParamsQueryTypeMX, DNSTopAsesParamsQueryTypeNAPTR, DNSTopAsesParamsQueryTypeNb, DNSTopAsesParamsQueryTypeNbstat, DNSTopAsesParamsQueryTypeNid, DNSTopAsesParamsQueryTypeNimloc, DNSTopAsesParamsQueryTypeNinfo, DNSTopAsesParamsQueryTypeNS, DNSTopAsesParamsQueryTypeNsap, DNSTopAsesParamsQueryTypeNsec, DNSTopAsesParamsQueryTypeNsec3, DNSTopAsesParamsQueryTypeNsec3Param, DNSTopAsesParamsQueryTypeNull, DNSTopAsesParamsQueryTypeNxt, DNSTopAsesParamsQueryTypeOpenpgpkey, DNSTopAsesParamsQueryTypeOpt, DNSTopAsesParamsQueryTypePTR, DNSTopAsesParamsQueryTypePx, DNSTopAsesParamsQueryTypeRkey, DNSTopAsesParamsQueryTypeRp, DNSTopAsesParamsQueryTypeRrsig, DNSTopAsesParamsQueryTypeRt, DNSTopAsesParamsQueryTypeSig, DNSTopAsesParamsQueryTypeSink, DNSTopAsesParamsQueryTypeSMIMEA, DNSTopAsesParamsQueryTypeSOA, DNSTopAsesParamsQueryTypeSPF, DNSTopAsesParamsQueryTypeSRV, DNSTopAsesParamsQueryTypeSSHFP, DNSTopAsesParamsQueryTypeSVCB, DNSTopAsesParamsQueryTypeTa, DNSTopAsesParamsQueryTypeTalink, DNSTopAsesParamsQueryTypeTkey, DNSTopAsesParamsQueryTypeTLSA, DNSTopAsesParamsQueryTypeTSIG, DNSTopAsesParamsQueryTypeTXT, DNSTopAsesParamsQueryTypeUinfo, DNSTopAsesParamsQueryTypeUID, DNSTopAsesParamsQueryTypeUnspec, DNSTopAsesParamsQueryTypeURI, DNSTopAsesParamsQueryTypeWks, DNSTopAsesParamsQueryTypeX25, DNSTopAsesParamsQueryTypeZonemd:
-		return true
-	}
-	return false
-}
-
-type DNSTopAsesParamsResponseCode string
-
-const (
-	DNSTopAsesParamsResponseCodeNoerror   DNSTopAsesParamsResponseCode = "NOERROR"
-	DNSTopAsesParamsResponseCodeFormerr   DNSTopAsesParamsResponseCode = "FORMERR"
-	DNSTopAsesParamsResponseCodeServfail  DNSTopAsesParamsResponseCode = "SERVFAIL"
-	DNSTopAsesParamsResponseCodeNxdomain  DNSTopAsesParamsResponseCode = "NXDOMAIN"
-	DNSTopAsesParamsResponseCodeNotimp    DNSTopAsesParamsResponseCode = "NOTIMP"
-	DNSTopAsesParamsResponseCodeRefused   DNSTopAsesParamsResponseCode = "REFUSED"
-	DNSTopAsesParamsResponseCodeYxdomain  DNSTopAsesParamsResponseCode = "YXDOMAIN"
-	DNSTopAsesParamsResponseCodeYxrrset   DNSTopAsesParamsResponseCode = "YXRRSET"
-	DNSTopAsesParamsResponseCodeNxrrset   DNSTopAsesParamsResponseCode = "NXRRSET"
-	DNSTopAsesParamsResponseCodeNotauth   DNSTopAsesParamsResponseCode = "NOTAUTH"
-	DNSTopAsesParamsResponseCodeNotzone   DNSTopAsesParamsResponseCode = "NOTZONE"
-	DNSTopAsesParamsResponseCodeBadsig    DNSTopAsesParamsResponseCode = "BADSIG"
-	DNSTopAsesParamsResponseCodeBadkey    DNSTopAsesParamsResponseCode = "BADKEY"
-	DNSTopAsesParamsResponseCodeBadtime   DNSTopAsesParamsResponseCode = "BADTIME"
-	DNSTopAsesParamsResponseCodeBadmode   DNSTopAsesParamsResponseCode = "BADMODE"
-	DNSTopAsesParamsResponseCodeBadname   DNSTopAsesParamsResponseCode = "BADNAME"
-	DNSTopAsesParamsResponseCodeBadalg    DNSTopAsesParamsResponseCode = "BADALG"
-	DNSTopAsesParamsResponseCodeBadtrunc  DNSTopAsesParamsResponseCode = "BADTRUNC"
-	DNSTopAsesParamsResponseCodeBadcookie DNSTopAsesParamsResponseCode = "BADCOOKIE"
-)
-
-func (r DNSTopAsesParamsResponseCode) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsResponseCodeNoerror, DNSTopAsesParamsResponseCodeFormerr, DNSTopAsesParamsResponseCodeServfail, DNSTopAsesParamsResponseCodeNxdomain, DNSTopAsesParamsResponseCodeNotimp, DNSTopAsesParamsResponseCodeRefused, DNSTopAsesParamsResponseCodeYxdomain, DNSTopAsesParamsResponseCodeYxrrset, DNSTopAsesParamsResponseCodeNxrrset, DNSTopAsesParamsResponseCodeNotauth, DNSTopAsesParamsResponseCodeNotzone, DNSTopAsesParamsResponseCodeBadsig, DNSTopAsesParamsResponseCodeBadkey, DNSTopAsesParamsResponseCodeBadtime, DNSTopAsesParamsResponseCodeBadmode, DNSTopAsesParamsResponseCodeBadname, DNSTopAsesParamsResponseCodeBadalg, DNSTopAsesParamsResponseCodeBadtrunc, DNSTopAsesParamsResponseCodeBadcookie:
-		return true
-	}
-	return false
-}
-
-type DNSTopAsesParamsResponseTTL string
-
-const (
-	DNSTopAsesParamsResponseTTLLte1M      DNSTopAsesParamsResponseTTL = "LTE_1M"
-	DNSTopAsesParamsResponseTTLGt1MLte5M  DNSTopAsesParamsResponseTTL = "GT_1M_LTE_5M"
-	DNSTopAsesParamsResponseTTLGt5MLte15M DNSTopAsesParamsResponseTTL = "GT_5M_LTE_15M"
-	DNSTopAsesParamsResponseTTLGt15MLte1H DNSTopAsesParamsResponseTTL = "GT_15M_LTE_1H"
-	DNSTopAsesParamsResponseTTLGt1HLte1D  DNSTopAsesParamsResponseTTL = "GT_1H_LTE_1D"
-	DNSTopAsesParamsResponseTTLGt1DLte1W  DNSTopAsesParamsResponseTTL = "GT_1D_LTE_1W"
-	DNSTopAsesParamsResponseTTLGt1W       DNSTopAsesParamsResponseTTL = "GT_1W"
-)
-
-func (r DNSTopAsesParamsResponseTTL) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsResponseTTLLte1M, DNSTopAsesParamsResponseTTLGt1MLte5M, DNSTopAsesParamsResponseTTLGt5MLte15M, DNSTopAsesParamsResponseTTLGt15MLte1H, DNSTopAsesParamsResponseTTLGt1HLte1D, DNSTopAsesParamsResponseTTLGt1DLte1W, DNSTopAsesParamsResponseTTLGt1W:
 		return true
 	}
 	return false
@@ -814,8 +575,6 @@ type DNSTopLocationsParams struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filters results based on cache status.
-	CacheHit param.Field[[]bool] `query:"cacheHit"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -828,40 +587,18 @@ type DNSTopLocationsParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filters results based on DNSSEC (DNS Security Extensions) support.
-	DNSSEC param.Field[[]DNSTopLocationsParamsDNSSEC] `query:"dnssec"`
-	// Filters results based on DNSSEC (DNS Security Extensions) client awareness.
-	DNSSECAware param.Field[[]DNSTopLocationsParamsDNSSECAware] `query:"dnssecAware"`
-	// Filters results based on DNSSEC-validated answers by end-to-end security status.
-	DNSSECE2E param.Field[[]bool] `query:"dnssecE2e"`
 	// Filters results by domain name.
 	Domain param.Field[[]string] `query:"domain"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTopLocationsParamsFormat] `query:"format"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]DNSTopLocationsParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
 	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Filters results based on whether the queries have a matching answer.
-	MatchingAnswer param.Field[[]bool] `query:"matchingAnswer"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Specifies whether the response includes empty DNS responses (NODATA).
-	Nodata param.Field[[]bool] `query:"nodata"`
-	// Filters results by DNS transport protocol.
-	Protocol param.Field[[]DNSTopLocationsParamsProtocol] `query:"protocol"`
-	// Filters results by DNS query type.
-	QueryType param.Field[[]DNSTopLocationsParamsQueryType] `query:"queryType"`
-	// Filters results by DNS response code.
-	ResponseCode param.Field[[]DNSTopLocationsParamsResponseCode] `query:"responseCode"`
-	// Filters results by DNS response TTL.
-	ResponseTTL param.Field[[]DNSTopLocationsParamsResponseTTL] `query:"responseTtl"`
-	// Filters results by top-level domain.
-	Tld param.Field[[]string] `query:"tld"`
 }
 
 // URLQuery serializes [DNSTopLocationsParams]'s query parameters as `url.Values`.
@@ -870,38 +607,6 @@ func (r DNSTopLocationsParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type DNSTopLocationsParamsDNSSEC string
-
-const (
-	DNSTopLocationsParamsDNSSECInvalid  DNSTopLocationsParamsDNSSEC = "INVALID"
-	DNSTopLocationsParamsDNSSECInsecure DNSTopLocationsParamsDNSSEC = "INSECURE"
-	DNSTopLocationsParamsDNSSECSecure   DNSTopLocationsParamsDNSSEC = "SECURE"
-	DNSTopLocationsParamsDNSSECOther    DNSTopLocationsParamsDNSSEC = "OTHER"
-)
-
-func (r DNSTopLocationsParamsDNSSEC) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsDNSSECInvalid, DNSTopLocationsParamsDNSSECInsecure, DNSTopLocationsParamsDNSSECSecure, DNSTopLocationsParamsDNSSECOther:
-		return true
-	}
-	return false
-}
-
-type DNSTopLocationsParamsDNSSECAware string
-
-const (
-	DNSTopLocationsParamsDNSSECAwareSupported    DNSTopLocationsParamsDNSSECAware = "SUPPORTED"
-	DNSTopLocationsParamsDNSSECAwareNotSupported DNSTopLocationsParamsDNSSECAware = "NOT_SUPPORTED"
-)
-
-func (r DNSTopLocationsParamsDNSSECAware) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsDNSSECAwareSupported, DNSTopLocationsParamsDNSSECAwareNotSupported:
-		return true
-	}
-	return false
 }
 
 // Format in which results will be returned.
@@ -915,191 +620,6 @@ const (
 func (r DNSTopLocationsParamsFormat) IsKnown() bool {
 	switch r {
 	case DNSTopLocationsParamsFormatJson, DNSTopLocationsParamsFormatCsv:
-		return true
-	}
-	return false
-}
-
-type DNSTopLocationsParamsIPVersion string
-
-const (
-	DNSTopLocationsParamsIPVersionIPv4 DNSTopLocationsParamsIPVersion = "IPv4"
-	DNSTopLocationsParamsIPVersionIPv6 DNSTopLocationsParamsIPVersion = "IPv6"
-)
-
-func (r DNSTopLocationsParamsIPVersion) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsIPVersionIPv4, DNSTopLocationsParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
-type DNSTopLocationsParamsProtocol string
-
-const (
-	DNSTopLocationsParamsProtocolUdp   DNSTopLocationsParamsProtocol = "UDP"
-	DNSTopLocationsParamsProtocolTCP   DNSTopLocationsParamsProtocol = "TCP"
-	DNSTopLocationsParamsProtocolHTTPS DNSTopLocationsParamsProtocol = "HTTPS"
-	DNSTopLocationsParamsProtocolTLS   DNSTopLocationsParamsProtocol = "TLS"
-)
-
-func (r DNSTopLocationsParamsProtocol) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsProtocolUdp, DNSTopLocationsParamsProtocolTCP, DNSTopLocationsParamsProtocolHTTPS, DNSTopLocationsParamsProtocolTLS:
-		return true
-	}
-	return false
-}
-
-type DNSTopLocationsParamsQueryType string
-
-const (
-	DNSTopLocationsParamsQueryTypeA          DNSTopLocationsParamsQueryType = "A"
-	DNSTopLocationsParamsQueryTypeAAAA       DNSTopLocationsParamsQueryType = "AAAA"
-	DNSTopLocationsParamsQueryTypeA6         DNSTopLocationsParamsQueryType = "A6"
-	DNSTopLocationsParamsQueryTypeAfsdb      DNSTopLocationsParamsQueryType = "AFSDB"
-	DNSTopLocationsParamsQueryTypeAny        DNSTopLocationsParamsQueryType = "ANY"
-	DNSTopLocationsParamsQueryTypeApl        DNSTopLocationsParamsQueryType = "APL"
-	DNSTopLocationsParamsQueryTypeAtma       DNSTopLocationsParamsQueryType = "ATMA"
-	DNSTopLocationsParamsQueryTypeAXFR       DNSTopLocationsParamsQueryType = "AXFR"
-	DNSTopLocationsParamsQueryTypeCAA        DNSTopLocationsParamsQueryType = "CAA"
-	DNSTopLocationsParamsQueryTypeCdnskey    DNSTopLocationsParamsQueryType = "CDNSKEY"
-	DNSTopLocationsParamsQueryTypeCds        DNSTopLocationsParamsQueryType = "CDS"
-	DNSTopLocationsParamsQueryTypeCERT       DNSTopLocationsParamsQueryType = "CERT"
-	DNSTopLocationsParamsQueryTypeCNAME      DNSTopLocationsParamsQueryType = "CNAME"
-	DNSTopLocationsParamsQueryTypeCsync      DNSTopLocationsParamsQueryType = "CSYNC"
-	DNSTopLocationsParamsQueryTypeDhcid      DNSTopLocationsParamsQueryType = "DHCID"
-	DNSTopLocationsParamsQueryTypeDlv        DNSTopLocationsParamsQueryType = "DLV"
-	DNSTopLocationsParamsQueryTypeDname      DNSTopLocationsParamsQueryType = "DNAME"
-	DNSTopLocationsParamsQueryTypeDNSKEY     DNSTopLocationsParamsQueryType = "DNSKEY"
-	DNSTopLocationsParamsQueryTypeDoa        DNSTopLocationsParamsQueryType = "DOA"
-	DNSTopLocationsParamsQueryTypeDS         DNSTopLocationsParamsQueryType = "DS"
-	DNSTopLocationsParamsQueryTypeEid        DNSTopLocationsParamsQueryType = "EID"
-	DNSTopLocationsParamsQueryTypeEui48      DNSTopLocationsParamsQueryType = "EUI48"
-	DNSTopLocationsParamsQueryTypeEui64      DNSTopLocationsParamsQueryType = "EUI64"
-	DNSTopLocationsParamsQueryTypeGpos       DNSTopLocationsParamsQueryType = "GPOS"
-	DNSTopLocationsParamsQueryTypeGid        DNSTopLocationsParamsQueryType = "GID"
-	DNSTopLocationsParamsQueryTypeHinfo      DNSTopLocationsParamsQueryType = "HINFO"
-	DNSTopLocationsParamsQueryTypeHip        DNSTopLocationsParamsQueryType = "HIP"
-	DNSTopLocationsParamsQueryTypeHTTPS      DNSTopLocationsParamsQueryType = "HTTPS"
-	DNSTopLocationsParamsQueryTypeIpseckey   DNSTopLocationsParamsQueryType = "IPSECKEY"
-	DNSTopLocationsParamsQueryTypeIsdn       DNSTopLocationsParamsQueryType = "ISDN"
-	DNSTopLocationsParamsQueryTypeIxfr       DNSTopLocationsParamsQueryType = "IXFR"
-	DNSTopLocationsParamsQueryTypeKey        DNSTopLocationsParamsQueryType = "KEY"
-	DNSTopLocationsParamsQueryTypeKx         DNSTopLocationsParamsQueryType = "KX"
-	DNSTopLocationsParamsQueryTypeL32        DNSTopLocationsParamsQueryType = "L32"
-	DNSTopLocationsParamsQueryTypeL64        DNSTopLocationsParamsQueryType = "L64"
-	DNSTopLocationsParamsQueryTypeLOC        DNSTopLocationsParamsQueryType = "LOC"
-	DNSTopLocationsParamsQueryTypeLp         DNSTopLocationsParamsQueryType = "LP"
-	DNSTopLocationsParamsQueryTypeMaila      DNSTopLocationsParamsQueryType = "MAILA"
-	DNSTopLocationsParamsQueryTypeMailb      DNSTopLocationsParamsQueryType = "MAILB"
-	DNSTopLocationsParamsQueryTypeMB         DNSTopLocationsParamsQueryType = "MB"
-	DNSTopLocationsParamsQueryTypeMd         DNSTopLocationsParamsQueryType = "MD"
-	DNSTopLocationsParamsQueryTypeMf         DNSTopLocationsParamsQueryType = "MF"
-	DNSTopLocationsParamsQueryTypeMg         DNSTopLocationsParamsQueryType = "MG"
-	DNSTopLocationsParamsQueryTypeMinfo      DNSTopLocationsParamsQueryType = "MINFO"
-	DNSTopLocationsParamsQueryTypeMr         DNSTopLocationsParamsQueryType = "MR"
-	DNSTopLocationsParamsQueryTypeMX         DNSTopLocationsParamsQueryType = "MX"
-	DNSTopLocationsParamsQueryTypeNAPTR      DNSTopLocationsParamsQueryType = "NAPTR"
-	DNSTopLocationsParamsQueryTypeNb         DNSTopLocationsParamsQueryType = "NB"
-	DNSTopLocationsParamsQueryTypeNbstat     DNSTopLocationsParamsQueryType = "NBSTAT"
-	DNSTopLocationsParamsQueryTypeNid        DNSTopLocationsParamsQueryType = "NID"
-	DNSTopLocationsParamsQueryTypeNimloc     DNSTopLocationsParamsQueryType = "NIMLOC"
-	DNSTopLocationsParamsQueryTypeNinfo      DNSTopLocationsParamsQueryType = "NINFO"
-	DNSTopLocationsParamsQueryTypeNS         DNSTopLocationsParamsQueryType = "NS"
-	DNSTopLocationsParamsQueryTypeNsap       DNSTopLocationsParamsQueryType = "NSAP"
-	DNSTopLocationsParamsQueryTypeNsec       DNSTopLocationsParamsQueryType = "NSEC"
-	DNSTopLocationsParamsQueryTypeNsec3      DNSTopLocationsParamsQueryType = "NSEC3"
-	DNSTopLocationsParamsQueryTypeNsec3Param DNSTopLocationsParamsQueryType = "NSEC3PARAM"
-	DNSTopLocationsParamsQueryTypeNull       DNSTopLocationsParamsQueryType = "NULL"
-	DNSTopLocationsParamsQueryTypeNxt        DNSTopLocationsParamsQueryType = "NXT"
-	DNSTopLocationsParamsQueryTypeOpenpgpkey DNSTopLocationsParamsQueryType = "OPENPGPKEY"
-	DNSTopLocationsParamsQueryTypeOpt        DNSTopLocationsParamsQueryType = "OPT"
-	DNSTopLocationsParamsQueryTypePTR        DNSTopLocationsParamsQueryType = "PTR"
-	DNSTopLocationsParamsQueryTypePx         DNSTopLocationsParamsQueryType = "PX"
-	DNSTopLocationsParamsQueryTypeRkey       DNSTopLocationsParamsQueryType = "RKEY"
-	DNSTopLocationsParamsQueryTypeRp         DNSTopLocationsParamsQueryType = "RP"
-	DNSTopLocationsParamsQueryTypeRrsig      DNSTopLocationsParamsQueryType = "RRSIG"
-	DNSTopLocationsParamsQueryTypeRt         DNSTopLocationsParamsQueryType = "RT"
-	DNSTopLocationsParamsQueryTypeSig        DNSTopLocationsParamsQueryType = "SIG"
-	DNSTopLocationsParamsQueryTypeSink       DNSTopLocationsParamsQueryType = "SINK"
-	DNSTopLocationsParamsQueryTypeSMIMEA     DNSTopLocationsParamsQueryType = "SMIMEA"
-	DNSTopLocationsParamsQueryTypeSOA        DNSTopLocationsParamsQueryType = "SOA"
-	DNSTopLocationsParamsQueryTypeSPF        DNSTopLocationsParamsQueryType = "SPF"
-	DNSTopLocationsParamsQueryTypeSRV        DNSTopLocationsParamsQueryType = "SRV"
-	DNSTopLocationsParamsQueryTypeSSHFP      DNSTopLocationsParamsQueryType = "SSHFP"
-	DNSTopLocationsParamsQueryTypeSVCB       DNSTopLocationsParamsQueryType = "SVCB"
-	DNSTopLocationsParamsQueryTypeTa         DNSTopLocationsParamsQueryType = "TA"
-	DNSTopLocationsParamsQueryTypeTalink     DNSTopLocationsParamsQueryType = "TALINK"
-	DNSTopLocationsParamsQueryTypeTkey       DNSTopLocationsParamsQueryType = "TKEY"
-	DNSTopLocationsParamsQueryTypeTLSA       DNSTopLocationsParamsQueryType = "TLSA"
-	DNSTopLocationsParamsQueryTypeTSIG       DNSTopLocationsParamsQueryType = "TSIG"
-	DNSTopLocationsParamsQueryTypeTXT        DNSTopLocationsParamsQueryType = "TXT"
-	DNSTopLocationsParamsQueryTypeUinfo      DNSTopLocationsParamsQueryType = "UINFO"
-	DNSTopLocationsParamsQueryTypeUID        DNSTopLocationsParamsQueryType = "UID"
-	DNSTopLocationsParamsQueryTypeUnspec     DNSTopLocationsParamsQueryType = "UNSPEC"
-	DNSTopLocationsParamsQueryTypeURI        DNSTopLocationsParamsQueryType = "URI"
-	DNSTopLocationsParamsQueryTypeWks        DNSTopLocationsParamsQueryType = "WKS"
-	DNSTopLocationsParamsQueryTypeX25        DNSTopLocationsParamsQueryType = "X25"
-	DNSTopLocationsParamsQueryTypeZonemd     DNSTopLocationsParamsQueryType = "ZONEMD"
-)
-
-func (r DNSTopLocationsParamsQueryType) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsQueryTypeA, DNSTopLocationsParamsQueryTypeAAAA, DNSTopLocationsParamsQueryTypeA6, DNSTopLocationsParamsQueryTypeAfsdb, DNSTopLocationsParamsQueryTypeAny, DNSTopLocationsParamsQueryTypeApl, DNSTopLocationsParamsQueryTypeAtma, DNSTopLocationsParamsQueryTypeAXFR, DNSTopLocationsParamsQueryTypeCAA, DNSTopLocationsParamsQueryTypeCdnskey, DNSTopLocationsParamsQueryTypeCds, DNSTopLocationsParamsQueryTypeCERT, DNSTopLocationsParamsQueryTypeCNAME, DNSTopLocationsParamsQueryTypeCsync, DNSTopLocationsParamsQueryTypeDhcid, DNSTopLocationsParamsQueryTypeDlv, DNSTopLocationsParamsQueryTypeDname, DNSTopLocationsParamsQueryTypeDNSKEY, DNSTopLocationsParamsQueryTypeDoa, DNSTopLocationsParamsQueryTypeDS, DNSTopLocationsParamsQueryTypeEid, DNSTopLocationsParamsQueryTypeEui48, DNSTopLocationsParamsQueryTypeEui64, DNSTopLocationsParamsQueryTypeGpos, DNSTopLocationsParamsQueryTypeGid, DNSTopLocationsParamsQueryTypeHinfo, DNSTopLocationsParamsQueryTypeHip, DNSTopLocationsParamsQueryTypeHTTPS, DNSTopLocationsParamsQueryTypeIpseckey, DNSTopLocationsParamsQueryTypeIsdn, DNSTopLocationsParamsQueryTypeIxfr, DNSTopLocationsParamsQueryTypeKey, DNSTopLocationsParamsQueryTypeKx, DNSTopLocationsParamsQueryTypeL32, DNSTopLocationsParamsQueryTypeL64, DNSTopLocationsParamsQueryTypeLOC, DNSTopLocationsParamsQueryTypeLp, DNSTopLocationsParamsQueryTypeMaila, DNSTopLocationsParamsQueryTypeMailb, DNSTopLocationsParamsQueryTypeMB, DNSTopLocationsParamsQueryTypeMd, DNSTopLocationsParamsQueryTypeMf, DNSTopLocationsParamsQueryTypeMg, DNSTopLocationsParamsQueryTypeMinfo, DNSTopLocationsParamsQueryTypeMr, DNSTopLocationsParamsQueryTypeMX, DNSTopLocationsParamsQueryTypeNAPTR, DNSTopLocationsParamsQueryTypeNb, DNSTopLocationsParamsQueryTypeNbstat, DNSTopLocationsParamsQueryTypeNid, DNSTopLocationsParamsQueryTypeNimloc, DNSTopLocationsParamsQueryTypeNinfo, DNSTopLocationsParamsQueryTypeNS, DNSTopLocationsParamsQueryTypeNsap, DNSTopLocationsParamsQueryTypeNsec, DNSTopLocationsParamsQueryTypeNsec3, DNSTopLocationsParamsQueryTypeNsec3Param, DNSTopLocationsParamsQueryTypeNull, DNSTopLocationsParamsQueryTypeNxt, DNSTopLocationsParamsQueryTypeOpenpgpkey, DNSTopLocationsParamsQueryTypeOpt, DNSTopLocationsParamsQueryTypePTR, DNSTopLocationsParamsQueryTypePx, DNSTopLocationsParamsQueryTypeRkey, DNSTopLocationsParamsQueryTypeRp, DNSTopLocationsParamsQueryTypeRrsig, DNSTopLocationsParamsQueryTypeRt, DNSTopLocationsParamsQueryTypeSig, DNSTopLocationsParamsQueryTypeSink, DNSTopLocationsParamsQueryTypeSMIMEA, DNSTopLocationsParamsQueryTypeSOA, DNSTopLocationsParamsQueryTypeSPF, DNSTopLocationsParamsQueryTypeSRV, DNSTopLocationsParamsQueryTypeSSHFP, DNSTopLocationsParamsQueryTypeSVCB, DNSTopLocationsParamsQueryTypeTa, DNSTopLocationsParamsQueryTypeTalink, DNSTopLocationsParamsQueryTypeTkey, DNSTopLocationsParamsQueryTypeTLSA, DNSTopLocationsParamsQueryTypeTSIG, DNSTopLocationsParamsQueryTypeTXT, DNSTopLocationsParamsQueryTypeUinfo, DNSTopLocationsParamsQueryTypeUID, DNSTopLocationsParamsQueryTypeUnspec, DNSTopLocationsParamsQueryTypeURI, DNSTopLocationsParamsQueryTypeWks, DNSTopLocationsParamsQueryTypeX25, DNSTopLocationsParamsQueryTypeZonemd:
-		return true
-	}
-	return false
-}
-
-type DNSTopLocationsParamsResponseCode string
-
-const (
-	DNSTopLocationsParamsResponseCodeNoerror   DNSTopLocationsParamsResponseCode = "NOERROR"
-	DNSTopLocationsParamsResponseCodeFormerr   DNSTopLocationsParamsResponseCode = "FORMERR"
-	DNSTopLocationsParamsResponseCodeServfail  DNSTopLocationsParamsResponseCode = "SERVFAIL"
-	DNSTopLocationsParamsResponseCodeNxdomain  DNSTopLocationsParamsResponseCode = "NXDOMAIN"
-	DNSTopLocationsParamsResponseCodeNotimp    DNSTopLocationsParamsResponseCode = "NOTIMP"
-	DNSTopLocationsParamsResponseCodeRefused   DNSTopLocationsParamsResponseCode = "REFUSED"
-	DNSTopLocationsParamsResponseCodeYxdomain  DNSTopLocationsParamsResponseCode = "YXDOMAIN"
-	DNSTopLocationsParamsResponseCodeYxrrset   DNSTopLocationsParamsResponseCode = "YXRRSET"
-	DNSTopLocationsParamsResponseCodeNxrrset   DNSTopLocationsParamsResponseCode = "NXRRSET"
-	DNSTopLocationsParamsResponseCodeNotauth   DNSTopLocationsParamsResponseCode = "NOTAUTH"
-	DNSTopLocationsParamsResponseCodeNotzone   DNSTopLocationsParamsResponseCode = "NOTZONE"
-	DNSTopLocationsParamsResponseCodeBadsig    DNSTopLocationsParamsResponseCode = "BADSIG"
-	DNSTopLocationsParamsResponseCodeBadkey    DNSTopLocationsParamsResponseCode = "BADKEY"
-	DNSTopLocationsParamsResponseCodeBadtime   DNSTopLocationsParamsResponseCode = "BADTIME"
-	DNSTopLocationsParamsResponseCodeBadmode   DNSTopLocationsParamsResponseCode = "BADMODE"
-	DNSTopLocationsParamsResponseCodeBadname   DNSTopLocationsParamsResponseCode = "BADNAME"
-	DNSTopLocationsParamsResponseCodeBadalg    DNSTopLocationsParamsResponseCode = "BADALG"
-	DNSTopLocationsParamsResponseCodeBadtrunc  DNSTopLocationsParamsResponseCode = "BADTRUNC"
-	DNSTopLocationsParamsResponseCodeBadcookie DNSTopLocationsParamsResponseCode = "BADCOOKIE"
-)
-
-func (r DNSTopLocationsParamsResponseCode) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsResponseCodeNoerror, DNSTopLocationsParamsResponseCodeFormerr, DNSTopLocationsParamsResponseCodeServfail, DNSTopLocationsParamsResponseCodeNxdomain, DNSTopLocationsParamsResponseCodeNotimp, DNSTopLocationsParamsResponseCodeRefused, DNSTopLocationsParamsResponseCodeYxdomain, DNSTopLocationsParamsResponseCodeYxrrset, DNSTopLocationsParamsResponseCodeNxrrset, DNSTopLocationsParamsResponseCodeNotauth, DNSTopLocationsParamsResponseCodeNotzone, DNSTopLocationsParamsResponseCodeBadsig, DNSTopLocationsParamsResponseCodeBadkey, DNSTopLocationsParamsResponseCodeBadtime, DNSTopLocationsParamsResponseCodeBadmode, DNSTopLocationsParamsResponseCodeBadname, DNSTopLocationsParamsResponseCodeBadalg, DNSTopLocationsParamsResponseCodeBadtrunc, DNSTopLocationsParamsResponseCodeBadcookie:
-		return true
-	}
-	return false
-}
-
-type DNSTopLocationsParamsResponseTTL string
-
-const (
-	DNSTopLocationsParamsResponseTTLLte1M      DNSTopLocationsParamsResponseTTL = "LTE_1M"
-	DNSTopLocationsParamsResponseTTLGt1MLte5M  DNSTopLocationsParamsResponseTTL = "GT_1M_LTE_5M"
-	DNSTopLocationsParamsResponseTTLGt5MLte15M DNSTopLocationsParamsResponseTTL = "GT_5M_LTE_15M"
-	DNSTopLocationsParamsResponseTTLGt15MLte1H DNSTopLocationsParamsResponseTTL = "GT_15M_LTE_1H"
-	DNSTopLocationsParamsResponseTTLGt1HLte1D  DNSTopLocationsParamsResponseTTL = "GT_1H_LTE_1D"
-	DNSTopLocationsParamsResponseTTLGt1DLte1W  DNSTopLocationsParamsResponseTTL = "GT_1D_LTE_1W"
-	DNSTopLocationsParamsResponseTTLGt1W       DNSTopLocationsParamsResponseTTL = "GT_1W"
-)
-
-func (r DNSTopLocationsParamsResponseTTL) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsResponseTTLLte1M, DNSTopLocationsParamsResponseTTLGt1MLte5M, DNSTopLocationsParamsResponseTTLGt5MLte15M, DNSTopLocationsParamsResponseTTLGt15MLte1H, DNSTopLocationsParamsResponseTTLGt1HLte1D, DNSTopLocationsParamsResponseTTLGt1DLte1W, DNSTopLocationsParamsResponseTTLGt1W:
 		return true
 	}
 	return false
