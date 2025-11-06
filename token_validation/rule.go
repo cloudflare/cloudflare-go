@@ -104,6 +104,76 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	return
 }
 
+// Create zone token validation rules.
+//
+// A request can create multiple Token Validation Rules.
+func (r *RuleService) BulkNew(ctx context.Context, params RuleBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenValidationRule], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/token_validation/rules/bulk", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Create zone token validation rules.
+//
+// A request can create multiple Token Validation Rules.
+func (r *RuleService) BulkNewAutoPaging(ctx context.Context, params RuleBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenValidationRule] {
+	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
+}
+
+// Edit token validation rules.
+//
+// A request can update multiple Token Validation Rules.
+//
+// Rules can be re-ordered using the `position` field.
+//
+// Returns all updated rules.
+func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenValidationRule], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/token_validation/rules/bulk", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Edit token validation rules.
+//
+// A request can update multiple Token Validation Rules.
+//
+// Rules can be re-ordered using the `position` field.
+//
+// Returns all updated rules.
+func (r *RuleService) BulkEditAutoPaging(ctx context.Context, params RuleBulkEditParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenValidationRule] {
+	return pagination.NewSinglePageAutoPager(r.BulkEdit(ctx, params, opts...))
+}
+
 // Edit a zone token validation rule.
 func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *TokenValidationRule, err error) {
 	var env RuleEditResponseEnvelope
@@ -509,6 +579,249 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RuleBulkNewParams struct {
+	// Identifier.
+	ZoneID param.Field[string]     `path:"zone_id,required"`
+	Body   []RuleBulkNewParamsBody `json:"body,required"`
+}
+
+func (r RuleBulkNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+// A Token Validation rule that can enforce security policies using JWT Tokens.
+type RuleBulkNewParamsBody struct {
+	// Action to take on requests that match operations included in `selector` and fail
+	// `expression`.
+	Action param.Field[RuleBulkNewParamsBodyAction] `json:"action,required"`
+	// A human-readable description that gives more details than `title`.
+	Description param.Field[string] `json:"description,required"`
+	// Toggle rule on or off.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Rule expression. Requests that fail to match this expression will be subject to
+	// `action`.
+	//
+	// For details on expressions, see the
+	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
+	Expression param.Field[string] `json:"expression,required"`
+	// Select operations covered by this rule.
+	//
+	// For details on selectors, see the
+	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
+	Selector param.Field[RuleBulkNewParamsBodySelector] `json:"selector,required"`
+	// A human-readable name for the rule.
+	Title param.Field[string] `json:"title,required"`
+}
+
+func (r RuleBulkNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Action to take on requests that match operations included in `selector` and fail
+// `expression`.
+type RuleBulkNewParamsBodyAction string
+
+const (
+	RuleBulkNewParamsBodyActionLog   RuleBulkNewParamsBodyAction = "log"
+	RuleBulkNewParamsBodyActionBlock RuleBulkNewParamsBodyAction = "block"
+)
+
+func (r RuleBulkNewParamsBodyAction) IsKnown() bool {
+	switch r {
+	case RuleBulkNewParamsBodyActionLog, RuleBulkNewParamsBodyActionBlock:
+		return true
+	}
+	return false
+}
+
+// Select operations covered by this rule.
+//
+// For details on selectors, see the
+// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
+type RuleBulkNewParamsBodySelector struct {
+	// Ignore operations that were otherwise included by `include`.
+	Exclude param.Field[[]RuleBulkNewParamsBodySelectorExclude] `json:"exclude"`
+	// Select all matching operations.
+	Include param.Field[[]RuleBulkNewParamsBodySelectorInclude] `json:"include"`
+}
+
+func (r RuleBulkNewParamsBodySelector) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkNewParamsBodySelectorExclude struct {
+	// Excluded operation IDs.
+	OperationIDs param.Field[[]string] `json:"operation_ids"`
+}
+
+func (r RuleBulkNewParamsBodySelectorExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkNewParamsBodySelectorInclude struct {
+	// Included hostnames.
+	Host param.Field[[]string] `json:"host" format:"hostname"`
+}
+
+func (r RuleBulkNewParamsBodySelectorInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkEditParams struct {
+	// Identifier.
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   []RuleBulkEditParamsBody `json:"body,required"`
+}
+
+func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RuleBulkEditParamsBody struct {
+	// Rule ID this patch applies to
+	ID param.Field[string] `json:"id,required" format:"uuid"`
+	// Action to take on requests that match operations included in `selector` and fail
+	// `expression`.
+	Action param.Field[RuleBulkEditParamsBodyAction] `json:"action"`
+	// A human-readable description that gives more details than `title`.
+	Description param.Field[string] `json:"description"`
+	// Toggle rule on or off.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Rule expression. Requests that fail to match this expression will be subject to
+	// `action`.
+	//
+	// For details on expressions, see the
+	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
+	Expression param.Field[string] `json:"expression"`
+	// Update rule order among zone rules.
+	Position param.Field[RuleBulkEditParamsBodyPositionUnion] `json:"position"`
+	// Select operations covered by this rule.
+	//
+	// For details on selectors, see the
+	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
+	Selector param.Field[RuleBulkEditParamsBodySelector] `json:"selector"`
+	// A human-readable name for the rule.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r RuleBulkEditParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Action to take on requests that match operations included in `selector` and fail
+// `expression`.
+type RuleBulkEditParamsBodyAction string
+
+const (
+	RuleBulkEditParamsBodyActionLog   RuleBulkEditParamsBodyAction = "log"
+	RuleBulkEditParamsBodyActionBlock RuleBulkEditParamsBodyAction = "block"
+)
+
+func (r RuleBulkEditParamsBodyAction) IsKnown() bool {
+	switch r {
+	case RuleBulkEditParamsBodyActionLog, RuleBulkEditParamsBodyActionBlock:
+		return true
+	}
+	return false
+}
+
+// Update rule order among zone rules.
+type RuleBulkEditParamsBodyPosition struct {
+	// Move rule to after rule with this ID.
+	After param.Field[string] `json:"after" format:"uuid"`
+	// Move rule to before rule with this ID.
+	Before param.Field[string] `json:"before" format:"uuid"`
+	// Move rule to this position
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleBulkEditParamsBodyPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleBulkEditParamsBodyPosition) implementsRuleBulkEditParamsBodyPositionUnion() {}
+
+// Update rule order among zone rules.
+//
+// Satisfied by [token_validation.RuleBulkEditParamsBodyPositionAPIShieldIndex],
+// [token_validation.RuleBulkEditParamsBodyPositionAPIShieldBefore],
+// [token_validation.RuleBulkEditParamsBodyPositionAPIShieldAfter],
+// [RuleBulkEditParamsBodyPosition].
+type RuleBulkEditParamsBodyPositionUnion interface {
+	implementsRuleBulkEditParamsBodyPositionUnion()
+}
+
+type RuleBulkEditParamsBodyPositionAPIShieldIndex struct {
+	// Move rule to this position
+	Index param.Field[int64] `json:"index,required"`
+}
+
+func (r RuleBulkEditParamsBodyPositionAPIShieldIndex) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleBulkEditParamsBodyPositionAPIShieldIndex) implementsRuleBulkEditParamsBodyPositionUnion() {
+}
+
+// Move rule to after rule with ID.
+type RuleBulkEditParamsBodyPositionAPIShieldBefore struct {
+	// Move rule to before rule with this ID.
+	Before param.Field[string] `json:"before" format:"uuid"`
+}
+
+func (r RuleBulkEditParamsBodyPositionAPIShieldBefore) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleBulkEditParamsBodyPositionAPIShieldBefore) implementsRuleBulkEditParamsBodyPositionUnion() {
+}
+
+// Move rule to before rule with ID.
+type RuleBulkEditParamsBodyPositionAPIShieldAfter struct {
+	// Move rule to after rule with this ID.
+	After param.Field[string] `json:"after" format:"uuid"`
+}
+
+func (r RuleBulkEditParamsBodyPositionAPIShieldAfter) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleBulkEditParamsBodyPositionAPIShieldAfter) implementsRuleBulkEditParamsBodyPositionUnion() {
+}
+
+// Select operations covered by this rule.
+//
+// For details on selectors, see the
+// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
+type RuleBulkEditParamsBodySelector struct {
+	// Ignore operations that were otherwise included by `include`.
+	Exclude param.Field[[]RuleBulkEditParamsBodySelectorExclude] `json:"exclude"`
+	// Select all matching operations.
+	Include param.Field[[]RuleBulkEditParamsBodySelectorInclude] `json:"include"`
+}
+
+func (r RuleBulkEditParamsBodySelector) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkEditParamsBodySelectorExclude struct {
+	// Excluded operation IDs.
+	OperationIDs param.Field[[]string] `json:"operation_ids"`
+}
+
+func (r RuleBulkEditParamsBodySelectorExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkEditParamsBodySelectorInclude struct {
+	// Included hostnames.
+	Host param.Field[[]string] `json:"host" format:"hostname"`
+}
+
+func (r RuleBulkEditParamsBodySelectorInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleEditParams struct {
