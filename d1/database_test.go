@@ -279,8 +279,10 @@ func TestDatabaseQueryWithOptionalParams(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseQueryParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Sql:       cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
-			Params:    cloudflare.F([]string{"firstParam", "secondParam"}),
+			Body: d1.DatabaseQueryParamsBodyD1SingleQuery{
+				Sql:    cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
+				Params: cloudflare.F([]string{"firstParam", "secondParam"}),
+			},
 		},
 	)
 	if err != nil {
@@ -310,8 +312,10 @@ func TestDatabaseRawWithOptionalParams(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseRawParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Sql:       cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
-			Params:    cloudflare.F([]string{"firstParam", "secondParam"}),
+			Body: d1.DatabaseRawParamsBodyD1SingleQuery{
+				Sql:    cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
+				Params: cloudflare.F([]string{"firstParam", "secondParam"}),
+			},
 		},
 	)
 	if err != nil {
