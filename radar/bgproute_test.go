@@ -29,7 +29,7 @@ func TestBGPRouteAsesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.BGP.Routes.Ases(context.TODO(), radar.BGPRouteAsesParams{
 		Format:    cloudflare.F(radar.BGPRouteAsesParamsFormatJson),
-		Limit:     cloudflare.F(int64(5)),
+		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F("US"),
 		SortBy:    cloudflare.F(radar.BGPRouteAsesParamsSortByIPV4),
 		SortOrder: cloudflare.F(radar.BGPRouteAsesParamsSortOrderAsc),
