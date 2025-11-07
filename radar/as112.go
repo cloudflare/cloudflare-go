@@ -745,11 +745,11 @@ type AS112SummaryV2Params struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[AS112SummaryV2ParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]AS112SummaryV2ParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[AS112SummaryV2ParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]AS112SummaryV2ParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[AS112SummaryV2ParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[[]AS112SummaryV2ParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112SummaryV2Params]'s query parameters as `url.Values`.
@@ -796,7 +796,6 @@ func (r AS112SummaryV2ParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type AS112SummaryV2ParamsProtocol string
 
 const (
@@ -814,7 +813,6 @@ func (r AS112SummaryV2ParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type AS112SummaryV2ParamsQueryType string
 
 const (
@@ -916,7 +914,6 @@ func (r AS112SummaryV2ParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type AS112SummaryV2ParamsResponseCode string
 
 const (
@@ -998,11 +995,11 @@ type AS112TimeseriesParams struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[AS112TimeseriesParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]AS112TimeseriesParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[AS112TimeseriesParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]AS112TimeseriesParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[AS112TimeseriesParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[[]AS112TimeseriesParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesParams]'s query parameters as `url.Values`.
@@ -1049,7 +1046,6 @@ func (r AS112TimeseriesParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type AS112TimeseriesParamsProtocol string
 
 const (
@@ -1067,7 +1063,6 @@ func (r AS112TimeseriesParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type AS112TimeseriesParamsQueryType string
 
 const (
@@ -1169,7 +1164,6 @@ func (r AS112TimeseriesParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type AS112TimeseriesParamsResponseCode string
 
 const (
@@ -1255,11 +1249,11 @@ type AS112TimeseriesGroupsV2Params struct {
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by DNS transport protocol.
-	Protocol param.Field[AS112TimeseriesGroupsV2ParamsProtocol] `query:"protocol"`
+	Protocol param.Field[[]AS112TimeseriesGroupsV2ParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
-	QueryType param.Field[AS112TimeseriesGroupsV2ParamsQueryType] `query:"queryType"`
+	QueryType param.Field[[]AS112TimeseriesGroupsV2ParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
-	ResponseCode param.Field[AS112TimeseriesGroupsV2ParamsResponseCode] `query:"responseCode"`
+	ResponseCode param.Field[[]AS112TimeseriesGroupsV2ParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupsV2Params]'s query parameters as
@@ -1327,7 +1321,6 @@ func (r AS112TimeseriesGroupsV2ParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS transport protocol.
 type AS112TimeseriesGroupsV2ParamsProtocol string
 
 const (
@@ -1345,7 +1338,6 @@ func (r AS112TimeseriesGroupsV2ParamsProtocol) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS query type.
 type AS112TimeseriesGroupsV2ParamsQueryType string
 
 const (
@@ -1447,7 +1439,6 @@ func (r AS112TimeseriesGroupsV2ParamsQueryType) IsKnown() bool {
 	return false
 }
 
-// Filters results by DNS response code.
 type AS112TimeseriesGroupsV2ParamsResponseCode string
 
 const (

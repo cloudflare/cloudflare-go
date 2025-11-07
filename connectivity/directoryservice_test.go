@@ -27,19 +27,19 @@ func TestDirectoryServiceNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Connectivity.Directory.Services.New(context.TODO(), connectivity.DirectoryServiceNewParams{
+	_, err := client.Connectivity.Directory.Services.New(context.TODO(), connectivity.DirectoryServiceNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Host: cloudflare.F(connectivity.DirectoryServiceNewParamsHost{
-			Hostname:        cloudflare.F("hostname"),
-			IPV4:            cloudflare.F("ipv4"),
-			IPV6:            cloudflare.F("ipv6"),
-			Network:         cloudflare.F[any](map[string]interface{}{}),
-			ResolverNetwork: cloudflare.F[any](map[string]interface{}{}),
+		Host: cloudflare.F[connectivity.DirectoryServiceNewParamsHostUnion](connectivity.DirectoryServiceNewParamsHostInfraHostnameHost{
+			Hostname: cloudflare.F("api.example.com"),
+			ResolverNetwork: cloudflare.F(connectivity.DirectoryServiceNewParamsHostInfraHostnameHostResolverNetwork{
+				TunnelID:    cloudflare.F("0191dce4-9ab4-7fce-b660-8e5dec5172da"),
+				ResolverIPs: cloudflare.F([]string{"string"}),
+			}),
 		}),
-		Name:      cloudflare.F("name"),
+		Name:      cloudflare.F("web-server"),
 		Type:      cloudflare.F(connectivity.DirectoryServiceNewParamsTypeHTTP),
-		HTTPPort:  cloudflare.F(int64(1)),
-		HTTPSPort: cloudflare.F(int64(1)),
+		HTTPPort:  cloudflare.F(int64(8080)),
+		HTTPSPort: cloudflare.F(int64(8443)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,22 +63,21 @@ func TestDirectoryServiceUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Connectivity.Directory.Services.Update(
+	_, err := client.Connectivity.Directory.Services.Update(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		connectivity.DirectoryServiceUpdateParams{
 			AccountID: cloudflare.F("account_id"),
-			Host: cloudflare.F(connectivity.DirectoryServiceUpdateParamsHost{
-				Hostname:        cloudflare.F("hostname"),
-				IPV4:            cloudflare.F("ipv4"),
-				IPV6:            cloudflare.F("ipv6"),
-				Network:         cloudflare.F[any](map[string]interface{}{}),
-				ResolverNetwork: cloudflare.F[any](map[string]interface{}{}),
+			Host: cloudflare.F[connectivity.DirectoryServiceUpdateParamsHostUnion](connectivity.DirectoryServiceUpdateParamsHostInfraIPv4Host{
+				IPV4: cloudflare.F("10.0.0.1"),
+				Network: cloudflare.F(connectivity.DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork{
+					TunnelID: cloudflare.F("0191dce4-9ab4-7fce-b660-8e5dec5172da"),
+				}),
 			}),
-			Name:      cloudflare.F("name"),
+			Name:      cloudflare.F("web-app"),
 			Type:      cloudflare.F(connectivity.DirectoryServiceUpdateParamsTypeHTTP),
-			HTTPPort:  cloudflare.F(int64(1)),
-			HTTPSPort: cloudflare.F(int64(1)),
+			HTTPPort:  cloudflare.F(int64(8080)),
+			HTTPSPort: cloudflare.F(int64(8443)),
 		},
 	)
 	if err != nil {
@@ -103,7 +102,7 @@ func TestDirectoryServiceListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Connectivity.Directory.Services.List(context.TODO(), connectivity.DirectoryServiceListParams{
+	_, err := client.Connectivity.Directory.Services.List(context.TODO(), connectivity.DirectoryServiceListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(1)),
@@ -160,7 +159,7 @@ func TestDirectoryServiceGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Connectivity.Directory.Services.Get(
+	_, err := client.Connectivity.Directory.Services.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		connectivity.DirectoryServiceGetParams{

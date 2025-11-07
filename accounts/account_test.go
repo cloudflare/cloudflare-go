@@ -59,9 +59,10 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Accounts.Update(context.TODO(), accounts.AccountUpdateParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Account: accounts.AccountParam{
-			ID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name: cloudflare.F("Demo Account"),
-			Type: cloudflare.F(accounts.AccountTypeStandard),
+			ID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Name:      cloudflare.F("Demo Account"),
+			Type:      cloudflare.F(accounts.AccountTypeStandard),
+			ManagedBy: cloudflare.F(accounts.AccountManagedByParam{}),
 			Settings: cloudflare.F(accounts.AccountSettingsParam{
 				AbuseContactEmail: cloudflare.F("abuse_contact_email"),
 				EnforceTwofactor:  cloudflare.F(true),
