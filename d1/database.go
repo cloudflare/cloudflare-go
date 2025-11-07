@@ -1531,25 +1531,139 @@ func (r DatabaseImportResponseEnvelopeSuccess) IsKnown() bool {
 type DatabaseQueryParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// A single query object or a batch query object
+	Body DatabaseQueryParamsBodyUnion `json:"body,required"`
+}
+
+func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+// A single query object or a batch query object
+type DatabaseQueryParamsBody struct {
+	Batch  param.Field[interface{}] `json:"batch"`
+	Params param.Field[interface{}] `json:"params"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql param.Field[string] `json:"sql"`
+}
+
+func (r DatabaseQueryParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseQueryParamsBody) implementsDatabaseQueryParamsBodyUnion() {}
+
+// A single query object or a batch query object
+//
+// Satisfied by [d1.DatabaseQueryParamsBodyD1SingleQuery],
+// [d1.DatabaseQueryParamsBodyMultipleQueries], [DatabaseQueryParamsBody].
+type DatabaseQueryParamsBodyUnion interface {
+	implementsDatabaseQueryParamsBodyUnion()
+}
+
+// A single query with or without parameters
+type DatabaseQueryParamsBodyD1SingleQuery struct {
 	// Your SQL query. Supports multiple statements, joined by semicolons, which will
 	// be executed as a batch.
 	Sql    param.Field[string]   `json:"sql,required"`
 	Params param.Field[[]string] `json:"params"`
 }
 
-func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
+func (r DatabaseQueryParamsBodyD1SingleQuery) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseQueryParamsBodyD1SingleQuery) implementsDatabaseQueryParamsBodyUnion() {}
+
+type DatabaseQueryParamsBodyMultipleQueries struct {
+	Batch param.Field[[]DatabaseQueryParamsBodyMultipleQueriesBatch] `json:"batch"`
+}
+
+func (r DatabaseQueryParamsBodyMultipleQueries) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseQueryParamsBodyMultipleQueries) implementsDatabaseQueryParamsBodyUnion() {}
+
+// A single query with or without parameters
+type DatabaseQueryParamsBodyMultipleQueriesBatch struct {
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
+}
+
+func (r DatabaseQueryParamsBodyMultipleQueriesBatch) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type DatabaseRawParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// A single query object or a batch query object
+	Body DatabaseRawParamsBodyUnion `json:"body,required"`
+}
+
+func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+// A single query object or a batch query object
+type DatabaseRawParamsBody struct {
+	Batch  param.Field[interface{}] `json:"batch"`
+	Params param.Field[interface{}] `json:"params"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql param.Field[string] `json:"sql"`
+}
+
+func (r DatabaseRawParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseRawParamsBody) implementsDatabaseRawParamsBodyUnion() {}
+
+// A single query object or a batch query object
+//
+// Satisfied by [d1.DatabaseRawParamsBodyD1SingleQuery],
+// [d1.DatabaseRawParamsBodyMultipleQueries], [DatabaseRawParamsBody].
+type DatabaseRawParamsBodyUnion interface {
+	implementsDatabaseRawParamsBodyUnion()
+}
+
+// A single query with or without parameters
+type DatabaseRawParamsBodyD1SingleQuery struct {
 	// Your SQL query. Supports multiple statements, joined by semicolons, which will
 	// be executed as a batch.
 	Sql    param.Field[string]   `json:"sql,required"`
 	Params param.Field[[]string] `json:"params"`
 }
 
-func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
+func (r DatabaseRawParamsBodyD1SingleQuery) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseRawParamsBodyD1SingleQuery) implementsDatabaseRawParamsBodyUnion() {}
+
+type DatabaseRawParamsBodyMultipleQueries struct {
+	Batch param.Field[[]DatabaseRawParamsBodyMultipleQueriesBatch] `json:"batch"`
+}
+
+func (r DatabaseRawParamsBodyMultipleQueries) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DatabaseRawParamsBodyMultipleQueries) implementsDatabaseRawParamsBodyUnion() {}
+
+// A single query with or without parameters
+type DatabaseRawParamsBodyMultipleQueriesBatch struct {
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
+}
+
+func (r DatabaseRawParamsBodyMultipleQueriesBatch) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
