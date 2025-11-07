@@ -79,6 +79,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/r2"
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 	"github.com/cloudflare/cloudflare-go/v6/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v6/realtime_kit"
 	"github.com/cloudflare/cloudflare-go/v6/registrar"
 	"github.com/cloudflare/cloudflare-go/v6/request_tracers"
 	"github.com/cloudflare/cloudflare-go/v6/resource_sharing"
@@ -201,6 +202,7 @@ type Client struct {
 	DCVDelegation               *dcv_delegation.DCVDelegationService
 	Hostnames                   *hostnames.HostnameService
 	Snippets                    *snippets.SnippetService
+	RealtimeKit                 *realtime_kit.RealtimeKitService
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	AIGateway                   *ai_gateway.AIGatewayService
@@ -334,6 +336,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)
 	r.Hostnames = hostnames.NewHostnameService(opts...)
 	r.Snippets = snippets.NewSnippetService(opts...)
+	r.RealtimeKit = realtime_kit.NewRealtimeKitService(opts...)
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
