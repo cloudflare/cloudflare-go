@@ -31,9 +31,8 @@ func TestConnectorNewWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.Connectors.New(context.TODO(), magic_transit.ConnectorNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Device: cloudflare.F(magic_transit.ConnectorNewParamsDevice{
-			ID:               cloudflare.F("id"),
-			ProvisionLicense: cloudflare.F(true),
-			SerialNumber:     cloudflare.F("serial_number"),
+			ID:           cloudflare.F("id"),
+			SerialNumber: cloudflare.F("serial_number"),
 		}),
 		Activated:                    cloudflare.F(true),
 		InterruptWindowDurationHours: cloudflare.F(0.000000),
@@ -72,7 +71,6 @@ func TestConnectorUpdateWithOptionalParams(t *testing.T) {
 			InterruptWindowDurationHours: cloudflare.F(0.000000),
 			InterruptWindowHourOfDay:     cloudflare.F(0.000000),
 			Notes:                        cloudflare.F("notes"),
-			ProvisionLicense:             cloudflare.F(true),
 			Timezone:                     cloudflare.F("timezone"),
 		},
 	)
@@ -161,7 +159,6 @@ func TestConnectorEditWithOptionalParams(t *testing.T) {
 			InterruptWindowDurationHours: cloudflare.F(0.000000),
 			InterruptWindowHourOfDay:     cloudflare.F(0.000000),
 			Notes:                        cloudflare.F("notes"),
-			ProvisionLicense:             cloudflare.F(true),
 			Timezone:                     cloudflare.F("timezone"),
 		},
 	)

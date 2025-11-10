@@ -36,7 +36,7 @@ func TestNetflowTopAsesWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.NetflowTopAsesParamsFormatJson),
 		GeoID:     cloudflare.F([]string{"string"}),
-		Limit:     cloudflare.F(int64(1)),
+		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"main_series"}),
 	})
@@ -70,7 +70,7 @@ func TestNetflowTopLocationsWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.NetflowTopLocationsParamsFormatJson),
 		GeoID:     cloudflare.F([]string{"string"}),
-		Limit:     cloudflare.F(int64(1)),
+		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"main_series"}),
 	})

@@ -32,7 +32,7 @@ func TestDatasetListWithOptionalParams(t *testing.T) {
 		DatasetType: cloudflare.F(radar.DatasetListParamsDatasetTypeRankingBucket),
 		Date:        cloudflare.F(time.Now()),
 		Format:      cloudflare.F(radar.DatasetListParamsFormatJson),
-		Limit:       cloudflare.F(int64(1)),
+		Limit:       cloudflare.F(int64(5)),
 		Offset:      cloudflare.F(int64(0)),
 	})
 	if err != nil {

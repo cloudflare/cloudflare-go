@@ -38,9 +38,7 @@ func NewEmailSecurityTimeseriesGroupService(opts ...option.RequestOption) (r *Em
 // Retrieves the distribution of emails by ARC (Authenticated Received Chain)
 // validation over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query EmailSecurityTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupARCResponse, err error) {
 	var env EmailSecurityTimeseriesGroupARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,9 +54,7 @@ func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query Ema
 // Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
 // validation over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query EmailSecurityTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDKIMResponse, err error) {
 	var env EmailSecurityTimeseriesGroupDKIMResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,9 +70,7 @@ func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query Em
 // Retrieves the distribution of emails by DMARC (Domain-based Message
 // Authentication, Reporting and Conformance) validation over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query EmailSecurityTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDMARCResponse, err error) {
 	var env EmailSecurityTimeseriesGroupDMARCResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -91,9 +85,7 @@ func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query E
 
 // Retrieves the distribution of emails by malicious classification over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, query EmailSecurityTimeseriesGroupMaliciousParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupMaliciousResponse, err error) {
 	var env EmailSecurityTimeseriesGroupMaliciousResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -109,9 +101,7 @@ func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, que
 // Retrieves the distribution of emails by spam classification (spam vs. non-spam)
 // over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query EmailSecurityTimeseriesGroupSpamParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpamResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSpamResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,9 +117,7 @@ func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query Em
 // Retrieves the distribution of emails by SPF (Sender Policy Framework) validation
 // over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query EmailSecurityTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSPFResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSPFResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -145,9 +133,7 @@ func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query Ema
 // Retrieves the distribution of emails by spoof classification (spoof vs.
 // non-spoof) over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query EmailSecurityTimeseriesGroupSpoofParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpoofResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSpoofResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -162,9 +148,7 @@ func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query E
 
 // Retrieves the distribution of emails by threat category over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context, query EmailSecurityTimeseriesGroupThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupThreatCategoryResponse, err error) {
 	var env EmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -179,9 +163,7 @@ func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context
 
 // Retrieves the distribution of emails by TLS version over time.
 //
-// Deprecated: Use
-// [Radar Email Security Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/email/subresources/security/methods/timeseries_groups_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, query EmailSecurityTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupTLSVersionResponse, err error) {
 	var env EmailSecurityTimeseriesGroupTLSVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -7,11 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -48,15 +46,15 @@ func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEvent
 	return
 }
 
-// Lists categories across multiple datasets
-func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEventCategoryListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
+// Lists categories
+func (r *ThreatEventCategoryService) List(ctx context.Context, query ThreatEventCategoryListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -261,18 +259,6 @@ func (r ThreatEventCategoryNewParams) MarshalJSON() (data []byte, err error) {
 type ThreatEventCategoryListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Array of dataset IDs to query categories from. If not provided, returns all
-	// categories from D1 database.
-	DatasetIDs param.Field[[]string] `query:"datasetIds"`
-}
-
-// URLQuery serializes [ThreatEventCategoryListParams]'s query parameters as
-// `url.Values`.
-func (r ThreatEventCategoryListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type ThreatEventCategoryDeleteParams struct {

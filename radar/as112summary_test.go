@@ -36,9 +36,9 @@ func TestAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.AS112SummaryDNSSECParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Protocol:     cloudflare.F([]radar.AS112SummaryDNSSECParamsProtocol{radar.AS112SummaryDNSSECParamsProtocolUdp}),
-		QueryType:    cloudflare.F([]radar.AS112SummaryDNSSECParamsQueryType{radar.AS112SummaryDNSSECParamsQueryTypeA}),
-		ResponseCode: cloudflare.F([]radar.AS112SummaryDNSSECParamsResponseCode{radar.AS112SummaryDNSSECParamsResponseCodeNoerror}),
+		Protocol:     cloudflare.F(radar.AS112SummaryDNSSECParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112SummaryDNSSECParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryDNSSECParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,9 +70,9 @@ func TestAS112SummaryEdnsWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.AS112SummaryEdnsParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Protocol:     cloudflare.F([]radar.AS112SummaryEdnsParamsProtocol{radar.AS112SummaryEdnsParamsProtocolUdp}),
-		QueryType:    cloudflare.F([]radar.AS112SummaryEdnsParamsQueryType{radar.AS112SummaryEdnsParamsQueryTypeA}),
-		ResponseCode: cloudflare.F([]radar.AS112SummaryEdnsParamsResponseCode{radar.AS112SummaryEdnsParamsResponseCodeNoerror}),
+		Protocol:     cloudflare.F(radar.AS112SummaryEdnsParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112SummaryEdnsParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryEdnsParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -104,9 +104,9 @@ func TestAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.AS112SummaryIPVersionParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Protocol:     cloudflare.F([]radar.AS112SummaryIPVersionParamsProtocol{radar.AS112SummaryIPVersionParamsProtocolUdp}),
-		QueryType:    cloudflare.F([]radar.AS112SummaryIPVersionParamsQueryType{radar.AS112SummaryIPVersionParamsQueryTypeA}),
-		ResponseCode: cloudflare.F([]radar.AS112SummaryIPVersionParamsResponseCode{radar.AS112SummaryIPVersionParamsResponseCodeNoerror}),
+		Protocol:     cloudflare.F(radar.AS112SummaryIPVersionParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112SummaryIPVersionParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryIPVersionParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -138,8 +138,8 @@ func TestAS112SummaryProtocolWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.AS112SummaryProtocolParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		QueryType:    cloudflare.F([]radar.AS112SummaryProtocolParamsQueryType{radar.AS112SummaryProtocolParamsQueryTypeA}),
-		ResponseCode: cloudflare.F([]radar.AS112SummaryProtocolParamsResponseCode{radar.AS112SummaryProtocolParamsResponseCodeNoerror}),
+		QueryType:    cloudflare.F(radar.AS112SummaryProtocolParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryProtocolParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -172,8 +172,8 @@ func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Protocol:      cloudflare.F([]radar.AS112SummaryQueryTypeParamsProtocol{radar.AS112SummaryQueryTypeParamsProtocolUdp}),
-		ResponseCode:  cloudflare.F([]radar.AS112SummaryQueryTypeParamsResponseCode{radar.AS112SummaryQueryTypeParamsResponseCodeNoerror}),
+		Protocol:      cloudflare.F(radar.AS112SummaryQueryTypeParamsProtocolUdp),
+		ResponseCode:  cloudflare.F(radar.AS112SummaryQueryTypeParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -206,8 +206,8 @@ func TestAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Protocol:      cloudflare.F([]radar.AS112SummaryResponseCodesParamsProtocol{radar.AS112SummaryResponseCodesParamsProtocolUdp}),
-		QueryType:     cloudflare.F([]radar.AS112SummaryResponseCodesParamsQueryType{radar.AS112SummaryResponseCodesParamsQueryTypeA}),
+		Protocol:      cloudflare.F(radar.AS112SummaryResponseCodesParamsProtocolUdp),
+		QueryType:     cloudflare.F(radar.AS112SummaryResponseCodesParamsQueryTypeA),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

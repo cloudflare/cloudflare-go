@@ -149,8 +149,6 @@ type Account struct {
 	Type AccountType `json:"type,required"`
 	// Timestamp for the creation of the account
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Parent container details
-	ManagedBy AccountManagedBy `json:"managed_by"`
 	// Account settings
 	Settings AccountSettings `json:"settings"`
 	JSON     accountJSON     `json:"-"`
@@ -162,7 +160,6 @@ type accountJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	CreatedOn   apijson.Field
-	ManagedBy   apijson.Field
 	Settings    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -189,32 +186,6 @@ func (r AccountType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Parent container details
-type AccountManagedBy struct {
-	// ID of the parent Organization, if one exists
-	ParentOrgID string `json:"parent_org_id"`
-	// Name of the parent Organization, if one exists
-	ParentOrgName string               `json:"parent_org_name"`
-	JSON          accountManagedByJSON `json:"-"`
-}
-
-// accountManagedByJSON contains the JSON metadata for the struct
-// [AccountManagedBy]
-type accountManagedByJSON struct {
-	ParentOrgID   apijson.Field
-	ParentOrgName apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccountManagedBy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountManagedByJSON) RawJSON() string {
-	return r.raw
 }
 
 // Account settings
@@ -249,21 +220,11 @@ type AccountParam struct {
 	// Account name
 	Name param.Field[string]      `json:"name,required"`
 	Type param.Field[AccountType] `json:"type,required"`
-	// Parent container details
-	ManagedBy param.Field[AccountManagedByParam] `json:"managed_by"`
 	// Account settings
 	Settings param.Field[AccountSettingsParam] `json:"settings"`
 }
 
 func (r AccountParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Parent container details
-type AccountManagedByParam struct {
-}
-
-func (r AccountManagedByParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

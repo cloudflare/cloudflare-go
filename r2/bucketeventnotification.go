@@ -343,7 +343,7 @@ type BucketEventNotificationUpdateParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Array of rules to drive notifications.
-	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules,required"`
+	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

@@ -56,9 +56,7 @@ func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3
 // This endpoint is deprecated. To continue getting this data, switch to the
 // summary by industry endpoint.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer3TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TopIndustryResponse, err error) {
 	var env AttackLayer3TopIndustryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,9 +72,7 @@ func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer
 // This endpoint is deprecated. To continue getting this data, switch to the
 // summary by vertical endpoint.
 //
-// Deprecated: Use
-// [Radar Attacks Layer 3 Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/attacks/subresources/layer3/methods/summary_v2/)
-// instead.
+// Deprecated: deprecated
 func (r *AttackLayer3TopService) Vertical(ctx context.Context, query AttackLayer3TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TopVerticalResponse, err error) {
 	var env AttackLayer3TopVerticalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
