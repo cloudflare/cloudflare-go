@@ -9264,10 +9264,12 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownSupportedResponse">ToMarkdownSupportedResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownTransformResponse">ToMarkdownTransformResponse</a>
 
 Methods:
 
+- <code title="get /accounts/{account_id}/ai/tomarkdown/supported">client.AI.ToMarkdown.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownService.Supported">Supported</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownSupportedParams">ToMarkdownSupportedParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownSupportedResponse">ToMarkdownSupportedResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="post /accounts/{account_id}/ai/tomarkdown">client.AI.ToMarkdown.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownService.Transform">Transform</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, file <a href="https://pkg.go.dev/builtin#io.Reader">io.Reader</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownTransformParams">ToMarkdownTransformParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai#ToMarkdownTransformResponse">ToMarkdownTransformResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # SecurityCenter
