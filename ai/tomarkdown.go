@@ -39,33 +39,6 @@ func NewToMarkdownService(opts ...option.RequestOption) (r *ToMarkdownService) {
 	return
 }
 
-// Get all converted formats supported
-func (r *ToMarkdownService) Supported(ctx context.Context, query ToMarkdownSupportedParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownSupportedResponse], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/ai/tomarkdown/supported", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Get all converted formats supported
-func (r *ToMarkdownService) SupportedAutoPaging(ctx context.Context, query ToMarkdownSupportedParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownSupportedResponse] {
-	return pagination.NewSinglePageAutoPager(r.Supported(ctx, query, opts...))
-}
-
 // Convert Files into Markdown
 func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, body ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
 	var raw *http.Response
@@ -91,29 +64,6 @@ func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, body 
 // Convert Files into Markdown
 func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, file io.Reader, body ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
 	return pagination.NewSinglePageAutoPager(r.Transform(ctx, file, body, opts...))
-}
-
-type ToMarkdownSupportedResponse struct {
-	Extension string                          `json:"extension,required"`
-	MimeType  string                          `json:"mimeType,required"`
-	JSON      toMarkdownSupportedResponseJSON `json:"-"`
-}
-
-// toMarkdownSupportedResponseJSON contains the JSON metadata for the struct
-// [ToMarkdownSupportedResponse]
-type toMarkdownSupportedResponseJSON struct {
-	Extension   apijson.Field
-	MimeType    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ToMarkdownSupportedResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r toMarkdownSupportedResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type ToMarkdownTransformResponse struct {
@@ -143,10 +93,6 @@ func (r *ToMarkdownTransformResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r toMarkdownTransformResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type ToMarkdownSupportedParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ToMarkdownTransformParams struct {

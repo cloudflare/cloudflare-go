@@ -30,7 +30,7 @@ func TestEntityASNListWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Entities.ASNs.List(context.TODO(), radar.EntityASNListParams{
 		ASN:      cloudflare.F("174,7922"),
 		Format:   cloudflare.F(radar.EntityASNListParamsFormatJson),
-		Limit:    cloudflare.F(int64(1)),
+		Limit:    cloudflare.F(int64(5)),
 		Location: cloudflare.F("US"),
 		Offset:   cloudflare.F(int64(0)),
 		OrderBy:  cloudflare.F(radar.EntityASNListParamsOrderByASN),

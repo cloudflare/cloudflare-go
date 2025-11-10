@@ -30,7 +30,6 @@ func TestDatabaseNewWithOptionalParams(t *testing.T) {
 	_, err := client.D1.Database.New(context.TODO(), d1.DatabaseNewParams{
 		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:                cloudflare.F("my-database"),
-		Jurisdiction:        cloudflare.F(d1.DatabaseNewParamsJurisdictionEu),
 		PrimaryLocationHint: cloudflare.F(d1.DatabaseNewParamsPrimaryLocationHintWnam),
 	})
 	if err != nil {
@@ -279,10 +278,8 @@ func TestDatabaseQueryWithOptionalParams(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseQueryParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: d1.DatabaseQueryParamsBodyD1SingleQuery{
-				Sql:    cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
-				Params: cloudflare.F([]string{"firstParam", "secondParam"}),
-			},
+			Sql:       cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
+			Params:    cloudflare.F([]string{"firstParam", "secondParam"}),
 		},
 	)
 	if err != nil {
@@ -312,10 +309,8 @@ func TestDatabaseRawWithOptionalParams(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseRawParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: d1.DatabaseRawParamsBodyD1SingleQuery{
-				Sql:    cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
-				Params: cloudflare.F([]string{"firstParam", "secondParam"}),
-			},
+			Sql:       cloudflare.F("SELECT * FROM myTable WHERE field = ? OR field = ?;"),
+			Params:    cloudflare.F([]string{"firstParam", "secondParam"}),
 		},
 	)
 	if err != nil {

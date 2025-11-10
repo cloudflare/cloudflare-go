@@ -7,11 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -36,15 +34,15 @@ func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *Threa
 	return
 }
 
-// Lists target industries across multiple datasets
-func (r *ThreatEventTargetIndustryService) List(ctx context.Context, params ThreatEventTargetIndustryListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
+// Lists all target industries
+func (r *ThreatEventTargetIndustryService) List(ctx context.Context, query ThreatEventTargetIndustryListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/targetIndustries", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/targetIndustries", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -95,16 +93,4 @@ func (r threatEventTargetIndustryListResponseItemsJSON) RawJSON() string {
 type ThreatEventTargetIndustryListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Array of dataset IDs to query target industries from. If not provided, returns
-	// all target industries from Event tables across all datasets.
-	DatasetIDs param.Field[[]string] `query:"datasetIds"`
-}
-
-// URLQuery serializes [ThreatEventTargetIndustryListParams]'s query parameters as
-// `url.Values`.
-func (r ThreatEventTargetIndustryListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }

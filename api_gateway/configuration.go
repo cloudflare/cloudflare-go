@@ -38,20 +38,15 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 	return
 }
 
-// Update configuration properties
-func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	var env ConfigurationUpdateResponseEnvelope
+// Set configuration properties
+func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *ConfigurationUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/configuration", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
@@ -341,75 +336,62 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimP
 func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam) implementsConfigurationAuthIDCharacteristicsUnionParam() {
 }
 
+type ConfigurationUpdateResponse struct {
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
+	// Whether the API call was successful.
+	Success ConfigurationUpdateResponseSuccess `json:"success,required"`
+	JSON    configurationUpdateResponseJSON    `json:"-"`
+}
+
+// configurationUpdateResponseJSON contains the JSON metadata for the struct
+// [ConfigurationUpdateResponse]
+type configurationUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ConfigurationUpdateResponseSuccess bool
+
+const (
+	ConfigurationUpdateResponseSuccessTrue ConfigurationUpdateResponseSuccess = true
+)
+
+func (r ConfigurationUpdateResponseSuccess) IsKnown() bool {
+	switch r {
+	case ConfigurationUpdateResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigurationUpdateParams struct {
 	// Identifier.
 	ZoneID        param.Field[string] `path:"zone_id,required"`
 	Configuration ConfigurationParam  `json:"configuration,required"`
-	// Ensures that the configuration is written or retrieved in normalized fashion
-	Normalize param.Field[bool] `query:"normalize"`
 }
 
 func (r ConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Configuration)
 }
 
-// URLQuery serializes [ConfigurationUpdateParams]'s query parameters as
-// `url.Values`.
-func (r ConfigurationUpdateParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type ConfigurationUpdateResponseEnvelope struct {
-	Errors   Message       `json:"errors,required"`
-	Messages Message       `json:"messages,required"`
-	Result   Configuration `json:"result,required"`
-	// Whether the API call was successful.
-	Success ConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    configurationUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// configurationUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ConfigurationUpdateResponseEnvelope]
-type configurationUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configurationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type ConfigurationUpdateResponseEnvelopeSuccess bool
-
-const (
-	ConfigurationUpdateResponseEnvelopeSuccessTrue ConfigurationUpdateResponseEnvelopeSuccess = true
-)
-
-func (r ConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ConfigurationUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type ConfigurationGetParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Ensures that the configuration is written or retrieved in normalized fashion
-	Normalize param.Field[bool] `query:"normalize"`
+	// Requests information about certain properties.
+	Properties param.Field[[]ConfigurationGetParamsProperty] `query:"properties"`
 }
 
 // URLQuery serializes [ConfigurationGetParams]'s query parameters as `url.Values`.
@@ -418,6 +400,20 @@ func (r ConfigurationGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type ConfigurationGetParamsProperty string
+
+const (
+	ConfigurationGetParamsPropertyAuthIDCharacteristics ConfigurationGetParamsProperty = "auth_id_characteristics"
+)
+
+func (r ConfigurationGetParamsProperty) IsKnown() bool {
+	switch r {
+	case ConfigurationGetParamsPropertyAuthIDCharacteristics:
+		return true
+	}
+	return false
 }
 
 type ConfigurationGetResponseEnvelope struct {

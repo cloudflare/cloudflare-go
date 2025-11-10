@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestConfigurationUpdateWithOptionalParams(t *testing.T) {
+func TestConfigurationUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -35,7 +35,6 @@ func TestConfigurationUpdateWithOptionalParams(t *testing.T) {
 				Type: cloudflare.F(api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicTypeHeader),
 			}}),
 		},
-		Normalize: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -60,8 +59,8 @@ func TestConfigurationGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Configurations.Get(context.TODO(), api_gateway.ConfigurationGetParams{
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Normalize: cloudflare.F(true),
+		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Properties: cloudflare.F([]api_gateway.ConfigurationGetParamsProperty{api_gateway.ConfigurationGetParamsPropertyAuthIDCharacteristics}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
