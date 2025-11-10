@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -54,15 +56,15 @@ func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationU
 }
 
 // Retrieve information about specific configuration properties
-func (r *ConfigurationService) Get(ctx context.Context, query ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
+func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
+	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/api_gateway/configuration", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/api_gateway/configuration", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -343,10 +345,21 @@ type ConfigurationUpdateParams struct {
 	// Identifier.
 	ZoneID        param.Field[string] `path:"zone_id,required"`
 	Configuration ConfigurationParam  `json:"configuration,required"`
+	// Ensures that the configuration is written or retrieved in normalized fashion
+	Normalize param.Field[bool] `query:"normalize"`
 }
 
 func (r ConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Configuration)
+}
+
+// URLQuery serializes [ConfigurationUpdateParams]'s query parameters as
+// `url.Values`.
+func (r ConfigurationUpdateParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ConfigurationUpdateResponseEnvelope struct {
@@ -395,6 +408,16 @@ func (r ConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ConfigurationGetParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Ensures that the configuration is written or retrieved in normalized fashion
+	Normalize param.Field[bool] `query:"normalize"`
+}
+
+// URLQuery serializes [ConfigurationGetParams]'s query parameters as `url.Values`.
+func (r ConfigurationGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ConfigurationGetResponseEnvelope struct {
