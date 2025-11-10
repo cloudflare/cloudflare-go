@@ -28,7 +28,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAbuseReportService] method instead.
 type AbuseReportService struct {
-	Options []option.RequestOption
+	Options     []option.RequestOption
+	Mitigations *MitigationService
 }
 
 // NewAbuseReportService generates a new service that applies the given options to
@@ -37,6 +38,7 @@ type AbuseReportService struct {
 func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService) {
 	r = &AbuseReportService{}
 	r.Options = opts
+	r.Mitigations = NewMitigationService(opts...)
 	return
 }
 
