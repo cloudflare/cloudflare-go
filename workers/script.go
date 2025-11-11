@@ -86,7 +86,7 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Script], err error) {
+func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScriptListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -108,7 +108,7 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Script] {
+func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScriptListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -169,7 +169,7 @@ func (r *ScriptService) Search(ctx context.Context, params ScriptSearchParams, o
 }
 
 type Script struct {
-	// The id of the script in the Workers system. Usually the script name.
+	// The name used to identify the script.
 	ID string `json:"id"`
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
 	// fixes to the runtime following this date will not affect this Worker.
@@ -200,6 +200,8 @@ type Script struct {
 	// Named exports, such as Durable Object class implementations and named
 	// entrypoints.
 	NamedHandlers []ScriptNamedHandler `json:"named_handlers"`
+	// Observability settings for the Worker.
+	Observability ScriptObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptPlacement `json:"placement"`
@@ -213,8 +215,12 @@ type Script struct {
 	//
 	// Deprecated: deprecated
 	PlacementStatus ScriptPlacementStatus `json:"placement_status"`
+	// The immutable ID of the script.
+	Tag string `json:"tag"`
+	// Tags associated with the Worker.
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptUsageModel `json:"usage_model"`
 	JSON       scriptJSON       `json:"-"`
@@ -235,9 +241,12 @@ type scriptJSON struct {
 	MigrationTag       apijson.Field
 	ModifiedOn         apijson.Field
 	NamedHandlers      apijson.Field
+	Observability      apijson.Field
 	Placement          apijson.Field
 	PlacementMode      apijson.Field
 	PlacementStatus    apijson.Field
+	Tag                apijson.Field
+	Tags               apijson.Field
 	TailConsumers      apijson.Field
 	UsageModel         apijson.Field
 	raw                string
@@ -274,6 +283,73 @@ func (r *ScriptNamedHandler) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptNamedHandlerJSON) RawJSON() string {
+	return r.raw
+}
+
+// Observability settings for the Worker.
+type ScriptObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptObservabilityLogs `json:"logs,nullable"`
+	JSON scriptObservabilityJSON `json:"-"`
+}
+
+// scriptObservabilityJSON contains the JSON metadata for the struct
+// [ScriptObservability]
+type scriptObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                        `json:"persist"`
+	JSON    scriptObservabilityLogsJSON `json:"-"`
+}
+
+// scriptObservabilityLogsJSON contains the JSON metadata for the struct
+// [ScriptObservabilityLogs]
+type scriptObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	Destinations     apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -366,7 +442,7 @@ type ScriptSetting struct {
 	// Observability settings for the Worker.
 	Observability ScriptSettingObservability `json:"observability,nullable"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript  `json:"tail_consumers,nullable"`
 	JSON          scriptSettingJSON `json:"-"`
@@ -509,7 +585,7 @@ func (r ScriptSettingObservabilityLogsParam) MarshalJSON() (data []byte, err err
 
 type ScriptUpdateResponse struct {
 	StartupTimeMs int64 `json:"startup_time_ms,required"`
-	// The id of the script in the Workers system. Usually the script name.
+	// The name used to identify the script.
 	ID string `json:"id"`
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
 	// fixes to the runtime following this date will not affect this Worker.
@@ -520,6 +596,8 @@ type ScriptUpdateResponse struct {
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// When the script was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// The entry point for the script.
+	EntryPoint string `json:"entry_point"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
 	// The names of handlers exported as part of the default export.
@@ -540,6 +618,8 @@ type ScriptUpdateResponse struct {
 	// Named exports, such as Durable Object class implementations and named
 	// entrypoints.
 	NamedHandlers []ScriptUpdateResponseNamedHandler `json:"named_handlers"`
+	// Observability settings for the Worker.
+	Observability ScriptUpdateResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptUpdateResponsePlacement `json:"placement"`
@@ -547,8 +627,12 @@ type ScriptUpdateResponse struct {
 	PlacementMode ScriptUpdateResponsePlacementMode `json:"placement_mode"`
 	// Deprecated: deprecated
 	PlacementStatus ScriptUpdateResponsePlacementStatus `json:"placement_status"`
+	// The immutable ID of the script.
+	Tag string `json:"tag"`
+	// Tags associated with the Worker.
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptUpdateResponseUsageModel `json:"usage_model"`
 	JSON       scriptUpdateResponseJSON       `json:"-"`
@@ -562,6 +646,7 @@ type scriptUpdateResponseJSON struct {
 	CompatibilityDate  apijson.Field
 	CompatibilityFlags apijson.Field
 	CreatedOn          apijson.Field
+	EntryPoint         apijson.Field
 	Etag               apijson.Field
 	Handlers           apijson.Field
 	HasAssets          apijson.Field
@@ -571,9 +656,12 @@ type scriptUpdateResponseJSON struct {
 	MigrationTag       apijson.Field
 	ModifiedOn         apijson.Field
 	NamedHandlers      apijson.Field
+	Observability      apijson.Field
 	Placement          apijson.Field
 	PlacementMode      apijson.Field
 	PlacementStatus    apijson.Field
+	Tag                apijson.Field
+	Tags               apijson.Field
 	TailConsumers      apijson.Field
 	UsageModel         apijson.Field
 	raw                string
@@ -610,6 +698,73 @@ func (r *ScriptUpdateResponseNamedHandler) UnmarshalJSON(data []byte) (err error
 }
 
 func (r scriptUpdateResponseNamedHandlerJSON) RawJSON() string {
+	return r.raw
+}
+
+// Observability settings for the Worker.
+type ScriptUpdateResponseObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptUpdateResponseObservabilityLogs `json:"logs,nullable"`
+	JSON scriptUpdateResponseObservabilityJSON `json:"-"`
+}
+
+// scriptUpdateResponseObservabilityJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponseObservability]
+type scriptUpdateResponseObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptUpdateResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                                      `json:"persist"`
+	JSON    scriptUpdateResponseObservabilityLogsJSON `json:"-"`
+}
+
+// scriptUpdateResponseObservabilityLogsJSON contains the JSON metadata for the
+// struct [ScriptUpdateResponseObservabilityLogs]
+type scriptUpdateResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	Destinations     apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -692,6 +847,302 @@ const (
 func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 	switch r {
 	case ScriptUpdateResponseUsageModelStandard, ScriptUpdateResponseUsageModelBundled, ScriptUpdateResponseUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
+type ScriptListResponse struct {
+	// The name used to identify the script.
+	ID string `json:"id"`
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
+	CompatibilityDate string `json:"compatibility_date"`
+	// Flags that enable or disable certain features in the Workers runtime. Used to
+	// enable upcoming features or opt in or out of specific changes not included in a
+	// `compatibility_date`.
+	CompatibilityFlags []string `json:"compatibility_flags"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// The names of handlers exported as part of the default export.
+	Handlers []string `json:"handlers"`
+	// Whether a Worker contains assets.
+	HasAssets bool `json:"has_assets"`
+	// Whether a Worker contains modules.
+	HasModules bool `json:"has_modules"`
+	// The client most recently used to deploy this Worker.
+	LastDeployedFrom string `json:"last_deployed_from"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// The tag of the Durable Object migration that was most recently applied for this
+	// Worker.
+	MigrationTag string `json:"migration_tag"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Named exports, such as Durable Object class implementations and named
+	// entrypoints.
+	NamedHandlers []ScriptListResponseNamedHandler `json:"named_handlers"`
+	// Observability settings for the Worker.
+	Observability ScriptListResponseObservability `json:"observability"`
+	// Configuration for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Placement ScriptListResponsePlacement `json:"placement"`
+	// Deprecated: deprecated
+	PlacementMode ScriptListResponsePlacementMode `json:"placement_mode"`
+	// Deprecated: deprecated
+	PlacementStatus ScriptListResponsePlacementStatus `json:"placement_status"`
+	// Routes associated with the Worker.
+	Routes []ScriptListResponseRoute `json:"routes,nullable"`
+	// The immutable ID of the script.
+	Tag string `json:"tag"`
+	// Tags associated with the Worker.
+	Tags []string `json:"tags,nullable"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
+	// Usage model for the Worker invocations.
+	UsageModel ScriptListResponseUsageModel `json:"usage_model"`
+	JSON       scriptListResponseJSON       `json:"-"`
+}
+
+// scriptListResponseJSON contains the JSON metadata for the struct
+// [ScriptListResponse]
+type scriptListResponseJSON struct {
+	ID                 apijson.Field
+	CompatibilityDate  apijson.Field
+	CompatibilityFlags apijson.Field
+	CreatedOn          apijson.Field
+	Etag               apijson.Field
+	Handlers           apijson.Field
+	HasAssets          apijson.Field
+	HasModules         apijson.Field
+	LastDeployedFrom   apijson.Field
+	Logpush            apijson.Field
+	MigrationTag       apijson.Field
+	ModifiedOn         apijson.Field
+	NamedHandlers      apijson.Field
+	Observability      apijson.Field
+	Placement          apijson.Field
+	PlacementMode      apijson.Field
+	PlacementStatus    apijson.Field
+	Routes             apijson.Field
+	Tag                apijson.Field
+	Tags               apijson.Field
+	TailConsumers      apijson.Field
+	UsageModel         apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptListResponseNamedHandler struct {
+	// The names of handlers exported as part of the named export.
+	Handlers []string `json:"handlers"`
+	// The name of the export.
+	Name string                             `json:"name"`
+	JSON scriptListResponseNamedHandlerJSON `json:"-"`
+}
+
+// scriptListResponseNamedHandlerJSON contains the JSON metadata for the struct
+// [ScriptListResponseNamedHandler]
+type scriptListResponseNamedHandlerJSON struct {
+	Handlers    apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptListResponseNamedHandler) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseNamedHandlerJSON) RawJSON() string {
+	return r.raw
+}
+
+// Observability settings for the Worker.
+type ScriptListResponseObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptListResponseObservabilityLogs `json:"logs,nullable"`
+	JSON scriptListResponseObservabilityJSON `json:"-"`
+}
+
+// scriptListResponseObservabilityJSON contains the JSON metadata for the struct
+// [ScriptListResponseObservability]
+type scriptListResponseObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptListResponseObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptListResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                                    `json:"persist"`
+	JSON    scriptListResponseObservabilityLogsJSON `json:"-"`
+}
+
+// scriptListResponseObservabilityLogsJSON contains the JSON metadata for the
+// struct [ScriptListResponseObservabilityLogs]
+type scriptListResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	Destinations     apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptListResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptListResponsePlacement struct {
+	// The last time the script was analyzed for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptListResponsePlacementMode `json:"mode"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Status ScriptListResponsePlacementStatus `json:"status"`
+	JSON   scriptListResponsePlacementJSON   `json:"-"`
+}
+
+// scriptListResponsePlacementJSON contains the JSON metadata for the struct
+// [ScriptListResponsePlacement]
+type scriptListResponsePlacementJSON struct {
+	LastAnalyzedAt apijson.Field
+	Mode           apijson.Field
+	Status         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ScriptListResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponsePlacementJSON) RawJSON() string {
+	return r.raw
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptListResponsePlacementMode string
+
+const (
+	ScriptListResponsePlacementModeSmart ScriptListResponsePlacementMode = "smart"
+)
+
+func (r ScriptListResponsePlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptListResponsePlacementModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptListResponsePlacementStatus string
+
+const (
+	ScriptListResponsePlacementStatusSuccess                 ScriptListResponsePlacementStatus = "SUCCESS"
+	ScriptListResponsePlacementStatusUnsupportedApplication  ScriptListResponsePlacementStatus = "UNSUPPORTED_APPLICATION"
+	ScriptListResponsePlacementStatusInsufficientInvocations ScriptListResponsePlacementStatus = "INSUFFICIENT_INVOCATIONS"
+)
+
+func (r ScriptListResponsePlacementStatus) IsKnown() bool {
+	switch r {
+	case ScriptListResponsePlacementStatusSuccess, ScriptListResponsePlacementStatusUnsupportedApplication, ScriptListResponsePlacementStatusInsufficientInvocations:
+		return true
+	}
+	return false
+}
+
+type ScriptListResponseRoute struct {
+	// Identifier.
+	ID string `json:"id,required"`
+	// Pattern to match incoming requests against.
+	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
+	Pattern string `json:"pattern,required"`
+	// Name of the script to run if the route matches.
+	Script string                      `json:"script"`
+	JSON   scriptListResponseRouteJSON `json:"-"`
+}
+
+// scriptListResponseRouteJSON contains the JSON metadata for the struct
+// [ScriptListResponseRoute]
+type scriptListResponseRouteJSON struct {
+	ID          apijson.Field
+	Pattern     apijson.Field
+	Script      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptListResponseRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseRouteJSON) RawJSON() string {
+	return r.raw
+}
+
+// Usage model for the Worker invocations.
+type ScriptListResponseUsageModel string
+
+const (
+	ScriptListResponseUsageModelStandard ScriptListResponseUsageModel = "standard"
+	ScriptListResponseUsageModelBundled  ScriptListResponseUsageModel = "bundled"
+	ScriptListResponseUsageModelUnbound  ScriptListResponseUsageModel = "unbound"
+)
+
+func (r ScriptListResponseUsageModel) IsKnown() bool {
+	switch r {
+	case ScriptListResponseUsageModelStandard, ScriptListResponseUsageModelBundled, ScriptListResponseUsageModelUnbound:
 		return true
 	}
 	return false
@@ -1015,7 +1466,6 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmail],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindService],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlob],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
@@ -1742,37 +2192,6 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer struct {
-	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
-	// Name of Tail Worker to bind to.
-	Service param.Field[string] `json:"service,required"`
-	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
-}
-
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsScriptUpdateParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType string
-
-const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-)
-
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
-	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
-		return true
-	}
-	return false
-}
-
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -2080,7 +2499,6 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeSecretText             ScriptUpdateParamsMetadataBindingsType = "secret_text"
 	ScriptUpdateParamsMetadataBindingsTypeSendEmail              ScriptUpdateParamsMetadataBindingsType = "send_email"
 	ScriptUpdateParamsMetadataBindingsTypeService                ScriptUpdateParamsMetadataBindingsType = "service"
-	ScriptUpdateParamsMetadataBindingsTypeTailConsumer           ScriptUpdateParamsMetadataBindingsType = "tail_consumer"
 	ScriptUpdateParamsMetadataBindingsTypeTextBlob               ScriptUpdateParamsMetadataBindingsType = "text_blob"
 	ScriptUpdateParamsMetadataBindingsTypeVectorize              ScriptUpdateParamsMetadataBindingsType = "vectorize"
 	ScriptUpdateParamsMetadataBindingsTypeVersionMetadata        ScriptUpdateParamsMetadataBindingsType = "version_metadata"
@@ -2092,7 +2510,7 @@ const (
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTailConsumer, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule:
 		return true
 	}
 	return false

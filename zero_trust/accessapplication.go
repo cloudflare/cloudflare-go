@@ -313,11 +313,14 @@ const (
 	ApplicationTypeDashSSO        ApplicationType = "dash_sso"
 	ApplicationTypeInfrastructure ApplicationType = "infrastructure"
 	ApplicationTypeRdp            ApplicationType = "rdp"
+	ApplicationTypeMcp            ApplicationType = "mcp"
+	ApplicationTypeMcpPortal      ApplicationType = "mcp_portal"
+	ApplicationTypeProxyEndpoint  ApplicationType = "proxy_endpoint"
 )
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure, ApplicationTypeRdp:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure, ApplicationTypeRdp, ApplicationTypeMcp, ApplicationTypeMcpPortal, ApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -1969,6 +1972,7 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -2086,6 +2090,7 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccessApplicationNewResponseAppLauncherApplication],
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationNewResponseBookmarkApplication],
 // [AccessApplicationNewResponseInfrastructureApplication],
 // [AccessApplicationNewResponseBrowserRdpApplication].
@@ -2100,6 +2105,7 @@ func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnio
 // [AccessApplicationNewResponseAppLauncherApplication],
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationNewResponseBookmarkApplication],
 // [AccessApplicationNewResponseInfrastructureApplication] or
 // [AccessApplicationNewResponseBrowserRdpApplication].
@@ -2138,6 +2144,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -2303,6 +2313,8 @@ type AccessApplicationNewResponseSelfHostedApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -2324,6 +2336,7 @@ type accessApplicationNewResponseSelfHostedApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -2351,7 +2364,8 @@ func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -2360,9 +2374,10 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseSelfHostedApplicationDestination()
 }
@@ -2378,6 +2393,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -2428,8 +2447,6 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -2503,6 +2520,50 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -2523,13 +2584,14 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol)
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsType string
 
 const (
-	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate:
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -3668,11 +3730,14 @@ const (
 	AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationNewResponseBrowserSSHApplicationType = "dash_sso"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationNewResponseBrowserSSHApplicationType = "infrastructure"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeRdp            AccessApplicationNewResponseBrowserSSHApplicationType = "rdp"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeMcp            AccessApplicationNewResponseBrowserSSHApplicationType = "mcp"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationNewResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationNewResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRdp:
+	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRdp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -3688,6 +3753,8 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -3709,6 +3776,7 @@ type accessApplicationNewResponseBrowserSSHApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -3736,7 +3804,8 @@ func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -3745,9 +3814,10 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserSSHApplicationDestination()
 }
@@ -3763,6 +3833,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -3813,8 +3887,6 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -3888,6 +3960,50 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -3908,13 +4024,14 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol)
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType string
 
 const (
-	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate:
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -4458,11 +4575,14 @@ const (
 	AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationNewResponseBrowserVNCApplicationType = "dash_sso"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationNewResponseBrowserVNCApplicationType = "infrastructure"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeRdp            AccessApplicationNewResponseBrowserVNCApplicationType = "rdp"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeMcp            AccessApplicationNewResponseBrowserVNCApplicationType = "mcp"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationNewResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationNewResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRdp:
+	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRdp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -4478,6 +4598,8 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -4499,6 +4621,7 @@ type accessApplicationNewResponseBrowserVNCApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -4526,7 +4649,8 @@ func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -4535,9 +4659,10 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserVNCApplicationDestination()
 }
@@ -4553,6 +4678,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -4603,8 +4732,6 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -4678,6 +4805,50 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -4698,13 +4869,14 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol)
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType string
 
 const (
-	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate:
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -5191,11 +5363,14 @@ const (
 	AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO        AccessApplicationNewResponseAppLauncherApplicationType = "dash_sso"
 	AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure AccessApplicationNewResponseAppLauncherApplicationType = "infrastructure"
 	AccessApplicationNewResponseAppLauncherApplicationTypeRdp            AccessApplicationNewResponseAppLauncherApplicationType = "rdp"
+	AccessApplicationNewResponseAppLauncherApplicationTypeMcp            AccessApplicationNewResponseAppLauncherApplicationType = "mcp"
+	AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationNewResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationNewResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationNewResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRdp:
+	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRdp, AccessApplicationNewResponseAppLauncherApplicationTypeMcp, AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationNewResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -5609,6 +5784,144 @@ func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolic
 }
 
 func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                      `json:"name"`
+	Policies []AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                  `json:"session_duration"`
+	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6041,6 +6354,8 @@ type AccessApplicationNewResponseBrowserRdpApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationNewResponseBrowserRdpApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -6062,6 +6377,7 @@ type accessApplicationNewResponseBrowserRdpApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -6089,7 +6405,8 @@ func (r *AccessApplicationNewResponseBrowserRdpApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationNewResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -6098,9 +6415,10 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationNewResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserRdpApplicationDestination()
 }
@@ -6116,6 +6434,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -6166,8 +6488,6 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -6241,6 +6561,50 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewResponseBrowserRdpApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseBrowserRdpApplicationDestinationsL4Protocol string
@@ -6261,13 +6625,14 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsL4Protocol)
 type AccessApplicationNewResponseBrowserRdpApplicationDestinationsType string
 
 const (
-	AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserRdpApplicationDestinationsType = "public"
-	AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePublic             AccessApplicationNewResponseBrowserRdpApplicationDestinationsType = "public"
+	AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePrivate            AccessApplicationNewResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseBrowserRdpApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePrivate:
+	case AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -6733,6 +7098,7 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -6850,6 +7216,7 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // [AccessApplicationUpdateResponseAppLauncherApplication],
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationUpdateResponseBookmarkApplication],
 // [AccessApplicationUpdateResponseInfrastructureApplication],
 // [AccessApplicationUpdateResponseBrowserRdpApplication].
@@ -6864,6 +7231,7 @@ func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateRespon
 // [AccessApplicationUpdateResponseAppLauncherApplication],
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationUpdateResponseBookmarkApplication],
 // [AccessApplicationUpdateResponseInfrastructureApplication] or
 // [AccessApplicationUpdateResponseBrowserRdpApplication].
@@ -6902,6 +7270,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7068,6 +7440,8 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -7089,6 +7463,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON struct 
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -7116,7 +7491,8 @@ func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) Unmars
 //
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -7125,9 +7501,10 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination()
 }
@@ -7143,6 +7520,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -7193,8 +7574,6 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDe
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -7268,6 +7647,50 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateD
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                            `json:"mcp_server_id"`
+	Type        AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -7288,13 +7711,14 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protoc
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -8435,11 +8859,14 @@ const (
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationUpdateResponseBrowserSSHApplicationType = "dash_sso"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationUpdateResponseBrowserSSHApplicationType = "infrastructure"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp            AccessApplicationUpdateResponseBrowserSSHApplicationType = "rdp"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp            AccessApplicationUpdateResponseBrowserSSHApplicationType = "mcp"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationUpdateResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp:
+	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -8455,6 +8882,8 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -8476,6 +8905,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON struct 
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -8503,7 +8933,8 @@ func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) Unmars
 //
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -8512,9 +8943,10 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination()
 }
@@ -8530,6 +8962,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -8580,8 +9016,6 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDe
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -8655,6 +9089,50 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateD
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                            `json:"mcp_server_id"`
+	Type        AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -8675,13 +9153,14 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protoc
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -9226,11 +9705,14 @@ const (
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationUpdateResponseBrowserVNCApplicationType = "dash_sso"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationUpdateResponseBrowserVNCApplicationType = "infrastructure"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp            AccessApplicationUpdateResponseBrowserVNCApplicationType = "rdp"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp            AccessApplicationUpdateResponseBrowserVNCApplicationType = "mcp"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationUpdateResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp:
+	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -9246,6 +9728,8 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -9267,6 +9751,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON struct 
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -9294,7 +9779,8 @@ func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) Unmars
 //
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -9303,9 +9789,10 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination()
 }
@@ -9321,6 +9808,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -9371,8 +9862,6 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDe
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -9446,6 +9935,50 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateD
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                            `json:"mcp_server_id"`
+	Type        AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -9466,13 +9999,14 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protoc
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -9959,11 +10493,14 @@ const (
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO        AccessApplicationUpdateResponseAppLauncherApplicationType = "dash_sso"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure AccessApplicationUpdateResponseAppLauncherApplicationType = "infrastructure"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp            AccessApplicationUpdateResponseAppLauncherApplicationType = "rdp"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp            AccessApplicationUpdateResponseAppLauncherApplicationType = "mcp"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationUpdateResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp:
+	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -10377,6 +10914,144 @@ func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPo
 }
 
 func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                         `json:"name"`
+	Policies []AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                     `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                           `json:"session_duration"`
+	UpdatedAt       time.Time                                                                        `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -10812,6 +11487,8 @@ type AccessApplicationUpdateResponseBrowserRdpApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -10833,6 +11510,7 @@ type accessApplicationUpdateResponseBrowserRdpApplicationDestinationJSON struct 
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -10860,7 +11538,8 @@ func (r *AccessApplicationUpdateResponseBrowserRdpApplicationDestination) Unmars
 //
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -10869,9 +11548,10 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserRdpApplicationDestination()
 }
@@ -10887,6 +11567,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -10937,8 +11621,6 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDe
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -11012,6 +11694,50 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateD
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                            `json:"mcp_server_id"`
+	Type        AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateResponseBrowserRdpApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsL4Protocol string
@@ -11032,13 +11758,14 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsL4Protoc
 type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePublic             AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -11504,6 +12231,7 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -11621,6 +12349,7 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccessApplicationListResponseAppLauncherApplication],
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationListResponseBookmarkApplication],
 // [AccessApplicationListResponseInfrastructureApplication],
 // [AccessApplicationListResponseBrowserRdpApplication].
@@ -11635,6 +12364,7 @@ func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUn
 // [AccessApplicationListResponseAppLauncherApplication],
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationListResponseBookmarkApplication],
 // [AccessApplicationListResponseInfrastructureApplication] or
 // [AccessApplicationListResponseBrowserRdpApplication].
@@ -11673,6 +12403,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -11839,6 +12573,8 @@ type AccessApplicationListResponseSelfHostedApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -11860,6 +12596,7 @@ type accessApplicationListResponseSelfHostedApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -11887,7 +12624,8 @@ func (r *AccessApplicationListResponseSelfHostedApplicationDestination) Unmarsha
 //
 // Possible runtime types of the union are
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationListResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -11896,9 +12634,10 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationListResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseSelfHostedApplicationDestination()
 }
@@ -11914,6 +12653,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -11964,8 +12707,6 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDest
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -12039,6 +12780,50 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDes
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                          `json:"mcp_server_id"`
+	Type        AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -12059,13 +12844,14 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol
 type AccessApplicationListResponseSelfHostedApplicationDestinationsType string
 
 const (
-	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationListResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationListResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationListResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationListResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate:
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationListResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -13205,11 +13991,14 @@ const (
 	AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationListResponseBrowserSSHApplicationType = "dash_sso"
 	AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationListResponseBrowserSSHApplicationType = "infrastructure"
 	AccessApplicationListResponseBrowserSSHApplicationTypeRdp            AccessApplicationListResponseBrowserSSHApplicationType = "rdp"
+	AccessApplicationListResponseBrowserSSHApplicationTypeMcp            AccessApplicationListResponseBrowserSSHApplicationType = "mcp"
+	AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationListResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationListResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationListResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationListResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRdp:
+	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRdp, AccessApplicationListResponseBrowserSSHApplicationTypeMcp, AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationListResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -13225,6 +14014,8 @@ type AccessApplicationListResponseBrowserSSHApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -13246,6 +14037,7 @@ type accessApplicationListResponseBrowserSSHApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -13273,7 +14065,8 @@ func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) Unmarsha
 //
 // Possible runtime types of the union are
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -13282,9 +14075,10 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserSSHApplicationDestination()
 }
@@ -13300,6 +14094,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -13350,8 +14148,6 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDest
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -13425,6 +14221,50 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDes
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                          `json:"mcp_server_id"`
+	Type        AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -13445,13 +14285,14 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsType string
 
 const (
-	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate:
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -13996,11 +14837,14 @@ const (
 	AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationListResponseBrowserVNCApplicationType = "dash_sso"
 	AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationListResponseBrowserVNCApplicationType = "infrastructure"
 	AccessApplicationListResponseBrowserVNCApplicationTypeRdp            AccessApplicationListResponseBrowserVNCApplicationType = "rdp"
+	AccessApplicationListResponseBrowserVNCApplicationTypeMcp            AccessApplicationListResponseBrowserVNCApplicationType = "mcp"
+	AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationListResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationListResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationListResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationListResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRdp:
+	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRdp, AccessApplicationListResponseBrowserVNCApplicationTypeMcp, AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationListResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -14016,6 +14860,8 @@ type AccessApplicationListResponseBrowserVNCApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -14037,6 +14883,7 @@ type accessApplicationListResponseBrowserVNCApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -14064,7 +14911,8 @@ func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) Unmarsha
 //
 // Possible runtime types of the union are
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -14073,9 +14921,10 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserVNCApplicationDestination()
 }
@@ -14091,6 +14940,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -14141,8 +14994,6 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDest
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -14216,6 +15067,50 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDes
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                          `json:"mcp_server_id"`
+	Type        AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -14236,13 +15131,14 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsType string
 
 const (
-	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate:
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -14729,11 +15625,14 @@ const (
 	AccessApplicationListResponseAppLauncherApplicationTypeDashSSO        AccessApplicationListResponseAppLauncherApplicationType = "dash_sso"
 	AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure AccessApplicationListResponseAppLauncherApplicationType = "infrastructure"
 	AccessApplicationListResponseAppLauncherApplicationTypeRdp            AccessApplicationListResponseAppLauncherApplicationType = "rdp"
+	AccessApplicationListResponseAppLauncherApplicationTypeMcp            AccessApplicationListResponseAppLauncherApplicationType = "mcp"
+	AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationListResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationListResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationListResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationListResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRdp:
+	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRdp, AccessApplicationListResponseAppLauncherApplicationTypeMcp, AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationListResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -15147,6 +16046,144 @@ func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoli
 }
 
 func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                       `json:"name"`
+	Policies []AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                   `json:"session_duration"`
+	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                         `json:"session_duration"`
+	UpdatedAt       time.Time                                                                      `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -15580,6 +16617,8 @@ type AccessApplicationListResponseBrowserRdpApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationListResponseBrowserRdpApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -15601,6 +16640,7 @@ type accessApplicationListResponseBrowserRdpApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -15628,7 +16668,8 @@ func (r *AccessApplicationListResponseBrowserRdpApplicationDestination) Unmarsha
 //
 // Possible runtime types of the union are
 // [AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationListResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationListResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -15637,9 +16678,10 @@ func (r AccessApplicationListResponseBrowserRdpApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationListResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserRdpApplicationDestination()
 }
@@ -15655,6 +16697,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -15705,8 +16751,6 @@ func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDest
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -15780,6 +16824,50 @@ func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDes
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                          `json:"mcp_server_id"`
+	Type        AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationListResponseBrowserRdpApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseBrowserRdpApplicationDestinationsL4Protocol string
@@ -15800,13 +16888,14 @@ func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsL4Protocol
 type AccessApplicationListResponseBrowserRdpApplicationDestinationsType string
 
 const (
-	AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserRdpApplicationDestinationsType = "public"
-	AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePublic             AccessApplicationListResponseBrowserRdpApplicationDestinationsType = "public"
+	AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePrivate            AccessApplicationListResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationListResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseBrowserRdpApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePrivate:
+	case AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserRdpApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -16294,6 +17383,7 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -16411,6 +17501,7 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccessApplicationGetResponseAppLauncherApplication],
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationGetResponseBookmarkApplication],
 // [AccessApplicationGetResponseInfrastructureApplication],
 // [AccessApplicationGetResponseBrowserRdpApplication].
@@ -16425,6 +17516,7 @@ func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnio
 // [AccessApplicationGetResponseAppLauncherApplication],
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationGetResponseBookmarkApplication],
 // [AccessApplicationGetResponseInfrastructureApplication] or
 // [AccessApplicationGetResponseBrowserRdpApplication].
@@ -16463,6 +17555,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -16628,6 +17724,8 @@ type AccessApplicationGetResponseSelfHostedApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -16649,6 +17747,7 @@ type accessApplicationGetResponseSelfHostedApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -16676,7 +17775,8 @@ func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -16685,9 +17785,10 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseSelfHostedApplicationDestination()
 }
@@ -16703,6 +17804,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -16753,8 +17858,6 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -16828,6 +17931,50 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -16848,13 +17995,14 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol)
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsType string
 
 const (
-	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "private"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate:
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -17993,11 +19141,14 @@ const (
 	AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO        AccessApplicationGetResponseBrowserSSHApplicationType = "dash_sso"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure AccessApplicationGetResponseBrowserSSHApplicationType = "infrastructure"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeRdp            AccessApplicationGetResponseBrowserSSHApplicationType = "rdp"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeMcp            AccessApplicationGetResponseBrowserSSHApplicationType = "mcp"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationGetResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationGetResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationGetResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRdp:
+	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRdp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -18013,6 +19164,8 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -18034,6 +19187,7 @@ type accessApplicationGetResponseBrowserSSHApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -18061,7 +19215,8 @@ func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -18070,9 +19225,10 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserSSHApplicationDestination()
 }
@@ -18088,6 +19244,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -18138,8 +19298,6 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -18213,6 +19371,50 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -18233,13 +19435,14 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol)
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType string
 
 const (
-	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate:
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -18783,11 +19986,14 @@ const (
 	AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO        AccessApplicationGetResponseBrowserVNCApplicationType = "dash_sso"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure AccessApplicationGetResponseBrowserVNCApplicationType = "infrastructure"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeRdp            AccessApplicationGetResponseBrowserVNCApplicationType = "rdp"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeMcp            AccessApplicationGetResponseBrowserVNCApplicationType = "mcp"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationGetResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationGetResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationGetResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRdp:
+	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRdp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -18803,6 +20009,8 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -18824,6 +20032,7 @@ type accessApplicationGetResponseBrowserVNCApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -18851,7 +20060,8 @@ func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -18860,9 +20070,10 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserVNCApplicationDestination()
 }
@@ -18878,6 +20089,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -18928,8 +20143,6 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -19003,6 +20216,50 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -19023,13 +20280,14 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol)
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType string
 
 const (
-	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate:
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -19516,11 +20774,14 @@ const (
 	AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO        AccessApplicationGetResponseAppLauncherApplicationType = "dash_sso"
 	AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure AccessApplicationGetResponseAppLauncherApplicationType = "infrastructure"
 	AccessApplicationGetResponseAppLauncherApplicationTypeRdp            AccessApplicationGetResponseAppLauncherApplicationType = "rdp"
+	AccessApplicationGetResponseAppLauncherApplicationTypeMcp            AccessApplicationGetResponseAppLauncherApplicationType = "mcp"
+	AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationGetResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationGetResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationGetResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationGetResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRdp:
+	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRdp, AccessApplicationGetResponseAppLauncherApplicationTypeMcp, AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationGetResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -19934,6 +21195,144 @@ func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolic
 }
 
 func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                      `json:"name"`
+	Policies []AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                  `json:"session_duration"`
+	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -20366,6 +21765,8 @@ type AccessApplicationGetResponseBrowserRdpApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol AccessApplicationGetResponseBrowserRdpApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID string `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -20387,6 +21788,7 @@ type accessApplicationGetResponseBrowserRdpApplicationDestinationJSON struct {
 	CIDR        apijson.Field
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
+	McpServerID apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -20414,7 +21816,8 @@ func (r *AccessApplicationGetResponseBrowserRdpApplicationDestination) Unmarshal
 //
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 func (r AccessApplicationGetResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -20423,9 +21826,10 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination]
 // or
-// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination].
 type AccessApplicationGetResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserRdpApplicationDestination()
 }
@@ -20441,6 +21845,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination{}),
 		},
 	)
 }
@@ -20491,8 +21899,6 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDesti
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR string `json:"cidr"`
@@ -20566,6 +21972,50 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDest
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID string                                                                                         `json:"mcp_server_id"`
+	Type        AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType `json:"type"`
+	JSON        accessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination]
+type accessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON struct {
+	McpServerID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationGetResponseBrowserRdpApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseBrowserRdpApplicationDestinationsL4Protocol string
@@ -20586,13 +22036,14 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsL4Protocol)
 type AccessApplicationGetResponseBrowserRdpApplicationDestinationsType string
 
 const (
-	AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserRdpApplicationDestinationsType = "public"
-	AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePublic             AccessApplicationGetResponseBrowserRdpApplicationDestinationsType = "public"
+	AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePrivate            AccessApplicationGetResponseBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseBrowserRdpApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePrivate:
+	case AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserRdpApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -21097,6 +22548,7 @@ func (r AccessApplicationNewParamsBody) implementsAccessApplicationNewParamsBody
 // [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication],
 // [zero_trust.AccessApplicationNewParamsBodyAccessBookmarkProps],
 // [zero_trust.AccessApplicationNewParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplication],
@@ -21212,6 +22664,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -21237,6 +22691,7 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) implemen
 // Satisfied by
 // [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationNewParamsBodySelfHostedApplicationDestination].
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion()
@@ -21273,8 +22728,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDes
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -21329,6 +22782,35 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDe
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                           `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol string
@@ -21349,13 +22831,14 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protoco
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType string
 
 const (
-	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic  AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic             AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate:
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -22228,11 +23711,14 @@ const (
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO        AccessApplicationNewParamsBodyBrowserSSHApplicationType = "dash_sso"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure AccessApplicationNewParamsBodyBrowserSSHApplicationType = "infrastructure"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "rdp"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "mcp"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal      AccessApplicationNewParamsBodyBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationNewParamsBodyBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp:
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -22248,6 +23734,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -22273,6 +23761,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) implemen
 // Satisfied by
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationNewParamsBodyBrowserSSHApplicationDestination].
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion()
@@ -22309,8 +23798,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDes
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -22365,6 +23852,35 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDe
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                           `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol string
@@ -22385,13 +23901,14 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protoco
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType string
 
 const (
-	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate:
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -22826,11 +24343,14 @@ const (
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO        AccessApplicationNewParamsBodyBrowserVNCApplicationType = "dash_sso"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure AccessApplicationNewParamsBodyBrowserVNCApplicationType = "infrastructure"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "rdp"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "mcp"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal      AccessApplicationNewParamsBodyBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationNewParamsBodyBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp:
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -22846,6 +24366,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -22871,6 +24393,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) implemen
 // Satisfied by
 // [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationNewParamsBodyBrowserVNCApplicationDestination].
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion()
@@ -22907,8 +24430,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDes
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -22963,6 +24484,35 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDe
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                           `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol string
@@ -22983,13 +24533,14 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protoco
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType string
 
 const (
-	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate:
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -23373,11 +24924,14 @@ const (
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO        AccessApplicationNewParamsBodyAppLauncherApplicationType = "dash_sso"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure AccessApplicationNewParamsBodyAppLauncherApplicationType = "infrastructure"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp            AccessApplicationNewParamsBodyAppLauncherApplicationType = "rdp"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp            AccessApplicationNewParamsBodyAppLauncherApplicationType = "mcp"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal      AccessApplicationNewParamsBodyAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeProxyEndpoint  AccessApplicationNewParamsBodyAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp:
+	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationNewParamsBodyAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -23753,6 +25307,136 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain param.Field[string] `json:"domain"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application, in ascending order of
+	// precedence. Items can reference existing policies or create new policies
+	// exclusive to the application.
+	Policies param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication) implementsAccessApplicationNewParamsBodyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink],
+// [shared.UnionString],
+// [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject],
+// [AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy].
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion interface {
+	ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion()
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
 type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
@@ -24009,6 +25693,8 @@ type AccessApplicationNewParamsBodyBrowserRdpApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -24034,6 +25720,7 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestination) implemen
 // Satisfied by
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationNewParamsBodyBrowserRdpApplicationDestination].
 type AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyBrowserRdpApplicationDestinationUnion()
@@ -24070,8 +25757,6 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsPublicDes
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -24126,6 +25811,35 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsPrivateDe
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                           `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationNewParamsBodyBrowserRdpApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsL4Protocol string
@@ -24146,13 +25860,14 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsL4Protoco
 type AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType string
 
 const (
-	AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePrivate:
+	case AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserRdpApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -24728,6 +26443,7 @@ func (r AccessApplicationUpdateParamsBody) implementsAccessApplicationUpdatePara
 // [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyAccessBookmarkProps],
 // [zero_trust.AccessApplicationUpdateParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplication],
@@ -24843,6 +26559,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -24868,6 +26586,7 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) imple
 // Satisfied by
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationUpdateParamsBodySelfHostedApplicationDestination].
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion()
@@ -24904,8 +26623,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublic
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -24960,6 +26677,35 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivat
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                              `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol string
@@ -24980,13 +26726,14 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Prot
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -25859,11 +27606,14 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO        AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "dash_sso"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "infrastructure"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "rdp"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "mcp"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal      AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp:
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -25879,6 +27629,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -25904,6 +27656,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) imple
 // Satisfied by
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination].
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion()
@@ -25940,8 +27693,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublic
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -25996,6 +27747,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivat
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                              `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol string
@@ -26016,13 +27796,14 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Prot
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -26457,11 +28238,14 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO        AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "dash_sso"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "infrastructure"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "rdp"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "mcp"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal      AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp:
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -26477,6 +28261,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -26502,6 +28288,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) imple
 // Satisfied by
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination].
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion()
@@ -26538,8 +28325,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublic
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -26594,6 +28379,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivat
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                              `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol string
@@ -26614,13 +28428,14 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Prot
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -27004,11 +28819,14 @@ const (
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO        AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "dash_sso"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "infrastructure"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "rdp"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "mcp"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal      AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeProxyEndpoint  AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp:
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -27384,6 +29202,136 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain param.Field[string] `json:"domain"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application, in ascending order of
+	// precedence. Items can reference existing policies or create new policies
+	// exclusive to the application.
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink],
+// [shared.UnionString],
+// [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject],
+// [AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy].
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion interface {
+	ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion()
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
 type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
@@ -27640,6 +29588,8 @@ type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestination struct {
 	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string] `json:"mcp_server_id"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -27665,6 +29615,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestination) imple
 // Satisfied by
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsPrivateDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination],
 // [AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestination].
 type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationUnion()
@@ -27701,8 +29652,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsPublic
 	return false
 }
 
-// Private destinations are an early access feature and gated behind a feature
-// flag.
 type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsPrivateDestination struct {
 	// The CIDR range of the destination. Single IPs will be computed as /32.
 	CIDR param.Field[string] `json:"cidr"`
@@ -27757,6 +29706,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsPrivat
 	return false
 }
 
+// A MCP server id configured in ai-controls. Access will secure the MCP server if
+// accessed through a MCP portal.
+type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination struct {
+	// The MCP server id configured in ai-controls.
+	McpServerID param.Field[string]                                                                                              `json:"mcp_server_id"`
+	Type        param.Field[AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType] `json:"type"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestination) implementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType = "via_mcp_server_portal"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsL4Protocol string
@@ -27777,13 +29755,14 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsL4Prot
 type AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType string
 
 const (
-	AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType = "private"
+	AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType = "via_mcp_server_portal"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePrivate:
+	case AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserRdpApplicationDestinationsTypeViaMcpServerPortal:
 		return true
 	}
 	return false
@@ -28264,6 +30243,8 @@ type AccessApplicationListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// Search for apps by other listed query parameters.
 	Search param.Field[string] `query:"search"`
+	// Target Criteria attributes in key=value format.
+	TargetAttributes param.Field[string] `query:"target_attributes"`
 }
 
 // URLQuery serializes [AccessApplicationListParams]'s query parameters as

@@ -34,7 +34,7 @@ func TestStoreSecretNew(t *testing.T) {
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Body: []secrets_store.StoreSecretNewParamsBody{{
 				Name:    cloudflare.F("MY_API_KEY"),
-				Scopes:  cloudflare.F([]string{"workers", "ai_gateway"}),
+				Scopes:  cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
 				Value:   cloudflare.F("api-token-secret-123"),
 				Comment: cloudflare.F("info about my secret"),
 			}},
@@ -72,7 +72,7 @@ func TestStoreSecretListWithOptionalParams(t *testing.T) {
 			Order:     cloudflare.F(secrets_store.StoreSecretListParamsOrderName),
 			Page:      cloudflare.F(int64(2)),
 			PerPage:   cloudflare.F(int64(20)),
-			Scopes:    cloudflare.F([][]string{{"workers", "ai_gateway"}}),
+			Scopes:    cloudflare.F([][]string{{"workers", "ai_gateway", "dex", "access"}}),
 			Search:    cloudflare.F("search"),
 		},
 	)
@@ -165,7 +165,7 @@ func TestStoreSecretDuplicateWithOptionalParams(t *testing.T) {
 		secrets_store.StoreSecretDuplicateParams{
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("MY_API_KEY"),
-			Scopes:    cloudflare.F([]string{"workers", "ai_gateway"}),
+			Scopes:    cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
 			Comment:   cloudflare.F("info about my secret"),
 		},
 	)
@@ -199,7 +199,7 @@ func TestStoreSecretEditWithOptionalParams(t *testing.T) {
 		secrets_store.StoreSecretEditParams{
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Comment:   cloudflare.F("info about my secret"),
-			Scopes:    cloudflare.F([]string{"workers", "ai_gateway"}),
+			Scopes:    cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
 		},
 	)
 	if err != nil {
