@@ -152,11 +152,9 @@ type RecipientNewResponse struct {
 	// When the share was created.
 	Created time.Time `json:"created,required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
-	// Share Recipient status message.
-	StatusMessage string                         `json:"status_message,required"`
-	Resources     []RecipientNewResponseResource `json:"resources"`
-	JSON          recipientNewResponseJSON       `json:"-"`
+	Modified  time.Time                      `json:"modified,required" format:"date-time"`
+	Resources []RecipientNewResponseResource `json:"resources"`
+	JSON      recipientNewResponseJSON       `json:"-"`
 }
 
 // recipientNewResponseJSON contains the JSON metadata for the struct
@@ -167,7 +165,6 @@ type recipientNewResponseJSON struct {
 	AssociationStatus apijson.Field
 	Created           apijson.Field
 	Modified          apijson.Field
-	StatusMessage     apijson.Field
 	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -205,8 +202,10 @@ type RecipientNewResponseResource struct {
 	// Share Resource identifier.
 	ResourceID string `json:"resource_id,required"`
 	// Resource Version.
-	ResourceVersion int64                            `json:"resource_version,required"`
-	JSON            recipientNewResponseResourceJSON `json:"-"`
+	ResourceVersion int64 `json:"resource_version,required"`
+	// Whether the error is terminal or will be continually retried.
+	Terminal bool                             `json:"terminal,required"`
+	JSON     recipientNewResponseResourceJSON `json:"-"`
 }
 
 // recipientNewResponseResourceJSON contains the JSON metadata for the struct
@@ -215,6 +214,7 @@ type recipientNewResponseResourceJSON struct {
 	Error           apijson.Field
 	ResourceID      apijson.Field
 	ResourceVersion apijson.Field
+	Terminal        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -237,11 +237,9 @@ type RecipientListResponse struct {
 	// When the share was created.
 	Created time.Time `json:"created,required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
-	// Share Recipient status message.
-	StatusMessage string                          `json:"status_message,required"`
-	Resources     []RecipientListResponseResource `json:"resources"`
-	JSON          recipientListResponseJSON       `json:"-"`
+	Modified  time.Time                       `json:"modified,required" format:"date-time"`
+	Resources []RecipientListResponseResource `json:"resources"`
+	JSON      recipientListResponseJSON       `json:"-"`
 }
 
 // recipientListResponseJSON contains the JSON metadata for the struct
@@ -252,7 +250,6 @@ type recipientListResponseJSON struct {
 	AssociationStatus apijson.Field
 	Created           apijson.Field
 	Modified          apijson.Field
-	StatusMessage     apijson.Field
 	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -290,8 +287,10 @@ type RecipientListResponseResource struct {
 	// Share Resource identifier.
 	ResourceID string `json:"resource_id,required"`
 	// Resource Version.
-	ResourceVersion int64                             `json:"resource_version,required"`
-	JSON            recipientListResponseResourceJSON `json:"-"`
+	ResourceVersion int64 `json:"resource_version,required"`
+	// Whether the error is terminal or will be continually retried.
+	Terminal bool                              `json:"terminal,required"`
+	JSON     recipientListResponseResourceJSON `json:"-"`
 }
 
 // recipientListResponseResourceJSON contains the JSON metadata for the struct
@@ -300,6 +299,7 @@ type recipientListResponseResourceJSON struct {
 	Error           apijson.Field
 	ResourceID      apijson.Field
 	ResourceVersion apijson.Field
+	Terminal        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -322,11 +322,9 @@ type RecipientDeleteResponse struct {
 	// When the share was created.
 	Created time.Time `json:"created,required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
-	// Share Recipient status message.
-	StatusMessage string                            `json:"status_message,required"`
-	Resources     []RecipientDeleteResponseResource `json:"resources"`
-	JSON          recipientDeleteResponseJSON       `json:"-"`
+	Modified  time.Time                         `json:"modified,required" format:"date-time"`
+	Resources []RecipientDeleteResponseResource `json:"resources"`
+	JSON      recipientDeleteResponseJSON       `json:"-"`
 }
 
 // recipientDeleteResponseJSON contains the JSON metadata for the struct
@@ -337,7 +335,6 @@ type recipientDeleteResponseJSON struct {
 	AssociationStatus apijson.Field
 	Created           apijson.Field
 	Modified          apijson.Field
-	StatusMessage     apijson.Field
 	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -375,8 +372,10 @@ type RecipientDeleteResponseResource struct {
 	// Share Resource identifier.
 	ResourceID string `json:"resource_id,required"`
 	// Resource Version.
-	ResourceVersion int64                               `json:"resource_version,required"`
-	JSON            recipientDeleteResponseResourceJSON `json:"-"`
+	ResourceVersion int64 `json:"resource_version,required"`
+	// Whether the error is terminal or will be continually retried.
+	Terminal bool                                `json:"terminal,required"`
+	JSON     recipientDeleteResponseResourceJSON `json:"-"`
 }
 
 // recipientDeleteResponseResourceJSON contains the JSON metadata for the struct
@@ -385,6 +384,7 @@ type recipientDeleteResponseResourceJSON struct {
 	Error           apijson.Field
 	ResourceID      apijson.Field
 	ResourceVersion apijson.Field
+	Terminal        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -407,11 +407,9 @@ type RecipientGetResponse struct {
 	// When the share was created.
 	Created time.Time `json:"created,required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
-	// Share Recipient status message.
-	StatusMessage string                         `json:"status_message,required"`
-	Resources     []RecipientGetResponseResource `json:"resources"`
-	JSON          recipientGetResponseJSON       `json:"-"`
+	Modified  time.Time                      `json:"modified,required" format:"date-time"`
+	Resources []RecipientGetResponseResource `json:"resources"`
+	JSON      recipientGetResponseJSON       `json:"-"`
 }
 
 // recipientGetResponseJSON contains the JSON metadata for the struct
@@ -422,7 +420,6 @@ type recipientGetResponseJSON struct {
 	AssociationStatus apijson.Field
 	Created           apijson.Field
 	Modified          apijson.Field
-	StatusMessage     apijson.Field
 	Resources         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -460,8 +457,10 @@ type RecipientGetResponseResource struct {
 	// Share Resource identifier.
 	ResourceID string `json:"resource_id,required"`
 	// Resource Version.
-	ResourceVersion int64                            `json:"resource_version,required"`
-	JSON            recipientGetResponseResourceJSON `json:"-"`
+	ResourceVersion int64 `json:"resource_version,required"`
+	// Whether the error is terminal or will be continually retried.
+	Terminal bool                             `json:"terminal,required"`
+	JSON     recipientGetResponseResourceJSON `json:"-"`
 }
 
 // recipientGetResponseResourceJSON contains the JSON metadata for the struct
@@ -470,6 +469,7 @@ type recipientGetResponseResourceJSON struct {
 	Error           apijson.Field
 	ResourceID      apijson.Field
 	ResourceVersion apijson.Field
+	Terminal        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
