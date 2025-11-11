@@ -757,6 +757,7 @@ type InvestigateListParams struct {
 	// Determines if the message action log is included in the response.
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
+	Cursor    param.Field[string] `query:"cursor"`
 	// Determines if the search results will include detections or not.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
 	// The sender domains the search filters by.
@@ -769,7 +770,7 @@ type InvestigateListParams struct {
 	MessageAction param.Field[InvestigateListParamsMessageAction] `query:"message_action"`
 	MessageID     param.Field[string]                             `query:"message_id"`
 	Metric        param.Field[string]                             `query:"metric"`
-	// The page number of paginated results.
+	// Deprecated: Use cursor pagination instead.
 	Page param.Field[int64] `query:"page"`
 	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`

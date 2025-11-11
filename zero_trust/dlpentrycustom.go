@@ -1240,7 +1240,7 @@ type DLPEntryCustomNewParams struct {
 	Enabled   param.Field[bool]         `json:"enabled,required"`
 	Name      param.Field[string]       `json:"name,required"`
 	Pattern   param.Field[PatternParam] `json:"pattern,required"`
-	ProfileID param.Field[string]       `json:"profile_id,required" format:"uuid"`
+	ProfileID param.Field[string]       `json:"profile_id" format:"uuid"`
 }
 
 func (r DLPEntryCustomNewParams) MarshalJSON() (data []byte, err error) {
