@@ -261,8 +261,8 @@ func (r ThreatEventCategoryNewParams) MarshalJSON() (data []byte, err error) {
 type ThreatEventCategoryListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Array of dataset IDs to query categories from. If not provided, returns all
-	// categories from D1 database.
+	// Array of dataset IDs to query categories from. If not provided, uses the default
+	// dataset.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 }
 
