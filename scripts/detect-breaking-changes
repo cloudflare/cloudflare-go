@@ -660,6 +660,8 @@ TEST_PATHS=(
 	secrets_store/storesecret_test.go
 	secrets_store/quota_test.go
 	pipelines/pipeline_test.go
+	pipelines/sink_test.go
+	pipelines/stream_test.go
 	schema_validation/schema_test.go
 	schema_validation/setting_test.go
 	schema_validation/settingoperation_test.go
