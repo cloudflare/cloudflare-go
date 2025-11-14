@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package connectivity_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/connectivity"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
-func TestConnectivityDirectoryServiceNewWithOptionalParams(t *testing.T) {
+func TestDirectoryServiceNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,17 +27,17 @@ func TestConnectivityDirectoryServiceNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Connectivity.Directory.Services.New(context.TODO(), zero_trust.ConnectivityDirectoryServiceNewParams{
+	_, err := client.Connectivity.Directory.Services.New(context.TODO(), connectivity.DirectoryServiceNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Host: cloudflare.F[zero_trust.ConnectivityDirectoryServiceNewParamsHostUnion](zero_trust.ConnectivityDirectoryServiceNewParamsHostInfraHostnameHost{
+		Host: cloudflare.F[connectivity.DirectoryServiceNewParamsHostUnion](connectivity.DirectoryServiceNewParamsHostInfraHostnameHost{
 			Hostname: cloudflare.F("api.example.com"),
-			ResolverNetwork: cloudflare.F(zero_trust.ConnectivityDirectoryServiceNewParamsHostInfraHostnameHostResolverNetwork{
+			ResolverNetwork: cloudflare.F(connectivity.DirectoryServiceNewParamsHostInfraHostnameHostResolverNetwork{
 				TunnelID:    cloudflare.F("0191dce4-9ab4-7fce-b660-8e5dec5172da"),
 				ResolverIPs: cloudflare.F([]string{"string"}),
 			}),
 		}),
 		Name:      cloudflare.F("web-server"),
-		Type:      cloudflare.F(zero_trust.ConnectivityDirectoryServiceNewParamsTypeHTTP),
+		Type:      cloudflare.F(connectivity.DirectoryServiceNewParamsTypeHTTP),
 		HTTPPort:  cloudflare.F(int64(8080)),
 		HTTPSPort: cloudflare.F(int64(8443)),
 	})
@@ -50,7 +50,7 @@ func TestConnectivityDirectoryServiceNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConnectivityDirectoryServiceUpdateWithOptionalParams(t *testing.T) {
+func TestDirectoryServiceUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -63,19 +63,19 @@ func TestConnectivityDirectoryServiceUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Connectivity.Directory.Services.Update(
+	_, err := client.Connectivity.Directory.Services.Update(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		zero_trust.ConnectivityDirectoryServiceUpdateParams{
+		connectivity.DirectoryServiceUpdateParams{
 			AccountID: cloudflare.F("account_id"),
-			Host: cloudflare.F[zero_trust.ConnectivityDirectoryServiceUpdateParamsHostUnion](zero_trust.ConnectivityDirectoryServiceUpdateParamsHostInfraIPv4Host{
+			Host: cloudflare.F[connectivity.DirectoryServiceUpdateParamsHostUnion](connectivity.DirectoryServiceUpdateParamsHostInfraIPv4Host{
 				IPV4: cloudflare.F("10.0.0.1"),
-				Network: cloudflare.F(zero_trust.ConnectivityDirectoryServiceUpdateParamsHostInfraIPv4HostNetwork{
+				Network: cloudflare.F(connectivity.DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork{
 					TunnelID: cloudflare.F("0191dce4-9ab4-7fce-b660-8e5dec5172da"),
 				}),
 			}),
 			Name:      cloudflare.F("web-app"),
-			Type:      cloudflare.F(zero_trust.ConnectivityDirectoryServiceUpdateParamsTypeHTTP),
+			Type:      cloudflare.F(connectivity.DirectoryServiceUpdateParamsTypeHTTP),
 			HTTPPort:  cloudflare.F(int64(8080)),
 			HTTPSPort: cloudflare.F(int64(8443)),
 		},
@@ -89,7 +89,7 @@ func TestConnectivityDirectoryServiceUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConnectivityDirectoryServiceListWithOptionalParams(t *testing.T) {
+func TestDirectoryServiceListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -102,11 +102,11 @@ func TestConnectivityDirectoryServiceListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Connectivity.Directory.Services.List(context.TODO(), zero_trust.ConnectivityDirectoryServiceListParams{
+	_, err := client.Connectivity.Directory.Services.List(context.TODO(), connectivity.DirectoryServiceListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(1)),
-		Type:      cloudflare.F(zero_trust.ConnectivityDirectoryServiceListParamsTypeHTTP),
+		Type:      cloudflare.F(connectivity.DirectoryServiceListParamsTypeHTTP),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -117,7 +117,7 @@ func TestConnectivityDirectoryServiceListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConnectivityDirectoryServiceDelete(t *testing.T) {
+func TestDirectoryServiceDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -130,10 +130,10 @@ func TestConnectivityDirectoryServiceDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.ZeroTrust.Connectivity.Directory.Services.Delete(
+	err := client.Connectivity.Directory.Services.Delete(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		zero_trust.ConnectivityDirectoryServiceDeleteParams{
+		connectivity.DirectoryServiceDeleteParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)
@@ -146,7 +146,7 @@ func TestConnectivityDirectoryServiceDelete(t *testing.T) {
 	}
 }
 
-func TestConnectivityDirectoryServiceGet(t *testing.T) {
+func TestDirectoryServiceGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -159,10 +159,10 @@ func TestConnectivityDirectoryServiceGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Connectivity.Directory.Services.Get(
+	_, err := client.Connectivity.Directory.Services.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		zero_trust.ConnectivityDirectoryServiceGetParams{
+		connectivity.DirectoryServiceGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)

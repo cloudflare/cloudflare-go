@@ -203,6 +203,8 @@ type TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest stru
 	KeepAliveConnections int64 `json:"keepAliveConnections"`
 	// Timeout after which an idle keepalive connection can be discarded.
 	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
+	// Auto configure the Hostname on the origin server certificate.
+	MatchSnItoHost bool `json:"matchSNItoHost"`
 	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
 	// network has misconfigured one of the protocols.
 	NoHappyEyeballs bool `json:"noHappyEyeballs"`
@@ -237,6 +239,7 @@ type tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestJSON 
 	HTTPHostHeader         apijson.Field
 	KeepAliveConnections   apijson.Field
 	KeepAliveTimeout       apijson.Field
+	MatchSnItoHost         apijson.Field
 	NoHappyEyeballs        apijson.Field
 	NoTLSVerify            apijson.Field
 	OriginServerName       apijson.Field
@@ -310,6 +313,8 @@ type TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest struct {
 	KeepAliveConnections int64 `json:"keepAliveConnections"`
 	// Timeout after which an idle keepalive connection can be discarded.
 	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
+	// Auto configure the Hostname on the origin server certificate.
+	MatchSnItoHost bool `json:"matchSNItoHost"`
 	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
 	// network has misconfigured one of the protocols.
 	NoHappyEyeballs bool `json:"noHappyEyeballs"`
@@ -344,6 +349,7 @@ type tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestJSON struct 
 	HTTPHostHeader         apijson.Field
 	KeepAliveConnections   apijson.Field
 	KeepAliveTimeout       apijson.Field
+	MatchSnItoHost         apijson.Field
 	NoHappyEyeballs        apijson.Field
 	NoTLSVerify            apijson.Field
 	OriginServerName       apijson.Field
@@ -537,6 +543,8 @@ type TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest struct 
 	KeepAliveConnections int64 `json:"keepAliveConnections"`
 	// Timeout after which an idle keepalive connection can be discarded.
 	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
+	// Auto configure the Hostname on the origin server certificate.
+	MatchSnItoHost bool `json:"matchSNItoHost"`
 	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
 	// network has misconfigured one of the protocols.
 	NoHappyEyeballs bool `json:"noHappyEyeballs"`
@@ -571,6 +579,7 @@ type tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestJSON str
 	HTTPHostHeader         apijson.Field
 	KeepAliveConnections   apijson.Field
 	KeepAliveTimeout       apijson.Field
+	MatchSnItoHost         apijson.Field
 	NoHappyEyeballs        apijson.Field
 	NoTLSVerify            apijson.Field
 	OriginServerName       apijson.Field
@@ -644,6 +653,8 @@ type TunnelCloudflaredConfigurationGetResponseConfigOriginRequest struct {
 	KeepAliveConnections int64 `json:"keepAliveConnections"`
 	// Timeout after which an idle keepalive connection can be discarded.
 	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
+	// Auto configure the Hostname on the origin server certificate.
+	MatchSnItoHost bool `json:"matchSNItoHost"`
 	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
 	// network has misconfigured one of the protocols.
 	NoHappyEyeballs bool `json:"noHappyEyeballs"`
@@ -678,6 +689,7 @@ type tunnelCloudflaredConfigurationGetResponseConfigOriginRequestJSON struct {
 	HTTPHostHeader         apijson.Field
 	KeepAliveConnections   apijson.Field
 	KeepAliveTimeout       apijson.Field
+	MatchSnItoHost         apijson.Field
 	NoHappyEyeballs        apijson.Field
 	NoTLSVerify            apijson.Field
 	OriginServerName       apijson.Field
@@ -813,6 +825,8 @@ type TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest struct
 	KeepAliveConnections param.Field[int64] `json:"keepAliveConnections"`
 	// Timeout after which an idle keepalive connection can be discarded.
 	KeepAliveTimeout param.Field[int64] `json:"keepAliveTimeout"`
+	// Auto configure the Hostname on the origin server certificate.
+	MatchSnItoHost param.Field[bool] `json:"matchSNItoHost"`
 	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
 	// network has misconfigured one of the protocols.
 	NoHappyEyeballs param.Field[bool] `json:"noHappyEyeballs"`
@@ -877,6 +891,8 @@ type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest struct {
 	KeepAliveConnections param.Field[int64] `json:"keepAliveConnections"`
 	// Timeout after which an idle keepalive connection can be discarded.
 	KeepAliveTimeout param.Field[int64] `json:"keepAliveTimeout"`
+	// Auto configure the Hostname on the origin server certificate.
+	MatchSnItoHost param.Field[bool] `json:"matchSNItoHost"`
 	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
 	// network has misconfigured one of the protocols.
 	NoHappyEyeballs param.Field[bool] `json:"noHappyEyeballs"`

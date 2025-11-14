@@ -40,9 +40,9 @@ func TestAS112SummaryV2WithOptionalParams(t *testing.T) {
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Protocol:      cloudflare.F(radar.AS112SummaryV2ParamsProtocolUdp),
-			QueryType:     cloudflare.F(radar.AS112SummaryV2ParamsQueryTypeA),
-			ResponseCode:  cloudflare.F(radar.AS112SummaryV2ParamsResponseCodeNoerror),
+			Protocol:      cloudflare.F([]radar.AS112SummaryV2ParamsProtocol{radar.AS112SummaryV2ParamsProtocolUdp}),
+			QueryType:     cloudflare.F([]radar.AS112SummaryV2ParamsQueryType{radar.AS112SummaryV2ParamsQueryTypeA}),
+			ResponseCode:  cloudflare.F([]radar.AS112SummaryV2ParamsResponseCode{radar.AS112SummaryV2ParamsResponseCodeNoerror}),
 		},
 	)
 	if err != nil {
@@ -76,9 +76,9 @@ func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
 		Format:       cloudflare.F(radar.AS112TimeseriesParamsFormatJson),
 		Location:     cloudflare.F([]string{"string"}),
 		Name:         cloudflare.F([]string{"main_series"}),
-		Protocol:     cloudflare.F(radar.AS112TimeseriesParamsProtocolUdp),
-		QueryType:    cloudflare.F(radar.AS112TimeseriesParamsQueryTypeA),
-		ResponseCode: cloudflare.F(radar.AS112TimeseriesParamsResponseCodeNoerror),
+		Protocol:     cloudflare.F([]radar.AS112TimeseriesParamsProtocol{radar.AS112TimeseriesParamsProtocolUdp}),
+		QueryType:    cloudflare.F([]radar.AS112TimeseriesParamsQueryType{radar.AS112TimeseriesParamsQueryTypeA}),
+		ResponseCode: cloudflare.F([]radar.AS112TimeseriesParamsResponseCode{radar.AS112TimeseriesParamsResponseCodeNoerror}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -115,9 +115,9 @@ func TestAS112TimeseriesGroupsV2WithOptionalParams(t *testing.T) {
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Protocol:      cloudflare.F(radar.AS112TimeseriesGroupsV2ParamsProtocolUdp),
-			QueryType:     cloudflare.F(radar.AS112TimeseriesGroupsV2ParamsQueryTypeA),
-			ResponseCode:  cloudflare.F(radar.AS112TimeseriesGroupsV2ParamsResponseCodeNoerror),
+			Protocol:      cloudflare.F([]radar.AS112TimeseriesGroupsV2ParamsProtocol{radar.AS112TimeseriesGroupsV2ParamsProtocolUdp}),
+			QueryType:     cloudflare.F([]radar.AS112TimeseriesGroupsV2ParamsQueryType{radar.AS112TimeseriesGroupsV2ParamsQueryTypeA}),
+			ResponseCode:  cloudflare.F([]radar.AS112TimeseriesGroupsV2ParamsResponseCode{radar.AS112TimeseriesGroupsV2ParamsResponseCodeNoerror}),
 		},
 	)
 	if err != nil {

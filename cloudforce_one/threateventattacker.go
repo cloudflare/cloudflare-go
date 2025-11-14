@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -34,15 +36,15 @@ func NewThreatEventAttackerService(opts ...option.RequestOption) (r *ThreatEvent
 	return
 }
 
-// Lists attackers
-func (r *ThreatEventAttackerService) List(ctx context.Context, query ThreatEventAttackerListParams, opts ...option.RequestOption) (res *ThreatEventAttackerListResponse, err error) {
+// Lists attackers across multiple datasets
+func (r *ThreatEventAttackerService) List(ctx context.Context, params ThreatEventAttackerListParams, opts ...option.RequestOption) (res *ThreatEventAttackerListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/attackers", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/attackers", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
 
@@ -93,4 +95,16 @@ func (r threatEventAttackerListResponseItemsJSON) RawJSON() string {
 type ThreatEventAttackerListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Array of dataset IDs to query attackers from. If not provided, uses the default
+	// dataset.
+	DatasetIDs param.Field[[]string] `query:"datasetIds"`
+}
+
+// URLQuery serializes [ThreatEventAttackerListParams]'s query parameters as
+// `url.Values`.
+func (r ThreatEventAttackerListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }

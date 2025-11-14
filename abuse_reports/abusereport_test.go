@@ -66,3 +66,66 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
 }
+
+func TestAbuseReportListWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.AbuseReports.List(context.TODO(), abuse_reports.AbuseReportListParams{
+		AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CreatedAfter:     cloudflare.F("2009-11-10T23:00:00Z"),
+		CreatedBefore:    cloudflare.F("2009-11-10T23:00:00Z"),
+		Domain:           cloudflare.F("domain"),
+		MitigationStatus: cloudflare.F(abuse_reports.AbuseReportListParamsMitigationStatusPending),
+		Page:             cloudflare.F(int64(0)),
+		PerPage:          cloudflare.F(int64(0)),
+		Sort:             cloudflare.F("sort"),
+		Status:           cloudflare.F(abuse_reports.AbuseReportListParamsStatusAccepted),
+		Type:             cloudflare.F(abuse_reports.AbuseReportListParamsTypePhish),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAbuseReportGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.AbuseReports.Get(
+		context.TODO(),
+		"report_param",
+		abuse_reports.AbuseReportGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}

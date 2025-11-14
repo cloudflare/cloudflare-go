@@ -370,6 +370,8 @@ TEST_PATHS=(
 	zero_trust/organization_test.go
 	zero_trust/organizationdoh_test.go
 	zero_trust/seat_test.go
+	zero_trust/accessaicontrolmcpportal_test.go
+	zero_trust/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
@@ -418,7 +420,6 @@ TEST_PATHS=(
 	zero_trust/tunnelwarpconnector_test.go
 	zero_trust/tunnelwarpconnectortoken_test.go
 	zero_trust/connectivitysetting_test.go
-	zero_trust/connectivitydirectoryservice_test.go
 	zero_trust/dlpdataset_test.go
 	zero_trust/dlpdatasetupload_test.go
 	zero_trust/dlpdatasetversion_test.go
@@ -461,6 +462,7 @@ TEST_PATHS=(
 	zero_trust/riskscoringintegration_test.go
 	zero_trust/riskscoringintegrationreference_test.go
 	turnstile/widget_test.go
+	connectivity/directoryservice_test.go
 	hyperdrive/config_test.go
 	rum/siteinfo_test.go
 	rum/rule_test.go
@@ -612,6 +614,7 @@ TEST_PATHS=(
 	iam/resourcegroup_test.go
 	iam/usergroup_test.go
 	iam/usergroupmember_test.go
+	iam/sso_test.go
 	cloud_connector/rule_test.go
 	botnet_feed/asn_test.go
 	botnet_feed/configasn_test.go
@@ -630,6 +633,7 @@ TEST_PATHS=(
 	content_scanning/payload_test.go
 	content_scanning/setting_test.go
 	abuse_reports/abusereport_test.go
+	abuse_reports/mitigation_test.go
 	ai/ai_test.go
 	ai/finetune_test.go
 	ai/finetuneasset_test.go
@@ -656,9 +660,14 @@ TEST_PATHS=(
 	secrets_store/storesecret_test.go
 	secrets_store/quota_test.go
 	pipelines/pipeline_test.go
+	pipelines/sink_test.go
+	pipelines/stream_test.go
 	schema_validation/schema_test.go
 	schema_validation/setting_test.go
 	schema_validation/settingoperation_test.go
+	token_validation/configuration_test.go
+	token_validation/configurationcredential_test.go
+	token_validation/rule_test.go
 	usage_test.go
 	paginationauto_test.go
 	paginationmanual_test.go

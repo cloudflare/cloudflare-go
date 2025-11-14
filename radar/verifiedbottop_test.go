@@ -35,7 +35,7 @@ func TestVerifiedBotTopBotsWithOptionalParams(t *testing.T) {
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.VerifiedBotTopBotsParamsFormatJson),
-		Limit:     cloudflare.F(int64(5)),
+		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"main_series"}),
 	})
@@ -68,7 +68,7 @@ func TestVerifiedBotTopCategoriesWithOptionalParams(t *testing.T) {
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.VerifiedBotTopCategoriesParamsFormatJson),
-		Limit:     cloudflare.F(int64(5)),
+		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"main_series"}),
 	})

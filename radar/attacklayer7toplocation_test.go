@@ -38,7 +38,7 @@ func TestAttackLayer7TopLocationOriginWithOptionalParams(t *testing.T) {
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsHTTPMethod{radar.AttackLayer7TopLocationOriginParamsHTTPMethodGet}),
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsHTTPVersion{radar.AttackLayer7TopLocationOriginParamsHTTPVersionHttPv1}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsIPVersion{radar.AttackLayer7TopLocationOriginParamsIPVersionIPv4}),
-		Limit:             cloudflare.F(int64(5)),
+		Limit:             cloudflare.F(int64(1)),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsMitigationProduct{radar.AttackLayer7TopLocationOriginParamsMitigationProductDDoS}),
 		Name:              cloudflare.F([]string{"main_series"}),
 	})
@@ -70,7 +70,7 @@ func TestAttackLayer7TopLocationTargetWithOptionalParams(t *testing.T) {
 		DateRange:         cloudflare.F([]string{"7d"}),
 		DateStart:         cloudflare.F([]time.Time{time.Now()}),
 		Format:            cloudflare.F(radar.AttackLayer7TopLocationTargetParamsFormatJson),
-		Limit:             cloudflare.F(int64(5)),
+		Limit:             cloudflare.F(int64(1)),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsMitigationProduct{radar.AttackLayer7TopLocationTargetParamsMitigationProductDDoS}),
 		Name:              cloudflare.F([]string{"main_series"}),
 	})

@@ -51,6 +51,19 @@ func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdatePar
 	return
 }
 
+// Deletes a Workers subdomain for an account.
+func (r *SubdomainService) Delete(ctx context.Context, body SubdomainDeleteParams, opts ...option.RequestOption) (err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/subdomain", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
 // Returns a Workers subdomain for an account.
 func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, opts ...option.RequestOption) (res *SubdomainGetResponse, err error) {
 	var env SubdomainGetResponseEnvelope
@@ -257,6 +270,11 @@ func (r SubdomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type SubdomainDeleteParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type SubdomainGetParams struct {

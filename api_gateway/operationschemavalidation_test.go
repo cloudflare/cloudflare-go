@@ -59,12 +59,12 @@ func TestOperationSchemaValidationEdit(t *testing.T) {
 	)
 	_, err := client.APIGateway.Operations.SchemaValidation.Edit(context.TODO(), api_gateway.OperationSchemaValidationEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		SettingsMultipleRequest: api_gateway.SettingsMultipleRequestParam{
-			"3818d821-5901-4147-a474-f5f5aec1d54e": api_gateway.SettingsMultipleRequestItemParam{
-				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionLog),
+		Body: map[string]api_gateway.OperationSchemaValidationEditParamsBody{
+			"3818d821-5901-4147-a474-f5f5aec1d54e": {
+				MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationEditParamsBodyMitigationActionLog),
 			},
-			"b17c8043-99a0-4202-b7d9-8f7cdbee02cd": api_gateway.SettingsMultipleRequestItemParam{
-				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionBlock),
+			"b17c8043-99a0-4202-b7d9-8f7cdbee02cd": {
+				MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationEditParamsBodyMitigationActionBlock),
 			},
 		},
 	})

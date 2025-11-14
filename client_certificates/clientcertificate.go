@@ -108,10 +108,10 @@ func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificate
 
 // If a API Shield mTLS Client Certificate is in a pending_revocation state, you
 // may reactivate it with this endpoint.
-func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
+func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, params ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.ZoneID.Value == "" {
+	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
@@ -119,8 +119,8 @@ func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID
 		err = errors.New("missing required client_certificate_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/client_certificates/%s", params.ZoneID, clientCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -588,7 +588,12 @@ func (r ClientCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ClientCertificateEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID     param.Field[string] `path:"zone_id,required"`
+	Reactivate param.Field[bool]   `json:"reactivate"`
+}
+
+func (r ClientCertificateEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ClientCertificateEditResponseEnvelope struct {

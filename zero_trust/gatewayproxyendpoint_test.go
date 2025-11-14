@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
-func TestGatewayProxyEndpointNew(t *testing.T) {
+func TestGatewayProxyEndpointNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,8 +29,10 @@ func TestGatewayProxyEndpointNew(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.New(context.TODO(), zero_trust.GatewayProxyEndpointNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		IPs:       cloudflare.F([]zero_trust.GatewayIPsParam{"192.0.2.1/32"}),
-		Name:      cloudflare.F("Devops team"),
+		Body: zero_trust.GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreate{
+			Name: cloudflare.F("Devops team"),
+			Kind: cloudflare.F(zero_trust.GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreateKindIP),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

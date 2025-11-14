@@ -315,11 +315,12 @@ const (
 	ApplicationTypeRdp            ApplicationType = "rdp"
 	ApplicationTypeMcp            ApplicationType = "mcp"
 	ApplicationTypeMcpPortal      ApplicationType = "mcp_portal"
+	ApplicationTypeProxyEndpoint  ApplicationType = "proxy_endpoint"
 )
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure, ApplicationTypeRdp, ApplicationTypeMcp, ApplicationTypeMcpPortal:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure, ApplicationTypeRdp, ApplicationTypeMcp, ApplicationTypeMcpPortal, ApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -1971,6 +1972,7 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -2088,6 +2090,7 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccessApplicationNewResponseAppLauncherApplication],
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationNewResponseBookmarkApplication],
 // [AccessApplicationNewResponseInfrastructureApplication],
 // [AccessApplicationNewResponseBrowserRdpApplication].
@@ -2102,6 +2105,7 @@ func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnio
 // [AccessApplicationNewResponseAppLauncherApplication],
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationNewResponseBookmarkApplication],
 // [AccessApplicationNewResponseInfrastructureApplication] or
 // [AccessApplicationNewResponseBrowserRdpApplication].
@@ -2140,6 +2144,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -3724,11 +3732,12 @@ const (
 	AccessApplicationNewResponseBrowserSSHApplicationTypeRdp            AccessApplicationNewResponseBrowserSSHApplicationType = "rdp"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeMcp            AccessApplicationNewResponseBrowserSSHApplicationType = "mcp"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationNewResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationNewResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationNewResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRdp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal:
+	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRdp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -4568,11 +4577,12 @@ const (
 	AccessApplicationNewResponseBrowserVNCApplicationTypeRdp            AccessApplicationNewResponseBrowserVNCApplicationType = "rdp"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeMcp            AccessApplicationNewResponseBrowserVNCApplicationType = "mcp"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationNewResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationNewResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationNewResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRdp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal:
+	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRdp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -5355,11 +5365,12 @@ const (
 	AccessApplicationNewResponseAppLauncherApplicationTypeRdp            AccessApplicationNewResponseAppLauncherApplicationType = "rdp"
 	AccessApplicationNewResponseAppLauncherApplicationTypeMcp            AccessApplicationNewResponseAppLauncherApplicationType = "mcp"
 	AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationNewResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationNewResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationNewResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRdp, AccessApplicationNewResponseAppLauncherApplicationTypeMcp, AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal:
+	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRdp, AccessApplicationNewResponseAppLauncherApplicationTypeMcp, AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationNewResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -5773,6 +5784,144 @@ func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolic
 }
 
 func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                      `json:"name"`
+	Policies []AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                  `json:"session_duration"`
+	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6949,6 +7098,7 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -7066,6 +7216,7 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // [AccessApplicationUpdateResponseAppLauncherApplication],
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationUpdateResponseBookmarkApplication],
 // [AccessApplicationUpdateResponseInfrastructureApplication],
 // [AccessApplicationUpdateResponseBrowserRdpApplication].
@@ -7080,6 +7231,7 @@ func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateRespon
 // [AccessApplicationUpdateResponseAppLauncherApplication],
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationUpdateResponseBookmarkApplication],
 // [AccessApplicationUpdateResponseInfrastructureApplication] or
 // [AccessApplicationUpdateResponseBrowserRdpApplication].
@@ -7118,6 +7270,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8705,11 +8861,12 @@ const (
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp            AccessApplicationUpdateResponseBrowserSSHApplicationType = "rdp"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp            AccessApplicationUpdateResponseBrowserSSHApplicationType = "mcp"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationUpdateResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationUpdateResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal:
+	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRdp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -9550,11 +9707,12 @@ const (
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp            AccessApplicationUpdateResponseBrowserVNCApplicationType = "rdp"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp            AccessApplicationUpdateResponseBrowserVNCApplicationType = "mcp"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationUpdateResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationUpdateResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal:
+	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRdp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -10337,11 +10495,12 @@ const (
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp            AccessApplicationUpdateResponseAppLauncherApplicationType = "rdp"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp            AccessApplicationUpdateResponseAppLauncherApplicationType = "mcp"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationUpdateResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal:
+	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRdp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -10755,6 +10914,144 @@ func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPo
 }
 
 func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                         `json:"name"`
+	Policies []AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                     `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                           `json:"session_duration"`
+	UpdatedAt       time.Time                                                                        `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -11934,6 +12231,7 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -12051,6 +12349,7 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccessApplicationListResponseAppLauncherApplication],
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationListResponseBookmarkApplication],
 // [AccessApplicationListResponseInfrastructureApplication],
 // [AccessApplicationListResponseBrowserRdpApplication].
@@ -12065,6 +12364,7 @@ func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUn
 // [AccessApplicationListResponseAppLauncherApplication],
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationListResponseBookmarkApplication],
 // [AccessApplicationListResponseInfrastructureApplication] or
 // [AccessApplicationListResponseBrowserRdpApplication].
@@ -12103,6 +12403,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -13689,11 +13993,12 @@ const (
 	AccessApplicationListResponseBrowserSSHApplicationTypeRdp            AccessApplicationListResponseBrowserSSHApplicationType = "rdp"
 	AccessApplicationListResponseBrowserSSHApplicationTypeMcp            AccessApplicationListResponseBrowserSSHApplicationType = "mcp"
 	AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationListResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationListResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationListResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationListResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRdp, AccessApplicationListResponseBrowserSSHApplicationTypeMcp, AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal:
+	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRdp, AccessApplicationListResponseBrowserSSHApplicationTypeMcp, AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationListResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -14534,11 +14839,12 @@ const (
 	AccessApplicationListResponseBrowserVNCApplicationTypeRdp            AccessApplicationListResponseBrowserVNCApplicationType = "rdp"
 	AccessApplicationListResponseBrowserVNCApplicationTypeMcp            AccessApplicationListResponseBrowserVNCApplicationType = "mcp"
 	AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationListResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationListResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationListResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationListResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRdp, AccessApplicationListResponseBrowserVNCApplicationTypeMcp, AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal:
+	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRdp, AccessApplicationListResponseBrowserVNCApplicationTypeMcp, AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationListResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -15321,11 +15627,12 @@ const (
 	AccessApplicationListResponseAppLauncherApplicationTypeRdp            AccessApplicationListResponseAppLauncherApplicationType = "rdp"
 	AccessApplicationListResponseAppLauncherApplicationTypeMcp            AccessApplicationListResponseAppLauncherApplicationType = "mcp"
 	AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationListResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationListResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationListResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationListResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRdp, AccessApplicationListResponseAppLauncherApplicationTypeMcp, AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal:
+	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRdp, AccessApplicationListResponseAppLauncherApplicationTypeMcp, AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationListResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -15739,6 +16046,144 @@ func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoli
 }
 
 func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                       `json:"name"`
+	Policies []AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                   `json:"session_duration"`
+	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                         `json:"session_duration"`
+	UpdatedAt       time.Time                                                                      `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -16938,6 +17383,7 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseAppLauncherApplicationPolicy],
 	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy],
+	// [[]AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy],
 	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -17055,6 +17501,7 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccessApplicationGetResponseAppLauncherApplication],
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationGetResponseBookmarkApplication],
 // [AccessApplicationGetResponseInfrastructureApplication],
 // [AccessApplicationGetResponseBrowserRdpApplication].
@@ -17069,6 +17516,7 @@ func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnio
 // [AccessApplicationGetResponseAppLauncherApplication],
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication],
 // [AccessApplicationGetResponseBookmarkApplication],
 // [AccessApplicationGetResponseInfrastructureApplication] or
 // [AccessApplicationGetResponseBrowserRdpApplication].
@@ -17107,6 +17555,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -18691,11 +19143,12 @@ const (
 	AccessApplicationGetResponseBrowserSSHApplicationTypeRdp            AccessApplicationGetResponseBrowserSSHApplicationType = "rdp"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeMcp            AccessApplicationGetResponseBrowserSSHApplicationType = "mcp"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal      AccessApplicationGetResponseBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationGetResponseBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationGetResponseBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationGetResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRdp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal:
+	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRdp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -19535,11 +19988,12 @@ const (
 	AccessApplicationGetResponseBrowserVNCApplicationTypeRdp            AccessApplicationGetResponseBrowserVNCApplicationType = "rdp"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeMcp            AccessApplicationGetResponseBrowserVNCApplicationType = "mcp"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal      AccessApplicationGetResponseBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationGetResponseBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationGetResponseBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationGetResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRdp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal:
+	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRdp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -20322,11 +20776,12 @@ const (
 	AccessApplicationGetResponseAppLauncherApplicationTypeRdp            AccessApplicationGetResponseAppLauncherApplicationType = "rdp"
 	AccessApplicationGetResponseAppLauncherApplicationTypeMcp            AccessApplicationGetResponseAppLauncherApplicationType = "mcp"
 	AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal      AccessApplicationGetResponseAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationGetResponseAppLauncherApplicationTypeProxyEndpoint  AccessApplicationGetResponseAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationGetResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRdp, AccessApplicationGetResponseAppLauncherApplicationTypeMcp, AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal:
+	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRdp, AccessApplicationGetResponseAppLauncherApplicationTypeMcp, AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationGetResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -20740,6 +21195,144 @@ func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolic
 }
 
 func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID.
+	ID string `json:"id"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// Audience tag.
+	AUD string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain string `json:"domain"`
+	// The name of the application.
+	Name     string                                                                      `json:"name"`
+	Policies []AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration string                                                                  `json:"session_duration"`
+	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication]
+type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON struct {
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SessionDuration          apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication) implementsAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy]
+type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -21955,6 +22548,7 @@ func (r AccessApplicationNewParamsBody) implementsAccessApplicationNewParamsBody
 // [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication],
 // [zero_trust.AccessApplicationNewParamsBodyAccessBookmarkProps],
 // [zero_trust.AccessApplicationNewParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplication],
@@ -23119,11 +23713,12 @@ const (
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "rdp"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "mcp"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal      AccessApplicationNewParamsBodyBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationNewParamsBodyBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal:
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRdp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -23750,11 +24345,12 @@ const (
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "rdp"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "mcp"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal      AccessApplicationNewParamsBodyBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationNewParamsBodyBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal:
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRdp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -24330,11 +24926,12 @@ const (
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp            AccessApplicationNewParamsBodyAppLauncherApplicationType = "rdp"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp            AccessApplicationNewParamsBodyAppLauncherApplicationType = "mcp"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal      AccessApplicationNewParamsBodyAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationNewParamsBodyAppLauncherApplicationTypeProxyEndpoint  AccessApplicationNewParamsBodyAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal:
+	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRdp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationNewParamsBodyAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -24708,6 +25305,136 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain param.Field[string] `json:"domain"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application, in ascending order of
+	// precedence. Items can reference existing policies or create new policies
+	// exclusive to the application.
+	Policies param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication) implementsAccessApplicationNewParamsBodyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink],
+// [shared.UnionString],
+// [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject],
+// [AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy].
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion interface {
+	ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion()
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
 
 type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
@@ -25716,6 +26443,7 @@ func (r AccessApplicationUpdateParamsBody) implementsAccessApplicationUpdatePara
 // [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyAccessBookmarkProps],
 // [zero_trust.AccessApplicationUpdateParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplication],
@@ -26880,11 +27608,12 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "rdp"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "mcp"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal      AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "mcp_portal"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeProxyEndpoint  AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal:
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRdp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -27511,11 +28240,12 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "rdp"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "mcp"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal      AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "mcp_portal"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeProxyEndpoint  AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal:
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRdp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -28091,11 +28821,12 @@ const (
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "rdp"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "mcp"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal      AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "mcp_portal"
+	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeProxyEndpoint  AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "proxy_endpoint"
 )
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal:
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRdp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -28469,6 +29200,136 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication struct {
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The proxy endpoint domain in the format: 10 alphanumeric characters followed by
+	// .proxy.cloudflare-gateway.com
+	Domain param.Field[string] `json:"domain"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application, in ascending order of
+	// precedence. Items can reference existing policies or create new policies
+	// exclusive to the application.
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h. Note: unsupported for infrastructure type applications.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy struct {
+	// The UUID of the policy
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink],
+// [shared.UnionString],
+// [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject],
+// [AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy].
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion interface {
+	ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion()
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
 
 type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {

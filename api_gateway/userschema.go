@@ -51,7 +51,7 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams, opts ...option.RequestOption) (res *SchemaUpload, err error) {
+func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams, opts ...option.RequestOption) (res *UserSchemaNewResponse, err error) {
 	var env UserSchemaNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -72,7 +72,7 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
+func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OldPublicSchema], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -98,7 +98,7 @@ func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParam
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
+func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OldPublicSchema] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -127,7 +127,7 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
+func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *OldPublicSchema, err error) {
 	var env UserSchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -152,7 +152,7 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
+func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *OldPublicSchema, err error) {
 	var env UserSchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -221,10 +221,10 @@ func (r messageItemSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type PublicSchema struct {
+type OldPublicSchema struct {
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// Kind of schema
-	Kind PublicSchemaKind `json:"kind,required"`
+	Kind OldPublicSchemaKind `json:"kind,required"`
 	// Name of the schema
 	Name string `json:"name,required"`
 	// UUID.
@@ -232,12 +232,12 @@ type PublicSchema struct {
 	// Source of the schema
 	Source string `json:"source"`
 	// Flag whether schema is enabled for validation.
-	ValidationEnabled bool             `json:"validation_enabled"`
-	JSON              publicSchemaJSON `json:"-"`
+	ValidationEnabled bool                `json:"validation_enabled"`
+	JSON              oldPublicSchemaJSON `json:"-"`
 }
 
-// publicSchemaJSON contains the JSON metadata for the struct [PublicSchema]
-type publicSchemaJSON struct {
+// oldPublicSchemaJSON contains the JSON metadata for the struct [OldPublicSchema]
+type oldPublicSchemaJSON struct {
 	CreatedAt         apijson.Field
 	Kind              apijson.Field
 	Name              apijson.Field
@@ -248,75 +248,76 @@ type publicSchemaJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *PublicSchema) UnmarshalJSON(data []byte) (err error) {
+func (r *OldPublicSchema) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r publicSchemaJSON) RawJSON() string {
+func (r oldPublicSchemaJSON) RawJSON() string {
 	return r.raw
 }
 
 // Kind of schema
-type PublicSchemaKind string
+type OldPublicSchemaKind string
 
 const (
-	PublicSchemaKindOpenAPIV3 PublicSchemaKind = "openapi_v3"
+	OldPublicSchemaKindOpenAPIV3 OldPublicSchemaKind = "openapi_v3"
 )
 
-func (r PublicSchemaKind) IsKnown() bool {
+func (r OldPublicSchemaKind) IsKnown() bool {
 	switch r {
-	case PublicSchemaKindOpenAPIV3:
+	case OldPublicSchemaKindOpenAPIV3:
 		return true
 	}
 	return false
 }
 
-type SchemaUpload struct {
-	Schema        PublicSchema              `json:"schema,required"`
-	UploadDetails SchemaUploadUploadDetails `json:"upload_details"`
-	JSON          schemaUploadJSON          `json:"-"`
+type UserSchemaNewResponse struct {
+	Schema        OldPublicSchema                    `json:"schema,required"`
+	UploadDetails UserSchemaNewResponseUploadDetails `json:"upload_details"`
+	JSON          userSchemaNewResponseJSON          `json:"-"`
 }
 
-// schemaUploadJSON contains the JSON metadata for the struct [SchemaUpload]
-type schemaUploadJSON struct {
+// userSchemaNewResponseJSON contains the JSON metadata for the struct
+// [UserSchemaNewResponse]
+type userSchemaNewResponseJSON struct {
 	Schema        apijson.Field
 	UploadDetails apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SchemaUpload) UnmarshalJSON(data []byte) (err error) {
+func (r *UserSchemaNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r schemaUploadJSON) RawJSON() string {
+func (r userSchemaNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SchemaUploadUploadDetails struct {
+type UserSchemaNewResponseUploadDetails struct {
 	// Diagnostic warning events that occurred during processing. These events are
 	// non-critical errors found within the schema.
-	Warnings []SchemaUploadUploadDetailsWarning `json:"warnings"`
-	JSON     schemaUploadUploadDetailsJSON      `json:"-"`
+	Warnings []UserSchemaNewResponseUploadDetailsWarning `json:"warnings"`
+	JSON     userSchemaNewResponseUploadDetailsJSON      `json:"-"`
 }
 
-// schemaUploadUploadDetailsJSON contains the JSON metadata for the struct
-// [SchemaUploadUploadDetails]
-type schemaUploadUploadDetailsJSON struct {
+// userSchemaNewResponseUploadDetailsJSON contains the JSON metadata for the struct
+// [UserSchemaNewResponseUploadDetails]
+type userSchemaNewResponseUploadDetailsJSON struct {
 	Warnings    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaUploadUploadDetails) UnmarshalJSON(data []byte) (err error) {
+func (r *UserSchemaNewResponseUploadDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r schemaUploadUploadDetailsJSON) RawJSON() string {
+func (r userSchemaNewResponseUploadDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SchemaUploadUploadDetailsWarning struct {
+type UserSchemaNewResponseUploadDetailsWarning struct {
 	// Code that identifies the event that occurred.
 	Code int64 `json:"code,required"`
 	// JSONPath location(s) in the schema where these events were encountered. See
@@ -324,13 +325,13 @@ type SchemaUploadUploadDetailsWarning struct {
 	// for JSONPath specification.
 	Locations []string `json:"locations"`
 	// Diagnostic message that describes the event.
-	Message string                               `json:"message"`
-	JSON    schemaUploadUploadDetailsWarningJSON `json:"-"`
+	Message string                                        `json:"message"`
+	JSON    userSchemaNewResponseUploadDetailsWarningJSON `json:"-"`
 }
 
-// schemaUploadUploadDetailsWarningJSON contains the JSON metadata for the struct
-// [SchemaUploadUploadDetailsWarning]
-type schemaUploadUploadDetailsWarningJSON struct {
+// userSchemaNewResponseUploadDetailsWarningJSON contains the JSON metadata for the
+// struct [UserSchemaNewResponseUploadDetailsWarning]
+type userSchemaNewResponseUploadDetailsWarningJSON struct {
 	Code        apijson.Field
 	Locations   apijson.Field
 	Message     apijson.Field
@@ -338,11 +339,11 @@ type schemaUploadUploadDetailsWarningJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaUploadUploadDetailsWarning) UnmarshalJSON(data []byte) (err error) {
+func (r *UserSchemaNewResponseUploadDetailsWarning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r schemaUploadUploadDetailsWarningJSON) RawJSON() string {
+func (r userSchemaNewResponseUploadDetailsWarningJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -447,9 +448,9 @@ func (r UserSchemaNewParamsValidationEnabled) IsKnown() bool {
 }
 
 type UserSchemaNewResponseEnvelope struct {
-	Errors   Message      `json:"errors,required"`
-	Messages Message      `json:"messages,required"`
-	Result   SchemaUpload `json:"result,required"`
+	Errors   Message               `json:"errors,required"`
+	Messages Message               `json:"messages,required"`
+	Result   UserSchemaNewResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success UserSchemaNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaNewResponseEnvelopeJSON    `json:"-"`
@@ -542,9 +543,9 @@ func (r UserSchemaEditParamsValidationEnabled) IsKnown() bool {
 }
 
 type UserSchemaEditResponseEnvelope struct {
-	Errors   Message      `json:"errors,required"`
-	Messages Message      `json:"messages,required"`
-	Result   PublicSchema `json:"result,required"`
+	Errors   Message         `json:"errors,required"`
+	Messages Message         `json:"messages,required"`
+	Result   OldPublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success UserSchemaEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaEditResponseEnvelopeJSON    `json:"-"`
@@ -600,9 +601,9 @@ func (r UserSchemaGetParams) URLQuery() (v url.Values) {
 }
 
 type UserSchemaGetResponseEnvelope struct {
-	Errors   Message      `json:"errors,required"`
-	Messages Message      `json:"messages,required"`
-	Result   PublicSchema `json:"result,required"`
+	Errors   Message         `json:"errors,required"`
+	Messages Message         `json:"messages,required"`
+	Result   OldPublicSchema `json:"result,required"`
 	// Whether the API call was successful.
 	Success UserSchemaGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaGetResponseEnvelopeJSON    `json:"-"`

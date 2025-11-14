@@ -37,7 +37,7 @@ func TestAttackLayer7TopAseOriginWithOptionalParams(t *testing.T) {
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TopAseOriginParamsHTTPMethod{radar.AttackLayer7TopAseOriginParamsHTTPMethodGet}),
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TopAseOriginParamsHTTPVersion{radar.AttackLayer7TopAseOriginParamsHTTPVersionHttPv1}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TopAseOriginParamsIPVersion{radar.AttackLayer7TopAseOriginParamsIPVersionIPv4}),
-		Limit:             cloudflare.F(int64(5)),
+		Limit:             cloudflare.F(int64(1)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopAseOriginParamsMitigationProduct{radar.AttackLayer7TopAseOriginParamsMitigationProductDDoS}),
 		Name:              cloudflare.F([]string{"main_series"}),

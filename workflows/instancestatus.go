@@ -122,11 +122,12 @@ const (
 	InstanceStatusEditParamsStatusResume    InstanceStatusEditParamsStatus = "resume"
 	InstanceStatusEditParamsStatusPause     InstanceStatusEditParamsStatus = "pause"
 	InstanceStatusEditParamsStatusTerminate InstanceStatusEditParamsStatus = "terminate"
+	InstanceStatusEditParamsStatusRestart   InstanceStatusEditParamsStatus = "restart"
 )
 
 func (r InstanceStatusEditParamsStatus) IsKnown() bool {
 	switch r {
-	case InstanceStatusEditParamsStatusResume, InstanceStatusEditParamsStatusPause, InstanceStatusEditParamsStatusTerminate:
+	case InstanceStatusEditParamsStatusResume, InstanceStatusEditParamsStatusPause, InstanceStatusEditParamsStatusTerminate, InstanceStatusEditParamsStatusRestart:
 		return true
 	}
 	return false

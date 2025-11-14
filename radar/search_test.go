@@ -32,7 +32,7 @@ func TestSearchGlobalWithOptionalParams(t *testing.T) {
 		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeAdm1S}),
 		Format:        cloudflare.F(radar.SearchGlobalParamsFormatJson),
 		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeAdm1S}),
-		Limit:         cloudflare.F(int64(5)),
+		Limit:         cloudflare.F(int64(1)),
 		LimitPerGroup: cloudflare.F(0.000000),
 	})
 	if err != nil {
