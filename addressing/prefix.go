@@ -390,6 +390,9 @@ type PrefixNewParams struct {
 	DelegateLOACreation param.Field[bool] `json:"delegate_loa_creation"`
 	// Description of the prefix.
 	Description param.Field[string] `json:"description"`
+	// Identifier for the uploaded LOA document.
+	// Deprecated: The LOA API is deprecated and will be removed in a future release.
+	LOADocumentID param.Field[string] `json:"loa_document_id"`
 }
 
 func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
