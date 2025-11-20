@@ -30,7 +30,7 @@ func TestGeolocationListWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Geolocations.List(context.TODO(), radar.GeolocationListParams{
 		Format:   cloudflare.F(radar.GeolocationListParamsFormatJson),
 		GeoID:    cloudflare.F("3190509,360689"),
-		Limit:    cloudflare.F(int64(5)),
+		Limit:    cloudflare.F(int64(1)),
 		Location: cloudflare.F("US,CA"),
 		Offset:   cloudflare.F(int64(0)),
 	})

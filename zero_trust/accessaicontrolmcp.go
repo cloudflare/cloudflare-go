@@ -14,6 +14,8 @@ import (
 // the [NewAccessAIControlMcpService] method instead.
 type AccessAIControlMcpService struct {
 	Options []option.RequestOption
+	Portals *AccessAIControlMcpPortalService
+	Servers *AccessAIControlMcpServerService
 }
 
 // NewAccessAIControlMcpService generates a new service that applies the given
@@ -22,5 +24,7 @@ type AccessAIControlMcpService struct {
 func NewAccessAIControlMcpService(opts ...option.RequestOption) (r *AccessAIControlMcpService) {
 	r = &AccessAIControlMcpService{}
 	r.Options = opts
+	r.Portals = NewAccessAIControlMcpPortalService(opts...)
+	r.Servers = NewAccessAIControlMcpServerService(opts...)
 	return
 }

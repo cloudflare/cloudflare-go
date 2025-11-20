@@ -44,7 +44,7 @@ func TestHTTPAseBrowserFamilyGetWithOptionalParams(t *testing.T) {
 			HTTPProtocol: cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsHTTPProtocol{radar.HTTPAseBrowserFamilyGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:  cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsHTTPVersion{radar.HTTPAseBrowserFamilyGetParamsHTTPVersionHttPv1}),
 			IPVersion:    cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsIPVersion{radar.HTTPAseBrowserFamilyGetParamsIPVersionIPv4}),
-			Limit:        cloudflare.F(int64(5)),
+			Limit:        cloudflare.F(int64(1)),
 			Location:     cloudflare.F([]string{"string"}),
 			Name:         cloudflare.F([]string{"main_series"}),
 			OS:           cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsOS{radar.HTTPAseBrowserFamilyGetParamsOSWindows}),

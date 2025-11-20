@@ -162,8 +162,9 @@ type DeviceDeviceListResponse struct {
 	Model string `json:"model,nullable"`
 	// The device operating system version number.
 	OSVersion string `json:"os_version,nullable"`
-	// Additional operating system version data. For macOS or iOS, the Product Version
-	// Extra. For Linux, the kernel release version.
+	// Additional operating system version details. For Windows, the UBR (Update Build
+	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
+	// distribution name and version.
 	OSVersionExtra string `json:"os_version_extra,nullable"`
 	// **Deprecated**: IP information is provided by DEX - see
 	// https://developers.cloudflare.com/api/resources/zero_trust/subresources/dex/subresources/fleet_status/subresources/devices/methods/list/
@@ -334,8 +335,9 @@ type DeviceDeviceGetResponse struct {
 	Model string `json:"model,nullable"`
 	// The device operating system version number.
 	OSVersion string `json:"os_version,nullable"`
-	// Additional operating system version data. For macOS or iOS, the Product Version
-	// Extra. For Linux, the kernel release version.
+	// Additional operating system version details. For Windows, the UBR (Update Build
+	// Revision). For Mac or iOS, the Product Version Extra. For Linux, the
+	// distribution name and version.
 	OSVersionExtra string `json:"os_version_extra,nullable"`
 	// **Deprecated**: IP information is provided by DEX - see
 	// https://developers.cloudflare.com/api/resources/zero_trust/subresources/dex/subresources/fleet_status/subresources/devices/methods/list/

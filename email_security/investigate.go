@@ -208,11 +208,12 @@ const (
 	InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity        InvestigateListResponsePropertiesAllowlistedPatternType = "domain_similarity"
 	InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency           InvestigateListResponsePropertiesAllowlistedPatternType = "domain_recency"
 	InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender InvestigateListResponsePropertiesAllowlistedPatternType = "managed_acceptable_sender"
+	InvestigateListResponsePropertiesAllowlistedPatternTypeOutboundNdr             InvestigateListResponsePropertiesAllowlistedPatternType = "outbound_ndr"
 )
 
 func (r InvestigateListResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	switch r {
-	case InvestigateListResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
+	case InvestigateListResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateListResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateListResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender, InvestigateListResponsePropertiesAllowlistedPatternTypeOutboundNdr:
 		return true
 	}
 	return false
@@ -228,11 +229,12 @@ const (
 	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateListResponsePropertiesWhitelistedPatternType = "domain_similarity"
 	InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateListResponsePropertiesWhitelistedPatternType = "domain_recency"
 	InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateListResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+	InvestigateListResponsePropertiesWhitelistedPatternTypeOutboundNdr             InvestigateListResponsePropertiesWhitelistedPatternType = "outbound_ndr"
 )
 
 func (r InvestigateListResponsePropertiesWhitelistedPatternType) IsKnown() bool {
 	switch r {
-	case InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
+	case InvestigateListResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateListResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateListResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateListResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateListResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender, InvestigateListResponsePropertiesWhitelistedPatternTypeOutboundNdr:
 		return true
 	}
 	return false
@@ -533,11 +535,12 @@ const (
 	InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesAllowlistedPatternType = "domain_similarity"
 	InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesAllowlistedPatternType = "domain_recency"
 	InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesAllowlistedPatternType = "managed_acceptable_sender"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeOutboundNdr             InvestigateGetResponsePropertiesAllowlistedPatternType = "outbound_ndr"
 )
 
 func (r InvestigateGetResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	switch r {
-	case InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender:
+	case InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeOutboundNdr:
 		return true
 	}
 	return false
@@ -553,11 +556,12 @@ const (
 	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_similarity"
 	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_recency"
 	InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeOutboundNdr             InvestigateGetResponsePropertiesWhitelistedPatternType = "outbound_ndr"
 )
 
 func (r InvestigateGetResponsePropertiesWhitelistedPatternType) IsKnown() bool {
 	switch r {
-	case InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender:
+	case InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeOutboundNdr:
 		return true
 	}
 	return false
@@ -757,6 +761,7 @@ type InvestigateListParams struct {
 	// Determines if the message action log is included in the response.
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
+	Cursor    param.Field[string] `query:"cursor"`
 	// Determines if the search results will include detections or not.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
 	// The sender domains the search filters by.
@@ -769,7 +774,7 @@ type InvestigateListParams struct {
 	MessageAction param.Field[InvestigateListParamsMessageAction] `query:"message_action"`
 	MessageID     param.Field[string]                             `query:"message_id"`
 	Metric        param.Field[string]                             `query:"metric"`
-	// The page number of paginated results.
+	// Deprecated: Use cursor pagination instead.
 	Page param.Field[int64] `query:"page"`
 	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
