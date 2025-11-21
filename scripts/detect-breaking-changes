@@ -320,6 +320,7 @@ TEST_PATHS=(
 	alerting/destinationwebhook_test.go
 	alerting/history_test.go
 	alerting/policy_test.go
+	alerting/silence_test.go
 	d1/database_test.go
 	r2/bucket_test.go
 	r2/bucketlifecycle_test.go
