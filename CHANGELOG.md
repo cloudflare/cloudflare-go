@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.4.0 (2025-11-21)
+
+Full Changelog: [v6.3.0...v6.4.0](https://github.com/cloudflare/cloudflare-go/compare/v6.3.0...v6.4.0)
+
+### Features
+
+* feat(silences): add a new alert silencing api ([fbe4969](https://github.com/cloudflare/cloudflare-go/commit/fbe4969d2d8b61c2e8c635543297a04e14435391))
+
 ## 6.3.0 (2025-11-19)
 
 Full Changelog: [v6.2.0...v6.3.0](https://github.com/cloudflare/cloudflare-go/compare/v6.2.0...v6.3.0)
