@@ -133,10 +133,12 @@ func (r httpLocationDeviceTypeGetResponseMetaConfidenceInfoJSON) RawJSON() strin
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                   `json:"description,required"`
+	EndDate     time.Time                                                                `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
@@ -165,6 +167,65 @@ func (r *HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotation) Unmarsha
 
 func (r httpLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPLocationDeviceTypeGetResponseMetaDateRange struct {

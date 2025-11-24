@@ -37,7 +37,9 @@ func TestTrafficAnomalyGetWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F("US"),
 		Offset:    cloudflare.F(int64(0)),
+		Origin:    cloudflare.F("amazon-us-east-1"),
 		Status:    cloudflare.F(radar.TrafficAnomalyGetParamsStatusVerified),
+		Type:      cloudflare.F([]radar.TrafficAnomalyGetParamsType{radar.TrafficAnomalyGetParamsTypeLocation}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

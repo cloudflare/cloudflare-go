@@ -167,6 +167,7 @@ type ThreatEventNewResponse struct {
 	Category        string                     `json:"category,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
+	HasChildren     bool                       `json:"hasChildren,required"`
 	Indicator       string                     `json:"indicator,required"`
 	IndicatorType   string                     `json:"indicatorType,required"`
 	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
@@ -197,6 +198,7 @@ type threatEventNewResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
+	HasChildren     apijson.Field
 	Indicator       apijson.Field
 	IndicatorType   apijson.Field
 	IndicatorTypeID apijson.Field
@@ -234,6 +236,7 @@ type ThreatEventListResponse struct {
 	Category        string                      `json:"category,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
+	HasChildren     bool                        `json:"hasChildren,required"`
 	Indicator       string                      `json:"indicator,required"`
 	IndicatorType   string                      `json:"indicatorType,required"`
 	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
@@ -264,6 +267,7 @@ type threatEventListResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
+	HasChildren     apijson.Field
 	Indicator       apijson.Field
 	IndicatorType   apijson.Field
 	IndicatorTypeID apijson.Field
@@ -322,6 +326,7 @@ type ThreatEventEditResponse struct {
 	Category        string                      `json:"category,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
+	HasChildren     bool                        `json:"hasChildren,required"`
 	Indicator       string                      `json:"indicator,required"`
 	IndicatorType   string                      `json:"indicatorType,required"`
 	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
@@ -352,6 +357,7 @@ type threatEventEditResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
+	HasChildren     apijson.Field
 	Indicator       apijson.Field
 	IndicatorType   apijson.Field
 	IndicatorTypeID apijson.Field
@@ -389,6 +395,7 @@ type ThreatEventGetResponse struct {
 	Category        string                     `json:"category,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
+	HasChildren     bool                       `json:"hasChildren,required"`
 	Indicator       string                     `json:"indicator,required"`
 	IndicatorType   string                     `json:"indicatorType,required"`
 	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
@@ -419,6 +426,7 @@ type threatEventGetResponseJSON struct {
 	Category        apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
+	HasChildren     apijson.Field
 	Indicator       apijson.Field
 	IndicatorType   apijson.Field
 	IndicatorTypeID apijson.Field
@@ -456,7 +464,6 @@ type ThreatEventNewParams struct {
 	Category        param.Field[string]                  `json:"category,required"`
 	Date            param.Field[time.Time]               `json:"date,required" format:"date-time"`
 	Event           param.Field[string]                  `json:"event,required"`
-	IndicatorType   param.Field[string]                  `json:"indicatorType,required"`
 	Raw             param.Field[ThreatEventNewParamsRaw] `json:"raw,required"`
 	TLP             param.Field[string]                  `json:"tlp,required"`
 	BodyAccountID   param.Field[float64]                 `json:"accountId"`
@@ -464,10 +471,14 @@ type ThreatEventNewParams struct {
 	AttackerCountry param.Field[string]                  `json:"attackerCountry"`
 	DatasetID       param.Field[string]                  `json:"datasetId"`
 	Indicator       param.Field[string]                  `json:"indicator"`
-	Insight         param.Field[string]                  `json:"insight"`
-	Tags            param.Field[[]string]                `json:"tags"`
-	TargetCountry   param.Field[string]                  `json:"targetCountry"`
-	TargetIndustry  param.Field[string]                  `json:"targetIndustry"`
+	// Array of indicators for this event. Supports multiple indicators per event for
+	// complex scenarios.
+	Indicators     param.Field[[]ThreatEventNewParamsIndicator] `json:"indicators"`
+	IndicatorType  param.Field[string]                          `json:"indicatorType"`
+	Insight        param.Field[string]                          `json:"insight"`
+	Tags           param.Field[[]string]                        `json:"tags"`
+	TargetCountry  param.Field[string]                          `json:"targetCountry"`
+	TargetIndustry param.Field[string]                          `json:"targetIndustry"`
 }
 
 func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
@@ -481,6 +492,17 @@ type ThreatEventNewParamsRaw struct {
 }
 
 func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventNewParamsIndicator struct {
+	// The type of indicator (e.g., DOMAIN, IP, JA3, HASH)
+	IndicatorType param.Field[string] `json:"indicatorType,required"`
+	// The indicator value (e.g., domain name, IP address, hash)
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -594,7 +616,6 @@ type ThreatEventBulkNewParamsData struct {
 	Category        param.Field[string]                          `json:"category,required"`
 	Date            param.Field[time.Time]                       `json:"date,required" format:"date-time"`
 	Event           param.Field[string]                          `json:"event,required"`
-	IndicatorType   param.Field[string]                          `json:"indicatorType,required"`
 	Raw             param.Field[ThreatEventBulkNewParamsDataRaw] `json:"raw,required"`
 	TLP             param.Field[string]                          `json:"tlp,required"`
 	AccountID       param.Field[float64]                         `json:"accountId"`
@@ -602,10 +623,14 @@ type ThreatEventBulkNewParamsData struct {
 	AttackerCountry param.Field[string]                          `json:"attackerCountry"`
 	DatasetID       param.Field[string]                          `json:"datasetId"`
 	Indicator       param.Field[string]                          `json:"indicator"`
-	Insight         param.Field[string]                          `json:"insight"`
-	Tags            param.Field[[]string]                        `json:"tags"`
-	TargetCountry   param.Field[string]                          `json:"targetCountry"`
-	TargetIndustry  param.Field[string]                          `json:"targetIndustry"`
+	// Array of indicators for this event. Supports multiple indicators per event for
+	// complex scenarios.
+	Indicators     param.Field[[]ThreatEventBulkNewParamsDataIndicator] `json:"indicators"`
+	IndicatorType  param.Field[string]                                  `json:"indicatorType"`
+	Insight        param.Field[string]                                  `json:"insight"`
+	Tags           param.Field[[]string]                                `json:"tags"`
+	TargetCountry  param.Field[string]                                  `json:"targetCountry"`
+	TargetIndustry param.Field[string]                                  `json:"targetIndustry"`
 }
 
 func (r ThreatEventBulkNewParamsData) MarshalJSON() (data []byte, err error) {
@@ -619,6 +644,17 @@ type ThreatEventBulkNewParamsDataRaw struct {
 }
 
 func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventBulkNewParamsDataIndicator struct {
+	// The type of indicator (e.g., DOMAIN, IP, JA3, HASH)
+	IndicatorType param.Field[string] `json:"indicatorType,required"`
+	// The indicator value (e.g., domain name, IP address, hash)
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r ThreatEventBulkNewParamsDataIndicator) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

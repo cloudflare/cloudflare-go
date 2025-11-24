@@ -134,10 +134,12 @@ func (r httpLocationOSGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                           `json:"description,required"`
+	EndDate     time.Time                                                        `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	LinkedURL       string                                                    `json:"linkedUrl,required" format:"uri"`
@@ -165,6 +167,65 @@ func (r *HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(da
 
 func (r httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPLocationOSGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPLocationOSGetResponseMetaDateRange struct {

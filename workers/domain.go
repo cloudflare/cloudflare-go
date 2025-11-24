@@ -123,6 +123,8 @@ type Domain struct {
 	// Identifer of the Worker Domain.
 	ID string `json:"id"`
 	// Worker environment associated with the zone and hostname.
+	//
+	// Deprecated: deprecated
 	Environment string `json:"environment"`
 	// Hostname of the Worker Domain.
 	Hostname string `json:"hostname"`
@@ -158,14 +160,14 @@ func (r domainJSON) RawJSON() string {
 type DomainUpdateParams struct {
 	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Worker environment associated with the zone and hostname.
-	Environment param.Field[string] `json:"environment,required"`
 	// Hostname of the Worker Domain.
 	Hostname param.Field[string] `json:"hostname,required"`
 	// Worker service associated with the zone and hostname.
 	Service param.Field[string] `json:"service,required"`
 	// Identifier of the zone.
 	ZoneID param.Field[string] `json:"zone_id,required"`
+	// Worker environment associated with the zone and hostname.
+	Environment param.Field[string] `json:"environment"`
 }
 
 func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {

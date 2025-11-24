@@ -94,20 +94,6 @@ TEST_PATHS=(
 	dns/zonetransferacl_test.go
 	dns/zonetransferpeer_test.go
 	dns/zonetransfertsig_test.go
-	email_security/investigate_test.go
-	email_security/investigatedetection_test.go
-	email_security/investigatepreview_test.go
-	email_security/investigateraw_test.go
-	email_security/investigatetrace_test.go
-	email_security/investigatemove_test.go
-	email_security/investigatereclassify_test.go
-	email_security/investigaterelease_test.go
-	email_security/settingallowpolicy_test.go
-	email_security/settingblocksender_test.go
-	email_security/settingdomain_test.go
-	email_security/settingimpersonationregistry_test.go
-	email_security/settingtrusteddomain_test.go
-	email_security/submission_test.go
 	email_routing/emailrouting_test.go
 	email_routing/dns_test.go
 	email_routing/rule_test.go

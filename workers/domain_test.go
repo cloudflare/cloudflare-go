@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/workers"
 )
 
-func TestDomainUpdate(t *testing.T) {
+func TestDomainUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,10 +29,10 @@ func TestDomainUpdate(t *testing.T) {
 	)
 	_, err := client.Workers.Domains.Update(context.TODO(), workers.DomainUpdateParams{
 		AccountID:   cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
-		Environment: cloudflare.F("production"),
 		Hostname:    cloudflare.F("foo.example.com"),
 		Service:     cloudflare.F("foo"),
 		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
+		Environment: cloudflare.F("production"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

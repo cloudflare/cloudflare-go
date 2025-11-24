@@ -147,10 +147,12 @@ func (r qualityIQISummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                           `json:"description,required"`
+	EndDate     time.Time                                                        `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	LinkedURL       string                                                    `json:"linkedUrl,required" format:"uri"`
@@ -178,6 +180,65 @@ func (r *QualityIQISummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(da
 
 func (r qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, QualityIQISummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type QualityIQISummaryResponseMetaDateRange struct {
@@ -386,10 +447,12 @@ func (r qualityIQITimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() stri
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                    `json:"description,required"`
+	EndDate     time.Time                                                                 `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
@@ -418,6 +481,65 @@ func (r *QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotation) Unmarsh
 
 func (r qualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll                QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots               QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos                QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet                QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, QualityIQITimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type QualityIQITimeseriesGroupsResponseMetaDateRange struct {

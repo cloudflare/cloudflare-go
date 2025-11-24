@@ -134,10 +134,12 @@ func (r httpLocationTLSVersionGetResponseMetaConfidenceInfoJSON) RawJSON() strin
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                   `json:"description,required"`
+	EndDate     time.Time                                                                `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
@@ -166,6 +168,65 @@ func (r *HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation) Unmarsha
 
 func (r httpLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPLocationTLSVersionGetResponseMetaDateRange struct {

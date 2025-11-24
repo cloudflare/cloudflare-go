@@ -165,10 +165,12 @@ func (r dnsSummaryV2ResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryV2ResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                      `json:"description,required"`
+	EndDate     time.Time                                                   `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
 	LinkedURL       string                                               `json:"linkedUrl,required" format:"uri"`
@@ -196,6 +198,65 @@ func (r *DNSSummaryV2ResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []
 
 func (r dnsSummaryV2ResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceAll                DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceBGP                DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceBots               DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceCt                 DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNS                DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDos                DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceFw                 DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceIQI                DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceNet                DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceAll, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceBGP, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceBots, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceCt, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNS, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceDos, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceFw, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceIQI, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceNet, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeEvent             DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeOutage            DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypePipeline          DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeEvent, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSSummaryV2ResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type DNSSummaryV2ResponseMetaDateRange struct {
@@ -378,10 +439,12 @@ func (r dnsTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                       `json:"description,required"`
+	EndDate     time.Time                                                    `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
@@ -409,6 +472,65 @@ func (r *DNSTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data [
 
 func (r dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type DNSTimeseriesResponseMetaDateRange struct {
@@ -592,10 +714,12 @@ func (r dnsTimeseriesGroupsV2ResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                               `json:"description,required"`
+	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
@@ -624,6 +748,65 @@ func (r *DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation) UnmarshalJSO
 
 func (r dnsTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceAll                DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceBGP                DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceBots               DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceCt                 DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNS                DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDos                DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceFw                 DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceIQI                DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceNet                DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceAll, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceBGP, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceBots, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceCt, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNS, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceDos, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceFw, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceIQI, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceNet, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeEvent             DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeOutage            DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypePipeline          DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeEvent, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type DNSTimeseriesGroupsV2ResponseMetaDateRange struct {

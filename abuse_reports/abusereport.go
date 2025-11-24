@@ -146,7 +146,14 @@ type AbuseReportListResponseReport struct {
 	Status AbuseReportListResponseReportsStatus `json:"status,required"`
 	// The abuse report type
 	Type AbuseReportListResponseReportsType `json:"type,required"`
-	JSON abuseReportListResponseReportJSON  `json:"-"`
+	// Justification for the report.
+	Justification string `json:"justification"`
+	// Original work / Targeted brand in the alleged abuse.
+	OriginalWork string `json:"original_work"`
+	// Information about the submitter of the report.
+	Submitter AbuseReportListResponseReportsSubmitter `json:"submitter"`
+	URLs      []string                                `json:"urls"`
+	JSON      abuseReportListResponseReportJSON       `json:"-"`
 }
 
 // abuseReportListResponseReportJSON contains the JSON metadata for the struct
@@ -158,6 +165,10 @@ type abuseReportListResponseReportJSON struct {
 	MitigationSummary apijson.Field
 	Status            apijson.Field
 	Type              apijson.Field
+	Justification     apijson.Field
+	OriginalWork      apijson.Field
+	Submitter         apijson.Field
+	URLs              apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -244,6 +255,34 @@ func (r AbuseReportListResponseReportsType) IsKnown() bool {
 	return false
 }
 
+// Information about the submitter of the report.
+type AbuseReportListResponseReportsSubmitter struct {
+	Company   string                                      `json:"company"`
+	Email     string                                      `json:"email"`
+	Name      string                                      `json:"name"`
+	Telephone string                                      `json:"telephone"`
+	JSON      abuseReportListResponseReportsSubmitterJSON `json:"-"`
+}
+
+// abuseReportListResponseReportsSubmitterJSON contains the JSON metadata for the
+// struct [AbuseReportListResponseReportsSubmitter]
+type abuseReportListResponseReportsSubmitterJSON struct {
+	Company     apijson.Field
+	Email       apijson.Field
+	Name        apijson.Field
+	Telephone   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AbuseReportListResponseReportsSubmitter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportListResponseReportsSubmitterJSON) RawJSON() string {
+	return r.raw
+}
+
 type AbuseReportGetResponse struct {
 	// Public facing ID of abuse report, aka abuse_rand.
 	ID string `json:"id,required"`
@@ -258,7 +297,14 @@ type AbuseReportGetResponse struct {
 	Status AbuseReportGetResponseStatus `json:"status,required"`
 	// The abuse report type
 	Type AbuseReportGetResponseType `json:"type,required"`
-	JSON abuseReportGetResponseJSON `json:"-"`
+	// Justification for the report.
+	Justification string `json:"justification"`
+	// Original work / Targeted brand in the alleged abuse.
+	OriginalWork string `json:"original_work"`
+	// Information about the submitter of the report.
+	Submitter AbuseReportGetResponseSubmitter `json:"submitter"`
+	URLs      []string                        `json:"urls"`
+	JSON      abuseReportGetResponseJSON      `json:"-"`
 }
 
 // abuseReportGetResponseJSON contains the JSON metadata for the struct
@@ -270,6 +316,10 @@ type abuseReportGetResponseJSON struct {
 	MitigationSummary apijson.Field
 	Status            apijson.Field
 	Type              apijson.Field
+	Justification     apijson.Field
+	OriginalWork      apijson.Field
+	Submitter         apijson.Field
+	URLs              apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -354,6 +404,34 @@ func (r AbuseReportGetResponseType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Information about the submitter of the report.
+type AbuseReportGetResponseSubmitter struct {
+	Company   string                              `json:"company"`
+	Email     string                              `json:"email"`
+	Name      string                              `json:"name"`
+	Telephone string                              `json:"telephone"`
+	JSON      abuseReportGetResponseSubmitterJSON `json:"-"`
+}
+
+// abuseReportGetResponseSubmitterJSON contains the JSON metadata for the struct
+// [AbuseReportGetResponseSubmitter]
+type abuseReportGetResponseSubmitterJSON struct {
+	Company     apijson.Field
+	Email       apijson.Field
+	Name        apijson.Field
+	Telephone   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AbuseReportGetResponseSubmitter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r abuseReportGetResponseSubmitterJSON) RawJSON() string {
+	return r.raw
 }
 
 type AbuseReportNewParams struct {

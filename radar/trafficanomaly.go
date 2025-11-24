@@ -81,6 +81,7 @@ type TrafficAnomalyGetResponseTrafficAnomaly struct {
 	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails"`
 	EndDate              time.Time                                                `json:"endDate" format:"date-time"`
 	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails"`
+	OriginDetails        TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails   `json:"originDetails"`
 	VisibleInDataSources []string                                                 `json:"visibleInDataSources"`
 	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON              `json:"-"`
 }
@@ -95,6 +96,7 @@ type trafficAnomalyGetResponseTrafficAnomalyJSON struct {
 	ASNDetails           apijson.Field
 	EndDate              apijson.Field
 	LocationDetails      apijson.Field
+	OriginDetails        apijson.Field
 	VisibleInDataSources apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
@@ -181,6 +183,29 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON) RawJSON() 
 	return r.raw
 }
 
+type TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails struct {
+	Name   string                                                     `json:"name,required"`
+	Origin string                                                     `json:"origin,required"`
+	JSON   trafficAnomalyGetResponseTrafficAnomaliesOriginDetailsJSON `json:"-"`
+}
+
+// trafficAnomalyGetResponseTrafficAnomaliesOriginDetailsJSON contains the JSON
+// metadata for the struct [TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails]
+type trafficAnomalyGetResponseTrafficAnomaliesOriginDetailsJSON struct {
+	Name        apijson.Field
+	Origin      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r trafficAnomalyGetResponseTrafficAnomaliesOriginDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type TrafficAnomalyGetParams struct {
 	// Filters results by Autonomous System. Specify a single Autonomous System Number
 	// (ASN) as integer.
@@ -198,8 +223,12 @@ type TrafficAnomalyGetParams struct {
 	// Filters results by location. Specify an alpha-2 location code.
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
-	Offset param.Field[int64]                         `query:"offset"`
+	Offset param.Field[int64] `query:"offset"`
+	// Filters results by origin.
+	Origin param.Field[string]                        `query:"origin"`
 	Status param.Field[TrafficAnomalyGetParamsStatus] `query:"status"`
+	// Filters results by entity type (LOCATION, AS, or ORIGIN).
+	Type param.Field[[]TrafficAnomalyGetParamsType] `query:"type"`
 }
 
 // URLQuery serializes [TrafficAnomalyGetParams]'s query parameters as
@@ -237,6 +266,22 @@ const (
 func (r TrafficAnomalyGetParamsStatus) IsKnown() bool {
 	switch r {
 	case TrafficAnomalyGetParamsStatusVerified, TrafficAnomalyGetParamsStatusUnverified:
+		return true
+	}
+	return false
+}
+
+type TrafficAnomalyGetParamsType string
+
+const (
+	TrafficAnomalyGetParamsTypeLocation TrafficAnomalyGetParamsType = "LOCATION"
+	TrafficAnomalyGetParamsTypeAs       TrafficAnomalyGetParamsType = "AS"
+	TrafficAnomalyGetParamsTypeOrigin   TrafficAnomalyGetParamsType = "ORIGIN"
+)
+
+func (r TrafficAnomalyGetParamsType) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyGetParamsTypeLocation, TrafficAnomalyGetParamsTypeAs, TrafficAnomalyGetParamsTypeOrigin:
 		return true
 	}
 	return false
