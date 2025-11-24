@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/pages"
 )
 
-func TestProjectDomainNewWithOptionalParams(t *testing.T) {
+func TestProjectDomainNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -32,7 +32,7 @@ func TestProjectDomainNewWithOptionalParams(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDomainNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("example.com"),
+			Name:      cloudflare.F("this-is-my-domain-01.com"),
 		},
 	)
 	if err != nil {
@@ -122,7 +122,6 @@ func TestProjectDomainEdit(t *testing.T) {
 		"this-is-my-domain-01.com",
 		pages.ProjectDomainEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

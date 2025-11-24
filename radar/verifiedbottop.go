@@ -154,10 +154,12 @@ func (r verifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                            `json:"description,required"`
+	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
@@ -185,6 +187,65 @@ func (r *VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(d
 
 func (r verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceAll                VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceBots               VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDos                VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceNet                VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceAll, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceBots, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceCt, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceDos, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceFw, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceNet, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type VerifiedBotTopBotsResponseMetaDateRange struct {
@@ -370,10 +431,12 @@ func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                  `json:"description,required"`
+	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
@@ -402,6 +465,65 @@ func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation) Unmarshal
 
 func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceCt, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type VerifiedBotTopCategoriesResponseMetaDateRange struct {

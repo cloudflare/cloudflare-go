@@ -133,10 +133,12 @@ func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON) RawJSON() str
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                     `json:"description,required"`
+	EndDate     time.Time                                                                  `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
@@ -165,6 +167,65 @@ func (r *EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation) Unmars
 
 func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type EmailSecurityTopTldSpoofGetResponseMetaDateRange struct {

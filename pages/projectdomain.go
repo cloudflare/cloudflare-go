@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // ProjectDomainService contains methods and other services that help with
@@ -114,10 +113,10 @@ func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, d
 }
 
 // Retry the validation status of a single domain.
-func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, params ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponse, err error) {
+func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, body ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponse, err error) {
 	var env ProjectDomainEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -129,8 +128,8 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 		err = errors.New("missing required domain_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,16 +163,17 @@ func (r *ProjectDomainService) Get(ctx context.Context, projectName string, doma
 }
 
 type ProjectDomainNewResponse struct {
-	ID                   string                                       `json:"id"`
-	CertificateAuthority ProjectDomainNewResponseCertificateAuthority `json:"certificate_authority"`
-	CreatedOn            string                                       `json:"created_on"`
-	DomainID             string                                       `json:"domain_id"`
-	Name                 string                                       `json:"name"`
-	Status               ProjectDomainNewResponseStatus               `json:"status"`
-	ValidationData       ProjectDomainNewResponseValidationData       `json:"validation_data"`
-	VerificationData     ProjectDomainNewResponseVerificationData     `json:"verification_data"`
-	ZoneTag              string                                       `json:"zone_tag"`
-	JSON                 projectDomainNewResponseJSON                 `json:"-"`
+	ID                   string                                       `json:"id,required"`
+	CertificateAuthority ProjectDomainNewResponseCertificateAuthority `json:"certificate_authority,required"`
+	CreatedOn            string                                       `json:"created_on,required"`
+	DomainID             string                                       `json:"domain_id,required"`
+	// The domain name.
+	Name             string                                   `json:"name,required"`
+	Status           ProjectDomainNewResponseStatus           `json:"status,required"`
+	ValidationData   ProjectDomainNewResponseValidationData   `json:"validation_data,required"`
+	VerificationData ProjectDomainNewResponseVerificationData `json:"verification_data,required"`
+	ZoneTag          string                                   `json:"zone_tag,required"`
+	JSON             projectDomainNewResponseJSON             `json:"-"`
 }
 
 // projectDomainNewResponseJSON contains the JSON metadata for the struct
@@ -235,9 +235,9 @@ func (r ProjectDomainNewResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainNewResponseValidationData struct {
+	Method       ProjectDomainNewResponseValidationDataMethod `json:"method,required"`
+	Status       ProjectDomainNewResponseValidationDataStatus `json:"status,required"`
 	ErrorMessage string                                       `json:"error_message"`
-	Method       ProjectDomainNewResponseValidationDataMethod `json:"method"`
-	Status       ProjectDomainNewResponseValidationDataStatus `json:"status"`
 	TXTName      string                                       `json:"txt_name"`
 	TXTValue     string                                       `json:"txt_value"`
 	JSON         projectDomainNewResponseValidationDataJSON   `json:"-"`
@@ -246,9 +246,9 @@ type ProjectDomainNewResponseValidationData struct {
 // projectDomainNewResponseValidationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainNewResponseValidationData]
 type projectDomainNewResponseValidationDataJSON struct {
-	ErrorMessage apijson.Field
 	Method       apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	TXTName      apijson.Field
 	TXTValue     apijson.Field
 	raw          string
@@ -297,16 +297,16 @@ func (r ProjectDomainNewResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainNewResponseVerificationData struct {
+	Status       ProjectDomainNewResponseVerificationDataStatus `json:"status,required"`
 	ErrorMessage string                                         `json:"error_message"`
-	Status       ProjectDomainNewResponseVerificationDataStatus `json:"status"`
 	JSON         projectDomainNewResponseVerificationDataJSON   `json:"-"`
 }
 
 // projectDomainNewResponseVerificationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainNewResponseVerificationData]
 type projectDomainNewResponseVerificationDataJSON struct {
-	ErrorMessage apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -338,16 +338,17 @@ func (r ProjectDomainNewResponseVerificationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainListResponse struct {
-	ID                   string                                        `json:"id"`
-	CertificateAuthority ProjectDomainListResponseCertificateAuthority `json:"certificate_authority"`
-	CreatedOn            string                                        `json:"created_on"`
-	DomainID             string                                        `json:"domain_id"`
-	Name                 string                                        `json:"name"`
-	Status               ProjectDomainListResponseStatus               `json:"status"`
-	ValidationData       ProjectDomainListResponseValidationData       `json:"validation_data"`
-	VerificationData     ProjectDomainListResponseVerificationData     `json:"verification_data"`
-	ZoneTag              string                                        `json:"zone_tag"`
-	JSON                 projectDomainListResponseJSON                 `json:"-"`
+	ID                   string                                        `json:"id,required"`
+	CertificateAuthority ProjectDomainListResponseCertificateAuthority `json:"certificate_authority,required"`
+	CreatedOn            string                                        `json:"created_on,required"`
+	DomainID             string                                        `json:"domain_id,required"`
+	// The domain name.
+	Name             string                                    `json:"name,required"`
+	Status           ProjectDomainListResponseStatus           `json:"status,required"`
+	ValidationData   ProjectDomainListResponseValidationData   `json:"validation_data,required"`
+	VerificationData ProjectDomainListResponseVerificationData `json:"verification_data,required"`
+	ZoneTag          string                                    `json:"zone_tag,required"`
+	JSON             projectDomainListResponseJSON             `json:"-"`
 }
 
 // projectDomainListResponseJSON contains the JSON metadata for the struct
@@ -409,9 +410,9 @@ func (r ProjectDomainListResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainListResponseValidationData struct {
+	Method       ProjectDomainListResponseValidationDataMethod `json:"method,required"`
+	Status       ProjectDomainListResponseValidationDataStatus `json:"status,required"`
 	ErrorMessage string                                        `json:"error_message"`
-	Method       ProjectDomainListResponseValidationDataMethod `json:"method"`
-	Status       ProjectDomainListResponseValidationDataStatus `json:"status"`
 	TXTName      string                                        `json:"txt_name"`
 	TXTValue     string                                        `json:"txt_value"`
 	JSON         projectDomainListResponseValidationDataJSON   `json:"-"`
@@ -420,9 +421,9 @@ type ProjectDomainListResponseValidationData struct {
 // projectDomainListResponseValidationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainListResponseValidationData]
 type projectDomainListResponseValidationDataJSON struct {
-	ErrorMessage apijson.Field
 	Method       apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	TXTName      apijson.Field
 	TXTValue     apijson.Field
 	raw          string
@@ -471,16 +472,16 @@ func (r ProjectDomainListResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainListResponseVerificationData struct {
+	Status       ProjectDomainListResponseVerificationDataStatus `json:"status,required"`
 	ErrorMessage string                                          `json:"error_message"`
-	Status       ProjectDomainListResponseVerificationDataStatus `json:"status"`
 	JSON         projectDomainListResponseVerificationDataJSON   `json:"-"`
 }
 
 // projectDomainListResponseVerificationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainListResponseVerificationData]
 type projectDomainListResponseVerificationDataJSON struct {
-	ErrorMessage apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -514,16 +515,17 @@ func (r ProjectDomainListResponseVerificationDataStatus) IsKnown() bool {
 type ProjectDomainDeleteResponse = interface{}
 
 type ProjectDomainEditResponse struct {
-	ID                   string                                        `json:"id"`
-	CertificateAuthority ProjectDomainEditResponseCertificateAuthority `json:"certificate_authority"`
-	CreatedOn            string                                        `json:"created_on"`
-	DomainID             string                                        `json:"domain_id"`
-	Name                 string                                        `json:"name"`
-	Status               ProjectDomainEditResponseStatus               `json:"status"`
-	ValidationData       ProjectDomainEditResponseValidationData       `json:"validation_data"`
-	VerificationData     ProjectDomainEditResponseVerificationData     `json:"verification_data"`
-	ZoneTag              string                                        `json:"zone_tag"`
-	JSON                 projectDomainEditResponseJSON                 `json:"-"`
+	ID                   string                                        `json:"id,required"`
+	CertificateAuthority ProjectDomainEditResponseCertificateAuthority `json:"certificate_authority,required"`
+	CreatedOn            string                                        `json:"created_on,required"`
+	DomainID             string                                        `json:"domain_id,required"`
+	// The domain name.
+	Name             string                                    `json:"name,required"`
+	Status           ProjectDomainEditResponseStatus           `json:"status,required"`
+	ValidationData   ProjectDomainEditResponseValidationData   `json:"validation_data,required"`
+	VerificationData ProjectDomainEditResponseVerificationData `json:"verification_data,required"`
+	ZoneTag          string                                    `json:"zone_tag,required"`
+	JSON             projectDomainEditResponseJSON             `json:"-"`
 }
 
 // projectDomainEditResponseJSON contains the JSON metadata for the struct
@@ -585,9 +587,9 @@ func (r ProjectDomainEditResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainEditResponseValidationData struct {
+	Method       ProjectDomainEditResponseValidationDataMethod `json:"method,required"`
+	Status       ProjectDomainEditResponseValidationDataStatus `json:"status,required"`
 	ErrorMessage string                                        `json:"error_message"`
-	Method       ProjectDomainEditResponseValidationDataMethod `json:"method"`
-	Status       ProjectDomainEditResponseValidationDataStatus `json:"status"`
 	TXTName      string                                        `json:"txt_name"`
 	TXTValue     string                                        `json:"txt_value"`
 	JSON         projectDomainEditResponseValidationDataJSON   `json:"-"`
@@ -596,9 +598,9 @@ type ProjectDomainEditResponseValidationData struct {
 // projectDomainEditResponseValidationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainEditResponseValidationData]
 type projectDomainEditResponseValidationDataJSON struct {
-	ErrorMessage apijson.Field
 	Method       apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	TXTName      apijson.Field
 	TXTValue     apijson.Field
 	raw          string
@@ -647,16 +649,16 @@ func (r ProjectDomainEditResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainEditResponseVerificationData struct {
+	Status       ProjectDomainEditResponseVerificationDataStatus `json:"status,required"`
 	ErrorMessage string                                          `json:"error_message"`
-	Status       ProjectDomainEditResponseVerificationDataStatus `json:"status"`
 	JSON         projectDomainEditResponseVerificationDataJSON   `json:"-"`
 }
 
 // projectDomainEditResponseVerificationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainEditResponseVerificationData]
 type projectDomainEditResponseVerificationDataJSON struct {
-	ErrorMessage apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -688,16 +690,17 @@ func (r ProjectDomainEditResponseVerificationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainGetResponse struct {
-	ID                   string                                       `json:"id"`
-	CertificateAuthority ProjectDomainGetResponseCertificateAuthority `json:"certificate_authority"`
-	CreatedOn            string                                       `json:"created_on"`
-	DomainID             string                                       `json:"domain_id"`
-	Name                 string                                       `json:"name"`
-	Status               ProjectDomainGetResponseStatus               `json:"status"`
-	ValidationData       ProjectDomainGetResponseValidationData       `json:"validation_data"`
-	VerificationData     ProjectDomainGetResponseVerificationData     `json:"verification_data"`
-	ZoneTag              string                                       `json:"zone_tag"`
-	JSON                 projectDomainGetResponseJSON                 `json:"-"`
+	ID                   string                                       `json:"id,required"`
+	CertificateAuthority ProjectDomainGetResponseCertificateAuthority `json:"certificate_authority,required"`
+	CreatedOn            string                                       `json:"created_on,required"`
+	DomainID             string                                       `json:"domain_id,required"`
+	// The domain name.
+	Name             string                                   `json:"name,required"`
+	Status           ProjectDomainGetResponseStatus           `json:"status,required"`
+	ValidationData   ProjectDomainGetResponseValidationData   `json:"validation_data,required"`
+	VerificationData ProjectDomainGetResponseVerificationData `json:"verification_data,required"`
+	ZoneTag          string                                   `json:"zone_tag,required"`
+	JSON             projectDomainGetResponseJSON             `json:"-"`
 }
 
 // projectDomainGetResponseJSON contains the JSON metadata for the struct
@@ -759,9 +762,9 @@ func (r ProjectDomainGetResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainGetResponseValidationData struct {
+	Method       ProjectDomainGetResponseValidationDataMethod `json:"method,required"`
+	Status       ProjectDomainGetResponseValidationDataStatus `json:"status,required"`
 	ErrorMessage string                                       `json:"error_message"`
-	Method       ProjectDomainGetResponseValidationDataMethod `json:"method"`
-	Status       ProjectDomainGetResponseValidationDataStatus `json:"status"`
 	TXTName      string                                       `json:"txt_name"`
 	TXTValue     string                                       `json:"txt_value"`
 	JSON         projectDomainGetResponseValidationDataJSON   `json:"-"`
@@ -770,9 +773,9 @@ type ProjectDomainGetResponseValidationData struct {
 // projectDomainGetResponseValidationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainGetResponseValidationData]
 type projectDomainGetResponseValidationDataJSON struct {
-	ErrorMessage apijson.Field
 	Method       apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	TXTName      apijson.Field
 	TXTValue     apijson.Field
 	raw          string
@@ -821,16 +824,16 @@ func (r ProjectDomainGetResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainGetResponseVerificationData struct {
+	Status       ProjectDomainGetResponseVerificationDataStatus `json:"status,required"`
 	ErrorMessage string                                         `json:"error_message"`
-	Status       ProjectDomainGetResponseVerificationDataStatus `json:"status"`
 	JSON         projectDomainGetResponseVerificationDataJSON   `json:"-"`
 }
 
 // projectDomainGetResponseVerificationDataJSON contains the JSON metadata for the
 // struct [ProjectDomainGetResponseVerificationData]
 type projectDomainGetResponseVerificationDataJSON struct {
-	ErrorMessage apijson.Field
 	Status       apijson.Field
+	ErrorMessage apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -862,9 +865,10 @@ func (r ProjectDomainGetResponseVerificationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Name      param.Field[string] `json:"name"`
+	// The domain name.
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -872,10 +876,10 @@ func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ProjectDomainNewResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	Errors   []ProjectDomainNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ProjectDomainNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ProjectDomainNewResponse                   `json:"result,required"`
+	// Whether the API call was successful.
 	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -899,37 +903,132 @@ func (r projectDomainNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ProjectDomainNewResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ProjectDomainNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             projectDomainNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// projectDomainNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ProjectDomainNewResponseEnvelopeErrors]
+type projectDomainNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    projectDomainNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// projectDomainNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ProjectDomainNewResponseEnvelopeErrorsSource]
+type projectDomainNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainNewResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ProjectDomainNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             projectDomainNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// projectDomainNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ProjectDomainNewResponseEnvelopeMessages]
+type projectDomainNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    projectDomainNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// projectDomainNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ProjectDomainNewResponseEnvelopeMessagesSource]
+type projectDomainNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ProjectDomainNewResponseEnvelopeSuccess bool
 
 const (
-	ProjectDomainNewResponseEnvelopeSuccessFalse ProjectDomainNewResponseEnvelopeSuccess = false
-	ProjectDomainNewResponseEnvelopeSuccessTrue  ProjectDomainNewResponseEnvelopeSuccess = true
+	ProjectDomainNewResponseEnvelopeSuccessTrue ProjectDomainNewResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDomainNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDomainNewResponseEnvelopeSuccessFalse, ProjectDomainNewResponseEnvelopeSuccessTrue:
+	case ProjectDomainNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
 type ProjectDomainListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ProjectDomainDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ProjectDomainDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ProjectDomainDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	Errors   []ProjectDomainDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ProjectDomainDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   ProjectDomainDeleteResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful.
 	Success ProjectDomainDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -953,37 +1052,127 @@ func (r projectDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ProjectDomainDeleteResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ProjectDomainDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             projectDomainDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// projectDomainDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ProjectDomainDeleteResponseEnvelopeErrors]
+type projectDomainDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    projectDomainDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// projectDomainDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ProjectDomainDeleteResponseEnvelopeErrorsSource]
+type projectDomainDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainDeleteResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ProjectDomainDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             projectDomainDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// projectDomainDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ProjectDomainDeleteResponseEnvelopeMessages]
+type projectDomainDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    projectDomainDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// projectDomainDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ProjectDomainDeleteResponseEnvelopeMessagesSource]
+type projectDomainDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ProjectDomainDeleteResponseEnvelopeSuccess bool
 
 const (
-	ProjectDomainDeleteResponseEnvelopeSuccessFalse ProjectDomainDeleteResponseEnvelopeSuccess = false
-	ProjectDomainDeleteResponseEnvelopeSuccessTrue  ProjectDomainDeleteResponseEnvelopeSuccess = true
+	ProjectDomainDeleteResponseEnvelopeSuccessTrue ProjectDomainDeleteResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDomainDeleteResponseEnvelopeSuccessFalse, ProjectDomainDeleteResponseEnvelopeSuccessTrue:
+	case ProjectDomainDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
 type ProjectDomainEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
-}
-
-func (r ProjectDomainEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectDomainEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ProjectDomainEditResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	Errors   []ProjectDomainEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ProjectDomainEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ProjectDomainEditResponse                   `json:"result,required"`
+	// Whether the API call was successful.
 	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -1007,32 +1196,127 @@ func (r projectDomainEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ProjectDomainEditResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           ProjectDomainEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             projectDomainEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// projectDomainEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ProjectDomainEditResponseEnvelopeErrors]
+type projectDomainEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    projectDomainEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// projectDomainEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ProjectDomainEditResponseEnvelopeErrorsSource]
+type projectDomainEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainEditResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ProjectDomainEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             projectDomainEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// projectDomainEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ProjectDomainEditResponseEnvelopeMessages]
+type projectDomainEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    projectDomainEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// projectDomainEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ProjectDomainEditResponseEnvelopeMessagesSource]
+type projectDomainEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ProjectDomainEditResponseEnvelopeSuccess bool
 
 const (
-	ProjectDomainEditResponseEnvelopeSuccessFalse ProjectDomainEditResponseEnvelopeSuccess = false
-	ProjectDomainEditResponseEnvelopeSuccessTrue  ProjectDomainEditResponseEnvelopeSuccess = true
+	ProjectDomainEditResponseEnvelopeSuccessTrue ProjectDomainEditResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDomainEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDomainEditResponseEnvelopeSuccessFalse, ProjectDomainEditResponseEnvelopeSuccessTrue:
+	case ProjectDomainEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
 type ProjectDomainGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ProjectDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ProjectDomainGetResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	Errors   []ProjectDomainGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ProjectDomainGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ProjectDomainGetResponse                   `json:"result,required"`
+	// Whether the API call was successful.
 	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1056,17 +1340,112 @@ func (r projectDomainGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ProjectDomainGetResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ProjectDomainGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             projectDomainGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// projectDomainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ProjectDomainGetResponseEnvelopeErrors]
+type projectDomainGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    projectDomainGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// projectDomainGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ProjectDomainGetResponseEnvelopeErrorsSource]
+type projectDomainGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainGetResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ProjectDomainGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             projectDomainGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// projectDomainGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ProjectDomainGetResponseEnvelopeMessages]
+type projectDomainGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ProjectDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDomainGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    projectDomainGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// projectDomainGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ProjectDomainGetResponseEnvelopeMessagesSource]
+type projectDomainGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDomainGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDomainGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ProjectDomainGetResponseEnvelopeSuccess bool
 
 const (
-	ProjectDomainGetResponseEnvelopeSuccessFalse ProjectDomainGetResponseEnvelopeSuccess = false
-	ProjectDomainGetResponseEnvelopeSuccessTrue  ProjectDomainGetResponseEnvelopeSuccess = true
+	ProjectDomainGetResponseEnvelopeSuccessTrue ProjectDomainGetResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDomainGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDomainGetResponseEnvelopeSuccessFalse, ProjectDomainGetResponseEnvelopeSuccessTrue:
+	case ProjectDomainGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

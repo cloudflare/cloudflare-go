@@ -134,10 +134,12 @@ func (r httpAseBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                            `json:"description,required"`
+	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
@@ -165,6 +167,65 @@ func (r *HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(d
 
 func (r httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPAseBotClassGetResponseMetaDateRange struct {

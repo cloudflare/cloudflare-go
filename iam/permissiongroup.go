@@ -66,6 +66,7 @@ func (r *PermissionGroupService) ListAutoPaging(ctx context.Context, params Perm
 
 // Get information about a specific permission group in an account.
 func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID string, query PermissionGroupGetParams, opts ...option.RequestOption) (res *PermissionGroupGetResponse, err error) {
+	var env PermissionGroupGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -76,7 +77,11 @@ func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID stri
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/iam/permission_groups/%s", query.AccountID, permissionGroupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -215,4 +220,145 @@ func (r PermissionGroupListParams) URLQuery() (v url.Values) {
 type PermissionGroupGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PermissionGroupGetResponseEnvelope struct {
+	Errors   []PermissionGroupGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PermissionGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success PermissionGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	// A named group of permissions that map to a group of operations against
+	// resources.
+	Result PermissionGroupGetResponse             `json:"result"`
+	JSON   permissionGroupGetResponseEnvelopeJSON `json:"-"`
+}
+
+// permissionGroupGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PermissionGroupGetResponseEnvelope]
+type permissionGroupGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PermissionGroupGetResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           PermissionGroupGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             permissionGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// permissionGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PermissionGroupGetResponseEnvelopeErrors]
+type permissionGroupGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PermissionGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PermissionGroupGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    permissionGroupGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// permissionGroupGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [PermissionGroupGetResponseEnvelopeErrorsSource]
+type permissionGroupGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGroupGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PermissionGroupGetResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           PermissionGroupGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             permissionGroupGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// permissionGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [PermissionGroupGetResponseEnvelopeMessages]
+type permissionGroupGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PermissionGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PermissionGroupGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    permissionGroupGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// permissionGroupGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [PermissionGroupGetResponseEnvelopeMessagesSource]
+type permissionGroupGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGroupGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type PermissionGroupGetResponseEnvelopeSuccess bool
+
+const (
+	PermissionGroupGetResponseEnvelopeSuccessTrue PermissionGroupGetResponseEnvelopeSuccess = true
+)
+
+func (r PermissionGroupGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PermissionGroupGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

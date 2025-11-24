@@ -136,10 +136,12 @@ func (r aiBotSummaryUserAgentResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                               `json:"description,required"`
+	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
@@ -168,6 +170,65 @@ func (r *AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotation) UnmarshalJSO
 
 func (r aiBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceAll                AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceBGP                AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceBots               AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceCt                 AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDNS                AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDos                AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceFw                 AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceIQI                AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceNet                AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceAll, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceBGP, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceBots, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceCt, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDNS, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceDos, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceFw, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceIQI, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceNet, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeEvent             AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeOutage            AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypePipeline          AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeEvent, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeOutage, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypePipeline, AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type AIBotSummaryUserAgentResponseMetaDateRange struct {

@@ -123,12 +123,16 @@ func (r *ScriptVersionService) Get(ctx context.Context, scriptName string, versi
 }
 
 type ScriptVersionNewResponse struct {
-	Resources     ScriptVersionNewResponseResources `json:"resources,required"`
-	ID            string                            `json:"id"`
-	Metadata      ScriptVersionNewResponseMetadata  `json:"metadata"`
-	Number        float64                           `json:"number"`
-	StartupTimeMs int64                             `json:"startup_time_ms"`
-	JSON          scriptVersionNewResponseJSON      `json:"-"`
+	Resources ScriptVersionNewResponseResources `json:"resources,required"`
+	// Unique identifier for the version.
+	ID       string                           `json:"id"`
+	Metadata ScriptVersionNewResponseMetadata `json:"metadata"`
+	// Sequential version number.
+	Number float64 `json:"number"`
+	// Time in milliseconds spent on
+	// [Worker startup](https://developers.cloudflare.com/workers/platform/limits/#worker-startup-time).
+	StartupTimeMs int64                        `json:"startup_time_ms"`
+	JSON          scriptVersionNewResponseJSON `json:"-"`
 }
 
 // scriptVersionNewResponseJSON contains the JSON metadata for the struct
@@ -155,8 +159,9 @@ type ScriptVersionNewResponseResources struct {
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Bindings      []ScriptVersionNewResponseResourcesBinding     `json:"bindings"`
-	Script        ScriptVersionNewResponseResourcesScript        `json:"script"`
+	Bindings []ScriptVersionNewResponseResourcesBinding `json:"bindings"`
+	Script   ScriptVersionNewResponseResourcesScript    `json:"script"`
+	// Runtime configuration for the Worker.
 	ScriptRuntime ScriptVersionNewResponseResourcesScriptRuntime `json:"script_runtime"`
 	JSON          scriptVersionNewResponseResourcesJSON          `json:"-"`
 }
@@ -2084,11 +2089,16 @@ func (r ScriptVersionNewResponseResourcesBindingsJurisdiction) IsKnown() bool {
 }
 
 type ScriptVersionNewResponseResourcesScript struct {
-	Etag             string                                                `json:"etag"`
-	Handlers         []string                                              `json:"handlers"`
-	LastDeployedFrom string                                                `json:"last_deployed_from"`
-	NamedHandlers    []ScriptVersionNewResponseResourcesScriptNamedHandler `json:"named_handlers"`
-	JSON             scriptVersionNewResponseResourcesScriptJSON           `json:"-"`
+	// Hashed script content
+	Etag string `json:"etag"`
+	// The names of handlers exported as part of the default export.
+	Handlers []string `json:"handlers"`
+	// The client most recently used to deploy this Worker.
+	LastDeployedFrom string `json:"last_deployed_from"`
+	// Named exports, such as Durable Object class implementations and named
+	// entrypoints.
+	NamedHandlers []ScriptVersionNewResponseResourcesScriptNamedHandler `json:"named_handlers"`
+	JSON          scriptVersionNewResponseResourcesScriptJSON           `json:"-"`
 }
 
 // scriptVersionNewResponseResourcesScriptJSON contains the JSON metadata for the
@@ -2111,9 +2121,11 @@ func (r scriptVersionNewResponseResourcesScriptJSON) RawJSON() string {
 }
 
 type ScriptVersionNewResponseResourcesScriptNamedHandler struct {
-	Handlers []string                                                `json:"handlers"`
-	Name     string                                                  `json:"name"`
-	JSON     scriptVersionNewResponseResourcesScriptNamedHandlerJSON `json:"-"`
+	// The names of handlers exported as part of the named export.
+	Handlers []string `json:"handlers"`
+	// The name of the exported class or entrypoint.
+	Name string                                                  `json:"name"`
+	JSON scriptVersionNewResponseResourcesScriptNamedHandlerJSON `json:"-"`
 }
 
 // scriptVersionNewResponseResourcesScriptNamedHandlerJSON contains the JSON
@@ -2133,13 +2145,21 @@ func (r scriptVersionNewResponseResourcesScriptNamedHandlerJSON) RawJSON() strin
 	return r.raw
 }
 
+// Runtime configuration for the Worker.
 type ScriptVersionNewResponseResourcesScriptRuntime struct {
-	CompatibilityDate  string                                                   `json:"compatibility_date"`
-	CompatibilityFlags []string                                                 `json:"compatibility_flags"`
-	Limits             ScriptVersionNewResponseResourcesScriptRuntimeLimits     `json:"limits"`
-	MigrationTag       string                                                   `json:"migration_tag"`
-	UsageModel         ScriptVersionNewResponseResourcesScriptRuntimeUsageModel `json:"usage_model"`
-	JSON               scriptVersionNewResponseResourcesScriptRuntimeJSON       `json:"-"`
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
+	CompatibilityDate string `json:"compatibility_date"`
+	// Flags that enable or disable certain features in the Workers runtime.
+	CompatibilityFlags []string `json:"compatibility_flags"`
+	// Resource limits for the Worker.
+	Limits ScriptVersionNewResponseResourcesScriptRuntimeLimits `json:"limits"`
+	// The tag of the Durable Object migration that was most recently applied for this
+	// Worker.
+	MigrationTag string `json:"migration_tag"`
+	// Usage model for the Worker invocations.
+	UsageModel ScriptVersionNewResponseResourcesScriptRuntimeUsageModel `json:"usage_model"`
+	JSON       scriptVersionNewResponseResourcesScriptRuntimeJSON       `json:"-"`
 }
 
 // scriptVersionNewResponseResourcesScriptRuntimeJSON contains the JSON metadata
@@ -2162,7 +2182,9 @@ func (r scriptVersionNewResponseResourcesScriptRuntimeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Resource limits for the Worker.
 type ScriptVersionNewResponseResourcesScriptRuntimeLimits struct {
+	// The amount of CPU time this Worker can use in milliseconds.
 	CPUMs int64                                                    `json:"cpu_ms"`
 	JSON  scriptVersionNewResponseResourcesScriptRuntimeLimitsJSON `json:"-"`
 }
@@ -2183,6 +2205,7 @@ func (r scriptVersionNewResponseResourcesScriptRuntimeLimitsJSON) RawJSON() stri
 	return r.raw
 }
 
+// Usage model for the Worker invocations.
 type ScriptVersionNewResponseResourcesScriptRuntimeUsageModel string
 
 const (
@@ -2200,13 +2223,19 @@ func (r ScriptVersionNewResponseResourcesScriptRuntimeUsageModel) IsKnown() bool
 }
 
 type ScriptVersionNewResponseMetadata struct {
-	AuthorEmail string                                 `json:"author_email"`
-	AuthorID    string                                 `json:"author_id"`
-	CreatedOn   string                                 `json:"created_on"`
-	HasPreview  bool                                   `json:"hasPreview"`
-	ModifiedOn  string                                 `json:"modified_on"`
-	Source      ScriptVersionNewResponseMetadataSource `json:"source"`
-	JSON        scriptVersionNewResponseMetadataJSON   `json:"-"`
+	// Email of the user who created the version.
+	AuthorEmail string `json:"author_email"`
+	// Identifier of the user who created the version.
+	AuthorID string `json:"author_id"`
+	// When the version was created.
+	CreatedOn string `json:"created_on"`
+	// Whether the version can be previewed.
+	HasPreview bool `json:"hasPreview"`
+	// When the version was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The source of the version upload.
+	Source ScriptVersionNewResponseMetadataSource `json:"source"`
+	JSON   scriptVersionNewResponseMetadataJSON   `json:"-"`
 }
 
 // scriptVersionNewResponseMetadataJSON contains the JSON metadata for the struct
@@ -2230,6 +2259,7 @@ func (r scriptVersionNewResponseMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The source of the version upload.
 type ScriptVersionNewResponseMetadataSource string
 
 const (
@@ -2254,10 +2284,12 @@ func (r ScriptVersionNewResponseMetadataSource) IsKnown() bool {
 }
 
 type ScriptVersionListResponse struct {
+	// Unique identifier for the version.
 	ID       string                            `json:"id"`
 	Metadata ScriptVersionListResponseMetadata `json:"metadata"`
-	Number   float64                           `json:"number"`
-	JSON     scriptVersionListResponseJSON     `json:"-"`
+	// Sequential version number.
+	Number float64                       `json:"number"`
+	JSON   scriptVersionListResponseJSON `json:"-"`
 }
 
 // scriptVersionListResponseJSON contains the JSON metadata for the struct
@@ -2279,13 +2311,19 @@ func (r scriptVersionListResponseJSON) RawJSON() string {
 }
 
 type ScriptVersionListResponseMetadata struct {
-	AuthorEmail string                                  `json:"author_email"`
-	AuthorID    string                                  `json:"author_id"`
-	CreatedOn   string                                  `json:"created_on"`
-	HasPreview  bool                                    `json:"hasPreview"`
-	ModifiedOn  string                                  `json:"modified_on"`
-	Source      ScriptVersionListResponseMetadataSource `json:"source"`
-	JSON        scriptVersionListResponseMetadataJSON   `json:"-"`
+	// Email of the user who created the version.
+	AuthorEmail string `json:"author_email"`
+	// Identifier of the user who created the version.
+	AuthorID string `json:"author_id"`
+	// When the version was created.
+	CreatedOn string `json:"created_on"`
+	// Whether the version can be previewed.
+	HasPreview bool `json:"hasPreview"`
+	// When the version was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The source of the version upload.
+	Source ScriptVersionListResponseMetadataSource `json:"source"`
+	JSON   scriptVersionListResponseMetadataJSON   `json:"-"`
 }
 
 // scriptVersionListResponseMetadataJSON contains the JSON metadata for the struct
@@ -2309,6 +2347,7 @@ func (r scriptVersionListResponseMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The source of the version upload.
 type ScriptVersionListResponseMetadataSource string
 
 const (
@@ -2334,10 +2373,12 @@ func (r ScriptVersionListResponseMetadataSource) IsKnown() bool {
 
 type ScriptVersionGetResponse struct {
 	Resources ScriptVersionGetResponseResources `json:"resources,required"`
-	ID        string                            `json:"id"`
-	Metadata  ScriptVersionGetResponseMetadata  `json:"metadata"`
-	Number    float64                           `json:"number"`
-	JSON      scriptVersionGetResponseJSON      `json:"-"`
+	// Unique identifier for the version.
+	ID       string                           `json:"id"`
+	Metadata ScriptVersionGetResponseMetadata `json:"metadata"`
+	// Sequential version number.
+	Number float64                      `json:"number"`
+	JSON   scriptVersionGetResponseJSON `json:"-"`
 }
 
 // scriptVersionGetResponseJSON contains the JSON metadata for the struct
@@ -2363,8 +2404,9 @@ type ScriptVersionGetResponseResources struct {
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Bindings      []ScriptVersionGetResponseResourcesBinding     `json:"bindings"`
-	Script        ScriptVersionGetResponseResourcesScript        `json:"script"`
+	Bindings []ScriptVersionGetResponseResourcesBinding `json:"bindings"`
+	Script   ScriptVersionGetResponseResourcesScript    `json:"script"`
+	// Runtime configuration for the Worker.
 	ScriptRuntime ScriptVersionGetResponseResourcesScriptRuntime `json:"script_runtime"`
 	JSON          scriptVersionGetResponseResourcesJSON          `json:"-"`
 }
@@ -4292,11 +4334,16 @@ func (r ScriptVersionGetResponseResourcesBindingsJurisdiction) IsKnown() bool {
 }
 
 type ScriptVersionGetResponseResourcesScript struct {
-	Etag             string                                                `json:"etag"`
-	Handlers         []string                                              `json:"handlers"`
-	LastDeployedFrom string                                                `json:"last_deployed_from"`
-	NamedHandlers    []ScriptVersionGetResponseResourcesScriptNamedHandler `json:"named_handlers"`
-	JSON             scriptVersionGetResponseResourcesScriptJSON           `json:"-"`
+	// Hashed script content
+	Etag string `json:"etag"`
+	// The names of handlers exported as part of the default export.
+	Handlers []string `json:"handlers"`
+	// The client most recently used to deploy this Worker.
+	LastDeployedFrom string `json:"last_deployed_from"`
+	// Named exports, such as Durable Object class implementations and named
+	// entrypoints.
+	NamedHandlers []ScriptVersionGetResponseResourcesScriptNamedHandler `json:"named_handlers"`
+	JSON          scriptVersionGetResponseResourcesScriptJSON           `json:"-"`
 }
 
 // scriptVersionGetResponseResourcesScriptJSON contains the JSON metadata for the
@@ -4319,9 +4366,11 @@ func (r scriptVersionGetResponseResourcesScriptJSON) RawJSON() string {
 }
 
 type ScriptVersionGetResponseResourcesScriptNamedHandler struct {
-	Handlers []string                                                `json:"handlers"`
-	Name     string                                                  `json:"name"`
-	JSON     scriptVersionGetResponseResourcesScriptNamedHandlerJSON `json:"-"`
+	// The names of handlers exported as part of the named export.
+	Handlers []string `json:"handlers"`
+	// The name of the exported class or entrypoint.
+	Name string                                                  `json:"name"`
+	JSON scriptVersionGetResponseResourcesScriptNamedHandlerJSON `json:"-"`
 }
 
 // scriptVersionGetResponseResourcesScriptNamedHandlerJSON contains the JSON
@@ -4341,13 +4390,21 @@ func (r scriptVersionGetResponseResourcesScriptNamedHandlerJSON) RawJSON() strin
 	return r.raw
 }
 
+// Runtime configuration for the Worker.
 type ScriptVersionGetResponseResourcesScriptRuntime struct {
-	CompatibilityDate  string                                                   `json:"compatibility_date"`
-	CompatibilityFlags []string                                                 `json:"compatibility_flags"`
-	Limits             ScriptVersionGetResponseResourcesScriptRuntimeLimits     `json:"limits"`
-	MigrationTag       string                                                   `json:"migration_tag"`
-	UsageModel         ScriptVersionGetResponseResourcesScriptRuntimeUsageModel `json:"usage_model"`
-	JSON               scriptVersionGetResponseResourcesScriptRuntimeJSON       `json:"-"`
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
+	CompatibilityDate string `json:"compatibility_date"`
+	// Flags that enable or disable certain features in the Workers runtime.
+	CompatibilityFlags []string `json:"compatibility_flags"`
+	// Resource limits for the Worker.
+	Limits ScriptVersionGetResponseResourcesScriptRuntimeLimits `json:"limits"`
+	// The tag of the Durable Object migration that was most recently applied for this
+	// Worker.
+	MigrationTag string `json:"migration_tag"`
+	// Usage model for the Worker invocations.
+	UsageModel ScriptVersionGetResponseResourcesScriptRuntimeUsageModel `json:"usage_model"`
+	JSON       scriptVersionGetResponseResourcesScriptRuntimeJSON       `json:"-"`
 }
 
 // scriptVersionGetResponseResourcesScriptRuntimeJSON contains the JSON metadata
@@ -4370,7 +4427,9 @@ func (r scriptVersionGetResponseResourcesScriptRuntimeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Resource limits for the Worker.
 type ScriptVersionGetResponseResourcesScriptRuntimeLimits struct {
+	// The amount of CPU time this Worker can use in milliseconds.
 	CPUMs int64                                                    `json:"cpu_ms"`
 	JSON  scriptVersionGetResponseResourcesScriptRuntimeLimitsJSON `json:"-"`
 }
@@ -4391,6 +4450,7 @@ func (r scriptVersionGetResponseResourcesScriptRuntimeLimitsJSON) RawJSON() stri
 	return r.raw
 }
 
+// Usage model for the Worker invocations.
 type ScriptVersionGetResponseResourcesScriptRuntimeUsageModel string
 
 const (
@@ -4408,13 +4468,19 @@ func (r ScriptVersionGetResponseResourcesScriptRuntimeUsageModel) IsKnown() bool
 }
 
 type ScriptVersionGetResponseMetadata struct {
-	AuthorEmail string                                 `json:"author_email"`
-	AuthorID    string                                 `json:"author_id"`
-	CreatedOn   string                                 `json:"created_on"`
-	HasPreview  bool                                   `json:"hasPreview"`
-	ModifiedOn  string                                 `json:"modified_on"`
-	Source      ScriptVersionGetResponseMetadataSource `json:"source"`
-	JSON        scriptVersionGetResponseMetadataJSON   `json:"-"`
+	// Email of the user who created the version.
+	AuthorEmail string `json:"author_email"`
+	// Identifier of the user who created the version.
+	AuthorID string `json:"author_id"`
+	// When the version was created.
+	CreatedOn string `json:"created_on"`
+	// Whether the version can be previewed.
+	HasPreview bool `json:"hasPreview"`
+	// When the version was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The source of the version upload.
+	Source ScriptVersionGetResponseMetadataSource `json:"source"`
+	JSON   scriptVersionGetResponseMetadataJSON   `json:"-"`
 }
 
 // scriptVersionGetResponseMetadataJSON contains the JSON metadata for the struct
@@ -4438,6 +4504,7 @@ func (r scriptVersionGetResponseMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
+// The source of the version upload.
 type ScriptVersionGetResponseMetadataSource string
 
 const (

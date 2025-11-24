@@ -134,10 +134,12 @@ func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON) RawJSON() st
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                      `json:"description,required"`
+	EndDate     time.Time                                                                   `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
@@ -166,6 +168,65 @@ func (r *RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation) Unmar
 
 func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceCt, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type RobotsTXTTopDomainCategoriesResponseMetaDateRange struct {

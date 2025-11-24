@@ -179,10 +179,12 @@ func (r qualitySpeedHistogramResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type QualitySpeedHistogramResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                               `json:"description,required"`
+	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
@@ -211,6 +213,65 @@ func (r *QualitySpeedHistogramResponseMetaConfidenceInfoAnnotation) UnmarshalJSO
 
 func (r qualitySpeedHistogramResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceAll                QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceBGP                QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceBots               QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceCt                 QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDNS                QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDos                QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceFw                 QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceIQI                QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceNet                QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceAll, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceBGP, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceBots, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceCt, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDNS, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceDos, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceFw, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceIQI, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceNet, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeEvent             QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeOutage            QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypePipeline          QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeEvent, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeOutage, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypePipeline, QualitySpeedHistogramResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type QualitySpeedHistogramResponseMetaDateRange struct {
@@ -368,10 +429,12 @@ func (r qualitySpeedSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                             `json:"description,required"`
+	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
@@ -400,6 +463,65 @@ func (r *QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(
 
 func (r qualitySpeedSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, QualitySpeedSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type QualitySpeedSummaryResponseMetaDateRange struct {
