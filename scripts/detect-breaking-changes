@@ -94,6 +94,20 @@ TEST_PATHS=(
 	dns/zonetransferacl_test.go
 	dns/zonetransferpeer_test.go
 	dns/zonetransfertsig_test.go
+	email_security/investigate_test.go
+	email_security/investigatedetection_test.go
+	email_security/investigatepreview_test.go
+	email_security/investigateraw_test.go
+	email_security/investigatetrace_test.go
+	email_security/investigatemove_test.go
+	email_security/investigatereclassify_test.go
+	email_security/investigaterelease_test.go
+	email_security/settingallowpolicy_test.go
+	email_security/settingblocksender_test.go
+	email_security/settingdomain_test.go
+	email_security/settingimpersonationregistry_test.go
+	email_security/settingtrusteddomain_test.go
+	email_security/submission_test.go
 	email_routing/emailrouting_test.go
 	email_routing/dns_test.go
 	email_routing/rule_test.go
@@ -321,6 +335,12 @@ TEST_PATHS=(
 	r2/superslurperjob_test.go
 	r2/superslurperjoblog_test.go
 	r2/superslurperconnectivityprecheck_test.go
+	r2_data_catalog/r2datacatalog_test.go
+	r2_data_catalog/maintenanceconfig_test.go
+	r2_data_catalog/credential_test.go
+	r2_data_catalog/namespace_test.go
+	r2_data_catalog/namespacetable_test.go
+	r2_data_catalog/namespacetablemaintenanceconfig_test.go
 	workers_for_platforms/dispatchnamespace_test.go
 	workers_for_platforms/dispatchnamespacescript_test.go
 	workers_for_platforms/dispatchnamespacescriptassetupload_test.go
