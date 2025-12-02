@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust
+package connectivity
 
 import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -14,7 +14,7 @@ import (
 // the [NewConnectivityService] method instead.
 type ConnectivityService struct {
 	Options   []option.RequestOption
-	Directory *ConnectivityDirectoryService
+	Directory *DirectoryService
 }
 
 // NewConnectivityService generates a new service that applies the given options to
@@ -23,6 +23,6 @@ type ConnectivityService struct {
 func NewConnectivityService(opts ...option.RequestOption) (r *ConnectivityService) {
 	r = &ConnectivityService{}
 	r.Options = opts
-	r.Directory = NewConnectivityDirectoryService(opts...)
+	r.Directory = NewDirectoryService(opts...)
 	return
 }

@@ -103,9 +103,9 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingEditResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptScriptAndVersionSettingEditResponseUsageModel `json:"usage_model"`
 	JSON       scriptScriptAndVersionSettingEditResponseJSON       `json:"-"`
@@ -2310,9 +2310,9 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingGetResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptScriptAndVersionSettingGetResponseUsageModel `json:"usage_model"`
 	JSON       scriptScriptAndVersionSettingGetResponseJSON       `json:"-"`

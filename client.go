@@ -29,6 +29,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/client_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/cloud_connector"
 	"github.com/cloudflare/cloudflare-go/v6/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v6/connectivity"
 	"github.com/cloudflare/cloudflare-go/v6/content_scanning"
 	"github.com/cloudflare/cloudflare-go/v6/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
@@ -78,6 +79,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/r2"
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 	"github.com/cloudflare/cloudflare-go/v6/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v6/realtime_kit"
 	"github.com/cloudflare/cloudflare-go/v6/registrar"
 	"github.com/cloudflare/cloudflare-go/v6/request_tracers"
 	"github.com/cloudflare/cloudflare-go/v6/resource_sharing"
@@ -93,6 +95,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/speed"
 	"github.com/cloudflare/cloudflare-go/v6/ssl"
 	"github.com/cloudflare/cloudflare-go/v6/stream"
+	"github.com/cloudflare/cloudflare-go/v6/token_validation"
 	"github.com/cloudflare/cloudflare-go/v6/turnstile"
 	"github.com/cloudflare/cloudflare-go/v6/url_normalization"
 	"github.com/cloudflare/cloudflare-go/v6/url_scanner"
@@ -186,6 +189,7 @@ type Client struct {
 	WorkersForPlatforms         *workers_for_platforms.WorkersForPlatformService
 	ZeroTrust                   *zero_trust.ZeroTrustService
 	Turnstile                   *turnstile.TurnstileService
+	Connectivity                *connectivity.ConnectivityService
 	Hyperdrive                  *hyperdrive.HyperdriveService
 	RUM                         *rum.RUMService
 	Vectorize                   *vectorize.VectorizeService
@@ -198,6 +202,7 @@ type Client struct {
 	DCVDelegation               *dcv_delegation.DCVDelegationService
 	Hostnames                   *hostnames.HostnameService
 	Snippets                    *snippets.SnippetService
+	RealtimeKit                 *realtime_kit.RealtimeKitService
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	AIGateway                   *ai_gateway.AIGatewayService
@@ -217,6 +222,7 @@ type Client struct {
 	SecretsStore                *secrets_store.SecretsStoreService
 	Pipelines                   *pipelines.PipelineService
 	SchemaValidation            *schema_validation.SchemaValidationService
+	TokenValidation             *token_validation.TokenValidationService
 }
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
@@ -317,6 +323,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.WorkersForPlatforms = workers_for_platforms.NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = zero_trust.NewZeroTrustService(opts...)
 	r.Turnstile = turnstile.NewTurnstileService(opts...)
+	r.Connectivity = connectivity.NewConnectivityService(opts...)
 	r.Hyperdrive = hyperdrive.NewHyperdriveService(opts...)
 	r.RUM = rum.NewRUMService(opts...)
 	r.Vectorize = vectorize.NewVectorizeService(opts...)
@@ -329,6 +336,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)
 	r.Hostnames = hostnames.NewHostnameService(opts...)
 	r.Snippets = snippets.NewSnippetService(opts...)
+	r.RealtimeKit = realtime_kit.NewRealtimeKitService(opts...)
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
@@ -348,6 +356,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
 	r.Pipelines = pipelines.NewPipelineService(opts...)
 	r.SchemaValidation = schema_validation.NewSchemaValidationService(opts...)
+	r.TokenValidation = token_validation.NewTokenValidationService(opts...)
 
 	return
 }

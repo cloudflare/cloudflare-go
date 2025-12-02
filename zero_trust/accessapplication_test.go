@@ -73,7 +73,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				VnetID:     cloudflare.F("vnet_id"),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
 				CIDR:       cloudflare.F("cidr"),
-				Hostname:   cloudflare.F("hostname"),
+				Hostname:   cloudflare.F("private-sni.example.com"),
 				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
 				PortRange:  cloudflare.F("port_range"),
 				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
@@ -196,7 +196,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					VnetID:     cloudflare.F("vnet_id"),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
 					CIDR:       cloudflare.F("cidr"),
-					Hostname:   cloudflare.F("hostname"),
+					Hostname:   cloudflare.F("private-sni.example.com"),
 					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
 					PortRange:  cloudflare.F("port_range"),
 					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),

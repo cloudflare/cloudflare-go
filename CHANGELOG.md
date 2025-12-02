@@ -1,5 +1,36 @@
 # Changelog
 
+## 6.3.0 (2025-11-19)
+
+Full Changelog: [v6.2.0...v6.3.0](https://github.com/cloudflare/cloudflare-go/compare/v6.2.0...v6.3.0)
+
+### Features
+
+* **mcp_portals:** enable sdks generation ([c582b3d](https://github.com/cloudflare/cloudflare-go/commit/c582b3d))
+* **iam:** add SSO Connectors resource to SDKs ([a6cadb2](https://github.com/cloudflare/cloudflare-go/commit/a6cadb2))
+* **config:** add token validation to stainless config ([f733821](https://github.com/cloudflare/cloudflare-go/commit/f733821))
+* **workers:** expose subdomain delete ([159aba7](https://github.com/cloudflare/cloudflare-go/commit/159aba7))
+* **abuse_reports:** expose new abuse report endpoints (GET and LIST) ([b5e8f16](https://github.com/cloudflare/cloudflare-go/commit/b5e8f16))
+* **tomarkdown:** add new markdown supported endpoint ([6737d33](https://github.com/cloudflare/cloudflare-go/commit/6737d33))
+* **abuse_reports:** add abuse mitigations in client API ([e25cf5d](https://github.com/cloudflare/cloudflare-go/commit/e25cf5d))
+* **pipelines:** configure SDKs/Terraform to use the new Pipelines, Streams, Sinks routes ([47fe62a](https://github.com/cloudflare/cloudflare-go/commit/47fe62a))
+* **dlp:** switch DLP Predefined Profile endpoints ([496a17a](https://github.com/cloudflare/cloudflare-go/commit/496a17a))
+* **addressing_load:** add deprecation to LOA api ([2d0f886](https://github.com/cloudflare/cloudflare-go/commit/2d0f886))
+
+
+### Bug Fixes
+
+* **schema:** correctly reflect schema validation model mapping ([e13a4b0](https://github.com/cloudflare/cloudflare-go/commit/e13a4b0))
+* **ai_controls:** incorrect use of standalone_api ([12b2f77](https://github.com/cloudflare/cloudflare-go/commit/12b2f77))
+* **wvpc:** move to connectivity module ([30e2d15](https://github.com/cloudflare/cloudflare-go/commit/30e2d15))
+* **realtime-kit:** tabbing on realtime-kit api resources ([b0f08de](https://github.com/cloudflare/cloudflare-go/commit/b0f08de))
+
+
+### Chores
+
+* **internal:** codegen related update ([46aa6df](https://github.com/cloudflare/cloudflare-go/commit/46aa6df))
+* **api:** update composite API spec ([dbd3501](https://github.com/cloudflare/cloudflare-go/commit/dbd3501), [9d98e16](https://github.com/cloudflare/cloudflare-go/commit/9d98e16), [1505c81](https://github.com/cloudflare/cloudflare-go/commit/1505c81), [8675c4c](https://github.com/cloudflare/cloudflare-go/commit/8675c4c), [b5bbbe9](https://github.com/cloudflare/cloudflare-go/commit/b5bbbe9), [38a87ce](https://github.com/cloudflare/cloudflare-go/commit/38a87ce), [fe3eb4e](https://github.com/cloudflare/cloudflare-go/commit/fe3eb4e), [3d6daa1](https://github.com/cloudflare/cloudflare-go/commit/3d6daa1), [b47aab6](https://github.com/cloudflare/cloudflare-go/commit/b47aab6), [974bd02](https://github.com/cloudflare/cloudflare-go/commit/974bd02), [3d0ffd6](https://github.com/cloudflare/cloudflare-go/commit/3d0ffd6), [73536a3](https://github.com/cloudflare/cloudflare-go/commit/73536a3), [e262a8c](https://github.com/cloudflare/cloudflare-go/commit/e262a8c), [7f1df0a](https://github.com/cloudflare/cloudflare-go/commit/7f1df0a), [5142652](https://github.com/cloudflare/cloudflare-go/commit/5142652), [75f93c0](https://github.com/cloudflare/cloudflare-go/commit/75f93c0), [50f68e8](https://github.com/cloudflare/cloudflare-go/commit/50f68e8), [2392214](https://github.com/cloudflare/cloudflare-go/commit/2392214), [2d6e9a1](https://github.com/cloudflare/cloudflare-go/commit/2d6e9a1), [ad22ee9](https://github.com/cloudflare/cloudflare-go/commit/ad22ee9), [e249bb7](https://github.com/cloudflare/cloudflare-go/commit/e249bb7), [682d37e](https://github.com/cloudflare/cloudflare-go/commit/682d37e), [8eb7d7e](https://github.com/cloudflare/cloudflare-go/commit/8eb7d7e), [d9a67b9](https://github.com/cloudflare/cloudflare-go/commit/d9a67b9), [7b8206b](https://github.com/cloudflare/cloudflare-go/commit/7b8206b), [e482bcb](https://github.com/cloudflare/cloudflare-go/commit/e482bcb), [177205f](https://github.com/cloudflare/cloudflare-go/commit/177205f), [e10f556](https://github.com/cloudflare/cloudflare-go/commit/e10f556), [a148439](https://github.com/cloudflare/cloudflare-go/commit/a148439), [8c76499](https://github.com/cloudflare/cloudflare-go/commit/8c76499), [58c65f1](https://github.com/cloudflare/cloudflare-go/commit/58c65f1), [55d06fc](https://github.com/cloudflare/cloudflare-go/commit/55d06fc), [abfc0fa](https://github.com/cloudflare/cloudflare-go/commit/abfc0fa))
+
 ## 6.2.0 (2025-10-22)
 
 Full Changelog: [v6.1.0...v6.2.0](https://github.com/cloudflare/cloudflare-go/compare/v6.1.0...v6.2.0)

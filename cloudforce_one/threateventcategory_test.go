@@ -44,7 +44,7 @@ func TestThreatEventCategoryNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestThreatEventCategoryList(t *testing.T) {
+func TestThreatEventCategoryListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -59,7 +59,8 @@ func TestThreatEventCategoryList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Categories.List(context.TODO(), cloudforce_one.ThreatEventCategoryListParams{
-		AccountID: cloudflare.F("account_id"),
+		AccountID:  cloudflare.F("account_id"),
+		DatasetIDs: cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
