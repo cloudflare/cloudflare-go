@@ -68,6 +68,7 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 }
 
 func TestAbuseReportListWithOptionalParams(t *testing.T) {
+	t.Skip("TODO: support api token auth scheme")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -102,6 +103,7 @@ func TestAbuseReportListWithOptionalParams(t *testing.T) {
 }
 
 func TestAbuseReportGet(t *testing.T) {
+	t.Skip("TODO: support api token auth scheme")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
