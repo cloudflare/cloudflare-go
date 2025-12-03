@@ -54,7 +54,7 @@ func (r *ManagedTransformService) List(ctx context.Context, query ManagedTransfo
 // Disables all Managed Transforms.
 func (r *ManagedTransformService) Delete(ctx context.Context, body ManagedTransformDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

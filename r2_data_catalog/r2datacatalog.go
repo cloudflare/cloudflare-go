@@ -63,7 +63,7 @@ func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogList
 // preserves existing metadata and data files. The catalog can be re-enabled later.
 func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, body R2DataCatalogDisableParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

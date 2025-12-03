@@ -90,7 +90,7 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, organizationID strin
 // see https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *MemberService) Delete(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
 		return
