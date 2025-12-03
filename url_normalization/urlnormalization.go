@@ -54,7 +54,7 @@ func (r *URLNormalizationService) Update(ctx context.Context, params URLNormaliz
 // Deletes the URL Normalization settings.
 func (r *URLNormalizationService) Delete(ctx context.Context, body URLNormalizationDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

@@ -65,7 +65,7 @@ func (r *InterconnectService) List(ctx context.Context, params InterconnectListP
 // Delete an interconnect object
 func (r *InterconnectService) Delete(ctx context.Context, icon string, body InterconnectDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -98,7 +98,7 @@ func (r *InterconnectService) Get(ctx context.Context, icon string, query Interc
 // Generate the Letter of Authorization (LOA) for a given interconnect
 func (r *InterconnectService) LOA(ctx context.Context, icon string, query InterconnectLOAParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

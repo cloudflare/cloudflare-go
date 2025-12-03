@@ -54,7 +54,7 @@ func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdatePar
 // Deletes a Workers subdomain for an account.
 func (r *SubdomainService) Delete(ctx context.Context, body SubdomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

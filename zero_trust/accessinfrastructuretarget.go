@@ -108,7 +108,7 @@ func (r *AccessInfrastructureTargetService) ListAutoPaging(ctx context.Context, 
 // Delete target
 func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID string, body AccessInfrastructureTargetDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +127,7 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 // Deprecated: deprecated
 func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -140,7 +140,7 @@ func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body
 // Removes one or more targets.
 func (r *AccessInfrastructureTargetService) BulkDeleteV2(ctx context.Context, params AccessInfrastructureTargetBulkDeleteV2Params, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
