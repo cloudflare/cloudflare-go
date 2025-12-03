@@ -39,18 +39,24 @@ func NewResourceGroupService(opts ...option.RequestOption) (r *ResourceGroupServ
 
 // Create a new Resource Group under the specified account.
 func (r *ResourceGroupService) New(ctx context.Context, params ResourceGroupNewParams, opts ...option.RequestOption) (res *ResourceGroupNewResponse, err error) {
+	var env ResourceGroupNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Modify an existing resource group.
 func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID string, params ResourceGroupUpdateParams, opts ...option.RequestOption) (res *ResourceGroupUpdateResponse, err error) {
+	var env ResourceGroupUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -61,7 +67,11 @@ func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID strin
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups/%s", params.AccountID, resourceGroupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -115,6 +125,7 @@ func (r *ResourceGroupService) Delete(ctx context.Context, resourceGroupID strin
 
 // Get information about a specific resource group in an account.
 func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, query ResourceGroupGetParams, opts ...option.RequestOption) (res *ResourceGroupGetResponse, err error) {
+	var env ResourceGroupGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -125,27 +136,34 @@ func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups/%s", query.AccountID, resourceGroupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // A group of scoped resources.
 type ResourceGroupNewResponse struct {
-	// Identifier of the group.
-	ID string `json:"id"`
+	// Identifier of the resource group.
+	ID string `json:"id,required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupNewResponseScope `json:"scope,required"`
 	// Attributes associated to the resource group.
-	Meta interface{} `json:"meta"`
-	// A scope is a combination of scope objects which provides additional context.
-	Scope ResourceGroupNewResponseScope `json:"scope"`
-	JSON  resourceGroupNewResponseJSON  `json:"-"`
+	Meta ResourceGroupNewResponseMeta `json:"meta"`
+	// Name of the resource group.
+	Name string                       `json:"name"`
+	JSON resourceGroupNewResponseJSON `json:"-"`
 }
 
 // resourceGroupNewResponseJSON contains the JSON metadata for the struct
 // [ResourceGroupNewResponse]
 type resourceGroupNewResponseJSON struct {
 	ID          apijson.Field
-	Meta        apijson.Field
 	Scope       apijson.Field
+	Meta        apijson.Field
+	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -163,8 +181,7 @@ type ResourceGroupNewResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
 	Key string `json:"key,required"`
-	// A list of scope objects for additional context. The number of Scope objects
-	// should not be zero.
+	// A list of scope objects for additional context.
 	Objects []ResourceGroupNewResponseScopeObject `json:"objects,required"`
 	JSON    resourceGroupNewResponseScopeJSON     `json:"-"`
 }
@@ -208,6 +225,30 @@ func (r *ResourceGroupNewResponseScopeObject) UnmarshalJSON(data []byte) (err er
 }
 
 func (r resourceGroupNewResponseScopeObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the resource group.
+type ResourceGroupNewResponseMeta struct {
+	Key   string                           `json:"key"`
+	Value string                           `json:"value"`
+	JSON  resourceGroupNewResponseMetaJSON `json:"-"`
+}
+
+// resourceGroupNewResponseMetaJSON contains the JSON metadata for the struct
+// [ResourceGroupNewResponseMeta]
+type resourceGroupNewResponseMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupNewResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupNewResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -596,6 +637,146 @@ func (r ResourceGroupNewParamsScopeObject) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
+type ResourceGroupNewResponseEnvelope struct {
+	Errors   []ResourceGroupNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ResourceGroupNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success ResourceGroupNewResponseEnvelopeSuccess `json:"success,required"`
+	// A group of scoped resources.
+	Result ResourceGroupNewResponse             `json:"result"`
+	JSON   resourceGroupNewResponseEnvelopeJSON `json:"-"`
+}
+
+// resourceGroupNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ResourceGroupNewResponseEnvelope]
+type resourceGroupNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupNewResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ResourceGroupNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             resourceGroupNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// resourceGroupNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ResourceGroupNewResponseEnvelopeErrors]
+type resourceGroupNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    resourceGroupNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// resourceGroupNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ResourceGroupNewResponseEnvelopeErrorsSource]
+type resourceGroupNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupNewResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ResourceGroupNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             resourceGroupNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// resourceGroupNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ResourceGroupNewResponseEnvelopeMessages]
+type resourceGroupNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    resourceGroupNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// resourceGroupNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ResourceGroupNewResponseEnvelopeMessagesSource]
+type resourceGroupNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ResourceGroupNewResponseEnvelopeSuccess bool
+
+const (
+	ResourceGroupNewResponseEnvelopeSuccessTrue ResourceGroupNewResponseEnvelopeSuccess = true
+)
+
+func (r ResourceGroupNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ResourceGroupNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ResourceGroupUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -633,6 +814,146 @@ type ResourceGroupUpdateParamsScopeObject struct {
 
 func (r ResourceGroupUpdateParamsScopeObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ResourceGroupUpdateResponseEnvelope struct {
+	Errors   []ResourceGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ResourceGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success ResourceGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
+	// A group of scoped resources.
+	Result ResourceGroupUpdateResponse             `json:"result"`
+	JSON   resourceGroupUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// resourceGroupUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ResourceGroupUpdateResponseEnvelope]
+type resourceGroupUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupUpdateResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ResourceGroupUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             resourceGroupUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// resourceGroupUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ResourceGroupUpdateResponseEnvelopeErrors]
+type resourceGroupUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    resourceGroupUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// resourceGroupUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ResourceGroupUpdateResponseEnvelopeErrorsSource]
+type resourceGroupUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupUpdateResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ResourceGroupUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             resourceGroupUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// resourceGroupUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ResourceGroupUpdateResponseEnvelopeMessages]
+type resourceGroupUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    resourceGroupUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// resourceGroupUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ResourceGroupUpdateResponseEnvelopeMessagesSource]
+type resourceGroupUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ResourceGroupUpdateResponseEnvelopeSuccess bool
+
+const (
+	ResourceGroupUpdateResponseEnvelopeSuccessTrue ResourceGroupUpdateResponseEnvelopeSuccess = true
+)
+
+func (r ResourceGroupUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ResourceGroupUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type ResourceGroupListParams struct {
@@ -800,4 +1121,144 @@ func (r ResourceGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type ResourceGroupGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ResourceGroupGetResponseEnvelope struct {
+	Errors   []ResourceGroupGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ResourceGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success ResourceGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	// A group of scoped resources.
+	Result ResourceGroupGetResponse             `json:"result"`
+	JSON   resourceGroupGetResponseEnvelopeJSON `json:"-"`
+}
+
+// resourceGroupGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ResourceGroupGetResponseEnvelope]
+type resourceGroupGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupGetResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ResourceGroupGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             resourceGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// resourceGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ResourceGroupGetResponseEnvelopeErrors]
+type resourceGroupGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    resourceGroupGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// resourceGroupGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ResourceGroupGetResponseEnvelopeErrorsSource]
+type resourceGroupGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupGetResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ResourceGroupGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             resourceGroupGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// resourceGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ResourceGroupGetResponseEnvelopeMessages]
+type resourceGroupGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    resourceGroupGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// resourceGroupGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ResourceGroupGetResponseEnvelopeMessagesSource]
+type resourceGroupGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ResourceGroupGetResponseEnvelopeSuccess bool
+
+const (
+	ResourceGroupGetResponseEnvelopeSuccessTrue ResourceGroupGetResponseEnvelopeSuccess = true
+)
+
+func (r ResourceGroupGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ResourceGroupGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

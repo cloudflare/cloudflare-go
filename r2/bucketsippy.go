@@ -180,9 +180,11 @@ func (r sippyDestinationJSON) RawJSON() string {
 
 // Details about the configured source bucket.
 type SippySource struct {
-	// Name of the bucket on the provider.
-	Bucket   string              `json:"bucket"`
-	Provider SippySourceProvider `json:"provider"`
+	// Name of the bucket on the provider (AWS, GCS only).
+	Bucket string `json:"bucket,nullable"`
+	// S3-compatible URL (Generic S3-compatible providers only).
+	BucketURL string              `json:"bucketUrl,nullable"`
+	Provider  SippySourceProvider `json:"provider"`
 	// Region where the bucket resides (AWS only).
 	Region string          `json:"region,nullable"`
 	JSON   sippySourceJSON `json:"-"`
@@ -191,6 +193,7 @@ type SippySource struct {
 // sippySourceJSON contains the JSON metadata for the struct [SippySource]
 type sippySourceJSON struct {
 	Bucket      apijson.Field
+	BucketURL   apijson.Field
 	Provider    apijson.Field
 	Region      apijson.Field
 	raw         string
@@ -210,11 +213,12 @@ type SippySourceProvider string
 const (
 	SippySourceProviderAws SippySourceProvider = "aws"
 	SippySourceProviderGcs SippySourceProvider = "gcs"
+	SippySourceProviderS3  SippySourceProvider = "s3"
 )
 
 func (r SippySourceProvider) IsKnown() bool {
 	switch r {
-	case SippySourceProviderAws, SippySourceProviderGcs:
+	case SippySourceProviderAws, SippySourceProviderGcs, SippySourceProviderS3:
 		return true
 	}
 	return false
@@ -279,7 +283,8 @@ func (r BucketSippyUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 func (r BucketSippyUpdateParamsBody) implementsBucketSippyUpdateParamsBodyUnion() {}
 
 // Satisfied by [r2.BucketSippyUpdateParamsBodyR2EnableSippyAws],
-// [r2.BucketSippyUpdateParamsBodyR2EnableSippyGcs], [BucketSippyUpdateParamsBody].
+// [r2.BucketSippyUpdateParamsBodyR2EnableSippyGcs],
+// [r2.BucketSippyUpdateParamsBodyR2EnableSippyS3], [BucketSippyUpdateParamsBody].
 type BucketSippyUpdateParamsBodyUnion interface {
 	implementsBucketSippyUpdateParamsBodyUnion()
 }
@@ -411,6 +416,71 @@ const (
 func (r BucketSippyUpdateParamsBodyR2EnableSippyGcsSourceProvider) IsKnown() bool {
 	switch r {
 	case BucketSippyUpdateParamsBodyR2EnableSippyGcsSourceProviderGcs:
+		return true
+	}
+	return false
+}
+
+type BucketSippyUpdateParamsBodyR2EnableSippyS3 struct {
+	// R2 bucket to copy objects to.
+	Destination param.Field[BucketSippyUpdateParamsBodyR2EnableSippyS3Destination] `json:"destination"`
+	// General S3-compatible provider to copy objects from.
+	Source param.Field[BucketSippyUpdateParamsBodyR2EnableSippyS3Source] `json:"source"`
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyS3) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyS3) implementsBucketSippyUpdateParamsBodyUnion() {}
+
+// R2 bucket to copy objects to.
+type BucketSippyUpdateParamsBodyR2EnableSippyS3Destination struct {
+	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
+	// creating an API. token from the
+	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
+	//
+	// Sippy will use this token when writing objects to R2, so it is best to scope
+	// this token to the bucket you're enabling Sippy for.
+	AccessKeyID param.Field[string]   `json:"accessKeyId"`
+	Provider    param.Field[Provider] `json:"provider"`
+	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
+	// when creating an API. token from the
+	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
+	//
+	// Sippy will use this token when writing objects to R2, so it is best to scope
+	// this token to the bucket you're enabling Sippy for.
+	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyS3Destination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// General S3-compatible provider to copy objects from.
+type BucketSippyUpdateParamsBodyR2EnableSippyS3Source struct {
+	// Access Key ID of an IAM credential (ideally scoped to a single S3 bucket).
+	AccessKeyID param.Field[string] `json:"accessKeyId"`
+	// URL to the S3-compatible API of the bucket.
+	BucketURL param.Field[string]                                                   `json:"bucketUrl"`
+	Provider  param.Field[BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProvider] `json:"provider"`
+	// Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket).
+	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyS3Source) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProvider string
+
+const (
+	BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProviderS3 BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProvider = "s3"
+)
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProvider) IsKnown() bool {
+	switch r {
+	case BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProviderS3:
 		return true
 	}
 	return false
