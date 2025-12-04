@@ -14,7 +14,7 @@ function prism_is_running() {
 }
 
 kill_server_on_port() {
-  pids=$(lsof -t -i tcp:"$1" || echo "")
+  pids=$(lsof -t -i tcp:"$1" -sTCP:LISTEN 2>/dev/null || echo "")
   if [ "$pids" != "" ]; then
     kill "$pids"
     echo "Stopped $pids."
@@ -53,4 +53,5 @@ else
 fi
 
 echo "==> Running tests"
-go test ./... "$@"
+go clean -cache -testcache -modcache
+go test -timeout 30m -p 4 ./... "$@"
