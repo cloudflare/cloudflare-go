@@ -464,6 +464,7 @@ func (r SnapshotNewParamsWaitForSelectorVisible) IsKnown() bool {
 }
 
 type SnapshotNewResponseEnvelope struct {
+	Meta SnapshotNewResponseEnvelopeMeta `json:"meta,required"`
 	// Response status
 	Status bool                                `json:"status,required"`
 	Errors []SnapshotNewResponseEnvelopeErrors `json:"errors"`
@@ -474,6 +475,7 @@ type SnapshotNewResponseEnvelope struct {
 // snapshotNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SnapshotNewResponseEnvelope]
 type snapshotNewResponseEnvelopeJSON struct {
+	Meta        apijson.Field
 	Status      apijson.Field
 	Errors      apijson.Field
 	Result      apijson.Field
@@ -486,6 +488,29 @@ func (r *SnapshotNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r snapshotNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SnapshotNewResponseEnvelopeMeta struct {
+	Status float64                             `json:"status"`
+	Title  string                              `json:"title"`
+	JSON   snapshotNewResponseEnvelopeMetaJSON `json:"-"`
+}
+
+// snapshotNewResponseEnvelopeMetaJSON contains the JSON metadata for the struct
+// [SnapshotNewResponseEnvelopeMeta]
+type snapshotNewResponseEnvelopeMetaJSON struct {
+	Status      apijson.Field
+	Title       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnapshotNewResponseEnvelopeMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snapshotNewResponseEnvelopeMetaJSON) RawJSON() string {
 	return r.raw
 }
 

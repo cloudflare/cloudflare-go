@@ -133,10 +133,12 @@ func (r httpLocationIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                  `json:"description,required"`
+	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
@@ -165,6 +167,65 @@ func (r *HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation) Unmarshal
 
 func (r httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPLocationIPVersionGetResponseMetaDateRange struct {

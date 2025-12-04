@@ -147,10 +147,12 @@ func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON) RawJSON() string 
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                 `json:"description,required"`
+	EndDate     time.Time                                                              `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
@@ -179,6 +181,65 @@ func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 
 func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type TCPResetsTimeoutSummaryResponseMetaDateRange struct {
@@ -401,10 +462,12 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON(
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                          `json:"description,required"`
+	EndDate     time.Time                                                                       `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
@@ -433,6 +496,65 @@ func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) U
 
 func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll                TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots               TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos                TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet                TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type TCPResetsTimeoutTimeseriesGroupsResponseMetaDateRange struct {

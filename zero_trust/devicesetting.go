@@ -107,6 +107,20 @@ type DeviceSettings struct {
 	// Sets the time limit, in seconds, that a user can use an override code to bypass
 	// WARP.
 	DisableForTime float64 `json:"disable_for_time"`
+	// Controls whether the external emergency disconnect feature is enabled.
+	ExternalEmergencySignalEnabled bool `json:"external_emergency_signal_enabled"`
+	// The SHA256 fingerprint (64 hexadecimal characters) of the HTTPS server
+	// certificate for the external_emergency_signal_url. If provided, the WARP client
+	// will use this value to verify the server's identity. The device will ignore any
+	// response if the server's certificate fingerprint does not exactly match this
+	// value.
+	ExternalEmergencySignalFingerprint string `json:"external_emergency_signal_fingerprint"`
+	// The interval at which the WARP client fetches the emergency disconnect signal,
+	// formatted as a duration string (e.g., "5m", "2m30s", "1h"). Minimum 30 seconds.
+	ExternalEmergencySignalInterval string `json:"external_emergency_signal_interval"`
+	// The HTTPS URL from which to fetch the emergency disconnect signal. Must use
+	// HTTPS and have an IPv4 or IPv6 address as the host.
+	ExternalEmergencySignalURL string `json:"external_emergency_signal_url"`
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -121,6 +135,10 @@ type DeviceSettings struct {
 // deviceSettingsJSON contains the JSON metadata for the struct [DeviceSettings]
 type deviceSettingsJSON struct {
 	DisableForTime                     apijson.Field
+	ExternalEmergencySignalEnabled     apijson.Field
+	ExternalEmergencySignalFingerprint apijson.Field
+	ExternalEmergencySignalInterval    apijson.Field
+	ExternalEmergencySignalURL         apijson.Field
 	GatewayProxyEnabled                apijson.Field
 	GatewayUdpProxyEnabled             apijson.Field
 	RootCertificateInstallationEnabled apijson.Field
@@ -141,6 +159,20 @@ type DeviceSettingsParam struct {
 	// Sets the time limit, in seconds, that a user can use an override code to bypass
 	// WARP.
 	DisableForTime param.Field[float64] `json:"disable_for_time"`
+	// Controls whether the external emergency disconnect feature is enabled.
+	ExternalEmergencySignalEnabled param.Field[bool] `json:"external_emergency_signal_enabled"`
+	// The SHA256 fingerprint (64 hexadecimal characters) of the HTTPS server
+	// certificate for the external_emergency_signal_url. If provided, the WARP client
+	// will use this value to verify the server's identity. The device will ignore any
+	// response if the server's certificate fingerprint does not exactly match this
+	// value.
+	ExternalEmergencySignalFingerprint param.Field[string] `json:"external_emergency_signal_fingerprint"`
+	// The interval at which the WARP client fetches the emergency disconnect signal,
+	// formatted as a duration string (e.g., "5m", "2m30s", "1h"). Minimum 30 seconds.
+	ExternalEmergencySignalInterval param.Field[string] `json:"external_emergency_signal_interval"`
+	// The HTTPS URL from which to fetch the emergency disconnect signal. Must use
+	// HTTPS and have an IPv4 or IPv6 address as the host.
+	ExternalEmergencySignalURL param.Field[string] `json:"external_emergency_signal_url"`
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.

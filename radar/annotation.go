@@ -79,6 +79,8 @@ type AnnotationListResponseAnnotation struct {
 	EventType        string                                             `json:"eventType,required"`
 	Locations        []string                                           `json:"locations,required"`
 	LocationsDetails []AnnotationListResponseAnnotationsLocationsDetail `json:"locationsDetails,required"`
+	Origins          []string                                           `json:"origins,required"`
+	OriginsDetails   []AnnotationListResponseAnnotationsOriginsDetail   `json:"originsDetails,required"`
 	Outage           AnnotationListResponseAnnotationsOutage            `json:"outage,required"`
 	StartDate        string                                             `json:"startDate,required"`
 	Description      string                                             `json:"description"`
@@ -98,6 +100,8 @@ type annotationListResponseAnnotationJSON struct {
 	EventType        apijson.Field
 	Locations        apijson.Field
 	LocationsDetails apijson.Field
+	Origins          apijson.Field
+	OriginsDetails   apijson.Field
 	Outage           apijson.Field
 	StartDate        apijson.Field
 	Description      apijson.Field
@@ -187,6 +191,29 @@ func (r annotationListResponseAnnotationsLocationsDetailJSON) RawJSON() string {
 	return r.raw
 }
 
+type AnnotationListResponseAnnotationsOriginsDetail struct {
+	Name   string                                             `json:"name,required"`
+	Origin string                                             `json:"origin,required"`
+	JSON   annotationListResponseAnnotationsOriginsDetailJSON `json:"-"`
+}
+
+// annotationListResponseAnnotationsOriginsDetailJSON contains the JSON metadata
+// for the struct [AnnotationListResponseAnnotationsOriginsDetail]
+type annotationListResponseAnnotationsOriginsDetailJSON struct {
+	Name        apijson.Field
+	Origin      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnnotationListResponseAnnotationsOriginsDetail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r annotationListResponseAnnotationsOriginsDetailJSON) RawJSON() string {
+	return r.raw
+}
+
 type AnnotationListResponseAnnotationsOutage struct {
 	OutageCause string                                      `json:"outageCause,required"`
 	OutageType  string                                      `json:"outageType,required"`
@@ -214,12 +241,16 @@ type AnnotationListParams struct {
 	// Filters results by Autonomous System. Specify a single Autonomous System Number
 	// (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
+	// Filters results by data source.
+	DataSource param.Field[AnnotationListParamsDataSource] `query:"dataSource"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Filters results by date range.
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
+	// Filters results by event type.
+	EventType param.Field[AnnotationListParamsEventType] `query:"eventType"`
 	// Format in which results will be returned.
 	Format param.Field[AnnotationListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
@@ -228,6 +259,8 @@ type AnnotationListParams struct {
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
+	// Filters results by origin.
+	Origin param.Field[string] `query:"origin"`
 }
 
 // URLQuery serializes [AnnotationListParams]'s query parameters as `url.Values`.
@@ -236,6 +269,65 @@ func (r AnnotationListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filters results by data source.
+type AnnotationListParamsDataSource string
+
+const (
+	AnnotationListParamsDataSourceAll                AnnotationListParamsDataSource = "ALL"
+	AnnotationListParamsDataSourceAIBots             AnnotationListParamsDataSource = "AI_BOTS"
+	AnnotationListParamsDataSourceAIGateway          AnnotationListParamsDataSource = "AI_GATEWAY"
+	AnnotationListParamsDataSourceBGP                AnnotationListParamsDataSource = "BGP"
+	AnnotationListParamsDataSourceBots               AnnotationListParamsDataSource = "BOTS"
+	AnnotationListParamsDataSourceConnectionAnomaly  AnnotationListParamsDataSource = "CONNECTION_ANOMALY"
+	AnnotationListParamsDataSourceCt                 AnnotationListParamsDataSource = "CT"
+	AnnotationListParamsDataSourceDNS                AnnotationListParamsDataSource = "DNS"
+	AnnotationListParamsDataSourceDNSMagnitude       AnnotationListParamsDataSource = "DNS_MAGNITUDE"
+	AnnotationListParamsDataSourceDNSAS112           AnnotationListParamsDataSource = "DNS_AS112"
+	AnnotationListParamsDataSourceDos                AnnotationListParamsDataSource = "DOS"
+	AnnotationListParamsDataSourceEmailRouting       AnnotationListParamsDataSource = "EMAIL_ROUTING"
+	AnnotationListParamsDataSourceEmailSecurity      AnnotationListParamsDataSource = "EMAIL_SECURITY"
+	AnnotationListParamsDataSourceFw                 AnnotationListParamsDataSource = "FW"
+	AnnotationListParamsDataSourceFwPg               AnnotationListParamsDataSource = "FW_PG"
+	AnnotationListParamsDataSourceHTTP               AnnotationListParamsDataSource = "HTTP"
+	AnnotationListParamsDataSourceHTTPControl        AnnotationListParamsDataSource = "HTTP_CONTROL"
+	AnnotationListParamsDataSourceHTTPCrawlerReferer AnnotationListParamsDataSource = "HTTP_CRAWLER_REFERER"
+	AnnotationListParamsDataSourceHTTPOrigins        AnnotationListParamsDataSource = "HTTP_ORIGINS"
+	AnnotationListParamsDataSourceIQI                AnnotationListParamsDataSource = "IQI"
+	AnnotationListParamsDataSourceLeakedCredentials  AnnotationListParamsDataSource = "LEAKED_CREDENTIALS"
+	AnnotationListParamsDataSourceNet                AnnotationListParamsDataSource = "NET"
+	AnnotationListParamsDataSourceRobotsTXT          AnnotationListParamsDataSource = "ROBOTS_TXT"
+	AnnotationListParamsDataSourceSpeed              AnnotationListParamsDataSource = "SPEED"
+	AnnotationListParamsDataSourceWorkersAI          AnnotationListParamsDataSource = "WORKERS_AI"
+)
+
+func (r AnnotationListParamsDataSource) IsKnown() bool {
+	switch r {
+	case AnnotationListParamsDataSourceAll, AnnotationListParamsDataSourceAIBots, AnnotationListParamsDataSourceAIGateway, AnnotationListParamsDataSourceBGP, AnnotationListParamsDataSourceBots, AnnotationListParamsDataSourceConnectionAnomaly, AnnotationListParamsDataSourceCt, AnnotationListParamsDataSourceDNS, AnnotationListParamsDataSourceDNSMagnitude, AnnotationListParamsDataSourceDNSAS112, AnnotationListParamsDataSourceDos, AnnotationListParamsDataSourceEmailRouting, AnnotationListParamsDataSourceEmailSecurity, AnnotationListParamsDataSourceFw, AnnotationListParamsDataSourceFwPg, AnnotationListParamsDataSourceHTTP, AnnotationListParamsDataSourceHTTPControl, AnnotationListParamsDataSourceHTTPCrawlerReferer, AnnotationListParamsDataSourceHTTPOrigins, AnnotationListParamsDataSourceIQI, AnnotationListParamsDataSourceLeakedCredentials, AnnotationListParamsDataSourceNet, AnnotationListParamsDataSourceRobotsTXT, AnnotationListParamsDataSourceSpeed, AnnotationListParamsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Filters results by event type.
+type AnnotationListParamsEventType string
+
+const (
+	AnnotationListParamsEventTypeEvent             AnnotationListParamsEventType = "EVENT"
+	AnnotationListParamsEventTypeGeneral           AnnotationListParamsEventType = "GENERAL"
+	AnnotationListParamsEventTypeOutage            AnnotationListParamsEventType = "OUTAGE"
+	AnnotationListParamsEventTypePartialProjection AnnotationListParamsEventType = "PARTIAL_PROJECTION"
+	AnnotationListParamsEventTypePipeline          AnnotationListParamsEventType = "PIPELINE"
+	AnnotationListParamsEventTypeTrafficAnomaly    AnnotationListParamsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r AnnotationListParamsEventType) IsKnown() bool {
+	switch r {
+	case AnnotationListParamsEventTypeEvent, AnnotationListParamsEventTypeGeneral, AnnotationListParamsEventTypeOutage, AnnotationListParamsEventTypePartialProjection, AnnotationListParamsEventTypePipeline, AnnotationListParamsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 // Format in which results will be returned.

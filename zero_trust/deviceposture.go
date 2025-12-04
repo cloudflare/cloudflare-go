@@ -406,6 +406,8 @@ type DeviceInput struct {
 	Thumbprint string `json:"thumbprint"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore float64 `json:"total_score"`
+	// Number of days that the antivirus should be updated within.
+	UpdateWindowDays float64 `json:"update_window_days"`
 	// Version of OS.
 	Version string `json:"version"`
 	// Version Operator.
@@ -455,6 +457,7 @@ type deviceInputJSON struct {
 	SubjectAlternativeNames apijson.Field
 	Thumbprint              apijson.Field
 	TotalScore              apijson.Field
+	UpdateWindowDays        apijson.Field
 	Version                 apijson.Field
 	VersionOperator         apijson.Field
 	raw                     string
@@ -483,7 +486,8 @@ func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
 // [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
 // [DiskEncryptionInput], [DeviceInputTeamsDevicesApplicationInputRequest],
 // [ClientCertificateInput],
-// [DeviceInputTeamsDevicesClientCertificateV2InputRequest], [WorkspaceOneInput],
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequest],
+// [DeviceInputTeamsDevicesAntivirusInputRequest], [WorkspaceOneInput],
 // [CrowdstrikeInput], [IntuneInput], [KolideInput], [TaniumInput],
 // [SentineloneS2sInput], [DeviceInputTeamsDevicesCustomS2sInputRequest].
 func (r DeviceInput) AsUnion() DeviceInputUnion {
@@ -498,7 +502,8 @@ func (r DeviceInput) AsUnion() DeviceInputUnion {
 // [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
 // [DiskEncryptionInput], [DeviceInputTeamsDevicesApplicationInputRequest],
 // [ClientCertificateInput],
-// [DeviceInputTeamsDevicesClientCertificateV2InputRequest], [WorkspaceOneInput],
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequest],
+// [DeviceInputTeamsDevicesAntivirusInputRequest], [WorkspaceOneInput],
 // [CrowdstrikeInput], [IntuneInput], [KolideInput], [TaniumInput],
 // [SentineloneS2sInput] or [DeviceInputTeamsDevicesCustomS2sInputRequest].
 type DeviceInputUnion interface {
@@ -556,6 +561,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DeviceInputTeamsDevicesClientCertificateV2InputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeviceInputTeamsDevicesAntivirusInputRequest{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -829,6 +838,30 @@ func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStor
 	}
 	return false
 }
+
+type DeviceInputTeamsDevicesAntivirusInputRequest struct {
+	// Number of days that the antivirus should be updated within.
+	UpdateWindowDays float64                                          `json:"update_window_days"`
+	JSON             deviceInputTeamsDevicesAntivirusInputRequestJSON `json:"-"`
+}
+
+// deviceInputTeamsDevicesAntivirusInputRequestJSON contains the JSON metadata for
+// the struct [DeviceInputTeamsDevicesAntivirusInputRequest]
+type deviceInputTeamsDevicesAntivirusInputRequestJSON struct {
+	UpdateWindowDays apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DeviceInputTeamsDevicesAntivirusInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceInputTeamsDevicesAntivirusInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeviceInputTeamsDevicesAntivirusInputRequest) implementsDeviceInput() {}
 
 type DeviceInputTeamsDevicesCustomS2sInputRequest struct {
 	// Posture Integration ID.
@@ -1148,6 +1181,8 @@ type DeviceInputParam struct {
 	Thumbprint param.Field[string] `json:"thumbprint"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore param.Field[float64] `json:"total_score"`
+	// Number of days that the antivirus should be updated within.
+	UpdateWindowDays param.Field[float64] `json:"update_window_days"`
 	// Version of OS.
 	Version param.Field[string] `json:"version"`
 	// Version Operator.
@@ -1171,6 +1206,7 @@ func (r DeviceInputParam) implementsDeviceInputUnionParam() {}
 // [zero_trust.DeviceInputTeamsDevicesApplicationInputRequestParam],
 // [zero_trust.ClientCertificateInputParam],
 // [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequestParam],
+// [zero_trust.DeviceInputTeamsDevicesAntivirusInputRequestParam],
 // [zero_trust.WorkspaceOneInputParam], [zero_trust.CrowdstrikeInputParam],
 // [zero_trust.IntuneInputParam], [zero_trust.KolideInputParam],
 // [zero_trust.TaniumInputParam], [zero_trust.SentineloneS2sInputParam],
@@ -1262,6 +1298,17 @@ type DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam struct
 func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+type DeviceInputTeamsDevicesAntivirusInputRequestParam struct {
+	// Number of days that the antivirus should be updated within.
+	UpdateWindowDays param.Field[float64] `json:"update_window_days"`
+}
+
+func (r DeviceInputTeamsDevicesAntivirusInputRequestParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeviceInputTeamsDevicesAntivirusInputRequestParam) implementsDeviceInputUnionParam() {}
 
 type DeviceInputTeamsDevicesCustomS2sInputRequestParam struct {
 	// Posture Integration ID.
@@ -1388,6 +1435,7 @@ const (
 	DevicePostureRuleTypeDomainJoined        DevicePostureRuleType = "domain_joined"
 	DevicePostureRuleTypeClientCertificate   DevicePostureRuleType = "client_certificate"
 	DevicePostureRuleTypeClientCertificateV2 DevicePostureRuleType = "client_certificate_v2"
+	DevicePostureRuleTypeAntivirus           DevicePostureRuleType = "antivirus"
 	DevicePostureRuleTypeUniqueClientID      DevicePostureRuleType = "unique_client_id"
 	DevicePostureRuleTypeKolide              DevicePostureRuleType = "kolide"
 	DevicePostureRuleTypeTaniumS2s           DevicePostureRuleType = "tanium_s2s"
@@ -1400,7 +1448,7 @@ const (
 
 func (r DevicePostureRuleType) IsKnown() bool {
 	switch r {
-	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSerialNumber, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s, DevicePostureRuleTypeCustomS2s:
+	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSerialNumber, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeAntivirus, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s, DevicePostureRuleTypeCustomS2s:
 		return true
 	}
 	return false
@@ -2329,6 +2377,7 @@ const (
 	DevicePostureNewParamsTypeDomainJoined        DevicePostureNewParamsType = "domain_joined"
 	DevicePostureNewParamsTypeClientCertificate   DevicePostureNewParamsType = "client_certificate"
 	DevicePostureNewParamsTypeClientCertificateV2 DevicePostureNewParamsType = "client_certificate_v2"
+	DevicePostureNewParamsTypeAntivirus           DevicePostureNewParamsType = "antivirus"
 	DevicePostureNewParamsTypeUniqueClientID      DevicePostureNewParamsType = "unique_client_id"
 	DevicePostureNewParamsTypeKolide              DevicePostureNewParamsType = "kolide"
 	DevicePostureNewParamsTypeTaniumS2s           DevicePostureNewParamsType = "tanium_s2s"
@@ -2341,7 +2390,7 @@ const (
 
 func (r DevicePostureNewParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSerialNumber, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s, DevicePostureNewParamsTypeCustomS2s:
+	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSerialNumber, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeAntivirus, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s, DevicePostureNewParamsTypeCustomS2s:
 		return true
 	}
 	return false
@@ -2432,6 +2481,7 @@ const (
 	DevicePostureUpdateParamsTypeDomainJoined        DevicePostureUpdateParamsType = "domain_joined"
 	DevicePostureUpdateParamsTypeClientCertificate   DevicePostureUpdateParamsType = "client_certificate"
 	DevicePostureUpdateParamsTypeClientCertificateV2 DevicePostureUpdateParamsType = "client_certificate_v2"
+	DevicePostureUpdateParamsTypeAntivirus           DevicePostureUpdateParamsType = "antivirus"
 	DevicePostureUpdateParamsTypeUniqueClientID      DevicePostureUpdateParamsType = "unique_client_id"
 	DevicePostureUpdateParamsTypeKolide              DevicePostureUpdateParamsType = "kolide"
 	DevicePostureUpdateParamsTypeTaniumS2s           DevicePostureUpdateParamsType = "tanium_s2s"
@@ -2444,7 +2494,7 @@ const (
 
 func (r DevicePostureUpdateParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSerialNumber, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s, DevicePostureUpdateParamsTypeCustomS2s:
+	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSerialNumber, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeAntivirus, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s, DevicePostureUpdateParamsTypeCustomS2s:
 		return true
 	}
 	return false

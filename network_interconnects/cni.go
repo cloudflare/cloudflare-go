@@ -79,7 +79,7 @@ func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...opt
 // Delete a specified CNI object
 func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

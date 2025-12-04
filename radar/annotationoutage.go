@@ -90,6 +90,8 @@ type AnnotationOutageGetResponseAnnotation struct {
 	EventType        string                                                  `json:"eventType,required"`
 	Locations        []string                                                `json:"locations,required"`
 	LocationsDetails []AnnotationOutageGetResponseAnnotationsLocationsDetail `json:"locationsDetails,required"`
+	Origins          []string                                                `json:"origins,required"`
+	OriginsDetails   []AnnotationOutageGetResponseAnnotationsOriginsDetail   `json:"originsDetails,required"`
 	Outage           AnnotationOutageGetResponseAnnotationsOutage            `json:"outage,required"`
 	StartDate        time.Time                                               `json:"startDate,required" format:"date-time"`
 	Description      string                                                  `json:"description"`
@@ -109,6 +111,8 @@ type annotationOutageGetResponseAnnotationJSON struct {
 	EventType        apijson.Field
 	Locations        apijson.Field
 	LocationsDetails apijson.Field
+	Origins          apijson.Field
+	OriginsDetails   apijson.Field
 	Outage           apijson.Field
 	StartDate        apijson.Field
 	Description      apijson.Field
@@ -196,6 +200,29 @@ func (r *AnnotationOutageGetResponseAnnotationsLocationsDetail) UnmarshalJSON(da
 }
 
 func (r annotationOutageGetResponseAnnotationsLocationsDetailJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnnotationOutageGetResponseAnnotationsOriginsDetail struct {
+	Name   string                                                  `json:"name,required"`
+	Origin string                                                  `json:"origin,required"`
+	JSON   annotationOutageGetResponseAnnotationsOriginsDetailJSON `json:"-"`
+}
+
+// annotationOutageGetResponseAnnotationsOriginsDetailJSON contains the JSON
+// metadata for the struct [AnnotationOutageGetResponseAnnotationsOriginsDetail]
+type annotationOutageGetResponseAnnotationsOriginsDetailJSON struct {
+	Name        apijson.Field
+	Origin      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnnotationOutageGetResponseAnnotationsOriginsDetail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r annotationOutageGetResponseAnnotationsOriginsDetailJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -287,6 +314,8 @@ type AnnotationOutageGetParams struct {
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
+	// Filters results by origin.
+	Origin param.Field[string] `query:"origin"`
 }
 
 // URLQuery serializes [AnnotationOutageGetParams]'s query parameters as

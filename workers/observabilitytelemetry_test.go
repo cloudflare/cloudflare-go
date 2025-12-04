@@ -37,6 +37,7 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 			Type:      cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersTypeString),
 			Value:     cloudflare.F[workers.ObservabilityTelemetryKeysParamsFiltersValueUnion](shared.UnionString("string")),
 		}}),
+		From: cloudflare.F(0.000000),
 		KeyNeedle: cloudflare.F(workers.ObservabilityTelemetryKeysParamsKeyNeedle{
 			Value:     cloudflare.F[workers.ObservabilityTelemetryKeysParamsKeyNeedleValueUnion](shared.UnionString("string")),
 			IsRegex:   cloudflare.F(true),
@@ -48,10 +49,7 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 			IsRegex:   cloudflare.F(true),
 			MatchCase: cloudflare.F(true),
 		}),
-		Timeframe: cloudflare.F(workers.ObservabilityTelemetryKeysParamsTimeframe{
-			From: cloudflare.F(0.000000),
-			To:   cloudflare.F(0.000000),
-		}),
+		To: cloudflare.F(0.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -87,7 +85,7 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 		Dry:             cloudflare.F(true),
 		Granularity:     cloudflare.F(0.000000),
 		IgnoreSeries:    cloudflare.F(true),
-		Limit:           cloudflare.F(100.000000),
+		Limit:           cloudflare.F(2000.000000),
 		Offset:          cloudflare.F("offset"),
 		OffsetBy:        cloudflare.F(0.000000),
 		OffsetDirection: cloudflare.F("offsetDirection"),

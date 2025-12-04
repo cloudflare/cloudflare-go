@@ -145,10 +145,12 @@ func (r netflowTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetflowTopAsesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                        `json:"description,required"`
+	EndDate     time.Time                                                     `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
@@ -176,6 +178,65 @@ func (r *NetflowTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data 
 
 func (r netflowTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceAll                NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceBots               NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDos                NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceNet                NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceAll, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceBots, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceCt, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceDos, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceFw, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceNet, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, NetflowTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type NetflowTopAsesResponseMetaDateRange struct {
@@ -359,10 +420,12 @@ func (r netflowTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetflowTopLocationsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                             `json:"description,required"`
+	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
@@ -391,6 +454,65 @@ func (r *NetflowTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(
 
 func (r netflowTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceAll                NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceBots               NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDos                NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceNet                NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceAll, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceBots, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceCt, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceDos, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceFw, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceNet, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, NetflowTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type NetflowTopLocationsResponseMetaDateRange struct {

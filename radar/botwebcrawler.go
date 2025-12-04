@@ -148,10 +148,12 @@ func (r botWebCrawlerSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                              `json:"description,required"`
+	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
@@ -180,6 +182,65 @@ func (r *BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON
 
 func (r botWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type BotWebCrawlerSummaryResponseMetaDateRange struct {
@@ -364,10 +425,12 @@ func (r botWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() s
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                       `json:"description,required"`
+	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
@@ -396,6 +459,65 @@ func (r *BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) Unma
 
 func (r botWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll                BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots               BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos                BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet                BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type BotWebCrawlerTimeseriesGroupsResponseMetaDateRange struct {

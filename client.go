@@ -77,6 +77,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/pipelines"
 	"github.com/cloudflare/cloudflare-go/v6/queues"
 	"github.com/cloudflare/cloudflare-go/v6/r2"
+	"github.com/cloudflare/cloudflare-go/v6/r2_data_catalog"
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 	"github.com/cloudflare/cloudflare-go/v6/rate_limits"
 	"github.com/cloudflare/cloudflare-go/v6/realtime_kit"
@@ -186,6 +187,7 @@ type Client struct {
 	Alerting                    *alerting.AlertingService
 	D1                          *d1.D1Service
 	R2                          *r2.R2Service
+	R2DataCatalog               *r2_data_catalog.R2DataCatalogService
 	WorkersForPlatforms         *workers_for_platforms.WorkersForPlatformService
 	ZeroTrust                   *zero_trust.ZeroTrustService
 	Turnstile                   *turnstile.TurnstileService
@@ -320,6 +322,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Alerting = alerting.NewAlertingService(opts...)
 	r.D1 = d1.NewD1Service(opts...)
 	r.R2 = r2.NewR2Service(opts...)
+	r.R2DataCatalog = r2_data_catalog.NewR2DataCatalogService(opts...)
 	r.WorkersForPlatforms = workers_for_platforms.NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = zero_trust.NewZeroTrustService(opts...)
 	r.Turnstile = turnstile.NewTurnstileService(opts...)

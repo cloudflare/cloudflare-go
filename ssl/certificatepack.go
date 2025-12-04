@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -225,9 +226,19 @@ func (r ValidationMethod) IsKnown() bool {
 	return false
 }
 
+// A certificate pack with all its properties.
 type CertificatePackNewResponse struct {
 	// Identifier.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
+	// Array of certificates in this pack.
+	Certificates []CertificatePackNewResponseCertificate `json:"certificates,required"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []Host `json:"hosts,required"`
+	// Status of certificate pack.
+	Status Status `json:"status,required"`
+	// Type of certificate pack.
+	Type CertificatePackNewResponseType `json:"type,required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -235,20 +246,14 @@ type CertificatePackNewResponse struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
-	// Comma separated list of valid host names for the certificate packs. Must contain
-	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []Host `json:"hosts"`
-	// Status of certificate pack.
-	Status Status `json:"status"`
-	// Type of certificate pack.
-	Type CertificatePackNewResponseType `json:"type"`
+	// Identifier of the primary certificate in a pack.
+	PrimaryCertificate string `json:"primary_certificate"`
 	// Domain validation errors that have been received by the certificate authority
 	// (CA).
 	ValidationErrors []CertificatePackNewResponseValidationError `json:"validation_errors"`
 	// Validation Method selected for the order.
 	ValidationMethod CertificatePackNewResponseValidationMethod `json:"validation_method"`
-	// Certificates' validation records. Only present when certificate pack is in
-	// "pending_validation" status
+	// Certificates' validation records.
 	ValidationRecords []CertificatePackNewResponseValidationRecord `json:"validation_records"`
 	// Validity Days selected for the order.
 	ValidityDays CertificatePackNewResponseValidityDays `json:"validity_days"`
@@ -259,11 +264,13 @@ type CertificatePackNewResponse struct {
 // [CertificatePackNewResponse]
 type certificatePackNewResponseJSON struct {
 	ID                   apijson.Field
-	CertificateAuthority apijson.Field
-	CloudflareBranding   apijson.Field
+	Certificates         apijson.Field
 	Hosts                apijson.Field
 	Status               apijson.Field
 	Type                 apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	PrimaryCertificate   apijson.Field
 	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
 	ValidationRecords    apijson.Field
@@ -280,20 +287,95 @@ func (r certificatePackNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate Authority selected for the order. For information on any certificate
-// authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-type CertificatePackNewResponseCertificateAuthority string
+// An individual certificate within a certificate pack.
+type CertificatePackNewResponseCertificate struct {
+	// Certificate identifier.
+	ID string `json:"id,required"`
+	// Hostnames covered by this certificate.
+	Hosts []string `json:"hosts,required"`
+	// Certificate status.
+	Status string `json:"status,required"`
+	// Certificate bundle method.
+	BundleMethod string `json:"bundle_method"`
+	// When the certificate from the authority expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// Specify the region where your private key can be held locally.
+	GeoRestrictions CertificatePackNewResponseCertificatesGeoRestrictions `json:"geo_restrictions"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// When the certificate was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The order/priority in which the certificate will be used.
+	Priority float64 `json:"priority"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// When the certificate was uploaded to Cloudflare.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Identifier.
+	ZoneID string                                    `json:"zone_id"`
+	JSON   certificatePackNewResponseCertificateJSON `json:"-"`
+}
+
+// certificatePackNewResponseCertificateJSON contains the JSON metadata for the
+// struct [CertificatePackNewResponseCertificate]
+type certificatePackNewResponseCertificateJSON struct {
+	ID              apijson.Field
+	Hosts           apijson.Field
+	Status          apijson.Field
+	BundleMethod    apijson.Field
+	ExpiresOn       apijson.Field
+	GeoRestrictions apijson.Field
+	Issuer          apijson.Field
+	ModifiedOn      apijson.Field
+	Priority        apijson.Field
+	Signature       apijson.Field
+	UploadedOn      apijson.Field
+	ZoneID          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponseCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specify the region where your private key can be held locally.
+type CertificatePackNewResponseCertificatesGeoRestrictions struct {
+	Label CertificatePackNewResponseCertificatesGeoRestrictionsLabel `json:"label"`
+	JSON  certificatePackNewResponseCertificatesGeoRestrictionsJSON  `json:"-"`
+}
+
+// certificatePackNewResponseCertificatesGeoRestrictionsJSON contains the JSON
+// metadata for the struct [CertificatePackNewResponseCertificatesGeoRestrictions]
+type certificatePackNewResponseCertificatesGeoRestrictionsJSON struct {
+	Label       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponseCertificatesGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseCertificatesGeoRestrictionsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CertificatePackNewResponseCertificatesGeoRestrictionsLabel string
 
 const (
-	CertificatePackNewResponseCertificateAuthorityGoogle      CertificatePackNewResponseCertificateAuthority = "google"
-	CertificatePackNewResponseCertificateAuthorityLetsEncrypt CertificatePackNewResponseCertificateAuthority = "lets_encrypt"
-	CertificatePackNewResponseCertificateAuthoritySSLCom      CertificatePackNewResponseCertificateAuthority = "ssl_com"
+	CertificatePackNewResponseCertificatesGeoRestrictionsLabelUs              CertificatePackNewResponseCertificatesGeoRestrictionsLabel = "us"
+	CertificatePackNewResponseCertificatesGeoRestrictionsLabelEu              CertificatePackNewResponseCertificatesGeoRestrictionsLabel = "eu"
+	CertificatePackNewResponseCertificatesGeoRestrictionsLabelHighestSecurity CertificatePackNewResponseCertificatesGeoRestrictionsLabel = "highest_security"
 )
 
-func (r CertificatePackNewResponseCertificateAuthority) IsKnown() bool {
+func (r CertificatePackNewResponseCertificatesGeoRestrictionsLabel) IsKnown() bool {
 	switch r {
-	case CertificatePackNewResponseCertificateAuthorityGoogle, CertificatePackNewResponseCertificateAuthorityLetsEncrypt, CertificatePackNewResponseCertificateAuthoritySSLCom:
+	case CertificatePackNewResponseCertificatesGeoRestrictionsLabelUs, CertificatePackNewResponseCertificatesGeoRestrictionsLabelEu, CertificatePackNewResponseCertificatesGeoRestrictionsLabelHighestSecurity:
 		return true
 	}
 	return false
@@ -316,6 +398,25 @@ const (
 func (r CertificatePackNewResponseType) IsKnown() bool {
 	switch r {
 	case CertificatePackNewResponseTypeMhCustom, CertificatePackNewResponseTypeManagedHostname, CertificatePackNewResponseTypeSNICustom, CertificatePackNewResponseTypeUniversal, CertificatePackNewResponseTypeAdvanced, CertificatePackNewResponseTypeTotalTLS, CertificatePackNewResponseTypeKeyless, CertificatePackNewResponseTypeLegacyCustom:
+		return true
+	}
+	return false
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type CertificatePackNewResponseCertificateAuthority string
+
+const (
+	CertificatePackNewResponseCertificateAuthorityGoogle      CertificatePackNewResponseCertificateAuthority = "google"
+	CertificatePackNewResponseCertificateAuthorityLetsEncrypt CertificatePackNewResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackNewResponseCertificateAuthoritySSLCom      CertificatePackNewResponseCertificateAuthority = "ssl_com"
+)
+
+func (r CertificatePackNewResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackNewResponseCertificateAuthorityGoogle, CertificatePackNewResponseCertificateAuthorityLetsEncrypt, CertificatePackNewResponseCertificateAuthoritySSLCom:
 		return true
 	}
 	return false
@@ -417,7 +518,297 @@ func (r CertificatePackNewResponseValidityDays) IsKnown() bool {
 	return false
 }
 
-type CertificatePackListResponse = interface{}
+// A certificate pack with all its properties.
+type CertificatePackListResponse struct {
+	// Identifier.
+	ID string `json:"id,required"`
+	// Array of certificates in this pack.
+	Certificates []CertificatePackListResponseCertificate `json:"certificates,required"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []Host `json:"hosts,required"`
+	// Status of certificate pack.
+	Status Status `json:"status,required"`
+	// Type of certificate pack.
+	Type CertificatePackListResponseType `json:"type,required"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority CertificatePackListResponseCertificateAuthority `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
+	CloudflareBranding bool `json:"cloudflare_branding"`
+	// Identifier of the primary certificate in a pack.
+	PrimaryCertificate string `json:"primary_certificate"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors []CertificatePackListResponseValidationError `json:"validation_errors"`
+	// Validation Method selected for the order.
+	ValidationMethod CertificatePackListResponseValidationMethod `json:"validation_method"`
+	// Certificates' validation records.
+	ValidationRecords []CertificatePackListResponseValidationRecord `json:"validation_records"`
+	// Validity Days selected for the order.
+	ValidityDays CertificatePackListResponseValidityDays `json:"validity_days"`
+	JSON         certificatePackListResponseJSON         `json:"-"`
+}
+
+// certificatePackListResponseJSON contains the JSON metadata for the struct
+// [CertificatePackListResponse]
+type certificatePackListResponseJSON struct {
+	ID                   apijson.Field
+	Certificates         apijson.Field
+	Hosts                apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	PrimaryCertificate   apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationMethod     apijson.Field
+	ValidationRecords    apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *CertificatePackListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// An individual certificate within a certificate pack.
+type CertificatePackListResponseCertificate struct {
+	// Certificate identifier.
+	ID string `json:"id,required"`
+	// Hostnames covered by this certificate.
+	Hosts []string `json:"hosts,required"`
+	// Certificate status.
+	Status string `json:"status,required"`
+	// Certificate bundle method.
+	BundleMethod string `json:"bundle_method"`
+	// When the certificate from the authority expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// Specify the region where your private key can be held locally.
+	GeoRestrictions CertificatePackListResponseCertificatesGeoRestrictions `json:"geo_restrictions"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// When the certificate was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The order/priority in which the certificate will be used.
+	Priority float64 `json:"priority"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// When the certificate was uploaded to Cloudflare.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Identifier.
+	ZoneID string                                     `json:"zone_id"`
+	JSON   certificatePackListResponseCertificateJSON `json:"-"`
+}
+
+// certificatePackListResponseCertificateJSON contains the JSON metadata for the
+// struct [CertificatePackListResponseCertificate]
+type certificatePackListResponseCertificateJSON struct {
+	ID              apijson.Field
+	Hosts           apijson.Field
+	Status          apijson.Field
+	BundleMethod    apijson.Field
+	ExpiresOn       apijson.Field
+	GeoRestrictions apijson.Field
+	Issuer          apijson.Field
+	ModifiedOn      apijson.Field
+	Priority        apijson.Field
+	Signature       apijson.Field
+	UploadedOn      apijson.Field
+	ZoneID          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *CertificatePackListResponseCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackListResponseCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specify the region where your private key can be held locally.
+type CertificatePackListResponseCertificatesGeoRestrictions struct {
+	Label CertificatePackListResponseCertificatesGeoRestrictionsLabel `json:"label"`
+	JSON  certificatePackListResponseCertificatesGeoRestrictionsJSON  `json:"-"`
+}
+
+// certificatePackListResponseCertificatesGeoRestrictionsJSON contains the JSON
+// metadata for the struct [CertificatePackListResponseCertificatesGeoRestrictions]
+type certificatePackListResponseCertificatesGeoRestrictionsJSON struct {
+	Label       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackListResponseCertificatesGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackListResponseCertificatesGeoRestrictionsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CertificatePackListResponseCertificatesGeoRestrictionsLabel string
+
+const (
+	CertificatePackListResponseCertificatesGeoRestrictionsLabelUs              CertificatePackListResponseCertificatesGeoRestrictionsLabel = "us"
+	CertificatePackListResponseCertificatesGeoRestrictionsLabelEu              CertificatePackListResponseCertificatesGeoRestrictionsLabel = "eu"
+	CertificatePackListResponseCertificatesGeoRestrictionsLabelHighestSecurity CertificatePackListResponseCertificatesGeoRestrictionsLabel = "highest_security"
+)
+
+func (r CertificatePackListResponseCertificatesGeoRestrictionsLabel) IsKnown() bool {
+	switch r {
+	case CertificatePackListResponseCertificatesGeoRestrictionsLabelUs, CertificatePackListResponseCertificatesGeoRestrictionsLabelEu, CertificatePackListResponseCertificatesGeoRestrictionsLabelHighestSecurity:
+		return true
+	}
+	return false
+}
+
+// Type of certificate pack.
+type CertificatePackListResponseType string
+
+const (
+	CertificatePackListResponseTypeMhCustom        CertificatePackListResponseType = "mh_custom"
+	CertificatePackListResponseTypeManagedHostname CertificatePackListResponseType = "managed_hostname"
+	CertificatePackListResponseTypeSNICustom       CertificatePackListResponseType = "sni_custom"
+	CertificatePackListResponseTypeUniversal       CertificatePackListResponseType = "universal"
+	CertificatePackListResponseTypeAdvanced        CertificatePackListResponseType = "advanced"
+	CertificatePackListResponseTypeTotalTLS        CertificatePackListResponseType = "total_tls"
+	CertificatePackListResponseTypeKeyless         CertificatePackListResponseType = "keyless"
+	CertificatePackListResponseTypeLegacyCustom    CertificatePackListResponseType = "legacy_custom"
+)
+
+func (r CertificatePackListResponseType) IsKnown() bool {
+	switch r {
+	case CertificatePackListResponseTypeMhCustom, CertificatePackListResponseTypeManagedHostname, CertificatePackListResponseTypeSNICustom, CertificatePackListResponseTypeUniversal, CertificatePackListResponseTypeAdvanced, CertificatePackListResponseTypeTotalTLS, CertificatePackListResponseTypeKeyless, CertificatePackListResponseTypeLegacyCustom:
+		return true
+	}
+	return false
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type CertificatePackListResponseCertificateAuthority string
+
+const (
+	CertificatePackListResponseCertificateAuthorityGoogle      CertificatePackListResponseCertificateAuthority = "google"
+	CertificatePackListResponseCertificateAuthorityLetsEncrypt CertificatePackListResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackListResponseCertificateAuthoritySSLCom      CertificatePackListResponseCertificateAuthority = "ssl_com"
+)
+
+func (r CertificatePackListResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackListResponseCertificateAuthorityGoogle, CertificatePackListResponseCertificateAuthorityLetsEncrypt, CertificatePackListResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
+type CertificatePackListResponseValidationError struct {
+	// A domain validation error.
+	Message string                                         `json:"message"`
+	JSON    certificatePackListResponseValidationErrorJSON `json:"-"`
+}
+
+// certificatePackListResponseValidationErrorJSON contains the JSON metadata for
+// the struct [CertificatePackListResponseValidationError]
+type certificatePackListResponseValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackListResponseValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackListResponseValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+// Validation Method selected for the order.
+type CertificatePackListResponseValidationMethod string
+
+const (
+	CertificatePackListResponseValidationMethodTXT   CertificatePackListResponseValidationMethod = "txt"
+	CertificatePackListResponseValidationMethodHTTP  CertificatePackListResponseValidationMethod = "http"
+	CertificatePackListResponseValidationMethodEmail CertificatePackListResponseValidationMethod = "email"
+)
+
+func (r CertificatePackListResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackListResponseValidationMethodTXT, CertificatePackListResponseValidationMethodHTTP, CertificatePackListResponseValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
+// Certificate's required validation record.
+type CertificatePackListResponseValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                          `json:"txt_value"`
+	JSON     certificatePackListResponseValidationRecordJSON `json:"-"`
+}
+
+// certificatePackListResponseValidationRecordJSON contains the JSON metadata for
+// the struct [CertificatePackListResponseValidationRecord]
+type certificatePackListResponseValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackListResponseValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackListResponseValidationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
+// Validity Days selected for the order.
+type CertificatePackListResponseValidityDays int64
+
+const (
+	CertificatePackListResponseValidityDays14  CertificatePackListResponseValidityDays = 14
+	CertificatePackListResponseValidityDays30  CertificatePackListResponseValidityDays = 30
+	CertificatePackListResponseValidityDays90  CertificatePackListResponseValidityDays = 90
+	CertificatePackListResponseValidityDays365 CertificatePackListResponseValidityDays = 365
+)
+
+func (r CertificatePackListResponseValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackListResponseValidityDays14, CertificatePackListResponseValidityDays30, CertificatePackListResponseValidityDays90, CertificatePackListResponseValidityDays365:
+		return true
+	}
+	return false
+}
 
 type CertificatePackDeleteResponse struct {
 	// Identifier.
@@ -441,9 +832,19 @@ func (r certificatePackDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// A certificate pack with all its properties.
 type CertificatePackEditResponse struct {
 	// Identifier.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
+	// Array of certificates in this pack.
+	Certificates []CertificatePackEditResponseCertificate `json:"certificates,required"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []Host `json:"hosts,required"`
+	// Status of certificate pack.
+	Status Status `json:"status,required"`
+	// Type of certificate pack.
+	Type CertificatePackEditResponseType `json:"type,required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -451,20 +852,14 @@ type CertificatePackEditResponse struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
-	// Comma separated list of valid host names for the certificate packs. Must contain
-	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []Host `json:"hosts"`
-	// Status of certificate pack.
-	Status Status `json:"status"`
-	// Type of certificate pack.
-	Type CertificatePackEditResponseType `json:"type"`
+	// Identifier of the primary certificate in a pack.
+	PrimaryCertificate string `json:"primary_certificate"`
 	// Domain validation errors that have been received by the certificate authority
 	// (CA).
 	ValidationErrors []CertificatePackEditResponseValidationError `json:"validation_errors"`
 	// Validation Method selected for the order.
 	ValidationMethod CertificatePackEditResponseValidationMethod `json:"validation_method"`
-	// Certificates' validation records. Only present when certificate pack is in
-	// "pending_validation" status
+	// Certificates' validation records.
 	ValidationRecords []CertificatePackEditResponseValidationRecord `json:"validation_records"`
 	// Validity Days selected for the order.
 	ValidityDays CertificatePackEditResponseValidityDays `json:"validity_days"`
@@ -475,11 +870,13 @@ type CertificatePackEditResponse struct {
 // [CertificatePackEditResponse]
 type certificatePackEditResponseJSON struct {
 	ID                   apijson.Field
-	CertificateAuthority apijson.Field
-	CloudflareBranding   apijson.Field
+	Certificates         apijson.Field
 	Hosts                apijson.Field
 	Status               apijson.Field
 	Type                 apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	PrimaryCertificate   apijson.Field
 	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
 	ValidationRecords    apijson.Field
@@ -496,20 +893,95 @@ func (r certificatePackEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate Authority selected for the order. For information on any certificate
-// authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-type CertificatePackEditResponseCertificateAuthority string
+// An individual certificate within a certificate pack.
+type CertificatePackEditResponseCertificate struct {
+	// Certificate identifier.
+	ID string `json:"id,required"`
+	// Hostnames covered by this certificate.
+	Hosts []string `json:"hosts,required"`
+	// Certificate status.
+	Status string `json:"status,required"`
+	// Certificate bundle method.
+	BundleMethod string `json:"bundle_method"`
+	// When the certificate from the authority expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// Specify the region where your private key can be held locally.
+	GeoRestrictions CertificatePackEditResponseCertificatesGeoRestrictions `json:"geo_restrictions"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// When the certificate was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The order/priority in which the certificate will be used.
+	Priority float64 `json:"priority"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// When the certificate was uploaded to Cloudflare.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Identifier.
+	ZoneID string                                     `json:"zone_id"`
+	JSON   certificatePackEditResponseCertificateJSON `json:"-"`
+}
+
+// certificatePackEditResponseCertificateJSON contains the JSON metadata for the
+// struct [CertificatePackEditResponseCertificate]
+type certificatePackEditResponseCertificateJSON struct {
+	ID              apijson.Field
+	Hosts           apijson.Field
+	Status          apijson.Field
+	BundleMethod    apijson.Field
+	ExpiresOn       apijson.Field
+	GeoRestrictions apijson.Field
+	Issuer          apijson.Field
+	ModifiedOn      apijson.Field
+	Priority        apijson.Field
+	Signature       apijson.Field
+	UploadedOn      apijson.Field
+	ZoneID          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *CertificatePackEditResponseCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackEditResponseCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specify the region where your private key can be held locally.
+type CertificatePackEditResponseCertificatesGeoRestrictions struct {
+	Label CertificatePackEditResponseCertificatesGeoRestrictionsLabel `json:"label"`
+	JSON  certificatePackEditResponseCertificatesGeoRestrictionsJSON  `json:"-"`
+}
+
+// certificatePackEditResponseCertificatesGeoRestrictionsJSON contains the JSON
+// metadata for the struct [CertificatePackEditResponseCertificatesGeoRestrictions]
+type certificatePackEditResponseCertificatesGeoRestrictionsJSON struct {
+	Label       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackEditResponseCertificatesGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackEditResponseCertificatesGeoRestrictionsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CertificatePackEditResponseCertificatesGeoRestrictionsLabel string
 
 const (
-	CertificatePackEditResponseCertificateAuthorityGoogle      CertificatePackEditResponseCertificateAuthority = "google"
-	CertificatePackEditResponseCertificateAuthorityLetsEncrypt CertificatePackEditResponseCertificateAuthority = "lets_encrypt"
-	CertificatePackEditResponseCertificateAuthoritySSLCom      CertificatePackEditResponseCertificateAuthority = "ssl_com"
+	CertificatePackEditResponseCertificatesGeoRestrictionsLabelUs              CertificatePackEditResponseCertificatesGeoRestrictionsLabel = "us"
+	CertificatePackEditResponseCertificatesGeoRestrictionsLabelEu              CertificatePackEditResponseCertificatesGeoRestrictionsLabel = "eu"
+	CertificatePackEditResponseCertificatesGeoRestrictionsLabelHighestSecurity CertificatePackEditResponseCertificatesGeoRestrictionsLabel = "highest_security"
 )
 
-func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
+func (r CertificatePackEditResponseCertificatesGeoRestrictionsLabel) IsKnown() bool {
 	switch r {
-	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt, CertificatePackEditResponseCertificateAuthoritySSLCom:
+	case CertificatePackEditResponseCertificatesGeoRestrictionsLabelUs, CertificatePackEditResponseCertificatesGeoRestrictionsLabelEu, CertificatePackEditResponseCertificatesGeoRestrictionsLabelHighestSecurity:
 		return true
 	}
 	return false
@@ -532,6 +1004,25 @@ const (
 func (r CertificatePackEditResponseType) IsKnown() bool {
 	switch r {
 	case CertificatePackEditResponseTypeMhCustom, CertificatePackEditResponseTypeManagedHostname, CertificatePackEditResponseTypeSNICustom, CertificatePackEditResponseTypeUniversal, CertificatePackEditResponseTypeAdvanced, CertificatePackEditResponseTypeTotalTLS, CertificatePackEditResponseTypeKeyless, CertificatePackEditResponseTypeLegacyCustom:
+		return true
+	}
+	return false
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type CertificatePackEditResponseCertificateAuthority string
+
+const (
+	CertificatePackEditResponseCertificateAuthorityGoogle      CertificatePackEditResponseCertificateAuthority = "google"
+	CertificatePackEditResponseCertificateAuthorityLetsEncrypt CertificatePackEditResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackEditResponseCertificateAuthoritySSLCom      CertificatePackEditResponseCertificateAuthority = "ssl_com"
+)
+
+func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt, CertificatePackEditResponseCertificateAuthoritySSLCom:
 		return true
 	}
 	return false
@@ -633,7 +1124,297 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 	return false
 }
 
-type CertificatePackGetResponse = interface{}
+// A certificate pack with all its properties.
+type CertificatePackGetResponse struct {
+	// Identifier.
+	ID string `json:"id,required"`
+	// Array of certificates in this pack.
+	Certificates []CertificatePackGetResponseCertificate `json:"certificates,required"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []Host `json:"hosts,required"`
+	// Status of certificate pack.
+	Status Status `json:"status,required"`
+	// Type of certificate pack.
+	Type CertificatePackGetResponseType `json:"type,required"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority CertificatePackGetResponseCertificateAuthority `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
+	CloudflareBranding bool `json:"cloudflare_branding"`
+	// Identifier of the primary certificate in a pack.
+	PrimaryCertificate string `json:"primary_certificate"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors []CertificatePackGetResponseValidationError `json:"validation_errors"`
+	// Validation Method selected for the order.
+	ValidationMethod CertificatePackGetResponseValidationMethod `json:"validation_method"`
+	// Certificates' validation records.
+	ValidationRecords []CertificatePackGetResponseValidationRecord `json:"validation_records"`
+	// Validity Days selected for the order.
+	ValidityDays CertificatePackGetResponseValidityDays `json:"validity_days"`
+	JSON         certificatePackGetResponseJSON         `json:"-"`
+}
+
+// certificatePackGetResponseJSON contains the JSON metadata for the struct
+// [CertificatePackGetResponse]
+type certificatePackGetResponseJSON struct {
+	ID                   apijson.Field
+	Certificates         apijson.Field
+	Hosts                apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	PrimaryCertificate   apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationMethod     apijson.Field
+	ValidationRecords    apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *CertificatePackGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// An individual certificate within a certificate pack.
+type CertificatePackGetResponseCertificate struct {
+	// Certificate identifier.
+	ID string `json:"id,required"`
+	// Hostnames covered by this certificate.
+	Hosts []string `json:"hosts,required"`
+	// Certificate status.
+	Status string `json:"status,required"`
+	// Certificate bundle method.
+	BundleMethod string `json:"bundle_method"`
+	// When the certificate from the authority expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// Specify the region where your private key can be held locally.
+	GeoRestrictions CertificatePackGetResponseCertificatesGeoRestrictions `json:"geo_restrictions"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// When the certificate was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The order/priority in which the certificate will be used.
+	Priority float64 `json:"priority"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// When the certificate was uploaded to Cloudflare.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Identifier.
+	ZoneID string                                    `json:"zone_id"`
+	JSON   certificatePackGetResponseCertificateJSON `json:"-"`
+}
+
+// certificatePackGetResponseCertificateJSON contains the JSON metadata for the
+// struct [CertificatePackGetResponseCertificate]
+type certificatePackGetResponseCertificateJSON struct {
+	ID              apijson.Field
+	Hosts           apijson.Field
+	Status          apijson.Field
+	BundleMethod    apijson.Field
+	ExpiresOn       apijson.Field
+	GeoRestrictions apijson.Field
+	Issuer          apijson.Field
+	ModifiedOn      apijson.Field
+	Priority        apijson.Field
+	Signature       apijson.Field
+	UploadedOn      apijson.Field
+	ZoneID          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *CertificatePackGetResponseCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackGetResponseCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specify the region where your private key can be held locally.
+type CertificatePackGetResponseCertificatesGeoRestrictions struct {
+	Label CertificatePackGetResponseCertificatesGeoRestrictionsLabel `json:"label"`
+	JSON  certificatePackGetResponseCertificatesGeoRestrictionsJSON  `json:"-"`
+}
+
+// certificatePackGetResponseCertificatesGeoRestrictionsJSON contains the JSON
+// metadata for the struct [CertificatePackGetResponseCertificatesGeoRestrictions]
+type certificatePackGetResponseCertificatesGeoRestrictionsJSON struct {
+	Label       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackGetResponseCertificatesGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackGetResponseCertificatesGeoRestrictionsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CertificatePackGetResponseCertificatesGeoRestrictionsLabel string
+
+const (
+	CertificatePackGetResponseCertificatesGeoRestrictionsLabelUs              CertificatePackGetResponseCertificatesGeoRestrictionsLabel = "us"
+	CertificatePackGetResponseCertificatesGeoRestrictionsLabelEu              CertificatePackGetResponseCertificatesGeoRestrictionsLabel = "eu"
+	CertificatePackGetResponseCertificatesGeoRestrictionsLabelHighestSecurity CertificatePackGetResponseCertificatesGeoRestrictionsLabel = "highest_security"
+)
+
+func (r CertificatePackGetResponseCertificatesGeoRestrictionsLabel) IsKnown() bool {
+	switch r {
+	case CertificatePackGetResponseCertificatesGeoRestrictionsLabelUs, CertificatePackGetResponseCertificatesGeoRestrictionsLabelEu, CertificatePackGetResponseCertificatesGeoRestrictionsLabelHighestSecurity:
+		return true
+	}
+	return false
+}
+
+// Type of certificate pack.
+type CertificatePackGetResponseType string
+
+const (
+	CertificatePackGetResponseTypeMhCustom        CertificatePackGetResponseType = "mh_custom"
+	CertificatePackGetResponseTypeManagedHostname CertificatePackGetResponseType = "managed_hostname"
+	CertificatePackGetResponseTypeSNICustom       CertificatePackGetResponseType = "sni_custom"
+	CertificatePackGetResponseTypeUniversal       CertificatePackGetResponseType = "universal"
+	CertificatePackGetResponseTypeAdvanced        CertificatePackGetResponseType = "advanced"
+	CertificatePackGetResponseTypeTotalTLS        CertificatePackGetResponseType = "total_tls"
+	CertificatePackGetResponseTypeKeyless         CertificatePackGetResponseType = "keyless"
+	CertificatePackGetResponseTypeLegacyCustom    CertificatePackGetResponseType = "legacy_custom"
+)
+
+func (r CertificatePackGetResponseType) IsKnown() bool {
+	switch r {
+	case CertificatePackGetResponseTypeMhCustom, CertificatePackGetResponseTypeManagedHostname, CertificatePackGetResponseTypeSNICustom, CertificatePackGetResponseTypeUniversal, CertificatePackGetResponseTypeAdvanced, CertificatePackGetResponseTypeTotalTLS, CertificatePackGetResponseTypeKeyless, CertificatePackGetResponseTypeLegacyCustom:
+		return true
+	}
+	return false
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type CertificatePackGetResponseCertificateAuthority string
+
+const (
+	CertificatePackGetResponseCertificateAuthorityGoogle      CertificatePackGetResponseCertificateAuthority = "google"
+	CertificatePackGetResponseCertificateAuthorityLetsEncrypt CertificatePackGetResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackGetResponseCertificateAuthoritySSLCom      CertificatePackGetResponseCertificateAuthority = "ssl_com"
+)
+
+func (r CertificatePackGetResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackGetResponseCertificateAuthorityGoogle, CertificatePackGetResponseCertificateAuthorityLetsEncrypt, CertificatePackGetResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
+type CertificatePackGetResponseValidationError struct {
+	// A domain validation error.
+	Message string                                        `json:"message"`
+	JSON    certificatePackGetResponseValidationErrorJSON `json:"-"`
+}
+
+// certificatePackGetResponseValidationErrorJSON contains the JSON metadata for the
+// struct [CertificatePackGetResponseValidationError]
+type certificatePackGetResponseValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackGetResponseValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackGetResponseValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+// Validation Method selected for the order.
+type CertificatePackGetResponseValidationMethod string
+
+const (
+	CertificatePackGetResponseValidationMethodTXT   CertificatePackGetResponseValidationMethod = "txt"
+	CertificatePackGetResponseValidationMethodHTTP  CertificatePackGetResponseValidationMethod = "http"
+	CertificatePackGetResponseValidationMethodEmail CertificatePackGetResponseValidationMethod = "email"
+)
+
+func (r CertificatePackGetResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackGetResponseValidationMethodTXT, CertificatePackGetResponseValidationMethodHTTP, CertificatePackGetResponseValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
+// Certificate's required validation record.
+type CertificatePackGetResponseValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                         `json:"txt_value"`
+	JSON     certificatePackGetResponseValidationRecordJSON `json:"-"`
+}
+
+// certificatePackGetResponseValidationRecordJSON contains the JSON metadata for
+// the struct [CertificatePackGetResponseValidationRecord]
+type certificatePackGetResponseValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackGetResponseValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackGetResponseValidationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
+// Validity Days selected for the order.
+type CertificatePackGetResponseValidityDays int64
+
+const (
+	CertificatePackGetResponseValidityDays14  CertificatePackGetResponseValidityDays = 14
+	CertificatePackGetResponseValidityDays30  CertificatePackGetResponseValidityDays = 30
+	CertificatePackGetResponseValidityDays90  CertificatePackGetResponseValidityDays = 90
+	CertificatePackGetResponseValidityDays365 CertificatePackGetResponseValidityDays = 365
+)
+
+func (r CertificatePackGetResponseValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackGetResponseValidityDays14, CertificatePackGetResponseValidityDays30, CertificatePackGetResponseValidityDays90, CertificatePackGetResponseValidityDays365:
+		return true
+	}
+	return false
+}
 
 type CertificatePackNewParams struct {
 	// Identifier.
@@ -734,8 +1515,9 @@ type CertificatePackNewResponseEnvelope struct {
 	Messages []CertificatePackNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success CertificatePackNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  CertificatePackNewResponse                `json:"result"`
-	JSON    certificatePackNewResponseEnvelopeJSON    `json:"-"`
+	// A certificate pack with all its properties.
+	Result CertificatePackNewResponse             `json:"result"`
+	JSON   certificatePackNewResponseEnvelopeJSON `json:"-"`
 }
 
 // certificatePackNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1060,8 +1842,9 @@ type CertificatePackEditResponseEnvelope struct {
 	Messages []CertificatePackEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success CertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  CertificatePackEditResponse                `json:"result"`
-	JSON    certificatePackEditResponseEnvelopeJSON    `json:"-"`
+	// A certificate pack with all its properties.
+	Result CertificatePackEditResponse             `json:"result"`
+	JSON   certificatePackEditResponseEnvelopeJSON `json:"-"`
 }
 
 // certificatePackEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -1204,8 +1987,9 @@ type CertificatePackGetResponseEnvelope struct {
 	Messages []CertificatePackGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  CertificatePackGetResponse                `json:"result"`
-	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`
+	// A certificate pack with all its properties.
+	Result CertificatePackGetResponse             `json:"result"`
+	JSON   certificatePackGetResponseEnvelopeJSON `json:"-"`
 }
 
 // certificatePackGetResponseEnvelopeJSON contains the JSON metadata for the struct

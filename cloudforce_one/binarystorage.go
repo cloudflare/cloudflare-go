@@ -53,7 +53,7 @@ func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewP
 // Retrieves a file from Binary Storage
 func (r *BinaryStorageService) Get(ctx context.Context, hash string, query BinaryStorageGetParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

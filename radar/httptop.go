@@ -153,10 +153,12 @@ func (r httpTopBrowserResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTopBrowserResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                        `json:"description,required"`
+	EndDate     time.Time                                                     `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
 	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
@@ -184,6 +186,65 @@ func (r *HTTPTopBrowserResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data 
 
 func (r httpTopBrowserResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPTopBrowserResponseMetaDateRange struct {
@@ -364,10 +425,12 @@ func (r httpTopBrowserFamilyResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                              `json:"description,required"`
+	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
@@ -396,6 +459,65 @@ func (r *HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation) UnmarshalJSON
 
 func (r httpTopBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPTopBrowserFamilyResponseMetaDateRange struct {

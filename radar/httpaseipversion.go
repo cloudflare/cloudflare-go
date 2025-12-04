@@ -134,10 +134,12 @@ func (r httpAseIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                             `json:"description,required"`
+	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
@@ -166,6 +168,65 @@ func (r *HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(
 
 func (r httpAseIPVersionGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPAseIPVersionGetResponseMetaDateRange struct {

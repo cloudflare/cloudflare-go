@@ -40,7 +40,7 @@ func NewQueryService(opts ...option.RequestOption) (r *QueryService) {
 // Return a success message after creating new saved string queries
 func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -53,7 +53,7 @@ func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...o
 // Return a success message after deleting saved string queries by ID
 func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -66,7 +66,7 @@ func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opt
 // Return a success message after creating new saved string queries in bulk
 func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

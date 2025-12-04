@@ -33,6 +33,7 @@ func TestPrefixNewWithOptionalParams(t *testing.T) {
 		CIDR:                cloudflare.F("192.0.2.0/24"),
 		DelegateLOACreation: cloudflare.F(true),
 		Description:         cloudflare.F("Internal test prefix"),
+		LOADocumentID:       cloudflare.F("d933b1530bc56c9953cf8ce166da8004"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

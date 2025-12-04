@@ -115,12 +115,16 @@ type InvestigateListResponse struct {
 	AlertID               string                                  `json:"alert_id,nullable"`
 	DeliveryMode          InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
 	EdfHash               string                                  `json:"edf_hash,nullable"`
+	EnvelopeFrom          string                                  `json:"envelope_from,nullable"`
+	EnvelopeTo            []string                                `json:"envelope_to,nullable"`
 	FinalDisposition      InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
 	Findings              []InvestigateListResponseFinding        `json:"findings,nullable"`
 	From                  string                                  `json:"from,nullable"`
 	FromName              string                                  `json:"from_name,nullable"`
 	HtmltextStructureHash string                                  `json:"htmltext_structure_hash,nullable"`
 	MessageID             string                                  `json:"message_id,nullable"`
+	PostfixIDOutbound     string                                  `json:"postfix_id_outbound,nullable"`
+	Replyto               string                                  `json:"replyto,nullable"`
 	SentDate              string                                  `json:"sent_date,nullable"`
 	Subject               string                                  `json:"subject,nullable"`
 	ThreatCategories      []string                                `json:"threat_categories,nullable"`
@@ -145,12 +149,16 @@ type investigateListResponseJSON struct {
 	AlertID               apijson.Field
 	DeliveryMode          apijson.Field
 	EdfHash               apijson.Field
+	EnvelopeFrom          apijson.Field
+	EnvelopeTo            apijson.Field
 	FinalDisposition      apijson.Field
 	Findings              apijson.Field
 	From                  apijson.Field
 	FromName              apijson.Field
 	HtmltextStructureHash apijson.Field
 	MessageID             apijson.Field
+	PostfixIDOutbound     apijson.Field
+	Replyto               apijson.Field
 	SentDate              apijson.Field
 	Subject               apijson.Field
 	ThreatCategories      apijson.Field
@@ -442,12 +450,16 @@ type InvestigateGetResponse struct {
 	AlertID               string                                 `json:"alert_id,nullable"`
 	DeliveryMode          InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
 	EdfHash               string                                 `json:"edf_hash,nullable"`
+	EnvelopeFrom          string                                 `json:"envelope_from,nullable"`
+	EnvelopeTo            []string                               `json:"envelope_to,nullable"`
 	FinalDisposition      InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
 	Findings              []InvestigateGetResponseFinding        `json:"findings,nullable"`
 	From                  string                                 `json:"from,nullable"`
 	FromName              string                                 `json:"from_name,nullable"`
 	HtmltextStructureHash string                                 `json:"htmltext_structure_hash,nullable"`
 	MessageID             string                                 `json:"message_id,nullable"`
+	PostfixIDOutbound     string                                 `json:"postfix_id_outbound,nullable"`
+	Replyto               string                                 `json:"replyto,nullable"`
 	SentDate              string                                 `json:"sent_date,nullable"`
 	Subject               string                                 `json:"subject,nullable"`
 	ThreatCategories      []string                               `json:"threat_categories,nullable"`
@@ -472,12 +484,16 @@ type investigateGetResponseJSON struct {
 	AlertID               apijson.Field
 	DeliveryMode          apijson.Field
 	EdfHash               apijson.Field
+	EnvelopeFrom          apijson.Field
+	EnvelopeTo            apijson.Field
 	FinalDisposition      apijson.Field
 	Findings              apijson.Field
 	From                  apijson.Field
 	FromName              apijson.Field
 	HtmltextStructureHash apijson.Field
 	MessageID             apijson.Field
+	PostfixIDOutbound     apijson.Field
+	Replyto               apijson.Field
 	SentDate              apijson.Field
 	Subject               apijson.Field
 	ThreatCategories      apijson.Field

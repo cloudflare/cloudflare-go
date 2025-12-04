@@ -134,10 +134,12 @@ func (r httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                              `json:"description,required"`
+	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
@@ -166,6 +168,65 @@ func (r *HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON
 
 func (r httpAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type HTTPAseDeviceTypeGetResponseMetaDateRange struct {
