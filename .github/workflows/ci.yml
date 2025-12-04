@@ -46,4 +46,4 @@ jobs:
         run: ./scripts/bootstrap
 
       - name: Run tests
-        run: ./scripts/mock; go clean -testcache && go test -timeout 30m ./... "$@"
+        run: ./scripts/mock --daemon; go clean -testcache && go test -timeout 30m ./... "$@"
