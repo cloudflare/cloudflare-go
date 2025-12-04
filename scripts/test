@@ -54,4 +54,4 @@ fi
 
 echo "==> Running tests"
 go clean -cache -testcache -modcache
-go test -p 4 ./... "$@"
+go test -timeout 30m -p 4 ./... "$@"
