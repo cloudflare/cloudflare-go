@@ -898,6 +898,8 @@ type SettingDomainListParams struct {
 	Direction param.Field[SettingDomainListParamsDirection] `query:"direction"`
 	// Filters results by the provided domains, allowing for multiple occurrences.
 	Domain param.Field[[]string] `query:"domain"`
+	// Filters response to domains with the provided integration ID.
+	IntegrationID param.Field[string] `query:"integration_id" format:"uuid"`
 	// The field to sort by.
 	Order param.Field[SettingDomainListParamsOrder] `query:"order"`
 	// The page number of paginated results.

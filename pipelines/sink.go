@@ -87,7 +87,7 @@ func (r *SinkService) ListAutoPaging(ctx context.Context, params SinkListParams,
 // Delete Pipeline in Account.
 func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

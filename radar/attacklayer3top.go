@@ -173,10 +173,12 @@ func (r attackLayer3TopAttacksResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                `json:"description,required"`
+	EndDate     time.Time                                                             `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
@@ -205,6 +207,65 @@ func (r *AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation) UnmarshalJS
 
 func (r attackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceAll                AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceBGP                AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceBots               AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceCt                 AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDNS                AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDos                AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceFw                 AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceIQI                AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceNet                AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceAll, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceBGP, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceBots, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceCt, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDNS, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceDos, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceFw, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceIQI, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceNet, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeEvent             AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeOutage            AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypePipeline          AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeEvent, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeOutage, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypePipeline, AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type AttackLayer3TopAttacksResponseMetaDateRange struct {
@@ -387,10 +448,12 @@ func (r attackLayer3TopIndustryResponseMetaConfidenceInfoJSON) RawJSON() string 
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                 `json:"description,required"`
+	EndDate     time.Time                                                              `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
@@ -419,6 +482,65 @@ func (r *AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 
 func (r attackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceAll                AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceBots               AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDos                AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceNet                AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceAll, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceBots, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceCt, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceDos, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceFw, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceNet, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type AttackLayer3TopIndustryResponseMetaDateRange struct {
@@ -599,10 +721,12 @@ func (r attackLayer3TopVerticalResponseMetaConfidenceInfoJSON) RawJSON() string 
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                 `json:"description,required"`
+	EndDate     time.Time                                                              `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
@@ -631,6 +755,65 @@ func (r *AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 
 func (r attackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceAll                AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceBGP                AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceBots               AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceCt                 AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDNS                AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDos                AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceFw                 AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceIQI                AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceNet                AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceAll, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceBGP, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceBots, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceCt, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDNS, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceDos, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceFw, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceIQI, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceNet, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeEvent             AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeOutage            AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypePipeline          AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeEvent, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeOutage, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypePipeline, AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type AttackLayer3TopVerticalResponseMetaDateRange struct {

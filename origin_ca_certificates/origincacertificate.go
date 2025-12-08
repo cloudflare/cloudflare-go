@@ -188,13 +188,13 @@ func (r originCACertificateDeleteResponseJSON) RawJSON() string {
 
 type OriginCACertificateNewParams struct {
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
-	Csr param.Field[string] `json:"csr"`
+	Csr param.Field[string] `json:"csr,required"`
 	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
 	// certificate.
-	Hostnames param.Field[[]string] `json:"hostnames"`
+	Hostnames param.Field[[]string] `json:"hostnames,required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType param.Field[shared.CertificateRequestType] `json:"request_type"`
+	RequestType param.Field[shared.CertificateRequestType] `json:"request_type,required"`
 	// The number of days for which the certificate should be valid.
 	RequestedValidity param.Field[ssl.RequestValidity] `json:"requested_validity"`
 }

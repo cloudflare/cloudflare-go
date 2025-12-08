@@ -109,7 +109,7 @@ func (r *PipelineService) List(ctx context.Context, params PipelineListParams, o
 // Deprecated: Use delete_v1 instead. This endpoint will be removed in the future.
 func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body PipelineDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -143,7 +143,7 @@ func (r *PipelineService) NewV1(ctx context.Context, params PipelineNewV1Params,
 // Delete Pipeline in Account.
 func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body PipelineDeleteV1Params, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

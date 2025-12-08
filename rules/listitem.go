@@ -1049,7 +1049,8 @@ func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ListItemDeleteParamsItem struct {
-	ID param.Field[string] `json:"id"`
+	// Defines the unique ID of the item in the List.
+	ID param.Field[string] `json:"id,required"`
 }
 
 func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {

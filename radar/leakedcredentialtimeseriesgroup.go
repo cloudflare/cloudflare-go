@@ -182,10 +182,12 @@ func (r leakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON) R
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                                 `json:"description,required"`
+	EndDate     time.Time                                                                              `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                            `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                          `json:"linkedUrl,required" format:"uri"`
@@ -214,6 +216,65 @@ func (r *LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnota
 
 func (r leakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceAll                LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceBGP                LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceBots               LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceCt                 LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDNS                LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDos                LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceFw                 LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceIQI                LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceNet                LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceAll, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceBGP, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceBots, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceCt, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDNS, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceDos, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceFw, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceIQI, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceNet, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeEvent             LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeOutage            LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypePipeline          LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeEvent, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeOutage, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypePipeline, LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type LeakedCredentialTimeseriesGroupBotClassResponseMetaDateRange struct {
@@ -425,10 +486,12 @@ func (r leakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoJSON
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                                                    `json:"description,required"`
+	EndDate     time.Time                                                                                 `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                               `json:"isInstantaneous,required"`
 	LinkedURL       string                                                                             `json:"linkedUrl,required" format:"uri"`
@@ -457,6 +520,65 @@ func (r *LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnn
 
 func (r leakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceAll                LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceBGP                LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceBots               LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceCt                 LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDNS                LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDos                LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceFw                 LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceIQI                LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceNet                LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceAll, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceBGP, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceBots, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceCt, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDNS, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceDos, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceFw, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceIQI, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceNet, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeEvent             LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeOutage            LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypePipeline          LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeEvent, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeOutage, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypePipeline, LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type LeakedCredentialTimeseriesGroupCompromisedResponseMetaDateRange struct {

@@ -15,6 +15,7 @@ import (
 )
 
 func TestMitigationListWithOptionalParams(t *testing.T) {
+	t.Skip("TODO: support api token auth scheme")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,6 +53,7 @@ func TestMitigationListWithOptionalParams(t *testing.T) {
 }
 
 func TestMitigationReview(t *testing.T) {
+	t.Skip("TODO: support api token auth scheme")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

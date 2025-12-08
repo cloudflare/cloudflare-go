@@ -152,10 +152,12 @@ func (r bgpTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                       `json:"description,required"`
+	EndDate     time.Time                                                    `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
@@ -183,6 +185,65 @@ func (r *BGPTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data [
 
 func (r bgpTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type BGPTimeseriesResponseMetaDateRange struct {

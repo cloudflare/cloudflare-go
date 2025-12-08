@@ -31,6 +31,10 @@ func TestDeviceSettingUpdateWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		DeviceSettings: zero_trust.DeviceSettingsParam{
 			DisableForTime:                     cloudflare.F(0.000000),
+			ExternalEmergencySignalEnabled:     cloudflare.F(true),
+			ExternalEmergencySignalFingerprint: cloudflare.F("abcd1234567890abcd1234567890abcd1234567890abcd1234567890abcd1234"),
+			ExternalEmergencySignalInterval:    cloudflare.F("5m"),
+			ExternalEmergencySignalURL:         cloudflare.F("https://192.0.2.1/signal"),
 			GatewayProxyEnabled:                cloudflare.F(true),
 			GatewayUdpProxyEnabled:             cloudflare.F(true),
 			RootCertificateInstallationEnabled: cloudflare.F(true),
@@ -88,6 +92,10 @@ func TestDeviceSettingEditWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		DeviceSettings: zero_trust.DeviceSettingsParam{
 			DisableForTime:                     cloudflare.F(0.000000),
+			ExternalEmergencySignalEnabled:     cloudflare.F(true),
+			ExternalEmergencySignalFingerprint: cloudflare.F("abcd1234567890abcd1234567890abcd1234567890abcd1234567890abcd1234"),
+			ExternalEmergencySignalInterval:    cloudflare.F("5m"),
+			ExternalEmergencySignalURL:         cloudflare.F("https://192.0.2.1/signal"),
 			GatewayProxyEnabled:                cloudflare.F(true),
 			GatewayUdpProxyEnabled:             cloudflare.F(true),
 			RootCertificateInstallationEnabled: cloudflare.F(true),

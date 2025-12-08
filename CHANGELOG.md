@@ -1,5 +1,29 @@
 # Changelog
 
+## 6.4.0 (2025-12-04)
+
+Full Changelog: [v6.3.0...v6.4.0](https://github.com/cloudflare/cloudflare-go/compare/v6.3.0...v6.4.0)
+
+### Features
+
+* chore: skip unsupported auth tests ([b08ac6e](https://github.com/cloudflare/cloudflare-go/commit/b08ac6eb9f235c5f112b9b7625f8c8c2bf1fd7ab))
+* chore(abuse_report): unsupported auth scheme ([61ece69](https://github.com/cloudflare/cloudflare-go/commit/61ece69b7ae6a76319b47054f416609de31a24fb))
+* feat(r2_data_catalog): Configure SDKs/Terraform to use R2 Data Catalog routes ([d1b1eab](https://github.com/cloudflare/cloudflare-go/commit/d1b1eab741593d97221a099b07e120cc205999dc))
+* feat(silences): add a new alert silencing api ([fbe4969](https://github.com/cloudflare/cloudflare-go/commit/fbe4969d2d8b61c2e8c635543297a04e14435391))
+
+
+### Bug Fixes
+
+* **ci:** clean cache ([#4213](https://github.com/cloudflare/cloudflare-go/issues/4213)) ([92a4819](https://github.com/cloudflare/cloudflare-go/commit/92a481998217dd120e6f893c8631b6dafac5f24c))
+* **logaudit:** revert breaking change to query by log audit id param ([#4212](https://github.com/cloudflare/cloudflare-go/issues/4212)) ([e1d5999](https://github.com/cloudflare/cloudflare-go/commit/e1d5999b2509fb2b33bf2e22f135942d1be4b32e))
+
+
+### Chores
+
+* **api:** update composite API spec ([813b47b](https://github.com/cloudflare/cloudflare-go/commit/813b47b136cd4e9095aa00f3921f2d94242287e9))
+* **api:** update composite API spec ([86f0a73](https://github.com/cloudflare/cloudflare-go/commit/86f0a73093fe70cec9766b585281f396ec500c76))
+* **internal:** codegen related update ([4548d4d](https://github.com/cloudflare/cloudflare-go/commit/4548d4d0057294c110ce8ed12509a18fae3225ac))
+
 ## 6.3.0 (2025-11-19)
 
 Full Changelog: [v6.2.0...v6.3.0](https://github.com/cloudflare/cloudflare-go/compare/v6.2.0...v6.3.0)

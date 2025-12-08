@@ -108,7 +108,7 @@ func (r *DirectoryServiceService) ListAutoPaging(ctx context.Context, params Dir
 // Delete connectivity service
 func (r *DirectoryServiceService) Delete(ctx context.Context, serviceID string, body DirectoryServiceDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -84,7 +84,7 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListPar
 // Detaches a Worker from a zone and hostname.
 func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,6 +123,8 @@ type Domain struct {
 	// Identifer of the Worker Domain.
 	ID string `json:"id"`
 	// Worker environment associated with the zone and hostname.
+	//
+	// Deprecated: deprecated
 	Environment string `json:"environment"`
 	// Hostname of the Worker Domain.
 	Hostname string `json:"hostname"`
@@ -158,14 +160,14 @@ func (r domainJSON) RawJSON() string {
 type DomainUpdateParams struct {
 	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Worker environment associated with the zone and hostname.
-	Environment param.Field[string] `json:"environment,required"`
 	// Hostname of the Worker Domain.
 	Hostname param.Field[string] `json:"hostname,required"`
 	// Worker service associated with the zone and hostname.
 	Service param.Field[string] `json:"service,required"`
 	// Identifier of the zone.
 	ZoneID param.Field[string] `json:"zone_id,required"`
+	// Worker environment associated with the zone and hostname.
+	Environment param.Field[string] `json:"environment"`
 }
 
 func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {

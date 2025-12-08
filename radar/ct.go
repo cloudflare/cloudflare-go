@@ -167,10 +167,12 @@ func (r ctSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type CtSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                   `json:"description,required"`
+	EndDate     time.Time                                                `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType CtSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                              `json:"isInstantaneous,required"`
 	LinkedURL       string                                            `json:"linkedUrl,required" format:"uri"`
@@ -198,6 +200,65 @@ func (r *CtSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byt
 
 func (r ctSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type CtSummaryResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r CtSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type CtSummaryResponseMetaDateRange struct {
@@ -457,10 +518,12 @@ func (r ctTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type CtTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                      `json:"description,required"`
+	EndDate     time.Time                                                   `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
 	LinkedURL       string                                               `json:"linkedUrl,required" format:"uri"`
@@ -488,6 +551,65 @@ func (r *CtTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []
 
 func (r ctTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type CtTimeseriesResponseMetaDateRange struct {
@@ -671,10 +793,12 @@ func (r ctTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
 
 // Annotation associated with the result (e.g. outage or other type of event).
 type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource  string    `json:"dataSource,required"`
-	Description string    `json:"description,required"`
-	EndDate     time.Time `json:"endDate,required" format:"date-time"`
-	EventType   string    `json:"eventType,required"`
+	// Data source for annotations.
+	DataSource  CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	Description string                                                            `json:"description,required"`
+	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	// Event type for annotations.
+	EventType CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
@@ -702,6 +826,65 @@ func (r *CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(d
 
 func (r ctTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Data source for annotations.
+type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource string
+
+const (
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots               CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+)
+
+func (r CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+	switch r {
+	case CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+		return true
+	}
+	return false
+}
+
+// Event type for annotations.
+type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType string
+
+const (
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+)
+
+func (r CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+	switch r {
+	case CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+		return true
+	}
+	return false
 }
 
 type CtTimeseriesGroupsResponseMetaDateRange struct {

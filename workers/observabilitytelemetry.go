@@ -161,6 +161,7 @@ type ObservabilityTelemetryQueryResponse struct {
 	Events       ObservabilityTelemetryQueryResponseEvents                  `json:"events"`
 	Invocations  map[string][]ObservabilityTelemetryQueryResponseInvocation `json:"invocations"`
 	Patterns     []ObservabilityTelemetryQueryResponsePattern               `json:"patterns"`
+	Traces       []ObservabilityTelemetryQueryResponseTrace                 `json:"traces"`
 	JSON         observabilityTelemetryQueryResponseJSON                    `json:"-"`
 }
 
@@ -174,6 +175,7 @@ type observabilityTelemetryQueryResponseJSON struct {
 	Events       apijson.Field
 	Invocations  apijson.Field
 	Patterns     apijson.Field
+	Traces       apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -192,12 +194,13 @@ type ObservabilityTelemetryQueryResponseRun struct {
 	AccountID string `json:"accountId,required"`
 	Dry       bool   `json:"dry,required"`
 	// Deprecated: deprecated
-	EnvironmentID string                                          `json:"environmentId,required"`
-	Granularity   float64                                         `json:"granularity,required"`
-	Query         ObservabilityTelemetryQueryResponseRunQuery     `json:"query,required"`
-	Status        ObservabilityTelemetryQueryResponseRunStatus    `json:"status,required"`
-	Timeframe     ObservabilityTelemetryQueryResponseRunTimeframe `json:"timeframe,required"`
-	UserID        string                                          `json:"userId,required"`
+	EnvironmentID string                                       `json:"environmentId,required"`
+	Granularity   float64                                      `json:"granularity,required"`
+	Query         ObservabilityTelemetryQueryResponseRunQuery  `json:"query,required"`
+	Status        ObservabilityTelemetryQueryResponseRunStatus `json:"status,required"`
+	// Time range for the query execution
+	Timeframe ObservabilityTelemetryQueryResponseRunTimeframe `json:"timeframe,required"`
+	UserID    string                                          `json:"userId,required"`
 	// Deprecated: deprecated
 	WorkspaceID string                                           `json:"workspaceId,required"`
 	Created     string                                           `json:"created"`
@@ -750,10 +753,11 @@ func (r ObservabilityTelemetryQueryResponseRunStatus) IsKnown() bool {
 	return false
 }
 
+// Time range for the query execution
 type ObservabilityTelemetryQueryResponseRunTimeframe struct {
-	// Set the start time for your query using UNIX time in milliseconds.
+	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
 	From float64 `json:"from,required"`
-	// Set the end time for your query using UNIX time in milliseconds.
+	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
 	To   float64                                             `json:"to,required"`
 	JSON observabilityTelemetryQueryResponseRunTimeframeJSON `json:"-"`
 }
@@ -781,7 +785,10 @@ type ObservabilityTelemetryQueryResponseRunStatistics struct {
 	// Time in seconds for the query to run.
 	Elapsed float64 `json:"elapsed,required"`
 	// Number of rows scanned from the table.
-	RowsRead float64                                              `json:"rows_read,required"`
+	RowsRead float64 `json:"rows_read,required"`
+	// The level of Adaptive Bit Rate (ABR) sampling used for the query. If empty the
+	// ABR level is 1
+	AbrLevel float64                                              `json:"abr_level"`
 	JSON     observabilityTelemetryQueryResponseRunStatisticsJSON `json:"-"`
 }
 
@@ -791,6 +798,7 @@ type observabilityTelemetryQueryResponseRunStatisticsJSON struct {
 	BytesRead   apijson.Field
 	Elapsed     apijson.Field
 	RowsRead    apijson.Field
+	AbrLevel    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -811,7 +819,10 @@ type ObservabilityTelemetryQueryResponseStatistics struct {
 	// Time in seconds for the query to run.
 	Elapsed float64 `json:"elapsed,required"`
 	// Number of rows scanned from the table.
-	RowsRead float64                                           `json:"rows_read,required"`
+	RowsRead float64 `json:"rows_read,required"`
+	// The level of Adaptive Bit Rate (ABR) sampling used for the query. If empty the
+	// ABR level is 1
+	AbrLevel float64                                           `json:"abr_level"`
 	JSON     observabilityTelemetryQueryResponseStatisticsJSON `json:"-"`
 }
 
@@ -821,6 +832,7 @@ type observabilityTelemetryQueryResponseStatisticsJSON struct {
 	BytesRead   apijson.Field
 	Elapsed     apijson.Field
 	RowsRead    apijson.Field
+	AbrLevel    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1304,6 +1316,9 @@ type ObservabilityTelemetryQueryResponseEventsEvent struct {
 	Dataset   string                                                  `json:"dataset,required"`
 	Source    interface{}                                             `json:"source,required"`
 	Timestamp int64                                                   `json:"timestamp,required"`
+	// Cloudflare Containers event information enriches your logs so you can easily
+	// identify and debug issues.
+	Containers interface{} `json:"$containers"`
 	// Cloudflare Workers event information enriches your logs so you can easily
 	// identify and debug issues.
 	Workers ObservabilityTelemetryQueryResponseEventsEventsWorkers `json:"$workers"`
@@ -1317,6 +1332,7 @@ type observabilityTelemetryQueryResponseEventsEventJSON struct {
 	Dataset     apijson.Field
 	Source      apijson.Field
 	Timestamp   apijson.Field
+	Containers  apijson.Field
 	Workers     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1358,6 +1374,7 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	StatusCode      int64                                                       `json:"statusCode"`
 	TraceDuration   int64                                                       `json:"traceDuration"`
 	TraceID         string                                                      `json:"traceId"`
+	TransactionName string                                                      `json:"transactionName"`
 	Trigger         string                                                      `json:"trigger"`
 	Type            string                                                      `json:"type"`
 	URL             string                                                      `json:"url"`
@@ -1395,6 +1412,7 @@ type observabilityTelemetryQueryResponseEventsEventsMetadataJSON struct {
 	StatusCode      apijson.Field
 	TraceDuration   apijson.Field
 	TraceID         apijson.Field
+	TransactionName apijson.Field
 	Trigger         apijson.Field
 	Type            apijson.Field
 	URL             apijson.Field
@@ -1414,7 +1432,6 @@ func (r observabilityTelemetryQueryResponseEventsEventsMetadataJSON) RawJSON() s
 // identify and debug issues.
 type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	EventType  ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType `json:"eventType,required"`
-	Outcome    string                                                          `json:"outcome,required"`
 	RequestID  string                                                          `json:"requestId,required"`
 	ScriptName string                                                          `json:"scriptName,required"`
 	CPUTimeMs  float64                                                         `json:"cpuTimeMs"`
@@ -1422,11 +1439,13 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	// [[]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectDiagnosticsChannelEvent].
 	DiagnosticsChannelEvents interface{} `json:"diagnosticsChannelEvents"`
 	DispatchNamespace        string      `json:"dispatchNamespace"`
+	DurableObjectID          string      `json:"durableObjectId"`
 	Entrypoint               string      `json:"entrypoint"`
 	// This field can have the runtime type of
 	// [map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion].
 	Event          interface{}                                                          `json:"event"`
 	ExecutionModel ObservabilityTelemetryQueryResponseEventsEventsWorkersExecutionModel `json:"executionModel"`
+	Outcome        string                                                               `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                                `json:"scriptVersion"`
@@ -1440,15 +1459,16 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 // metadata for the struct [ObservabilityTelemetryQueryResponseEventsEventsWorkers]
 type observabilityTelemetryQueryResponseEventsEventsWorkersJSON struct {
 	EventType                apijson.Field
-	Outcome                  apijson.Field
 	RequestID                apijson.Field
 	ScriptName               apijson.Field
 	CPUTimeMs                apijson.Field
 	DiagnosticsChannelEvents apijson.Field
 	DispatchNamespace        apijson.Field
+	DurableObjectID          apijson.Field
 	Entrypoint               apijson.Field
 	Event                    apijson.Field
 	ExecutionModel           apijson.Field
+	Outcome                  apijson.Field
 	ScriptVersion            apijson.Field
 	Truncated                apijson.Field
 	WallTimeMs               apijson.Field
@@ -1505,33 +1525,35 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
-	EventType      ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType             `json:"eventType,required"`
-	Outcome        string                                                                            `json:"outcome,required"`
-	RequestID      string                                                                            `json:"requestId,required"`
-	ScriptName     string                                                                            `json:"scriptName,required"`
-	Entrypoint     string                                                                            `json:"entrypoint"`
-	Event          map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion `json:"event"`
-	ExecutionModel ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel        `json:"executionModel"`
-	ScriptVersion  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion         `json:"scriptVersion"`
-	Truncated      bool                                                                              `json:"truncated"`
-	JSON           observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON                  `json:"-"`
+	EventType       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType             `json:"eventType,required"`
+	RequestID       string                                                                            `json:"requestId,required"`
+	ScriptName      string                                                                            `json:"scriptName,required"`
+	DurableObjectID string                                                                            `json:"durableObjectId"`
+	Entrypoint      string                                                                            `json:"entrypoint"`
+	Event           map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion `json:"event"`
+	ExecutionModel  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel        `json:"executionModel"`
+	Outcome         string                                                                            `json:"outcome"`
+	ScriptVersion   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion         `json:"scriptVersion"`
+	Truncated       bool                                                                              `json:"truncated"`
+	JSON            observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON                  `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON contains the
 // JSON metadata for the struct
 // [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject]
 type observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON struct {
-	EventType      apijson.Field
-	Outcome        apijson.Field
-	RequestID      apijson.Field
-	ScriptName     apijson.Field
-	Entrypoint     apijson.Field
-	Event          apijson.Field
-	ExecutionModel apijson.Field
-	ScriptVersion  apijson.Field
-	Truncated      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	EventType       apijson.Field
+	RequestID       apijson.Field
+	ScriptName      apijson.Field
+	DurableObjectID apijson.Field
+	Entrypoint      apijson.Field
+	Event           apijson.Field
+	ExecutionModel  apijson.Field
+	Outcome         apijson.Field
+	ScriptVersion   apijson.Field
+	Truncated       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ObservabilityTelemetryQueryResponseEventsEventsWorkersObject) UnmarshalJSON(data []byte) (err error) {
@@ -1939,6 +1961,9 @@ type ObservabilityTelemetryQueryResponseInvocation struct {
 	Dataset   string                                                 `json:"dataset,required"`
 	Source    interface{}                                            `json:"source,required"`
 	Timestamp int64                                                  `json:"timestamp,required"`
+	// Cloudflare Containers event information enriches your logs so you can easily
+	// identify and debug issues.
+	Containers interface{} `json:"$containers"`
 	// Cloudflare Workers event information enriches your logs so you can easily
 	// identify and debug issues.
 	Workers ObservabilityTelemetryQueryResponseInvocationsWorkers `json:"$workers"`
@@ -1952,6 +1977,7 @@ type observabilityTelemetryQueryResponseInvocationJSON struct {
 	Dataset     apijson.Field
 	Source      apijson.Field
 	Timestamp   apijson.Field
+	Containers  apijson.Field
 	Workers     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1993,6 +2019,7 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	StatusCode      int64                                                      `json:"statusCode"`
 	TraceDuration   int64                                                      `json:"traceDuration"`
 	TraceID         string                                                     `json:"traceId"`
+	TransactionName string                                                     `json:"transactionName"`
 	Trigger         string                                                     `json:"trigger"`
 	Type            string                                                     `json:"type"`
 	URL             string                                                     `json:"url"`
@@ -2029,6 +2056,7 @@ type observabilityTelemetryQueryResponseInvocationsMetadataJSON struct {
 	StatusCode      apijson.Field
 	TraceDuration   apijson.Field
 	TraceID         apijson.Field
+	TransactionName apijson.Field
 	Trigger         apijson.Field
 	Type            apijson.Field
 	URL             apijson.Field
@@ -2048,7 +2076,6 @@ func (r observabilityTelemetryQueryResponseInvocationsMetadataJSON) RawJSON() st
 // identify and debug issues.
 type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	EventType  ObservabilityTelemetryQueryResponseInvocationsWorkersEventType `json:"eventType,required"`
-	Outcome    string                                                         `json:"outcome,required"`
 	RequestID  string                                                         `json:"requestId,required"`
 	ScriptName string                                                         `json:"scriptName,required"`
 	CPUTimeMs  float64                                                        `json:"cpuTimeMs"`
@@ -2056,11 +2083,13 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	// [[]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectDiagnosticsChannelEvent].
 	DiagnosticsChannelEvents interface{} `json:"diagnosticsChannelEvents"`
 	DispatchNamespace        string      `json:"dispatchNamespace"`
+	DurableObjectID          string      `json:"durableObjectId"`
 	Entrypoint               string      `json:"entrypoint"`
 	// This field can have the runtime type of
 	// [map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion].
 	Event          interface{}                                                         `json:"event"`
 	ExecutionModel ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel `json:"executionModel"`
+	Outcome        string                                                              `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                               `json:"scriptVersion"`
@@ -2074,15 +2103,16 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 // metadata for the struct [ObservabilityTelemetryQueryResponseInvocationsWorkers]
 type observabilityTelemetryQueryResponseInvocationsWorkersJSON struct {
 	EventType                apijson.Field
-	Outcome                  apijson.Field
 	RequestID                apijson.Field
 	ScriptName               apijson.Field
 	CPUTimeMs                apijson.Field
 	DiagnosticsChannelEvents apijson.Field
 	DispatchNamespace        apijson.Field
+	DurableObjectID          apijson.Field
 	Entrypoint               apijson.Field
 	Event                    apijson.Field
 	ExecutionModel           apijson.Field
+	Outcome                  apijson.Field
 	ScriptVersion            apijson.Field
 	Truncated                apijson.Field
 	WallTimeMs               apijson.Field
@@ -2138,33 +2168,35 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
-	EventType      ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType             `json:"eventType,required"`
-	Outcome        string                                                                           `json:"outcome,required"`
-	RequestID      string                                                                           `json:"requestId,required"`
-	ScriptName     string                                                                           `json:"scriptName,required"`
-	Entrypoint     string                                                                           `json:"entrypoint"`
-	Event          map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion `json:"event"`
-	ExecutionModel ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel        `json:"executionModel"`
-	ScriptVersion  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion         `json:"scriptVersion"`
-	Truncated      bool                                                                             `json:"truncated"`
-	JSON           observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON                  `json:"-"`
+	EventType       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType             `json:"eventType,required"`
+	RequestID       string                                                                           `json:"requestId,required"`
+	ScriptName      string                                                                           `json:"scriptName,required"`
+	DurableObjectID string                                                                           `json:"durableObjectId"`
+	Entrypoint      string                                                                           `json:"entrypoint"`
+	Event           map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion `json:"event"`
+	ExecutionModel  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel        `json:"executionModel"`
+	Outcome         string                                                                           `json:"outcome"`
+	ScriptVersion   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion         `json:"scriptVersion"`
+	Truncated       bool                                                                             `json:"truncated"`
+	JSON            observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON                  `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON contains the
 // JSON metadata for the struct
 // [ObservabilityTelemetryQueryResponseInvocationsWorkersObject]
 type observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON struct {
-	EventType      apijson.Field
-	Outcome        apijson.Field
-	RequestID      apijson.Field
-	ScriptName     apijson.Field
-	Entrypoint     apijson.Field
-	Event          apijson.Field
-	ExecutionModel apijson.Field
-	ScriptVersion  apijson.Field
-	Truncated      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	EventType       apijson.Field
+	RequestID       apijson.Field
+	ScriptName      apijson.Field
+	DurableObjectID apijson.Field
+	Entrypoint      apijson.Field
+	Event           apijson.Field
+	ExecutionModel  apijson.Field
+	Outcome         apijson.Field
+	ScriptVersion   apijson.Field
+	Truncated       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ObservabilityTelemetryQueryResponseInvocationsWorkersObject) UnmarshalJSON(data []byte) (err error) {
@@ -2556,6 +2588,43 @@ func init() {
 	)
 }
 
+type ObservabilityTelemetryQueryResponseTrace struct {
+	RootSpanName        string                                       `json:"rootSpanName,required"`
+	RootTransactionName string                                       `json:"rootTransactionName,required"`
+	Service             []string                                     `json:"service,required"`
+	Spans               float64                                      `json:"spans,required"`
+	TraceDurationMs     float64                                      `json:"traceDurationMs,required"`
+	TraceEndMs          float64                                      `json:"traceEndMs,required"`
+	TraceID             string                                       `json:"traceId,required"`
+	TraceStartMs        float64                                      `json:"traceStartMs,required"`
+	Errors              []string                                     `json:"errors"`
+	JSON                observabilityTelemetryQueryResponseTraceJSON `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseTraceJSON contains the JSON metadata for the
+// struct [ObservabilityTelemetryQueryResponseTrace]
+type observabilityTelemetryQueryResponseTraceJSON struct {
+	RootSpanName        apijson.Field
+	RootTransactionName apijson.Field
+	Service             apijson.Field
+	Spans               apijson.Field
+	TraceDurationMs     apijson.Field
+	TraceEndMs          apijson.Field
+	TraceID             apijson.Field
+	TraceStartMs        apijson.Field
+	Errors              apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseTrace) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseTraceJSON) RawJSON() string {
+	return r.raw
+}
+
 type ObservabilityTelemetryValuesResponse struct {
 	Dataset string                                         `json:"dataset,required"`
 	Key     string                                         `json:"key,required"`
@@ -2632,12 +2701,13 @@ type ObservabilityTelemetryKeysParams struct {
 	AccountID param.Field[string]                                   `path:"account_id,required"`
 	Datasets  param.Field[[]string]                                 `json:"datasets"`
 	Filters   param.Field[[]ObservabilityTelemetryKeysParamsFilter] `json:"filters"`
+	From      param.Field[float64]                                  `json:"from"`
 	// Search for a specific substring in the keys.
 	KeyNeedle param.Field[ObservabilityTelemetryKeysParamsKeyNeedle] `json:"keyNeedle"`
 	Limit     param.Field[float64]                                   `json:"limit"`
-	// Search for a specific substring in the event.
-	Needle    param.Field[ObservabilityTelemetryKeysParamsNeedle]    `json:"needle"`
-	Timeframe param.Field[ObservabilityTelemetryKeysParamsTimeframe] `json:"timeframe"`
+	// Search for a specific substring in any of the events
+	Needle param.Field[ObservabilityTelemetryKeysParamsNeedle] `json:"needle"`
+	To     param.Field[float64]                                `json:"to"`
 }
 
 func (r ObservabilityTelemetryKeysParams) MarshalJSON() (data []byte, err error) {
@@ -2733,7 +2803,7 @@ type ObservabilityTelemetryKeysParamsKeyNeedleValueUnion interface {
 	ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion()
 }
 
-// Search for a specific substring in the event.
+// Search for a specific substring in any of the events
 type ObservabilityTelemetryKeysParamsNeedle struct {
 	Value     param.Field[ObservabilityTelemetryKeysParamsNeedleValueUnion] `json:"value,required"`
 	IsRegex   param.Field[bool]                                             `json:"isRegex"`
@@ -2749,46 +2819,58 @@ type ObservabilityTelemetryKeysParamsNeedleValueUnion interface {
 	ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()
 }
 
-type ObservabilityTelemetryKeysParamsTimeframe struct {
-	From param.Field[float64] `json:"from,required"`
-	To   param.Field[float64] `json:"to,required"`
-}
-
-func (r ObservabilityTelemetryKeysParamsTimeframe) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ObservabilityTelemetryQueryParams struct {
-	AccountID       param.Field[string]                                       `path:"account_id,required"`
-	QueryID         param.Field[string]                                       `json:"queryId,required"`
-	Timeframe       param.Field[ObservabilityTelemetryQueryParamsTimeframe]   `json:"timeframe,required"`
-	Chart           param.Field[bool]                                         `json:"chart"`
-	Compare         param.Field[bool]                                         `json:"compare"`
-	Dry             param.Field[bool]                                         `json:"dry"`
-	Granularity     param.Field[float64]                                      `json:"granularity"`
-	IgnoreSeries    param.Field[bool]                                         `json:"ignoreSeries"`
-	Limit           param.Field[float64]                                      `json:"limit"`
-	Offset          param.Field[string]                                       `json:"offset"`
-	OffsetBy        param.Field[float64]                                      `json:"offsetBy"`
-	OffsetDirection param.Field[string]                                       `json:"offsetDirection"`
-	Parameters      param.Field[ObservabilityTelemetryQueryParamsParameters]  `json:"parameters"`
-	PatternType     param.Field[ObservabilityTelemetryQueryParamsPatternType] `json:"patternType"`
-	View            param.Field[ObservabilityTelemetryQueryParamsView]        `json:"view"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Unique identifier for the query to execute
+	QueryID param.Field[string] `json:"queryId,required"`
+	// Time range for the query execution
+	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe,required"`
+	// Whether to include timeseties data in the response
+	Chart param.Field[bool] `json:"chart"`
+	// Whether to include comparison data with previous time periods
+	Compare param.Field[bool] `json:"compare"`
+	// Whether to perform a dry run without saving the results of the query. Useful for
+	// validation
+	Dry param.Field[bool] `json:"dry"`
+	// Time granularity for aggregating results (in milliseconds). Controls the
+	// bucketing of time-series data
+	Granularity param.Field[float64] `json:"granularity"`
+	// Whether to ignore time-series data in the results and return only aggregated
+	// values
+	IgnoreSeries param.Field[bool] `json:"ignoreSeries"`
+	// Maximum number of events to return.
+	Limit param.Field[float64] `json:"limit"`
+	// Cursor for pagination to retrieve the next set of results
+	Offset param.Field[string] `json:"offset"`
+	// Number of events to skip for pagination. Used in conjunction with offset
+	OffsetBy param.Field[float64] `json:"offsetBy"`
+	// Direction for offset-based pagination (e.g., 'next', 'prev')
+	OffsetDirection param.Field[string] `json:"offsetDirection"`
+	// Optional parameters to pass to the query execution
+	Parameters param.Field[ObservabilityTelemetryQueryParamsParameters] `json:"parameters"`
+	// Type of pattern to search for when using pattern-based views
+	PatternType param.Field[ObservabilityTelemetryQueryParamsPatternType] `json:"patternType"`
+	// View type for presenting the query results.
+	View param.Field[ObservabilityTelemetryQueryParamsView] `json:"view"`
 }
 
 func (r ObservabilityTelemetryQueryParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Time range for the query execution
 type ObservabilityTelemetryQueryParamsTimeframe struct {
+	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
 	From param.Field[float64] `json:"from,required"`
-	To   param.Field[float64] `json:"to,required"`
+	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
+	To param.Field[float64] `json:"to,required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsTimeframe) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Optional parameters to pass to the query execution
 type ObservabilityTelemetryQueryParamsParameters struct {
 	// Create Calculations to compute as part of the query.
 	Calculations param.Field[[]ObservabilityTelemetryQueryParamsParametersCalculation] `json:"calculations"`
@@ -3081,6 +3163,7 @@ func (r ObservabilityTelemetryQueryParamsParametersOrderByOrder) IsKnown() bool 
 	return false
 }
 
+// Type of pattern to search for when using pattern-based views
 type ObservabilityTelemetryQueryParamsPatternType string
 
 const (
@@ -3096,6 +3179,7 @@ func (r ObservabilityTelemetryQueryParamsPatternType) IsKnown() bool {
 	return false
 }
 
+// View type for presenting the query results.
 type ObservabilityTelemetryQueryParamsView string
 
 const (

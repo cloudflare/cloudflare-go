@@ -33,6 +33,9 @@ func TestLogAuditListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("a67e14daa5f8dceeb91fe5449ba496ef"),
 		Before:    cloudflare.F(time.Now()),
 		Since:     cloudflare.F(time.Now()),
+		ID: cloudflare.F(accounts.LogAuditListParamsID{
+			Not: cloudflare.F([]string{"f174be97-19b1-40d6-954d-70cd5fbd52db"}),
+		}),
 		AccountName: cloudflare.F(accounts.LogAuditListParamsAccountName{
 			Not: cloudflare.F([]string{"string"}),
 		}),
@@ -62,9 +65,6 @@ func TestLogAuditListWithOptionalParams(t *testing.T) {
 		}),
 		ActorType: cloudflare.F(accounts.LogAuditListParamsActorType{
 			Not: cloudflare.F([]accounts.LogAuditListParamsActorTypeNot{accounts.LogAuditListParamsActorTypeNotAccount}),
-		}),
-		AuditLogID: cloudflare.F(accounts.LogAuditListParamsAuditLogID{
-			Not: cloudflare.F([]string{"f174be97-19b1-40d6-954d-70cd5fbd52db"}),
 		}),
 		Cursor:    cloudflare.F("Q1buH-__DQqqig7SVYXT-SsMOTGY2Z3Y80W-fGgva7yaDdmPKveucH5ddOcHsJRhNb-xUK8agZQqkJSMAENGO8NU6g=="),
 		Direction: cloudflare.F(accounts.LogAuditListParamsDirectionDesc),

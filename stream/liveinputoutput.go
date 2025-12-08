@@ -117,7 +117,7 @@ func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputId
 // Deletes an output and removes it from the associated live input.
 func (r *LiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier string, outputIdentifier string, body LiveInputOutputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

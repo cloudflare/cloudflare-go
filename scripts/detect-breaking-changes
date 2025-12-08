@@ -320,6 +320,7 @@ TEST_PATHS=(
 	alerting/destinationwebhook_test.go
 	alerting/history_test.go
 	alerting/policy_test.go
+	alerting/silence_test.go
 	d1/database_test.go
 	r2/bucket_test.go
 	r2/bucketlifecycle_test.go
@@ -334,6 +335,12 @@ TEST_PATHS=(
 	r2/superslurperjob_test.go
 	r2/superslurperjoblog_test.go
 	r2/superslurperconnectivityprecheck_test.go
+	r2_data_catalog/r2datacatalog_test.go
+	r2_data_catalog/maintenanceconfig_test.go
+	r2_data_catalog/credential_test.go
+	r2_data_catalog/namespace_test.go
+	r2_data_catalog/namespacetable_test.go
+	r2_data_catalog/namespacetablemaintenanceconfig_test.go
 	workers_for_platforms/dispatchnamespace_test.go
 	workers_for_platforms/dispatchnamespacescript_test.go
 	workers_for_platforms/dispatchnamespacescriptassetupload_test.go

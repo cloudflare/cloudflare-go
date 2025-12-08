@@ -165,7 +165,7 @@ func (r *DLPEmailRuleService) Get(ctx context.Context, ruleID string, query DLPE
 
 type DLPEmailRuleNewResponse struct {
 	Action DLPEmailRuleNewResponseAction `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  []DLPEmailRuleNewResponseCondition `json:"conditions,required"`
 	CreatedAt   time.Time                          `json:"created_at,required" format:"date-time"`
 	Enabled     bool                               `json:"enabled,required"`
@@ -324,7 +324,7 @@ func (r DLPEmailRuleNewResponseConditionsValueArray) ImplementsDLPEmailRuleNewRe
 
 type DLPEmailRuleUpdateResponse struct {
 	Action DLPEmailRuleUpdateResponseAction `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  []DLPEmailRuleUpdateResponseCondition `json:"conditions,required"`
 	CreatedAt   time.Time                             `json:"created_at,required" format:"date-time"`
 	Enabled     bool                                  `json:"enabled,required"`
@@ -483,7 +483,7 @@ func (r DLPEmailRuleUpdateResponseConditionsValueArray) ImplementsDLPEmailRuleUp
 
 type DLPEmailRuleListResponse struct {
 	Action DLPEmailRuleListResponseAction `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  []DLPEmailRuleListResponseCondition `json:"conditions,required"`
 	CreatedAt   time.Time                           `json:"created_at,required" format:"date-time"`
 	Enabled     bool                                `json:"enabled,required"`
@@ -642,7 +642,7 @@ func (r DLPEmailRuleListResponseConditionsValueArray) ImplementsDLPEmailRuleList
 
 type DLPEmailRuleDeleteResponse struct {
 	Action DLPEmailRuleDeleteResponseAction `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  []DLPEmailRuleDeleteResponseCondition `json:"conditions,required"`
 	CreatedAt   time.Time                             `json:"created_at,required" format:"date-time"`
 	Enabled     bool                                  `json:"enabled,required"`
@@ -801,7 +801,7 @@ func (r DLPEmailRuleDeleteResponseConditionsValueArray) ImplementsDLPEmailRuleDe
 
 type DLPEmailRuleBulkEditResponse struct {
 	Action DLPEmailRuleBulkEditResponseAction `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  []DLPEmailRuleBulkEditResponseCondition `json:"conditions,required"`
 	CreatedAt   time.Time                               `json:"created_at,required" format:"date-time"`
 	Enabled     bool                                    `json:"enabled,required"`
@@ -960,7 +960,7 @@ func (r DLPEmailRuleBulkEditResponseConditionsValueArray) ImplementsDLPEmailRule
 
 type DLPEmailRuleGetResponse struct {
 	Action DLPEmailRuleGetResponseAction `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  []DLPEmailRuleGetResponseCondition `json:"conditions,required"`
 	CreatedAt   time.Time                          `json:"created_at,required" format:"date-time"`
 	Enabled     bool                               `json:"enabled,required"`
@@ -1120,7 +1120,7 @@ func (r DLPEmailRuleGetResponseConditionsValueArray) ImplementsDLPEmailRuleGetRe
 type DLPEmailRuleNewParams struct {
 	AccountID param.Field[string]                      `path:"account_id,required"`
 	Action    param.Field[DLPEmailRuleNewParamsAction] `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  param.Field[[]DLPEmailRuleNewParamsCondition] `json:"conditions,required"`
 	Enabled     param.Field[bool]                             `json:"enabled,required"`
 	Name        param.Field[string]                           `json:"name,required"`
@@ -1350,7 +1350,7 @@ func (r DLPEmailRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 type DLPEmailRuleUpdateParams struct {
 	AccountID param.Field[string]                         `path:"account_id,required"`
 	Action    param.Field[DLPEmailRuleUpdateParamsAction] `json:"action,required"`
-	// Rule is triggered if all conditions match.
+	// Triggered if all conditions match.
 	Conditions  param.Field[[]DLPEmailRuleUpdateParamsCondition] `json:"conditions,required"`
 	Enabled     param.Field[bool]                                `json:"enabled,required"`
 	Name        param.Field[string]                              `json:"name,required"`

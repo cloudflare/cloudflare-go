@@ -423,8 +423,8 @@ func (r contentNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ContentNewResponseEnvelopeMeta struct {
-	Status float64                            `json:"status,required"`
-	Title  string                             `json:"title,required"`
+	Status float64                            `json:"status"`
+	Title  string                             `json:"title"`
 	JSON   contentNewResponseEnvelopeMetaJSON `json:"-"`
 }
 

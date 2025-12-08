@@ -125,6 +125,8 @@ const (
 	SearchGlobalParamsExcludeBots                   SearchGlobalParamsExclude = "BOTS"
 	SearchGlobalParamsExcludeCertificateAuthorities SearchGlobalParamsExclude = "CERTIFICATE_AUTHORITIES"
 	SearchGlobalParamsExcludeCertificateLogs        SearchGlobalParamsExclude = "CERTIFICATE_LOGS"
+	SearchGlobalParamsExcludeOrigins                SearchGlobalParamsExclude = "ORIGINS"
+	SearchGlobalParamsExcludeOriginRegions          SearchGlobalParamsExclude = "ORIGIN_REGIONS"
 	SearchGlobalParamsExcludeIndustries             SearchGlobalParamsExclude = "INDUSTRIES"
 	SearchGlobalParamsExcludeLocations              SearchGlobalParamsExclude = "LOCATIONS"
 	SearchGlobalParamsExcludeNotebooks              SearchGlobalParamsExclude = "NOTEBOOKS"
@@ -134,7 +136,7 @@ const (
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
+	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeOrigins, SearchGlobalParamsExcludeOriginRegions, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
 		return true
 	}
 	return false
@@ -164,6 +166,8 @@ const (
 	SearchGlobalParamsIncludeBots                   SearchGlobalParamsInclude = "BOTS"
 	SearchGlobalParamsIncludeCertificateAuthorities SearchGlobalParamsInclude = "CERTIFICATE_AUTHORITIES"
 	SearchGlobalParamsIncludeCertificateLogs        SearchGlobalParamsInclude = "CERTIFICATE_LOGS"
+	SearchGlobalParamsIncludeOrigins                SearchGlobalParamsInclude = "ORIGINS"
+	SearchGlobalParamsIncludeOriginRegions          SearchGlobalParamsInclude = "ORIGIN_REGIONS"
 	SearchGlobalParamsIncludeIndustries             SearchGlobalParamsInclude = "INDUSTRIES"
 	SearchGlobalParamsIncludeLocations              SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeNotebooks              SearchGlobalParamsInclude = "NOTEBOOKS"
@@ -173,7 +177,7 @@ const (
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
+	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeOrigins, SearchGlobalParamsIncludeOriginRegions, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
 		return true
 	}
 	return false
