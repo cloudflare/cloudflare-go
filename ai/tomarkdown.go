@@ -67,15 +67,15 @@ func (r *ToMarkdownService) SupportedAutoPaging(ctx context.Context, query ToMar
 }
 
 // Convert Files into Markdown
-func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, body ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
+func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, params ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", file), option.WithResponseInto(&raw)}, opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/ai/tomarkdown", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/ai/tomarkdown", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -89,8 +89,8 @@ func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, body 
 }
 
 // Convert Files into Markdown
-func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, file io.Reader, body ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
-	return pagination.NewSinglePageAutoPager(r.Transform(ctx, file, body, opts...))
+func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, file io.Reader, params ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
+	return pagination.NewSinglePageAutoPager(r.Transform(ctx, file, params, opts...))
 }
 
 type ToMarkdownSupportedResponse struct {
