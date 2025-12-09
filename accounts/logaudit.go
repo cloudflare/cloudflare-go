@@ -367,6 +367,7 @@ type LogAuditListParams struct {
 	ActorTokenID   param.Field[LogAuditListParamsActorTokenID]   `query:"actor_token_id"`
 	ActorTokenName param.Field[LogAuditListParamsActorTokenName] `query:"actor_token_name"`
 	ActorType      param.Field[LogAuditListParamsActorType]      `query:"actor_type"`
+	AuditLogID     param.Field[LogAuditListParamsAuditLogID]     `query:"audit_log_id"`
 	// The cursor is an opaque token used to paginate through large sets of records. It
 	// indicates the position from which to continue when requesting the next set of
 	// records. A valid cursor value can be obtained from the cursor object in the
@@ -618,6 +619,22 @@ func (r LogAuditListParamsActorTypeNot) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type LogAuditListParamsAuditLogID struct {
+	// Filters out audit logs by their IDs.
+	//
+	// Deprecated: deprecated
+	Not param.Field[[]string] `query:"not"`
+}
+
+// URLQuery serializes [LogAuditListParamsAuditLogID]'s query parameters as
+// `url.Values`.
+func (r LogAuditListParamsAuditLogID) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 // Sets sorting order.

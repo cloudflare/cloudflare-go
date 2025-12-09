@@ -180,6 +180,7 @@ type AIGatewayNewResponse struct {
 	Otel                    []AIGatewayNewResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
+	Zdr                     bool                                      `json:"zdr"`
 	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
 }
 
@@ -207,6 +208,7 @@ type aiGatewayNewResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -463,6 +465,7 @@ type AIGatewayUpdateResponse struct {
 	Otel                    []AIGatewayUpdateResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
+	Zdr                     bool                                         `json:"zdr"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
@@ -490,6 +493,7 @@ type aiGatewayUpdateResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -747,6 +751,7 @@ type AIGatewayListResponse struct {
 	Otel                    []AIGatewayListResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                     `json:"store_id,nullable"`
 	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
+	Zdr                     bool                                       `json:"zdr"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
@@ -774,6 +779,7 @@ type aiGatewayListResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -1031,6 +1037,7 @@ type AIGatewayDeleteResponse struct {
 	Otel                    []AIGatewayDeleteResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
+	Zdr                     bool                                         `json:"zdr"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
@@ -1058,6 +1065,7 @@ type aiGatewayDeleteResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -1315,6 +1323,7 @@ type AIGatewayGetResponse struct {
 	Otel                    []AIGatewayGetResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
+	Zdr                     bool                                      `json:"zdr"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 
@@ -1342,6 +1351,7 @@ type aiGatewayGetResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -1590,6 +1600,7 @@ type AIGatewayNewParams struct {
 	LogManagementStrategy   param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
+	Zdr                     param.Field[bool]                                    `json:"zdr"`
 }
 
 func (r AIGatewayNewParams) MarshalJSON() (data []byte, err error) {
@@ -1666,6 +1677,7 @@ type AIGatewayUpdateParams struct {
 	Otel                    param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
 	StoreID                 param.Field[string]                                     `json:"store_id"`
 	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
+	Zdr                     param.Field[bool]                                       `json:"zdr"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {

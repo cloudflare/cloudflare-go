@@ -189,6 +189,9 @@ type Version struct {
 	Placement VersionPlacement `json:"placement"`
 	// The client used to create the version.
 	Source string `json:"source"`
+	// Time in milliseconds spent on
+	// [Worker startup](https://developers.cloudflare.com/workers/platform/limits/#worker-startup-time).
+	StartupTimeMs int64 `json:"startup_time_ms"`
 	// Usage model for the version.
 	//
 	// Deprecated: deprecated
@@ -212,6 +215,7 @@ type versionJSON struct {
 	Modules            apijson.Field
 	Placement          apijson.Field
 	Source             apijson.Field
+	StartupTimeMs      apijson.Field
 	UsageModel         apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
