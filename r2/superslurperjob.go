@@ -266,10 +266,12 @@ type SuperSlurperJobListResponseSource struct {
 	Bucket       string                                        `json:"bucket"`
 	Endpoint     string                                        `json:"endpoint,nullable"`
 	Jurisdiction SuperSlurperJobListResponseSourceJurisdiction `json:"jurisdiction"`
-	PathPrefix   string                                        `json:"pathPrefix,nullable"`
-	Vendor       SuperSlurperJobListResponseSourceVendor       `json:"vendor"`
-	JSON         superSlurperJobListResponseSourceJSON         `json:"-"`
-	union        SuperSlurperJobListResponseSourceUnion
+	// This field can have the runtime type of [[]string].
+	Keys       interface{}                             `json:"keys"`
+	PathPrefix string                                  `json:"pathPrefix,nullable"`
+	Vendor     SuperSlurperJobListResponseSourceVendor `json:"vendor"`
+	JSON       superSlurperJobListResponseSourceJSON   `json:"-"`
+	union      SuperSlurperJobListResponseSourceUnion
 }
 
 // superSlurperJobListResponseSourceJSON contains the JSON metadata for the struct
@@ -278,6 +280,7 @@ type superSlurperJobListResponseSourceJSON struct {
 	Bucket       apijson.Field
 	Endpoint     apijson.Field
 	Jurisdiction apijson.Field
+	Keys         apijson.Field
 	PathPrefix   apijson.Field
 	Vendor       apijson.Field
 	raw          string
@@ -337,6 +340,7 @@ func init() {
 type SuperSlurperJobListResponseSourceS3SourceResponseSchema struct {
 	Bucket     string                                                        `json:"bucket"`
 	Endpoint   string                                                        `json:"endpoint,nullable"`
+	Keys       []string                                                      `json:"keys,nullable"`
 	PathPrefix string                                                        `json:"pathPrefix,nullable"`
 	Vendor     SuperSlurperJobListResponseSourceS3SourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobListResponseSourceS3SourceResponseSchemaJSON   `json:"-"`
@@ -348,6 +352,7 @@ type SuperSlurperJobListResponseSourceS3SourceResponseSchema struct {
 type superSlurperJobListResponseSourceS3SourceResponseSchemaJSON struct {
 	Bucket      apijson.Field
 	Endpoint    apijson.Field
+	Keys        apijson.Field
 	PathPrefix  apijson.Field
 	Vendor      apijson.Field
 	raw         string
@@ -381,6 +386,7 @@ func (r SuperSlurperJobListResponseSourceS3SourceResponseSchemaVendor) IsKnown()
 
 type SuperSlurperJobListResponseSourceGcsSourceResponseSchema struct {
 	Bucket     string                                                         `json:"bucket"`
+	Keys       []string                                                       `json:"keys,nullable"`
 	PathPrefix string                                                         `json:"pathPrefix,nullable"`
 	Vendor     SuperSlurperJobListResponseSourceGcsSourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobListResponseSourceGcsSourceResponseSchemaJSON   `json:"-"`
@@ -391,6 +397,7 @@ type SuperSlurperJobListResponseSourceGcsSourceResponseSchema struct {
 // [SuperSlurperJobListResponseSourceGcsSourceResponseSchema]
 type superSlurperJobListResponseSourceGcsSourceResponseSchemaJSON struct {
 	Bucket      apijson.Field
+	Keys        apijson.Field
 	PathPrefix  apijson.Field
 	Vendor      apijson.Field
 	raw         string
@@ -425,6 +432,7 @@ func (r SuperSlurperJobListResponseSourceGcsSourceResponseSchemaVendor) IsKnown(
 type SuperSlurperJobListResponseSourceR2SourceResponseSchema struct {
 	Bucket       string                                                              `json:"bucket"`
 	Jurisdiction SuperSlurperJobListResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction"`
+	Keys         []string                                                            `json:"keys,nullable"`
 	PathPrefix   string                                                              `json:"pathPrefix,nullable"`
 	Vendor       Provider                                                            `json:"vendor"`
 	JSON         superSlurperJobListResponseSourceR2SourceResponseSchemaJSON         `json:"-"`
@@ -436,6 +444,7 @@ type SuperSlurperJobListResponseSourceR2SourceResponseSchema struct {
 type superSlurperJobListResponseSourceR2SourceResponseSchemaJSON struct {
 	Bucket       apijson.Field
 	Jurisdiction apijson.Field
+	Keys         apijson.Field
 	PathPrefix   apijson.Field
 	Vendor       apijson.Field
 	raw          string
@@ -596,10 +605,12 @@ type SuperSlurperJobGetResponseSource struct {
 	Bucket       string                                       `json:"bucket"`
 	Endpoint     string                                       `json:"endpoint,nullable"`
 	Jurisdiction SuperSlurperJobGetResponseSourceJurisdiction `json:"jurisdiction"`
-	PathPrefix   string                                       `json:"pathPrefix,nullable"`
-	Vendor       SuperSlurperJobGetResponseSourceVendor       `json:"vendor"`
-	JSON         superSlurperJobGetResponseSourceJSON         `json:"-"`
-	union        SuperSlurperJobGetResponseSourceUnion
+	// This field can have the runtime type of [[]string].
+	Keys       interface{}                            `json:"keys"`
+	PathPrefix string                                 `json:"pathPrefix,nullable"`
+	Vendor     SuperSlurperJobGetResponseSourceVendor `json:"vendor"`
+	JSON       superSlurperJobGetResponseSourceJSON   `json:"-"`
+	union      SuperSlurperJobGetResponseSourceUnion
 }
 
 // superSlurperJobGetResponseSourceJSON contains the JSON metadata for the struct
@@ -608,6 +619,7 @@ type superSlurperJobGetResponseSourceJSON struct {
 	Bucket       apijson.Field
 	Endpoint     apijson.Field
 	Jurisdiction apijson.Field
+	Keys         apijson.Field
 	PathPrefix   apijson.Field
 	Vendor       apijson.Field
 	raw          string
@@ -667,6 +679,7 @@ func init() {
 type SuperSlurperJobGetResponseSourceS3SourceResponseSchema struct {
 	Bucket     string                                                       `json:"bucket"`
 	Endpoint   string                                                       `json:"endpoint,nullable"`
+	Keys       []string                                                     `json:"keys,nullable"`
 	PathPrefix string                                                       `json:"pathPrefix,nullable"`
 	Vendor     SuperSlurperJobGetResponseSourceS3SourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobGetResponseSourceS3SourceResponseSchemaJSON   `json:"-"`
@@ -677,6 +690,7 @@ type SuperSlurperJobGetResponseSourceS3SourceResponseSchema struct {
 type superSlurperJobGetResponseSourceS3SourceResponseSchemaJSON struct {
 	Bucket      apijson.Field
 	Endpoint    apijson.Field
+	Keys        apijson.Field
 	PathPrefix  apijson.Field
 	Vendor      apijson.Field
 	raw         string
@@ -710,6 +724,7 @@ func (r SuperSlurperJobGetResponseSourceS3SourceResponseSchemaVendor) IsKnown() 
 
 type SuperSlurperJobGetResponseSourceGcsSourceResponseSchema struct {
 	Bucket     string                                                        `json:"bucket"`
+	Keys       []string                                                      `json:"keys,nullable"`
 	PathPrefix string                                                        `json:"pathPrefix,nullable"`
 	Vendor     SuperSlurperJobGetResponseSourceGcsSourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobGetResponseSourceGcsSourceResponseSchemaJSON   `json:"-"`
@@ -720,6 +735,7 @@ type SuperSlurperJobGetResponseSourceGcsSourceResponseSchema struct {
 // [SuperSlurperJobGetResponseSourceGcsSourceResponseSchema]
 type superSlurperJobGetResponseSourceGcsSourceResponseSchemaJSON struct {
 	Bucket      apijson.Field
+	Keys        apijson.Field
 	PathPrefix  apijson.Field
 	Vendor      apijson.Field
 	raw         string
@@ -754,6 +770,7 @@ func (r SuperSlurperJobGetResponseSourceGcsSourceResponseSchemaVendor) IsKnown()
 type SuperSlurperJobGetResponseSourceR2SourceResponseSchema struct {
 	Bucket       string                                                             `json:"bucket"`
 	Jurisdiction SuperSlurperJobGetResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction"`
+	Keys         []string                                                           `json:"keys,nullable"`
 	PathPrefix   string                                                             `json:"pathPrefix,nullable"`
 	Vendor       Provider                                                           `json:"vendor"`
 	JSON         superSlurperJobGetResponseSourceR2SourceResponseSchemaJSON         `json:"-"`
@@ -764,6 +781,7 @@ type SuperSlurperJobGetResponseSourceR2SourceResponseSchema struct {
 type superSlurperJobGetResponseSourceR2SourceResponseSchemaJSON struct {
 	Bucket       apijson.Field
 	Jurisdiction apijson.Field
+	Keys         apijson.Field
 	PathPrefix   apijson.Field
 	Vendor       apijson.Field
 	raw          string

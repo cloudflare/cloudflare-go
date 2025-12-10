@@ -38,6 +38,9 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 			ExtraPrefixes: cloudflare.F([]string{"string"}),
 			Md5Key:        cloudflare.F("md5_key"),
 		}),
+		CustomRemoteIdentities: cloudflare.F(magic_transit.IPSECTunnelNewParamsCustomRemoteIdentities{
+			FqdnID: cloudflare.F("fqdn_id"),
+		}),
 		CustomerEndpoint: cloudflare.F("203.0.113.1"),
 		Description:      cloudflare.F("Tunnel for ISP X"),
 		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
@@ -90,6 +93,9 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 				CustomerASN:   cloudflare.F(int64(0)),
 				ExtraPrefixes: cloudflare.F([]string{"string"}),
 				Md5Key:        cloudflare.F("md5_key"),
+			}),
+			CustomRemoteIdentities: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsCustomRemoteIdentities{
+				FqdnID: cloudflare.F("fqdn_id"),
 			}),
 			CustomerEndpoint: cloudflare.F("203.0.113.1"),
 			Description:      cloudflare.F("Tunnel for ISP X"),

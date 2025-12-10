@@ -625,6 +625,8 @@ func (r LogAuditListParamsActorTypeNot) IsKnown() bool {
 // Deprecated: deprecated in favor of ID. Use ID to query by the audit log ID.
 type LogAuditListParamsAuditLogID struct {
 	// Filters out audit logs by their IDs.
+	//
+	// Deprecated: deprecated
 	Not param.Field[[]string] `query:"not"`
 }
 
