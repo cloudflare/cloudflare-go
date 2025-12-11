@@ -706,14 +706,16 @@ type DLPEntryListResponse struct {
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
-	// [DLPEntryListResponsePredefinedConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	Pattern    Pattern     `json:"pattern"`
-	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
-	Secret     bool        `json:"secret"`
-	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [DLPEntryListResponsePredefinedVariant].
+	// [DLPEntryListResponsePredefinedEntryConfidence].
+	Confidence   interface{}                      `json:"confidence"`
+	CreatedAt    time.Time                        `json:"created_at" format:"date-time"`
+	Pattern      Pattern                          `json:"pattern"`
+	ProfileID    string                           `json:"profile_id,nullable" format:"uuid"`
+	Secret       bool                             `json:"secret"`
+	UpdatedAt    time.Time                        `json:"updated_at" format:"date-time"`
+	UploadStatus DLPEntryListResponseUploadStatus `json:"upload_status"`
+	// This field can have the runtime type of
+	// [DLPEntryListResponsePredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}              `json:"word_list"`
@@ -735,6 +737,7 @@ type dlpEntryListResponseJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	UploadStatus  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -757,18 +760,20 @@ func (r *DLPEntryListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DLPEntryListResponseUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [DLPEntryListResponseCustom],
-// [DLPEntryListResponsePredefined], [DLPEntryListResponseIntegration],
-// [DLPEntryListResponseExactData], [DLPEntryListResponseDocumentFingerprint],
-// [DLPEntryListResponseWordList].
+// Possible runtime types of the union are [DLPEntryListResponseCustomEntry],
+// [DLPEntryListResponsePredefinedEntry], [DLPEntryListResponseIntegrationEntry],
+// [DLPEntryListResponseExactDataEntry],
+// [DLPEntryListResponseDocumentFingerprintEntry],
+// [DLPEntryListResponseWordListEntry].
 func (r DLPEntryListResponse) AsUnion() DLPEntryListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryListResponseCustom],
-// [DLPEntryListResponsePredefined], [DLPEntryListResponseIntegration],
-// [DLPEntryListResponseExactData], [DLPEntryListResponseDocumentFingerprint] or
-// [DLPEntryListResponseWordList].
+// Union satisfied by [DLPEntryListResponseCustomEntry],
+// [DLPEntryListResponsePredefinedEntry], [DLPEntryListResponseIntegrationEntry],
+// [DLPEntryListResponseExactDataEntry],
+// [DLPEntryListResponseDocumentFingerprintEntry] or
+// [DLPEntryListResponseWordListEntry].
 type DLPEntryListResponseUnion interface {
 	implementsDLPEntryListResponse()
 }
@@ -776,176 +781,212 @@ type DLPEntryListResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*DLPEntryListResponseUnion)(nil)).Elem(),
-		"type",
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPEntryListResponseCustom{}),
-			DiscriminatorValue: "custom",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponseCustomEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPEntryListResponsePredefined{}),
-			DiscriminatorValue: "predefined",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponsePredefinedEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPEntryListResponseIntegration{}),
-			DiscriminatorValue: "integration",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponseIntegrationEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPEntryListResponseExactData{}),
-			DiscriminatorValue: "exact_data",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponseExactDataEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPEntryListResponseDocumentFingerprint{}),
-			DiscriminatorValue: "document_fingerprint",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponseDocumentFingerprintEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPEntryListResponseWordList{}),
-			DiscriminatorValue: "word_list",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryListResponseWordListEntry{}),
 		},
 	)
 }
 
-type DLPEntryListResponseCustom struct {
-	ID        string                         `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
-	Enabled   bool                           `json:"enabled,required"`
-	Name      string                         `json:"name,required"`
-	Pattern   Pattern                        `json:"pattern,required"`
-	Type      DLPEntryListResponseCustomType `json:"type,required"`
-	UpdatedAt time.Time                      `json:"updated_at,required" format:"date-time"`
-	ProfileID string                         `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpEntryListResponseCustomJSON `json:"-"`
+type DLPEntryListResponseCustomEntry struct {
+	ID           string                                      `json:"id,required" format:"uuid"`
+	CreatedAt    time.Time                                   `json:"created_at,required" format:"date-time"`
+	Enabled      bool                                        `json:"enabled,required"`
+	Name         string                                      `json:"name,required"`
+	Pattern      Pattern                                     `json:"pattern,required"`
+	Type         DLPEntryListResponseCustomEntryType         `json:"type,required"`
+	UpdatedAt    time.Time                                   `json:"updated_at,required" format:"date-time"`
+	ProfileID    string                                      `json:"profile_id,nullable" format:"uuid"`
+	UploadStatus DLPEntryListResponseCustomEntryUploadStatus `json:"upload_status"`
+	JSON         dlpEntryListResponseCustomEntryJSON         `json:"-"`
 }
 
-// dlpEntryListResponseCustomJSON contains the JSON metadata for the struct
-// [DLPEntryListResponseCustom]
-type dlpEntryListResponseCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// dlpEntryListResponseCustomEntryJSON contains the JSON metadata for the struct
+// [DLPEntryListResponseCustomEntry]
+type dlpEntryListResponseCustomEntryJSON struct {
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	ProfileID    apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DLPEntryListResponseCustom) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryListResponseCustomEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponseCustomJSON) RawJSON() string {
+func (r dlpEntryListResponseCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseCustom) implementsDLPEntryListResponse() {}
+func (r DLPEntryListResponseCustomEntry) implementsDLPEntryListResponse() {}
 
-type DLPEntryListResponseCustomType string
+type DLPEntryListResponseCustomEntryType string
 
 const (
-	DLPEntryListResponseCustomTypeCustom DLPEntryListResponseCustomType = "custom"
+	DLPEntryListResponseCustomEntryTypeCustom DLPEntryListResponseCustomEntryType = "custom"
 )
 
-func (r DLPEntryListResponseCustomType) IsKnown() bool {
+func (r DLPEntryListResponseCustomEntryType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponseCustomTypeCustom:
+	case DLPEntryListResponseCustomEntryTypeCustom:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponsePredefined struct {
-	ID         string                                   `json:"id,required" format:"uuid"`
-	Confidence DLPEntryListResponsePredefinedConfidence `json:"confidence,required"`
-	Enabled    bool                                     `json:"enabled,required"`
-	Name       string                                   `json:"name,required"`
-	Type       DLPEntryListResponsePredefinedType       `json:"type,required"`
-	ProfileID  string                                   `json:"profile_id,nullable" format:"uuid"`
-	Variant    DLPEntryListResponsePredefinedVariant    `json:"variant"`
-	JSON       dlpEntryListResponsePredefinedJSON       `json:"-"`
+type DLPEntryListResponseCustomEntryUploadStatus string
+
+const (
+	DLPEntryListResponseCustomEntryUploadStatusEmpty      DLPEntryListResponseCustomEntryUploadStatus = "empty"
+	DLPEntryListResponseCustomEntryUploadStatusUploading  DLPEntryListResponseCustomEntryUploadStatus = "uploading"
+	DLPEntryListResponseCustomEntryUploadStatusPending    DLPEntryListResponseCustomEntryUploadStatus = "pending"
+	DLPEntryListResponseCustomEntryUploadStatusProcessing DLPEntryListResponseCustomEntryUploadStatus = "processing"
+	DLPEntryListResponseCustomEntryUploadStatusFailed     DLPEntryListResponseCustomEntryUploadStatus = "failed"
+	DLPEntryListResponseCustomEntryUploadStatusComplete   DLPEntryListResponseCustomEntryUploadStatus = "complete"
+)
+
+func (r DLPEntryListResponseCustomEntryUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseCustomEntryUploadStatusEmpty, DLPEntryListResponseCustomEntryUploadStatusUploading, DLPEntryListResponseCustomEntryUploadStatusPending, DLPEntryListResponseCustomEntryUploadStatusProcessing, DLPEntryListResponseCustomEntryUploadStatusFailed, DLPEntryListResponseCustomEntryUploadStatusComplete:
+		return true
+	}
+	return false
 }
 
-// dlpEntryListResponsePredefinedJSON contains the JSON metadata for the struct
-// [DLPEntryListResponsePredefined]
-type dlpEntryListResponsePredefinedJSON struct {
-	ID          apijson.Field
-	Confidence  apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	Variant     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+type DLPEntryListResponsePredefinedEntry struct {
+	ID           string                                          `json:"id,required" format:"uuid"`
+	Confidence   DLPEntryListResponsePredefinedEntryConfidence   `json:"confidence,required"`
+	Enabled      bool                                            `json:"enabled,required"`
+	Name         string                                          `json:"name,required"`
+	Type         DLPEntryListResponsePredefinedEntryType         `json:"type,required"`
+	ProfileID    string                                          `json:"profile_id,nullable" format:"uuid"`
+	UploadStatus DLPEntryListResponsePredefinedEntryUploadStatus `json:"upload_status"`
+	Variant      DLPEntryListResponsePredefinedEntryVariant      `json:"variant"`
+	JSON         dlpEntryListResponsePredefinedEntryJSON         `json:"-"`
 }
 
-func (r *DLPEntryListResponsePredefined) UnmarshalJSON(data []byte) (err error) {
+// dlpEntryListResponsePredefinedEntryJSON contains the JSON metadata for the
+// struct [DLPEntryListResponsePredefinedEntry]
+type dlpEntryListResponsePredefinedEntryJSON struct {
+	ID           apijson.Field
+	Confidence   apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	ProfileID    apijson.Field
+	UploadStatus apijson.Field
+	Variant      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DLPEntryListResponsePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponsePredefinedJSON) RawJSON() string {
+func (r dlpEntryListResponsePredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponsePredefined) implementsDLPEntryListResponse() {}
+func (r DLPEntryListResponsePredefinedEntry) implementsDLPEntryListResponse() {}
 
-type DLPEntryListResponsePredefinedConfidence struct {
+type DLPEntryListResponsePredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                         `json:"available,required"`
-	JSON      dlpEntryListResponsePredefinedConfidenceJSON `json:"-"`
+	Available bool                                              `json:"available,required"`
+	JSON      dlpEntryListResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
 
-// dlpEntryListResponsePredefinedConfidenceJSON contains the JSON metadata for the
-// struct [DLPEntryListResponsePredefinedConfidence]
-type dlpEntryListResponsePredefinedConfidenceJSON struct {
+// dlpEntryListResponsePredefinedEntryConfidenceJSON contains the JSON metadata for
+// the struct [DLPEntryListResponsePredefinedEntryConfidence]
+type dlpEntryListResponsePredefinedEntryConfidenceJSON struct {
 	AIContextAvailable apijson.Field
 	Available          apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DLPEntryListResponsePredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryListResponsePredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponsePredefinedConfidenceJSON) RawJSON() string {
+func (r dlpEntryListResponsePredefinedEntryConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPEntryListResponsePredefinedType string
+type DLPEntryListResponsePredefinedEntryType string
 
 const (
-	DLPEntryListResponsePredefinedTypePredefined DLPEntryListResponsePredefinedType = "predefined"
+	DLPEntryListResponsePredefinedEntryTypePredefined DLPEntryListResponsePredefinedEntryType = "predefined"
 )
 
-func (r DLPEntryListResponsePredefinedType) IsKnown() bool {
+func (r DLPEntryListResponsePredefinedEntryType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponsePredefinedTypePredefined:
+	case DLPEntryListResponsePredefinedEntryTypePredefined:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponsePredefinedVariant struct {
-	TopicType   DLPEntryListResponsePredefinedVariantTopicType `json:"topic_type,required"`
-	Type        DLPEntryListResponsePredefinedVariantType      `json:"type,required"`
-	Description string                                         `json:"description,nullable"`
-	JSON        dlpEntryListResponsePredefinedVariantJSON      `json:"-"`
+type DLPEntryListResponsePredefinedEntryUploadStatus string
+
+const (
+	DLPEntryListResponsePredefinedEntryUploadStatusEmpty      DLPEntryListResponsePredefinedEntryUploadStatus = "empty"
+	DLPEntryListResponsePredefinedEntryUploadStatusUploading  DLPEntryListResponsePredefinedEntryUploadStatus = "uploading"
+	DLPEntryListResponsePredefinedEntryUploadStatusPending    DLPEntryListResponsePredefinedEntryUploadStatus = "pending"
+	DLPEntryListResponsePredefinedEntryUploadStatusProcessing DLPEntryListResponsePredefinedEntryUploadStatus = "processing"
+	DLPEntryListResponsePredefinedEntryUploadStatusFailed     DLPEntryListResponsePredefinedEntryUploadStatus = "failed"
+	DLPEntryListResponsePredefinedEntryUploadStatusComplete   DLPEntryListResponsePredefinedEntryUploadStatus = "complete"
+)
+
+func (r DLPEntryListResponsePredefinedEntryUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponsePredefinedEntryUploadStatusEmpty, DLPEntryListResponsePredefinedEntryUploadStatusUploading, DLPEntryListResponsePredefinedEntryUploadStatusPending, DLPEntryListResponsePredefinedEntryUploadStatusProcessing, DLPEntryListResponsePredefinedEntryUploadStatusFailed, DLPEntryListResponsePredefinedEntryUploadStatusComplete:
+		return true
+	}
+	return false
 }
 
-// dlpEntryListResponsePredefinedVariantJSON contains the JSON metadata for the
-// struct [DLPEntryListResponsePredefinedVariant]
-type dlpEntryListResponsePredefinedVariantJSON struct {
+type DLPEntryListResponsePredefinedEntryVariant struct {
+	TopicType   DLPEntryListResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
+	Type        DLPEntryListResponsePredefinedEntryVariantType      `json:"type,required"`
+	Description string                                              `json:"description,nullable"`
+	JSON        dlpEntryListResponsePredefinedEntryVariantJSON      `json:"-"`
+}
+
+// dlpEntryListResponsePredefinedEntryVariantJSON contains the JSON metadata for
+// the struct [DLPEntryListResponsePredefinedEntryVariant]
+type dlpEntryListResponsePredefinedEntryVariantJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -953,109 +994,131 @@ type dlpEntryListResponsePredefinedVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPEntryListResponsePredefinedVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryListResponsePredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponsePredefinedVariantJSON) RawJSON() string {
+func (r dlpEntryListResponsePredefinedEntryVariantJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPEntryListResponsePredefinedVariantTopicType string
+type DLPEntryListResponsePredefinedEntryVariantTopicType string
 
 const (
-	DLPEntryListResponsePredefinedVariantTopicTypeIntent  DLPEntryListResponsePredefinedVariantTopicType = "Intent"
-	DLPEntryListResponsePredefinedVariantTopicTypeContent DLPEntryListResponsePredefinedVariantTopicType = "Content"
+	DLPEntryListResponsePredefinedEntryVariantTopicTypeIntent  DLPEntryListResponsePredefinedEntryVariantTopicType = "Intent"
+	DLPEntryListResponsePredefinedEntryVariantTopicTypeContent DLPEntryListResponsePredefinedEntryVariantTopicType = "Content"
 )
 
-func (r DLPEntryListResponsePredefinedVariantTopicType) IsKnown() bool {
+func (r DLPEntryListResponsePredefinedEntryVariantTopicType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponsePredefinedVariantTopicTypeIntent, DLPEntryListResponsePredefinedVariantTopicTypeContent:
+	case DLPEntryListResponsePredefinedEntryVariantTopicTypeIntent, DLPEntryListResponsePredefinedEntryVariantTopicTypeContent:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponsePredefinedVariantType string
+type DLPEntryListResponsePredefinedEntryVariantType string
 
 const (
-	DLPEntryListResponsePredefinedVariantTypePromptTopic DLPEntryListResponsePredefinedVariantType = "PromptTopic"
+	DLPEntryListResponsePredefinedEntryVariantTypePromptTopic DLPEntryListResponsePredefinedEntryVariantType = "PromptTopic"
 )
 
-func (r DLPEntryListResponsePredefinedVariantType) IsKnown() bool {
+func (r DLPEntryListResponsePredefinedEntryVariantType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponsePredefinedVariantTypePromptTopic:
+	case DLPEntryListResponsePredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponseIntegration struct {
-	ID        string                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                `json:"enabled,required"`
-	Name      string                              `json:"name,required"`
-	Type      DLPEntryListResponseIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                           `json:"updated_at,required" format:"date-time"`
-	ProfileID string                              `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpEntryListResponseIntegrationJSON `json:"-"`
+type DLPEntryListResponseIntegrationEntry struct {
+	ID           string                                           `json:"id,required" format:"uuid"`
+	CreatedAt    time.Time                                        `json:"created_at,required" format:"date-time"`
+	Enabled      bool                                             `json:"enabled,required"`
+	Name         string                                           `json:"name,required"`
+	Type         DLPEntryListResponseIntegrationEntryType         `json:"type,required"`
+	UpdatedAt    time.Time                                        `json:"updated_at,required" format:"date-time"`
+	ProfileID    string                                           `json:"profile_id,nullable" format:"uuid"`
+	UploadStatus DLPEntryListResponseIntegrationEntryUploadStatus `json:"upload_status"`
+	JSON         dlpEntryListResponseIntegrationEntryJSON         `json:"-"`
 }
 
-// dlpEntryListResponseIntegrationJSON contains the JSON metadata for the struct
-// [DLPEntryListResponseIntegration]
-type dlpEntryListResponseIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// dlpEntryListResponseIntegrationEntryJSON contains the JSON metadata for the
+// struct [DLPEntryListResponseIntegrationEntry]
+type dlpEntryListResponseIntegrationEntryJSON struct {
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	ProfileID    apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DLPEntryListResponseIntegration) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryListResponseIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponseIntegrationJSON) RawJSON() string {
+func (r dlpEntryListResponseIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseIntegration) implementsDLPEntryListResponse() {}
+func (r DLPEntryListResponseIntegrationEntry) implementsDLPEntryListResponse() {}
 
-type DLPEntryListResponseIntegrationType string
+type DLPEntryListResponseIntegrationEntryType string
 
 const (
-	DLPEntryListResponseIntegrationTypeIntegration DLPEntryListResponseIntegrationType = "integration"
+	DLPEntryListResponseIntegrationEntryTypeIntegration DLPEntryListResponseIntegrationEntryType = "integration"
 )
 
-func (r DLPEntryListResponseIntegrationType) IsKnown() bool {
+func (r DLPEntryListResponseIntegrationEntryType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponseIntegrationTypeIntegration:
+	case DLPEntryListResponseIntegrationEntryTypeIntegration:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponseExactData struct {
+type DLPEntryListResponseIntegrationEntryUploadStatus string
+
+const (
+	DLPEntryListResponseIntegrationEntryUploadStatusEmpty      DLPEntryListResponseIntegrationEntryUploadStatus = "empty"
+	DLPEntryListResponseIntegrationEntryUploadStatusUploading  DLPEntryListResponseIntegrationEntryUploadStatus = "uploading"
+	DLPEntryListResponseIntegrationEntryUploadStatusPending    DLPEntryListResponseIntegrationEntryUploadStatus = "pending"
+	DLPEntryListResponseIntegrationEntryUploadStatusProcessing DLPEntryListResponseIntegrationEntryUploadStatus = "processing"
+	DLPEntryListResponseIntegrationEntryUploadStatusFailed     DLPEntryListResponseIntegrationEntryUploadStatus = "failed"
+	DLPEntryListResponseIntegrationEntryUploadStatusComplete   DLPEntryListResponseIntegrationEntryUploadStatus = "complete"
+)
+
+func (r DLPEntryListResponseIntegrationEntryUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseIntegrationEntryUploadStatusEmpty, DLPEntryListResponseIntegrationEntryUploadStatusUploading, DLPEntryListResponseIntegrationEntryUploadStatusPending, DLPEntryListResponseIntegrationEntryUploadStatusProcessing, DLPEntryListResponseIntegrationEntryUploadStatusFailed, DLPEntryListResponseIntegrationEntryUploadStatusComplete:
+		return true
+	}
+	return false
+}
+
+type DLPEntryListResponseExactDataEntry struct {
 	ID string `json:"id,required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                              `json:"case_sensitive,required"`
-	CreatedAt     time.Time                         `json:"created_at,required" format:"date-time"`
-	Enabled       bool                              `json:"enabled,required"`
-	Name          string                            `json:"name,required"`
-	Secret        bool                              `json:"secret,required"`
-	Type          DLPEntryListResponseExactDataType `json:"type,required"`
-	UpdatedAt     time.Time                         `json:"updated_at,required" format:"date-time"`
-	JSON          dlpEntryListResponseExactDataJSON `json:"-"`
+	CaseSensitive bool                                           `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                      `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                           `json:"enabled,required"`
+	Name          string                                         `json:"name,required"`
+	Secret        bool                                           `json:"secret,required"`
+	Type          DLPEntryListResponseExactDataEntryType         `json:"type,required"`
+	UpdatedAt     time.Time                                      `json:"updated_at,required" format:"date-time"`
+	UploadStatus  DLPEntryListResponseExactDataEntryUploadStatus `json:"upload_status"`
+	JSON          dlpEntryListResponseExactDataEntryJSON         `json:"-"`
 }
 
-// dlpEntryListResponseExactDataJSON contains the JSON metadata for the struct
-// [DLPEntryListResponseExactData]
-type dlpEntryListResponseExactDataJSON struct {
+// dlpEntryListResponseExactDataEntryJSON contains the JSON metadata for the struct
+// [DLPEntryListResponseExactDataEntry]
+type dlpEntryListResponseExactDataEntryJSON struct {
 	ID            apijson.Field
 	CaseSensitive apijson.Field
 	CreatedAt     apijson.Field
@@ -1064,127 +1127,189 @@ type dlpEntryListResponseExactDataJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
+	UploadStatus  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DLPEntryListResponseExactData) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryListResponseExactDataEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponseExactDataJSON) RawJSON() string {
+func (r dlpEntryListResponseExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseExactData) implementsDLPEntryListResponse() {}
+func (r DLPEntryListResponseExactDataEntry) implementsDLPEntryListResponse() {}
 
-type DLPEntryListResponseExactDataType string
+type DLPEntryListResponseExactDataEntryType string
 
 const (
-	DLPEntryListResponseExactDataTypeExactData DLPEntryListResponseExactDataType = "exact_data"
+	DLPEntryListResponseExactDataEntryTypeExactData DLPEntryListResponseExactDataEntryType = "exact_data"
 )
 
-func (r DLPEntryListResponseExactDataType) IsKnown() bool {
+func (r DLPEntryListResponseExactDataEntryType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponseExactDataTypeExactData:
+	case DLPEntryListResponseExactDataEntryTypeExactData:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponseDocumentFingerprint struct {
-	ID        string                                      `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                   `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                        `json:"enabled,required"`
-	Name      string                                      `json:"name,required"`
-	Type      DLPEntryListResponseDocumentFingerprintType `json:"type,required"`
-	UpdatedAt time.Time                                   `json:"updated_at,required" format:"date-time"`
-	JSON      dlpEntryListResponseDocumentFingerprintJSON `json:"-"`
-}
-
-// dlpEntryListResponseDocumentFingerprintJSON contains the JSON metadata for the
-// struct [DLPEntryListResponseDocumentFingerprint]
-type dlpEntryListResponseDocumentFingerprintJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryListResponseDocumentFingerprint) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryListResponseDocumentFingerprintJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPEntryListResponseDocumentFingerprint) implementsDLPEntryListResponse() {}
-
-type DLPEntryListResponseDocumentFingerprintType string
+type DLPEntryListResponseExactDataEntryUploadStatus string
 
 const (
-	DLPEntryListResponseDocumentFingerprintTypeDocumentFingerprint DLPEntryListResponseDocumentFingerprintType = "document_fingerprint"
+	DLPEntryListResponseExactDataEntryUploadStatusEmpty      DLPEntryListResponseExactDataEntryUploadStatus = "empty"
+	DLPEntryListResponseExactDataEntryUploadStatusUploading  DLPEntryListResponseExactDataEntryUploadStatus = "uploading"
+	DLPEntryListResponseExactDataEntryUploadStatusPending    DLPEntryListResponseExactDataEntryUploadStatus = "pending"
+	DLPEntryListResponseExactDataEntryUploadStatusProcessing DLPEntryListResponseExactDataEntryUploadStatus = "processing"
+	DLPEntryListResponseExactDataEntryUploadStatusFailed     DLPEntryListResponseExactDataEntryUploadStatus = "failed"
+	DLPEntryListResponseExactDataEntryUploadStatusComplete   DLPEntryListResponseExactDataEntryUploadStatus = "complete"
 )
 
-func (r DLPEntryListResponseDocumentFingerprintType) IsKnown() bool {
+func (r DLPEntryListResponseExactDataEntryUploadStatus) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponseDocumentFingerprintTypeDocumentFingerprint:
+	case DLPEntryListResponseExactDataEntryUploadStatusEmpty, DLPEntryListResponseExactDataEntryUploadStatusUploading, DLPEntryListResponseExactDataEntryUploadStatusPending, DLPEntryListResponseExactDataEntryUploadStatusProcessing, DLPEntryListResponseExactDataEntryUploadStatusFailed, DLPEntryListResponseExactDataEntryUploadStatusComplete:
 		return true
 	}
 	return false
 }
 
-type DLPEntryListResponseWordList struct {
-	ID        string                           `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                        `json:"created_at,required" format:"date-time"`
-	Enabled   bool                             `json:"enabled,required"`
-	Name      string                           `json:"name,required"`
-	Type      DLPEntryListResponseWordListType `json:"type,required"`
-	UpdatedAt time.Time                        `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                      `json:"word_list,required"`
-	ProfileID string                           `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpEntryListResponseWordListJSON `json:"-"`
+type DLPEntryListResponseDocumentFingerprintEntry struct {
+	ID           string                                                   `json:"id,required" format:"uuid"`
+	CreatedAt    time.Time                                                `json:"created_at,required" format:"date-time"`
+	Enabled      bool                                                     `json:"enabled,required"`
+	Name         string                                                   `json:"name,required"`
+	Type         DLPEntryListResponseDocumentFingerprintEntryType         `json:"type,required"`
+	UpdatedAt    time.Time                                                `json:"updated_at,required" format:"date-time"`
+	UploadStatus DLPEntryListResponseDocumentFingerprintEntryUploadStatus `json:"upload_status"`
+	JSON         dlpEntryListResponseDocumentFingerprintEntryJSON         `json:"-"`
 }
 
-// dlpEntryListResponseWordListJSON contains the JSON metadata for the struct
-// [DLPEntryListResponseWordList]
-type dlpEntryListResponseWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// dlpEntryListResponseDocumentFingerprintEntryJSON contains the JSON metadata for
+// the struct [DLPEntryListResponseDocumentFingerprintEntry]
+type dlpEntryListResponseDocumentFingerprintEntryJSON struct {
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DLPEntryListResponseWordList) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryListResponseDocumentFingerprintEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryListResponseWordListJSON) RawJSON() string {
+func (r dlpEntryListResponseDocumentFingerprintEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseWordList) implementsDLPEntryListResponse() {}
+func (r DLPEntryListResponseDocumentFingerprintEntry) implementsDLPEntryListResponse() {}
 
-type DLPEntryListResponseWordListType string
+type DLPEntryListResponseDocumentFingerprintEntryType string
 
 const (
-	DLPEntryListResponseWordListTypeWordList DLPEntryListResponseWordListType = "word_list"
+	DLPEntryListResponseDocumentFingerprintEntryTypeDocumentFingerprint DLPEntryListResponseDocumentFingerprintEntryType = "document_fingerprint"
 )
 
-func (r DLPEntryListResponseWordListType) IsKnown() bool {
+func (r DLPEntryListResponseDocumentFingerprintEntryType) IsKnown() bool {
 	switch r {
-	case DLPEntryListResponseWordListTypeWordList:
+	case DLPEntryListResponseDocumentFingerprintEntryTypeDocumentFingerprint:
+		return true
+	}
+	return false
+}
+
+type DLPEntryListResponseDocumentFingerprintEntryUploadStatus string
+
+const (
+	DLPEntryListResponseDocumentFingerprintEntryUploadStatusEmpty      DLPEntryListResponseDocumentFingerprintEntryUploadStatus = "empty"
+	DLPEntryListResponseDocumentFingerprintEntryUploadStatusUploading  DLPEntryListResponseDocumentFingerprintEntryUploadStatus = "uploading"
+	DLPEntryListResponseDocumentFingerprintEntryUploadStatusPending    DLPEntryListResponseDocumentFingerprintEntryUploadStatus = "pending"
+	DLPEntryListResponseDocumentFingerprintEntryUploadStatusProcessing DLPEntryListResponseDocumentFingerprintEntryUploadStatus = "processing"
+	DLPEntryListResponseDocumentFingerprintEntryUploadStatusFailed     DLPEntryListResponseDocumentFingerprintEntryUploadStatus = "failed"
+	DLPEntryListResponseDocumentFingerprintEntryUploadStatusComplete   DLPEntryListResponseDocumentFingerprintEntryUploadStatus = "complete"
+)
+
+func (r DLPEntryListResponseDocumentFingerprintEntryUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseDocumentFingerprintEntryUploadStatusEmpty, DLPEntryListResponseDocumentFingerprintEntryUploadStatusUploading, DLPEntryListResponseDocumentFingerprintEntryUploadStatusPending, DLPEntryListResponseDocumentFingerprintEntryUploadStatusProcessing, DLPEntryListResponseDocumentFingerprintEntryUploadStatusFailed, DLPEntryListResponseDocumentFingerprintEntryUploadStatusComplete:
+		return true
+	}
+	return false
+}
+
+type DLPEntryListResponseWordListEntry struct {
+	ID           string                                        `json:"id,required" format:"uuid"`
+	CreatedAt    time.Time                                     `json:"created_at,required" format:"date-time"`
+	Enabled      bool                                          `json:"enabled,required"`
+	Name         string                                        `json:"name,required"`
+	Type         DLPEntryListResponseWordListEntryType         `json:"type,required"`
+	UpdatedAt    time.Time                                     `json:"updated_at,required" format:"date-time"`
+	WordList     interface{}                                   `json:"word_list,required"`
+	ProfileID    string                                        `json:"profile_id,nullable" format:"uuid"`
+	UploadStatus DLPEntryListResponseWordListEntryUploadStatus `json:"upload_status"`
+	JSON         dlpEntryListResponseWordListEntryJSON         `json:"-"`
+}
+
+// dlpEntryListResponseWordListEntryJSON contains the JSON metadata for the struct
+// [DLPEntryListResponseWordListEntry]
+type dlpEntryListResponseWordListEntryJSON struct {
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	WordList     apijson.Field
+	ProfileID    apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DLPEntryListResponseWordListEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryListResponseWordListEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DLPEntryListResponseWordListEntry) implementsDLPEntryListResponse() {}
+
+type DLPEntryListResponseWordListEntryType string
+
+const (
+	DLPEntryListResponseWordListEntryTypeWordList DLPEntryListResponseWordListEntryType = "word_list"
+)
+
+func (r DLPEntryListResponseWordListEntryType) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseWordListEntryTypeWordList:
+		return true
+	}
+	return false
+}
+
+type DLPEntryListResponseWordListEntryUploadStatus string
+
+const (
+	DLPEntryListResponseWordListEntryUploadStatusEmpty      DLPEntryListResponseWordListEntryUploadStatus = "empty"
+	DLPEntryListResponseWordListEntryUploadStatusUploading  DLPEntryListResponseWordListEntryUploadStatus = "uploading"
+	DLPEntryListResponseWordListEntryUploadStatusPending    DLPEntryListResponseWordListEntryUploadStatus = "pending"
+	DLPEntryListResponseWordListEntryUploadStatusProcessing DLPEntryListResponseWordListEntryUploadStatus = "processing"
+	DLPEntryListResponseWordListEntryUploadStatusFailed     DLPEntryListResponseWordListEntryUploadStatus = "failed"
+	DLPEntryListResponseWordListEntryUploadStatusComplete   DLPEntryListResponseWordListEntryUploadStatus = "complete"
+)
+
+func (r DLPEntryListResponseWordListEntryUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseWordListEntryUploadStatusEmpty, DLPEntryListResponseWordListEntryUploadStatusUploading, DLPEntryListResponseWordListEntryUploadStatusPending, DLPEntryListResponseWordListEntryUploadStatusProcessing, DLPEntryListResponseWordListEntryUploadStatusFailed, DLPEntryListResponseWordListEntryUploadStatusComplete:
 		return true
 	}
 	return false
@@ -1209,6 +1334,25 @@ func (r DLPEntryListResponseType) IsKnown() bool {
 	return false
 }
 
+type DLPEntryListResponseUploadStatus string
+
+const (
+	DLPEntryListResponseUploadStatusEmpty      DLPEntryListResponseUploadStatus = "empty"
+	DLPEntryListResponseUploadStatusUploading  DLPEntryListResponseUploadStatus = "uploading"
+	DLPEntryListResponseUploadStatusPending    DLPEntryListResponseUploadStatus = "pending"
+	DLPEntryListResponseUploadStatusProcessing DLPEntryListResponseUploadStatus = "processing"
+	DLPEntryListResponseUploadStatusFailed     DLPEntryListResponseUploadStatus = "failed"
+	DLPEntryListResponseUploadStatusComplete   DLPEntryListResponseUploadStatus = "complete"
+)
+
+func (r DLPEntryListResponseUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryListResponseUploadStatusEmpty, DLPEntryListResponseUploadStatusUploading, DLPEntryListResponseUploadStatusPending, DLPEntryListResponseUploadStatusProcessing, DLPEntryListResponseUploadStatusFailed, DLPEntryListResponseUploadStatusComplete:
+		return true
+	}
+	return false
+}
+
 type DLPEntryDeleteResponse = interface{}
 
 type DLPEntryGetResponse struct {
@@ -1219,24 +1363,17 @@ type DLPEntryGetResponse struct {
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
-	// This field can have the runtime type of
-	// [DLPEntryGetResponsePredefinedEntryConfidence].
+	// This field can have the runtime type of [DLPEntryGetResponseObjectConfidence].
 	Confidence interface{} `json:"confidence"`
 	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
 	Pattern    Pattern     `json:"pattern"`
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
-	// This field can have the runtime type of
-	// [[]DLPEntryGetResponseCustomEntryProfile],
-	// [[]DLPEntryGetResponsePredefinedEntryProfile],
-	// [[]DLPEntryGetResponseIntegrationEntryProfile],
-	// [[]DLPEntryGetResponseExactDataEntryProfile],
-	// [[]DLPEntryGetResponseDocumentFingerprintEntryProfile],
-	// [[]DLPEntryGetResponseWordListEntryProfile].
-	Profiles  interface{} `json:"profiles"`
-	Secret    bool        `json:"secret"`
-	UpdatedAt time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of
-	// [DLPEntryGetResponsePredefinedEntryVariant].
+	// This field can have the runtime type of [[]DLPEntryGetResponseObjectProfile].
+	Profiles     interface{}                     `json:"profiles"`
+	Secret       bool                            `json:"secret"`
+	UpdatedAt    time.Time                       `json:"updated_at" format:"date-time"`
+	UploadStatus DLPEntryGetResponseUploadStatus `json:"upload_status"`
+	// This field can have the runtime type of [DLPEntryGetResponseObjectVariant].
 	Variant interface{} `json:"variant"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}             `json:"word_list"`
@@ -1259,6 +1396,7 @@ type dlpEntryGetResponseJSON struct {
 	Profiles      apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	UploadStatus  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -1281,20 +1419,17 @@ func (r *DLPEntryGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DLPEntryGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [DLPEntryGetResponseCustomEntry],
-// [DLPEntryGetResponsePredefinedEntry], [DLPEntryGetResponseIntegrationEntry],
-// [DLPEntryGetResponseExactDataEntry],
-// [DLPEntryGetResponseDocumentFingerprintEntry],
-// [DLPEntryGetResponseWordListEntry].
+// Possible runtime types of the union are [DLPEntryGetResponseObject],
+// [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
+// [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
+// [DLPEntryGetResponseObject].
 func (r DLPEntryGetResponse) AsUnion() DLPEntryGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryGetResponseCustomEntry],
-// [DLPEntryGetResponsePredefinedEntry], [DLPEntryGetResponseIntegrationEntry],
-// [DLPEntryGetResponseExactDataEntry],
-// [DLPEntryGetResponseDocumentFingerprintEntry] or
-// [DLPEntryGetResponseWordListEntry].
+// Union satisfied by [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
+// [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
+// [DLPEntryGetResponseObject] or [DLPEntryGetResponseObject].
 type DLPEntryGetResponseUnion interface {
 	implementsDLPEntryGetResponse()
 }
@@ -1305,565 +1440,127 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPEntryGetResponseCustomEntry{}),
+			Type:       reflect.TypeOf(DLPEntryGetResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPEntryGetResponsePredefinedEntry{}),
+			Type:       reflect.TypeOf(DLPEntryGetResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPEntryGetResponseIntegrationEntry{}),
+			Type:       reflect.TypeOf(DLPEntryGetResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPEntryGetResponseExactDataEntry{}),
+			Type:       reflect.TypeOf(DLPEntryGetResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPEntryGetResponseDocumentFingerprintEntry{}),
+			Type:       reflect.TypeOf(DLPEntryGetResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPEntryGetResponseWordListEntry{}),
+			Type:       reflect.TypeOf(DLPEntryGetResponseObject{}),
 		},
 	)
 }
 
-type DLPEntryGetResponseCustomEntry struct {
-	ID        string                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                               `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                    `json:"enabled,required"`
-	Name      string                                  `json:"name,required"`
-	Pattern   Pattern                                 `json:"pattern,required"`
-	Type      DLPEntryGetResponseCustomEntryType      `json:"type,required"`
-	UpdatedAt time.Time                               `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
-	Profiles  []DLPEntryGetResponseCustomEntryProfile `json:"profiles"`
-	JSON      dlpEntryGetResponseCustomEntryJSON      `json:"-"`
+type DLPEntryGetResponseObject struct {
+	ID           string                                `json:"id,required" format:"uuid"`
+	CreatedAt    time.Time                             `json:"created_at,required" format:"date-time"`
+	Enabled      bool                                  `json:"enabled,required"`
+	Name         string                                `json:"name,required"`
+	Pattern      Pattern                               `json:"pattern,required"`
+	Type         DLPEntryGetResponseObjectType         `json:"type,required"`
+	UpdatedAt    time.Time                             `json:"updated_at,required" format:"date-time"`
+	ProfileID    string                                `json:"profile_id,nullable" format:"uuid"`
+	Profiles     []DLPEntryGetResponseObjectProfile    `json:"profiles"`
+	UploadStatus DLPEntryGetResponseObjectUploadStatus `json:"upload_status"`
+	JSON         dlpEntryGetResponseObjectJSON         `json:"-"`
 }
 
-// dlpEntryGetResponseCustomEntryJSON contains the JSON metadata for the struct
-// [DLPEntryGetResponseCustomEntry]
-type dlpEntryGetResponseCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	Profiles    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// dlpEntryGetResponseObjectJSON contains the JSON metadata for the struct
+// [DLPEntryGetResponseObject]
+type dlpEntryGetResponseObjectJSON struct {
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	ProfileID    apijson.Field
+	Profiles     apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DLPEntryGetResponseCustomEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryGetResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryGetResponseCustomEntryJSON) RawJSON() string {
+func (r dlpEntryGetResponseObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryGetResponseCustomEntry) implementsDLPEntryGetResponse() {}
+func (r DLPEntryGetResponseObject) implementsDLPEntryGetResponse() {}
 
-type DLPEntryGetResponseCustomEntryType string
+type DLPEntryGetResponseObjectType string
 
 const (
-	DLPEntryGetResponseCustomEntryTypeCustom DLPEntryGetResponseCustomEntryType = "custom"
+	DLPEntryGetResponseObjectTypeCustom DLPEntryGetResponseObjectType = "custom"
 )
 
-func (r DLPEntryGetResponseCustomEntryType) IsKnown() bool {
+func (r DLPEntryGetResponseObjectType) IsKnown() bool {
 	switch r {
-	case DLPEntryGetResponseCustomEntryTypeCustom:
+	case DLPEntryGetResponseObjectTypeCustom:
 		return true
 	}
 	return false
 }
 
 // Computed entry field for a profile that an entry is shared into.
-type DLPEntryGetResponseCustomEntryProfile struct {
-	ID   string                                    `json:"id,required" format:"uuid"`
-	Name string                                    `json:"name,required"`
-	JSON dlpEntryGetResponseCustomEntryProfileJSON `json:"-"`
+type DLPEntryGetResponseObjectProfile struct {
+	ID   string                               `json:"id,required" format:"uuid"`
+	Name string                               `json:"name,required"`
+	JSON dlpEntryGetResponseObjectProfileJSON `json:"-"`
 }
 
-// dlpEntryGetResponseCustomEntryProfileJSON contains the JSON metadata for the
-// struct [DLPEntryGetResponseCustomEntryProfile]
-type dlpEntryGetResponseCustomEntryProfileJSON struct {
+// dlpEntryGetResponseObjectProfileJSON contains the JSON metadata for the struct
+// [DLPEntryGetResponseObjectProfile]
+type dlpEntryGetResponseObjectProfileJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPEntryGetResponseCustomEntryProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryGetResponseObjectProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryGetResponseCustomEntryProfileJSON) RawJSON() string {
+func (r dlpEntryGetResponseObjectProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPEntryGetResponsePredefinedEntry struct {
-	ID         string                                       `json:"id,required" format:"uuid"`
-	Confidence DLPEntryGetResponsePredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                         `json:"enabled,required"`
-	Name       string                                       `json:"name,required"`
-	Type       DLPEntryGetResponsePredefinedEntryType       `json:"type,required"`
-	ProfileID  string                                       `json:"profile_id,nullable" format:"uuid"`
-	Profiles   []DLPEntryGetResponsePredefinedEntryProfile  `json:"profiles"`
-	Variant    DLPEntryGetResponsePredefinedEntryVariant    `json:"variant"`
-	JSON       dlpEntryGetResponsePredefinedEntryJSON       `json:"-"`
-}
-
-// dlpEntryGetResponsePredefinedEntryJSON contains the JSON metadata for the struct
-// [DLPEntryGetResponsePredefinedEntry]
-type dlpEntryGetResponsePredefinedEntryJSON struct {
-	ID          apijson.Field
-	Confidence  apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	Profiles    apijson.Field
-	Variant     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponsePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponsePredefinedEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPEntryGetResponsePredefinedEntry) implementsDLPEntryGetResponse() {}
-
-type DLPEntryGetResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
-	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service.
-	Available bool                                             `json:"available,required"`
-	JSON      dlpEntryGetResponsePredefinedEntryConfidenceJSON `json:"-"`
-}
-
-// dlpEntryGetResponsePredefinedEntryConfidenceJSON contains the JSON metadata for
-// the struct [DLPEntryGetResponsePredefinedEntryConfidence]
-type dlpEntryGetResponsePredefinedEntryConfidenceJSON struct {
-	AIContextAvailable apijson.Field
-	Available          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponsePredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponsePredefinedEntryConfidenceJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPEntryGetResponsePredefinedEntryType string
+type DLPEntryGetResponseObjectUploadStatus string
 
 const (
-	DLPEntryGetResponsePredefinedEntryTypePredefined DLPEntryGetResponsePredefinedEntryType = "predefined"
+	DLPEntryGetResponseObjectUploadStatusEmpty      DLPEntryGetResponseObjectUploadStatus = "empty"
+	DLPEntryGetResponseObjectUploadStatusUploading  DLPEntryGetResponseObjectUploadStatus = "uploading"
+	DLPEntryGetResponseObjectUploadStatusPending    DLPEntryGetResponseObjectUploadStatus = "pending"
+	DLPEntryGetResponseObjectUploadStatusProcessing DLPEntryGetResponseObjectUploadStatus = "processing"
+	DLPEntryGetResponseObjectUploadStatusFailed     DLPEntryGetResponseObjectUploadStatus = "failed"
+	DLPEntryGetResponseObjectUploadStatusComplete   DLPEntryGetResponseObjectUploadStatus = "complete"
 )
 
-func (r DLPEntryGetResponsePredefinedEntryType) IsKnown() bool {
+func (r DLPEntryGetResponseObjectUploadStatus) IsKnown() bool {
 	switch r {
-	case DLPEntryGetResponsePredefinedEntryTypePredefined:
+	case DLPEntryGetResponseObjectUploadStatusEmpty, DLPEntryGetResponseObjectUploadStatusUploading, DLPEntryGetResponseObjectUploadStatusPending, DLPEntryGetResponseObjectUploadStatusProcessing, DLPEntryGetResponseObjectUploadStatusFailed, DLPEntryGetResponseObjectUploadStatusComplete:
 		return true
 	}
 	return false
-}
-
-// Computed entry field for a profile that an entry is shared into.
-type DLPEntryGetResponsePredefinedEntryProfile struct {
-	ID   string                                        `json:"id,required" format:"uuid"`
-	Name string                                        `json:"name,required"`
-	JSON dlpEntryGetResponsePredefinedEntryProfileJSON `json:"-"`
-}
-
-// dlpEntryGetResponsePredefinedEntryProfileJSON contains the JSON metadata for the
-// struct [DLPEntryGetResponsePredefinedEntryProfile]
-type dlpEntryGetResponsePredefinedEntryProfileJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponsePredefinedEntryProfile) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponsePredefinedEntryProfileJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPEntryGetResponsePredefinedEntryVariant struct {
-	TopicType   DLPEntryGetResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        DLPEntryGetResponsePredefinedEntryVariantType      `json:"type,required"`
-	Description string                                             `json:"description,nullable"`
-	JSON        dlpEntryGetResponsePredefinedEntryVariantJSON      `json:"-"`
-}
-
-// dlpEntryGetResponsePredefinedEntryVariantJSON contains the JSON metadata for the
-// struct [DLPEntryGetResponsePredefinedEntryVariant]
-type dlpEntryGetResponsePredefinedEntryVariantJSON struct {
-	TopicType   apijson.Field
-	Type        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponsePredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponsePredefinedEntryVariantJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPEntryGetResponsePredefinedEntryVariantTopicType string
-
-const (
-	DLPEntryGetResponsePredefinedEntryVariantTopicTypeIntent  DLPEntryGetResponsePredefinedEntryVariantTopicType = "Intent"
-	DLPEntryGetResponsePredefinedEntryVariantTopicTypeContent DLPEntryGetResponsePredefinedEntryVariantTopicType = "Content"
-)
-
-func (r DLPEntryGetResponsePredefinedEntryVariantTopicType) IsKnown() bool {
-	switch r {
-	case DLPEntryGetResponsePredefinedEntryVariantTopicTypeIntent, DLPEntryGetResponsePredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type DLPEntryGetResponsePredefinedEntryVariantType string
-
-const (
-	DLPEntryGetResponsePredefinedEntryVariantTypePromptTopic DLPEntryGetResponsePredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r DLPEntryGetResponsePredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case DLPEntryGetResponsePredefinedEntryVariantTypePromptTopic:
-		return true
-	}
-	return false
-}
-
-type DLPEntryGetResponseIntegrationEntry struct {
-	ID        string                                       `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                         `json:"enabled,required"`
-	Name      string                                       `json:"name,required"`
-	Type      DLPEntryGetResponseIntegrationEntryType      `json:"type,required"`
-	UpdatedAt time.Time                                    `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
-	Profiles  []DLPEntryGetResponseIntegrationEntryProfile `json:"profiles"`
-	JSON      dlpEntryGetResponseIntegrationEntryJSON      `json:"-"`
-}
-
-// dlpEntryGetResponseIntegrationEntryJSON contains the JSON metadata for the
-// struct [DLPEntryGetResponseIntegrationEntry]
-type dlpEntryGetResponseIntegrationEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	Profiles    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseIntegrationEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPEntryGetResponseIntegrationEntry) implementsDLPEntryGetResponse() {}
-
-type DLPEntryGetResponseIntegrationEntryType string
-
-const (
-	DLPEntryGetResponseIntegrationEntryTypeIntegration DLPEntryGetResponseIntegrationEntryType = "integration"
-)
-
-func (r DLPEntryGetResponseIntegrationEntryType) IsKnown() bool {
-	switch r {
-	case DLPEntryGetResponseIntegrationEntryTypeIntegration:
-		return true
-	}
-	return false
-}
-
-// Computed entry field for a profile that an entry is shared into.
-type DLPEntryGetResponseIntegrationEntryProfile struct {
-	ID   string                                         `json:"id,required" format:"uuid"`
-	Name string                                         `json:"name,required"`
-	JSON dlpEntryGetResponseIntegrationEntryProfileJSON `json:"-"`
-}
-
-// dlpEntryGetResponseIntegrationEntryProfileJSON contains the JSON metadata for
-// the struct [DLPEntryGetResponseIntegrationEntryProfile]
-type dlpEntryGetResponseIntegrationEntryProfileJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseIntegrationEntryProfile) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseIntegrationEntryProfileJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPEntryGetResponseExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
-	// Only applies to custom word lists. Determines if the words should be matched in
-	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                       `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                  `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                       `json:"enabled,required"`
-	Name          string                                     `json:"name,required"`
-	Secret        bool                                       `json:"secret,required"`
-	Type          DLPEntryGetResponseExactDataEntryType      `json:"type,required"`
-	UpdatedAt     time.Time                                  `json:"updated_at,required" format:"date-time"`
-	Profiles      []DLPEntryGetResponseExactDataEntryProfile `json:"profiles"`
-	JSON          dlpEntryGetResponseExactDataEntryJSON      `json:"-"`
-}
-
-// dlpEntryGetResponseExactDataEntryJSON contains the JSON metadata for the struct
-// [DLPEntryGetResponseExactDataEntry]
-type dlpEntryGetResponseExactDataEntryJSON struct {
-	ID            apijson.Field
-	CaseSensitive apijson.Field
-	CreatedAt     apijson.Field
-	Enabled       apijson.Field
-	Name          apijson.Field
-	Secret        apijson.Field
-	Type          apijson.Field
-	UpdatedAt     apijson.Field
-	Profiles      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseExactDataEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseExactDataEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPEntryGetResponseExactDataEntry) implementsDLPEntryGetResponse() {}
-
-type DLPEntryGetResponseExactDataEntryType string
-
-const (
-	DLPEntryGetResponseExactDataEntryTypeExactData DLPEntryGetResponseExactDataEntryType = "exact_data"
-)
-
-func (r DLPEntryGetResponseExactDataEntryType) IsKnown() bool {
-	switch r {
-	case DLPEntryGetResponseExactDataEntryTypeExactData:
-		return true
-	}
-	return false
-}
-
-// Computed entry field for a profile that an entry is shared into.
-type DLPEntryGetResponseExactDataEntryProfile struct {
-	ID   string                                       `json:"id,required" format:"uuid"`
-	Name string                                       `json:"name,required"`
-	JSON dlpEntryGetResponseExactDataEntryProfileJSON `json:"-"`
-}
-
-// dlpEntryGetResponseExactDataEntryProfileJSON contains the JSON metadata for the
-// struct [DLPEntryGetResponseExactDataEntryProfile]
-type dlpEntryGetResponseExactDataEntryProfileJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseExactDataEntryProfile) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseExactDataEntryProfileJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPEntryGetResponseDocumentFingerprintEntry struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Type      DLPEntryGetResponseDocumentFingerprintEntryType      `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	Profiles  []DLPEntryGetResponseDocumentFingerprintEntryProfile `json:"profiles"`
-	JSON      dlpEntryGetResponseDocumentFingerprintEntryJSON      `json:"-"`
-}
-
-// dlpEntryGetResponseDocumentFingerprintEntryJSON contains the JSON metadata for
-// the struct [DLPEntryGetResponseDocumentFingerprintEntry]
-type dlpEntryGetResponseDocumentFingerprintEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Profiles    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseDocumentFingerprintEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseDocumentFingerprintEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPEntryGetResponseDocumentFingerprintEntry) implementsDLPEntryGetResponse() {}
-
-type DLPEntryGetResponseDocumentFingerprintEntryType string
-
-const (
-	DLPEntryGetResponseDocumentFingerprintEntryTypeDocumentFingerprint DLPEntryGetResponseDocumentFingerprintEntryType = "document_fingerprint"
-)
-
-func (r DLPEntryGetResponseDocumentFingerprintEntryType) IsKnown() bool {
-	switch r {
-	case DLPEntryGetResponseDocumentFingerprintEntryTypeDocumentFingerprint:
-		return true
-	}
-	return false
-}
-
-// Computed entry field for a profile that an entry is shared into.
-type DLPEntryGetResponseDocumentFingerprintEntryProfile struct {
-	ID   string                                                 `json:"id,required" format:"uuid"`
-	Name string                                                 `json:"name,required"`
-	JSON dlpEntryGetResponseDocumentFingerprintEntryProfileJSON `json:"-"`
-}
-
-// dlpEntryGetResponseDocumentFingerprintEntryProfileJSON contains the JSON
-// metadata for the struct [DLPEntryGetResponseDocumentFingerprintEntryProfile]
-type dlpEntryGetResponseDocumentFingerprintEntryProfileJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseDocumentFingerprintEntryProfile) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseDocumentFingerprintEntryProfileJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPEntryGetResponseWordListEntry struct {
-	ID        string                                    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                 `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                      `json:"enabled,required"`
-	Name      string                                    `json:"name,required"`
-	Type      DLPEntryGetResponseWordListEntryType      `json:"type,required"`
-	UpdatedAt time.Time                                 `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                               `json:"word_list,required"`
-	ProfileID string                                    `json:"profile_id,nullable" format:"uuid"`
-	Profiles  []DLPEntryGetResponseWordListEntryProfile `json:"profiles"`
-	JSON      dlpEntryGetResponseWordListEntryJSON      `json:"-"`
-}
-
-// dlpEntryGetResponseWordListEntryJSON contains the JSON metadata for the struct
-// [DLPEntryGetResponseWordListEntry]
-type dlpEntryGetResponseWordListEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	Profiles    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseWordListEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseWordListEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPEntryGetResponseWordListEntry) implementsDLPEntryGetResponse() {}
-
-type DLPEntryGetResponseWordListEntryType string
-
-const (
-	DLPEntryGetResponseWordListEntryTypeWordList DLPEntryGetResponseWordListEntryType = "word_list"
-)
-
-func (r DLPEntryGetResponseWordListEntryType) IsKnown() bool {
-	switch r {
-	case DLPEntryGetResponseWordListEntryTypeWordList:
-		return true
-	}
-	return false
-}
-
-// Computed entry field for a profile that an entry is shared into.
-type DLPEntryGetResponseWordListEntryProfile struct {
-	ID   string                                      `json:"id,required" format:"uuid"`
-	Name string                                      `json:"name,required"`
-	JSON dlpEntryGetResponseWordListEntryProfileJSON `json:"-"`
-}
-
-// dlpEntryGetResponseWordListEntryProfileJSON contains the JSON metadata for the
-// struct [DLPEntryGetResponseWordListEntryProfile]
-type dlpEntryGetResponseWordListEntryProfileJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPEntryGetResponseWordListEntryProfile) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpEntryGetResponseWordListEntryProfileJSON) RawJSON() string {
-	return r.raw
 }
 
 type DLPEntryGetResponseType string
@@ -1880,6 +1577,25 @@ const (
 func (r DLPEntryGetResponseType) IsKnown() bool {
 	switch r {
 	case DLPEntryGetResponseTypeCustom, DLPEntryGetResponseTypePredefined, DLPEntryGetResponseTypeIntegration, DLPEntryGetResponseTypeExactData, DLPEntryGetResponseTypeDocumentFingerprint, DLPEntryGetResponseTypeWordList:
+		return true
+	}
+	return false
+}
+
+type DLPEntryGetResponseUploadStatus string
+
+const (
+	DLPEntryGetResponseUploadStatusEmpty      DLPEntryGetResponseUploadStatus = "empty"
+	DLPEntryGetResponseUploadStatusUploading  DLPEntryGetResponseUploadStatus = "uploading"
+	DLPEntryGetResponseUploadStatusPending    DLPEntryGetResponseUploadStatus = "pending"
+	DLPEntryGetResponseUploadStatusProcessing DLPEntryGetResponseUploadStatus = "processing"
+	DLPEntryGetResponseUploadStatusFailed     DLPEntryGetResponseUploadStatus = "failed"
+	DLPEntryGetResponseUploadStatusComplete   DLPEntryGetResponseUploadStatus = "complete"
+)
+
+func (r DLPEntryGetResponseUploadStatus) IsKnown() bool {
+	switch r {
+	case DLPEntryGetResponseUploadStatusEmpty, DLPEntryGetResponseUploadStatusUploading, DLPEntryGetResponseUploadStatusPending, DLPEntryGetResponseUploadStatusProcessing, DLPEntryGetResponseUploadStatusFailed, DLPEntryGetResponseUploadStatusComplete:
 		return true
 	}
 	return false
