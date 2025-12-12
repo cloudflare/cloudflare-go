@@ -122,6 +122,27 @@ func (r *DetectionService) Delete(ctx context.Context, detectionID string, body 
 	return
 }
 
+// Get user-defined detection pattern for Leaked Credential Checks.
+func (r *DetectionService) Get(ctx context.Context, detectionID string, query DetectionGetParams, opts ...option.RequestOption) (res *DetectionGetResponse, err error) {
+	var env DetectionGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if detectionID == "" {
+		err = errors.New("missing required detection_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections/%s", query.ZoneID, detectionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Defines a custom set of username/password expressions to match Leaked Credential
 // Checks on.
 type DetectionNewResponse struct {
@@ -213,6 +234,36 @@ func (r detectionListResponseJSON) RawJSON() string {
 }
 
 type DetectionDeleteResponse = interface{}
+
+// Defines a custom set of username/password expressions to match Leaked Credential
+// Checks on.
+type DetectionGetResponse struct {
+	// Defines the unique ID for this custom detection.
+	ID string `json:"id"`
+	// Defines ehe ruleset expression to use in matching the password in a request.
+	Password string `json:"password"`
+	// Defines the ruleset expression to use in matching the username in a request.
+	Username string                   `json:"username"`
+	JSON     detectionGetResponseJSON `json:"-"`
+}
+
+// detectionGetResponseJSON contains the JSON metadata for the struct
+// [DetectionGetResponse]
+type detectionGetResponseJSON struct {
+	ID          apijson.Field
+	Password    apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionGetResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type DetectionNewParams struct {
 	// Defines an identifier.
@@ -378,6 +429,56 @@ const (
 func (r DetectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DetectionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DetectionGetParams struct {
+	// Defines an identifier.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type DetectionGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Defines a custom set of username/password expressions to match Leaked Credential
+	// Checks on.
+	Result DetectionGetResponse `json:"result,required"`
+	// Defines whether the API call was successful.
+	Success DetectionGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    detectionGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// detectionGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DetectionGetResponseEnvelope]
+type detectionGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Defines whether the API call was successful.
+type DetectionGetResponseEnvelopeSuccess bool
+
+const (
+	DetectionGetResponseEnvelopeSuccessTrue DetectionGetResponseEnvelopeSuccess = true
+)
+
+func (r DetectionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DetectionGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
