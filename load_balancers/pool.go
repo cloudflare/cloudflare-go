@@ -223,7 +223,7 @@ type Pool struct {
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude float64 `json:"latitude"`
 	// Configures load shedding policies and percentages for the pool.
-	LoadShedding LoadShedding `json:"load_shedding"`
+	LoadShedding LoadShedding `json:"load_shedding,nullable"`
 	// The longitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, latitude must also be set.
 	Longitude float64 `json:"longitude"`
@@ -254,7 +254,7 @@ type Pool struct {
 	NotificationFilter NotificationFilter `json:"notification_filter,nullable"`
 	// Configures origin steering for the pool. Controls how origins are selected for
 	// new sessions and traffic without session affinity.
-	OriginSteering OriginSteering `json:"origin_steering"`
+	OriginSteering OriginSteering `json:"origin_steering,nullable"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
 	Origins []Origin `json:"origins"`

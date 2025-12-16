@@ -30,9 +30,10 @@ func TestBotWebCrawlerSummaryWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Bots.WebCrawlers.Summary(
 		context.TODO(),
-		radar.BotWebCrawlerSummaryParamsDimensionUserAgent,
+		radar.BotWebCrawlerSummaryParamsDimensionClientType,
 		radar.BotWebCrawlerSummaryParams{
 			BotOperator:   cloudflare.F([]string{"string"}),
+			ClientType:    cloudflare.F([]radar.BotWebCrawlerSummaryParamsClientType{radar.BotWebCrawlerSummaryParamsClientTypeHuman}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
@@ -67,10 +68,11 @@ func TestBotWebCrawlerTimeseriesGroupsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Bots.WebCrawlers.TimeseriesGroups(
 		context.TODO(),
-		radar.BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent,
+		radar.BotWebCrawlerTimeseriesGroupsParamsDimensionClientType,
 		radar.BotWebCrawlerTimeseriesGroupsParams{
 			AggInterval:   cloudflare.F(radar.BotWebCrawlerTimeseriesGroupsParamsAggInterval1h),
 			BotOperator:   cloudflare.F([]string{"string"}),
+			ClientType:    cloudflare.F([]radar.BotWebCrawlerTimeseriesGroupsParamsClientType{radar.BotWebCrawlerTimeseriesGroupsParamsClientTypeHuman}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),

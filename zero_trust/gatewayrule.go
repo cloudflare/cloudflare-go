@@ -529,6 +529,9 @@ type RuleSetting struct {
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs. Settable only for `egress` rules.
 	Egress RuleSettingEgress `json:"egress,nullable"`
+	// Configure whether a copy of the HTTP request will be sent to storage when the
+	// rule matches.
+	ForensicCopy RuleSettingForensicCopy `json:"forensic_copy,nullable"`
 	// Ignore category matches at CNAME domains in a response. When off, evaluate
 	// categories in this rule against all CNAME domain categories in the response.
 	// Settable only for `dns` and `dns_resolver` rules.
@@ -593,6 +596,7 @@ type ruleSettingJSON struct {
 	CheckSession                    apijson.Field
 	DNSResolvers                    apijson.Field
 	Egress                          apijson.Field
+	ForensicCopy                    apijson.Field
 	IgnoreCNAMECategoryMatches      apijson.Field
 	InsecureDisableDNSSECValidation apijson.Field
 	IPCategories                    apijson.Field
@@ -946,6 +950,30 @@ func (r ruleSettingEgressJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configure whether a copy of the HTTP request will be sent to storage when the
+// rule matches.
+type RuleSettingForensicCopy struct {
+	// Enable sending the copy to storage.
+	Enabled bool                        `json:"enabled"`
+	JSON    ruleSettingForensicCopyJSON `json:"-"`
+}
+
+// ruleSettingForensicCopyJSON contains the JSON metadata for the struct
+// [RuleSettingForensicCopy]
+type ruleSettingForensicCopyJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleSettingForensicCopy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingForensicCopyJSON) RawJSON() string {
+	return r.raw
+}
+
 // Send matching traffic to the supplied destination IP address and port. Settable
 // only for `l4` rules with the action set to `l4_override`.
 type RuleSettingL4override struct {
@@ -1246,6 +1274,9 @@ type RuleSettingParam struct {
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs. Settable only for `egress` rules.
 	Egress param.Field[RuleSettingEgressParam] `json:"egress"`
+	// Configure whether a copy of the HTTP request will be sent to storage when the
+	// rule matches.
+	ForensicCopy param.Field[RuleSettingForensicCopyParam] `json:"forensic_copy"`
 	// Ignore category matches at CNAME domains in a response. When off, evaluate
 	// categories in this rule against all CNAME domain categories in the response.
 	// Settable only for `dns` and `dns_resolver` rules.
@@ -1407,6 +1438,17 @@ type RuleSettingEgressParam struct {
 }
 
 func (r RuleSettingEgressParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configure whether a copy of the HTTP request will be sent to storage when the
+// rule matches.
+type RuleSettingForensicCopyParam struct {
+	// Enable sending the copy to storage.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r RuleSettingForensicCopyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
