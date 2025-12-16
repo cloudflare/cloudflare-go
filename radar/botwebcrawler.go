@@ -616,6 +616,8 @@ func (r botWebCrawlerTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 type BotWebCrawlerSummaryParams struct {
 	// Filters results by bot operator.
 	BotOperator param.Field[[]string] `query:"botOperator"`
+	// Filters results by agent type.
+	ClientType param.Field[[]BotWebCrawlerSummaryParamsClientType] `query:"clientType"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
@@ -651,6 +653,7 @@ func (r BotWebCrawlerSummaryParams) URLQuery() (v url.Values) {
 type BotWebCrawlerSummaryParamsDimension string
 
 const (
+	BotWebCrawlerSummaryParamsDimensionClientType      BotWebCrawlerSummaryParamsDimension = "CLIENT_TYPE"
 	BotWebCrawlerSummaryParamsDimensionUserAgent       BotWebCrawlerSummaryParamsDimension = "USER_AGENT"
 	BotWebCrawlerSummaryParamsDimensionReferer         BotWebCrawlerSummaryParamsDimension = "REFERER"
 	BotWebCrawlerSummaryParamsDimensionCrawlReferRatio BotWebCrawlerSummaryParamsDimension = "CRAWL_REFER_RATIO"
@@ -660,7 +663,25 @@ const (
 
 func (r BotWebCrawlerSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case BotWebCrawlerSummaryParamsDimensionUserAgent, BotWebCrawlerSummaryParamsDimensionReferer, BotWebCrawlerSummaryParamsDimensionCrawlReferRatio, BotWebCrawlerSummaryParamsDimensionVertical, BotWebCrawlerSummaryParamsDimensionIndustry:
+	case BotWebCrawlerSummaryParamsDimensionClientType, BotWebCrawlerSummaryParamsDimensionUserAgent, BotWebCrawlerSummaryParamsDimensionReferer, BotWebCrawlerSummaryParamsDimensionCrawlReferRatio, BotWebCrawlerSummaryParamsDimensionVertical, BotWebCrawlerSummaryParamsDimensionIndustry:
+		return true
+	}
+	return false
+}
+
+// The type of the client.
+type BotWebCrawlerSummaryParamsClientType string
+
+const (
+	BotWebCrawlerSummaryParamsClientTypeHuman        BotWebCrawlerSummaryParamsClientType = "HUMAN"
+	BotWebCrawlerSummaryParamsClientTypeNonAIBot     BotWebCrawlerSummaryParamsClientType = "NON_AI_BOT"
+	BotWebCrawlerSummaryParamsClientTypeAIBot        BotWebCrawlerSummaryParamsClientType = "AI_BOT"
+	BotWebCrawlerSummaryParamsClientTypeMixedPurpose BotWebCrawlerSummaryParamsClientType = "MIXED_PURPOSE"
+)
+
+func (r BotWebCrawlerSummaryParamsClientType) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerSummaryParamsClientTypeHuman, BotWebCrawlerSummaryParamsClientTypeNonAIBot, BotWebCrawlerSummaryParamsClientTypeAIBot, BotWebCrawlerSummaryParamsClientTypeMixedPurpose:
 		return true
 	}
 	return false
@@ -712,6 +733,8 @@ type BotWebCrawlerTimeseriesGroupsParams struct {
 	AggInterval param.Field[BotWebCrawlerTimeseriesGroupsParamsAggInterval] `query:"aggInterval"`
 	// Filters results by bot operator.
 	BotOperator param.Field[[]string] `query:"botOperator"`
+	// Filters results by agent type.
+	ClientType param.Field[[]BotWebCrawlerTimeseriesGroupsParamsClientType] `query:"clientType"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
@@ -747,6 +770,7 @@ func (r BotWebCrawlerTimeseriesGroupsParams) URLQuery() (v url.Values) {
 type BotWebCrawlerTimeseriesGroupsParamsDimension string
 
 const (
+	BotWebCrawlerTimeseriesGroupsParamsDimensionClientType      BotWebCrawlerTimeseriesGroupsParamsDimension = "CLIENT_TYPE"
 	BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent       BotWebCrawlerTimeseriesGroupsParamsDimension = "USER_AGENT"
 	BotWebCrawlerTimeseriesGroupsParamsDimensionReferer         BotWebCrawlerTimeseriesGroupsParamsDimension = "REFERER"
 	BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio BotWebCrawlerTimeseriesGroupsParamsDimension = "CRAWL_REFER_RATIO"
@@ -756,7 +780,7 @@ const (
 
 func (r BotWebCrawlerTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent, BotWebCrawlerTimeseriesGroupsParamsDimensionReferer, BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio, BotWebCrawlerTimeseriesGroupsParamsDimensionVertical, BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry:
+	case BotWebCrawlerTimeseriesGroupsParamsDimensionClientType, BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent, BotWebCrawlerTimeseriesGroupsParamsDimensionReferer, BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio, BotWebCrawlerTimeseriesGroupsParamsDimensionVertical, BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry:
 		return true
 	}
 	return false
@@ -777,6 +801,24 @@ const (
 func (r BotWebCrawlerTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	switch r {
 	case BotWebCrawlerTimeseriesGroupsParamsAggInterval15m, BotWebCrawlerTimeseriesGroupsParamsAggInterval1h, BotWebCrawlerTimeseriesGroupsParamsAggInterval1d, BotWebCrawlerTimeseriesGroupsParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
+// The type of the client.
+type BotWebCrawlerTimeseriesGroupsParamsClientType string
+
+const (
+	BotWebCrawlerTimeseriesGroupsParamsClientTypeHuman        BotWebCrawlerTimeseriesGroupsParamsClientType = "HUMAN"
+	BotWebCrawlerTimeseriesGroupsParamsClientTypeNonAIBot     BotWebCrawlerTimeseriesGroupsParamsClientType = "NON_AI_BOT"
+	BotWebCrawlerTimeseriesGroupsParamsClientTypeAIBot        BotWebCrawlerTimeseriesGroupsParamsClientType = "AI_BOT"
+	BotWebCrawlerTimeseriesGroupsParamsClientTypeMixedPurpose BotWebCrawlerTimeseriesGroupsParamsClientType = "MIXED_PURPOSE"
+)
+
+func (r BotWebCrawlerTimeseriesGroupsParamsClientType) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerTimeseriesGroupsParamsClientTypeHuman, BotWebCrawlerTimeseriesGroupsParamsClientTypeNonAIBot, BotWebCrawlerTimeseriesGroupsParamsClientTypeAIBot, BotWebCrawlerTimeseriesGroupsParamsClientTypeMixedPurpose:
 		return true
 	}
 	return false
