@@ -64,11 +64,11 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 // only be created in the Cloudflare dashboard. For other clients, this operation
 // can only be used for non-secret Custom Word Lists. The body must be a UTF-8
 // encoded, newline (NL or CRNL) separated list of words to be matched.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, dataset io.Reader, body DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDatasetUploadEditResponse, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, dataset io.Reader, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDatasetUploadEditResponse, err error) {
 	var env DLPDatasetUploadEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", dataset)}, opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -76,7 +76,7 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 		err = errors.New("missing required dataset_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", body.AccountID, datasetID, version)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", params.AccountID, datasetID, version)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return

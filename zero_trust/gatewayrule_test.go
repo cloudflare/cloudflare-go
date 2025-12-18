@@ -95,6 +95,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				IPV4Fallback: cloudflare.F("192.0.2.3"),
 				IPV6:         cloudflare.F("2001:DB8::/64"),
 			}),
+			ForensicCopy: cloudflare.F(zero_trust.RuleSettingForensicCopyParam{
+				Enabled: cloudflare.F(true),
+			}),
 			IgnoreCNAMECategoryMatches:      cloudflare.F(true),
 			InsecureDisableDNSSECValidation: cloudflare.F(false),
 			IPCategories:                    cloudflare.F(true),
@@ -234,6 +237,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					IPV4:         cloudflare.F("192.0.2.2"),
 					IPV4Fallback: cloudflare.F("192.0.2.3"),
 					IPV6:         cloudflare.F("2001:DB8::/64"),
+				}),
+				ForensicCopy: cloudflare.F(zero_trust.RuleSettingForensicCopyParam{
+					Enabled: cloudflare.F(true),
 				}),
 				IgnoreCNAMECategoryMatches:      cloudflare.F(true),
 				InsecureDisableDNSSECValidation: cloudflare.F(false),

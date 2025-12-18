@@ -240,16 +240,19 @@ func (r gatewayListJSON) RawJSON() string {
 type GatewayListType string
 
 const (
-	GatewayListTypeSerial GatewayListType = "SERIAL"
-	GatewayListTypeURL    GatewayListType = "URL"
-	GatewayListTypeDomain GatewayListType = "DOMAIN"
-	GatewayListTypeEmail  GatewayListType = "EMAIL"
-	GatewayListTypeIP     GatewayListType = "IP"
+	GatewayListTypeSerial   GatewayListType = "SERIAL"
+	GatewayListTypeURL      GatewayListType = "URL"
+	GatewayListTypeDomain   GatewayListType = "DOMAIN"
+	GatewayListTypeEmail    GatewayListType = "EMAIL"
+	GatewayListTypeIP       GatewayListType = "IP"
+	GatewayListTypeCategory GatewayListType = "CATEGORY"
+	GatewayListTypeLocation GatewayListType = "LOCATION"
+	GatewayListTypeDevice   GatewayListType = "DEVICE"
 )
 
 func (r GatewayListType) IsKnown() bool {
 	switch r {
-	case GatewayListTypeSerial, GatewayListTypeURL, GatewayListTypeDomain, GatewayListTypeEmail, GatewayListTypeIP:
+	case GatewayListTypeSerial, GatewayListTypeURL, GatewayListTypeDomain, GatewayListTypeEmail, GatewayListTypeIP, GatewayListTypeCategory, GatewayListTypeLocation, GatewayListTypeDevice:
 		return true
 	}
 	return false
@@ -297,16 +300,19 @@ func (r gatewayListNewResponseJSON) RawJSON() string {
 type GatewayListNewResponseType string
 
 const (
-	GatewayListNewResponseTypeSerial GatewayListNewResponseType = "SERIAL"
-	GatewayListNewResponseTypeURL    GatewayListNewResponseType = "URL"
-	GatewayListNewResponseTypeDomain GatewayListNewResponseType = "DOMAIN"
-	GatewayListNewResponseTypeEmail  GatewayListNewResponseType = "EMAIL"
-	GatewayListNewResponseTypeIP     GatewayListNewResponseType = "IP"
+	GatewayListNewResponseTypeSerial   GatewayListNewResponseType = "SERIAL"
+	GatewayListNewResponseTypeURL      GatewayListNewResponseType = "URL"
+	GatewayListNewResponseTypeDomain   GatewayListNewResponseType = "DOMAIN"
+	GatewayListNewResponseTypeEmail    GatewayListNewResponseType = "EMAIL"
+	GatewayListNewResponseTypeIP       GatewayListNewResponseType = "IP"
+	GatewayListNewResponseTypeCategory GatewayListNewResponseType = "CATEGORY"
+	GatewayListNewResponseTypeLocation GatewayListNewResponseType = "LOCATION"
+	GatewayListNewResponseTypeDevice   GatewayListNewResponseType = "DEVICE"
 )
 
 func (r GatewayListNewResponseType) IsKnown() bool {
 	switch r {
-	case GatewayListNewResponseTypeSerial, GatewayListNewResponseTypeURL, GatewayListNewResponseTypeDomain, GatewayListNewResponseTypeEmail, GatewayListNewResponseTypeIP:
+	case GatewayListNewResponseTypeSerial, GatewayListNewResponseTypeURL, GatewayListNewResponseTypeDomain, GatewayListNewResponseTypeEmail, GatewayListNewResponseTypeIP, GatewayListNewResponseTypeCategory, GatewayListNewResponseTypeLocation, GatewayListNewResponseTypeDevice:
 		return true
 	}
 	return false
@@ -334,16 +340,19 @@ func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayListNewParamsType string
 
 const (
-	GatewayListNewParamsTypeSerial GatewayListNewParamsType = "SERIAL"
-	GatewayListNewParamsTypeURL    GatewayListNewParamsType = "URL"
-	GatewayListNewParamsTypeDomain GatewayListNewParamsType = "DOMAIN"
-	GatewayListNewParamsTypeEmail  GatewayListNewParamsType = "EMAIL"
-	GatewayListNewParamsTypeIP     GatewayListNewParamsType = "IP"
+	GatewayListNewParamsTypeSerial   GatewayListNewParamsType = "SERIAL"
+	GatewayListNewParamsTypeURL      GatewayListNewParamsType = "URL"
+	GatewayListNewParamsTypeDomain   GatewayListNewParamsType = "DOMAIN"
+	GatewayListNewParamsTypeEmail    GatewayListNewParamsType = "EMAIL"
+	GatewayListNewParamsTypeIP       GatewayListNewParamsType = "IP"
+	GatewayListNewParamsTypeCategory GatewayListNewParamsType = "CATEGORY"
+	GatewayListNewParamsTypeLocation GatewayListNewParamsType = "LOCATION"
+	GatewayListNewParamsTypeDevice   GatewayListNewParamsType = "DEVICE"
 )
 
 func (r GatewayListNewParamsType) IsKnown() bool {
 	switch r {
-	case GatewayListNewParamsTypeSerial, GatewayListNewParamsTypeURL, GatewayListNewParamsTypeDomain, GatewayListNewParamsTypeEmail, GatewayListNewParamsTypeIP:
+	case GatewayListNewParamsTypeSerial, GatewayListNewParamsTypeURL, GatewayListNewParamsTypeDomain, GatewayListNewParamsTypeEmail, GatewayListNewParamsTypeIP, GatewayListNewParamsTypeCategory, GatewayListNewParamsTypeLocation, GatewayListNewParamsTypeDevice:
 		return true
 	}
 	return false
@@ -489,16 +498,19 @@ func (r GatewayListListParams) URLQuery() (v url.Values) {
 type GatewayListListParamsType string
 
 const (
-	GatewayListListParamsTypeSerial GatewayListListParamsType = "SERIAL"
-	GatewayListListParamsTypeURL    GatewayListListParamsType = "URL"
-	GatewayListListParamsTypeDomain GatewayListListParamsType = "DOMAIN"
-	GatewayListListParamsTypeEmail  GatewayListListParamsType = "EMAIL"
-	GatewayListListParamsTypeIP     GatewayListListParamsType = "IP"
+	GatewayListListParamsTypeSerial   GatewayListListParamsType = "SERIAL"
+	GatewayListListParamsTypeURL      GatewayListListParamsType = "URL"
+	GatewayListListParamsTypeDomain   GatewayListListParamsType = "DOMAIN"
+	GatewayListListParamsTypeEmail    GatewayListListParamsType = "EMAIL"
+	GatewayListListParamsTypeIP       GatewayListListParamsType = "IP"
+	GatewayListListParamsTypeCategory GatewayListListParamsType = "CATEGORY"
+	GatewayListListParamsTypeLocation GatewayListListParamsType = "LOCATION"
+	GatewayListListParamsTypeDevice   GatewayListListParamsType = "DEVICE"
 )
 
 func (r GatewayListListParamsType) IsKnown() bool {
 	switch r {
-	case GatewayListListParamsTypeSerial, GatewayListListParamsTypeURL, GatewayListListParamsTypeDomain, GatewayListListParamsTypeEmail, GatewayListListParamsTypeIP:
+	case GatewayListListParamsTypeSerial, GatewayListListParamsTypeURL, GatewayListListParamsTypeDomain, GatewayListListParamsTypeEmail, GatewayListListParamsTypeIP, GatewayListListParamsTypeCategory, GatewayListListParamsTypeLocation, GatewayListListParamsTypeDevice:
 		return true
 	}
 	return false

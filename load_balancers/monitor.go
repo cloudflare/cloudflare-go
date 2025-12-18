@@ -209,7 +209,7 @@ type Monitor struct {
 	// The port number to connect to for the health check. Required for TCP, UDP, and
 	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
 	// non-standard port (HTTP: default 80, HTTPS: default 443).
-	Port int64 `json:"port"`
+	Port int64 `json:"port,nullable"`
 	// Assign this monitor to emulate the specified zone while probing. This parameter
 	// is only valid for HTTP and HTTPS monitors.
 	ProbeZone string `json:"probe_zone"`

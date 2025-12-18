@@ -40,11 +40,11 @@ func NewDLPDatasetVersionEntryService(opts ...option.RequestOption) (r *DLPDatas
 
 // This is used for multi-column EDMv2 datasets. The EDMv2 format can only be
 // created in the Cloudflare dashboard.
-func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID string, version int64, entryID string, datasetVersionEntry io.Reader, body DLPDatasetVersionEntryNewParams, opts ...option.RequestOption) (res *DLPDatasetVersionEntryNewResponse, err error) {
+func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID string, version int64, entryID string, datasetVersionEntry io.Reader, params DLPDatasetVersionEntryNewParams, opts ...option.RequestOption) (res *DLPDatasetVersionEntryNewResponse, err error) {
 	var env DLPDatasetVersionEntryNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", datasetVersionEntry)}, opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -56,7 +56,7 @@ func (r *DLPDatasetVersionEntryService) New(ctx context.Context, datasetID strin
 		err = errors.New("missing required entry_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/versions/%v/entries/%s", body.AccountID, datasetID, version, entryID)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/versions/%v/entries/%s", params.AccountID, datasetID, version, entryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return

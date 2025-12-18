@@ -28,7 +28,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewOperationService] method instead.
 type OperationService struct {
-	Options          []option.RequestOption
+	Options []option.RequestOption
+	// Deprecated: Use the
+	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingOperationService]
+	// service instead
 	SchemaValidation *OperationSchemaValidationService
 }
 

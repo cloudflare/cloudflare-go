@@ -2365,8 +2365,9 @@ type IPSECTunnelNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
-	AutomaticReturnRouting param.Field[bool]                    `json:"automatic_return_routing"`
-	BGP                    param.Field[IPSECTunnelNewParamsBGP] `json:"bgp"`
+	AutomaticReturnRouting param.Field[bool]                                       `json:"automatic_return_routing"`
+	BGP                    param.Field[IPSECTunnelNewParamsBGP]                    `json:"bgp"`
+	CustomRemoteIdentities param.Field[IPSECTunnelNewParamsCustomRemoteIdentities] `json:"custom_remote_identities"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
@@ -2418,6 +2419,22 @@ type IPSECTunnelNewParamsBGP struct {
 }
 
 func (r IPSECTunnelNewParamsBGP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPSECTunnelNewParamsCustomRemoteIdentities struct {
+	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
+	// generated IKE IDs can still be used even if this custom value is specified.
+	//
+	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
+	//
+	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
+	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
+	// tunnels cannot have the same cloudflare_endpoint.
+	FqdnID param.Field[string] `json:"fqdn_id"`
+}
+
+func (r IPSECTunnelNewParamsCustomRemoteIdentities) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2555,8 +2572,9 @@ type IPSECTunnelUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
-	AutomaticReturnRouting param.Field[bool]                       `json:"automatic_return_routing"`
-	BGP                    param.Field[IPSECTunnelUpdateParamsBGP] `json:"bgp"`
+	AutomaticReturnRouting param.Field[bool]                                          `json:"automatic_return_routing"`
+	BGP                    param.Field[IPSECTunnelUpdateParamsBGP]                    `json:"bgp"`
+	CustomRemoteIdentities param.Field[IPSECTunnelUpdateParamsCustomRemoteIdentities] `json:"custom_remote_identities"`
 	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
@@ -2608,6 +2626,22 @@ type IPSECTunnelUpdateParamsBGP struct {
 }
 
 func (r IPSECTunnelUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPSECTunnelUpdateParamsCustomRemoteIdentities struct {
+	// A custom IKE ID of type FQDN that may be used to identity the IPsec tunnel. The
+	// generated IKE IDs can still be used even if this custom value is specified.
+	//
+	// Must be of the form `<custom label>.<account ID>.custom.ipsec.cloudflare.com`.
+	//
+	// This custom ID does not need to be unique. Two IPsec tunnels may have the same
+	// custom fqdn_id. However, if another IPsec tunnel has the same value then the two
+	// tunnels cannot have the same cloudflare_endpoint.
+	FqdnID param.Field[string] `json:"fqdn_id"`
+}
+
+func (r IPSECTunnelUpdateParamsCustomRemoteIdentities) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

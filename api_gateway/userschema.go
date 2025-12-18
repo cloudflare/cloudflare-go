@@ -29,6 +29,10 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewUserSchemaService] method instead.
+//
+// Deprecated: Use the
+// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SchemaService] service
+// instead
 type UserSchemaService struct {
 	Options    []option.RequestOption
 	Operations *UserSchemaOperationService

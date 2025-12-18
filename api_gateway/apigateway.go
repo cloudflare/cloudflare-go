@@ -13,12 +13,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAPIGatewayService] method instead.
 type APIGatewayService struct {
-	Options            []option.RequestOption
-	Configurations     *ConfigurationService
-	Discovery          *DiscoveryService
-	Operations         *OperationService
-	Schemas            *SchemaService
-	Settings           *SettingService
+	Options        []option.RequestOption
+	Configurations *ConfigurationService
+	Discovery      *DiscoveryService
+	Operations     *OperationService
+	Schemas        *SchemaService
+	// Deprecated: Use the
+	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingService]
+	// service instead
+	Settings *SettingService
+	// Deprecated: Use the
+	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SchemaService] service
+	// instead
 	UserSchemas        *UserSchemaService
 	ExpressionTemplate *ExpressionTemplateService
 }

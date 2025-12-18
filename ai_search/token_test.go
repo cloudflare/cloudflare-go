@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package leaked_credential_checks_test
+package ai_search_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/ai_search"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v6/leaked_credential_checks"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestDetectionNewWithOptionalParams(t *testing.T) {
+func TestTokenNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,12 @@ func TestDetectionNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LeakedCredentialChecks.Detections.New(context.TODO(), leaked_credential_checks.DetectionNewParams{
-		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Password: cloudflare.F(`lookup_json_string(http.request.body.raw, "secret")`),
-		Username: cloudflare.F(`lookup_json_string(http.request.body.raw, "user")`),
+	_, err := client.AISearch.Tokens.New(context.TODO(), ai_search.TokenNewParams{
+		AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		CfAPIID:   cloudflare.F("cf_api_id"),
+		CfAPIKey:  cloudflare.F("cf_api_key"),
+		Name:      cloudflare.F("name"),
+		Legacy:    cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +43,7 @@ func TestDetectionNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDetectionUpdateWithOptionalParams(t *testing.T) {
+func TestTokenUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,13 +56,11 @@ func TestDetectionUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LeakedCredentialChecks.Detections.Update(
+	_, err := client.AISearch.Tokens.Update(
 		context.TODO(),
-		"18a14bafaa8eb1df04ce683ec18c765e",
-		leaked_credential_checks.DetectionUpdateParams{
-			ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Password: cloudflare.F(`lookup_json_string(http.request.body.raw, "secret")`),
-			Username: cloudflare.F(`lookup_json_string(http.request.body.raw, "user")`),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		ai_search.TokenUpdateParams{
+			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		},
 	)
 	if err != nil {
@@ -72,7 +72,7 @@ func TestDetectionUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDetectionList(t *testing.T) {
+func TestTokenListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -85,8 +85,10 @@ func TestDetectionList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LeakedCredentialChecks.Detections.List(context.TODO(), leaked_credential_checks.DetectionListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	_, err := client.AISearch.Tokens.List(context.TODO(), ai_search.TokenListParams{
+		AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -97,7 +99,7 @@ func TestDetectionList(t *testing.T) {
 	}
 }
 
-func TestDetectionDelete(t *testing.T) {
+func TestTokenDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -110,11 +112,11 @@ func TestDetectionDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LeakedCredentialChecks.Detections.Delete(
+	_, err := client.AISearch.Tokens.Delete(
 		context.TODO(),
-		"18a14bafaa8eb1df04ce683ec18c765e",
-		leaked_credential_checks.DetectionDeleteParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		ai_search.TokenDeleteParams{
+			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		},
 	)
 	if err != nil {
@@ -126,7 +128,7 @@ func TestDetectionDelete(t *testing.T) {
 	}
 }
 
-func TestDetectionGet(t *testing.T) {
+func TestTokenRead(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -139,11 +141,11 @@ func TestDetectionGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LeakedCredentialChecks.Detections.Get(
+	_, err := client.AISearch.Tokens.Read(
 		context.TODO(),
-		"18a14bafaa8eb1df04ce683ec18c765e",
-		leaked_credential_checks.DetectionGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		ai_search.TokenReadParams{
+			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		},
 	)
 	if err != nil {

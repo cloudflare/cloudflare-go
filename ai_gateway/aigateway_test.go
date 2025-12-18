@@ -41,6 +41,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayNewParamsLogManagementStrategyStopInserting),
 		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
+		Zdr:                     cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -99,6 +100,7 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 					Payload: cloudflare.F("payload"),
 				}}),
 			}),
+			Zdr: cloudflare.F(true),
 		},
 	)
 	if err != nil {

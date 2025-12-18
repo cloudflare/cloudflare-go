@@ -66,6 +66,9 @@ func TestLogAuditListWithOptionalParams(t *testing.T) {
 		ActorType: cloudflare.F(accounts.LogAuditListParamsActorType{
 			Not: cloudflare.F([]accounts.LogAuditListParamsActorTypeNot{accounts.LogAuditListParamsActorTypeNotAccount}),
 		}),
+		AuditLogID: cloudflare.F(accounts.LogAuditListParamsAuditLogID{
+			Not: cloudflare.F([]string{"f174be97-19b1-40d6-954d-70cd5fbd52db"}),
+		}),
 		Cursor:    cloudflare.F("Q1buH-__DQqqig7SVYXT-SsMOTGY2Z3Y80W-fGgva7yaDdmPKveucH5ddOcHsJRhNb-xUK8agZQqkJSMAENGO8NU6g=="),
 		Direction: cloudflare.F(accounts.LogAuditListParamsDirectionDesc),
 		Limit:     cloudflare.F(25.000000),
