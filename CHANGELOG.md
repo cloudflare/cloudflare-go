@@ -6,17 +6,22 @@ Full Changelog: [v6.4.0...v6.5.0](https://github.com/cloudflare/cloudflare-go/co
 
 ### Features
 
-* docs: Deprecate API Shield Schema Validation resources ([ae8644c](https://github.com/cloudflare/cloudflare-go/commit/ae8644cb41a29e0a1496b79cbe797365be1cb253))
-* feat(api): RAG-395: add AI Search endpoints ([9d95c4b](https://github.com/cloudflare/cloudflare-go/commit/9d95c4baab206211083fbf85ab04ff3fa9205fc8))
-* feat(leaked_credentials_check): Add GET endpoint for leaked_credentials_check/detections ([2c4f6f5](https://github.com/cloudflare/cloudflare-go/commit/2c4f6f5f09e5aba4afe79b4df782032b242bf2af))
-
+* **ai_gateway:** add `zdr` field ([f85b933](https://github.com/cloudflare/cloudflare-go/commit/f85b93344696aab1472cbe94c51badf28c6a5de7))
+* **ai_search**: add AI Search endpoints ([9d95c4b](https://github.com/cloudflare/cloudflare-go/commit/9d95c4baab206211083fbf85ab04ff3fa9205fc8))
+* **leaked_credentials_check**: Add GET endpoint for leaked_credentials_check/detections ([2c4f6f5](https://github.com/cloudflare/cloudflare-go/commit/2c4f6f5f09e5aba4afe79b4df782032b242bf2af))
+* **magic_transit:** support custom remote identities ([f85b933](https://github.com/cloudflare/cloudflare-go/commit/f85b93344696aab1472cbe94c51badf28c6a5de7))
+* **r2:** add `keys` to super slurper response types ([f85b933](https://github.com/cloudflare/cloudflare-go/commit/f85b93344696aab1472cbe94c51badf28c6a5de7))
+* **radar:** support filtering results by agent type ([2020995](https://github.com/cloudflare/cloudflare-go/commit/2020995fcd4a89b52f8b1bf2f78303a90fa4e66a))
+* **workers:** add startup_time_ms to version types ([f85b933](https://github.com/cloudflare/cloudflare-go/commit/f85b93344696aab1472cbe94c51badf28c6a5de7))
+* **zero_trust:** support new gateway list types ([2020995](https://github.com/cloudflare/cloudflare-go/commit/2020995fcd4a89b52f8b1bf2f78303a90fa4e66a))
 
 ### Chores
 
-* **api:** update composite API spec ([2020995](https://github.com/cloudflare/cloudflare-go/commit/2020995fcd4a89b52f8b1bf2f78303a90fa4e66a))
-* **api:** update composite API spec ([23fdbc6](https://github.com/cloudflare/cloudflare-go/commit/23fdbc69d399ef783bf4ad85df3ae07cf8ffb794))
-* **api:** update composite API spec ([f85b933](https://github.com/cloudflare/cloudflare-go/commit/f85b93344696aab1472cbe94c51badf28c6a5de7))
+* **accounts:** docs, tests updates ([f85b933](https://github.com/cloudflare/cloudflare-go/commit/f85b93344696aab1472cbe94c51badf28c6a5de7))
+* **api_gateway** Deprecate API Shield Schema Validation resources ([ae8644c](https://github.com/cloudflare/cloudflare-go/commit/ae8644cb41a29e0a1496b79cbe797365be1cb253))
 * **internal:** codegen related update ([d2d0a29](https://github.com/cloudflare/cloudflare-go/commit/d2d0a295b5658e40177ec6af88b7d6a5d4bbc8bb))
+* **load_balancers:** update pool, monitor nullability ([2020995](https://github.com/cloudflare/cloudflare-go/commit/2020995fcd4a89b52f8b1bf2f78303a90fa4e66a))
+* **zero_trus:** refactor DLP entry types ([23fdbc6](https://github.com/cloudflare/cloudflare-go/commit/23fdbc69d399ef783bf4ad85df3ae07cf8ffb794))
 
 ## 6.4.0 (2025-12-04)
 
