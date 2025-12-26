@@ -591,6 +591,15 @@ TEST_PATHS=(
 	snippets/snippet_test.go
 	snippets/content_test.go
 	snippets/rule_test.go
+	realtime_kit/app_test.go
+	realtime_kit/meeting_test.go
+	realtime_kit/preset_test.go
+	realtime_kit/session_test.go
+	realtime_kit/recording_test.go
+	realtime_kit/webhook_test.go
+	realtime_kit/activesession_test.go
+	realtime_kit/livestream_test.go
+	realtime_kit/analytics_test.go
 	calls/sfu_test.go
 	calls/turn_test.go
 	cloudforce_one/scanresult_test.go
