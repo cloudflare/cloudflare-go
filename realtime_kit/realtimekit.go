@@ -13,7 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewRealtimeKitService] method instead.
 type RealtimeKitService struct {
-	Options []option.RequestOption
+	Options       []option.RequestOption
+	Apps          *AppService
+	Meetings      *MeetingService
+	Presets       *PresetService
+	Sessions      *SessionService
+	Recordings    *RecordingService
+	Webhooks      *WebhookService
+	ActiveSession *ActiveSessionService
+	Livestreams   *LivestreamService
+	Analytics     *AnalyticsService
 }
 
 // NewRealtimeKitService generates a new service that applies the given options to
@@ -22,5 +31,14 @@ type RealtimeKitService struct {
 func NewRealtimeKitService(opts ...option.RequestOption) (r *RealtimeKitService) {
 	r = &RealtimeKitService{}
 	r.Options = opts
+	r.Apps = NewAppService(opts...)
+	r.Meetings = NewMeetingService(opts...)
+	r.Presets = NewPresetService(opts...)
+	r.Sessions = NewSessionService(opts...)
+	r.Recordings = NewRecordingService(opts...)
+	r.Webhooks = NewWebhookService(opts...)
+	r.ActiveSession = NewActiveSessionService(opts...)
+	r.Livestreams = NewLivestreamService(opts...)
+	r.Analytics = NewAnalyticsService(opts...)
 	return
 }
