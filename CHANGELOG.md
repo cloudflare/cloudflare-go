@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.6.0 (2025-12-29)
+
+Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/compare/v6.5.0...v6.6.0)
+
+### Features
+
+* chore: use 'next' branch for go_sdk_version ([97e181d](https://github.com/cloudflare/cloudflare-go/commit/97e181d8a09a62f9399e6de824adf76f65692d56))
+
 ## 6.5.0 (2025-12-17)
 
 Full Changelog: [v6.4.0...v6.5.0](https://github.com/cloudflare/cloudflare-go/compare/v6.4.0...v6.5.0)
