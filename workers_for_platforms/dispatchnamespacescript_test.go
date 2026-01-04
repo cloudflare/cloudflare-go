@@ -91,8 +91,8 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 				}),
-				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacement{
-					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart),
+				Placement: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementObject{
+					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementObjectModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,7 +37,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Create a zone subscription, either plan or add-ons.
-func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
+func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponse, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -53,7 +54,7 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 }
 
 // Updates zone subscriptions, either plan or add-ons.
-func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
+func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
 	var env SubscriptionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -70,7 +71,7 @@ func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpd
 }
 
 // Lists zone subscription details.
-func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
+func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *SubscriptionGetResponse, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
@@ -86,8 +87,260 @@ func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetPara
 	return
 }
 
-type SubscriptionNewParams struct {
+type SubscriptionNewResponse struct {
 	// Subscription identifier tag.
+	ID string `json:"id"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// The end of the current period and also when the next billing is due.
+	CurrentPeriodEnd time.Time `json:"current_period_end" format:"date-time"`
+	// When the current billing period started. May match initial_period_start if this
+	// is the first period.
+	CurrentPeriodStart time.Time `json:"current_period_start" format:"date-time"`
+	// How often the subscription is renewed automatically.
+	Frequency SubscriptionNewResponseFrequency `json:"frequency"`
+	// The price of the subscription that will be billed, in US dollars.
+	Price float64 `json:"price"`
+	// The rate plan applied to the subscription.
+	RatePlan shared.RatePlan `json:"rate_plan"`
+	// The state that the subscription is in.
+	State SubscriptionNewResponseState `json:"state"`
+	JSON  subscriptionNewResponseJSON  `json:"-"`
+}
+
+// subscriptionNewResponseJSON contains the JSON metadata for the struct
+// [SubscriptionNewResponse]
+type subscriptionNewResponseJSON struct {
+	ID                 apijson.Field
+	Currency           apijson.Field
+	CurrentPeriodEnd   apijson.Field
+	CurrentPeriodStart apijson.Field
+	Frequency          apijson.Field
+	Price              apijson.Field
+	RatePlan           apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SubscriptionNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// How often the subscription is renewed automatically.
+type SubscriptionNewResponseFrequency string
+
+const (
+	SubscriptionNewResponseFrequencyWeekly        SubscriptionNewResponseFrequency = "weekly"
+	SubscriptionNewResponseFrequencyMonthly       SubscriptionNewResponseFrequency = "monthly"
+	SubscriptionNewResponseFrequencyQuarterly     SubscriptionNewResponseFrequency = "quarterly"
+	SubscriptionNewResponseFrequencyYearly        SubscriptionNewResponseFrequency = "yearly"
+	SubscriptionNewResponseFrequencyNotApplicable SubscriptionNewResponseFrequency = "not-applicable"
+)
+
+func (r SubscriptionNewResponseFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionNewResponseFrequencyWeekly, SubscriptionNewResponseFrequencyMonthly, SubscriptionNewResponseFrequencyQuarterly, SubscriptionNewResponseFrequencyYearly, SubscriptionNewResponseFrequencyNotApplicable:
+		return true
+	}
+	return false
+}
+
+// The state that the subscription is in.
+type SubscriptionNewResponseState string
+
+const (
+	SubscriptionNewResponseStateTrial           SubscriptionNewResponseState = "Trial"
+	SubscriptionNewResponseStateProvisioned     SubscriptionNewResponseState = "Provisioned"
+	SubscriptionNewResponseStatePaid            SubscriptionNewResponseState = "Paid"
+	SubscriptionNewResponseStateAwaitingPayment SubscriptionNewResponseState = "AwaitingPayment"
+	SubscriptionNewResponseStateCancelled       SubscriptionNewResponseState = "Cancelled"
+	SubscriptionNewResponseStateFailed          SubscriptionNewResponseState = "Failed"
+	SubscriptionNewResponseStateExpired         SubscriptionNewResponseState = "Expired"
+)
+
+func (r SubscriptionNewResponseState) IsKnown() bool {
+	switch r {
+	case SubscriptionNewResponseStateTrial, SubscriptionNewResponseStateProvisioned, SubscriptionNewResponseStatePaid, SubscriptionNewResponseStateAwaitingPayment, SubscriptionNewResponseStateCancelled, SubscriptionNewResponseStateFailed, SubscriptionNewResponseStateExpired:
+		return true
+	}
+	return false
+}
+
+type SubscriptionUpdateResponse struct {
+	// Subscription identifier tag.
+	ID string `json:"id"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// The end of the current period and also when the next billing is due.
+	CurrentPeriodEnd time.Time `json:"current_period_end" format:"date-time"`
+	// When the current billing period started. May match initial_period_start if this
+	// is the first period.
+	CurrentPeriodStart time.Time `json:"current_period_start" format:"date-time"`
+	// How often the subscription is renewed automatically.
+	Frequency SubscriptionUpdateResponseFrequency `json:"frequency"`
+	// The price of the subscription that will be billed, in US dollars.
+	Price float64 `json:"price"`
+	// The rate plan applied to the subscription.
+	RatePlan shared.RatePlan `json:"rate_plan"`
+	// The state that the subscription is in.
+	State SubscriptionUpdateResponseState `json:"state"`
+	JSON  subscriptionUpdateResponseJSON  `json:"-"`
+}
+
+// subscriptionUpdateResponseJSON contains the JSON metadata for the struct
+// [SubscriptionUpdateResponse]
+type subscriptionUpdateResponseJSON struct {
+	ID                 apijson.Field
+	Currency           apijson.Field
+	CurrentPeriodEnd   apijson.Field
+	CurrentPeriodStart apijson.Field
+	Frequency          apijson.Field
+	Price              apijson.Field
+	RatePlan           apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SubscriptionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// How often the subscription is renewed automatically.
+type SubscriptionUpdateResponseFrequency string
+
+const (
+	SubscriptionUpdateResponseFrequencyWeekly        SubscriptionUpdateResponseFrequency = "weekly"
+	SubscriptionUpdateResponseFrequencyMonthly       SubscriptionUpdateResponseFrequency = "monthly"
+	SubscriptionUpdateResponseFrequencyQuarterly     SubscriptionUpdateResponseFrequency = "quarterly"
+	SubscriptionUpdateResponseFrequencyYearly        SubscriptionUpdateResponseFrequency = "yearly"
+	SubscriptionUpdateResponseFrequencyNotApplicable SubscriptionUpdateResponseFrequency = "not-applicable"
+)
+
+func (r SubscriptionUpdateResponseFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateResponseFrequencyWeekly, SubscriptionUpdateResponseFrequencyMonthly, SubscriptionUpdateResponseFrequencyQuarterly, SubscriptionUpdateResponseFrequencyYearly, SubscriptionUpdateResponseFrequencyNotApplicable:
+		return true
+	}
+	return false
+}
+
+// The state that the subscription is in.
+type SubscriptionUpdateResponseState string
+
+const (
+	SubscriptionUpdateResponseStateTrial           SubscriptionUpdateResponseState = "Trial"
+	SubscriptionUpdateResponseStateProvisioned     SubscriptionUpdateResponseState = "Provisioned"
+	SubscriptionUpdateResponseStatePaid            SubscriptionUpdateResponseState = "Paid"
+	SubscriptionUpdateResponseStateAwaitingPayment SubscriptionUpdateResponseState = "AwaitingPayment"
+	SubscriptionUpdateResponseStateCancelled       SubscriptionUpdateResponseState = "Cancelled"
+	SubscriptionUpdateResponseStateFailed          SubscriptionUpdateResponseState = "Failed"
+	SubscriptionUpdateResponseStateExpired         SubscriptionUpdateResponseState = "Expired"
+)
+
+func (r SubscriptionUpdateResponseState) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateResponseStateTrial, SubscriptionUpdateResponseStateProvisioned, SubscriptionUpdateResponseStatePaid, SubscriptionUpdateResponseStateAwaitingPayment, SubscriptionUpdateResponseStateCancelled, SubscriptionUpdateResponseStateFailed, SubscriptionUpdateResponseStateExpired:
+		return true
+	}
+	return false
+}
+
+type SubscriptionGetResponse struct {
+	// Subscription identifier tag.
+	ID string `json:"id"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// The end of the current period and also when the next billing is due.
+	CurrentPeriodEnd time.Time `json:"current_period_end" format:"date-time"`
+	// When the current billing period started. May match initial_period_start if this
+	// is the first period.
+	CurrentPeriodStart time.Time `json:"current_period_start" format:"date-time"`
+	// How often the subscription is renewed automatically.
+	Frequency SubscriptionGetResponseFrequency `json:"frequency"`
+	// The price of the subscription that will be billed, in US dollars.
+	Price float64 `json:"price"`
+	// The rate plan applied to the subscription.
+	RatePlan shared.RatePlan `json:"rate_plan"`
+	// The state that the subscription is in.
+	State SubscriptionGetResponseState `json:"state"`
+	JSON  subscriptionGetResponseJSON  `json:"-"`
+}
+
+// subscriptionGetResponseJSON contains the JSON metadata for the struct
+// [SubscriptionGetResponse]
+type subscriptionGetResponseJSON struct {
+	ID                 apijson.Field
+	Currency           apijson.Field
+	CurrentPeriodEnd   apijson.Field
+	CurrentPeriodStart apijson.Field
+	Frequency          apijson.Field
+	Price              apijson.Field
+	RatePlan           apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SubscriptionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// How often the subscription is renewed automatically.
+type SubscriptionGetResponseFrequency string
+
+const (
+	SubscriptionGetResponseFrequencyWeekly        SubscriptionGetResponseFrequency = "weekly"
+	SubscriptionGetResponseFrequencyMonthly       SubscriptionGetResponseFrequency = "monthly"
+	SubscriptionGetResponseFrequencyQuarterly     SubscriptionGetResponseFrequency = "quarterly"
+	SubscriptionGetResponseFrequencyYearly        SubscriptionGetResponseFrequency = "yearly"
+	SubscriptionGetResponseFrequencyNotApplicable SubscriptionGetResponseFrequency = "not-applicable"
+)
+
+func (r SubscriptionGetResponseFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionGetResponseFrequencyWeekly, SubscriptionGetResponseFrequencyMonthly, SubscriptionGetResponseFrequencyQuarterly, SubscriptionGetResponseFrequencyYearly, SubscriptionGetResponseFrequencyNotApplicable:
+		return true
+	}
+	return false
+}
+
+// The state that the subscription is in.
+type SubscriptionGetResponseState string
+
+const (
+	SubscriptionGetResponseStateTrial           SubscriptionGetResponseState = "Trial"
+	SubscriptionGetResponseStateProvisioned     SubscriptionGetResponseState = "Provisioned"
+	SubscriptionGetResponseStatePaid            SubscriptionGetResponseState = "Paid"
+	SubscriptionGetResponseStateAwaitingPayment SubscriptionGetResponseState = "AwaitingPayment"
+	SubscriptionGetResponseStateCancelled       SubscriptionGetResponseState = "Cancelled"
+	SubscriptionGetResponseStateFailed          SubscriptionGetResponseState = "Failed"
+	SubscriptionGetResponseStateExpired         SubscriptionGetResponseState = "Expired"
+)
+
+func (r SubscriptionGetResponseState) IsKnown() bool {
+	switch r {
+	case SubscriptionGetResponseStateTrial, SubscriptionGetResponseStateProvisioned, SubscriptionGetResponseStatePaid, SubscriptionGetResponseStateAwaitingPayment, SubscriptionGetResponseStateCancelled, SubscriptionGetResponseStateFailed, SubscriptionGetResponseStateExpired:
+		return true
+	}
+	return false
+}
+
+type SubscriptionNewParams struct {
+	// Identifier
 	ZoneID       param.Field[string]      `path:"zone_id,required"`
 	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
@@ -97,9 +350,9 @@ func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.Subscription   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SubscriptionNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
@@ -140,7 +393,7 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionUpdateParams struct {
-	// Subscription identifier tag.
+	// Identifier
 	ZoneID       param.Field[string]      `path:"zone_id,required"`
 	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
@@ -150,9 +403,9 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.Subscription   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   SubscriptionUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -193,14 +446,14 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetParams struct {
-	// Subscription identifier tag.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.Subscription   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SubscriptionGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`

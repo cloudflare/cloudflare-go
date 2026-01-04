@@ -704,62 +704,62 @@ func (r projectNewResponseCanonicalDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectNewResponseCanonicalDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectNewResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectNewResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                                `json:"repo_id"`
-	JSON   projectNewResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                                `json:"repo_name,required"`
+	JSON     projectNewResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectNewResponseCanonicalDeploymentSourceConfigJSON contains the JSON metadata
 // for the struct [ProjectNewResponseCanonicalDeploymentSourceConfig]
 type projectNewResponseCanonicalDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -2434,62 +2434,62 @@ func (r projectNewResponseLatestDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectNewResponseLatestDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectNewResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectNewResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                             `json:"repo_id"`
-	JSON   projectNewResponseLatestDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                             `json:"repo_name,required"`
+	JSON     projectNewResponseLatestDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectNewResponseLatestDeploymentSourceConfigJSON contains the JSON metadata
 // for the struct [ProjectNewResponseLatestDeploymentSourceConfig]
 type projectNewResponseLatestDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -2599,62 +2599,62 @@ func (r projectNewResponseSourceJSON) RawJSON() string {
 }
 
 type ProjectNewResponseSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectNewResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectNewResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                             `json:"repo_id"`
-	JSON   projectNewResponseSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                             `json:"repo_name,required"`
+	JSON     projectNewResponseSourceConfigJSON `json:"-"`
 }
 
 // projectNewResponseSourceConfigJSON contains the JSON metadata for the struct
 // [ProjectNewResponseSourceConfig]
 type projectNewResponseSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -3163,62 +3163,62 @@ func (r projectListResponseCanonicalDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectListResponseCanonicalDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectListResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectListResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                                 `json:"repo_id"`
-	JSON   projectListResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                                 `json:"repo_name,required"`
+	JSON     projectListResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectListResponseCanonicalDeploymentSourceConfigJSON contains the JSON
 // metadata for the struct [ProjectListResponseCanonicalDeploymentSourceConfig]
 type projectListResponseCanonicalDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -4895,62 +4895,62 @@ func (r projectListResponseLatestDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectListResponseLatestDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectListResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectListResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                              `json:"repo_id"`
-	JSON   projectListResponseLatestDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                              `json:"repo_name,required"`
+	JSON     projectListResponseLatestDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectListResponseLatestDeploymentSourceConfigJSON contains the JSON metadata
 // for the struct [ProjectListResponseLatestDeploymentSourceConfig]
 type projectListResponseLatestDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -5060,62 +5060,62 @@ func (r projectListResponseSourceJSON) RawJSON() string {
 }
 
 type ProjectListResponseSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectListResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectListResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                              `json:"repo_id"`
-	JSON   projectListResponseSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                              `json:"repo_name,required"`
+	JSON     projectListResponseSourceConfigJSON `json:"-"`
 }
 
 // projectListResponseSourceConfigJSON contains the JSON metadata for the struct
 // [ProjectListResponseSourceConfig]
 type projectListResponseSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -5626,62 +5626,62 @@ func (r projectEditResponseCanonicalDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectEditResponseCanonicalDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectEditResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectEditResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                                 `json:"repo_id"`
-	JSON   projectEditResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                                 `json:"repo_name,required"`
+	JSON     projectEditResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectEditResponseCanonicalDeploymentSourceConfigJSON contains the JSON
 // metadata for the struct [ProjectEditResponseCanonicalDeploymentSourceConfig]
 type projectEditResponseCanonicalDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -7358,62 +7358,62 @@ func (r projectEditResponseLatestDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectEditResponseLatestDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectEditResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectEditResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                              `json:"repo_id"`
-	JSON   projectEditResponseLatestDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                              `json:"repo_name,required"`
+	JSON     projectEditResponseLatestDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectEditResponseLatestDeploymentSourceConfigJSON contains the JSON metadata
 // for the struct [ProjectEditResponseLatestDeploymentSourceConfig]
 type projectEditResponseLatestDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -7523,62 +7523,62 @@ func (r projectEditResponseSourceJSON) RawJSON() string {
 }
 
 type ProjectEditResponseSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectEditResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectEditResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                              `json:"repo_id"`
-	JSON   projectEditResponseSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                              `json:"repo_name,required"`
+	JSON     projectEditResponseSourceConfigJSON `json:"-"`
 }
 
 // projectEditResponseSourceConfigJSON contains the JSON metadata for the struct
 // [ProjectEditResponseSourceConfig]
 type projectEditResponseSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -8086,62 +8086,62 @@ func (r projectGetResponseCanonicalDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectGetResponseCanonicalDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectGetResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectGetResponseCanonicalDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                                `json:"repo_id"`
-	JSON   projectGetResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                                `json:"repo_name,required"`
+	JSON     projectGetResponseCanonicalDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectGetResponseCanonicalDeploymentSourceConfigJSON contains the JSON metadata
 // for the struct [ProjectGetResponseCanonicalDeploymentSourceConfig]
 type projectGetResponseCanonicalDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -9816,62 +9816,62 @@ func (r projectGetResponseLatestDeploymentSourceJSON) RawJSON() string {
 }
 
 type ProjectGetResponseLatestDeploymentSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectGetResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectGetResponseLatestDeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                                             `json:"repo_id"`
-	JSON   projectGetResponseLatestDeploymentSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                                             `json:"repo_name,required"`
+	JSON     projectGetResponseLatestDeploymentSourceConfigJSON `json:"-"`
 }
 
 // projectGetResponseLatestDeploymentSourceConfigJSON contains the JSON metadata
 // for the struct [ProjectGetResponseLatestDeploymentSourceConfig]
 type projectGetResponseLatestDeploymentSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -9981,62 +9981,62 @@ func (r projectGetResponseSourceJSON) RawJSON() string {
 }
 
 type ProjectGetResponseSourceConfig struct {
-	// The owner of the repository.
-	Owner string `json:"owner,required"`
-	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
-	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
-	// The name of the repository.
-	RepoName string `json:"repo_name,required"`
 	// Whether to enable automatic deployments when pushing to the source repository.
 	// When disabled, no deployments (production or preview) will be triggered
 	// automatically.
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled"`
+	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	// The owner of the repository.
+	Owner string `json:"owner,required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id"`
+	OwnerID string `json:"owner_id,required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes"`
+	PathExcludes []string `json:"path_excludes,required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes"`
+	PathIncludes []string `json:"path_includes,required"`
+	// Whether to enable PR comments.
+	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectGetResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewDeploymentSetting ProjectGetResponseSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	// The production branch of the repository.
+	ProductionBranch string `json:"production_branch,required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
 	// The ID of the repository.
-	RepoID string                             `json:"repo_id"`
-	JSON   projectGetResponseSourceConfigJSON `json:"-"`
+	RepoID string `json:"repo_id,required"`
+	// The name of the repository.
+	RepoName string                             `json:"repo_name,required"`
+	JSON     projectGetResponseSourceConfigJSON `json:"-"`
 }
 
 // projectGetResponseSourceConfigJSON contains the JSON metadata for the struct
 // [ProjectGetResponseSourceConfig]
 type projectGetResponseSourceConfigJSON struct {
-	Owner                        apijson.Field
-	PrCommentsEnabled            apijson.Field
-	ProductionBranch             apijson.Field
-	RepoName                     apijson.Field
 	DeploymentsEnabled           apijson.Field
+	Owner                        apijson.Field
 	OwnerID                      apijson.Field
 	PathExcludes                 apijson.Field
 	PathIncludes                 apijson.Field
+	PrCommentsEnabled            apijson.Field
 	PreviewBranchExcludes        apijson.Field
 	PreviewBranchIncludes        apijson.Field
 	PreviewDeploymentSetting     apijson.Field
+	ProductionBranch             apijson.Field
 	ProductionDeploymentsEnabled apijson.Field
 	RepoID                       apijson.Field
+	RepoName                     apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }

@@ -72,8 +72,8 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 				}),
-				Placement: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacement{
-					Mode: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeSmart),
+				Placement: cloudflare.F[workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion](workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode{
+					Mode: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"my-team", "my-public-api"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{

@@ -319,6 +319,8 @@ type QueryResultMeta struct {
 	RowsRead float64 `json:"rows_read"`
 	// Number of rows written during the SQL query execution, including indices.
 	RowsWritten float64 `json:"rows_written"`
+	// The three letters airport code of the colo that handled the query.
+	ServedByColo string `json:"served_by_colo"`
 	// Denotes if the query has been handled by the database primary instance.
 	ServedByPrimary bool `json:"served_by_primary"`
 	// Region location hint of the database instance that handled the query.
@@ -338,6 +340,7 @@ type queryResultMetaJSON struct {
 	LastRowID       apijson.Field
 	RowsRead        apijson.Field
 	RowsWritten     apijson.Field
+	ServedByColo    apijson.Field
 	ServedByPrimary apijson.Field
 	ServedByRegion  apijson.Field
 	SizeAfter       apijson.Field
@@ -617,6 +620,8 @@ type DatabaseImportResponseResultMeta struct {
 	RowsRead float64 `json:"rows_read"`
 	// Number of rows written during the SQL query execution, including indices.
 	RowsWritten float64 `json:"rows_written"`
+	// The three letters airport code of the colo that handled the query.
+	ServedByColo string `json:"served_by_colo"`
 	// Denotes if the query has been handled by the database primary instance.
 	ServedByPrimary bool `json:"served_by_primary"`
 	// Region location hint of the database instance that handled the query.
@@ -637,6 +642,7 @@ type databaseImportResponseResultMetaJSON struct {
 	LastRowID       apijson.Field
 	RowsRead        apijson.Field
 	RowsWritten     apijson.Field
+	ServedByColo    apijson.Field
 	ServedByPrimary apijson.Field
 	ServedByRegion  apijson.Field
 	SizeAfter       apijson.Field
@@ -768,6 +774,8 @@ type DatabaseRawResponseMeta struct {
 	RowsRead float64 `json:"rows_read"`
 	// Number of rows written during the SQL query execution, including indices.
 	RowsWritten float64 `json:"rows_written"`
+	// The three letters airport code of the colo that handled the query.
+	ServedByColo string `json:"served_by_colo"`
 	// Denotes if the query has been handled by the database primary instance.
 	ServedByPrimary bool `json:"served_by_primary"`
 	// Region location hint of the database instance that handled the query.
@@ -788,6 +796,7 @@ type databaseRawResponseMetaJSON struct {
 	LastRowID       apijson.Field
 	RowsRead        apijson.Field
 	RowsWritten     apijson.Field
+	ServedByColo    apijson.Field
 	ServedByPrimary apijson.Field
 	ServedByRegion  apijson.Field
 	SizeAfter       apijson.Field
