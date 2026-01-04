@@ -784,7 +784,7 @@ type RatePlan struct {
 	PublicName string `json:"public_name"`
 	// The scope that this rate plan applies to.
 	Scope string `json:"scope"`
-	// The list of sets this rate plan applies to.
+	// The list of sets this rate plan applies to. Returns array of strings.
 	Sets []string     `json:"sets"`
 	JSON ratePlanJSON `json:"-"`
 }
@@ -848,7 +848,7 @@ type RatePlanParam struct {
 	PublicName param.Field[string] `json:"public_name"`
 	// The scope that this rate plan applies to.
 	Scope param.Field[string] `json:"scope"`
-	// The list of sets this rate plan applies to.
+	// The list of sets this rate plan applies to. Returns array of strings.
 	Sets param.Field[[]string] `json:"sets"`
 }
 

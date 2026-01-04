@@ -173,46 +173,48 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 
 type InstanceNewResponse struct {
 	// Use your AI Search ID.
-	ID                             string                                `json:"id,required"`
-	AccountID                      string                                `json:"account_id,required"`
-	AccountTag                     string                                `json:"account_tag,required"`
-	CreatedAt                      time.Time                             `json:"created_at,required" format:"date-time"`
-	InternalID                     string                                `json:"internal_id,required" format:"uuid"`
-	ModifiedAt                     time.Time                             `json:"modified_at,required" format:"date-time"`
-	Source                         string                                `json:"source,required"`
-	TokenID                        string                                `json:"token_id,required" format:"uuid"`
-	Type                           InstanceNewResponseType               `json:"type,required"`
-	VectorizeName                  string                                `json:"vectorize_name,required"`
-	AIGatewayID                    string                                `json:"ai_gateway_id"`
-	AISearchModel                  InstanceNewResponseAISearchModel      `json:"ai_search_model"`
-	Cache                          bool                                  `json:"cache"`
-	CacheThreshold                 InstanceNewResponseCacheThreshold     `json:"cache_threshold"`
-	Chunk                          bool                                  `json:"chunk"`
-	ChunkOverlap                   int64                                 `json:"chunk_overlap"`
-	ChunkSize                      int64                                 `json:"chunk_size"`
-	CreatedBy                      string                                `json:"created_by"`
-	EmbeddingModel                 InstanceNewResponseEmbeddingModel     `json:"embedding_model"`
-	Enable                         bool                                  `json:"enable"`
-	EngineVersion                  float64                               `json:"engine_version"`
-	LastActivity                   time.Time                             `json:"last_activity" format:"date-time"`
-	MaxNumResults                  int64                                 `json:"max_num_results"`
-	Metadata                       InstanceNewResponseMetadata           `json:"metadata"`
-	ModifiedBy                     string                                `json:"modified_by"`
-	Paused                         bool                                  `json:"paused"`
-	Reranking                      bool                                  `json:"reranking"`
-	RerankingModel                 InstanceNewResponseRerankingModel     `json:"reranking_model"`
-	RewriteModel                   InstanceNewResponseRewriteModel       `json:"rewrite_model"`
-	RewriteQuery                   bool                                  `json:"rewrite_query"`
-	ScoreThreshold                 float64                               `json:"score_threshold"`
-	SourceParams                   InstanceNewResponseSourceParams       `json:"source_params"`
-	Status                         string                                `json:"status"`
-	Summarization                  bool                                  `json:"summarization"`
-	SummarizationModel             InstanceNewResponseSummarizationModel `json:"summarization_model"`
-	SystemPromptAISearch           string                                `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization string                                `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       string                                `json:"system_prompt_rewrite_query"`
-	VectorizeActiveNamespace       string                                `json:"vectorize_active_namespace"`
-	JSON                           instanceNewResponseJSON               `json:"-"`
+	ID                             string                                  `json:"id,required"`
+	AccountID                      string                                  `json:"account_id,required"`
+	AccountTag                     string                                  `json:"account_tag,required"`
+	CreatedAt                      time.Time                               `json:"created_at,required" format:"date-time"`
+	InternalID                     string                                  `json:"internal_id,required" format:"uuid"`
+	ModifiedAt                     time.Time                               `json:"modified_at,required" format:"date-time"`
+	Source                         string                                  `json:"source,required"`
+	TokenID                        string                                  `json:"token_id,required" format:"uuid"`
+	Type                           InstanceNewResponseType                 `json:"type,required"`
+	VectorizeName                  string                                  `json:"vectorize_name,required"`
+	AIGatewayID                    string                                  `json:"ai_gateway_id"`
+	AISearchModel                  InstanceNewResponseAISearchModel        `json:"ai_search_model"`
+	Cache                          bool                                    `json:"cache"`
+	CacheThreshold                 InstanceNewResponseCacheThreshold       `json:"cache_threshold"`
+	Chunk                          bool                                    `json:"chunk"`
+	ChunkOverlap                   int64                                   `json:"chunk_overlap"`
+	ChunkSize                      int64                                   `json:"chunk_size"`
+	CreatedBy                      string                                  `json:"created_by"`
+	EmbeddingModel                 InstanceNewResponseEmbeddingModel       `json:"embedding_model"`
+	Enable                         bool                                    `json:"enable"`
+	EngineVersion                  float64                                 `json:"engine_version"`
+	LastActivity                   time.Time                               `json:"last_activity" format:"date-time"`
+	MaxNumResults                  int64                                   `json:"max_num_results"`
+	Metadata                       InstanceNewResponseMetadata             `json:"metadata"`
+	ModifiedBy                     string                                  `json:"modified_by"`
+	Paused                         bool                                    `json:"paused"`
+	PublicEndpointID               string                                  `json:"public_endpoint_id"`
+	PublicEndpointParams           InstanceNewResponsePublicEndpointParams `json:"public_endpoint_params"`
+	Reranking                      bool                                    `json:"reranking"`
+	RerankingModel                 InstanceNewResponseRerankingModel       `json:"reranking_model"`
+	RewriteModel                   InstanceNewResponseRewriteModel         `json:"rewrite_model"`
+	RewriteQuery                   bool                                    `json:"rewrite_query"`
+	ScoreThreshold                 float64                                 `json:"score_threshold"`
+	SourceParams                   InstanceNewResponseSourceParams         `json:"source_params"`
+	Status                         string                                  `json:"status"`
+	Summarization                  bool                                    `json:"summarization"`
+	SummarizationModel             InstanceNewResponseSummarizationModel   `json:"summarization_model"`
+	SystemPromptAISearch           string                                  `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization string                                  `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       string                                  `json:"system_prompt_rewrite_query"`
+	VectorizeActiveNamespace       string                                  `json:"vectorize_active_namespace"`
+	JSON                           instanceNewResponseJSON                 `json:"-"`
 }
 
 // instanceNewResponseJSON contains the JSON metadata for the struct
@@ -244,6 +246,8 @@ type instanceNewResponseJSON struct {
 	Metadata                       apijson.Field
 	ModifiedBy                     apijson.Field
 	Paused                         apijson.Field
+	PublicEndpointID               apijson.Field
+	PublicEndpointParams           apijson.Field
 	Reranking                      apijson.Field
 	RerankingModel                 apijson.Field
 	RewriteModel                   apijson.Field
@@ -382,6 +386,71 @@ func (r *InstanceNewResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceNewResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceNewResponsePublicEndpointParams struct {
+	AuthorizedHosts []string                                         `json:"authorized_hosts"`
+	Enabled         bool                                             `json:"enabled"`
+	RateLimit       InstanceNewResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
+	JSON            instanceNewResponsePublicEndpointParamsJSON      `json:"-"`
+}
+
+// instanceNewResponsePublicEndpointParamsJSON contains the JSON metadata for the
+// struct [InstanceNewResponsePublicEndpointParams]
+type instanceNewResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts apijson.Field
+	Enabled         apijson.Field
+	RateLimit       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *InstanceNewResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                     `json:"period_ms"`
+	Requests  int64                                                     `json:"requests"`
+	Technique InstanceNewResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      instanceNewResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// instanceNewResponsePublicEndpointParamsRateLimitJSON contains the JSON metadata
+// for the struct [InstanceNewResponsePublicEndpointParamsRateLimit]
+type instanceNewResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceNewResponsePublicEndpointParamsRateLimitTechniqueFixed   InstanceNewResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceNewResponsePublicEndpointParamsRateLimitTechniqueSliding InstanceNewResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceNewResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceNewResponsePublicEndpointParamsRateLimitTechniqueFixed, InstanceNewResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceNewResponseRerankingModel string
@@ -602,46 +671,48 @@ func (r InstanceNewResponseSummarizationModel) IsKnown() bool {
 
 type InstanceUpdateResponse struct {
 	// Use your AI Search ID.
-	ID                             string                                   `json:"id,required"`
-	AccountID                      string                                   `json:"account_id,required"`
-	AccountTag                     string                                   `json:"account_tag,required"`
-	CreatedAt                      time.Time                                `json:"created_at,required" format:"date-time"`
-	InternalID                     string                                   `json:"internal_id,required" format:"uuid"`
-	ModifiedAt                     time.Time                                `json:"modified_at,required" format:"date-time"`
-	Source                         string                                   `json:"source,required"`
-	TokenID                        string                                   `json:"token_id,required" format:"uuid"`
-	Type                           InstanceUpdateResponseType               `json:"type,required"`
-	VectorizeName                  string                                   `json:"vectorize_name,required"`
-	AIGatewayID                    string                                   `json:"ai_gateway_id"`
-	AISearchModel                  InstanceUpdateResponseAISearchModel      `json:"ai_search_model"`
-	Cache                          bool                                     `json:"cache"`
-	CacheThreshold                 InstanceUpdateResponseCacheThreshold     `json:"cache_threshold"`
-	Chunk                          bool                                     `json:"chunk"`
-	ChunkOverlap                   int64                                    `json:"chunk_overlap"`
-	ChunkSize                      int64                                    `json:"chunk_size"`
-	CreatedBy                      string                                   `json:"created_by"`
-	EmbeddingModel                 InstanceUpdateResponseEmbeddingModel     `json:"embedding_model"`
-	Enable                         bool                                     `json:"enable"`
-	EngineVersion                  float64                                  `json:"engine_version"`
-	LastActivity                   time.Time                                `json:"last_activity" format:"date-time"`
-	MaxNumResults                  int64                                    `json:"max_num_results"`
-	Metadata                       InstanceUpdateResponseMetadata           `json:"metadata"`
-	ModifiedBy                     string                                   `json:"modified_by"`
-	Paused                         bool                                     `json:"paused"`
-	Reranking                      bool                                     `json:"reranking"`
-	RerankingModel                 InstanceUpdateResponseRerankingModel     `json:"reranking_model"`
-	RewriteModel                   InstanceUpdateResponseRewriteModel       `json:"rewrite_model"`
-	RewriteQuery                   bool                                     `json:"rewrite_query"`
-	ScoreThreshold                 float64                                  `json:"score_threshold"`
-	SourceParams                   InstanceUpdateResponseSourceParams       `json:"source_params"`
-	Status                         string                                   `json:"status"`
-	Summarization                  bool                                     `json:"summarization"`
-	SummarizationModel             InstanceUpdateResponseSummarizationModel `json:"summarization_model"`
-	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query"`
-	VectorizeActiveNamespace       string                                   `json:"vectorize_active_namespace"`
-	JSON                           instanceUpdateResponseJSON               `json:"-"`
+	ID                             string                                     `json:"id,required"`
+	AccountID                      string                                     `json:"account_id,required"`
+	AccountTag                     string                                     `json:"account_tag,required"`
+	CreatedAt                      time.Time                                  `json:"created_at,required" format:"date-time"`
+	InternalID                     string                                     `json:"internal_id,required" format:"uuid"`
+	ModifiedAt                     time.Time                                  `json:"modified_at,required" format:"date-time"`
+	Source                         string                                     `json:"source,required"`
+	TokenID                        string                                     `json:"token_id,required" format:"uuid"`
+	Type                           InstanceUpdateResponseType                 `json:"type,required"`
+	VectorizeName                  string                                     `json:"vectorize_name,required"`
+	AIGatewayID                    string                                     `json:"ai_gateway_id"`
+	AISearchModel                  InstanceUpdateResponseAISearchModel        `json:"ai_search_model"`
+	Cache                          bool                                       `json:"cache"`
+	CacheThreshold                 InstanceUpdateResponseCacheThreshold       `json:"cache_threshold"`
+	Chunk                          bool                                       `json:"chunk"`
+	ChunkOverlap                   int64                                      `json:"chunk_overlap"`
+	ChunkSize                      int64                                      `json:"chunk_size"`
+	CreatedBy                      string                                     `json:"created_by"`
+	EmbeddingModel                 InstanceUpdateResponseEmbeddingModel       `json:"embedding_model"`
+	Enable                         bool                                       `json:"enable"`
+	EngineVersion                  float64                                    `json:"engine_version"`
+	LastActivity                   time.Time                                  `json:"last_activity" format:"date-time"`
+	MaxNumResults                  int64                                      `json:"max_num_results"`
+	Metadata                       InstanceUpdateResponseMetadata             `json:"metadata"`
+	ModifiedBy                     string                                     `json:"modified_by"`
+	Paused                         bool                                       `json:"paused"`
+	PublicEndpointID               string                                     `json:"public_endpoint_id"`
+	PublicEndpointParams           InstanceUpdateResponsePublicEndpointParams `json:"public_endpoint_params"`
+	Reranking                      bool                                       `json:"reranking"`
+	RerankingModel                 InstanceUpdateResponseRerankingModel       `json:"reranking_model"`
+	RewriteModel                   InstanceUpdateResponseRewriteModel         `json:"rewrite_model"`
+	RewriteQuery                   bool                                       `json:"rewrite_query"`
+	ScoreThreshold                 float64                                    `json:"score_threshold"`
+	SourceParams                   InstanceUpdateResponseSourceParams         `json:"source_params"`
+	Status                         string                                     `json:"status"`
+	Summarization                  bool                                       `json:"summarization"`
+	SummarizationModel             InstanceUpdateResponseSummarizationModel   `json:"summarization_model"`
+	SystemPromptAISearch           string                                     `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization string                                     `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       string                                     `json:"system_prompt_rewrite_query"`
+	VectorizeActiveNamespace       string                                     `json:"vectorize_active_namespace"`
+	JSON                           instanceUpdateResponseJSON                 `json:"-"`
 }
 
 // instanceUpdateResponseJSON contains the JSON metadata for the struct
@@ -673,6 +744,8 @@ type instanceUpdateResponseJSON struct {
 	Metadata                       apijson.Field
 	ModifiedBy                     apijson.Field
 	Paused                         apijson.Field
+	PublicEndpointID               apijson.Field
+	PublicEndpointParams           apijson.Field
 	Reranking                      apijson.Field
 	RerankingModel                 apijson.Field
 	RewriteModel                   apijson.Field
@@ -811,6 +884,71 @@ func (r *InstanceUpdateResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 
 func (r instanceUpdateResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceUpdateResponsePublicEndpointParams struct {
+	AuthorizedHosts []string                                            `json:"authorized_hosts"`
+	Enabled         bool                                                `json:"enabled"`
+	RateLimit       InstanceUpdateResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
+	JSON            instanceUpdateResponsePublicEndpointParamsJSON      `json:"-"`
+}
+
+// instanceUpdateResponsePublicEndpointParamsJSON contains the JSON metadata for
+// the struct [InstanceUpdateResponsePublicEndpointParams]
+type instanceUpdateResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts apijson.Field
+	Enabled         apijson.Field
+	RateLimit       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                        `json:"period_ms"`
+	Requests  int64                                                        `json:"requests"`
+	Technique InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      instanceUpdateResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// instanceUpdateResponsePublicEndpointParamsRateLimitJSON contains the JSON
+// metadata for the struct [InstanceUpdateResponsePublicEndpointParamsRateLimit]
+type instanceUpdateResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceUpdateResponsePublicEndpointParamsRateLimitTechniqueFixed   InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceUpdateResponsePublicEndpointParamsRateLimitTechniqueSliding InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponsePublicEndpointParamsRateLimitTechniqueFixed, InstanceUpdateResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceUpdateResponseRerankingModel string
@@ -1033,46 +1171,48 @@ func (r InstanceUpdateResponseSummarizationModel) IsKnown() bool {
 
 type InstanceListResponse struct {
 	// Use your AI Search ID.
-	ID                             string                                 `json:"id,required"`
-	AccountID                      string                                 `json:"account_id,required"`
-	AccountTag                     string                                 `json:"account_tag,required"`
-	CreatedAt                      time.Time                              `json:"created_at,required" format:"date-time"`
-	InternalID                     string                                 `json:"internal_id,required" format:"uuid"`
-	ModifiedAt                     time.Time                              `json:"modified_at,required" format:"date-time"`
-	Source                         string                                 `json:"source,required"`
-	TokenID                        string                                 `json:"token_id,required" format:"uuid"`
-	Type                           InstanceListResponseType               `json:"type,required"`
-	VectorizeName                  string                                 `json:"vectorize_name,required"`
-	AIGatewayID                    string                                 `json:"ai_gateway_id"`
-	AISearchModel                  InstanceListResponseAISearchModel      `json:"ai_search_model"`
-	Cache                          bool                                   `json:"cache"`
-	CacheThreshold                 InstanceListResponseCacheThreshold     `json:"cache_threshold"`
-	Chunk                          bool                                   `json:"chunk"`
-	ChunkOverlap                   int64                                  `json:"chunk_overlap"`
-	ChunkSize                      int64                                  `json:"chunk_size"`
-	CreatedBy                      string                                 `json:"created_by"`
-	EmbeddingModel                 InstanceListResponseEmbeddingModel     `json:"embedding_model"`
-	Enable                         bool                                   `json:"enable"`
-	EngineVersion                  float64                                `json:"engine_version"`
-	LastActivity                   time.Time                              `json:"last_activity" format:"date-time"`
-	MaxNumResults                  int64                                  `json:"max_num_results"`
-	Metadata                       InstanceListResponseMetadata           `json:"metadata"`
-	ModifiedBy                     string                                 `json:"modified_by"`
-	Paused                         bool                                   `json:"paused"`
-	Reranking                      bool                                   `json:"reranking"`
-	RerankingModel                 InstanceListResponseRerankingModel     `json:"reranking_model"`
-	RewriteModel                   InstanceListResponseRewriteModel       `json:"rewrite_model"`
-	RewriteQuery                   bool                                   `json:"rewrite_query"`
-	ScoreThreshold                 float64                                `json:"score_threshold"`
-	SourceParams                   InstanceListResponseSourceParams       `json:"source_params"`
-	Status                         string                                 `json:"status"`
-	Summarization                  bool                                   `json:"summarization"`
-	SummarizationModel             InstanceListResponseSummarizationModel `json:"summarization_model"`
-	SystemPromptAISearch           string                                 `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization string                                 `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       string                                 `json:"system_prompt_rewrite_query"`
-	VectorizeActiveNamespace       string                                 `json:"vectorize_active_namespace"`
-	JSON                           instanceListResponseJSON               `json:"-"`
+	ID                             string                                   `json:"id,required"`
+	AccountID                      string                                   `json:"account_id,required"`
+	AccountTag                     string                                   `json:"account_tag,required"`
+	CreatedAt                      time.Time                                `json:"created_at,required" format:"date-time"`
+	InternalID                     string                                   `json:"internal_id,required" format:"uuid"`
+	ModifiedAt                     time.Time                                `json:"modified_at,required" format:"date-time"`
+	Source                         string                                   `json:"source,required"`
+	TokenID                        string                                   `json:"token_id,required" format:"uuid"`
+	Type                           InstanceListResponseType                 `json:"type,required"`
+	VectorizeName                  string                                   `json:"vectorize_name,required"`
+	AIGatewayID                    string                                   `json:"ai_gateway_id"`
+	AISearchModel                  InstanceListResponseAISearchModel        `json:"ai_search_model"`
+	Cache                          bool                                     `json:"cache"`
+	CacheThreshold                 InstanceListResponseCacheThreshold       `json:"cache_threshold"`
+	Chunk                          bool                                     `json:"chunk"`
+	ChunkOverlap                   int64                                    `json:"chunk_overlap"`
+	ChunkSize                      int64                                    `json:"chunk_size"`
+	CreatedBy                      string                                   `json:"created_by"`
+	EmbeddingModel                 InstanceListResponseEmbeddingModel       `json:"embedding_model"`
+	Enable                         bool                                     `json:"enable"`
+	EngineVersion                  float64                                  `json:"engine_version"`
+	LastActivity                   time.Time                                `json:"last_activity" format:"date-time"`
+	MaxNumResults                  int64                                    `json:"max_num_results"`
+	Metadata                       InstanceListResponseMetadata             `json:"metadata"`
+	ModifiedBy                     string                                   `json:"modified_by"`
+	Paused                         bool                                     `json:"paused"`
+	PublicEndpointID               string                                   `json:"public_endpoint_id"`
+	PublicEndpointParams           InstanceListResponsePublicEndpointParams `json:"public_endpoint_params"`
+	Reranking                      bool                                     `json:"reranking"`
+	RerankingModel                 InstanceListResponseRerankingModel       `json:"reranking_model"`
+	RewriteModel                   InstanceListResponseRewriteModel         `json:"rewrite_model"`
+	RewriteQuery                   bool                                     `json:"rewrite_query"`
+	ScoreThreshold                 float64                                  `json:"score_threshold"`
+	SourceParams                   InstanceListResponseSourceParams         `json:"source_params"`
+	Status                         string                                   `json:"status"`
+	Summarization                  bool                                     `json:"summarization"`
+	SummarizationModel             InstanceListResponseSummarizationModel   `json:"summarization_model"`
+	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query"`
+	VectorizeActiveNamespace       string                                   `json:"vectorize_active_namespace"`
+	JSON                           instanceListResponseJSON                 `json:"-"`
 }
 
 // instanceListResponseJSON contains the JSON metadata for the struct
@@ -1104,6 +1244,8 @@ type instanceListResponseJSON struct {
 	Metadata                       apijson.Field
 	ModifiedBy                     apijson.Field
 	Paused                         apijson.Field
+	PublicEndpointID               apijson.Field
+	PublicEndpointParams           apijson.Field
 	Reranking                      apijson.Field
 	RerankingModel                 apijson.Field
 	RewriteModel                   apijson.Field
@@ -1242,6 +1384,71 @@ func (r *InstanceListResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceListResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceListResponsePublicEndpointParams struct {
+	AuthorizedHosts []string                                          `json:"authorized_hosts"`
+	Enabled         bool                                              `json:"enabled"`
+	RateLimit       InstanceListResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
+	JSON            instanceListResponsePublicEndpointParamsJSON      `json:"-"`
+}
+
+// instanceListResponsePublicEndpointParamsJSON contains the JSON metadata for the
+// struct [InstanceListResponsePublicEndpointParams]
+type instanceListResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts apijson.Field
+	Enabled         apijson.Field
+	RateLimit       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *InstanceListResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                      `json:"period_ms"`
+	Requests  int64                                                      `json:"requests"`
+	Technique InstanceListResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      instanceListResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// instanceListResponsePublicEndpointParamsRateLimitJSON contains the JSON metadata
+// for the struct [InstanceListResponsePublicEndpointParamsRateLimit]
+type instanceListResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceListResponsePublicEndpointParamsRateLimitTechniqueFixed   InstanceListResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceListResponsePublicEndpointParamsRateLimitTechniqueSliding InstanceListResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceListResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceListResponsePublicEndpointParamsRateLimitTechniqueFixed, InstanceListResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceListResponseRerankingModel string
@@ -1462,46 +1669,48 @@ func (r InstanceListResponseSummarizationModel) IsKnown() bool {
 
 type InstanceDeleteResponse struct {
 	// Use your AI Search ID.
-	ID                             string                                   `json:"id,required"`
-	AccountID                      string                                   `json:"account_id,required"`
-	AccountTag                     string                                   `json:"account_tag,required"`
-	CreatedAt                      time.Time                                `json:"created_at,required" format:"date-time"`
-	InternalID                     string                                   `json:"internal_id,required" format:"uuid"`
-	ModifiedAt                     time.Time                                `json:"modified_at,required" format:"date-time"`
-	Source                         string                                   `json:"source,required"`
-	TokenID                        string                                   `json:"token_id,required" format:"uuid"`
-	Type                           InstanceDeleteResponseType               `json:"type,required"`
-	VectorizeName                  string                                   `json:"vectorize_name,required"`
-	AIGatewayID                    string                                   `json:"ai_gateway_id"`
-	AISearchModel                  InstanceDeleteResponseAISearchModel      `json:"ai_search_model"`
-	Cache                          bool                                     `json:"cache"`
-	CacheThreshold                 InstanceDeleteResponseCacheThreshold     `json:"cache_threshold"`
-	Chunk                          bool                                     `json:"chunk"`
-	ChunkOverlap                   int64                                    `json:"chunk_overlap"`
-	ChunkSize                      int64                                    `json:"chunk_size"`
-	CreatedBy                      string                                   `json:"created_by"`
-	EmbeddingModel                 InstanceDeleteResponseEmbeddingModel     `json:"embedding_model"`
-	Enable                         bool                                     `json:"enable"`
-	EngineVersion                  float64                                  `json:"engine_version"`
-	LastActivity                   time.Time                                `json:"last_activity" format:"date-time"`
-	MaxNumResults                  int64                                    `json:"max_num_results"`
-	Metadata                       InstanceDeleteResponseMetadata           `json:"metadata"`
-	ModifiedBy                     string                                   `json:"modified_by"`
-	Paused                         bool                                     `json:"paused"`
-	Reranking                      bool                                     `json:"reranking"`
-	RerankingModel                 InstanceDeleteResponseRerankingModel     `json:"reranking_model"`
-	RewriteModel                   InstanceDeleteResponseRewriteModel       `json:"rewrite_model"`
-	RewriteQuery                   bool                                     `json:"rewrite_query"`
-	ScoreThreshold                 float64                                  `json:"score_threshold"`
-	SourceParams                   InstanceDeleteResponseSourceParams       `json:"source_params"`
-	Status                         string                                   `json:"status"`
-	Summarization                  bool                                     `json:"summarization"`
-	SummarizationModel             InstanceDeleteResponseSummarizationModel `json:"summarization_model"`
-	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query"`
-	VectorizeActiveNamespace       string                                   `json:"vectorize_active_namespace"`
-	JSON                           instanceDeleteResponseJSON               `json:"-"`
+	ID                             string                                     `json:"id,required"`
+	AccountID                      string                                     `json:"account_id,required"`
+	AccountTag                     string                                     `json:"account_tag,required"`
+	CreatedAt                      time.Time                                  `json:"created_at,required" format:"date-time"`
+	InternalID                     string                                     `json:"internal_id,required" format:"uuid"`
+	ModifiedAt                     time.Time                                  `json:"modified_at,required" format:"date-time"`
+	Source                         string                                     `json:"source,required"`
+	TokenID                        string                                     `json:"token_id,required" format:"uuid"`
+	Type                           InstanceDeleteResponseType                 `json:"type,required"`
+	VectorizeName                  string                                     `json:"vectorize_name,required"`
+	AIGatewayID                    string                                     `json:"ai_gateway_id"`
+	AISearchModel                  InstanceDeleteResponseAISearchModel        `json:"ai_search_model"`
+	Cache                          bool                                       `json:"cache"`
+	CacheThreshold                 InstanceDeleteResponseCacheThreshold       `json:"cache_threshold"`
+	Chunk                          bool                                       `json:"chunk"`
+	ChunkOverlap                   int64                                      `json:"chunk_overlap"`
+	ChunkSize                      int64                                      `json:"chunk_size"`
+	CreatedBy                      string                                     `json:"created_by"`
+	EmbeddingModel                 InstanceDeleteResponseEmbeddingModel       `json:"embedding_model"`
+	Enable                         bool                                       `json:"enable"`
+	EngineVersion                  float64                                    `json:"engine_version"`
+	LastActivity                   time.Time                                  `json:"last_activity" format:"date-time"`
+	MaxNumResults                  int64                                      `json:"max_num_results"`
+	Metadata                       InstanceDeleteResponseMetadata             `json:"metadata"`
+	ModifiedBy                     string                                     `json:"modified_by"`
+	Paused                         bool                                       `json:"paused"`
+	PublicEndpointID               string                                     `json:"public_endpoint_id"`
+	PublicEndpointParams           InstanceDeleteResponsePublicEndpointParams `json:"public_endpoint_params"`
+	Reranking                      bool                                       `json:"reranking"`
+	RerankingModel                 InstanceDeleteResponseRerankingModel       `json:"reranking_model"`
+	RewriteModel                   InstanceDeleteResponseRewriteModel         `json:"rewrite_model"`
+	RewriteQuery                   bool                                       `json:"rewrite_query"`
+	ScoreThreshold                 float64                                    `json:"score_threshold"`
+	SourceParams                   InstanceDeleteResponseSourceParams         `json:"source_params"`
+	Status                         string                                     `json:"status"`
+	Summarization                  bool                                       `json:"summarization"`
+	SummarizationModel             InstanceDeleteResponseSummarizationModel   `json:"summarization_model"`
+	SystemPromptAISearch           string                                     `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization string                                     `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       string                                     `json:"system_prompt_rewrite_query"`
+	VectorizeActiveNamespace       string                                     `json:"vectorize_active_namespace"`
+	JSON                           instanceDeleteResponseJSON                 `json:"-"`
 }
 
 // instanceDeleteResponseJSON contains the JSON metadata for the struct
@@ -1533,6 +1742,8 @@ type instanceDeleteResponseJSON struct {
 	Metadata                       apijson.Field
 	ModifiedBy                     apijson.Field
 	Paused                         apijson.Field
+	PublicEndpointID               apijson.Field
+	PublicEndpointParams           apijson.Field
 	Reranking                      apijson.Field
 	RerankingModel                 apijson.Field
 	RewriteModel                   apijson.Field
@@ -1671,6 +1882,71 @@ func (r *InstanceDeleteResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 
 func (r instanceDeleteResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceDeleteResponsePublicEndpointParams struct {
+	AuthorizedHosts []string                                            `json:"authorized_hosts"`
+	Enabled         bool                                                `json:"enabled"`
+	RateLimit       InstanceDeleteResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
+	JSON            instanceDeleteResponsePublicEndpointParamsJSON      `json:"-"`
+}
+
+// instanceDeleteResponsePublicEndpointParamsJSON contains the JSON metadata for
+// the struct [InstanceDeleteResponsePublicEndpointParams]
+type instanceDeleteResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts apijson.Field
+	Enabled         apijson.Field
+	RateLimit       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                        `json:"period_ms"`
+	Requests  int64                                                        `json:"requests"`
+	Technique InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      instanceDeleteResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// instanceDeleteResponsePublicEndpointParamsRateLimitJSON contains the JSON
+// metadata for the struct [InstanceDeleteResponsePublicEndpointParamsRateLimit]
+type instanceDeleteResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceDeleteResponsePublicEndpointParamsRateLimitTechniqueFixed   InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceDeleteResponsePublicEndpointParamsRateLimitTechniqueSliding InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponsePublicEndpointParamsRateLimitTechniqueFixed, InstanceDeleteResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceDeleteResponseRerankingModel string
@@ -1893,46 +2169,48 @@ func (r InstanceDeleteResponseSummarizationModel) IsKnown() bool {
 
 type InstanceReadResponse struct {
 	// Use your AI Search ID.
-	ID                             string                                 `json:"id,required"`
-	AccountID                      string                                 `json:"account_id,required"`
-	AccountTag                     string                                 `json:"account_tag,required"`
-	CreatedAt                      time.Time                              `json:"created_at,required" format:"date-time"`
-	InternalID                     string                                 `json:"internal_id,required" format:"uuid"`
-	ModifiedAt                     time.Time                              `json:"modified_at,required" format:"date-time"`
-	Source                         string                                 `json:"source,required"`
-	TokenID                        string                                 `json:"token_id,required" format:"uuid"`
-	Type                           InstanceReadResponseType               `json:"type,required"`
-	VectorizeName                  string                                 `json:"vectorize_name,required"`
-	AIGatewayID                    string                                 `json:"ai_gateway_id"`
-	AISearchModel                  InstanceReadResponseAISearchModel      `json:"ai_search_model"`
-	Cache                          bool                                   `json:"cache"`
-	CacheThreshold                 InstanceReadResponseCacheThreshold     `json:"cache_threshold"`
-	Chunk                          bool                                   `json:"chunk"`
-	ChunkOverlap                   int64                                  `json:"chunk_overlap"`
-	ChunkSize                      int64                                  `json:"chunk_size"`
-	CreatedBy                      string                                 `json:"created_by"`
-	EmbeddingModel                 InstanceReadResponseEmbeddingModel     `json:"embedding_model"`
-	Enable                         bool                                   `json:"enable"`
-	EngineVersion                  float64                                `json:"engine_version"`
-	LastActivity                   time.Time                              `json:"last_activity" format:"date-time"`
-	MaxNumResults                  int64                                  `json:"max_num_results"`
-	Metadata                       InstanceReadResponseMetadata           `json:"metadata"`
-	ModifiedBy                     string                                 `json:"modified_by"`
-	Paused                         bool                                   `json:"paused"`
-	Reranking                      bool                                   `json:"reranking"`
-	RerankingModel                 InstanceReadResponseRerankingModel     `json:"reranking_model"`
-	RewriteModel                   InstanceReadResponseRewriteModel       `json:"rewrite_model"`
-	RewriteQuery                   bool                                   `json:"rewrite_query"`
-	ScoreThreshold                 float64                                `json:"score_threshold"`
-	SourceParams                   InstanceReadResponseSourceParams       `json:"source_params"`
-	Status                         string                                 `json:"status"`
-	Summarization                  bool                                   `json:"summarization"`
-	SummarizationModel             InstanceReadResponseSummarizationModel `json:"summarization_model"`
-	SystemPromptAISearch           string                                 `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization string                                 `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       string                                 `json:"system_prompt_rewrite_query"`
-	VectorizeActiveNamespace       string                                 `json:"vectorize_active_namespace"`
-	JSON                           instanceReadResponseJSON               `json:"-"`
+	ID                             string                                   `json:"id,required"`
+	AccountID                      string                                   `json:"account_id,required"`
+	AccountTag                     string                                   `json:"account_tag,required"`
+	CreatedAt                      time.Time                                `json:"created_at,required" format:"date-time"`
+	InternalID                     string                                   `json:"internal_id,required" format:"uuid"`
+	ModifiedAt                     time.Time                                `json:"modified_at,required" format:"date-time"`
+	Source                         string                                   `json:"source,required"`
+	TokenID                        string                                   `json:"token_id,required" format:"uuid"`
+	Type                           InstanceReadResponseType                 `json:"type,required"`
+	VectorizeName                  string                                   `json:"vectorize_name,required"`
+	AIGatewayID                    string                                   `json:"ai_gateway_id"`
+	AISearchModel                  InstanceReadResponseAISearchModel        `json:"ai_search_model"`
+	Cache                          bool                                     `json:"cache"`
+	CacheThreshold                 InstanceReadResponseCacheThreshold       `json:"cache_threshold"`
+	Chunk                          bool                                     `json:"chunk"`
+	ChunkOverlap                   int64                                    `json:"chunk_overlap"`
+	ChunkSize                      int64                                    `json:"chunk_size"`
+	CreatedBy                      string                                   `json:"created_by"`
+	EmbeddingModel                 InstanceReadResponseEmbeddingModel       `json:"embedding_model"`
+	Enable                         bool                                     `json:"enable"`
+	EngineVersion                  float64                                  `json:"engine_version"`
+	LastActivity                   time.Time                                `json:"last_activity" format:"date-time"`
+	MaxNumResults                  int64                                    `json:"max_num_results"`
+	Metadata                       InstanceReadResponseMetadata             `json:"metadata"`
+	ModifiedBy                     string                                   `json:"modified_by"`
+	Paused                         bool                                     `json:"paused"`
+	PublicEndpointID               string                                   `json:"public_endpoint_id"`
+	PublicEndpointParams           InstanceReadResponsePublicEndpointParams `json:"public_endpoint_params"`
+	Reranking                      bool                                     `json:"reranking"`
+	RerankingModel                 InstanceReadResponseRerankingModel       `json:"reranking_model"`
+	RewriteModel                   InstanceReadResponseRewriteModel         `json:"rewrite_model"`
+	RewriteQuery                   bool                                     `json:"rewrite_query"`
+	ScoreThreshold                 float64                                  `json:"score_threshold"`
+	SourceParams                   InstanceReadResponseSourceParams         `json:"source_params"`
+	Status                         string                                   `json:"status"`
+	Summarization                  bool                                     `json:"summarization"`
+	SummarizationModel             InstanceReadResponseSummarizationModel   `json:"summarization_model"`
+	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query"`
+	VectorizeActiveNamespace       string                                   `json:"vectorize_active_namespace"`
+	JSON                           instanceReadResponseJSON                 `json:"-"`
 }
 
 // instanceReadResponseJSON contains the JSON metadata for the struct
@@ -1964,6 +2242,8 @@ type instanceReadResponseJSON struct {
 	Metadata                       apijson.Field
 	ModifiedBy                     apijson.Field
 	Paused                         apijson.Field
+	PublicEndpointID               apijson.Field
+	PublicEndpointParams           apijson.Field
 	Reranking                      apijson.Field
 	RerankingModel                 apijson.Field
 	RewriteModel                   apijson.Field
@@ -2102,6 +2382,71 @@ func (r *InstanceReadResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceReadResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceReadResponsePublicEndpointParams struct {
+	AuthorizedHosts []string                                          `json:"authorized_hosts"`
+	Enabled         bool                                              `json:"enabled"`
+	RateLimit       InstanceReadResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
+	JSON            instanceReadResponsePublicEndpointParamsJSON      `json:"-"`
+}
+
+// instanceReadResponsePublicEndpointParamsJSON contains the JSON metadata for the
+// struct [InstanceReadResponsePublicEndpointParams]
+type instanceReadResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts apijson.Field
+	Enabled         apijson.Field
+	RateLimit       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *InstanceReadResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                      `json:"period_ms"`
+	Requests  int64                                                      `json:"requests"`
+	Technique InstanceReadResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      instanceReadResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// instanceReadResponsePublicEndpointParamsRateLimitJSON contains the JSON metadata
+// for the struct [InstanceReadResponsePublicEndpointParamsRateLimit]
+type instanceReadResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceReadResponsePublicEndpointParamsRateLimitTechniqueFixed   InstanceReadResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceReadResponsePublicEndpointParamsRateLimitTechniqueSliding InstanceReadResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceReadResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceReadResponsePublicEndpointParamsRateLimitTechniqueFixed, InstanceReadResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceReadResponseRerankingModel string
@@ -2358,24 +2703,25 @@ func (r instanceStatsResponseJSON) RawJSON() string {
 type InstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Use your AI Search ID.
-	ID             param.Field[string]                          `json:"id,required"`
-	Source         param.Field[string]                          `json:"source,required"`
-	TokenID        param.Field[string]                          `json:"token_id,required" format:"uuid"`
-	Type           param.Field[InstanceNewParamsType]           `json:"type,required"`
-	AIGatewayID    param.Field[string]                          `json:"ai_gateway_id"`
-	AISearchModel  param.Field[InstanceNewParamsAISearchModel]  `json:"ai_search_model"`
-	Chunk          param.Field[bool]                            `json:"chunk"`
-	ChunkOverlap   param.Field[int64]                           `json:"chunk_overlap"`
-	ChunkSize      param.Field[int64]                           `json:"chunk_size"`
-	EmbeddingModel param.Field[InstanceNewParamsEmbeddingModel] `json:"embedding_model"`
-	MaxNumResults  param.Field[int64]                           `json:"max_num_results"`
-	Metadata       param.Field[InstanceNewParamsMetadata]       `json:"metadata"`
-	Reranking      param.Field[bool]                            `json:"reranking"`
-	RerankingModel param.Field[InstanceNewParamsRerankingModel] `json:"reranking_model"`
-	RewriteModel   param.Field[InstanceNewParamsRewriteModel]   `json:"rewrite_model"`
-	RewriteQuery   param.Field[bool]                            `json:"rewrite_query"`
-	ScoreThreshold param.Field[float64]                         `json:"score_threshold"`
-	SourceParams   param.Field[InstanceNewParamsSourceParams]   `json:"source_params"`
+	ID                   param.Field[string]                                `json:"id,required"`
+	Source               param.Field[string]                                `json:"source,required"`
+	TokenID              param.Field[string]                                `json:"token_id,required" format:"uuid"`
+	Type                 param.Field[InstanceNewParamsType]                 `json:"type,required"`
+	AIGatewayID          param.Field[string]                                `json:"ai_gateway_id"`
+	AISearchModel        param.Field[InstanceNewParamsAISearchModel]        `json:"ai_search_model"`
+	Chunk                param.Field[bool]                                  `json:"chunk"`
+	ChunkOverlap         param.Field[int64]                                 `json:"chunk_overlap"`
+	ChunkSize            param.Field[int64]                                 `json:"chunk_size"`
+	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
+	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
+	Metadata             param.Field[InstanceNewParamsMetadata]             `json:"metadata"`
+	PublicEndpointParams param.Field[InstanceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
+	Reranking            param.Field[bool]                                  `json:"reranking"`
+	RerankingModel       param.Field[InstanceNewParamsRerankingModel]       `json:"reranking_model"`
+	RewriteModel         param.Field[InstanceNewParamsRewriteModel]         `json:"rewrite_model"`
+	RewriteQuery         param.Field[bool]                                  `json:"rewrite_query"`
+	ScoreThreshold       param.Field[float64]                               `json:"score_threshold"`
+	SourceParams         param.Field[InstanceNewParamsSourceParams]         `json:"source_params"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -2464,6 +2810,41 @@ type InstanceNewParamsMetadata struct {
 
 func (r InstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsPublicEndpointParams struct {
+	AuthorizedHosts param.Field[[]string]                                       `json:"authorized_hosts"`
+	Enabled         param.Field[bool]                                           `json:"enabled"`
+	RateLimit       param.Field[InstanceNewParamsPublicEndpointParamsRateLimit] `json:"rate_limit"`
+}
+
+func (r InstanceNewParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsPublicEndpointParamsRateLimit struct {
+	PeriodMs  param.Field[int64]                                                   `json:"period_ms"`
+	Requests  param.Field[int64]                                                   `json:"requests"`
+	Technique param.Field[InstanceNewParamsPublicEndpointParamsRateLimitTechnique] `json:"technique"`
+}
+
+func (r InstanceNewParamsPublicEndpointParamsRateLimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsPublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceNewParamsPublicEndpointParamsRateLimitTechniqueFixed   InstanceNewParamsPublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceNewParamsPublicEndpointParamsRateLimitTechniqueSliding InstanceNewParamsPublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceNewParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsPublicEndpointParamsRateLimitTechniqueFixed, InstanceNewParamsPublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceNewParamsRerankingModel string
@@ -2605,30 +2986,31 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
-	AccountID                      param.Field[string]                                 `path:"account_id,required"`
-	AIGatewayID                    param.Field[string]                                 `json:"ai_gateway_id"`
-	AISearchModel                  param.Field[InstanceUpdateParamsAISearchModel]      `json:"ai_search_model"`
-	Cache                          param.Field[bool]                                   `json:"cache"`
-	CacheThreshold                 param.Field[InstanceUpdateParamsCacheThreshold]     `json:"cache_threshold"`
-	Chunk                          param.Field[bool]                                   `json:"chunk"`
-	ChunkOverlap                   param.Field[int64]                                  `json:"chunk_overlap"`
-	ChunkSize                      param.Field[int64]                                  `json:"chunk_size"`
-	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]     `json:"embedding_model"`
-	MaxNumResults                  param.Field[int64]                                  `json:"max_num_results"`
-	Metadata                       param.Field[InstanceUpdateParamsMetadata]           `json:"metadata"`
-	Paused                         param.Field[bool]                                   `json:"paused"`
-	Reranking                      param.Field[bool]                                   `json:"reranking"`
-	RerankingModel                 param.Field[InstanceUpdateParamsRerankingModel]     `json:"reranking_model"`
-	RewriteModel                   param.Field[InstanceUpdateParamsRewriteModel]       `json:"rewrite_model"`
-	RewriteQuery                   param.Field[bool]                                   `json:"rewrite_query"`
-	ScoreThreshold                 param.Field[float64]                                `json:"score_threshold"`
-	SourceParams                   param.Field[InstanceUpdateParamsSourceParams]       `json:"source_params"`
-	Summarization                  param.Field[bool]                                   `json:"summarization"`
-	SummarizationModel             param.Field[InstanceUpdateParamsSummarizationModel] `json:"summarization_model"`
-	SystemPromptAISearch           param.Field[string]                                 `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization param.Field[string]                                 `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       param.Field[string]                                 `json:"system_prompt_rewrite_query"`
-	TokenID                        param.Field[string]                                 `json:"token_id" format:"uuid"`
+	AccountID                      param.Field[string]                                   `path:"account_id,required"`
+	AIGatewayID                    param.Field[string]                                   `json:"ai_gateway_id"`
+	AISearchModel                  param.Field[InstanceUpdateParamsAISearchModel]        `json:"ai_search_model"`
+	Cache                          param.Field[bool]                                     `json:"cache"`
+	CacheThreshold                 param.Field[InstanceUpdateParamsCacheThreshold]       `json:"cache_threshold"`
+	Chunk                          param.Field[bool]                                     `json:"chunk"`
+	ChunkOverlap                   param.Field[int64]                                    `json:"chunk_overlap"`
+	ChunkSize                      param.Field[int64]                                    `json:"chunk_size"`
+	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
+	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
+	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
+	Paused                         param.Field[bool]                                     `json:"paused"`
+	PublicEndpointParams           param.Field[InstanceUpdateParamsPublicEndpointParams] `json:"public_endpoint_params"`
+	Reranking                      param.Field[bool]                                     `json:"reranking"`
+	RerankingModel                 param.Field[InstanceUpdateParamsRerankingModel]       `json:"reranking_model"`
+	RewriteModel                   param.Field[InstanceUpdateParamsRewriteModel]         `json:"rewrite_model"`
+	RewriteQuery                   param.Field[bool]                                     `json:"rewrite_query"`
+	ScoreThreshold                 param.Field[float64]                                  `json:"score_threshold"`
+	SourceParams                   param.Field[InstanceUpdateParamsSourceParams]         `json:"source_params"`
+	Summarization                  param.Field[bool]                                     `json:"summarization"`
+	SummarizationModel             param.Field[InstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
+	SystemPromptAISearch           param.Field[string]                                   `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization param.Field[string]                                   `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       param.Field[string]                                   `json:"system_prompt_rewrite_query"`
+	TokenID                        param.Field[string]                                   `json:"token_id" format:"uuid"`
 }
 
 func (r InstanceUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -2719,6 +3101,41 @@ type InstanceUpdateParamsMetadata struct {
 
 func (r InstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsPublicEndpointParams struct {
+	AuthorizedHosts param.Field[[]string]                                          `json:"authorized_hosts"`
+	Enabled         param.Field[bool]                                              `json:"enabled"`
+	RateLimit       param.Field[InstanceUpdateParamsPublicEndpointParamsRateLimit] `json:"rate_limit"`
+}
+
+func (r InstanceUpdateParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsPublicEndpointParamsRateLimit struct {
+	PeriodMs  param.Field[int64]                                                      `json:"period_ms"`
+	Requests  param.Field[int64]                                                      `json:"requests"`
+	Technique param.Field[InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique] `json:"technique"`
+}
+
+func (r InstanceUpdateParamsPublicEndpointParamsRateLimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique string
+
+const (
+	InstanceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed   InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique = "fixed"
+	InstanceUpdateParamsPublicEndpointParamsRateLimitTechniqueSliding InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed, InstanceUpdateParamsPublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
 }
 
 type InstanceUpdateParamsRerankingModel string

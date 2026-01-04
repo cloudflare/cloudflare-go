@@ -324,12 +324,14 @@ func (r threatEventDeleteResponseJSON) RawJSON() string {
 type ThreatEventBulkNewResponse struct {
 	// Number of events created
 	CreatedEventsCount float64 `json:"createdEventsCount,required"`
-	// Number of indicators created
-	CreatedIndicatorsCount float64 `json:"createdIndicatorsCount,required"`
-	// Number of tags created in SoT
+	// Number of new tags created in SoT
 	CreatedTagsCount float64 `json:"createdTagsCount,required"`
 	// Number of errors encountered
 	ErrorCount float64 `json:"errorCount,required"`
+	// Number of indicators queued for async processing
+	QueuedIndicatorsCount float64 `json:"queuedIndicatorsCount,required"`
+	// Correlation ID for async indicator processing
+	CreateBulkEventsRequestID string `json:"createBulkEventsRequestId" format:"uuid"`
 	// Array of error details
 	Errors []ThreatEventBulkNewResponseError `json:"errors"`
 	JSON   threatEventBulkNewResponseJSON    `json:"-"`
@@ -338,13 +340,14 @@ type ThreatEventBulkNewResponse struct {
 // threatEventBulkNewResponseJSON contains the JSON metadata for the struct
 // [ThreatEventBulkNewResponse]
 type threatEventBulkNewResponseJSON struct {
-	CreatedEventsCount     apijson.Field
-	CreatedIndicatorsCount apijson.Field
-	CreatedTagsCount       apijson.Field
-	ErrorCount             apijson.Field
-	Errors                 apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	CreatedEventsCount        apijson.Field
+	CreatedTagsCount          apijson.Field
+	ErrorCount                apijson.Field
+	QueuedIndicatorsCount     apijson.Field
+	CreateBulkEventsRequestID apijson.Field
+	Errors                    apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *ThreatEventBulkNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -724,6 +727,8 @@ type ThreatEventEditParams struct {
 	Attacker        param.Field[string]                   `json:"attacker"`
 	AttackerCountry param.Field[string]                   `json:"attackerCountry"`
 	Category        param.Field[string]                   `json:"category"`
+	CreatedAt       param.Field[time.Time]                `json:"createdAt" format:"date-time"`
+	DatasetID       param.Field[string]                   `json:"datasetId"`
 	Date            param.Field[time.Time]                `json:"date" format:"date-time"`
 	Event           param.Field[string]                   `json:"event"`
 	Indicator       param.Field[string]                   `json:"indicator"`

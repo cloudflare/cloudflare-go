@@ -45,6 +45,15 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			CreatedFromAISearchWizard: cloudflare.F(true),
 			WorkerDomain:              cloudflare.F("worker_domain"),
 		}),
+		PublicEndpointParams: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParams{
+			AuthorizedHosts: cloudflare.F([]string{"string"}),
+			Enabled:         cloudflare.F(true),
+			RateLimit: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsRateLimit{
+				PeriodMs:  cloudflare.F(int64(60000)),
+				Requests:  cloudflare.F(int64(1)),
+				Technique: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsRateLimitTechniqueFixed),
+			}),
+		}),
 		Reranking:      cloudflare.F(true),
 		RerankingModel: cloudflare.F(ai_search.InstanceNewParamsRerankingModelCfBaaiBgeRerankerBase),
 		RewriteModel:   cloudflare.F(ai_search.InstanceNewParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
@@ -112,7 +121,16 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				CreatedFromAISearchWizard: cloudflare.F(true),
 				WorkerDomain:              cloudflare.F("worker_domain"),
 			}),
-			Paused:         cloudflare.F(true),
+			Paused: cloudflare.F(true),
+			PublicEndpointParams: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParams{
+				AuthorizedHosts: cloudflare.F([]string{"string"}),
+				Enabled:         cloudflare.F(true),
+				RateLimit: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsRateLimit{
+					PeriodMs:  cloudflare.F(int64(60000)),
+					Requests:  cloudflare.F(int64(1)),
+					Technique: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed),
+				}),
+			}),
 			Reranking:      cloudflare.F(true),
 			RerankingModel: cloudflare.F(ai_search.InstanceUpdateParamsRerankingModelCfBaaiBgeRerankerBase),
 			RewriteModel:   cloudflare.F(ai_search.InstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),

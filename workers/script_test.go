@@ -89,8 +89,8 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 				}),
-				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacement{
-					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementModeSmart),
+				Placement: cloudflare.F[workers.ScriptUpdateParamsMetadataPlacementUnion](workers.ScriptUpdateParamsMetadataPlacementObject{
+					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementObjectModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{

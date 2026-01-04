@@ -11,6 +11,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -21,6 +22,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/tidwall/gjson"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -204,6 +206,8 @@ type Script struct {
 	Observability ScriptObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
 	Placement ScriptPlacement `json:"placement"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
@@ -355,34 +359,161 @@ func (r scriptObservabilityLogsJSON) RawJSON() string {
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptPlacement struct {
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
 	// The last time the script was analyzed for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode ScriptPlacementMode `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string `json:"region"`
 	// Status of
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Status ScriptPlacementStatus `json:"status"`
 	JSON   scriptPlacementJSON   `json:"-"`
+	union  ScriptPlacementUnion
 }
 
 // scriptPlacementJSON contains the JSON metadata for the struct [ScriptPlacement]
 type scriptPlacementJSON struct {
+	Host           apijson.Field
+	Hostname       apijson.Field
 	LastAnalyzedAt apijson.Field
 	Mode           apijson.Field
+	Region         apijson.Field
 	Status         apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
+func (r scriptPlacementJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ScriptPlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptPlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ScriptPlacementUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [ScriptPlacementObject],
+// [ScriptPlacementObject], [ScriptPlacementObject], [ScriptPlacementObject].
+func (r ScriptPlacement) AsUnion() ScriptPlacementUnion {
+	return r.union
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Union satisfied by [ScriptPlacementObject], [ScriptPlacementObject],
+// [ScriptPlacementObject] or [ScriptPlacementObject].
+type ScriptPlacementUnion interface {
+	implementsScriptPlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptPlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptPlacementObject{}),
+		},
+	)
+}
+
+type ScriptPlacementObject struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptPlacementObjectMode `json:"mode,required"`
+	// The last time the script was analyzed for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Status ScriptPlacementObjectStatus `json:"status"`
+	JSON   scriptPlacementObjectJSON   `json:"-"`
+}
+
+// scriptPlacementObjectJSON contains the JSON metadata for the struct
+// [ScriptPlacementObject]
+type scriptPlacementObjectJSON struct {
+	Mode           apijson.Field
+	LastAnalyzedAt apijson.Field
+	Status         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ScriptPlacementObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptPlacementJSON) RawJSON() string {
+func (r scriptPlacementObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ScriptPlacementObject) implementsScriptPlacement() {}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptPlacementObjectMode string
+
+const (
+	ScriptPlacementObjectModeSmart ScriptPlacementObjectMode = "smart"
+)
+
+func (r ScriptPlacementObjectMode) IsKnown() bool {
+	switch r {
+	case ScriptPlacementObjectModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptPlacementObjectStatus string
+
+const (
+	ScriptPlacementObjectStatusSuccess                 ScriptPlacementObjectStatus = "SUCCESS"
+	ScriptPlacementObjectStatusUnsupportedApplication  ScriptPlacementObjectStatus = "UNSUPPORTED_APPLICATION"
+	ScriptPlacementObjectStatusInsufficientInvocations ScriptPlacementObjectStatus = "INSUFFICIENT_INVOCATIONS"
+)
+
+func (r ScriptPlacementObjectStatus) IsKnown() bool {
+	switch r {
+	case ScriptPlacementObjectStatusSuccess, ScriptPlacementObjectStatusUnsupportedApplication, ScriptPlacementObjectStatusInsufficientInvocations:
+		return true
+	}
+	return false
 }
 
 // Enables
@@ -622,6 +753,8 @@ type ScriptUpdateResponse struct {
 	Observability ScriptUpdateResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
 	Placement ScriptUpdateResponsePlacement `json:"placement"`
 	// Deprecated: deprecated
 	PlacementMode ScriptUpdateResponsePlacementMode `json:"placement_mode"`
@@ -770,35 +903,164 @@ func (r scriptUpdateResponseObservabilityLogsJSON) RawJSON() string {
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptUpdateResponsePlacement struct {
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
 	// The last time the script was analyzed for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode ScriptUpdateResponsePlacementMode `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string `json:"region"`
 	// Status of
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Status ScriptUpdateResponsePlacementStatus `json:"status"`
 	JSON   scriptUpdateResponsePlacementJSON   `json:"-"`
+	union  ScriptUpdateResponsePlacementUnion
 }
 
 // scriptUpdateResponsePlacementJSON contains the JSON metadata for the struct
 // [ScriptUpdateResponsePlacement]
 type scriptUpdateResponsePlacementJSON struct {
+	Host           apijson.Field
+	Hostname       apijson.Field
 	LastAnalyzedAt apijson.Field
 	Mode           apijson.Field
+	Region         apijson.Field
 	Status         apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
+func (r scriptUpdateResponsePlacementJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ScriptUpdateResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptUpdateResponsePlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ScriptUpdateResponsePlacementUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [ScriptUpdateResponsePlacementObject],
+// [ScriptUpdateResponsePlacementObject], [ScriptUpdateResponsePlacementObject],
+// [ScriptUpdateResponsePlacementObject].
+func (r ScriptUpdateResponsePlacement) AsUnion() ScriptUpdateResponsePlacementUnion {
+	return r.union
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Union satisfied by [ScriptUpdateResponsePlacementObject],
+// [ScriptUpdateResponsePlacementObject], [ScriptUpdateResponsePlacementObject] or
+// [ScriptUpdateResponsePlacementObject].
+type ScriptUpdateResponsePlacementUnion interface {
+	implementsScriptUpdateResponsePlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptUpdateResponsePlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptUpdateResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptUpdateResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptUpdateResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptUpdateResponsePlacementObject{}),
+		},
+	)
+}
+
+type ScriptUpdateResponsePlacementObject struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptUpdateResponsePlacementObjectMode `json:"mode,required"`
+	// The last time the script was analyzed for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Status ScriptUpdateResponsePlacementObjectStatus `json:"status"`
+	JSON   scriptUpdateResponsePlacementObjectJSON   `json:"-"`
+}
+
+// scriptUpdateResponsePlacementObjectJSON contains the JSON metadata for the
+// struct [ScriptUpdateResponsePlacementObject]
+type scriptUpdateResponsePlacementObjectJSON struct {
+	Mode           apijson.Field
+	LastAnalyzedAt apijson.Field
+	Status         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponsePlacementObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptUpdateResponsePlacementJSON) RawJSON() string {
+func (r scriptUpdateResponsePlacementObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ScriptUpdateResponsePlacementObject) implementsScriptUpdateResponsePlacement() {}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateResponsePlacementObjectMode string
+
+const (
+	ScriptUpdateResponsePlacementObjectModeSmart ScriptUpdateResponsePlacementObjectMode = "smart"
+)
+
+func (r ScriptUpdateResponsePlacementObjectMode) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponsePlacementObjectModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateResponsePlacementObjectStatus string
+
+const (
+	ScriptUpdateResponsePlacementObjectStatusSuccess                 ScriptUpdateResponsePlacementObjectStatus = "SUCCESS"
+	ScriptUpdateResponsePlacementObjectStatusUnsupportedApplication  ScriptUpdateResponsePlacementObjectStatus = "UNSUPPORTED_APPLICATION"
+	ScriptUpdateResponsePlacementObjectStatusInsufficientInvocations ScriptUpdateResponsePlacementObjectStatus = "INSUFFICIENT_INVOCATIONS"
+)
+
+func (r ScriptUpdateResponsePlacementObjectStatus) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponsePlacementObjectStatusSuccess, ScriptUpdateResponsePlacementObjectStatusUnsupportedApplication, ScriptUpdateResponsePlacementObjectStatusInsufficientInvocations:
+		return true
+	}
+	return false
 }
 
 // Enables
@@ -888,6 +1150,8 @@ type ScriptListResponse struct {
 	Observability ScriptListResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
 	Placement ScriptListResponsePlacement `json:"placement"`
 	// Deprecated: deprecated
 	PlacementMode ScriptListResponsePlacementMode `json:"placement_mode"`
@@ -1037,35 +1301,164 @@ func (r scriptListResponseObservabilityLogsJSON) RawJSON() string {
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptListResponsePlacement struct {
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
 	// The last time the script was analyzed for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode ScriptListResponsePlacementMode `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string `json:"region"`
 	// Status of
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Status ScriptListResponsePlacementStatus `json:"status"`
 	JSON   scriptListResponsePlacementJSON   `json:"-"`
+	union  ScriptListResponsePlacementUnion
 }
 
 // scriptListResponsePlacementJSON contains the JSON metadata for the struct
 // [ScriptListResponsePlacement]
 type scriptListResponsePlacementJSON struct {
+	Host           apijson.Field
+	Hostname       apijson.Field
 	LastAnalyzedAt apijson.Field
 	Mode           apijson.Field
+	Region         apijson.Field
 	Status         apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
+func (r scriptListResponsePlacementJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ScriptListResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptListResponsePlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ScriptListResponsePlacementUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [ScriptListResponsePlacementObject],
+// [ScriptListResponsePlacementObject], [ScriptListResponsePlacementObject],
+// [ScriptListResponsePlacementObject].
+func (r ScriptListResponsePlacement) AsUnion() ScriptListResponsePlacementUnion {
+	return r.union
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Union satisfied by [ScriptListResponsePlacementObject],
+// [ScriptListResponsePlacementObject], [ScriptListResponsePlacementObject] or
+// [ScriptListResponsePlacementObject].
+type ScriptListResponsePlacementUnion interface {
+	implementsScriptListResponsePlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptListResponsePlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptListResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptListResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptListResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptListResponsePlacementObject{}),
+		},
+	)
+}
+
+type ScriptListResponsePlacementObject struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptListResponsePlacementObjectMode `json:"mode,required"`
+	// The last time the script was analyzed for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Status ScriptListResponsePlacementObjectStatus `json:"status"`
+	JSON   scriptListResponsePlacementObjectJSON   `json:"-"`
+}
+
+// scriptListResponsePlacementObjectJSON contains the JSON metadata for the struct
+// [ScriptListResponsePlacementObject]
+type scriptListResponsePlacementObjectJSON struct {
+	Mode           apijson.Field
+	LastAnalyzedAt apijson.Field
+	Status         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ScriptListResponsePlacementObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptListResponsePlacementJSON) RawJSON() string {
+func (r scriptListResponsePlacementObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ScriptListResponsePlacementObject) implementsScriptListResponsePlacement() {}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptListResponsePlacementObjectMode string
+
+const (
+	ScriptListResponsePlacementObjectModeSmart ScriptListResponsePlacementObjectMode = "smart"
+)
+
+func (r ScriptListResponsePlacementObjectMode) IsKnown() bool {
+	switch r {
+	case ScriptListResponsePlacementObjectModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptListResponsePlacementObjectStatus string
+
+const (
+	ScriptListResponsePlacementObjectStatusSuccess                 ScriptListResponsePlacementObjectStatus = "SUCCESS"
+	ScriptListResponsePlacementObjectStatusUnsupportedApplication  ScriptListResponsePlacementObjectStatus = "UNSUPPORTED_APPLICATION"
+	ScriptListResponsePlacementObjectStatusInsufficientInvocations ScriptListResponsePlacementObjectStatus = "INSUFFICIENT_INVOCATIONS"
+)
+
+func (r ScriptListResponsePlacementObjectStatus) IsKnown() bool {
+	switch r {
+	case ScriptListResponsePlacementObjectStatusSuccess, ScriptListResponsePlacementObjectStatusUnsupportedApplication, ScriptListResponsePlacementObjectStatusInsufficientInvocations:
+		return true
+	}
+	return false
 }
 
 // Enables
@@ -1256,7 +1649,9 @@ type ScriptUpdateParamsMetadata struct {
 	Observability param.Field[ScriptUpdateParamsMetadataObservability] `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Placement param.Field[ScriptUpdateParamsMetadataPlacement] `json:"placement"`
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
+	Placement param.Field[ScriptUpdateParamsMetadataPlacementUnion] `json:"placement"`
 	// List of strings to use as tags for this Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -2647,14 +3042,85 @@ func (r ScriptUpdateParamsMetadataObservabilityLogs) MarshalJSON() (data []byte,
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptUpdateParamsMetadataPlacement struct {
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode param.Field[ScriptUpdateParamsMetadataPlacementMode] `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region"`
 }
 
 func (r ScriptUpdateParamsMetadataPlacement) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataPlacement) implementsScriptUpdateParamsMetadataPlacementUnion() {}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Satisfied by [workers.ScriptUpdateParamsMetadataPlacementObject],
+// [workers.ScriptUpdateParamsMetadataPlacementObject],
+// [workers.ScriptUpdateParamsMetadataPlacementObject],
+// [workers.ScriptUpdateParamsMetadataPlacementObject],
+// [ScriptUpdateParamsMetadataPlacement].
+type ScriptUpdateParamsMetadataPlacementUnion interface {
+	implementsScriptUpdateParamsMetadataPlacementUnion()
+}
+
+type ScriptUpdateParamsMetadataPlacementObject struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode param.Field[ScriptUpdateParamsMetadataPlacementObjectMode] `json:"mode,required"`
+}
+
+func (r ScriptUpdateParamsMetadataPlacementObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataPlacementObject) implementsScriptUpdateParamsMetadataPlacementUnion() {
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateParamsMetadataPlacementObjectMode string
+
+const (
+	ScriptUpdateParamsMetadataPlacementObjectModeSmart ScriptUpdateParamsMetadataPlacementObjectMode = "smart"
+)
+
+func (r ScriptUpdateParamsMetadataPlacementObjectMode) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataPlacementObjectModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateParamsMetadataPlacementObjectStatus string
+
+const (
+	ScriptUpdateParamsMetadataPlacementObjectStatusSuccess                 ScriptUpdateParamsMetadataPlacementObjectStatus = "SUCCESS"
+	ScriptUpdateParamsMetadataPlacementObjectStatusUnsupportedApplication  ScriptUpdateParamsMetadataPlacementObjectStatus = "UNSUPPORTED_APPLICATION"
+	ScriptUpdateParamsMetadataPlacementObjectStatusInsufficientInvocations ScriptUpdateParamsMetadataPlacementObjectStatus = "INSUFFICIENT_INVOCATIONS"
+)
+
+func (r ScriptUpdateParamsMetadataPlacementObjectStatus) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataPlacementObjectStatusSuccess, ScriptUpdateParamsMetadataPlacementObjectStatusUnsupportedApplication, ScriptUpdateParamsMetadataPlacementObjectStatusInsufficientInvocations:
+		return true
+	}
+	return false
 }
 
 // Enables

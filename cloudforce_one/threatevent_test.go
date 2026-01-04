@@ -210,6 +210,8 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 			Attacker:        cloudflare.F("Flying Yeti"),
 			AttackerCountry: cloudflare.F("CN"),
 			Category:        cloudflare.F("Domain Resolution"),
+			CreatedAt:       cloudflare.F(time.Now()),
+			DatasetID:       cloudflare.F("9b769969-a211-466c-8ac3-cb91266a066a"),
 			Date:            cloudflare.F(time.Now()),
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			Indicator:       cloudflare.F("domain2.com"),

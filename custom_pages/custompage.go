@@ -326,11 +326,12 @@ const (
 	CustomPageUpdateParamsIdentifierRatelimitBlock   CustomPageUpdateParamsIdentifier = "ratelimit_block"
 	CustomPageUpdateParamsIdentifierUnderAttack      CustomPageUpdateParamsIdentifier = "under_attack"
 	CustomPageUpdateParamsIdentifierWAFBlock         CustomPageUpdateParamsIdentifier = "waf_block"
+	CustomPageUpdateParamsIdentifierWAFChallenge     CustomPageUpdateParamsIdentifier = "waf_challenge"
 )
 
 func (r CustomPageUpdateParamsIdentifier) IsKnown() bool {
 	switch r {
-	case CustomPageUpdateParamsIdentifier1000Errors, CustomPageUpdateParamsIdentifier500Errors, CustomPageUpdateParamsIdentifierBasicChallenge, CustomPageUpdateParamsIdentifierCountryChallenge, CustomPageUpdateParamsIdentifierIPBlock, CustomPageUpdateParamsIdentifierManagedChallenge, CustomPageUpdateParamsIdentifierRatelimitBlock, CustomPageUpdateParamsIdentifierUnderAttack, CustomPageUpdateParamsIdentifierWAFBlock:
+	case CustomPageUpdateParamsIdentifier1000Errors, CustomPageUpdateParamsIdentifier500Errors, CustomPageUpdateParamsIdentifierBasicChallenge, CustomPageUpdateParamsIdentifierCountryChallenge, CustomPageUpdateParamsIdentifierIPBlock, CustomPageUpdateParamsIdentifierManagedChallenge, CustomPageUpdateParamsIdentifierRatelimitBlock, CustomPageUpdateParamsIdentifierUnderAttack, CustomPageUpdateParamsIdentifierWAFBlock, CustomPageUpdateParamsIdentifierWAFChallenge:
 		return true
 	}
 	return false
@@ -518,11 +519,12 @@ const (
 	CustomPageGetParamsIdentifierRatelimitBlock   CustomPageGetParamsIdentifier = "ratelimit_block"
 	CustomPageGetParamsIdentifierUnderAttack      CustomPageGetParamsIdentifier = "under_attack"
 	CustomPageGetParamsIdentifierWAFBlock         CustomPageGetParamsIdentifier = "waf_block"
+	CustomPageGetParamsIdentifierWAFChallenge     CustomPageGetParamsIdentifier = "waf_challenge"
 )
 
 func (r CustomPageGetParamsIdentifier) IsKnown() bool {
 	switch r {
-	case CustomPageGetParamsIdentifier1000Errors, CustomPageGetParamsIdentifier500Errors, CustomPageGetParamsIdentifierBasicChallenge, CustomPageGetParamsIdentifierCountryChallenge, CustomPageGetParamsIdentifierIPBlock, CustomPageGetParamsIdentifierManagedChallenge, CustomPageGetParamsIdentifierRatelimitBlock, CustomPageGetParamsIdentifierUnderAttack, CustomPageGetParamsIdentifierWAFBlock:
+	case CustomPageGetParamsIdentifier1000Errors, CustomPageGetParamsIdentifier500Errors, CustomPageGetParamsIdentifierBasicChallenge, CustomPageGetParamsIdentifierCountryChallenge, CustomPageGetParamsIdentifierIPBlock, CustomPageGetParamsIdentifierManagedChallenge, CustomPageGetParamsIdentifierRatelimitBlock, CustomPageGetParamsIdentifierUnderAttack, CustomPageGetParamsIdentifierWAFBlock, CustomPageGetParamsIdentifierWAFChallenge:
 		return true
 	}
 	return false

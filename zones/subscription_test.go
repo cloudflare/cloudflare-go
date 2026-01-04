@@ -29,7 +29,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Subscriptions.New(context.TODO(), zones.SubscriptionNewParams{
-		ZoneID: cloudflare.F("506e3185e9c882d175a2d0cb0093d9f2"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Subscription: shared.SubscriptionParam{
 			Frequency: cloudflare.F(shared.SubscriptionFrequencyMonthly),
 			RatePlan: cloudflare.F(shared.RatePlanParam{
@@ -66,7 +66,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Subscriptions.Update(context.TODO(), zones.SubscriptionUpdateParams{
-		ZoneID: cloudflare.F("506e3185e9c882d175a2d0cb0093d9f2"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Subscription: shared.SubscriptionParam{
 			Frequency: cloudflare.F(shared.SubscriptionFrequencyMonthly),
 			RatePlan: cloudflare.F(shared.RatePlanParam{
@@ -103,7 +103,7 @@ func TestSubscriptionGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Subscriptions.Get(context.TODO(), zones.SubscriptionGetParams{
-		ZoneID: cloudflare.F("506e3185e9c882d175a2d0cb0093d9f2"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
