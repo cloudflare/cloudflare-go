@@ -58,55 +58,12 @@ type MarkdownNewParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64] `query:"cacheTTL"`
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
-	AddScriptTag param.Field[[]MarkdownNewParamsAddScriptTag] `json:"addScriptTag"`
-	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
-	// `<style type="text/css">` tag with the content.
-	AddStyleTag param.Field[[]MarkdownNewParamsAddStyleTag] `json:"addStyleTag"`
-	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
-	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
-	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	AllowResourceTypes param.Field[[]MarkdownNewParamsAllowResourceType] `json:"allowResourceTypes"`
-	// Provide credentials for HTTP authentication.
-	Authenticate param.Field[MarkdownNewParamsAuthenticate] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool] `json:"bestAttempt"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]MarkdownNewParamsCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                    `json:"emulateMediaType"`
-	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-	GotoOptions param.Field[MarkdownNewParamsGotoOptions] `json:"gotoOptions"`
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML param.Field[string] `json:"html"`
-	// Block undesired requests that match the provided regex patterns, eg.
-	// '/^.\*\.(css)'.
-	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
-	// Block undesired requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	RejectResourceTypes  param.Field[[]MarkdownNewParamsRejectResourceType] `json:"rejectResourceTypes"`
-	SetExtraHTTPHeaders  param.Field[map[string]string]                     `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]                                  `json:"setJavaScriptEnabled"`
-	// URL to navigate to, eg. `https://example.com`.
-	URL       param.Field[string] `json:"url" format:"uri"`
-	UserAgent param.Field[string] `json:"userAgent"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-	Viewport param.Field[MarkdownNewParamsViewport] `json:"viewport"`
-	// Wait for the selector to appear in page. Check
-	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-	WaitForSelector param.Field[MarkdownNewParamsWaitForSelector] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+	CacheTTL param.Field[float64]       `query:"cacheTTL"`
+	Body     MarkdownNewParamsBodyUnion `json:"body"`
 }
 
 func (r MarkdownNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [MarkdownNewParams]'s query parameters as `url.Values`.
@@ -117,229 +74,323 @@ func (r MarkdownNewParams) URLQuery() (v url.Values) {
 	})
 }
 
-type MarkdownNewParamsAddScriptTag struct {
+type MarkdownNewParamsBody struct {
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout       param.Field[float64]     `json:"actionTimeout"`
+	AddScriptTag        param.Field[interface{}] `json:"addScriptTag"`
+	AddStyleTag         param.Field[interface{}] `json:"addStyleTag"`
+	AllowRequestPattern param.Field[interface{}] `json:"allowRequestPattern"`
+	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
+	Authenticate        param.Field[interface{}] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt      param.Field[bool]        `json:"bestAttempt"`
+	Cookies          param.Field[interface{}] `json:"cookies"`
+	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
+	GotoOptions      param.Field[interface{}] `json:"gotoOptions"`
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML                 param.Field[string]      `json:"html"`
+	RejectRequestPattern param.Field[interface{}] `json:"rejectRequestPattern"`
+	RejectResourceTypes  param.Field[interface{}] `json:"rejectResourceTypes"`
+	SetExtraHTTPHeaders  param.Field[interface{}] `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]        `json:"setJavaScriptEnabled"`
+	// URL to navigate to, eg. `https://example.com`.
+	URL             param.Field[string]      `json:"url" format:"uri"`
+	UserAgent       param.Field[string]      `json:"userAgent"`
+	Viewport        param.Field[interface{}] `json:"viewport"`
+	WaitForSelector param.Field[interface{}] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r MarkdownNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MarkdownNewParamsBody) implementsMarkdownNewParamsBodyUnion() {}
+
+// Satisfied by [browser_rendering.MarkdownNewParamsBodyObject],
+// [browser_rendering.MarkdownNewParamsBodyObject], [MarkdownNewParamsBody].
+type MarkdownNewParamsBodyUnion interface {
+	implementsMarkdownNewParamsBodyUnion()
+}
+
+type MarkdownNewParamsBodyObject struct {
+	// URL to navigate to, eg. `https://example.com`.
+	URL param.Field[string] `json:"url,required" format:"uri"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
+	// Adds a `<script>` tag into the page with the desired URL or content.
+	AddScriptTag param.Field[[]MarkdownNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
+	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
+	// `<style type="text/css">` tag with the content.
+	AddStyleTag param.Field[[]MarkdownNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
+	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
+	// Only allow requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	AllowResourceTypes param.Field[[]MarkdownNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
+	// Provide credentials for HTTP authentication.
+	Authenticate param.Field[MarkdownNewParamsBodyObjectAuthenticate] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
+	Cookies          param.Field[[]MarkdownNewParamsBodyObjectCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]                              `json:"emulateMediaType"`
+	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
+	GotoOptions param.Field[MarkdownNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
+	// Block undesired requests that match the provided regex patterns, eg.
+	// '/^.\*\.(css)'.
+	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
+	// Block undesired requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	RejectResourceTypes  param.Field[[]MarkdownNewParamsBodyObjectRejectResourceType] `json:"rejectResourceTypes"`
+	SetExtraHTTPHeaders  param.Field[map[string]string]                               `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]                                            `json:"setJavaScriptEnabled"`
+	UserAgent            param.Field[string]                                          `json:"userAgent"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
+	Viewport param.Field[MarkdownNewParamsBodyObjectViewport] `json:"viewport"`
+	// Wait for the selector to appear in page. Check
+	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
+	WaitForSelector param.Field[MarkdownNewParamsBodyObjectWaitForSelector] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r MarkdownNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MarkdownNewParamsBodyObject) implementsMarkdownNewParamsBodyUnion() {}
+
+type MarkdownNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r MarkdownNewParamsAddScriptTag) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MarkdownNewParamsAddStyleTag struct {
+type MarkdownNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r MarkdownNewParamsAddStyleTag) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MarkdownNewParamsAllowResourceType string
+type MarkdownNewParamsBodyObjectAllowResourceType string
 
 const (
-	MarkdownNewParamsAllowResourceTypeDocument           MarkdownNewParamsAllowResourceType = "document"
-	MarkdownNewParamsAllowResourceTypeStylesheet         MarkdownNewParamsAllowResourceType = "stylesheet"
-	MarkdownNewParamsAllowResourceTypeImage              MarkdownNewParamsAllowResourceType = "image"
-	MarkdownNewParamsAllowResourceTypeMedia              MarkdownNewParamsAllowResourceType = "media"
-	MarkdownNewParamsAllowResourceTypeFont               MarkdownNewParamsAllowResourceType = "font"
-	MarkdownNewParamsAllowResourceTypeScript             MarkdownNewParamsAllowResourceType = "script"
-	MarkdownNewParamsAllowResourceTypeTexttrack          MarkdownNewParamsAllowResourceType = "texttrack"
-	MarkdownNewParamsAllowResourceTypeXHR                MarkdownNewParamsAllowResourceType = "xhr"
-	MarkdownNewParamsAllowResourceTypeFetch              MarkdownNewParamsAllowResourceType = "fetch"
-	MarkdownNewParamsAllowResourceTypePrefetch           MarkdownNewParamsAllowResourceType = "prefetch"
-	MarkdownNewParamsAllowResourceTypeEventsource        MarkdownNewParamsAllowResourceType = "eventsource"
-	MarkdownNewParamsAllowResourceTypeWebsocket          MarkdownNewParamsAllowResourceType = "websocket"
-	MarkdownNewParamsAllowResourceTypeManifest           MarkdownNewParamsAllowResourceType = "manifest"
-	MarkdownNewParamsAllowResourceTypeSignedexchange     MarkdownNewParamsAllowResourceType = "signedexchange"
-	MarkdownNewParamsAllowResourceTypePing               MarkdownNewParamsAllowResourceType = "ping"
-	MarkdownNewParamsAllowResourceTypeCspviolationreport MarkdownNewParamsAllowResourceType = "cspviolationreport"
-	MarkdownNewParamsAllowResourceTypePreflight          MarkdownNewParamsAllowResourceType = "preflight"
-	MarkdownNewParamsAllowResourceTypeOther              MarkdownNewParamsAllowResourceType = "other"
+	MarkdownNewParamsBodyObjectAllowResourceTypeDocument           MarkdownNewParamsBodyObjectAllowResourceType = "document"
+	MarkdownNewParamsBodyObjectAllowResourceTypeStylesheet         MarkdownNewParamsBodyObjectAllowResourceType = "stylesheet"
+	MarkdownNewParamsBodyObjectAllowResourceTypeImage              MarkdownNewParamsBodyObjectAllowResourceType = "image"
+	MarkdownNewParamsBodyObjectAllowResourceTypeMedia              MarkdownNewParamsBodyObjectAllowResourceType = "media"
+	MarkdownNewParamsBodyObjectAllowResourceTypeFont               MarkdownNewParamsBodyObjectAllowResourceType = "font"
+	MarkdownNewParamsBodyObjectAllowResourceTypeScript             MarkdownNewParamsBodyObjectAllowResourceType = "script"
+	MarkdownNewParamsBodyObjectAllowResourceTypeTexttrack          MarkdownNewParamsBodyObjectAllowResourceType = "texttrack"
+	MarkdownNewParamsBodyObjectAllowResourceTypeXHR                MarkdownNewParamsBodyObjectAllowResourceType = "xhr"
+	MarkdownNewParamsBodyObjectAllowResourceTypeFetch              MarkdownNewParamsBodyObjectAllowResourceType = "fetch"
+	MarkdownNewParamsBodyObjectAllowResourceTypePrefetch           MarkdownNewParamsBodyObjectAllowResourceType = "prefetch"
+	MarkdownNewParamsBodyObjectAllowResourceTypeEventsource        MarkdownNewParamsBodyObjectAllowResourceType = "eventsource"
+	MarkdownNewParamsBodyObjectAllowResourceTypeWebsocket          MarkdownNewParamsBodyObjectAllowResourceType = "websocket"
+	MarkdownNewParamsBodyObjectAllowResourceTypeManifest           MarkdownNewParamsBodyObjectAllowResourceType = "manifest"
+	MarkdownNewParamsBodyObjectAllowResourceTypeSignedexchange     MarkdownNewParamsBodyObjectAllowResourceType = "signedexchange"
+	MarkdownNewParamsBodyObjectAllowResourceTypePing               MarkdownNewParamsBodyObjectAllowResourceType = "ping"
+	MarkdownNewParamsBodyObjectAllowResourceTypeCspviolationreport MarkdownNewParamsBodyObjectAllowResourceType = "cspviolationreport"
+	MarkdownNewParamsBodyObjectAllowResourceTypePreflight          MarkdownNewParamsBodyObjectAllowResourceType = "preflight"
+	MarkdownNewParamsBodyObjectAllowResourceTypeOther              MarkdownNewParamsBodyObjectAllowResourceType = "other"
 )
 
-func (r MarkdownNewParamsAllowResourceType) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsAllowResourceTypeDocument, MarkdownNewParamsAllowResourceTypeStylesheet, MarkdownNewParamsAllowResourceTypeImage, MarkdownNewParamsAllowResourceTypeMedia, MarkdownNewParamsAllowResourceTypeFont, MarkdownNewParamsAllowResourceTypeScript, MarkdownNewParamsAllowResourceTypeTexttrack, MarkdownNewParamsAllowResourceTypeXHR, MarkdownNewParamsAllowResourceTypeFetch, MarkdownNewParamsAllowResourceTypePrefetch, MarkdownNewParamsAllowResourceTypeEventsource, MarkdownNewParamsAllowResourceTypeWebsocket, MarkdownNewParamsAllowResourceTypeManifest, MarkdownNewParamsAllowResourceTypeSignedexchange, MarkdownNewParamsAllowResourceTypePing, MarkdownNewParamsAllowResourceTypeCspviolationreport, MarkdownNewParamsAllowResourceTypePreflight, MarkdownNewParamsAllowResourceTypeOther:
+	case MarkdownNewParamsBodyObjectAllowResourceTypeDocument, MarkdownNewParamsBodyObjectAllowResourceTypeStylesheet, MarkdownNewParamsBodyObjectAllowResourceTypeImage, MarkdownNewParamsBodyObjectAllowResourceTypeMedia, MarkdownNewParamsBodyObjectAllowResourceTypeFont, MarkdownNewParamsBodyObjectAllowResourceTypeScript, MarkdownNewParamsBodyObjectAllowResourceTypeTexttrack, MarkdownNewParamsBodyObjectAllowResourceTypeXHR, MarkdownNewParamsBodyObjectAllowResourceTypeFetch, MarkdownNewParamsBodyObjectAllowResourceTypePrefetch, MarkdownNewParamsBodyObjectAllowResourceTypeEventsource, MarkdownNewParamsBodyObjectAllowResourceTypeWebsocket, MarkdownNewParamsBodyObjectAllowResourceTypeManifest, MarkdownNewParamsBodyObjectAllowResourceTypeSignedexchange, MarkdownNewParamsBodyObjectAllowResourceTypePing, MarkdownNewParamsBodyObjectAllowResourceTypeCspviolationreport, MarkdownNewParamsBodyObjectAllowResourceTypePreflight, MarkdownNewParamsBodyObjectAllowResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Provide credentials for HTTP authentication.
-type MarkdownNewParamsAuthenticate struct {
+type MarkdownNewParamsBodyObjectAuthenticate struct {
 	Password param.Field[string] `json:"password,required"`
 	Username param.Field[string] `json:"username,required"`
 }
 
-func (r MarkdownNewParamsAuthenticate) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MarkdownNewParamsCookie struct {
-	Name         param.Field[string]                               `json:"name,required"`
-	Value        param.Field[string]                               `json:"value,required"`
-	Domain       param.Field[string]                               `json:"domain"`
-	Expires      param.Field[float64]                              `json:"expires"`
-	HTTPOnly     param.Field[bool]                                 `json:"httpOnly"`
-	PartitionKey param.Field[string]                               `json:"partitionKey"`
-	Path         param.Field[string]                               `json:"path"`
-	Priority     param.Field[MarkdownNewParamsCookiesPriority]     `json:"priority"`
-	SameParty    param.Field[bool]                                 `json:"sameParty"`
-	SameSite     param.Field[MarkdownNewParamsCookiesSameSite]     `json:"sameSite"`
-	Secure       param.Field[bool]                                 `json:"secure"`
-	SourcePort   param.Field[float64]                              `json:"sourcePort"`
-	SourceScheme param.Field[MarkdownNewParamsCookiesSourceScheme] `json:"sourceScheme"`
-	URL          param.Field[string]                               `json:"url"`
+type MarkdownNewParamsBodyObjectCookie struct {
+	Name         param.Field[string]                                         `json:"name,required"`
+	Value        param.Field[string]                                         `json:"value,required"`
+	Domain       param.Field[string]                                         `json:"domain"`
+	Expires      param.Field[float64]                                        `json:"expires"`
+	HTTPOnly     param.Field[bool]                                           `json:"httpOnly"`
+	PartitionKey param.Field[string]                                         `json:"partitionKey"`
+	Path         param.Field[string]                                         `json:"path"`
+	Priority     param.Field[MarkdownNewParamsBodyObjectCookiesPriority]     `json:"priority"`
+	SameParty    param.Field[bool]                                           `json:"sameParty"`
+	SameSite     param.Field[MarkdownNewParamsBodyObjectCookiesSameSite]     `json:"sameSite"`
+	Secure       param.Field[bool]                                           `json:"secure"`
+	SourcePort   param.Field[float64]                                        `json:"sourcePort"`
+	SourceScheme param.Field[MarkdownNewParamsBodyObjectCookiesSourceScheme] `json:"sourceScheme"`
+	URL          param.Field[string]                                         `json:"url"`
 }
 
-func (r MarkdownNewParamsCookie) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MarkdownNewParamsCookiesPriority string
+type MarkdownNewParamsBodyObjectCookiesPriority string
 
 const (
-	MarkdownNewParamsCookiesPriorityLow    MarkdownNewParamsCookiesPriority = "Low"
-	MarkdownNewParamsCookiesPriorityMedium MarkdownNewParamsCookiesPriority = "Medium"
-	MarkdownNewParamsCookiesPriorityHigh   MarkdownNewParamsCookiesPriority = "High"
+	MarkdownNewParamsBodyObjectCookiesPriorityLow    MarkdownNewParamsBodyObjectCookiesPriority = "Low"
+	MarkdownNewParamsBodyObjectCookiesPriorityMedium MarkdownNewParamsBodyObjectCookiesPriority = "Medium"
+	MarkdownNewParamsBodyObjectCookiesPriorityHigh   MarkdownNewParamsBodyObjectCookiesPriority = "High"
 )
 
-func (r MarkdownNewParamsCookiesPriority) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectCookiesPriority) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsCookiesPriorityLow, MarkdownNewParamsCookiesPriorityMedium, MarkdownNewParamsCookiesPriorityHigh:
+	case MarkdownNewParamsBodyObjectCookiesPriorityLow, MarkdownNewParamsBodyObjectCookiesPriorityMedium, MarkdownNewParamsBodyObjectCookiesPriorityHigh:
 		return true
 	}
 	return false
 }
 
-type MarkdownNewParamsCookiesSameSite string
+type MarkdownNewParamsBodyObjectCookiesSameSite string
 
 const (
-	MarkdownNewParamsCookiesSameSiteStrict MarkdownNewParamsCookiesSameSite = "Strict"
-	MarkdownNewParamsCookiesSameSiteLax    MarkdownNewParamsCookiesSameSite = "Lax"
-	MarkdownNewParamsCookiesSameSiteNone   MarkdownNewParamsCookiesSameSite = "None"
+	MarkdownNewParamsBodyObjectCookiesSameSiteStrict MarkdownNewParamsBodyObjectCookiesSameSite = "Strict"
+	MarkdownNewParamsBodyObjectCookiesSameSiteLax    MarkdownNewParamsBodyObjectCookiesSameSite = "Lax"
+	MarkdownNewParamsBodyObjectCookiesSameSiteNone   MarkdownNewParamsBodyObjectCookiesSameSite = "None"
 )
 
-func (r MarkdownNewParamsCookiesSameSite) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectCookiesSameSite) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsCookiesSameSiteStrict, MarkdownNewParamsCookiesSameSiteLax, MarkdownNewParamsCookiesSameSiteNone:
+	case MarkdownNewParamsBodyObjectCookiesSameSiteStrict, MarkdownNewParamsBodyObjectCookiesSameSiteLax, MarkdownNewParamsBodyObjectCookiesSameSiteNone:
 		return true
 	}
 	return false
 }
 
-type MarkdownNewParamsCookiesSourceScheme string
+type MarkdownNewParamsBodyObjectCookiesSourceScheme string
 
 const (
-	MarkdownNewParamsCookiesSourceSchemeUnset     MarkdownNewParamsCookiesSourceScheme = "Unset"
-	MarkdownNewParamsCookiesSourceSchemeNonSecure MarkdownNewParamsCookiesSourceScheme = "NonSecure"
-	MarkdownNewParamsCookiesSourceSchemeSecure    MarkdownNewParamsCookiesSourceScheme = "Secure"
+	MarkdownNewParamsBodyObjectCookiesSourceSchemeUnset     MarkdownNewParamsBodyObjectCookiesSourceScheme = "Unset"
+	MarkdownNewParamsBodyObjectCookiesSourceSchemeNonSecure MarkdownNewParamsBodyObjectCookiesSourceScheme = "NonSecure"
+	MarkdownNewParamsBodyObjectCookiesSourceSchemeSecure    MarkdownNewParamsBodyObjectCookiesSourceScheme = "Secure"
 )
 
-func (r MarkdownNewParamsCookiesSourceScheme) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsCookiesSourceSchemeUnset, MarkdownNewParamsCookiesSourceSchemeNonSecure, MarkdownNewParamsCookiesSourceSchemeSecure:
+	case MarkdownNewParamsBodyObjectCookiesSourceSchemeUnset, MarkdownNewParamsBodyObjectCookiesSourceSchemeNonSecure, MarkdownNewParamsBodyObjectCookiesSourceSchemeSecure:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-type MarkdownNewParamsGotoOptions struct {
-	Referer        param.Field[string]                                     `json:"referer"`
-	ReferrerPolicy param.Field[string]                                     `json:"referrerPolicy"`
-	Timeout        param.Field[float64]                                    `json:"timeout"`
-	WaitUntil      param.Field[MarkdownNewParamsGotoOptionsWaitUntilUnion] `json:"waitUntil"`
+type MarkdownNewParamsBodyObjectGotoOptions struct {
+	Referer        param.Field[string]                                               `json:"referer"`
+	ReferrerPolicy param.Field[string]                                               `json:"referrerPolicy"`
+	Timeout        param.Field[float64]                                              `json:"timeout"`
+	WaitUntil      param.Field[MarkdownNewParamsBodyObjectGotoOptionsWaitUntilUnion] `json:"waitUntil"`
 }
 
-func (r MarkdownNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [browser_rendering.MarkdownNewParamsGotoOptionsWaitUntilString],
-// [browser_rendering.MarkdownNewParamsGotoOptionsWaitUntilArray].
-type MarkdownNewParamsGotoOptionsWaitUntilUnion interface {
-	implementsMarkdownNewParamsGotoOptionsWaitUntilUnion()
+// Satisfied by
+// [browser_rendering.MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString],
+// [browser_rendering.MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArray].
+type MarkdownNewParamsBodyObjectGotoOptionsWaitUntilUnion interface {
+	implementsMarkdownNewParamsBodyObjectGotoOptionsWaitUntilUnion()
 }
 
-type MarkdownNewParamsGotoOptionsWaitUntilString string
+type MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString string
 
 const (
-	MarkdownNewParamsGotoOptionsWaitUntilStringLoad             MarkdownNewParamsGotoOptionsWaitUntilString = "load"
-	MarkdownNewParamsGotoOptionsWaitUntilStringDomcontentloaded MarkdownNewParamsGotoOptionsWaitUntilString = "domcontentloaded"
-	MarkdownNewParamsGotoOptionsWaitUntilStringNetworkidle0     MarkdownNewParamsGotoOptionsWaitUntilString = "networkidle0"
-	MarkdownNewParamsGotoOptionsWaitUntilStringNetworkidle2     MarkdownNewParamsGotoOptionsWaitUntilString = "networkidle2"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringLoad             MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString = "load"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString = "domcontentloaded"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0     MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle0"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2     MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle2"
 )
 
-func (r MarkdownNewParamsGotoOptionsWaitUntilString) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsGotoOptionsWaitUntilStringLoad, MarkdownNewParamsGotoOptionsWaitUntilStringDomcontentloaded, MarkdownNewParamsGotoOptionsWaitUntilStringNetworkidle0, MarkdownNewParamsGotoOptionsWaitUntilStringNetworkidle2:
+	case MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringLoad, MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded, MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0, MarkdownNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2:
 		return true
 	}
 	return false
 }
 
-func (r MarkdownNewParamsGotoOptionsWaitUntilString) implementsMarkdownNewParamsGotoOptionsWaitUntilUnion() {
+func (r MarkdownNewParamsBodyObjectGotoOptionsWaitUntilString) implementsMarkdownNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type MarkdownNewParamsGotoOptionsWaitUntilArray []MarkdownNewParamsGotoOptionsWaitUntilArrayItem
+type MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArray []MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem
 
-func (r MarkdownNewParamsGotoOptionsWaitUntilArray) implementsMarkdownNewParamsGotoOptionsWaitUntilUnion() {
+func (r MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArray) implementsMarkdownNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type MarkdownNewParamsGotoOptionsWaitUntilArrayItem string
+type MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem string
 
 const (
-	MarkdownNewParamsGotoOptionsWaitUntilArrayItemLoad             MarkdownNewParamsGotoOptionsWaitUntilArrayItem = "load"
-	MarkdownNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded MarkdownNewParamsGotoOptionsWaitUntilArrayItem = "domcontentloaded"
-	MarkdownNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0     MarkdownNewParamsGotoOptionsWaitUntilArrayItem = "networkidle0"
-	MarkdownNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2     MarkdownNewParamsGotoOptionsWaitUntilArrayItem = "networkidle2"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad             MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "load"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "domcontentloaded"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0     MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle0"
+	MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2     MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle2"
 )
 
-func (r MarkdownNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsGotoOptionsWaitUntilArrayItemLoad, MarkdownNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded, MarkdownNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0, MarkdownNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2:
+	case MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad, MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded, MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0, MarkdownNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2:
 		return true
 	}
 	return false
 }
 
-type MarkdownNewParamsRejectResourceType string
+type MarkdownNewParamsBodyObjectRejectResourceType string
 
 const (
-	MarkdownNewParamsRejectResourceTypeDocument           MarkdownNewParamsRejectResourceType = "document"
-	MarkdownNewParamsRejectResourceTypeStylesheet         MarkdownNewParamsRejectResourceType = "stylesheet"
-	MarkdownNewParamsRejectResourceTypeImage              MarkdownNewParamsRejectResourceType = "image"
-	MarkdownNewParamsRejectResourceTypeMedia              MarkdownNewParamsRejectResourceType = "media"
-	MarkdownNewParamsRejectResourceTypeFont               MarkdownNewParamsRejectResourceType = "font"
-	MarkdownNewParamsRejectResourceTypeScript             MarkdownNewParamsRejectResourceType = "script"
-	MarkdownNewParamsRejectResourceTypeTexttrack          MarkdownNewParamsRejectResourceType = "texttrack"
-	MarkdownNewParamsRejectResourceTypeXHR                MarkdownNewParamsRejectResourceType = "xhr"
-	MarkdownNewParamsRejectResourceTypeFetch              MarkdownNewParamsRejectResourceType = "fetch"
-	MarkdownNewParamsRejectResourceTypePrefetch           MarkdownNewParamsRejectResourceType = "prefetch"
-	MarkdownNewParamsRejectResourceTypeEventsource        MarkdownNewParamsRejectResourceType = "eventsource"
-	MarkdownNewParamsRejectResourceTypeWebsocket          MarkdownNewParamsRejectResourceType = "websocket"
-	MarkdownNewParamsRejectResourceTypeManifest           MarkdownNewParamsRejectResourceType = "manifest"
-	MarkdownNewParamsRejectResourceTypeSignedexchange     MarkdownNewParamsRejectResourceType = "signedexchange"
-	MarkdownNewParamsRejectResourceTypePing               MarkdownNewParamsRejectResourceType = "ping"
-	MarkdownNewParamsRejectResourceTypeCspviolationreport MarkdownNewParamsRejectResourceType = "cspviolationreport"
-	MarkdownNewParamsRejectResourceTypePreflight          MarkdownNewParamsRejectResourceType = "preflight"
-	MarkdownNewParamsRejectResourceTypeOther              MarkdownNewParamsRejectResourceType = "other"
+	MarkdownNewParamsBodyObjectRejectResourceTypeDocument           MarkdownNewParamsBodyObjectRejectResourceType = "document"
+	MarkdownNewParamsBodyObjectRejectResourceTypeStylesheet         MarkdownNewParamsBodyObjectRejectResourceType = "stylesheet"
+	MarkdownNewParamsBodyObjectRejectResourceTypeImage              MarkdownNewParamsBodyObjectRejectResourceType = "image"
+	MarkdownNewParamsBodyObjectRejectResourceTypeMedia              MarkdownNewParamsBodyObjectRejectResourceType = "media"
+	MarkdownNewParamsBodyObjectRejectResourceTypeFont               MarkdownNewParamsBodyObjectRejectResourceType = "font"
+	MarkdownNewParamsBodyObjectRejectResourceTypeScript             MarkdownNewParamsBodyObjectRejectResourceType = "script"
+	MarkdownNewParamsBodyObjectRejectResourceTypeTexttrack          MarkdownNewParamsBodyObjectRejectResourceType = "texttrack"
+	MarkdownNewParamsBodyObjectRejectResourceTypeXHR                MarkdownNewParamsBodyObjectRejectResourceType = "xhr"
+	MarkdownNewParamsBodyObjectRejectResourceTypeFetch              MarkdownNewParamsBodyObjectRejectResourceType = "fetch"
+	MarkdownNewParamsBodyObjectRejectResourceTypePrefetch           MarkdownNewParamsBodyObjectRejectResourceType = "prefetch"
+	MarkdownNewParamsBodyObjectRejectResourceTypeEventsource        MarkdownNewParamsBodyObjectRejectResourceType = "eventsource"
+	MarkdownNewParamsBodyObjectRejectResourceTypeWebsocket          MarkdownNewParamsBodyObjectRejectResourceType = "websocket"
+	MarkdownNewParamsBodyObjectRejectResourceTypeManifest           MarkdownNewParamsBodyObjectRejectResourceType = "manifest"
+	MarkdownNewParamsBodyObjectRejectResourceTypeSignedexchange     MarkdownNewParamsBodyObjectRejectResourceType = "signedexchange"
+	MarkdownNewParamsBodyObjectRejectResourceTypePing               MarkdownNewParamsBodyObjectRejectResourceType = "ping"
+	MarkdownNewParamsBodyObjectRejectResourceTypeCspviolationreport MarkdownNewParamsBodyObjectRejectResourceType = "cspviolationreport"
+	MarkdownNewParamsBodyObjectRejectResourceTypePreflight          MarkdownNewParamsBodyObjectRejectResourceType = "preflight"
+	MarkdownNewParamsBodyObjectRejectResourceTypeOther              MarkdownNewParamsBodyObjectRejectResourceType = "other"
 )
 
-func (r MarkdownNewParamsRejectResourceType) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsRejectResourceTypeDocument, MarkdownNewParamsRejectResourceTypeStylesheet, MarkdownNewParamsRejectResourceTypeImage, MarkdownNewParamsRejectResourceTypeMedia, MarkdownNewParamsRejectResourceTypeFont, MarkdownNewParamsRejectResourceTypeScript, MarkdownNewParamsRejectResourceTypeTexttrack, MarkdownNewParamsRejectResourceTypeXHR, MarkdownNewParamsRejectResourceTypeFetch, MarkdownNewParamsRejectResourceTypePrefetch, MarkdownNewParamsRejectResourceTypeEventsource, MarkdownNewParamsRejectResourceTypeWebsocket, MarkdownNewParamsRejectResourceTypeManifest, MarkdownNewParamsRejectResourceTypeSignedexchange, MarkdownNewParamsRejectResourceTypePing, MarkdownNewParamsRejectResourceTypeCspviolationreport, MarkdownNewParamsRejectResourceTypePreflight, MarkdownNewParamsRejectResourceTypeOther:
+	case MarkdownNewParamsBodyObjectRejectResourceTypeDocument, MarkdownNewParamsBodyObjectRejectResourceTypeStylesheet, MarkdownNewParamsBodyObjectRejectResourceTypeImage, MarkdownNewParamsBodyObjectRejectResourceTypeMedia, MarkdownNewParamsBodyObjectRejectResourceTypeFont, MarkdownNewParamsBodyObjectRejectResourceTypeScript, MarkdownNewParamsBodyObjectRejectResourceTypeTexttrack, MarkdownNewParamsBodyObjectRejectResourceTypeXHR, MarkdownNewParamsBodyObjectRejectResourceTypeFetch, MarkdownNewParamsBodyObjectRejectResourceTypePrefetch, MarkdownNewParamsBodyObjectRejectResourceTypeEventsource, MarkdownNewParamsBodyObjectRejectResourceTypeWebsocket, MarkdownNewParamsBodyObjectRejectResourceTypeManifest, MarkdownNewParamsBodyObjectRejectResourceTypeSignedexchange, MarkdownNewParamsBodyObjectRejectResourceTypePing, MarkdownNewParamsBodyObjectRejectResourceTypeCspviolationreport, MarkdownNewParamsBodyObjectRejectResourceTypePreflight, MarkdownNewParamsBodyObjectRejectResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-type MarkdownNewParamsViewport struct {
+type MarkdownNewParamsBodyObjectViewport struct {
 	Height            param.Field[float64] `json:"height,required"`
 	Width             param.Field[float64] `json:"width,required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
@@ -348,46 +399,46 @@ type MarkdownNewParamsViewport struct {
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }
 
-func (r MarkdownNewParamsViewport) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-type MarkdownNewParamsWaitForSelector struct {
-	Selector param.Field[string]                                  `json:"selector,required"`
-	Hidden   param.Field[MarkdownNewParamsWaitForSelectorHidden]  `json:"hidden"`
-	Timeout  param.Field[float64]                                 `json:"timeout"`
-	Visible  param.Field[MarkdownNewParamsWaitForSelectorVisible] `json:"visible"`
+type MarkdownNewParamsBodyObjectWaitForSelector struct {
+	Selector param.Field[string]                                            `json:"selector,required"`
+	Hidden   param.Field[MarkdownNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
+	Timeout  param.Field[float64]                                           `json:"timeout"`
+	Visible  param.Field[MarkdownNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
 }
 
-func (r MarkdownNewParamsWaitForSelector) MarshalJSON() (data []byte, err error) {
+func (r MarkdownNewParamsBodyObjectWaitForSelector) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MarkdownNewParamsWaitForSelectorHidden bool
+type MarkdownNewParamsBodyObjectWaitForSelectorHidden bool
 
 const (
-	MarkdownNewParamsWaitForSelectorHiddenTrue MarkdownNewParamsWaitForSelectorHidden = true
+	MarkdownNewParamsBodyObjectWaitForSelectorHiddenTrue MarkdownNewParamsBodyObjectWaitForSelectorHidden = true
 )
 
-func (r MarkdownNewParamsWaitForSelectorHidden) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectWaitForSelectorHidden) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsWaitForSelectorHiddenTrue:
+	case MarkdownNewParamsBodyObjectWaitForSelectorHiddenTrue:
 		return true
 	}
 	return false
 }
 
-type MarkdownNewParamsWaitForSelectorVisible bool
+type MarkdownNewParamsBodyObjectWaitForSelectorVisible bool
 
 const (
-	MarkdownNewParamsWaitForSelectorVisibleTrue MarkdownNewParamsWaitForSelectorVisible = true
+	MarkdownNewParamsBodyObjectWaitForSelectorVisibleTrue MarkdownNewParamsBodyObjectWaitForSelectorVisible = true
 )
 
-func (r MarkdownNewParamsWaitForSelectorVisible) IsKnown() bool {
+func (r MarkdownNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
-	case MarkdownNewParamsWaitForSelectorVisibleTrue:
+	case MarkdownNewParamsBodyObjectWaitForSelectorVisibleTrue:
 		return true
 	}
 	return false
@@ -395,8 +446,8 @@ func (r MarkdownNewParamsWaitForSelectorVisible) IsKnown() bool {
 
 type MarkdownNewResponseEnvelope struct {
 	// Response status
-	Status bool                                `json:"status,required"`
-	Errors []MarkdownNewResponseEnvelopeErrors `json:"errors"`
+	Success bool                                `json:"success,required"`
+	Errors  []MarkdownNewResponseEnvelopeErrors `json:"errors"`
 	// Markdown
 	Result string                          `json:"result"`
 	JSON   markdownNewResponseEnvelopeJSON `json:"-"`
@@ -405,7 +456,7 @@ type MarkdownNewResponseEnvelope struct {
 // markdownNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MarkdownNewResponseEnvelope]
 type markdownNewResponseEnvelopeJSON struct {
-	Status      apijson.Field
+	Success     apijson.Field
 	Errors      apijson.Field
 	Result      apijson.Field
 	raw         string
