@@ -148,13 +148,13 @@ func (UnionString) ImplementsInstanceGetResponseOutputUnion()                   
 func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                          {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                 {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                           {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                             {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                            {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                              {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                  {}
-func (UnionString) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                        {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                       {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                 {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                   {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                  {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                    {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                        {}
+func (UnionString) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()              {}
 
 type UnionBool bool
 
@@ -219,7 +219,7 @@ func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()     
 func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                {}
 func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()              {}
 func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                 {}
-func (UnionBool) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                     {}
+func (UnionBool) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()           {}
 
 type UnionInt int64
 
@@ -297,10 +297,10 @@ func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion() 
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}
 func (UnionFloat) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                              {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                     {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                               {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                                 {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                                {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                  {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                      {}
-func (UnionFloat) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                            {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                           {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                     {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                       {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                      {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                        {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                            {}
+func (UnionFloat) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()                  {}
