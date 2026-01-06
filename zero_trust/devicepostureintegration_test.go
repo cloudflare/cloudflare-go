@@ -31,7 +31,7 @@ func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Config: cloudflare.F[zero_trust.DevicePostureIntegrationNewParamsConfigUnion](zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 			APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
-			AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
+			AuthURL:      cloudflare.F("https://na.uemauth.workspaceone.com/connect/token"),
 			ClientID:     cloudflare.F("example client id"),
 			ClientSecret: cloudflare.F("example client secret"),
 		}),
@@ -122,7 +122,7 @@ func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Config: cloudflare.F[zero_trust.DevicePostureIntegrationEditParamsConfigUnion](zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 				APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
-				AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
+				AuthURL:      cloudflare.F("https://na.uemauth.workspaceone.com/connect/token"),
 				ClientID:     cloudflare.F("example client id"),
 				ClientSecret: cloudflare.F("example client secret"),
 			}),
