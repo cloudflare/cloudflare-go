@@ -98,15 +98,18 @@ func (r *NamespaceTableMaintenanceConfigService) Get(ctx context.Context, bucket
 type NamespaceTableMaintenanceConfigUpdateResponse struct {
 	// Configures compaction settings for table optimization.
 	Compaction NamespaceTableMaintenanceConfigUpdateResponseCompaction `json:"compaction"`
-	JSON       namespaceTableMaintenanceConfigUpdateResponseJSON       `json:"-"`
+	// Configures snapshot expiration settings.
+	SnapshotExpiration NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration `json:"snapshot_expiration"`
+	JSON               namespaceTableMaintenanceConfigUpdateResponseJSON               `json:"-"`
 }
 
 // namespaceTableMaintenanceConfigUpdateResponseJSON contains the JSON metadata for
 // the struct [NamespaceTableMaintenanceConfigUpdateResponse]
 type namespaceTableMaintenanceConfigUpdateResponseJSON struct {
-	Compaction  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Compaction         apijson.Field
+	SnapshotExpiration apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *NamespaceTableMaintenanceConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -178,6 +181,55 @@ func (r NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB) IsK
 	return false
 }
 
+// Configures snapshot expiration settings.
+type NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration struct {
+	// Specifies the maximum age for snapshots. The system deletes snapshots older than
+	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
+	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
+	// minutes).
+	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	// Specifies the minimum number of snapshots to retain.
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	// Specifies the state of maintenance operations.
+	State NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state,required"`
+	JSON  namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON  `json:"-"`
+}
+
+// namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON contains the
+// JSON metadata for the struct
+// [NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration]
+type namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON struct {
+	MaxSnapshotAge     apijson.Field
+	MinSnapshotsToKeep apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the state of maintenance operations.
+type NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState string
+
+const (
+	NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationStateEnabled  NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState = "enabled"
+	NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationStateDisabled NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState = "disabled"
+)
+
+func (r NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationStateEnabled, NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationStateDisabled:
+		return true
+	}
+	return false
+}
+
 // Contains table maintenance configuration.
 type NamespaceTableMaintenanceConfigGetResponse struct {
 	// Configures maintenance for the table.
@@ -205,16 +257,19 @@ func (r namespaceTableMaintenanceConfigGetResponseJSON) RawJSON() string {
 type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig struct {
 	// Configures compaction settings for table optimization.
 	Compaction NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction `json:"compaction"`
-	JSON       namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON       `json:"-"`
+	// Configures snapshot expiration settings.
+	SnapshotExpiration NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
+	JSON               namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON               `json:"-"`
 }
 
 // namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON contains the
 // JSON metadata for the struct
 // [NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig]
 type namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON struct {
-	Compaction  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Compaction         apijson.Field
+	SnapshotExpiration apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig) UnmarshalJSON(data []byte) (err error) {
@@ -286,11 +341,62 @@ func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTar
 	return false
 }
 
+// Configures snapshot expiration settings.
+type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration struct {
+	// Specifies the maximum age for snapshots. The system deletes snapshots older than
+	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
+	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
+	// minutes).
+	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	// Specifies the minimum number of snapshots to retain.
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	// Specifies the state of maintenance operations.
+	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	JSON  namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
+}
+
+// namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON
+// contains the JSON metadata for the struct
+// [NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration]
+type namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON struct {
+	MaxSnapshotAge     apijson.Field
+	MinSnapshotsToKeep apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the state of maintenance operations.
+type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState string
+
+const (
+	NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateEnabled  NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState = "enabled"
+	NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateDisabled NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState = "disabled"
+)
+
+func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateEnabled, NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateDisabled:
+		return true
+	}
+	return false
+}
+
 type NamespaceTableMaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Updates compaction configuration (all fields optional).
 	Compaction param.Field[NamespaceTableMaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
+	// Updates snapshot expiration configuration (all fields optional).
+	SnapshotExpiration param.Field[NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration] `json:"snapshot_expiration"`
 }
 
 func (r NamespaceTableMaintenanceConfigUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -338,6 +444,36 @@ const (
 func (r NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB) IsKnown() bool {
 	switch r {
 	case NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB64, NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB128, NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB256, NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB512:
+		return true
+	}
+	return false
+}
+
+// Updates snapshot expiration configuration (all fields optional).
+type NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration struct {
+	// Updates the maximum age for snapshots optionally.
+	MaxSnapshotAge param.Field[string] `json:"max_snapshot_age"`
+	// Updates the minimum number of snapshots to retain optionally.
+	MinSnapshotsToKeep param.Field[int64] `json:"min_snapshots_to_keep"`
+	// Updates the state optionally.
+	State param.Field[NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState] `json:"state"`
+}
+
+func (r NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Updates the state optionally.
+type NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState string
+
+const (
+	NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationStateEnabled  NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState = "enabled"
+	NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationStateDisabled NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState = "disabled"
+)
+
+func (r NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationStateEnabled, NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationStateDisabled:
 		return true
 	}
 	return false

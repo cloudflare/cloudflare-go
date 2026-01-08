@@ -36,6 +36,11 @@ func TestMaintenanceConfigUpdateWithOptionalParams(t *testing.T) {
 				State:        cloudflare.F(r2_data_catalog.MaintenanceConfigUpdateParamsCompactionStateEnabled),
 				TargetSizeMB: cloudflare.F(r2_data_catalog.MaintenanceConfigUpdateParamsCompactionTargetSizeMB256),
 			}),
+			SnapshotExpiration: cloudflare.F(r2_data_catalog.MaintenanceConfigUpdateParamsSnapshotExpiration{
+				MaxSnapshotAge:     cloudflare.F("14d"),
+				MinSnapshotsToKeep: cloudflare.F(int64(5)),
+				State:              cloudflare.F(r2_data_catalog.MaintenanceConfigUpdateParamsSnapshotExpirationStateEnabled),
+			}),
 		},
 	)
 	if err != nil {

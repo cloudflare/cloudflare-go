@@ -95,14 +95,16 @@ func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params Inve
 }
 
 type InvestigateMoveNewResponse struct {
-	CompletedTimestamp time.Time                      `json:"completed_timestamp,required" format:"date-time"`
-	ItemCount          int64                          `json:"item_count,required"`
-	Destination        string                         `json:"destination,nullable"`
-	MessageID          string                         `json:"message_id,nullable"`
-	Operation          string                         `json:"operation,nullable"`
-	Recipient          string                         `json:"recipient,nullable"`
-	Status             string                         `json:"status,nullable"`
-	JSON               investigateMoveNewResponseJSON `json:"-"`
+	CompletedTimestamp time.Time `json:"completed_timestamp,required" format:"date-time"`
+	// Deprecated: deprecated
+	ItemCount   int64                          `json:"item_count,required"`
+	Success     bool                           `json:"success,required"`
+	Destination string                         `json:"destination,nullable"`
+	MessageID   string                         `json:"message_id,nullable"`
+	Operation   string                         `json:"operation,nullable"`
+	Recipient   string                         `json:"recipient,nullable"`
+	Status      string                         `json:"status,nullable"`
+	JSON        investigateMoveNewResponseJSON `json:"-"`
 }
 
 // investigateMoveNewResponseJSON contains the JSON metadata for the struct
@@ -110,6 +112,7 @@ type InvestigateMoveNewResponse struct {
 type investigateMoveNewResponseJSON struct {
 	CompletedTimestamp apijson.Field
 	ItemCount          apijson.Field
+	Success            apijson.Field
 	Destination        apijson.Field
 	MessageID          apijson.Field
 	Operation          apijson.Field
@@ -128,14 +131,16 @@ func (r investigateMoveNewResponseJSON) RawJSON() string {
 }
 
 type InvestigateMoveBulkResponse struct {
-	CompletedTimestamp time.Time                       `json:"completed_timestamp,required" format:"date-time"`
-	ItemCount          int64                           `json:"item_count,required"`
-	Destination        string                          `json:"destination,nullable"`
-	MessageID          string                          `json:"message_id,nullable"`
-	Operation          string                          `json:"operation,nullable"`
-	Recipient          string                          `json:"recipient,nullable"`
-	Status             string                          `json:"status,nullable"`
-	JSON               investigateMoveBulkResponseJSON `json:"-"`
+	CompletedTimestamp time.Time `json:"completed_timestamp,required" format:"date-time"`
+	// Deprecated: deprecated
+	ItemCount   int64                           `json:"item_count,required"`
+	Success     bool                            `json:"success,required"`
+	Destination string                          `json:"destination,nullable"`
+	MessageID   string                          `json:"message_id,nullable"`
+	Operation   string                          `json:"operation,nullable"`
+	Recipient   string                          `json:"recipient,nullable"`
+	Status      string                          `json:"status,nullable"`
+	JSON        investigateMoveBulkResponseJSON `json:"-"`
 }
 
 // investigateMoveBulkResponseJSON contains the JSON metadata for the struct
@@ -143,6 +148,7 @@ type InvestigateMoveBulkResponse struct {
 type investigateMoveBulkResponseJSON struct {
 	CompletedTimestamp apijson.Field
 	ItemCount          apijson.Field
+	Success            apijson.Field
 	Destination        apijson.Field
 	MessageID          apijson.Field
 	Operation          apijson.Field

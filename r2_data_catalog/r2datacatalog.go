@@ -219,15 +219,18 @@ func (r R2DataCatalogListResponseWarehousesCredentialStatus) IsKnown() bool {
 type R2DataCatalogListResponseWarehousesMaintenanceConfig struct {
 	// Configures compaction for catalog maintenance.
 	Compaction R2DataCatalogListResponseWarehousesMaintenanceConfigCompaction `json:"compaction"`
-	JSON       r2DataCatalogListResponseWarehousesMaintenanceConfigJSON       `json:"-"`
+	// Configures snapshot expiration settings.
+	SnapshotExpiration R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
+	JSON               r2DataCatalogListResponseWarehousesMaintenanceConfigJSON               `json:"-"`
 }
 
 // r2DataCatalogListResponseWarehousesMaintenanceConfigJSON contains the JSON
 // metadata for the struct [R2DataCatalogListResponseWarehousesMaintenanceConfig]
 type r2DataCatalogListResponseWarehousesMaintenanceConfigJSON struct {
-	Compaction  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Compaction         apijson.Field
+	SnapshotExpiration apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *R2DataCatalogListResponseWarehousesMaintenanceConfig) UnmarshalJSON(data []byte) (err error) {
@@ -294,6 +297,55 @@ const (
 func (r R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB) IsKnown() bool {
 	switch r {
 	case R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB64, R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB128, R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB256, R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB512:
+		return true
+	}
+	return false
+}
+
+// Configures snapshot expiration settings.
+type R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration struct {
+	// Specifies the maximum age for snapshots. The system deletes snapshots older than
+	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
+	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
+	// minutes).
+	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	// Specifies the minimum number of snapshots to retain.
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	// Specifies the state of maintenance operations.
+	State R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	JSON  r2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
+}
+
+// r2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationJSON
+// contains the JSON metadata for the struct
+// [R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration]
+type r2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationJSON struct {
+	MaxSnapshotAge     apijson.Field
+	MinSnapshotsToKeep apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the state of maintenance operations.
+type R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState string
+
+const (
+	R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationStateEnabled  R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState = "enabled"
+	R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationStateDisabled R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState = "disabled"
+)
+
+func (r R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationStateEnabled, R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationStateDisabled:
 		return true
 	}
 	return false
@@ -399,15 +451,18 @@ func (r R2DataCatalogGetResponseCredentialStatus) IsKnown() bool {
 type R2DataCatalogGetResponseMaintenanceConfig struct {
 	// Configures compaction for catalog maintenance.
 	Compaction R2DataCatalogGetResponseMaintenanceConfigCompaction `json:"compaction"`
-	JSON       r2DataCatalogGetResponseMaintenanceConfigJSON       `json:"-"`
+	// Configures snapshot expiration settings.
+	SnapshotExpiration R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
+	JSON               r2DataCatalogGetResponseMaintenanceConfigJSON               `json:"-"`
 }
 
 // r2DataCatalogGetResponseMaintenanceConfigJSON contains the JSON metadata for the
 // struct [R2DataCatalogGetResponseMaintenanceConfig]
 type r2DataCatalogGetResponseMaintenanceConfigJSON struct {
-	Compaction  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Compaction         apijson.Field
+	SnapshotExpiration apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *R2DataCatalogGetResponseMaintenanceConfig) UnmarshalJSON(data []byte) (err error) {
@@ -473,6 +528,55 @@ const (
 func (r R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB) IsKnown() bool {
 	switch r {
 	case R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB64, R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB128, R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB256, R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB512:
+		return true
+	}
+	return false
+}
+
+// Configures snapshot expiration settings.
+type R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration struct {
+	// Specifies the maximum age for snapshots. The system deletes snapshots older than
+	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
+	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
+	// minutes).
+	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	// Specifies the minimum number of snapshots to retain.
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	// Specifies the state of maintenance operations.
+	State R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	JSON  r2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
+}
+
+// r2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationJSON contains the
+// JSON metadata for the struct
+// [R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration]
+type r2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationJSON struct {
+	MaxSnapshotAge     apijson.Field
+	MinSnapshotsToKeep apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the state of maintenance operations.
+type R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState string
+
+const (
+	R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationStateEnabled  R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState = "enabled"
+	R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationStateDisabled R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState = "disabled"
+)
+
+func (r R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationStateEnabled, R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationStateDisabled:
 		return true
 	}
 	return false

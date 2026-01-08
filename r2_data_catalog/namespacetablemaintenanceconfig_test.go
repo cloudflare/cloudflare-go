@@ -38,6 +38,11 @@ func TestNamespaceTableMaintenanceConfigUpdateWithOptionalParams(t *testing.T) {
 				State:        cloudflare.F(r2_data_catalog.NamespaceTableMaintenanceConfigUpdateParamsCompactionStateEnabled),
 				TargetSizeMB: cloudflare.F(r2_data_catalog.NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB256),
 			}),
+			SnapshotExpiration: cloudflare.F(r2_data_catalog.NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration{
+				MaxSnapshotAge:     cloudflare.F("14d"),
+				MinSnapshotsToKeep: cloudflare.F(int64(5)),
+				State:              cloudflare.F(r2_data_catalog.NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationStateEnabled),
+			}),
 		},
 	)
 	if err != nil {
