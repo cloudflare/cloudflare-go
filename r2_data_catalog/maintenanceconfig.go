@@ -82,15 +82,18 @@ func (r *MaintenanceConfigService) Get(ctx context.Context, bucketName string, q
 type MaintenanceConfigUpdateResponse struct {
 	// Configures compaction for catalog maintenance.
 	Compaction MaintenanceConfigUpdateResponseCompaction `json:"compaction"`
-	JSON       maintenanceConfigUpdateResponseJSON       `json:"-"`
+	// Configures snapshot expiration settings.
+	SnapshotExpiration MaintenanceConfigUpdateResponseSnapshotExpiration `json:"snapshot_expiration"`
+	JSON               maintenanceConfigUpdateResponseJSON               `json:"-"`
 }
 
 // maintenanceConfigUpdateResponseJSON contains the JSON metadata for the struct
 // [MaintenanceConfigUpdateResponse]
 type maintenanceConfigUpdateResponseJSON struct {
-	Compaction  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Compaction         apijson.Field
+	SnapshotExpiration apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *MaintenanceConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -161,6 +164,54 @@ func (r MaintenanceConfigUpdateResponseCompactionTargetSizeMB) IsKnown() bool {
 	return false
 }
 
+// Configures snapshot expiration settings.
+type MaintenanceConfigUpdateResponseSnapshotExpiration struct {
+	// Specifies the maximum age for snapshots. The system deletes snapshots older than
+	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
+	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
+	// minutes).
+	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	// Specifies the minimum number of snapshots to retain.
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	// Specifies the state of maintenance operations.
+	State MaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state,required"`
+	JSON  maintenanceConfigUpdateResponseSnapshotExpirationJSON  `json:"-"`
+}
+
+// maintenanceConfigUpdateResponseSnapshotExpirationJSON contains the JSON metadata
+// for the struct [MaintenanceConfigUpdateResponseSnapshotExpiration]
+type maintenanceConfigUpdateResponseSnapshotExpirationJSON struct {
+	MaxSnapshotAge     apijson.Field
+	MinSnapshotsToKeep apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *MaintenanceConfigUpdateResponseSnapshotExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r maintenanceConfigUpdateResponseSnapshotExpirationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the state of maintenance operations.
+type MaintenanceConfigUpdateResponseSnapshotExpirationState string
+
+const (
+	MaintenanceConfigUpdateResponseSnapshotExpirationStateEnabled  MaintenanceConfigUpdateResponseSnapshotExpirationState = "enabled"
+	MaintenanceConfigUpdateResponseSnapshotExpirationStateDisabled MaintenanceConfigUpdateResponseSnapshotExpirationState = "disabled"
+)
+
+func (r MaintenanceConfigUpdateResponseSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case MaintenanceConfigUpdateResponseSnapshotExpirationStateEnabled, MaintenanceConfigUpdateResponseSnapshotExpirationStateDisabled:
+		return true
+	}
+	return false
+}
+
 // Contains maintenance configuration and credential status.
 type MaintenanceConfigGetResponse struct {
 	// Shows the credential configuration status.
@@ -207,15 +258,18 @@ func (r MaintenanceConfigGetResponseCredentialStatus) IsKnown() bool {
 type MaintenanceConfigGetResponseMaintenanceConfig struct {
 	// Configures compaction for catalog maintenance.
 	Compaction MaintenanceConfigGetResponseMaintenanceConfigCompaction `json:"compaction"`
-	JSON       maintenanceConfigGetResponseMaintenanceConfigJSON       `json:"-"`
+	// Configures snapshot expiration settings.
+	SnapshotExpiration MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
+	JSON               maintenanceConfigGetResponseMaintenanceConfigJSON               `json:"-"`
 }
 
 // maintenanceConfigGetResponseMaintenanceConfigJSON contains the JSON metadata for
 // the struct [MaintenanceConfigGetResponseMaintenanceConfig]
 type maintenanceConfigGetResponseMaintenanceConfigJSON struct {
-	Compaction  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Compaction         apijson.Field
+	SnapshotExpiration apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *MaintenanceConfigGetResponseMaintenanceConfig) UnmarshalJSON(data []byte) (err error) {
@@ -287,11 +341,62 @@ func (r MaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB) IsK
 	return false
 }
 
+// Configures snapshot expiration settings.
+type MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration struct {
+	// Specifies the maximum age for snapshots. The system deletes snapshots older than
+	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
+	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
+	// minutes).
+	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	// Specifies the minimum number of snapshots to retain.
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	// Specifies the state of maintenance operations.
+	State MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	JSON  maintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
+}
+
+// maintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON contains the
+// JSON metadata for the struct
+// [MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration]
+type maintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON struct {
+	MaxSnapshotAge     apijson.Field
+	MinSnapshotsToKeep apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r maintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the state of maintenance operations.
+type MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState string
+
+const (
+	MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateEnabled  MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState = "enabled"
+	MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateDisabled MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState = "disabled"
+)
+
+func (r MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateEnabled, MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationStateDisabled:
+		return true
+	}
+	return false
+}
+
 type MaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Updates compaction configuration (all fields optional).
 	Compaction param.Field[MaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
+	// Updates snapshot expiration configuration (all fields optional).
+	SnapshotExpiration param.Field[MaintenanceConfigUpdateParamsSnapshotExpiration] `json:"snapshot_expiration"`
 }
 
 func (r MaintenanceConfigUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -339,6 +444,36 @@ const (
 func (r MaintenanceConfigUpdateParamsCompactionTargetSizeMB) IsKnown() bool {
 	switch r {
 	case MaintenanceConfigUpdateParamsCompactionTargetSizeMB64, MaintenanceConfigUpdateParamsCompactionTargetSizeMB128, MaintenanceConfigUpdateParamsCompactionTargetSizeMB256, MaintenanceConfigUpdateParamsCompactionTargetSizeMB512:
+		return true
+	}
+	return false
+}
+
+// Updates snapshot expiration configuration (all fields optional).
+type MaintenanceConfigUpdateParamsSnapshotExpiration struct {
+	// Updates the maximum age for snapshots optionally.
+	MaxSnapshotAge param.Field[string] `json:"max_snapshot_age"`
+	// Updates the minimum number of snapshots to retain optionally.
+	MinSnapshotsToKeep param.Field[int64] `json:"min_snapshots_to_keep"`
+	// Updates the state optionally.
+	State param.Field[MaintenanceConfigUpdateParamsSnapshotExpirationState] `json:"state"`
+}
+
+func (r MaintenanceConfigUpdateParamsSnapshotExpiration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Updates the state optionally.
+type MaintenanceConfigUpdateParamsSnapshotExpirationState string
+
+const (
+	MaintenanceConfigUpdateParamsSnapshotExpirationStateEnabled  MaintenanceConfigUpdateParamsSnapshotExpirationState = "enabled"
+	MaintenanceConfigUpdateParamsSnapshotExpirationStateDisabled MaintenanceConfigUpdateParamsSnapshotExpirationState = "disabled"
+)
+
+func (r MaintenanceConfigUpdateParamsSnapshotExpirationState) IsKnown() bool {
+	switch r {
+	case MaintenanceConfigUpdateParamsSnapshotExpirationStateEnabled, MaintenanceConfigUpdateParamsSnapshotExpirationStateDisabled:
 		return true
 	}
 	return false

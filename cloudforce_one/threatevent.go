@@ -330,6 +330,8 @@ type ThreatEventBulkNewResponse struct {
 	ErrorCount float64 `json:"errorCount,required"`
 	// Number of indicators queued for async processing
 	QueuedIndicatorsCount float64 `json:"queuedIndicatorsCount,required"`
+	// Number of events skipped due to duplicate UUID (only when preserveUuid=true)
+	SkippedEventsCount float64 `json:"skippedEventsCount,required"`
 	// Correlation ID for async indicator processing
 	CreateBulkEventsRequestID string `json:"createBulkEventsRequestId" format:"uuid"`
 	// Array of error details
@@ -344,6 +346,7 @@ type threatEventBulkNewResponseJSON struct {
 	CreatedTagsCount          apijson.Field
 	ErrorCount                apijson.Field
 	QueuedIndicatorsCount     apijson.Field
+	SkippedEventsCount        apijson.Field
 	CreateBulkEventsRequestID apijson.Field
 	Errors                    apijson.Field
 	raw                       string
@@ -542,6 +545,9 @@ type ThreatEventNewParams struct {
 	Tags           param.Field[[]string]                        `json:"tags"`
 	TargetCountry  param.Field[string]                          `json:"targetCountry"`
 	TargetIndustry param.Field[string]                          `json:"targetIndustry"`
+	// Optional UUID for the event. Only used when preserveUuid=true in bulk create.
+	// Must be a valid UUID format.
+	UUID param.Field[string] `json:"uuid"`
 }
 
 func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
@@ -574,6 +580,7 @@ type ThreatEventListParams struct {
 	AccountID    param.Field[string]                        `path:"account_id,required"`
 	DatasetID    param.Field[[]string]                      `query:"datasetId"`
 	ForceRefresh param.Field[bool]                          `query:"forceRefresh"`
+	Format       param.Field[ThreatEventListParamsFormat]   `query:"format"`
 	Order        param.Field[ThreatEventListParamsOrder]    `query:"order"`
 	OrderBy      param.Field[string]                        `query:"orderBy"`
 	Page         param.Field[float64]                       `query:"page"`
@@ -587,6 +594,21 @@ func (r ThreatEventListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type ThreatEventListParamsFormat string
+
+const (
+	ThreatEventListParamsFormatJson  ThreatEventListParamsFormat = "json"
+	ThreatEventListParamsFormatStix2 ThreatEventListParamsFormat = "stix2"
+)
+
+func (r ThreatEventListParamsFormat) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsFormatJson, ThreatEventListParamsFormatStix2:
+		return true
+	}
+	return false
 }
 
 type ThreatEventListParamsOrder string
@@ -669,6 +691,10 @@ type ThreatEventBulkNewParams struct {
 	AccountID param.Field[string]                         `path:"account_id,required"`
 	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data,required"`
 	DatasetID param.Field[string]                         `json:"datasetId,required"`
+	// When true, use provided UUIDs from event data instead of generating new ones.
+	// Used for migration scenarios where original UUIDs must be preserved. Duplicate
+	// UUIDs will be skipped.
+	PreserveUUID param.Field[bool] `json:"preserveUuid"`
 }
 
 func (r ThreatEventBulkNewParams) MarshalJSON() (data []byte, err error) {
@@ -694,6 +720,9 @@ type ThreatEventBulkNewParamsData struct {
 	Tags           param.Field[[]string]                                `json:"tags"`
 	TargetCountry  param.Field[string]                                  `json:"targetCountry"`
 	TargetIndustry param.Field[string]                                  `json:"targetIndustry"`
+	// Optional UUID for the event. Only used when preserveUuid=true in bulk create.
+	// Must be a valid UUID format.
+	UUID param.Field[string] `json:"uuid"`
 }
 
 func (r ThreatEventBulkNewParamsData) MarshalJSON() (data []byte, err error) {

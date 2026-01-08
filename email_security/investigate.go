@@ -53,7 +53,9 @@ func NewInvestigateService(opts ...option.RequestOption) (r *InvestigateService)
 	return
 }
 
-// Returns information for each email that matches the search parameter(s).
+// Returns information for each email that matches the search parameter(s). If the
+// search takes too long, the endpoint returns 202 with a Location header pointing
+// to a polling endpoint where results can be retrieved once ready.
 func (r *InvestigateService) List(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -75,7 +77,9 @@ func (r *InvestigateService) List(ctx context.Context, params InvestigateListPar
 	return res, nil
 }
 
-// Returns information for each email that matches the search parameter(s).
+// Returns information for each email that matches the search parameter(s). If the
+// search takes too long, the endpoint returns 202 with a Location header pointing
+// to a polling endpoint where results can be retrieved once ready.
 func (r *InvestigateService) ListAutoPaging(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
