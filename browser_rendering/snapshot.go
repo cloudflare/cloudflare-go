@@ -82,10 +82,10 @@ func (r snapshotNewResponseJSON) RawJSON() string {
 
 type SnapshotNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      SnapshotNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]       `query:"cacheTTL"`
-	Body     SnapshotNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r SnapshotNewParams) MarshalJSON() (data []byte, err error) {

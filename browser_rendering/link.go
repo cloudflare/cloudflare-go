@@ -55,10 +55,10 @@ func (r *LinkService) New(ctx context.Context, params LinkNewParams, opts ...opt
 
 type LinkNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      LinkNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]   `query:"cacheTTL"`
-	Body     LinkNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r LinkNewParams) MarshalJSON() (data []byte, err error) {

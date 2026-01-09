@@ -56,10 +56,10 @@ func (r *MarkdownService) New(ctx context.Context, params MarkdownNewParams, opt
 
 type MarkdownNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      MarkdownNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]       `query:"cacheTTL"`
-	Body     MarkdownNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r MarkdownNewParams) MarshalJSON() (data []byte, err error) {

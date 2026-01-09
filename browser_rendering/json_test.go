@@ -30,9 +30,8 @@ func TestJsonNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.BrowserRendering.Json.New(context.TODO(), browser_rendering.JsonNewParams{
 		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
 		Body: browser_rendering.JsonNewParamsBodyObject{
-			HTML:          cloudflare.F("x"),
+			URL:           cloudflare.F("https://www.example.com/"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.JsonNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
@@ -108,6 +107,7 @@ func TestJsonNewWithOptionalParams(t *testing.T) {
 			}),
 			WaitForTimeout: cloudflare.F(120000.000000),
 		},
+		CacheTTL: cloudflare.F(86400.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

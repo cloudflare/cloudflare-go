@@ -143,10 +143,10 @@ func (r scrapeNewResponseResultsAttributeJSON) RawJSON() string {
 
 type ScrapeNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      ScrapeNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]     `query:"cacheTTL"`
-	Body     ScrapeNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r ScrapeNewParams) MarshalJSON() (data []byte, err error) {
