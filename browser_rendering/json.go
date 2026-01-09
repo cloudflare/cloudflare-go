@@ -58,10 +58,10 @@ type JsonNewResponse map[string]interface{}
 
 type JsonNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      JsonNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]   `query:"cacheTTL"`
-	Body     JsonNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r JsonNewParams) MarshalJSON() (data []byte, err error) {

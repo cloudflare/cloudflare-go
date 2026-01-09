@@ -56,10 +56,10 @@ func (r *ContentService) New(ctx context.Context, params ContentNewParams, opts 
 
 type ContentNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]       `path:"account_id,required"`
+	Body      ContentNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]      `query:"cacheTTL"`
-	Body     ContentNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r ContentNewParams) MarshalJSON() (data []byte, err error) {

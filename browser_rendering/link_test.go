@@ -29,9 +29,8 @@ func TestLinkNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.BrowserRendering.Links.New(context.TODO(), browser_rendering.LinkNewParams{
 		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
 		Body: browser_rendering.LinkNewParamsBodyObject{
-			HTML:          cloudflare.F("x"),
+			URL:           cloudflare.F("https://www.example.com/"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.LinkNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
@@ -98,6 +97,7 @@ func TestLinkNewWithOptionalParams(t *testing.T) {
 			}),
 			WaitForTimeout: cloudflare.F(120000.000000),
 		},
+		CacheTTL: cloudflare.F(86400.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

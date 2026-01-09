@@ -29,9 +29,8 @@ func TestMarkdownNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.BrowserRendering.Markdown.New(context.TODO(), browser_rendering.MarkdownNewParams{
 		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
 		Body: browser_rendering.MarkdownNewParamsBodyObject{
-			URL:           cloudflare.F("https://example.com"),
+			URL:           cloudflare.F("https://www.example.com/"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.MarkdownNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
@@ -96,6 +95,7 @@ func TestMarkdownNewWithOptionalParams(t *testing.T) {
 			}),
 			WaitForTimeout: cloudflare.F(120000.000000),
 		},
+		CacheTTL: cloudflare.F(86400.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

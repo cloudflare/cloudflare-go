@@ -29,12 +29,11 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.BrowserRendering.Scrape.New(context.TODO(), browser_rendering.ScrapeNewParams{
 		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
 		Body: browser_rendering.ScrapeNewParamsBodyObject{
 			Elements: cloudflare.F([]browser_rendering.ScrapeNewParamsBodyObjectElement{{
-				Selector: cloudflare.F("selector"),
+				Selector: cloudflare.F("h1"),
 			}}),
-			HTML:          cloudflare.F("x"),
+			URL:           cloudflare.F("https://www.example.com/"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.ScrapeNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
@@ -99,6 +98,7 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 			}),
 			WaitForTimeout: cloudflare.F(120000.000000),
 		},
+		CacheTTL: cloudflare.F(86400.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

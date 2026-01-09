@@ -52,10 +52,10 @@ func (r *PDFService) New(ctx context.Context, params PDFNewParams, opts ...optio
 
 type PDFNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]   `path:"account_id,required"`
+	Body      PDFNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
-	CacheTTL param.Field[float64]  `query:"cacheTTL"`
-	Body     PDFNewParamsBodyUnion `json:"body"`
+	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
 
 func (r PDFNewParams) MarshalJSON() (data []byte, err error) {
