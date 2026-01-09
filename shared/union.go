@@ -145,6 +145,10 @@ func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()  
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                 {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                    {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
+func (UnionString) ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()             {}
+func (UnionString) ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()           {}
+func (UnionString) ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()        {}
+func (UnionString) ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion()      {}
 func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                          {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
@@ -223,14 +227,18 @@ func (UnionBool) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion(
 
 type UnionInt int64
 
-func (UnionInt) ImplementsReceivedGetParamsEndUnion()                             {}
-func (UnionInt) ImplementsReceivedGetParamsStartUnion()                           {}
-func (UnionInt) ImplementsPageRuleActionsCacheTTLByStatusValueUnion()             {}
-func (UnionInt) ImplementsPageRuleNewParamsActionsCacheTTLByStatusValueUnion()    {}
-func (UnionInt) ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {}
-func (UnionInt) ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion()   {}
-func (UnionInt) ImplementsOriginPortUnionParam()                                  {}
-func (UnionInt) ImplementsOriginPortUnion()                                       {}
+func (UnionInt) ImplementsReceivedGetParamsEndUnion()                                    {}
+func (UnionInt) ImplementsReceivedGetParamsStartUnion()                                  {}
+func (UnionInt) ImplementsPageRuleActionsCacheTTLByStatusValueUnion()                    {}
+func (UnionInt) ImplementsPageRuleNewParamsActionsCacheTTLByStatusValueUnion()           {}
+func (UnionInt) ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion()        {}
+func (UnionInt) ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion()          {}
+func (UnionInt) ImplementsOriginPortUnionParam()                                         {}
+func (UnionInt) ImplementsOriginPortUnion()                                              {}
+func (UnionInt) ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()        {}
+func (UnionInt) ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()      {}
+func (UnionInt) ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()   {}
+func (UnionInt) ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion() {}
 
 type UnionFloat float64
 
