@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/cloudflare/cloudflare-go/v6/workflows"
 )
 
@@ -32,10 +33,13 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"x",
 		workflows.InstanceNewParams{
-			AccountID:         cloudflare.F("account_id"),
-			InstanceID:        cloudflare.F("instance_id"),
-			InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
-			Params:            cloudflare.F[any](map[string]interface{}{}),
+			AccountID:  cloudflare.F("account_id"),
+			InstanceID: cloudflare.F("instance_id"),
+			InstanceRetention: cloudflare.F(workflows.InstanceNewParamsInstanceRetention{
+				ErrorRetention:   cloudflare.F[workflows.InstanceNewParamsInstanceRetentionErrorRetentionUnion](shared.UnionInt(int64(0))),
+				SuccessRetention: cloudflare.F[workflows.InstanceNewParamsInstanceRetentionSuccessRetentionUnion](shared.UnionInt(int64(0))),
+			}),
+			Params: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -102,9 +106,12 @@ func TestInstanceBulkWithOptionalParams(t *testing.T) {
 		workflows.InstanceBulkParams{
 			AccountID: cloudflare.F("account_id"),
 			Body: []workflows.InstanceBulkParamsBody{{
-				InstanceID:        cloudflare.F("instance_id"),
-				InstanceRetention: cloudflare.F[any](map[string]interface{}{}),
-				Params:            cloudflare.F[any](map[string]interface{}{}),
+				InstanceID: cloudflare.F("instance_id"),
+				InstanceRetention: cloudflare.F(workflows.InstanceBulkParamsBodyInstanceRetention{
+					ErrorRetention:   cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion](shared.UnionInt(int64(0))),
+					SuccessRetention: cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion](shared.UnionInt(int64(0))),
+				}),
+				Params: cloudflare.F[any](map[string]interface{}{}),
 			}},
 		},
 	)

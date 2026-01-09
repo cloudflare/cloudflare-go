@@ -725,14 +725,39 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 }
 
 type InstanceNewParams struct {
-	AccountID         param.Field[string]      `path:"account_id,required"`
-	InstanceID        param.Field[string]      `json:"instance_id"`
-	InstanceRetention param.Field[interface{}] `json:"instance_retention"`
-	Params            param.Field[interface{}] `json:"params"`
+	AccountID         param.Field[string]                             `path:"account_id,required"`
+	InstanceID        param.Field[string]                             `json:"instance_id"`
+	InstanceRetention param.Field[InstanceNewParamsInstanceRetention] `json:"instance_retention"`
+	Params            param.Field[interface{}]                        `json:"params"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsInstanceRetention struct {
+	// Duration in milliseconds or as a string like '5 minutes'
+	ErrorRetention param.Field[InstanceNewParamsInstanceRetentionErrorRetentionUnion] `json:"error_retention"`
+	// Duration in milliseconds or as a string like '5 minutes'
+	SuccessRetention param.Field[InstanceNewParamsInstanceRetentionSuccessRetentionUnion] `json:"success_retention"`
+}
+
+func (r InstanceNewParamsInstanceRetention) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Duration in milliseconds or as a string like '5 minutes'
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type InstanceNewParamsInstanceRetentionErrorRetentionUnion interface {
+	ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()
+}
+
+// Duration in milliseconds or as a string like '5 minutes'
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type InstanceNewParamsInstanceRetentionSuccessRetentionUnion interface {
+	ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()
 }
 
 type InstanceNewResponseEnvelope struct {
@@ -926,13 +951,38 @@ func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceBulkParamsBody struct {
-	InstanceID        param.Field[string]      `json:"instance_id"`
-	InstanceRetention param.Field[interface{}] `json:"instance_retention"`
-	Params            param.Field[interface{}] `json:"params"`
+	InstanceID        param.Field[string]                                  `json:"instance_id"`
+	InstanceRetention param.Field[InstanceBulkParamsBodyInstanceRetention] `json:"instance_retention"`
+	Params            param.Field[interface{}]                             `json:"params"`
 }
 
 func (r InstanceBulkParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceBulkParamsBodyInstanceRetention struct {
+	// Duration in milliseconds or as a string like '5 minutes'
+	ErrorRetention param.Field[InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion] `json:"error_retention"`
+	// Duration in milliseconds or as a string like '5 minutes'
+	SuccessRetention param.Field[InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion] `json:"success_retention"`
+}
+
+func (r InstanceBulkParamsBodyInstanceRetention) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Duration in milliseconds or as a string like '5 minutes'
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion interface {
+	ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()
+}
+
+// Duration in milliseconds or as a string like '5 minutes'
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion interface {
+	ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion()
 }
 
 type InstanceGetParams struct {
