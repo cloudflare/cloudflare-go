@@ -194,6 +194,7 @@ type InstanceNewResponse struct {
 	EmbeddingModel                 InstanceNewResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                    `json:"enable"`
 	EngineVersion                  float64                                 `json:"engine_version"`
+	HybridSearchEnabled            bool                                    `json:"hybrid_search_enabled"`
 	LastActivity                   time.Time                               `json:"last_activity" format:"date-time"`
 	MaxNumResults                  int64                                   `json:"max_num_results"`
 	Metadata                       InstanceNewResponseMetadata             `json:"metadata"`
@@ -241,6 +242,7 @@ type instanceNewResponseJSON struct {
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
+	HybridSearchEnabled            apijson.Field
 	LastActivity                   apijson.Field
 	MaxNumResults                  apijson.Field
 	Metadata                       apijson.Field
@@ -692,6 +694,7 @@ type InstanceUpdateResponse struct {
 	EmbeddingModel                 InstanceUpdateResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                       `json:"enable"`
 	EngineVersion                  float64                                    `json:"engine_version"`
+	HybridSearchEnabled            bool                                       `json:"hybrid_search_enabled"`
 	LastActivity                   time.Time                                  `json:"last_activity" format:"date-time"`
 	MaxNumResults                  int64                                      `json:"max_num_results"`
 	Metadata                       InstanceUpdateResponseMetadata             `json:"metadata"`
@@ -739,6 +742,7 @@ type instanceUpdateResponseJSON struct {
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
+	HybridSearchEnabled            apijson.Field
 	LastActivity                   apijson.Field
 	MaxNumResults                  apijson.Field
 	Metadata                       apijson.Field
@@ -1192,6 +1196,7 @@ type InstanceListResponse struct {
 	EmbeddingModel                 InstanceListResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                     `json:"enable"`
 	EngineVersion                  float64                                  `json:"engine_version"`
+	HybridSearchEnabled            bool                                     `json:"hybrid_search_enabled"`
 	LastActivity                   time.Time                                `json:"last_activity" format:"date-time"`
 	MaxNumResults                  int64                                    `json:"max_num_results"`
 	Metadata                       InstanceListResponseMetadata             `json:"metadata"`
@@ -1239,6 +1244,7 @@ type instanceListResponseJSON struct {
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
+	HybridSearchEnabled            apijson.Field
 	LastActivity                   apijson.Field
 	MaxNumResults                  apijson.Field
 	Metadata                       apijson.Field
@@ -1690,6 +1696,7 @@ type InstanceDeleteResponse struct {
 	EmbeddingModel                 InstanceDeleteResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                       `json:"enable"`
 	EngineVersion                  float64                                    `json:"engine_version"`
+	HybridSearchEnabled            bool                                       `json:"hybrid_search_enabled"`
 	LastActivity                   time.Time                                  `json:"last_activity" format:"date-time"`
 	MaxNumResults                  int64                                      `json:"max_num_results"`
 	Metadata                       InstanceDeleteResponseMetadata             `json:"metadata"`
@@ -1737,6 +1744,7 @@ type instanceDeleteResponseJSON struct {
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
+	HybridSearchEnabled            apijson.Field
 	LastActivity                   apijson.Field
 	MaxNumResults                  apijson.Field
 	Metadata                       apijson.Field
@@ -2190,6 +2198,7 @@ type InstanceReadResponse struct {
 	EmbeddingModel                 InstanceReadResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                     `json:"enable"`
 	EngineVersion                  float64                                  `json:"engine_version"`
+	HybridSearchEnabled            bool                                     `json:"hybrid_search_enabled"`
 	LastActivity                   time.Time                                `json:"last_activity" format:"date-time"`
 	MaxNumResults                  int64                                    `json:"max_num_results"`
 	Metadata                       InstanceReadResponseMetadata             `json:"metadata"`
@@ -2237,6 +2246,7 @@ type instanceReadResponseJSON struct {
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
+	HybridSearchEnabled            apijson.Field
 	LastActivity                   apijson.Field
 	MaxNumResults                  apijson.Field
 	Metadata                       apijson.Field
@@ -2713,6 +2723,7 @@ type InstanceNewParams struct {
 	ChunkOverlap         param.Field[int64]                                 `json:"chunk_overlap"`
 	ChunkSize            param.Field[int64]                                 `json:"chunk_size"`
 	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
+	HybridSearchEnabled  param.Field[bool]                                  `json:"hybrid_search_enabled"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
 	Metadata             param.Field[InstanceNewParamsMetadata]             `json:"metadata"`
 	PublicEndpointParams param.Field[InstanceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
@@ -2995,6 +3006,7 @@ type InstanceUpdateParams struct {
 	ChunkOverlap                   param.Field[int64]                                    `json:"chunk_overlap"`
 	ChunkSize                      param.Field[int64]                                    `json:"chunk_size"`
 	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
+	HybridSearchEnabled            param.Field[bool]                                     `json:"hybrid_search_enabled"`
 	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
 	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
 	Paused                         param.Field[bool]                                     `json:"paused"`
