@@ -6498,6 +6498,10 @@ type SetConfigRuleActionParameters struct {
 	OpportunisticEncryption bool `json:"opportunistic_encryption"`
 	// The Polish level to configure.
 	Polish SetConfigRuleActionParametersPolish `json:"polish"`
+	// The request body buffering mode.
+	RequestBodyBuffering SetConfigRuleActionParametersRequestBodyBuffering `json:"request_body_buffering"`
+	// The response body buffering mode.
+	ResponseBodyBuffering SetConfigRuleActionParametersResponseBodyBuffering `json:"response_body_buffering"`
 	// Whether to enable Rocket Loader.
 	RocketLoader bool `json:"rocket_loader"`
 	// The Security Level to configure.
@@ -6527,6 +6531,8 @@ type setConfigRuleActionParametersJSON struct {
 	Mirage                  apijson.Field
 	OpportunisticEncryption apijson.Field
 	Polish                  apijson.Field
+	RequestBodyBuffering    apijson.Field
+	ResponseBodyBuffering   apijson.Field
 	RocketLoader            apijson.Field
 	SecurityLevel           apijson.Field
 	ServerSideExcludes      apijson.Field
@@ -6646,6 +6652,39 @@ const (
 func (r SetConfigRuleActionParametersPolish) IsKnown() bool {
 	switch r {
 	case SetConfigRuleActionParametersPolishOff, SetConfigRuleActionParametersPolishLossless, SetConfigRuleActionParametersPolishLossy, SetConfigRuleActionParametersPolishWebP:
+		return true
+	}
+	return false
+}
+
+// The request body buffering mode.
+type SetConfigRuleActionParametersRequestBodyBuffering string
+
+const (
+	SetConfigRuleActionParametersRequestBodyBufferingNone     SetConfigRuleActionParametersRequestBodyBuffering = "none"
+	SetConfigRuleActionParametersRequestBodyBufferingStandard SetConfigRuleActionParametersRequestBodyBuffering = "standard"
+	SetConfigRuleActionParametersRequestBodyBufferingFull     SetConfigRuleActionParametersRequestBodyBuffering = "full"
+)
+
+func (r SetConfigRuleActionParametersRequestBodyBuffering) IsKnown() bool {
+	switch r {
+	case SetConfigRuleActionParametersRequestBodyBufferingNone, SetConfigRuleActionParametersRequestBodyBufferingStandard, SetConfigRuleActionParametersRequestBodyBufferingFull:
+		return true
+	}
+	return false
+}
+
+// The response body buffering mode.
+type SetConfigRuleActionParametersResponseBodyBuffering string
+
+const (
+	SetConfigRuleActionParametersResponseBodyBufferingNone     SetConfigRuleActionParametersResponseBodyBuffering = "none"
+	SetConfigRuleActionParametersResponseBodyBufferingStandard SetConfigRuleActionParametersResponseBodyBuffering = "standard"
+)
+
+func (r SetConfigRuleActionParametersResponseBodyBuffering) IsKnown() bool {
+	switch r {
+	case SetConfigRuleActionParametersResponseBodyBufferingNone, SetConfigRuleActionParametersResponseBodyBufferingStandard:
 		return true
 	}
 	return false
@@ -6832,6 +6871,10 @@ type SetConfigRuleActionParametersParam struct {
 	OpportunisticEncryption param.Field[bool] `json:"opportunistic_encryption"`
 	// The Polish level to configure.
 	Polish param.Field[SetConfigRuleActionParametersPolish] `json:"polish"`
+	// The request body buffering mode.
+	RequestBodyBuffering param.Field[SetConfigRuleActionParametersRequestBodyBuffering] `json:"request_body_buffering"`
+	// The response body buffering mode.
+	ResponseBodyBuffering param.Field[SetConfigRuleActionParametersResponseBodyBuffering] `json:"response_body_buffering"`
 	// Whether to enable Rocket Loader.
 	RocketLoader param.Field[bool] `json:"rocket_loader"`
 	// The Security Level to configure.
