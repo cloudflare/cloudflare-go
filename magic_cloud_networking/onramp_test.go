@@ -34,6 +34,7 @@ func TestOnRampNewWithOptionalParams(t *testing.T) {
 	_, err := client.MagicCloudNetworking.OnRamps.New(context.TODO(), magic_cloud_networking.OnRampNewParams{
 		AccountID:                 cloudflare.F("account_id"),
 		CloudType:                 cloudflare.F(magic_cloud_networking.OnRampNewParamsCloudTypeAws),
+		DynamicRouting:            cloudflare.F(true),
 		InstallRoutesInCloud:      cloudflare.F(true),
 		InstallRoutesInMagicWAN:   cloudflare.F(true),
 		Name:                      cloudflare.F("name"),
@@ -41,6 +42,7 @@ func TestOnRampNewWithOptionalParams(t *testing.T) {
 		AdoptedHubID:              cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		AttachedHubs:              cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
 		AttachedVPCs:              cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
+		CloudASN:                  cloudflare.F(int64(0)),
 		Description:               cloudflare.F("description"),
 		HubProviderID:             cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		ManageHubToHubAttachments: cloudflare.F(true),
