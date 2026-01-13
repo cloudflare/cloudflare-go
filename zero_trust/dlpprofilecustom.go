@@ -5969,7 +5969,7 @@ type DLPProfileCustomNewParams struct {
 	OCREnabled  param.Field[bool]                                  `json:"ocr_enabled"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
 	// Microsoft Information Protection profiles).
-	SharedEntries param.Field[[]DLPProfileCustomNewParamsSharedEntryUnion] `json:"shared_entries"`
+	SharedEntries param.Field[[]DLPProfileCustomNewParamsSharedEntry] `json:"shared_entries"`
 }
 
 func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
@@ -6023,178 +6023,12 @@ func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) implementsDLPProfil
 }
 
 type DLPProfileCustomNewParamsSharedEntry struct {
-	Enabled   param.Field[bool]                                            `json:"enabled,required"`
-	EntryID   param.Field[string]                                          `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesEntryType] `json:"entry_type,required"`
+	Enabled param.Field[bool]   `json:"enabled,required"`
+	EntryID param.Field[string] `json:"entry_id,required" format:"uuid"`
 }
 
 func (r DLPProfileCustomNewParamsSharedEntry) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomNewParamsSharedEntry) implementsDLPProfileCustomNewParamsSharedEntryUnion() {}
-
-// Satisfied by [zero_trust.DLPProfileCustomNewParamsSharedEntriesCustom],
-// [zero_trust.DLPProfileCustomNewParamsSharedEntriesPredefined],
-// [zero_trust.DLPProfileCustomNewParamsSharedEntriesIntegration],
-// [zero_trust.DLPProfileCustomNewParamsSharedEntriesExactData],
-// [zero_trust.DLPProfileCustomNewParamsSharedEntriesObject],
-// [DLPProfileCustomNewParamsSharedEntry].
-type DLPProfileCustomNewParamsSharedEntryUnion interface {
-	implementsDLPProfileCustomNewParamsSharedEntryUnion()
-}
-
-type DLPProfileCustomNewParamsSharedEntriesCustom struct {
-	Enabled   param.Field[bool]                                                  `json:"enabled,required"`
-	EntryID   param.Field[string]                                                `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesCustomEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesCustom) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesCustom) implementsDLPProfileCustomNewParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomNewParamsSharedEntriesCustomEntryType string
-
-const (
-	DLPProfileCustomNewParamsSharedEntriesCustomEntryTypeCustom DLPProfileCustomNewParamsSharedEntriesCustomEntryType = "custom"
-)
-
-func (r DLPProfileCustomNewParamsSharedEntriesCustomEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesCustomEntryTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomNewParamsSharedEntriesPredefined struct {
-	Enabled   param.Field[bool]                                                      `json:"enabled,required"`
-	EntryID   param.Field[string]                                                    `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesPredefinedEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesPredefined) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesPredefined) implementsDLPProfileCustomNewParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomNewParamsSharedEntriesPredefinedEntryType string
-
-const (
-	DLPProfileCustomNewParamsSharedEntriesPredefinedEntryTypePredefined DLPProfileCustomNewParamsSharedEntriesPredefinedEntryType = "predefined"
-)
-
-func (r DLPProfileCustomNewParamsSharedEntriesPredefinedEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesPredefinedEntryTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomNewParamsSharedEntriesIntegration struct {
-	Enabled   param.Field[bool]                                                       `json:"enabled,required"`
-	EntryID   param.Field[string]                                                     `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesIntegrationEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesIntegration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesIntegration) implementsDLPProfileCustomNewParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomNewParamsSharedEntriesIntegrationEntryType string
-
-const (
-	DLPProfileCustomNewParamsSharedEntriesIntegrationEntryTypeIntegration DLPProfileCustomNewParamsSharedEntriesIntegrationEntryType = "integration"
-)
-
-func (r DLPProfileCustomNewParamsSharedEntriesIntegrationEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesIntegrationEntryTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomNewParamsSharedEntriesExactData struct {
-	Enabled   param.Field[bool]                                                     `json:"enabled,required"`
-	EntryID   param.Field[string]                                                   `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesExactDataEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesExactData) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesExactData) implementsDLPProfileCustomNewParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomNewParamsSharedEntriesExactDataEntryType string
-
-const (
-	DLPProfileCustomNewParamsSharedEntriesExactDataEntryTypeExactData DLPProfileCustomNewParamsSharedEntriesExactDataEntryType = "exact_data"
-)
-
-func (r DLPProfileCustomNewParamsSharedEntriesExactDataEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesExactDataEntryTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomNewParamsSharedEntriesObject struct {
-	Enabled   param.Field[bool]                                                  `json:"enabled,required"`
-	EntryID   param.Field[string]                                                `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomNewParamsSharedEntriesObjectEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomNewParamsSharedEntriesObject) implementsDLPProfileCustomNewParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomNewParamsSharedEntriesObjectEntryType string
-
-const (
-	DLPProfileCustomNewParamsSharedEntriesObjectEntryTypeDocumentFingerprint DLPProfileCustomNewParamsSharedEntriesObjectEntryType = "document_fingerprint"
-)
-
-func (r DLPProfileCustomNewParamsSharedEntriesObjectEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesObjectEntryTypeDocumentFingerprint:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomNewParamsSharedEntriesEntryType string
-
-const (
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeCustom              DLPProfileCustomNewParamsSharedEntriesEntryType = "custom"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypePredefined          DLPProfileCustomNewParamsSharedEntriesEntryType = "predefined"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeIntegration         DLPProfileCustomNewParamsSharedEntriesEntryType = "integration"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeExactData           DLPProfileCustomNewParamsSharedEntriesEntryType = "exact_data"
-	DLPProfileCustomNewParamsSharedEntriesEntryTypeDocumentFingerprint DLPProfileCustomNewParamsSharedEntriesEntryType = "document_fingerprint"
-)
-
-func (r DLPProfileCustomNewParamsSharedEntriesEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomNewParamsSharedEntriesEntryTypeCustom, DLPProfileCustomNewParamsSharedEntriesEntryTypePredefined, DLPProfileCustomNewParamsSharedEntriesEntryTypeIntegration, DLPProfileCustomNewParamsSharedEntriesEntryTypeExactData, DLPProfileCustomNewParamsSharedEntriesEntryTypeDocumentFingerprint:
-		return true
-	}
-	return false
 }
 
 type DLPProfileCustomNewResponseEnvelope struct {
@@ -6352,7 +6186,7 @@ type DLPProfileCustomUpdateParams struct {
 	Entries    param.Field[[]DLPProfileCustomUpdateParamsEntryUnion] `json:"entries"`
 	OCREnabled param.Field[bool]                                     `json:"ocr_enabled"`
 	// Other entries, e.g. predefined or integration.
-	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntryUnion] `json:"shared_entries"`
+	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntry] `json:"shared_entries"`
 }
 
 func (r DLPProfileCustomUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -6408,150 +6242,12 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) implementsDLPProfi
 }
 
 type DLPProfileCustomUpdateParamsSharedEntry struct {
-	Enabled   param.Field[bool]                                               `json:"enabled,required"`
-	EntryID   param.Field[string]                                             `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomUpdateParamsSharedEntriesEntryType] `json:"entry_type,required"`
+	Enabled param.Field[bool]   `json:"enabled,required"`
+	EntryID param.Field[string] `json:"entry_id,required" format:"uuid"`
 }
 
 func (r DLPProfileCustomUpdateParamsSharedEntry) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntry) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
-}
-
-// Satisfied by [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefined],
-// [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesIntegration],
-// [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesExactData],
-// [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesObject],
-// [DLPProfileCustomUpdateParamsSharedEntry].
-type DLPProfileCustomUpdateParamsSharedEntryUnion interface {
-	implementsDLPProfileCustomUpdateParamsSharedEntryUnion()
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesPredefined struct {
-	Enabled   param.Field[bool]                                                         `json:"enabled,required"`
-	EntryID   param.Field[string]                                                       `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesPredefined) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesPredefined) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryType string
-
-const (
-	DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryTypePredefined DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryType = "predefined"
-)
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesIntegration struct {
-	Enabled   param.Field[bool]                                                          `json:"enabled,required"`
-	EntryID   param.Field[string]                                                        `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomUpdateParamsSharedEntriesIntegrationEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesIntegration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesIntegration) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesIntegrationEntryType string
-
-const (
-	DLPProfileCustomUpdateParamsSharedEntriesIntegrationEntryTypeIntegration DLPProfileCustomUpdateParamsSharedEntriesIntegrationEntryType = "integration"
-)
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesIntegrationEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomUpdateParamsSharedEntriesIntegrationEntryTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesExactData struct {
-	Enabled   param.Field[bool]                                                        `json:"enabled,required"`
-	EntryID   param.Field[string]                                                      `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesExactData) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesExactData) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryType string
-
-const (
-	DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryTypeExactData DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryType = "exact_data"
-)
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomUpdateParamsSharedEntriesExactDataEntryTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesObject struct {
-	Enabled   param.Field[bool]                                                     `json:"enabled,required"`
-	EntryID   param.Field[string]                                                   `json:"entry_id,required" format:"uuid"`
-	EntryType param.Field[DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType] `json:"entry_type,required"`
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesObject) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType string
-
-const (
-	DLPProfileCustomUpdateParamsSharedEntriesObjectEntryTypeDocumentFingerprint DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType = "document_fingerprint"
-)
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomUpdateParamsSharedEntriesObjectEntryTypeDocumentFingerprint:
-		return true
-	}
-	return false
-}
-
-type DLPProfileCustomUpdateParamsSharedEntriesEntryType string
-
-const (
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypePredefined          DLPProfileCustomUpdateParamsSharedEntriesEntryType = "predefined"
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeIntegration         DLPProfileCustomUpdateParamsSharedEntriesEntryType = "integration"
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeExactData           DLPProfileCustomUpdateParamsSharedEntriesEntryType = "exact_data"
-	DLPProfileCustomUpdateParamsSharedEntriesEntryTypeDocumentFingerprint DLPProfileCustomUpdateParamsSharedEntriesEntryType = "document_fingerprint"
-)
-
-func (r DLPProfileCustomUpdateParamsSharedEntriesEntryType) IsKnown() bool {
-	switch r {
-	case DLPProfileCustomUpdateParamsSharedEntriesEntryTypePredefined, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeIntegration, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeExactData, DLPProfileCustomUpdateParamsSharedEntriesEntryTypeDocumentFingerprint:
-		return true
-	}
-	return false
 }
 
 type DLPProfileCustomUpdateResponseEnvelope struct {
