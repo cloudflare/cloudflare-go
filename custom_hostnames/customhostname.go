@@ -1980,11 +1980,11 @@ type CustomHostnameNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname param.Field[string] `json:"hostname,required"`
-	// SSL properties used when creating the custom hostname.
-	SSL param.Field[CustomHostnameNewParamsSSL] `json:"ssl,required"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
 	// settings.
 	CustomMetadata param.Field[map[string]string] `json:"custom_metadata"`
+	// SSL properties used when creating the custom hostname.
+	SSL param.Field[CustomHostnameNewParamsSSL] `json:"ssl"`
 }
 
 func (r CustomHostnameNewParams) MarshalJSON() (data []byte, err error) {
