@@ -31,6 +31,9 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 	_, err := client.CustomHostnames.New(context.TODO(), custom_hostnames.CustomHostnameNewParams{
 		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hostname: cloudflare.F("app.example.com"),
+		CustomMetadata: cloudflare.F(map[string]string{
+			"foo": "string",
+		}),
 		SSL: cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSL{
 			BundleMethod:         cloudflare.F(custom_hostnames.BundleMethodUbiquitous),
 			CertificateAuthority: cloudflare.F(shared.CertificateCAGoogle),
@@ -51,9 +54,6 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 			}),
 			Type:     cloudflare.F(custom_hostnames.DomainValidationTypeDv),
 			Wildcard: cloudflare.F(false),
-		}),
-		CustomMetadata: cloudflare.F(map[string]string{
-			"foo": "string",
 		}),
 	})
 	if err != nil {
