@@ -48,11 +48,20 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		}),
 		PublicEndpointParams: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParams{
 			AuthorizedHosts: cloudflare.F([]string{"string"}),
-			Enabled:         cloudflare.F(true),
+			ChatCompletionsEndpoint: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint{
+				Disabled: cloudflare.F(true),
+			}),
+			Enabled: cloudflare.F(true),
+			Mcp: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsMcp{
+				Disabled: cloudflare.F(true),
+			}),
 			RateLimit: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsRateLimit{
 				PeriodMs:  cloudflare.F(int64(60000)),
 				Requests:  cloudflare.F(int64(1)),
 				Technique: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsRateLimitTechniqueFixed),
+			}),
+			SearchEndpoint: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsSearchEndpoint{
+				Disabled: cloudflare.F(true),
 			}),
 		}),
 		Reranking:      cloudflare.F(true),
@@ -126,11 +135,20 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			Paused: cloudflare.F(true),
 			PublicEndpointParams: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParams{
 				AuthorizedHosts: cloudflare.F([]string{"string"}),
-				Enabled:         cloudflare.F(true),
+				ChatCompletionsEndpoint: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint{
+					Disabled: cloudflare.F(true),
+				}),
+				Enabled: cloudflare.F(true),
+				Mcp: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsMcp{
+					Disabled: cloudflare.F(true),
+				}),
 				RateLimit: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsRateLimit{
 					PeriodMs:  cloudflare.F(int64(60000)),
 					Requests:  cloudflare.F(int64(1)),
 					Technique: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed),
+				}),
+				SearchEndpoint: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsSearchEndpoint{
+					Disabled: cloudflare.F(true),
 				}),
 			}),
 			Reranking:      cloudflare.F(true),
