@@ -173,6 +173,7 @@ type AIGatewayNewResponse struct {
 	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
 	DLP                     AIGatewayNewResponseDLP                   `json:"dlp"`
+	IsDefault               bool                                      `json:"is_default"`
 	LogManagement           int64                                     `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
@@ -201,6 +202,7 @@ type aiGatewayNewResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
+	IsDefault               apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -458,6 +460,7 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
 	DLP                     AIGatewayUpdateResponseDLP                   `json:"dlp"`
+	IsDefault               bool                                         `json:"is_default"`
 	LogManagement           int64                                        `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
@@ -486,6 +489,7 @@ type aiGatewayUpdateResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
+	IsDefault               apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -744,6 +748,7 @@ type AIGatewayListResponse struct {
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                       `json:"authentication"`
 	DLP                     AIGatewayListResponseDLP                   `json:"dlp"`
+	IsDefault               bool                                       `json:"is_default"`
 	LogManagement           int64                                      `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                       `json:"logpush"`
@@ -772,6 +777,7 @@ type aiGatewayListResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
+	IsDefault               apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -1030,6 +1036,7 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
 	DLP                     AIGatewayDeleteResponseDLP                   `json:"dlp"`
+	IsDefault               bool                                         `json:"is_default"`
 	LogManagement           int64                                        `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
@@ -1058,6 +1065,7 @@ type aiGatewayDeleteResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
+	IsDefault               apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -1316,6 +1324,7 @@ type AIGatewayGetResponse struct {
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
 	DLP                     AIGatewayGetResponseDLP                   `json:"dlp"`
+	IsDefault               bool                                      `json:"is_default"`
 	LogManagement           int64                                     `json:"log_management,nullable"`
 	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
@@ -1344,6 +1353,7 @@ type aiGatewayGetResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
+	IsDefault               apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -1596,6 +1606,7 @@ type AIGatewayNewParams struct {
 	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                    `json:"authentication"`
+	IsDefault               param.Field[bool]                                    `json:"is_default"`
 	LogManagement           param.Field[int64]                                   `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
@@ -1670,6 +1681,7 @@ type AIGatewayUpdateParams struct {
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                       `json:"authentication"`
 	DLP                     param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
+	IsDefault               param.Field[bool]                                       `json:"is_default"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
