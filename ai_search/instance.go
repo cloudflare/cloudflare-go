@@ -391,20 +391,26 @@ func (r instanceNewResponseMetadataJSON) RawJSON() string {
 }
 
 type InstanceNewResponsePublicEndpointParams struct {
-	AuthorizedHosts []string                                         `json:"authorized_hosts"`
-	Enabled         bool                                             `json:"enabled"`
-	RateLimit       InstanceNewResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
-	JSON            instanceNewResponsePublicEndpointParamsJSON      `json:"-"`
+	AuthorizedHosts         []string                                                       `json:"authorized_hosts"`
+	ChatCompletionsEndpoint InstanceNewResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	Enabled                 bool                                                           `json:"enabled"`
+	Mcp                     InstanceNewResponsePublicEndpointParamsMcp                     `json:"mcp"`
+	RateLimit               InstanceNewResponsePublicEndpointParamsRateLimit               `json:"rate_limit"`
+	SearchEndpoint          InstanceNewResponsePublicEndpointParamsSearchEndpoint          `json:"search_endpoint"`
+	JSON                    instanceNewResponsePublicEndpointParamsJSON                    `json:"-"`
 }
 
 // instanceNewResponsePublicEndpointParamsJSON contains the JSON metadata for the
 // struct [InstanceNewResponsePublicEndpointParams]
 type instanceNewResponsePublicEndpointParamsJSON struct {
-	AuthorizedHosts apijson.Field
-	Enabled         apijson.Field
-	RateLimit       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	Enabled                 apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *InstanceNewResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
@@ -412,6 +418,51 @@ func (r *InstanceNewResponsePublicEndpointParams) UnmarshalJSON(data []byte) (er
 }
 
 func (r instanceNewResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                               `json:"disabled"`
+	JSON     instanceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// instanceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON contains the
+// JSON metadata for the struct
+// [InstanceNewResponsePublicEndpointParamsChatCompletionsEndpoint]
+type instanceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponsePublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                           `json:"disabled"`
+	JSON     instanceNewResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// instanceNewResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [InstanceNewResponsePublicEndpointParamsMcp]
+type instanceNewResponsePublicEndpointParamsMcpJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponsePublicEndpointParamsMcpJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -453,6 +504,28 @@ func (r InstanceNewResponsePublicEndpointParamsRateLimitTechnique) IsKnown() boo
 		return true
 	}
 	return false
+}
+
+type InstanceNewResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                      `json:"disabled"`
+	JSON     instanceNewResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// instanceNewResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct [InstanceNewResponsePublicEndpointParamsSearchEndpoint]
+type instanceNewResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceNewResponseRerankingModel string
@@ -891,20 +964,26 @@ func (r instanceUpdateResponseMetadataJSON) RawJSON() string {
 }
 
 type InstanceUpdateResponsePublicEndpointParams struct {
-	AuthorizedHosts []string                                            `json:"authorized_hosts"`
-	Enabled         bool                                                `json:"enabled"`
-	RateLimit       InstanceUpdateResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
-	JSON            instanceUpdateResponsePublicEndpointParamsJSON      `json:"-"`
+	AuthorizedHosts         []string                                                          `json:"authorized_hosts"`
+	ChatCompletionsEndpoint InstanceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	Enabled                 bool                                                              `json:"enabled"`
+	Mcp                     InstanceUpdateResponsePublicEndpointParamsMcp                     `json:"mcp"`
+	RateLimit               InstanceUpdateResponsePublicEndpointParamsRateLimit               `json:"rate_limit"`
+	SearchEndpoint          InstanceUpdateResponsePublicEndpointParamsSearchEndpoint          `json:"search_endpoint"`
+	JSON                    instanceUpdateResponsePublicEndpointParamsJSON                    `json:"-"`
 }
 
 // instanceUpdateResponsePublicEndpointParamsJSON contains the JSON metadata for
 // the struct [InstanceUpdateResponsePublicEndpointParams]
 type instanceUpdateResponsePublicEndpointParamsJSON struct {
-	AuthorizedHosts apijson.Field
-	Enabled         apijson.Field
-	RateLimit       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	Enabled                 apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *InstanceUpdateResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
@@ -912,6 +991,51 @@ func (r *InstanceUpdateResponsePublicEndpointParams) UnmarshalJSON(data []byte) 
 }
 
 func (r instanceUpdateResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                  `json:"disabled"`
+	JSON     instanceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// instanceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON contains
+// the JSON metadata for the struct
+// [InstanceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint]
+type instanceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponsePublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                              `json:"disabled"`
+	JSON     instanceUpdateResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// instanceUpdateResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [InstanceUpdateResponsePublicEndpointParamsMcp]
+type instanceUpdateResponsePublicEndpointParamsMcpJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponsePublicEndpointParamsMcpJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -953,6 +1077,29 @@ func (r InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique) IsKnown() 
 		return true
 	}
 	return false
+}
+
+type InstanceUpdateResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                         `json:"disabled"`
+	JSON     instanceUpdateResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// instanceUpdateResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct
+// [InstanceUpdateResponsePublicEndpointParamsSearchEndpoint]
+type instanceUpdateResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceUpdateResponseRerankingModel string
@@ -1393,20 +1540,26 @@ func (r instanceListResponseMetadataJSON) RawJSON() string {
 }
 
 type InstanceListResponsePublicEndpointParams struct {
-	AuthorizedHosts []string                                          `json:"authorized_hosts"`
-	Enabled         bool                                              `json:"enabled"`
-	RateLimit       InstanceListResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
-	JSON            instanceListResponsePublicEndpointParamsJSON      `json:"-"`
+	AuthorizedHosts         []string                                                        `json:"authorized_hosts"`
+	ChatCompletionsEndpoint InstanceListResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	Enabled                 bool                                                            `json:"enabled"`
+	Mcp                     InstanceListResponsePublicEndpointParamsMcp                     `json:"mcp"`
+	RateLimit               InstanceListResponsePublicEndpointParamsRateLimit               `json:"rate_limit"`
+	SearchEndpoint          InstanceListResponsePublicEndpointParamsSearchEndpoint          `json:"search_endpoint"`
+	JSON                    instanceListResponsePublicEndpointParamsJSON                    `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsJSON contains the JSON metadata for the
 // struct [InstanceListResponsePublicEndpointParams]
 type instanceListResponsePublicEndpointParamsJSON struct {
-	AuthorizedHosts apijson.Field
-	Enabled         apijson.Field
-	RateLimit       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	Enabled                 apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *InstanceListResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
@@ -1414,6 +1567,51 @@ func (r *InstanceListResponsePublicEndpointParams) UnmarshalJSON(data []byte) (e
 }
 
 func (r instanceListResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                `json:"disabled"`
+	JSON     instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON contains the
+// JSON metadata for the struct
+// [InstanceListResponsePublicEndpointParamsChatCompletionsEndpoint]
+type instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponsePublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                            `json:"disabled"`
+	JSON     instanceListResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// instanceListResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [InstanceListResponsePublicEndpointParamsMcp]
+type instanceListResponsePublicEndpointParamsMcpJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponsePublicEndpointParamsMcpJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1455,6 +1653,28 @@ func (r InstanceListResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bo
 		return true
 	}
 	return false
+}
+
+type InstanceListResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                       `json:"disabled"`
+	JSON     instanceListResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// instanceListResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct [InstanceListResponsePublicEndpointParamsSearchEndpoint]
+type instanceListResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceListResponseRerankingModel string
@@ -1893,20 +2113,26 @@ func (r instanceDeleteResponseMetadataJSON) RawJSON() string {
 }
 
 type InstanceDeleteResponsePublicEndpointParams struct {
-	AuthorizedHosts []string                                            `json:"authorized_hosts"`
-	Enabled         bool                                                `json:"enabled"`
-	RateLimit       InstanceDeleteResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
-	JSON            instanceDeleteResponsePublicEndpointParamsJSON      `json:"-"`
+	AuthorizedHosts         []string                                                          `json:"authorized_hosts"`
+	ChatCompletionsEndpoint InstanceDeleteResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	Enabled                 bool                                                              `json:"enabled"`
+	Mcp                     InstanceDeleteResponsePublicEndpointParamsMcp                     `json:"mcp"`
+	RateLimit               InstanceDeleteResponsePublicEndpointParamsRateLimit               `json:"rate_limit"`
+	SearchEndpoint          InstanceDeleteResponsePublicEndpointParamsSearchEndpoint          `json:"search_endpoint"`
+	JSON                    instanceDeleteResponsePublicEndpointParamsJSON                    `json:"-"`
 }
 
 // instanceDeleteResponsePublicEndpointParamsJSON contains the JSON metadata for
 // the struct [InstanceDeleteResponsePublicEndpointParams]
 type instanceDeleteResponsePublicEndpointParamsJSON struct {
-	AuthorizedHosts apijson.Field
-	Enabled         apijson.Field
-	RateLimit       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	Enabled                 apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *InstanceDeleteResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
@@ -1914,6 +2140,51 @@ func (r *InstanceDeleteResponsePublicEndpointParams) UnmarshalJSON(data []byte) 
 }
 
 func (r instanceDeleteResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                  `json:"disabled"`
+	JSON     instanceDeleteResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// instanceDeleteResponsePublicEndpointParamsChatCompletionsEndpointJSON contains
+// the JSON metadata for the struct
+// [InstanceDeleteResponsePublicEndpointParamsChatCompletionsEndpoint]
+type instanceDeleteResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponsePublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                              `json:"disabled"`
+	JSON     instanceDeleteResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// instanceDeleteResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [InstanceDeleteResponsePublicEndpointParamsMcp]
+type instanceDeleteResponsePublicEndpointParamsMcpJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponsePublicEndpointParamsMcpJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1955,6 +2226,29 @@ func (r InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique) IsKnown() 
 		return true
 	}
 	return false
+}
+
+type InstanceDeleteResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                         `json:"disabled"`
+	JSON     instanceDeleteResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// instanceDeleteResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct
+// [InstanceDeleteResponsePublicEndpointParamsSearchEndpoint]
+type instanceDeleteResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceDeleteResponseRerankingModel string
@@ -2395,20 +2689,26 @@ func (r instanceReadResponseMetadataJSON) RawJSON() string {
 }
 
 type InstanceReadResponsePublicEndpointParams struct {
-	AuthorizedHosts []string                                          `json:"authorized_hosts"`
-	Enabled         bool                                              `json:"enabled"`
-	RateLimit       InstanceReadResponsePublicEndpointParamsRateLimit `json:"rate_limit"`
-	JSON            instanceReadResponsePublicEndpointParamsJSON      `json:"-"`
+	AuthorizedHosts         []string                                                        `json:"authorized_hosts"`
+	ChatCompletionsEndpoint InstanceReadResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	Enabled                 bool                                                            `json:"enabled"`
+	Mcp                     InstanceReadResponsePublicEndpointParamsMcp                     `json:"mcp"`
+	RateLimit               InstanceReadResponsePublicEndpointParamsRateLimit               `json:"rate_limit"`
+	SearchEndpoint          InstanceReadResponsePublicEndpointParamsSearchEndpoint          `json:"search_endpoint"`
+	JSON                    instanceReadResponsePublicEndpointParamsJSON                    `json:"-"`
 }
 
 // instanceReadResponsePublicEndpointParamsJSON contains the JSON metadata for the
 // struct [InstanceReadResponsePublicEndpointParams]
 type instanceReadResponsePublicEndpointParamsJSON struct {
-	AuthorizedHosts apijson.Field
-	Enabled         apijson.Field
-	RateLimit       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	Enabled                 apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *InstanceReadResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
@@ -2416,6 +2716,51 @@ func (r *InstanceReadResponsePublicEndpointParams) UnmarshalJSON(data []byte) (e
 }
 
 func (r instanceReadResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                `json:"disabled"`
+	JSON     instanceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// instanceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON contains the
+// JSON metadata for the struct
+// [InstanceReadResponsePublicEndpointParamsChatCompletionsEndpoint]
+type instanceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponsePublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                            `json:"disabled"`
+	JSON     instanceReadResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// instanceReadResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [InstanceReadResponsePublicEndpointParamsMcp]
+type instanceReadResponsePublicEndpointParamsMcpJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponsePublicEndpointParamsMcpJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2457,6 +2802,28 @@ func (r InstanceReadResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bo
 		return true
 	}
 	return false
+}
+
+type InstanceReadResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                       `json:"disabled"`
+	JSON     instanceReadResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// instanceReadResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct [InstanceReadResponsePublicEndpointParamsSearchEndpoint]
+type instanceReadResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceReadResponseRerankingModel string
@@ -2824,12 +3191,33 @@ func (r InstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceNewParamsPublicEndpointParams struct {
-	AuthorizedHosts param.Field[[]string]                                       `json:"authorized_hosts"`
-	Enabled         param.Field[bool]                                           `json:"enabled"`
-	RateLimit       param.Field[InstanceNewParamsPublicEndpointParamsRateLimit] `json:"rate_limit"`
+	AuthorizedHosts         param.Field[[]string]                                                     `json:"authorized_hosts"`
+	ChatCompletionsEndpoint param.Field[InstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint] `json:"chat_completions_endpoint"`
+	Enabled                 param.Field[bool]                                                         `json:"enabled"`
+	Mcp                     param.Field[InstanceNewParamsPublicEndpointParamsMcp]                     `json:"mcp"`
+	RateLimit               param.Field[InstanceNewParamsPublicEndpointParamsRateLimit]               `json:"rate_limit"`
+	SearchEndpoint          param.Field[InstanceNewParamsPublicEndpointParamsSearchEndpoint]          `json:"search_endpoint"`
 }
 
 func (r InstanceNewParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r InstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsPublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r InstanceNewParamsPublicEndpointParamsMcp) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2856,6 +3244,15 @@ func (r InstanceNewParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool 
 		return true
 	}
 	return false
+}
+
+type InstanceNewParamsPublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r InstanceNewParamsPublicEndpointParamsSearchEndpoint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type InstanceNewParamsRerankingModel string
@@ -3116,12 +3513,33 @@ func (r InstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceUpdateParamsPublicEndpointParams struct {
-	AuthorizedHosts param.Field[[]string]                                          `json:"authorized_hosts"`
-	Enabled         param.Field[bool]                                              `json:"enabled"`
-	RateLimit       param.Field[InstanceUpdateParamsPublicEndpointParamsRateLimit] `json:"rate_limit"`
+	AuthorizedHosts         param.Field[[]string]                                                        `json:"authorized_hosts"`
+	ChatCompletionsEndpoint param.Field[InstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint] `json:"chat_completions_endpoint"`
+	Enabled                 param.Field[bool]                                                            `json:"enabled"`
+	Mcp                     param.Field[InstanceUpdateParamsPublicEndpointParamsMcp]                     `json:"mcp"`
+	RateLimit               param.Field[InstanceUpdateParamsPublicEndpointParamsRateLimit]               `json:"rate_limit"`
+	SearchEndpoint          param.Field[InstanceUpdateParamsPublicEndpointParamsSearchEndpoint]          `json:"search_endpoint"`
 }
 
 func (r InstanceUpdateParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r InstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsPublicEndpointParamsMcp struct {
+	// Disable MCP endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r InstanceUpdateParamsPublicEndpointParamsMcp) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -3148,6 +3566,15 @@ func (r InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bo
 		return true
 	}
 	return false
+}
+
+type InstanceUpdateParamsPublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r InstanceUpdateParamsPublicEndpointParamsSearchEndpoint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type InstanceUpdateParamsRerankingModel string
