@@ -27,7 +27,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDatabaseService] method instead.
 type DatabaseService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	TimeTravel *DatabaseTimeTravelService
 }
 
 // NewDatabaseService generates a new service that applies the given options to
@@ -36,6 +37,7 @@ type DatabaseService struct {
 func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 	r = &DatabaseService{}
 	r.Options = opts
+	r.TimeTravel = NewDatabaseTimeTravelService(opts...)
 	return
 }
 
