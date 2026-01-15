@@ -322,6 +322,7 @@ TEST_PATHS=(
 	alerting/policy_test.go
 	alerting/silence_test.go
 	d1/database_test.go
+	d1/databasetimetravel_test.go
 	r2/bucket_test.go
 	r2/bucketlifecycle_test.go
 	r2/bucketcors_test.go
