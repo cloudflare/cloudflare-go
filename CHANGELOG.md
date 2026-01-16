@@ -1,5 +1,44 @@
 # Changelog
 
+## 6.6.0 (2025-01-15)
+
+Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/compare/v6.5.0...v6.6.0)
+
+### Breaking Changes
+
+* **browser_rendering:** refactor request body parameters to use proper union types
+
+  The models were updated to be accurate to what the API expects, so there are parameter changes
+  across most of the sub-resources under the `browser_rendering` umbrella. This prevents some malformed
+  requests that resulted in client errors.
+
+### Features
+
+* **ai_search:** add hybrid search and public endpoint support
+* **ai_gateway:** add `is_default` field to gateway configurations
+* **cloudforce_one:** add UUID support, STIX2 format, and async indicator processing
+* **custom_pages:** add `waf_challenge` identifier support
+* **email_security:** add async polling support with Location header and success field
+* **magic_cloud_networking:** expand type definitions for catalog sync, cloud integration, and onramp
+* **realtime_kit:** add comprehensive meeting, preset, recording, session, and webhook endpoints
+* **rulesets:** add request and response body buffering configuration options
+* **stream:** add properly typed download responses with status tracking
+* **workers:** add targeted placement support with host, hostname, and region options
+* **workers_for_platforms:** enhance dispatch namespace script settings types
+* **workflows:** add properly typed instance_retention parameter with error and success retention
+* **zones:** refactor subscription responses to use dedicated types
+
+### Chores
+
+* **addressing:** add `auto_generated` field to LOA document responses
+* **custom_hostnames:** make SSL parameter optional in create requests
+* **email_security:** deprecate `item_count` field in move responses
+* **hyperdrive:** improve documentation for caching and port configuration
+* **pages:** refactor project and deployment type definitions
+* **shared:** add union type implementations and documentation updates
+* **zero_trust:** simplify DLP shared entry types by removing entry_type unions
+
+
 ## 6.5.0 (2025-12-17)
 
 Full Changelog: [v6.4.0...v6.5.0](https://github.com/cloudflare/cloudflare-go/compare/v6.4.0...v6.5.0)
