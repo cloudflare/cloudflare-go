@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.6.1 (2026-01-16)
+
+Full Changelog: [v6.6.0...v6.6.1](https://github.com/cloudflare/cloudflare-go/compare/v6.6.0...v6.6.1)
+
+### Chores
+
+* **changelog:** update with v6.6.0 release notes ([16ae7fd](https://github.com/cloudflare/cloudflare-go/commit/16ae7fd5a181613e433d3cd61f672f043e3bc42a))
+
 ## 6.6.0 (2025-01-15)
 
 Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/compare/v6.5.0...v6.6.0)
