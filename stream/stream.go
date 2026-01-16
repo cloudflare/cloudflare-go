@@ -352,8 +352,7 @@ type VideoStatus struct {
 	// Specifies why the video failed to encode using a human readable error message in
 	// English. This field is empty if the video is not in an `error` state.
 	ErrorReasonText string `json:"errorReasonText"`
-	// Indicates the size of the entire upload in bytes. The value must be a
-	// non-negative integer.
+	// Indicates the progress as a percentage between 0 and 100.
 	PctComplete string `json:"pctComplete"`
 	// Specifies the processing status for all quality levels for a video.
 	State VideoStatusState `json:"state"`

@@ -101,6 +101,8 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	Observability ScriptScriptAndVersionSettingEditResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
 	Placement ScriptScriptAndVersionSettingEditResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
 	Tags []string `json:"tags,nullable"`
@@ -2232,43 +2234,211 @@ func (r scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON) RawJSON(
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptScriptAndVersionSettingEditResponsePlacement struct {
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode ScriptScriptAndVersionSettingEditResponsePlacementMode `json:"mode"`
-	JSON scriptScriptAndVersionSettingEditResponsePlacementJSON `json:"-"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                                 `json:"region"`
+	JSON   scriptScriptAndVersionSettingEditResponsePlacementJSON `json:"-"`
+	union  ScriptScriptAndVersionSettingEditResponsePlacementUnion
 }
 
 // scriptScriptAndVersionSettingEditResponsePlacementJSON contains the JSON
 // metadata for the struct [ScriptScriptAndVersionSettingEditResponsePlacement]
 type scriptScriptAndVersionSettingEditResponsePlacementJSON struct {
+	Host        apijson.Field
+	Hostname    apijson.Field
 	Mode        apijson.Field
+	Region      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptScriptAndVersionSettingEditResponsePlacement) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r scriptScriptAndVersionSettingEditResponsePlacementJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *ScriptScriptAndVersionSettingEditResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptScriptAndVersionSettingEditResponsePlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ScriptScriptAndVersionSettingEditResponsePlacementUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ScriptScriptAndVersionSettingEditResponsePlacementMode],
+// [ScriptScriptAndVersionSettingEditResponsePlacementRegion],
+// [ScriptScriptAndVersionSettingEditResponsePlacementHostname],
+// [ScriptScriptAndVersionSettingEditResponsePlacementHost].
+func (r ScriptScriptAndVersionSettingEditResponsePlacement) AsUnion() ScriptScriptAndVersionSettingEditResponsePlacementUnion {
+	return r.union
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Union satisfied by [ScriptScriptAndVersionSettingEditResponsePlacementMode],
+// [ScriptScriptAndVersionSettingEditResponsePlacementRegion],
+// [ScriptScriptAndVersionSettingEditResponsePlacementHostname] or
+// [ScriptScriptAndVersionSettingEditResponsePlacementHost].
+type ScriptScriptAndVersionSettingEditResponsePlacementUnion interface {
+	implementsScriptScriptAndVersionSettingEditResponsePlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptScriptAndVersionSettingEditResponsePlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingEditResponsePlacementMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingEditResponsePlacementRegion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingEditResponsePlacementHostname{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingEditResponsePlacementHost{}),
+		},
+	)
+}
+
+type ScriptScriptAndVersionSettingEditResponsePlacementMode struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptScriptAndVersionSettingEditResponsePlacementModeMode `json:"mode,required"`
+	JSON scriptScriptAndVersionSettingEditResponsePlacementModeJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponsePlacementModeJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingEditResponsePlacementMode]
+type scriptScriptAndVersionSettingEditResponsePlacementModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponsePlacementMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponsePlacementModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponsePlacementMode) implementsScriptScriptAndVersionSettingEditResponsePlacement() {
+}
+
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-type ScriptScriptAndVersionSettingEditResponsePlacementMode string
+type ScriptScriptAndVersionSettingEditResponsePlacementModeMode string
 
 const (
-	ScriptScriptAndVersionSettingEditResponsePlacementModeSmart ScriptScriptAndVersionSettingEditResponsePlacementMode = "smart"
+	ScriptScriptAndVersionSettingEditResponsePlacementModeModeSmart ScriptScriptAndVersionSettingEditResponsePlacementModeMode = "smart"
 )
 
-func (r ScriptScriptAndVersionSettingEditResponsePlacementMode) IsKnown() bool {
+func (r ScriptScriptAndVersionSettingEditResponsePlacementModeMode) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponsePlacementModeSmart:
+	case ScriptScriptAndVersionSettingEditResponsePlacementModeModeSmart:
 		return true
 	}
 	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponsePlacementRegion struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                                       `json:"region,required"`
+	JSON   scriptScriptAndVersionSettingEditResponsePlacementRegionJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponsePlacementRegionJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponsePlacementRegion]
+type scriptScriptAndVersionSettingEditResponsePlacementRegionJSON struct {
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponsePlacementRegion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponsePlacementRegionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponsePlacementRegion) implementsScriptScriptAndVersionSettingEditResponsePlacement() {
+}
+
+type ScriptScriptAndVersionSettingEditResponsePlacementHostname struct {
+	// HTTP hostname for targeted placement.
+	Hostname string                                                         `json:"hostname,required"`
+	JSON     scriptScriptAndVersionSettingEditResponsePlacementHostnameJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponsePlacementHostnameJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponsePlacementHostname]
+type scriptScriptAndVersionSettingEditResponsePlacementHostnameJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponsePlacementHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponsePlacementHostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponsePlacementHostname) implementsScriptScriptAndVersionSettingEditResponsePlacement() {
+}
+
+type ScriptScriptAndVersionSettingEditResponsePlacementHost struct {
+	// TCP host and port for targeted placement.
+	Host string                                                     `json:"host,required"`
+	JSON scriptScriptAndVersionSettingEditResponsePlacementHostJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponsePlacementHostJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingEditResponsePlacementHost]
+type scriptScriptAndVersionSettingEditResponsePlacementHostJSON struct {
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponsePlacementHost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponsePlacementHostJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponsePlacementHost) implementsScriptScriptAndVersionSettingEditResponsePlacement() {
 }
 
 // Usage model for the Worker invocations.
@@ -2308,6 +2478,8 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	Observability ScriptScriptAndVersionSettingGetResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
 	Placement ScriptScriptAndVersionSettingGetResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
 	Tags []string `json:"tags,nullable"`
@@ -4439,43 +4611,211 @@ func (r scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON) RawJSON()
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptScriptAndVersionSettingGetResponsePlacement struct {
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode ScriptScriptAndVersionSettingGetResponsePlacementMode `json:"mode"`
-	JSON scriptScriptAndVersionSettingGetResponsePlacementJSON `json:"-"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                                `json:"region"`
+	JSON   scriptScriptAndVersionSettingGetResponsePlacementJSON `json:"-"`
+	union  ScriptScriptAndVersionSettingGetResponsePlacementUnion
 }
 
 // scriptScriptAndVersionSettingGetResponsePlacementJSON contains the JSON metadata
 // for the struct [ScriptScriptAndVersionSettingGetResponsePlacement]
 type scriptScriptAndVersionSettingGetResponsePlacementJSON struct {
+	Host        apijson.Field
+	Hostname    apijson.Field
 	Mode        apijson.Field
+	Region      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptScriptAndVersionSettingGetResponsePlacement) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r scriptScriptAndVersionSettingGetResponsePlacementJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *ScriptScriptAndVersionSettingGetResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptScriptAndVersionSettingGetResponsePlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ScriptScriptAndVersionSettingGetResponsePlacementUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ScriptScriptAndVersionSettingGetResponsePlacementMode],
+// [ScriptScriptAndVersionSettingGetResponsePlacementRegion],
+// [ScriptScriptAndVersionSettingGetResponsePlacementHostname],
+// [ScriptScriptAndVersionSettingGetResponsePlacementHost].
+func (r ScriptScriptAndVersionSettingGetResponsePlacement) AsUnion() ScriptScriptAndVersionSettingGetResponsePlacementUnion {
+	return r.union
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Union satisfied by [ScriptScriptAndVersionSettingGetResponsePlacementMode],
+// [ScriptScriptAndVersionSettingGetResponsePlacementRegion],
+// [ScriptScriptAndVersionSettingGetResponsePlacementHostname] or
+// [ScriptScriptAndVersionSettingGetResponsePlacementHost].
+type ScriptScriptAndVersionSettingGetResponsePlacementUnion interface {
+	implementsScriptScriptAndVersionSettingGetResponsePlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptScriptAndVersionSettingGetResponsePlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingGetResponsePlacementMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingGetResponsePlacementRegion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingGetResponsePlacementHostname{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ScriptScriptAndVersionSettingGetResponsePlacementHost{}),
+		},
+	)
+}
+
+type ScriptScriptAndVersionSettingGetResponsePlacementMode struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptScriptAndVersionSettingGetResponsePlacementModeMode `json:"mode,required"`
+	JSON scriptScriptAndVersionSettingGetResponsePlacementModeJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponsePlacementModeJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingGetResponsePlacementMode]
+type scriptScriptAndVersionSettingGetResponsePlacementModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponsePlacementMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponsePlacementModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponsePlacementMode) implementsScriptScriptAndVersionSettingGetResponsePlacement() {
+}
+
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-type ScriptScriptAndVersionSettingGetResponsePlacementMode string
+type ScriptScriptAndVersionSettingGetResponsePlacementModeMode string
 
 const (
-	ScriptScriptAndVersionSettingGetResponsePlacementModeSmart ScriptScriptAndVersionSettingGetResponsePlacementMode = "smart"
+	ScriptScriptAndVersionSettingGetResponsePlacementModeModeSmart ScriptScriptAndVersionSettingGetResponsePlacementModeMode = "smart"
 )
 
-func (r ScriptScriptAndVersionSettingGetResponsePlacementMode) IsKnown() bool {
+func (r ScriptScriptAndVersionSettingGetResponsePlacementModeMode) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponsePlacementModeSmart:
+	case ScriptScriptAndVersionSettingGetResponsePlacementModeModeSmart:
 		return true
 	}
 	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponsePlacementRegion struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                                      `json:"region,required"`
+	JSON   scriptScriptAndVersionSettingGetResponsePlacementRegionJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponsePlacementRegionJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponsePlacementRegion]
+type scriptScriptAndVersionSettingGetResponsePlacementRegionJSON struct {
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponsePlacementRegion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponsePlacementRegionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponsePlacementRegion) implementsScriptScriptAndVersionSettingGetResponsePlacement() {
+}
+
+type ScriptScriptAndVersionSettingGetResponsePlacementHostname struct {
+	// HTTP hostname for targeted placement.
+	Hostname string                                                        `json:"hostname,required"`
+	JSON     scriptScriptAndVersionSettingGetResponsePlacementHostnameJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponsePlacementHostnameJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponsePlacementHostname]
+type scriptScriptAndVersionSettingGetResponsePlacementHostnameJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponsePlacementHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponsePlacementHostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponsePlacementHostname) implementsScriptScriptAndVersionSettingGetResponsePlacement() {
+}
+
+type ScriptScriptAndVersionSettingGetResponsePlacementHost struct {
+	// TCP host and port for targeted placement.
+	Host string                                                    `json:"host,required"`
+	JSON scriptScriptAndVersionSettingGetResponsePlacementHostJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponsePlacementHostJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingGetResponsePlacementHost]
+type scriptScriptAndVersionSettingGetResponsePlacementHostJSON struct {
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponsePlacementHost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponsePlacementHostJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponsePlacementHost) implementsScriptScriptAndVersionSettingGetResponsePlacement() {
 }
 
 // Usage model for the Worker invocations.
@@ -4538,7 +4878,9 @@ type ScriptScriptAndVersionSettingEditParamsSettings struct {
 	Observability param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservability] `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Placement param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacement] `json:"placement"`
+	// Specify either mode for Smart Placement, or one of region/hostname/host for
+	// targeted placement.
+	Placement param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion] `json:"placement"`
 	// Tags associated with the Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -5837,30 +6179,105 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs) Marsha
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
 type ScriptScriptAndVersionSettingEditParamsSettingsPlacement struct {
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode] `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacement) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacement) implementsScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion() {
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify either mode for Smart Placement, or one of region/hostname/host for
+// targeted placement.
+//
+// Satisfied by
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementRegion],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementHostname],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementHost],
+// [ScriptScriptAndVersionSettingEditParamsSettingsPlacement].
+type ScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion interface {
+	implementsScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion()
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeMode] `json:"mode,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode) implementsScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion() {
+}
+
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-type ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode string
+type ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeMode string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeSmart ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode = "smart"
+	ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeModeSmart ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeMode = "smart"
 )
 
-func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode) IsKnown() bool {
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeMode) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeSmart:
+	case ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeModeSmart:
 		return true
 	}
 	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsPlacementRegion struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementRegion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementRegion) implementsScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion() {
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsPlacementHostname struct {
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementHostname) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementHostname) implementsScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion() {
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsPlacementHost struct {
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementHost) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsPlacementHost) implementsScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion() {
 }
 
 // Usage model for the Worker invocations.

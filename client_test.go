@@ -83,11 +83,11 @@ func TestRetryAfter(t *testing.T) {
 	}
 
 	attempts := len(retryCountHeaders)
-	if attempts != 3 {
+	if attempts != 11 {
 		t.Errorf("Expected %d attempts, got %d", 3, attempts)
 	}
 
-	expectedRetryCountHeaders := []string{"0", "1", "2"}
+	expectedRetryCountHeaders := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
 	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
 		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
 	}
@@ -124,7 +124,7 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		t.Error("Expected there to be a cancel error")
 	}
 
-	expectedRetryCountHeaders := []string{"", "", ""}
+	expectedRetryCountHeaders := []string{"", "", "", "", "", "", "", "", "", "", ""}
 	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
 		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
 	}
@@ -161,7 +161,7 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		t.Error("Expected there to be a cancel error")
 	}
 
-	expectedRetryCountHeaders := []string{"42", "42", "42"}
+	expectedRetryCountHeaders := []string{"42", "42", "42", "42", "42", "42", "42", "42", "42", "42", "42"}
 	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
 		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
 	}
@@ -196,7 +196,7 @@ func TestRetryAfterMs(t *testing.T) {
 	if err == nil {
 		t.Error("Expected there to be a cancel error")
 	}
-	if want := 3; attempts != want {
+	if want := 11; attempts != want {
 		t.Errorf("Expected %d attempts, got %d", want, attempts)
 	}
 }

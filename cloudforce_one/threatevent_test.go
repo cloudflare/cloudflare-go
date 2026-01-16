@@ -57,6 +57,7 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		Tags:           cloudflare.F([]string{"malware"}),
 		TargetCountry:  cloudflare.F("US"),
 		TargetIndustry: cloudflare.F("Agriculture"),
+		UUID:           cloudflare.F("12345678-1234-1234-1234-1234567890ab"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -85,6 +86,7 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 		AccountID:    cloudflare.F("account_id"),
 		DatasetID:    cloudflare.F([]string{"string"}),
 		ForceRefresh: cloudflare.F(true),
+		Format:       cloudflare.F(cloudforce_one.ThreatEventListParamsFormatJson),
 		Order:        cloudflare.F(cloudforce_one.ThreatEventListParamsOrderAsc),
 		OrderBy:      cloudflare.F("orderBy"),
 		Page:         cloudflare.F(0.000000),
@@ -134,7 +136,7 @@ func TestThreatEventDelete(t *testing.T) {
 	}
 }
 
-func TestThreatEventBulkNew(t *testing.T) {
+func TestThreatEventBulkNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -176,8 +178,10 @@ func TestThreatEventBulkNew(t *testing.T) {
 			Tags:           cloudflare.F([]string{"malware"}),
 			TargetCountry:  cloudflare.F("US"),
 			TargetIndustry: cloudflare.F("Agriculture"),
+			UUID:           cloudflare.F("12345678-1234-1234-1234-1234567890ab"),
 		}}),
-		DatasetID: cloudflare.F("durableObjectName"),
+		DatasetID:    cloudflare.F("durableObjectName"),
+		PreserveUUID: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -210,6 +214,8 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 			Attacker:        cloudflare.F("Flying Yeti"),
 			AttackerCountry: cloudflare.F("CN"),
 			Category:        cloudflare.F("Domain Resolution"),
+			CreatedAt:       cloudflare.F(time.Now()),
+			DatasetID:       cloudflare.F("9b769969-a211-466c-8ac3-cb91266a066a"),
 			Date:            cloudflare.F(time.Now()),
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			Indicator:       cloudflare.F("domain2.com"),

@@ -122,6 +122,12 @@ func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()  
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                        {}
 func (UnionString) ImplementsSettingValueUnionParam()                                            {}
 func (UnionString) ImplementsSettingValueUnion()                                                 {}
+func (UnionString) ImplementsPresetNewResponseDataPermissionsPluginsConfigUnion()                {}
+func (UnionString) ImplementsPresetUpdateResponseDataPermissionsPluginsConfigUnion()             {}
+func (UnionString) ImplementsPresetDeleteResponseDataPermissionsPluginsConfigUnion()             {}
+func (UnionString) ImplementsPresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion()      {}
+func (UnionString) ImplementsPresetNewParamsPermissionsPluginsConfigUnion()                      {}
+func (UnionString) ImplementsPresetUpdateParamsPermissionsPluginsConfigUnion()                   {}
 func (UnionString) ImplementsThreatEventListParamsSearchValueUnion()                             {}
 func (UnionString) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                    {}
 func (UnionString) ImplementsLogListParamsFiltersValueUnion()                                    {}
@@ -139,16 +145,20 @@ func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()  
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                 {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                    {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
+func (UnionString) ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()             {}
+func (UnionString) ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()           {}
+func (UnionString) ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()        {}
+func (UnionString) ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion()      {}
 func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                          {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                 {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                           {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                             {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                            {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                              {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                  {}
-func (UnionString) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                        {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                       {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                 {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                   {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                  {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                    {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                        {}
+func (UnionString) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()              {}
 
 type UnionBool bool
 
@@ -213,18 +223,22 @@ func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()     
 func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                {}
 func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()              {}
 func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                 {}
-func (UnionBool) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                     {}
+func (UnionBool) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()           {}
 
 type UnionInt int64
 
-func (UnionInt) ImplementsReceivedGetParamsEndUnion()                             {}
-func (UnionInt) ImplementsReceivedGetParamsStartUnion()                           {}
-func (UnionInt) ImplementsPageRuleActionsCacheTTLByStatusValueUnion()             {}
-func (UnionInt) ImplementsPageRuleNewParamsActionsCacheTTLByStatusValueUnion()    {}
-func (UnionInt) ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {}
-func (UnionInt) ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion()   {}
-func (UnionInt) ImplementsOriginPortUnionParam()                                  {}
-func (UnionInt) ImplementsOriginPortUnion()                                       {}
+func (UnionInt) ImplementsReceivedGetParamsEndUnion()                                    {}
+func (UnionInt) ImplementsReceivedGetParamsStartUnion()                                  {}
+func (UnionInt) ImplementsPageRuleActionsCacheTTLByStatusValueUnion()                    {}
+func (UnionInt) ImplementsPageRuleNewParamsActionsCacheTTLByStatusValueUnion()           {}
+func (UnionInt) ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion()        {}
+func (UnionInt) ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion()          {}
+func (UnionInt) ImplementsOriginPortUnionParam()                                         {}
+func (UnionInt) ImplementsOriginPortUnion()                                              {}
+func (UnionInt) ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()        {}
+func (UnionInt) ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()      {}
+func (UnionInt) ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()   {}
+func (UnionInt) ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion() {}
 
 type UnionFloat float64
 
@@ -291,10 +305,10 @@ func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion() 
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}
 func (UnionFloat) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                              {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                     {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                               {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                                 {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                                {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                  {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                      {}
-func (UnionFloat) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                            {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                           {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                     {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                       {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                      {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                        {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                            {}
+func (UnionFloat) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()                  {}

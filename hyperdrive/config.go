@@ -331,8 +331,10 @@ type ConfigEditParams struct {
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
 	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
-	Name      param.Field[string]                       `json:"name"`
-	Origin    param.Field[ConfigEditParamsOriginUnion]  `json:"origin"`
+	// The name of the Hyperdrive configuration. Used to identify the configuration in
+	// the Cloudflare dashboard and API.
+	Name   param.Field[string]                      `json:"name"`
+	Origin param.Field[ConfigEditParamsOriginUnion] `json:"origin"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
 	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
@@ -345,11 +347,11 @@ func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
 type ConfigEditParamsCaching struct {
 	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
-	// Specify the maximum duration items should persist in the cache. Not returned if
-	// set to the default (60).
+	// Specify the maximum duration (in seconds) items should persist in the cache.
+	// Defaults to 60 seconds if not specified.
 	MaxAge param.Field[int64] `json:"max_age"`
-	// Specify the number of seconds the cache may serve a stale response. Omitted if
-	// set to the default (15).
+	// Specify the number of seconds the cache may serve a stale response. Defaults to
+	// 15 seconds if not specified.
 	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
 }
 
@@ -382,11 +384,11 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) implementsConf
 type ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled struct {
 	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
-	// Specify the maximum duration items should persist in the cache. Not returned if
-	// set to the default (60).
+	// Specify the maximum duration (in seconds) items should persist in the cache.
+	// Defaults to 60 seconds if not specified.
 	MaxAge param.Field[int64] `json:"max_age"`
-	// Specify the number of seconds the cache may serve a stale response. Omitted if
-	// set to the default (15).
+	// Specify the number of seconds the cache may serve a stale response. Defaults to
+	// 15 seconds if not specified.
 	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
 }
 
@@ -424,7 +426,8 @@ type ConfigEditParamsOrigin struct {
 	// Set the password needed to access your origin database. The API never returns
 	// this write-only value.
 	Password param.Field[string] `json:"password"`
-	// Defines the port (default: 5432 for Postgres) of your origin database.
+	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
+	// 3306 for MySQL if not specified.
 	Port param.Field[int64] `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[ConfigEditParamsOriginScheme] `json:"scheme"`
@@ -484,7 +487,8 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme) IsKnown() bool
 type ConfigEditParamsOriginHyperdriveInternetOrigin struct {
 	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
-	// Defines the port (default: 5432 for Postgres) of your origin database.
+	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
+	// 3306 for MySQL if not specified.
 	Port param.Field[int64] `json:"port,required"`
 }
 

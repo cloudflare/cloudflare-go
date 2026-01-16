@@ -1,5 +1,80 @@
 # Changelog
 
+## 6.6.0 (2026-01-16)
+
+Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/compare/v6.5.0...v6.6.0)
+
+### Features
+
+* chore: use 'next' branch for go_sdk_version ([6e36dc4](https://github.com/cloudflare/cloudflare-go/commit/6e36dc44a16f8672d9fc9ec717e3884be5cacc33))
+* feat(d1): Add time travel `get_bookmark` and `restore` endpoints ([f4e82ff](https://github.com/cloudflare/cloudflare-go/commit/f4e82ffa8e03abb9d49671c262bd7aeb27b5e695))
+* fix: unsupported auth scheme ([3d01e2d](https://github.com/cloudflare/cloudflare-go/commit/3d01e2d03b742099a7d1eb3262fbae095811b05c))
+* **requestconfig:** more resilient rate limit handling ([2bbfb73](https://github.com/cloudflare/cloudflare-go/commit/2bbfb7321c9fe81b79554288e882f6ab46dcdd07))
+
+
+### Chores
+
+* **api:** update composite API spec ([087abae](https://github.com/cloudflare/cloudflare-go/commit/087abaec3e0ee420d742fbaf1a94beeb6a2d5e8d))
+* **api:** update composite API spec ([642e88b](https://github.com/cloudflare/cloudflare-go/commit/642e88ba84480f8f671097f2e9f8012273097db7))
+* **api:** update composite API spec ([3cca923](https://github.com/cloudflare/cloudflare-go/commit/3cca9238ccd2ba6c74846a262166f7445353c6c6))
+* **api:** update composite API spec ([d86ec65](https://github.com/cloudflare/cloudflare-go/commit/d86ec65cf166e7c0dda5ec3d0a7a2164203880d7))
+* **api:** update composite API spec ([4cab5b1](https://github.com/cloudflare/cloudflare-go/commit/4cab5b1a24718e0d6462bb9210a803133c1def41))
+* **api:** update composite API spec ([0198b9d](https://github.com/cloudflare/cloudflare-go/commit/0198b9d430bb4069c3c346b1070c1d72f96d4e27))
+* **api:** update composite API spec ([6a863d9](https://github.com/cloudflare/cloudflare-go/commit/6a863d9d4e3b9b6fdb4828e9599cc5f77bfc22a6))
+* **api:** update composite API spec ([e5b3dad](https://github.com/cloudflare/cloudflare-go/commit/e5b3dad3d396a425a5d2b6b251127e77f685cb42))
+* **api:** update composite API spec ([9ebcb23](https://github.com/cloudflare/cloudflare-go/commit/9ebcb236689be5c2327103e19f4d08106a038705))
+* **api:** update composite API spec ([20aa2ba](https://github.com/cloudflare/cloudflare-go/commit/20aa2baa64f78d608c7c1cd6df7226feb33d7f00))
+* **api:** update composite API spec ([51946fe](https://github.com/cloudflare/cloudflare-go/commit/51946fedde72943b8b9d933a7fc8b4955e2d562d))
+* **api:** update composite API spec ([352168e](https://github.com/cloudflare/cloudflare-go/commit/352168ede302b94aef9ce758925b14dce58a8a22))
+* **api:** update composite API spec ([a52e446](https://github.com/cloudflare/cloudflare-go/commit/a52e446a6c523db828cc58ef0c400d2d0add371c))
+* **api:** update composite API spec ([7c2d0c9](https://github.com/cloudflare/cloudflare-go/commit/7c2d0c940f953fdd7436150c27475ba10a834d56))
+* **ci:** fix client retry tests to accomodate the new retry logic ([72cc307](https://github.com/cloudflare/cloudflare-go/commit/72cc3074aa2fc0f36d5511b0409b1322f80f083c))
+* remove stalebot ([1c1e4b9](https://github.com/cloudflare/cloudflare-go/commit/1c1e4b9de15e284150f2b6f8ec73255744ad7239))
+
+
+### Documentation
+
+* **changelog:** update changelog for v6.6.0 ([7629a70](https://github.com/cloudflare/cloudflare-go/commit/7629a707f273272787f0e404f6002eb2557716a7))
+
+## 6.6.0 (2025-01-15)
+
+Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/compare/v6.5.0...v6.6.0)
+
+### Breaking Changes
+
+* **browser_rendering:** refactor request body parameters to use proper union types
+
+  The models were updated to be accurate to what the API expects, so there are parameter changes
+  across most of the sub-resources under the `browser_rendering` umbrella. This prevents some malformed
+  requests that resulted in client errors.
+
+### Features
+
+* **ai_search:** add hybrid search and public endpoint support
+* **ai_gateway:** add `is_default` field to gateway configurations
+* **cloudforce_one:** add UUID support, STIX2 format, and async indicator processing
+* **custom_pages:** add `waf_challenge` identifier support
+* **email_security:** add async polling support with Location header and success field
+* **magic_cloud_networking:** expand type definitions for catalog sync, cloud integration, and onramp
+* **realtime_kit:** add comprehensive meeting, preset, recording, session, and webhook endpoints
+* **rulesets:** add request and response body buffering configuration options
+* **stream:** add properly typed download responses with status tracking
+* **workers:** add targeted placement support with host, hostname, and region options
+* **workers_for_platforms:** enhance dispatch namespace script settings types
+* **workflows:** add properly typed instance_retention parameter with error and success retention
+* **zones:** refactor subscription responses to use dedicated types
+
+### Chores
+
+* **addressing:** add `auto_generated` field to LOA document responses
+* **custom_hostnames:** make SSL parameter optional in create requests
+* **email_security:** deprecate `item_count` field in move responses
+* **hyperdrive:** improve documentation for caching and port configuration
+* **pages:** refactor project and deployment type definitions
+* **shared:** add union type implementations and documentation updates
+* **zero_trust:** simplify DLP shared entry types by removing entry_type unions
+
+
 ## 6.5.0 (2025-12-17)
 
 Full Changelog: [v6.4.0...v6.5.0](https://github.com/cloudflare/cloudflare-go/compare/v6.4.0...v6.5.0)

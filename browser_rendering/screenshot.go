@@ -52,15 +52,15 @@ func (r *ScreenshotService) New(ctx context.Context, params ScreenshotNewParams,
 
 type ScreenshotNewResponse struct {
 	// Response status
-	Status bool                         `json:"status,required"`
-	Errors []ScreenshotNewResponseError `json:"errors"`
-	JSON   screenshotNewResponseJSON    `json:"-"`
+	Success bool                         `json:"success,required"`
+	Errors  []ScreenshotNewResponseError `json:"errors"`
+	JSON    screenshotNewResponseJSON    `json:"-"`
 }
 
 // screenshotNewResponseJSON contains the JSON metadata for the struct
 // [ScreenshotNewResponse]
 type screenshotNewResponseJSON struct {
-	Status      apijson.Field
+	Success     apijson.Field
 	Errors      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -101,61 +101,14 @@ func (r screenshotNewResponseErrorJSON) RawJSON() string {
 
 type ScreenshotNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]          `path:"account_id,required"`
+	Body      ScreenshotNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
-	AddScriptTag param.Field[[]ScreenshotNewParamsAddScriptTag] `json:"addScriptTag"`
-	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
-	// `<style type="text/css">` tag with the content.
-	AddStyleTag param.Field[[]ScreenshotNewParamsAddStyleTag] `json:"addStyleTag"`
-	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
-	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
-	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	AllowResourceTypes param.Field[[]ScreenshotNewParamsAllowResourceType] `json:"allowResourceTypes"`
-	// Provide credentials for HTTP authentication.
-	Authenticate param.Field[ScreenshotNewParamsAuthenticate] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool] `json:"bestAttempt"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]ScreenshotNewParamsCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                      `json:"emulateMediaType"`
-	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-	GotoOptions param.Field[ScreenshotNewParamsGotoOptions] `json:"gotoOptions"`
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML param.Field[string] `json:"html"`
-	// Block undesired requests that match the provided regex patterns, eg.
-	// '/^.\*\.(css)'.
-	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
-	// Block undesired requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	RejectResourceTypes param.Field[[]ScreenshotNewParamsRejectResourceType] `json:"rejectResourceTypes"`
-	// Check [options](https://pptr.dev/api/puppeteer.screenshotoptions).
-	ScreenshotOptions    param.Field[ScreenshotNewParamsScreenshotOptions] `json:"screenshotOptions"`
-	ScrollPage           param.Field[bool]                                 `json:"scrollPage"`
-	Selector             param.Field[string]                               `json:"selector"`
-	SetExtraHTTPHeaders  param.Field[map[string]string]                    `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]                                 `json:"setJavaScriptEnabled"`
-	// URL to navigate to, eg. `https://example.com`.
-	URL       param.Field[string] `json:"url" format:"uri"`
-	UserAgent param.Field[string] `json:"userAgent"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-	Viewport param.Field[ScreenshotNewParamsViewport] `json:"viewport"`
-	// Wait for the selector to appear in page. Check
-	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-	WaitForSelector param.Field[ScreenshotNewParamsWaitForSelector] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
 }
 
 func (r ScreenshotNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [ScreenshotNewParams]'s query parameters as `url.Values`.
@@ -166,245 +119,347 @@ func (r ScreenshotNewParams) URLQuery() (v url.Values) {
 	})
 }
 
-type ScreenshotNewParamsAddScriptTag struct {
+type ScreenshotNewParamsBody struct {
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout       param.Field[float64]     `json:"actionTimeout"`
+	AddScriptTag        param.Field[interface{}] `json:"addScriptTag"`
+	AddStyleTag         param.Field[interface{}] `json:"addStyleTag"`
+	AllowRequestPattern param.Field[interface{}] `json:"allowRequestPattern"`
+	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
+	Authenticate        param.Field[interface{}] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt      param.Field[bool]        `json:"bestAttempt"`
+	Cookies          param.Field[interface{}] `json:"cookies"`
+	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
+	GotoOptions      param.Field[interface{}] `json:"gotoOptions"`
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML                 param.Field[string]      `json:"html"`
+	RejectRequestPattern param.Field[interface{}] `json:"rejectRequestPattern"`
+	RejectResourceTypes  param.Field[interface{}] `json:"rejectResourceTypes"`
+	ScreenshotOptions    param.Field[interface{}] `json:"screenshotOptions"`
+	ScrollPage           param.Field[bool]        `json:"scrollPage"`
+	Selector             param.Field[string]      `json:"selector"`
+	SetExtraHTTPHeaders  param.Field[interface{}] `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]        `json:"setJavaScriptEnabled"`
+	// URL to navigate to, eg. `https://example.com`.
+	URL             param.Field[string]      `json:"url" format:"uri"`
+	UserAgent       param.Field[string]      `json:"userAgent"`
+	Viewport        param.Field[interface{}] `json:"viewport"`
+	WaitForSelector param.Field[interface{}] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r ScreenshotNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScreenshotNewParamsBody) implementsScreenshotNewParamsBodyUnion() {}
+
+// Satisfied by [browser_rendering.ScreenshotNewParamsBodyObject],
+// [browser_rendering.ScreenshotNewParamsBodyObject], [ScreenshotNewParamsBody].
+type ScreenshotNewParamsBodyUnion interface {
+	implementsScreenshotNewParamsBodyUnion()
+}
+
+type ScreenshotNewParamsBodyObject struct {
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML param.Field[string] `json:"html,required"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
+	// Adds a `<script>` tag into the page with the desired URL or content.
+	AddScriptTag param.Field[[]ScreenshotNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
+	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
+	// `<style type="text/css">` tag with the content.
+	AddStyleTag param.Field[[]ScreenshotNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
+	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
+	// Only allow requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	AllowResourceTypes param.Field[[]ScreenshotNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
+	// Provide credentials for HTTP authentication.
+	Authenticate param.Field[ScreenshotNewParamsBodyObjectAuthenticate] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
+	Cookies          param.Field[[]ScreenshotNewParamsBodyObjectCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]                                `json:"emulateMediaType"`
+	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
+	GotoOptions param.Field[ScreenshotNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
+	// Block undesired requests that match the provided regex patterns, eg.
+	// '/^.\*\.(css)'.
+	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
+	// Block undesired requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	RejectResourceTypes param.Field[[]ScreenshotNewParamsBodyObjectRejectResourceType] `json:"rejectResourceTypes"`
+	// Check [options](https://pptr.dev/api/puppeteer.screenshotoptions).
+	ScreenshotOptions    param.Field[ScreenshotNewParamsBodyObjectScreenshotOptions] `json:"screenshotOptions"`
+	ScrollPage           param.Field[bool]                                           `json:"scrollPage"`
+	Selector             param.Field[string]                                         `json:"selector"`
+	SetExtraHTTPHeaders  param.Field[map[string]string]                              `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]                                           `json:"setJavaScriptEnabled"`
+	UserAgent            param.Field[string]                                         `json:"userAgent"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
+	Viewport param.Field[ScreenshotNewParamsBodyObjectViewport] `json:"viewport"`
+	// Wait for the selector to appear in page. Check
+	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
+	WaitForSelector param.Field[ScreenshotNewParamsBodyObjectWaitForSelector] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r ScreenshotNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScreenshotNewParamsBodyObject) implementsScreenshotNewParamsBodyUnion() {}
+
+type ScreenshotNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r ScreenshotNewParamsAddScriptTag) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsAddStyleTag struct {
+type ScreenshotNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r ScreenshotNewParamsAddStyleTag) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsAllowResourceType string
+type ScreenshotNewParamsBodyObjectAllowResourceType string
 
 const (
-	ScreenshotNewParamsAllowResourceTypeDocument           ScreenshotNewParamsAllowResourceType = "document"
-	ScreenshotNewParamsAllowResourceTypeStylesheet         ScreenshotNewParamsAllowResourceType = "stylesheet"
-	ScreenshotNewParamsAllowResourceTypeImage              ScreenshotNewParamsAllowResourceType = "image"
-	ScreenshotNewParamsAllowResourceTypeMedia              ScreenshotNewParamsAllowResourceType = "media"
-	ScreenshotNewParamsAllowResourceTypeFont               ScreenshotNewParamsAllowResourceType = "font"
-	ScreenshotNewParamsAllowResourceTypeScript             ScreenshotNewParamsAllowResourceType = "script"
-	ScreenshotNewParamsAllowResourceTypeTexttrack          ScreenshotNewParamsAllowResourceType = "texttrack"
-	ScreenshotNewParamsAllowResourceTypeXHR                ScreenshotNewParamsAllowResourceType = "xhr"
-	ScreenshotNewParamsAllowResourceTypeFetch              ScreenshotNewParamsAllowResourceType = "fetch"
-	ScreenshotNewParamsAllowResourceTypePrefetch           ScreenshotNewParamsAllowResourceType = "prefetch"
-	ScreenshotNewParamsAllowResourceTypeEventsource        ScreenshotNewParamsAllowResourceType = "eventsource"
-	ScreenshotNewParamsAllowResourceTypeWebsocket          ScreenshotNewParamsAllowResourceType = "websocket"
-	ScreenshotNewParamsAllowResourceTypeManifest           ScreenshotNewParamsAllowResourceType = "manifest"
-	ScreenshotNewParamsAllowResourceTypeSignedexchange     ScreenshotNewParamsAllowResourceType = "signedexchange"
-	ScreenshotNewParamsAllowResourceTypePing               ScreenshotNewParamsAllowResourceType = "ping"
-	ScreenshotNewParamsAllowResourceTypeCspviolationreport ScreenshotNewParamsAllowResourceType = "cspviolationreport"
-	ScreenshotNewParamsAllowResourceTypePreflight          ScreenshotNewParamsAllowResourceType = "preflight"
-	ScreenshotNewParamsAllowResourceTypeOther              ScreenshotNewParamsAllowResourceType = "other"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeDocument           ScreenshotNewParamsBodyObjectAllowResourceType = "document"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeStylesheet         ScreenshotNewParamsBodyObjectAllowResourceType = "stylesheet"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeImage              ScreenshotNewParamsBodyObjectAllowResourceType = "image"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeMedia              ScreenshotNewParamsBodyObjectAllowResourceType = "media"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeFont               ScreenshotNewParamsBodyObjectAllowResourceType = "font"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeScript             ScreenshotNewParamsBodyObjectAllowResourceType = "script"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeTexttrack          ScreenshotNewParamsBodyObjectAllowResourceType = "texttrack"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeXHR                ScreenshotNewParamsBodyObjectAllowResourceType = "xhr"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeFetch              ScreenshotNewParamsBodyObjectAllowResourceType = "fetch"
+	ScreenshotNewParamsBodyObjectAllowResourceTypePrefetch           ScreenshotNewParamsBodyObjectAllowResourceType = "prefetch"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeEventsource        ScreenshotNewParamsBodyObjectAllowResourceType = "eventsource"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeWebsocket          ScreenshotNewParamsBodyObjectAllowResourceType = "websocket"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeManifest           ScreenshotNewParamsBodyObjectAllowResourceType = "manifest"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeSignedexchange     ScreenshotNewParamsBodyObjectAllowResourceType = "signedexchange"
+	ScreenshotNewParamsBodyObjectAllowResourceTypePing               ScreenshotNewParamsBodyObjectAllowResourceType = "ping"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeCspviolationreport ScreenshotNewParamsBodyObjectAllowResourceType = "cspviolationreport"
+	ScreenshotNewParamsBodyObjectAllowResourceTypePreflight          ScreenshotNewParamsBodyObjectAllowResourceType = "preflight"
+	ScreenshotNewParamsBodyObjectAllowResourceTypeOther              ScreenshotNewParamsBodyObjectAllowResourceType = "other"
 )
 
-func (r ScreenshotNewParamsAllowResourceType) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsAllowResourceTypeDocument, ScreenshotNewParamsAllowResourceTypeStylesheet, ScreenshotNewParamsAllowResourceTypeImage, ScreenshotNewParamsAllowResourceTypeMedia, ScreenshotNewParamsAllowResourceTypeFont, ScreenshotNewParamsAllowResourceTypeScript, ScreenshotNewParamsAllowResourceTypeTexttrack, ScreenshotNewParamsAllowResourceTypeXHR, ScreenshotNewParamsAllowResourceTypeFetch, ScreenshotNewParamsAllowResourceTypePrefetch, ScreenshotNewParamsAllowResourceTypeEventsource, ScreenshotNewParamsAllowResourceTypeWebsocket, ScreenshotNewParamsAllowResourceTypeManifest, ScreenshotNewParamsAllowResourceTypeSignedexchange, ScreenshotNewParamsAllowResourceTypePing, ScreenshotNewParamsAllowResourceTypeCspviolationreport, ScreenshotNewParamsAllowResourceTypePreflight, ScreenshotNewParamsAllowResourceTypeOther:
+	case ScreenshotNewParamsBodyObjectAllowResourceTypeDocument, ScreenshotNewParamsBodyObjectAllowResourceTypeStylesheet, ScreenshotNewParamsBodyObjectAllowResourceTypeImage, ScreenshotNewParamsBodyObjectAllowResourceTypeMedia, ScreenshotNewParamsBodyObjectAllowResourceTypeFont, ScreenshotNewParamsBodyObjectAllowResourceTypeScript, ScreenshotNewParamsBodyObjectAllowResourceTypeTexttrack, ScreenshotNewParamsBodyObjectAllowResourceTypeXHR, ScreenshotNewParamsBodyObjectAllowResourceTypeFetch, ScreenshotNewParamsBodyObjectAllowResourceTypePrefetch, ScreenshotNewParamsBodyObjectAllowResourceTypeEventsource, ScreenshotNewParamsBodyObjectAllowResourceTypeWebsocket, ScreenshotNewParamsBodyObjectAllowResourceTypeManifest, ScreenshotNewParamsBodyObjectAllowResourceTypeSignedexchange, ScreenshotNewParamsBodyObjectAllowResourceTypePing, ScreenshotNewParamsBodyObjectAllowResourceTypeCspviolationreport, ScreenshotNewParamsBodyObjectAllowResourceTypePreflight, ScreenshotNewParamsBodyObjectAllowResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Provide credentials for HTTP authentication.
-type ScreenshotNewParamsAuthenticate struct {
+type ScreenshotNewParamsBodyObjectAuthenticate struct {
 	Password param.Field[string] `json:"password,required"`
 	Username param.Field[string] `json:"username,required"`
 }
 
-func (r ScreenshotNewParamsAuthenticate) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsCookie struct {
-	Name         param.Field[string]                                 `json:"name,required"`
-	Value        param.Field[string]                                 `json:"value,required"`
-	Domain       param.Field[string]                                 `json:"domain"`
-	Expires      param.Field[float64]                                `json:"expires"`
-	HTTPOnly     param.Field[bool]                                   `json:"httpOnly"`
-	PartitionKey param.Field[string]                                 `json:"partitionKey"`
-	Path         param.Field[string]                                 `json:"path"`
-	Priority     param.Field[ScreenshotNewParamsCookiesPriority]     `json:"priority"`
-	SameParty    param.Field[bool]                                   `json:"sameParty"`
-	SameSite     param.Field[ScreenshotNewParamsCookiesSameSite]     `json:"sameSite"`
-	Secure       param.Field[bool]                                   `json:"secure"`
-	SourcePort   param.Field[float64]                                `json:"sourcePort"`
-	SourceScheme param.Field[ScreenshotNewParamsCookiesSourceScheme] `json:"sourceScheme"`
-	URL          param.Field[string]                                 `json:"url"`
+type ScreenshotNewParamsBodyObjectCookie struct {
+	Name         param.Field[string]                                           `json:"name,required"`
+	Value        param.Field[string]                                           `json:"value,required"`
+	Domain       param.Field[string]                                           `json:"domain"`
+	Expires      param.Field[float64]                                          `json:"expires"`
+	HTTPOnly     param.Field[bool]                                             `json:"httpOnly"`
+	PartitionKey param.Field[string]                                           `json:"partitionKey"`
+	Path         param.Field[string]                                           `json:"path"`
+	Priority     param.Field[ScreenshotNewParamsBodyObjectCookiesPriority]     `json:"priority"`
+	SameParty    param.Field[bool]                                             `json:"sameParty"`
+	SameSite     param.Field[ScreenshotNewParamsBodyObjectCookiesSameSite]     `json:"sameSite"`
+	Secure       param.Field[bool]                                             `json:"secure"`
+	SourcePort   param.Field[float64]                                          `json:"sourcePort"`
+	SourceScheme param.Field[ScreenshotNewParamsBodyObjectCookiesSourceScheme] `json:"sourceScheme"`
+	URL          param.Field[string]                                           `json:"url"`
 }
 
-func (r ScreenshotNewParamsCookie) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsCookiesPriority string
+type ScreenshotNewParamsBodyObjectCookiesPriority string
 
 const (
-	ScreenshotNewParamsCookiesPriorityLow    ScreenshotNewParamsCookiesPriority = "Low"
-	ScreenshotNewParamsCookiesPriorityMedium ScreenshotNewParamsCookiesPriority = "Medium"
-	ScreenshotNewParamsCookiesPriorityHigh   ScreenshotNewParamsCookiesPriority = "High"
+	ScreenshotNewParamsBodyObjectCookiesPriorityLow    ScreenshotNewParamsBodyObjectCookiesPriority = "Low"
+	ScreenshotNewParamsBodyObjectCookiesPriorityMedium ScreenshotNewParamsBodyObjectCookiesPriority = "Medium"
+	ScreenshotNewParamsBodyObjectCookiesPriorityHigh   ScreenshotNewParamsBodyObjectCookiesPriority = "High"
 )
 
-func (r ScreenshotNewParamsCookiesPriority) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectCookiesPriority) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsCookiesPriorityLow, ScreenshotNewParamsCookiesPriorityMedium, ScreenshotNewParamsCookiesPriorityHigh:
+	case ScreenshotNewParamsBodyObjectCookiesPriorityLow, ScreenshotNewParamsBodyObjectCookiesPriorityMedium, ScreenshotNewParamsBodyObjectCookiesPriorityHigh:
 		return true
 	}
 	return false
 }
 
-type ScreenshotNewParamsCookiesSameSite string
+type ScreenshotNewParamsBodyObjectCookiesSameSite string
 
 const (
-	ScreenshotNewParamsCookiesSameSiteStrict ScreenshotNewParamsCookiesSameSite = "Strict"
-	ScreenshotNewParamsCookiesSameSiteLax    ScreenshotNewParamsCookiesSameSite = "Lax"
-	ScreenshotNewParamsCookiesSameSiteNone   ScreenshotNewParamsCookiesSameSite = "None"
+	ScreenshotNewParamsBodyObjectCookiesSameSiteStrict ScreenshotNewParamsBodyObjectCookiesSameSite = "Strict"
+	ScreenshotNewParamsBodyObjectCookiesSameSiteLax    ScreenshotNewParamsBodyObjectCookiesSameSite = "Lax"
+	ScreenshotNewParamsBodyObjectCookiesSameSiteNone   ScreenshotNewParamsBodyObjectCookiesSameSite = "None"
 )
 
-func (r ScreenshotNewParamsCookiesSameSite) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectCookiesSameSite) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsCookiesSameSiteStrict, ScreenshotNewParamsCookiesSameSiteLax, ScreenshotNewParamsCookiesSameSiteNone:
+	case ScreenshotNewParamsBodyObjectCookiesSameSiteStrict, ScreenshotNewParamsBodyObjectCookiesSameSiteLax, ScreenshotNewParamsBodyObjectCookiesSameSiteNone:
 		return true
 	}
 	return false
 }
 
-type ScreenshotNewParamsCookiesSourceScheme string
+type ScreenshotNewParamsBodyObjectCookiesSourceScheme string
 
 const (
-	ScreenshotNewParamsCookiesSourceSchemeUnset     ScreenshotNewParamsCookiesSourceScheme = "Unset"
-	ScreenshotNewParamsCookiesSourceSchemeNonSecure ScreenshotNewParamsCookiesSourceScheme = "NonSecure"
-	ScreenshotNewParamsCookiesSourceSchemeSecure    ScreenshotNewParamsCookiesSourceScheme = "Secure"
+	ScreenshotNewParamsBodyObjectCookiesSourceSchemeUnset     ScreenshotNewParamsBodyObjectCookiesSourceScheme = "Unset"
+	ScreenshotNewParamsBodyObjectCookiesSourceSchemeNonSecure ScreenshotNewParamsBodyObjectCookiesSourceScheme = "NonSecure"
+	ScreenshotNewParamsBodyObjectCookiesSourceSchemeSecure    ScreenshotNewParamsBodyObjectCookiesSourceScheme = "Secure"
 )
 
-func (r ScreenshotNewParamsCookiesSourceScheme) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsCookiesSourceSchemeUnset, ScreenshotNewParamsCookiesSourceSchemeNonSecure, ScreenshotNewParamsCookiesSourceSchemeSecure:
+	case ScreenshotNewParamsBodyObjectCookiesSourceSchemeUnset, ScreenshotNewParamsBodyObjectCookiesSourceSchemeNonSecure, ScreenshotNewParamsBodyObjectCookiesSourceSchemeSecure:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-type ScreenshotNewParamsGotoOptions struct {
-	Referer        param.Field[string]                                       `json:"referer"`
-	ReferrerPolicy param.Field[string]                                       `json:"referrerPolicy"`
-	Timeout        param.Field[float64]                                      `json:"timeout"`
-	WaitUntil      param.Field[ScreenshotNewParamsGotoOptionsWaitUntilUnion] `json:"waitUntil"`
+type ScreenshotNewParamsBodyObjectGotoOptions struct {
+	Referer        param.Field[string]                                                 `json:"referer"`
+	ReferrerPolicy param.Field[string]                                                 `json:"referrerPolicy"`
+	Timeout        param.Field[float64]                                                `json:"timeout"`
+	WaitUntil      param.Field[ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilUnion] `json:"waitUntil"`
 }
 
-func (r ScreenshotNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [browser_rendering.ScreenshotNewParamsGotoOptionsWaitUntilString],
-// [browser_rendering.ScreenshotNewParamsGotoOptionsWaitUntilArray].
-type ScreenshotNewParamsGotoOptionsWaitUntilUnion interface {
-	implementsScreenshotNewParamsGotoOptionsWaitUntilUnion()
+// Satisfied by
+// [browser_rendering.ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString],
+// [browser_rendering.ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArray].
+type ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilUnion interface {
+	implementsScreenshotNewParamsBodyObjectGotoOptionsWaitUntilUnion()
 }
 
-type ScreenshotNewParamsGotoOptionsWaitUntilString string
+type ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString string
 
 const (
-	ScreenshotNewParamsGotoOptionsWaitUntilStringLoad             ScreenshotNewParamsGotoOptionsWaitUntilString = "load"
-	ScreenshotNewParamsGotoOptionsWaitUntilStringDomcontentloaded ScreenshotNewParamsGotoOptionsWaitUntilString = "domcontentloaded"
-	ScreenshotNewParamsGotoOptionsWaitUntilStringNetworkidle0     ScreenshotNewParamsGotoOptionsWaitUntilString = "networkidle0"
-	ScreenshotNewParamsGotoOptionsWaitUntilStringNetworkidle2     ScreenshotNewParamsGotoOptionsWaitUntilString = "networkidle2"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringLoad             ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString = "load"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString = "domcontentloaded"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0     ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle0"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2     ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle2"
 )
 
-func (r ScreenshotNewParamsGotoOptionsWaitUntilString) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsGotoOptionsWaitUntilStringLoad, ScreenshotNewParamsGotoOptionsWaitUntilStringDomcontentloaded, ScreenshotNewParamsGotoOptionsWaitUntilStringNetworkidle0, ScreenshotNewParamsGotoOptionsWaitUntilStringNetworkidle2:
+	case ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringLoad, ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded, ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0, ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2:
 		return true
 	}
 	return false
 }
 
-func (r ScreenshotNewParamsGotoOptionsWaitUntilString) implementsScreenshotNewParamsGotoOptionsWaitUntilUnion() {
+func (r ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilString) implementsScreenshotNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type ScreenshotNewParamsGotoOptionsWaitUntilArray []ScreenshotNewParamsGotoOptionsWaitUntilArrayItem
+type ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArray []ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem
 
-func (r ScreenshotNewParamsGotoOptionsWaitUntilArray) implementsScreenshotNewParamsGotoOptionsWaitUntilUnion() {
+func (r ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArray) implementsScreenshotNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type ScreenshotNewParamsGotoOptionsWaitUntilArrayItem string
+type ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem string
 
 const (
-	ScreenshotNewParamsGotoOptionsWaitUntilArrayItemLoad             ScreenshotNewParamsGotoOptionsWaitUntilArrayItem = "load"
-	ScreenshotNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded ScreenshotNewParamsGotoOptionsWaitUntilArrayItem = "domcontentloaded"
-	ScreenshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0     ScreenshotNewParamsGotoOptionsWaitUntilArrayItem = "networkidle0"
-	ScreenshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2     ScreenshotNewParamsGotoOptionsWaitUntilArrayItem = "networkidle2"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad             ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "load"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "domcontentloaded"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0     ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle0"
+	ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2     ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle2"
 )
 
-func (r ScreenshotNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsGotoOptionsWaitUntilArrayItemLoad, ScreenshotNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded, ScreenshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0, ScreenshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2:
+	case ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad, ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded, ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0, ScreenshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2:
 		return true
 	}
 	return false
 }
 
-type ScreenshotNewParamsRejectResourceType string
+type ScreenshotNewParamsBodyObjectRejectResourceType string
 
 const (
-	ScreenshotNewParamsRejectResourceTypeDocument           ScreenshotNewParamsRejectResourceType = "document"
-	ScreenshotNewParamsRejectResourceTypeStylesheet         ScreenshotNewParamsRejectResourceType = "stylesheet"
-	ScreenshotNewParamsRejectResourceTypeImage              ScreenshotNewParamsRejectResourceType = "image"
-	ScreenshotNewParamsRejectResourceTypeMedia              ScreenshotNewParamsRejectResourceType = "media"
-	ScreenshotNewParamsRejectResourceTypeFont               ScreenshotNewParamsRejectResourceType = "font"
-	ScreenshotNewParamsRejectResourceTypeScript             ScreenshotNewParamsRejectResourceType = "script"
-	ScreenshotNewParamsRejectResourceTypeTexttrack          ScreenshotNewParamsRejectResourceType = "texttrack"
-	ScreenshotNewParamsRejectResourceTypeXHR                ScreenshotNewParamsRejectResourceType = "xhr"
-	ScreenshotNewParamsRejectResourceTypeFetch              ScreenshotNewParamsRejectResourceType = "fetch"
-	ScreenshotNewParamsRejectResourceTypePrefetch           ScreenshotNewParamsRejectResourceType = "prefetch"
-	ScreenshotNewParamsRejectResourceTypeEventsource        ScreenshotNewParamsRejectResourceType = "eventsource"
-	ScreenshotNewParamsRejectResourceTypeWebsocket          ScreenshotNewParamsRejectResourceType = "websocket"
-	ScreenshotNewParamsRejectResourceTypeManifest           ScreenshotNewParamsRejectResourceType = "manifest"
-	ScreenshotNewParamsRejectResourceTypeSignedexchange     ScreenshotNewParamsRejectResourceType = "signedexchange"
-	ScreenshotNewParamsRejectResourceTypePing               ScreenshotNewParamsRejectResourceType = "ping"
-	ScreenshotNewParamsRejectResourceTypeCspviolationreport ScreenshotNewParamsRejectResourceType = "cspviolationreport"
-	ScreenshotNewParamsRejectResourceTypePreflight          ScreenshotNewParamsRejectResourceType = "preflight"
-	ScreenshotNewParamsRejectResourceTypeOther              ScreenshotNewParamsRejectResourceType = "other"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeDocument           ScreenshotNewParamsBodyObjectRejectResourceType = "document"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeStylesheet         ScreenshotNewParamsBodyObjectRejectResourceType = "stylesheet"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeImage              ScreenshotNewParamsBodyObjectRejectResourceType = "image"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeMedia              ScreenshotNewParamsBodyObjectRejectResourceType = "media"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeFont               ScreenshotNewParamsBodyObjectRejectResourceType = "font"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeScript             ScreenshotNewParamsBodyObjectRejectResourceType = "script"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeTexttrack          ScreenshotNewParamsBodyObjectRejectResourceType = "texttrack"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeXHR                ScreenshotNewParamsBodyObjectRejectResourceType = "xhr"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeFetch              ScreenshotNewParamsBodyObjectRejectResourceType = "fetch"
+	ScreenshotNewParamsBodyObjectRejectResourceTypePrefetch           ScreenshotNewParamsBodyObjectRejectResourceType = "prefetch"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeEventsource        ScreenshotNewParamsBodyObjectRejectResourceType = "eventsource"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeWebsocket          ScreenshotNewParamsBodyObjectRejectResourceType = "websocket"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeManifest           ScreenshotNewParamsBodyObjectRejectResourceType = "manifest"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeSignedexchange     ScreenshotNewParamsBodyObjectRejectResourceType = "signedexchange"
+	ScreenshotNewParamsBodyObjectRejectResourceTypePing               ScreenshotNewParamsBodyObjectRejectResourceType = "ping"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeCspviolationreport ScreenshotNewParamsBodyObjectRejectResourceType = "cspviolationreport"
+	ScreenshotNewParamsBodyObjectRejectResourceTypePreflight          ScreenshotNewParamsBodyObjectRejectResourceType = "preflight"
+	ScreenshotNewParamsBodyObjectRejectResourceTypeOther              ScreenshotNewParamsBodyObjectRejectResourceType = "other"
 )
 
-func (r ScreenshotNewParamsRejectResourceType) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsRejectResourceTypeDocument, ScreenshotNewParamsRejectResourceTypeStylesheet, ScreenshotNewParamsRejectResourceTypeImage, ScreenshotNewParamsRejectResourceTypeMedia, ScreenshotNewParamsRejectResourceTypeFont, ScreenshotNewParamsRejectResourceTypeScript, ScreenshotNewParamsRejectResourceTypeTexttrack, ScreenshotNewParamsRejectResourceTypeXHR, ScreenshotNewParamsRejectResourceTypeFetch, ScreenshotNewParamsRejectResourceTypePrefetch, ScreenshotNewParamsRejectResourceTypeEventsource, ScreenshotNewParamsRejectResourceTypeWebsocket, ScreenshotNewParamsRejectResourceTypeManifest, ScreenshotNewParamsRejectResourceTypeSignedexchange, ScreenshotNewParamsRejectResourceTypePing, ScreenshotNewParamsRejectResourceTypeCspviolationreport, ScreenshotNewParamsRejectResourceTypePreflight, ScreenshotNewParamsRejectResourceTypeOther:
+	case ScreenshotNewParamsBodyObjectRejectResourceTypeDocument, ScreenshotNewParamsBodyObjectRejectResourceTypeStylesheet, ScreenshotNewParamsBodyObjectRejectResourceTypeImage, ScreenshotNewParamsBodyObjectRejectResourceTypeMedia, ScreenshotNewParamsBodyObjectRejectResourceTypeFont, ScreenshotNewParamsBodyObjectRejectResourceTypeScript, ScreenshotNewParamsBodyObjectRejectResourceTypeTexttrack, ScreenshotNewParamsBodyObjectRejectResourceTypeXHR, ScreenshotNewParamsBodyObjectRejectResourceTypeFetch, ScreenshotNewParamsBodyObjectRejectResourceTypePrefetch, ScreenshotNewParamsBodyObjectRejectResourceTypeEventsource, ScreenshotNewParamsBodyObjectRejectResourceTypeWebsocket, ScreenshotNewParamsBodyObjectRejectResourceTypeManifest, ScreenshotNewParamsBodyObjectRejectResourceTypeSignedexchange, ScreenshotNewParamsBodyObjectRejectResourceTypePing, ScreenshotNewParamsBodyObjectRejectResourceTypeCspviolationreport, ScreenshotNewParamsBodyObjectRejectResourceTypePreflight, ScreenshotNewParamsBodyObjectRejectResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.screenshotoptions).
-type ScreenshotNewParamsScreenshotOptions struct {
-	CaptureBeyondViewport param.Field[bool]                                         `json:"captureBeyondViewport"`
-	Clip                  param.Field[ScreenshotNewParamsScreenshotOptionsClip]     `json:"clip"`
-	Encoding              param.Field[ScreenshotNewParamsScreenshotOptionsEncoding] `json:"encoding"`
-	FromSurface           param.Field[bool]                                         `json:"fromSurface"`
-	FullPage              param.Field[bool]                                         `json:"fullPage"`
-	OmitBackground        param.Field[bool]                                         `json:"omitBackground"`
-	OptimizeForSpeed      param.Field[bool]                                         `json:"optimizeForSpeed"`
-	Quality               param.Field[float64]                                      `json:"quality"`
-	Type                  param.Field[ScreenshotNewParamsScreenshotOptionsType]     `json:"type"`
+type ScreenshotNewParamsBodyObjectScreenshotOptions struct {
+	CaptureBeyondViewport param.Field[bool]                                                   `json:"captureBeyondViewport"`
+	Clip                  param.Field[ScreenshotNewParamsBodyObjectScreenshotOptionsClip]     `json:"clip"`
+	Encoding              param.Field[ScreenshotNewParamsBodyObjectScreenshotOptionsEncoding] `json:"encoding"`
+	FromSurface           param.Field[bool]                                                   `json:"fromSurface"`
+	FullPage              param.Field[bool]                                                   `json:"fullPage"`
+	OmitBackground        param.Field[bool]                                                   `json:"omitBackground"`
+	OptimizeForSpeed      param.Field[bool]                                                   `json:"optimizeForSpeed"`
+	Quality               param.Field[float64]                                                `json:"quality"`
+	Type                  param.Field[ScreenshotNewParamsBodyObjectScreenshotOptionsType]     `json:"type"`
 }
 
-func (r ScreenshotNewParamsScreenshotOptions) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectScreenshotOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsScreenshotOptionsClip struct {
+type ScreenshotNewParamsBodyObjectScreenshotOptionsClip struct {
 	Height param.Field[float64] `json:"height,required"`
 	Width  param.Field[float64] `json:"width,required"`
 	X      param.Field[float64] `json:"x,required"`
@@ -412,43 +467,43 @@ type ScreenshotNewParamsScreenshotOptionsClip struct {
 	Scale  param.Field[float64] `json:"scale"`
 }
 
-func (r ScreenshotNewParamsScreenshotOptionsClip) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectScreenshotOptionsClip) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsScreenshotOptionsEncoding string
+type ScreenshotNewParamsBodyObjectScreenshotOptionsEncoding string
 
 const (
-	ScreenshotNewParamsScreenshotOptionsEncodingBinary ScreenshotNewParamsScreenshotOptionsEncoding = "binary"
-	ScreenshotNewParamsScreenshotOptionsEncodingBase64 ScreenshotNewParamsScreenshotOptionsEncoding = "base64"
+	ScreenshotNewParamsBodyObjectScreenshotOptionsEncodingBinary ScreenshotNewParamsBodyObjectScreenshotOptionsEncoding = "binary"
+	ScreenshotNewParamsBodyObjectScreenshotOptionsEncodingBase64 ScreenshotNewParamsBodyObjectScreenshotOptionsEncoding = "base64"
 )
 
-func (r ScreenshotNewParamsScreenshotOptionsEncoding) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectScreenshotOptionsEncoding) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsScreenshotOptionsEncodingBinary, ScreenshotNewParamsScreenshotOptionsEncodingBase64:
+	case ScreenshotNewParamsBodyObjectScreenshotOptionsEncodingBinary, ScreenshotNewParamsBodyObjectScreenshotOptionsEncodingBase64:
 		return true
 	}
 	return false
 }
 
-type ScreenshotNewParamsScreenshotOptionsType string
+type ScreenshotNewParamsBodyObjectScreenshotOptionsType string
 
 const (
-	ScreenshotNewParamsScreenshotOptionsTypePNG  ScreenshotNewParamsScreenshotOptionsType = "png"
-	ScreenshotNewParamsScreenshotOptionsTypeJPEG ScreenshotNewParamsScreenshotOptionsType = "jpeg"
-	ScreenshotNewParamsScreenshotOptionsTypeWebP ScreenshotNewParamsScreenshotOptionsType = "webp"
+	ScreenshotNewParamsBodyObjectScreenshotOptionsTypePNG  ScreenshotNewParamsBodyObjectScreenshotOptionsType = "png"
+	ScreenshotNewParamsBodyObjectScreenshotOptionsTypeJPEG ScreenshotNewParamsBodyObjectScreenshotOptionsType = "jpeg"
+	ScreenshotNewParamsBodyObjectScreenshotOptionsTypeWebP ScreenshotNewParamsBodyObjectScreenshotOptionsType = "webp"
 )
 
-func (r ScreenshotNewParamsScreenshotOptionsType) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectScreenshotOptionsType) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsScreenshotOptionsTypePNG, ScreenshotNewParamsScreenshotOptionsTypeJPEG, ScreenshotNewParamsScreenshotOptionsTypeWebP:
+	case ScreenshotNewParamsBodyObjectScreenshotOptionsTypePNG, ScreenshotNewParamsBodyObjectScreenshotOptionsTypeJPEG, ScreenshotNewParamsBodyObjectScreenshotOptionsTypeWebP:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-type ScreenshotNewParamsViewport struct {
+type ScreenshotNewParamsBodyObjectViewport struct {
 	Height            param.Field[float64] `json:"height,required"`
 	Width             param.Field[float64] `json:"width,required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
@@ -457,46 +512,46 @@ type ScreenshotNewParamsViewport struct {
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }
 
-func (r ScreenshotNewParamsViewport) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-type ScreenshotNewParamsWaitForSelector struct {
-	Selector param.Field[string]                                    `json:"selector,required"`
-	Hidden   param.Field[ScreenshotNewParamsWaitForSelectorHidden]  `json:"hidden"`
-	Timeout  param.Field[float64]                                   `json:"timeout"`
-	Visible  param.Field[ScreenshotNewParamsWaitForSelectorVisible] `json:"visible"`
+type ScreenshotNewParamsBodyObjectWaitForSelector struct {
+	Selector param.Field[string]                                              `json:"selector,required"`
+	Hidden   param.Field[ScreenshotNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
+	Timeout  param.Field[float64]                                             `json:"timeout"`
+	Visible  param.Field[ScreenshotNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
 }
 
-func (r ScreenshotNewParamsWaitForSelector) MarshalJSON() (data []byte, err error) {
+func (r ScreenshotNewParamsBodyObjectWaitForSelector) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScreenshotNewParamsWaitForSelectorHidden bool
+type ScreenshotNewParamsBodyObjectWaitForSelectorHidden bool
 
 const (
-	ScreenshotNewParamsWaitForSelectorHiddenTrue ScreenshotNewParamsWaitForSelectorHidden = true
+	ScreenshotNewParamsBodyObjectWaitForSelectorHiddenTrue ScreenshotNewParamsBodyObjectWaitForSelectorHidden = true
 )
 
-func (r ScreenshotNewParamsWaitForSelectorHidden) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectWaitForSelectorHidden) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsWaitForSelectorHiddenTrue:
+	case ScreenshotNewParamsBodyObjectWaitForSelectorHiddenTrue:
 		return true
 	}
 	return false
 }
 
-type ScreenshotNewParamsWaitForSelectorVisible bool
+type ScreenshotNewParamsBodyObjectWaitForSelectorVisible bool
 
 const (
-	ScreenshotNewParamsWaitForSelectorVisibleTrue ScreenshotNewParamsWaitForSelectorVisible = true
+	ScreenshotNewParamsBodyObjectWaitForSelectorVisibleTrue ScreenshotNewParamsBodyObjectWaitForSelectorVisible = true
 )
 
-func (r ScreenshotNewParamsWaitForSelectorVisible) IsKnown() bool {
+func (r ScreenshotNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsWaitForSelectorVisibleTrue:
+	case ScreenshotNewParamsBodyObjectWaitForSelectorVisibleTrue:
 		return true
 	}
 	return false

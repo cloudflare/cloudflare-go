@@ -100,9 +100,169 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 	return
 }
 
-type DownloadNewResponse = interface{}
+type DownloadNewResponse struct {
+	// Indicates the progress as a percentage between 0 and 100.
+	PercentComplete float64 `json:"percentComplete"`
+	// The status of a generated download.
+	Status DownloadNewResponseStatus `json:"status"`
+	// The URL to access the generated download.
+	URL  string                  `json:"url" format:"uri"`
+	JSON downloadNewResponseJSON `json:"-"`
+}
 
-type DownloadGetResponse = interface{}
+// downloadNewResponseJSON contains the JSON metadata for the struct
+// [DownloadNewResponse]
+type downloadNewResponseJSON struct {
+	PercentComplete apijson.Field
+	Status          apijson.Field
+	URL             apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DownloadNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r downloadNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of a generated download.
+type DownloadNewResponseStatus string
+
+const (
+	DownloadNewResponseStatusReady      DownloadNewResponseStatus = "ready"
+	DownloadNewResponseStatusInprogress DownloadNewResponseStatus = "inprogress"
+	DownloadNewResponseStatusError      DownloadNewResponseStatus = "error"
+)
+
+func (r DownloadNewResponseStatus) IsKnown() bool {
+	switch r {
+	case DownloadNewResponseStatusReady, DownloadNewResponseStatusInprogress, DownloadNewResponseStatusError:
+		return true
+	}
+	return false
+}
+
+// An object with download type keys. Each key is optional and only present if that
+// download type has been created.
+type DownloadGetResponse struct {
+	// The audio-only download. Only present if this download type has been created.
+	Audio DownloadGetResponseAudio `json:"audio"`
+	// The default video download. Only present if this download type has been created.
+	Default DownloadGetResponseDefault `json:"default"`
+	JSON    downloadGetResponseJSON    `json:"-"`
+}
+
+// downloadGetResponseJSON contains the JSON metadata for the struct
+// [DownloadGetResponse]
+type downloadGetResponseJSON struct {
+	Audio       apijson.Field
+	Default     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DownloadGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r downloadGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The audio-only download. Only present if this download type has been created.
+type DownloadGetResponseAudio struct {
+	// Indicates the progress as a percentage between 0 and 100.
+	PercentComplete float64 `json:"percentComplete"`
+	// The status of a generated download.
+	Status DownloadGetResponseAudioStatus `json:"status"`
+	// The URL to access the generated download.
+	URL  string                       `json:"url" format:"uri"`
+	JSON downloadGetResponseAudioJSON `json:"-"`
+}
+
+// downloadGetResponseAudioJSON contains the JSON metadata for the struct
+// [DownloadGetResponseAudio]
+type downloadGetResponseAudioJSON struct {
+	PercentComplete apijson.Field
+	Status          apijson.Field
+	URL             apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DownloadGetResponseAudio) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r downloadGetResponseAudioJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of a generated download.
+type DownloadGetResponseAudioStatus string
+
+const (
+	DownloadGetResponseAudioStatusReady      DownloadGetResponseAudioStatus = "ready"
+	DownloadGetResponseAudioStatusInprogress DownloadGetResponseAudioStatus = "inprogress"
+	DownloadGetResponseAudioStatusError      DownloadGetResponseAudioStatus = "error"
+)
+
+func (r DownloadGetResponseAudioStatus) IsKnown() bool {
+	switch r {
+	case DownloadGetResponseAudioStatusReady, DownloadGetResponseAudioStatusInprogress, DownloadGetResponseAudioStatusError:
+		return true
+	}
+	return false
+}
+
+// The default video download. Only present if this download type has been created.
+type DownloadGetResponseDefault struct {
+	// Indicates the progress as a percentage between 0 and 100.
+	PercentComplete float64 `json:"percentComplete"`
+	// The status of a generated download.
+	Status DownloadGetResponseDefaultStatus `json:"status"`
+	// The URL to access the generated download.
+	URL  string                         `json:"url" format:"uri"`
+	JSON downloadGetResponseDefaultJSON `json:"-"`
+}
+
+// downloadGetResponseDefaultJSON contains the JSON metadata for the struct
+// [DownloadGetResponseDefault]
+type downloadGetResponseDefaultJSON struct {
+	PercentComplete apijson.Field
+	Status          apijson.Field
+	URL             apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DownloadGetResponseDefault) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r downloadGetResponseDefaultJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of a generated download.
+type DownloadGetResponseDefaultStatus string
+
+const (
+	DownloadGetResponseDefaultStatusReady      DownloadGetResponseDefaultStatus = "ready"
+	DownloadGetResponseDefaultStatusInprogress DownloadGetResponseDefaultStatus = "inprogress"
+	DownloadGetResponseDefaultStatusError      DownloadGetResponseDefaultStatus = "error"
+)
+
+func (r DownloadGetResponseDefaultStatus) IsKnown() bool {
+	switch r {
+	case DownloadGetResponseDefaultStatusReady, DownloadGetResponseDefaultStatusInprogress, DownloadGetResponseDefaultStatusError:
+		return true
+	}
+	return false
+}
 
 type DownloadNewParams struct {
 	// Identifier.
@@ -407,8 +567,10 @@ type DownloadGetResponseEnvelope struct {
 	Messages []DownloadGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  DownloadGetResponse                `json:"result"`
-	JSON    downloadGetResponseEnvelopeJSON    `json:"-"`
+	// An object with download type keys. Each key is optional and only present if that
+	// download type has been created.
+	Result DownloadGetResponse             `json:"result"`
+	JSON   downloadGetResponseEnvelopeJSON `json:"-"`
 }
 
 // downloadGetResponseEnvelopeJSON contains the JSON metadata for the struct

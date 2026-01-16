@@ -82,58 +82,14 @@ func (r snapshotNewResponseJSON) RawJSON() string {
 
 type SnapshotNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      SnapshotNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
-	AddScriptTag param.Field[[]SnapshotNewParamsAddScriptTag] `json:"addScriptTag"`
-	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
-	// `<style type="text/css">` tag with the content.
-	AddStyleTag param.Field[[]SnapshotNewParamsAddStyleTag] `json:"addStyleTag"`
-	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
-	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
-	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	AllowResourceTypes param.Field[[]SnapshotNewParamsAllowResourceType] `json:"allowResourceTypes"`
-	// Provide credentials for HTTP authentication.
-	Authenticate param.Field[SnapshotNewParamsAuthenticate] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool] `json:"bestAttempt"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]SnapshotNewParamsCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                    `json:"emulateMediaType"`
-	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-	GotoOptions param.Field[SnapshotNewParamsGotoOptions] `json:"gotoOptions"`
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML param.Field[string] `json:"html"`
-	// Block undesired requests that match the provided regex patterns, eg.
-	// '/^.\*\.(css)'.
-	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
-	// Block undesired requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	RejectResourceTypes  param.Field[[]SnapshotNewParamsRejectResourceType] `json:"rejectResourceTypes"`
-	ScreenshotOptions    param.Field[SnapshotNewParamsScreenshotOptions]    `json:"screenshotOptions"`
-	SetExtraHTTPHeaders  param.Field[map[string]string]                     `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]                                  `json:"setJavaScriptEnabled"`
-	// URL to navigate to, eg. `https://example.com`.
-	URL       param.Field[string] `json:"url" format:"uri"`
-	UserAgent param.Field[string] `json:"userAgent"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-	Viewport param.Field[SnapshotNewParamsViewport] `json:"viewport"`
-	// Wait for the selector to appear in page. Check
-	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-	WaitForSelector param.Field[SnapshotNewParamsWaitForSelector] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
 }
 
 func (r SnapshotNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [SnapshotNewParams]'s query parameters as `url.Values`.
@@ -144,243 +100,340 @@ func (r SnapshotNewParams) URLQuery() (v url.Values) {
 	})
 }
 
-type SnapshotNewParamsAddScriptTag struct {
+type SnapshotNewParamsBody struct {
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout       param.Field[float64]     `json:"actionTimeout"`
+	AddScriptTag        param.Field[interface{}] `json:"addScriptTag"`
+	AddStyleTag         param.Field[interface{}] `json:"addStyleTag"`
+	AllowRequestPattern param.Field[interface{}] `json:"allowRequestPattern"`
+	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
+	Authenticate        param.Field[interface{}] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt      param.Field[bool]        `json:"bestAttempt"`
+	Cookies          param.Field[interface{}] `json:"cookies"`
+	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
+	GotoOptions      param.Field[interface{}] `json:"gotoOptions"`
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML                 param.Field[string]      `json:"html"`
+	RejectRequestPattern param.Field[interface{}] `json:"rejectRequestPattern"`
+	RejectResourceTypes  param.Field[interface{}] `json:"rejectResourceTypes"`
+	ScreenshotOptions    param.Field[interface{}] `json:"screenshotOptions"`
+	SetExtraHTTPHeaders  param.Field[interface{}] `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]        `json:"setJavaScriptEnabled"`
+	// URL to navigate to, eg. `https://example.com`.
+	URL             param.Field[string]      `json:"url" format:"uri"`
+	UserAgent       param.Field[string]      `json:"userAgent"`
+	Viewport        param.Field[interface{}] `json:"viewport"`
+	WaitForSelector param.Field[interface{}] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r SnapshotNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SnapshotNewParamsBody) implementsSnapshotNewParamsBodyUnion() {}
+
+// Satisfied by [browser_rendering.SnapshotNewParamsBodyObject],
+// [browser_rendering.SnapshotNewParamsBodyObject], [SnapshotNewParamsBody].
+type SnapshotNewParamsBodyUnion interface {
+	implementsSnapshotNewParamsBodyUnion()
+}
+
+type SnapshotNewParamsBodyObject struct {
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML param.Field[string] `json:"html,required"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
+	// Adds a `<script>` tag into the page with the desired URL or content.
+	AddScriptTag param.Field[[]SnapshotNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
+	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
+	// `<style type="text/css">` tag with the content.
+	AddStyleTag param.Field[[]SnapshotNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
+	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
+	// Only allow requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	AllowResourceTypes param.Field[[]SnapshotNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
+	// Provide credentials for HTTP authentication.
+	Authenticate param.Field[SnapshotNewParamsBodyObjectAuthenticate] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
+	Cookies          param.Field[[]SnapshotNewParamsBodyObjectCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]                              `json:"emulateMediaType"`
+	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
+	GotoOptions param.Field[SnapshotNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
+	// Block undesired requests that match the provided regex patterns, eg.
+	// '/^.\*\.(css)'.
+	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
+	// Block undesired requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	RejectResourceTypes  param.Field[[]SnapshotNewParamsBodyObjectRejectResourceType] `json:"rejectResourceTypes"`
+	ScreenshotOptions    param.Field[SnapshotNewParamsBodyObjectScreenshotOptions]    `json:"screenshotOptions"`
+	SetExtraHTTPHeaders  param.Field[map[string]string]                               `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]                                            `json:"setJavaScriptEnabled"`
+	UserAgent            param.Field[string]                                          `json:"userAgent"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
+	Viewport param.Field[SnapshotNewParamsBodyObjectViewport] `json:"viewport"`
+	// Wait for the selector to appear in page. Check
+	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
+	WaitForSelector param.Field[SnapshotNewParamsBodyObjectWaitForSelector] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r SnapshotNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SnapshotNewParamsBodyObject) implementsSnapshotNewParamsBodyUnion() {}
+
+type SnapshotNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r SnapshotNewParamsAddScriptTag) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsAddStyleTag struct {
+type SnapshotNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r SnapshotNewParamsAddStyleTag) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsAllowResourceType string
+type SnapshotNewParamsBodyObjectAllowResourceType string
 
 const (
-	SnapshotNewParamsAllowResourceTypeDocument           SnapshotNewParamsAllowResourceType = "document"
-	SnapshotNewParamsAllowResourceTypeStylesheet         SnapshotNewParamsAllowResourceType = "stylesheet"
-	SnapshotNewParamsAllowResourceTypeImage              SnapshotNewParamsAllowResourceType = "image"
-	SnapshotNewParamsAllowResourceTypeMedia              SnapshotNewParamsAllowResourceType = "media"
-	SnapshotNewParamsAllowResourceTypeFont               SnapshotNewParamsAllowResourceType = "font"
-	SnapshotNewParamsAllowResourceTypeScript             SnapshotNewParamsAllowResourceType = "script"
-	SnapshotNewParamsAllowResourceTypeTexttrack          SnapshotNewParamsAllowResourceType = "texttrack"
-	SnapshotNewParamsAllowResourceTypeXHR                SnapshotNewParamsAllowResourceType = "xhr"
-	SnapshotNewParamsAllowResourceTypeFetch              SnapshotNewParamsAllowResourceType = "fetch"
-	SnapshotNewParamsAllowResourceTypePrefetch           SnapshotNewParamsAllowResourceType = "prefetch"
-	SnapshotNewParamsAllowResourceTypeEventsource        SnapshotNewParamsAllowResourceType = "eventsource"
-	SnapshotNewParamsAllowResourceTypeWebsocket          SnapshotNewParamsAllowResourceType = "websocket"
-	SnapshotNewParamsAllowResourceTypeManifest           SnapshotNewParamsAllowResourceType = "manifest"
-	SnapshotNewParamsAllowResourceTypeSignedexchange     SnapshotNewParamsAllowResourceType = "signedexchange"
-	SnapshotNewParamsAllowResourceTypePing               SnapshotNewParamsAllowResourceType = "ping"
-	SnapshotNewParamsAllowResourceTypeCspviolationreport SnapshotNewParamsAllowResourceType = "cspviolationreport"
-	SnapshotNewParamsAllowResourceTypePreflight          SnapshotNewParamsAllowResourceType = "preflight"
-	SnapshotNewParamsAllowResourceTypeOther              SnapshotNewParamsAllowResourceType = "other"
+	SnapshotNewParamsBodyObjectAllowResourceTypeDocument           SnapshotNewParamsBodyObjectAllowResourceType = "document"
+	SnapshotNewParamsBodyObjectAllowResourceTypeStylesheet         SnapshotNewParamsBodyObjectAllowResourceType = "stylesheet"
+	SnapshotNewParamsBodyObjectAllowResourceTypeImage              SnapshotNewParamsBodyObjectAllowResourceType = "image"
+	SnapshotNewParamsBodyObjectAllowResourceTypeMedia              SnapshotNewParamsBodyObjectAllowResourceType = "media"
+	SnapshotNewParamsBodyObjectAllowResourceTypeFont               SnapshotNewParamsBodyObjectAllowResourceType = "font"
+	SnapshotNewParamsBodyObjectAllowResourceTypeScript             SnapshotNewParamsBodyObjectAllowResourceType = "script"
+	SnapshotNewParamsBodyObjectAllowResourceTypeTexttrack          SnapshotNewParamsBodyObjectAllowResourceType = "texttrack"
+	SnapshotNewParamsBodyObjectAllowResourceTypeXHR                SnapshotNewParamsBodyObjectAllowResourceType = "xhr"
+	SnapshotNewParamsBodyObjectAllowResourceTypeFetch              SnapshotNewParamsBodyObjectAllowResourceType = "fetch"
+	SnapshotNewParamsBodyObjectAllowResourceTypePrefetch           SnapshotNewParamsBodyObjectAllowResourceType = "prefetch"
+	SnapshotNewParamsBodyObjectAllowResourceTypeEventsource        SnapshotNewParamsBodyObjectAllowResourceType = "eventsource"
+	SnapshotNewParamsBodyObjectAllowResourceTypeWebsocket          SnapshotNewParamsBodyObjectAllowResourceType = "websocket"
+	SnapshotNewParamsBodyObjectAllowResourceTypeManifest           SnapshotNewParamsBodyObjectAllowResourceType = "manifest"
+	SnapshotNewParamsBodyObjectAllowResourceTypeSignedexchange     SnapshotNewParamsBodyObjectAllowResourceType = "signedexchange"
+	SnapshotNewParamsBodyObjectAllowResourceTypePing               SnapshotNewParamsBodyObjectAllowResourceType = "ping"
+	SnapshotNewParamsBodyObjectAllowResourceTypeCspviolationreport SnapshotNewParamsBodyObjectAllowResourceType = "cspviolationreport"
+	SnapshotNewParamsBodyObjectAllowResourceTypePreflight          SnapshotNewParamsBodyObjectAllowResourceType = "preflight"
+	SnapshotNewParamsBodyObjectAllowResourceTypeOther              SnapshotNewParamsBodyObjectAllowResourceType = "other"
 )
 
-func (r SnapshotNewParamsAllowResourceType) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsAllowResourceTypeDocument, SnapshotNewParamsAllowResourceTypeStylesheet, SnapshotNewParamsAllowResourceTypeImage, SnapshotNewParamsAllowResourceTypeMedia, SnapshotNewParamsAllowResourceTypeFont, SnapshotNewParamsAllowResourceTypeScript, SnapshotNewParamsAllowResourceTypeTexttrack, SnapshotNewParamsAllowResourceTypeXHR, SnapshotNewParamsAllowResourceTypeFetch, SnapshotNewParamsAllowResourceTypePrefetch, SnapshotNewParamsAllowResourceTypeEventsource, SnapshotNewParamsAllowResourceTypeWebsocket, SnapshotNewParamsAllowResourceTypeManifest, SnapshotNewParamsAllowResourceTypeSignedexchange, SnapshotNewParamsAllowResourceTypePing, SnapshotNewParamsAllowResourceTypeCspviolationreport, SnapshotNewParamsAllowResourceTypePreflight, SnapshotNewParamsAllowResourceTypeOther:
+	case SnapshotNewParamsBodyObjectAllowResourceTypeDocument, SnapshotNewParamsBodyObjectAllowResourceTypeStylesheet, SnapshotNewParamsBodyObjectAllowResourceTypeImage, SnapshotNewParamsBodyObjectAllowResourceTypeMedia, SnapshotNewParamsBodyObjectAllowResourceTypeFont, SnapshotNewParamsBodyObjectAllowResourceTypeScript, SnapshotNewParamsBodyObjectAllowResourceTypeTexttrack, SnapshotNewParamsBodyObjectAllowResourceTypeXHR, SnapshotNewParamsBodyObjectAllowResourceTypeFetch, SnapshotNewParamsBodyObjectAllowResourceTypePrefetch, SnapshotNewParamsBodyObjectAllowResourceTypeEventsource, SnapshotNewParamsBodyObjectAllowResourceTypeWebsocket, SnapshotNewParamsBodyObjectAllowResourceTypeManifest, SnapshotNewParamsBodyObjectAllowResourceTypeSignedexchange, SnapshotNewParamsBodyObjectAllowResourceTypePing, SnapshotNewParamsBodyObjectAllowResourceTypeCspviolationreport, SnapshotNewParamsBodyObjectAllowResourceTypePreflight, SnapshotNewParamsBodyObjectAllowResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Provide credentials for HTTP authentication.
-type SnapshotNewParamsAuthenticate struct {
+type SnapshotNewParamsBodyObjectAuthenticate struct {
 	Password param.Field[string] `json:"password,required"`
 	Username param.Field[string] `json:"username,required"`
 }
 
-func (r SnapshotNewParamsAuthenticate) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsCookie struct {
-	Name         param.Field[string]                               `json:"name,required"`
-	Value        param.Field[string]                               `json:"value,required"`
-	Domain       param.Field[string]                               `json:"domain"`
-	Expires      param.Field[float64]                              `json:"expires"`
-	HTTPOnly     param.Field[bool]                                 `json:"httpOnly"`
-	PartitionKey param.Field[string]                               `json:"partitionKey"`
-	Path         param.Field[string]                               `json:"path"`
-	Priority     param.Field[SnapshotNewParamsCookiesPriority]     `json:"priority"`
-	SameParty    param.Field[bool]                                 `json:"sameParty"`
-	SameSite     param.Field[SnapshotNewParamsCookiesSameSite]     `json:"sameSite"`
-	Secure       param.Field[bool]                                 `json:"secure"`
-	SourcePort   param.Field[float64]                              `json:"sourcePort"`
-	SourceScheme param.Field[SnapshotNewParamsCookiesSourceScheme] `json:"sourceScheme"`
-	URL          param.Field[string]                               `json:"url"`
+type SnapshotNewParamsBodyObjectCookie struct {
+	Name         param.Field[string]                                         `json:"name,required"`
+	Value        param.Field[string]                                         `json:"value,required"`
+	Domain       param.Field[string]                                         `json:"domain"`
+	Expires      param.Field[float64]                                        `json:"expires"`
+	HTTPOnly     param.Field[bool]                                           `json:"httpOnly"`
+	PartitionKey param.Field[string]                                         `json:"partitionKey"`
+	Path         param.Field[string]                                         `json:"path"`
+	Priority     param.Field[SnapshotNewParamsBodyObjectCookiesPriority]     `json:"priority"`
+	SameParty    param.Field[bool]                                           `json:"sameParty"`
+	SameSite     param.Field[SnapshotNewParamsBodyObjectCookiesSameSite]     `json:"sameSite"`
+	Secure       param.Field[bool]                                           `json:"secure"`
+	SourcePort   param.Field[float64]                                        `json:"sourcePort"`
+	SourceScheme param.Field[SnapshotNewParamsBodyObjectCookiesSourceScheme] `json:"sourceScheme"`
+	URL          param.Field[string]                                         `json:"url"`
 }
 
-func (r SnapshotNewParamsCookie) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsCookiesPriority string
+type SnapshotNewParamsBodyObjectCookiesPriority string
 
 const (
-	SnapshotNewParamsCookiesPriorityLow    SnapshotNewParamsCookiesPriority = "Low"
-	SnapshotNewParamsCookiesPriorityMedium SnapshotNewParamsCookiesPriority = "Medium"
-	SnapshotNewParamsCookiesPriorityHigh   SnapshotNewParamsCookiesPriority = "High"
+	SnapshotNewParamsBodyObjectCookiesPriorityLow    SnapshotNewParamsBodyObjectCookiesPriority = "Low"
+	SnapshotNewParamsBodyObjectCookiesPriorityMedium SnapshotNewParamsBodyObjectCookiesPriority = "Medium"
+	SnapshotNewParamsBodyObjectCookiesPriorityHigh   SnapshotNewParamsBodyObjectCookiesPriority = "High"
 )
 
-func (r SnapshotNewParamsCookiesPriority) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectCookiesPriority) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsCookiesPriorityLow, SnapshotNewParamsCookiesPriorityMedium, SnapshotNewParamsCookiesPriorityHigh:
+	case SnapshotNewParamsBodyObjectCookiesPriorityLow, SnapshotNewParamsBodyObjectCookiesPriorityMedium, SnapshotNewParamsBodyObjectCookiesPriorityHigh:
 		return true
 	}
 	return false
 }
 
-type SnapshotNewParamsCookiesSameSite string
+type SnapshotNewParamsBodyObjectCookiesSameSite string
 
 const (
-	SnapshotNewParamsCookiesSameSiteStrict SnapshotNewParamsCookiesSameSite = "Strict"
-	SnapshotNewParamsCookiesSameSiteLax    SnapshotNewParamsCookiesSameSite = "Lax"
-	SnapshotNewParamsCookiesSameSiteNone   SnapshotNewParamsCookiesSameSite = "None"
+	SnapshotNewParamsBodyObjectCookiesSameSiteStrict SnapshotNewParamsBodyObjectCookiesSameSite = "Strict"
+	SnapshotNewParamsBodyObjectCookiesSameSiteLax    SnapshotNewParamsBodyObjectCookiesSameSite = "Lax"
+	SnapshotNewParamsBodyObjectCookiesSameSiteNone   SnapshotNewParamsBodyObjectCookiesSameSite = "None"
 )
 
-func (r SnapshotNewParamsCookiesSameSite) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectCookiesSameSite) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsCookiesSameSiteStrict, SnapshotNewParamsCookiesSameSiteLax, SnapshotNewParamsCookiesSameSiteNone:
+	case SnapshotNewParamsBodyObjectCookiesSameSiteStrict, SnapshotNewParamsBodyObjectCookiesSameSiteLax, SnapshotNewParamsBodyObjectCookiesSameSiteNone:
 		return true
 	}
 	return false
 }
 
-type SnapshotNewParamsCookiesSourceScheme string
+type SnapshotNewParamsBodyObjectCookiesSourceScheme string
 
 const (
-	SnapshotNewParamsCookiesSourceSchemeUnset     SnapshotNewParamsCookiesSourceScheme = "Unset"
-	SnapshotNewParamsCookiesSourceSchemeNonSecure SnapshotNewParamsCookiesSourceScheme = "NonSecure"
-	SnapshotNewParamsCookiesSourceSchemeSecure    SnapshotNewParamsCookiesSourceScheme = "Secure"
+	SnapshotNewParamsBodyObjectCookiesSourceSchemeUnset     SnapshotNewParamsBodyObjectCookiesSourceScheme = "Unset"
+	SnapshotNewParamsBodyObjectCookiesSourceSchemeNonSecure SnapshotNewParamsBodyObjectCookiesSourceScheme = "NonSecure"
+	SnapshotNewParamsBodyObjectCookiesSourceSchemeSecure    SnapshotNewParamsBodyObjectCookiesSourceScheme = "Secure"
 )
 
-func (r SnapshotNewParamsCookiesSourceScheme) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsCookiesSourceSchemeUnset, SnapshotNewParamsCookiesSourceSchemeNonSecure, SnapshotNewParamsCookiesSourceSchemeSecure:
+	case SnapshotNewParamsBodyObjectCookiesSourceSchemeUnset, SnapshotNewParamsBodyObjectCookiesSourceSchemeNonSecure, SnapshotNewParamsBodyObjectCookiesSourceSchemeSecure:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-type SnapshotNewParamsGotoOptions struct {
-	Referer        param.Field[string]                                     `json:"referer"`
-	ReferrerPolicy param.Field[string]                                     `json:"referrerPolicy"`
-	Timeout        param.Field[float64]                                    `json:"timeout"`
-	WaitUntil      param.Field[SnapshotNewParamsGotoOptionsWaitUntilUnion] `json:"waitUntil"`
+type SnapshotNewParamsBodyObjectGotoOptions struct {
+	Referer        param.Field[string]                                               `json:"referer"`
+	ReferrerPolicy param.Field[string]                                               `json:"referrerPolicy"`
+	Timeout        param.Field[float64]                                              `json:"timeout"`
+	WaitUntil      param.Field[SnapshotNewParamsBodyObjectGotoOptionsWaitUntilUnion] `json:"waitUntil"`
 }
 
-func (r SnapshotNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [browser_rendering.SnapshotNewParamsGotoOptionsWaitUntilString],
-// [browser_rendering.SnapshotNewParamsGotoOptionsWaitUntilArray].
-type SnapshotNewParamsGotoOptionsWaitUntilUnion interface {
-	implementsSnapshotNewParamsGotoOptionsWaitUntilUnion()
+// Satisfied by
+// [browser_rendering.SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString],
+// [browser_rendering.SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArray].
+type SnapshotNewParamsBodyObjectGotoOptionsWaitUntilUnion interface {
+	implementsSnapshotNewParamsBodyObjectGotoOptionsWaitUntilUnion()
 }
 
-type SnapshotNewParamsGotoOptionsWaitUntilString string
+type SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString string
 
 const (
-	SnapshotNewParamsGotoOptionsWaitUntilStringLoad             SnapshotNewParamsGotoOptionsWaitUntilString = "load"
-	SnapshotNewParamsGotoOptionsWaitUntilStringDomcontentloaded SnapshotNewParamsGotoOptionsWaitUntilString = "domcontentloaded"
-	SnapshotNewParamsGotoOptionsWaitUntilStringNetworkidle0     SnapshotNewParamsGotoOptionsWaitUntilString = "networkidle0"
-	SnapshotNewParamsGotoOptionsWaitUntilStringNetworkidle2     SnapshotNewParamsGotoOptionsWaitUntilString = "networkidle2"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringLoad             SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString = "load"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString = "domcontentloaded"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0     SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle0"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2     SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle2"
 )
 
-func (r SnapshotNewParamsGotoOptionsWaitUntilString) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsGotoOptionsWaitUntilStringLoad, SnapshotNewParamsGotoOptionsWaitUntilStringDomcontentloaded, SnapshotNewParamsGotoOptionsWaitUntilStringNetworkidle0, SnapshotNewParamsGotoOptionsWaitUntilStringNetworkidle2:
+	case SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringLoad, SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded, SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0, SnapshotNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2:
 		return true
 	}
 	return false
 }
 
-func (r SnapshotNewParamsGotoOptionsWaitUntilString) implementsSnapshotNewParamsGotoOptionsWaitUntilUnion() {
+func (r SnapshotNewParamsBodyObjectGotoOptionsWaitUntilString) implementsSnapshotNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type SnapshotNewParamsGotoOptionsWaitUntilArray []SnapshotNewParamsGotoOptionsWaitUntilArrayItem
+type SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArray []SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem
 
-func (r SnapshotNewParamsGotoOptionsWaitUntilArray) implementsSnapshotNewParamsGotoOptionsWaitUntilUnion() {
+func (r SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArray) implementsSnapshotNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type SnapshotNewParamsGotoOptionsWaitUntilArrayItem string
+type SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem string
 
 const (
-	SnapshotNewParamsGotoOptionsWaitUntilArrayItemLoad             SnapshotNewParamsGotoOptionsWaitUntilArrayItem = "load"
-	SnapshotNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded SnapshotNewParamsGotoOptionsWaitUntilArrayItem = "domcontentloaded"
-	SnapshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0     SnapshotNewParamsGotoOptionsWaitUntilArrayItem = "networkidle0"
-	SnapshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2     SnapshotNewParamsGotoOptionsWaitUntilArrayItem = "networkidle2"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad             SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "load"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "domcontentloaded"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0     SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle0"
+	SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2     SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle2"
 )
 
-func (r SnapshotNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsGotoOptionsWaitUntilArrayItemLoad, SnapshotNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded, SnapshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0, SnapshotNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2:
+	case SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad, SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded, SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0, SnapshotNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2:
 		return true
 	}
 	return false
 }
 
-type SnapshotNewParamsRejectResourceType string
+type SnapshotNewParamsBodyObjectRejectResourceType string
 
 const (
-	SnapshotNewParamsRejectResourceTypeDocument           SnapshotNewParamsRejectResourceType = "document"
-	SnapshotNewParamsRejectResourceTypeStylesheet         SnapshotNewParamsRejectResourceType = "stylesheet"
-	SnapshotNewParamsRejectResourceTypeImage              SnapshotNewParamsRejectResourceType = "image"
-	SnapshotNewParamsRejectResourceTypeMedia              SnapshotNewParamsRejectResourceType = "media"
-	SnapshotNewParamsRejectResourceTypeFont               SnapshotNewParamsRejectResourceType = "font"
-	SnapshotNewParamsRejectResourceTypeScript             SnapshotNewParamsRejectResourceType = "script"
-	SnapshotNewParamsRejectResourceTypeTexttrack          SnapshotNewParamsRejectResourceType = "texttrack"
-	SnapshotNewParamsRejectResourceTypeXHR                SnapshotNewParamsRejectResourceType = "xhr"
-	SnapshotNewParamsRejectResourceTypeFetch              SnapshotNewParamsRejectResourceType = "fetch"
-	SnapshotNewParamsRejectResourceTypePrefetch           SnapshotNewParamsRejectResourceType = "prefetch"
-	SnapshotNewParamsRejectResourceTypeEventsource        SnapshotNewParamsRejectResourceType = "eventsource"
-	SnapshotNewParamsRejectResourceTypeWebsocket          SnapshotNewParamsRejectResourceType = "websocket"
-	SnapshotNewParamsRejectResourceTypeManifest           SnapshotNewParamsRejectResourceType = "manifest"
-	SnapshotNewParamsRejectResourceTypeSignedexchange     SnapshotNewParamsRejectResourceType = "signedexchange"
-	SnapshotNewParamsRejectResourceTypePing               SnapshotNewParamsRejectResourceType = "ping"
-	SnapshotNewParamsRejectResourceTypeCspviolationreport SnapshotNewParamsRejectResourceType = "cspviolationreport"
-	SnapshotNewParamsRejectResourceTypePreflight          SnapshotNewParamsRejectResourceType = "preflight"
-	SnapshotNewParamsRejectResourceTypeOther              SnapshotNewParamsRejectResourceType = "other"
+	SnapshotNewParamsBodyObjectRejectResourceTypeDocument           SnapshotNewParamsBodyObjectRejectResourceType = "document"
+	SnapshotNewParamsBodyObjectRejectResourceTypeStylesheet         SnapshotNewParamsBodyObjectRejectResourceType = "stylesheet"
+	SnapshotNewParamsBodyObjectRejectResourceTypeImage              SnapshotNewParamsBodyObjectRejectResourceType = "image"
+	SnapshotNewParamsBodyObjectRejectResourceTypeMedia              SnapshotNewParamsBodyObjectRejectResourceType = "media"
+	SnapshotNewParamsBodyObjectRejectResourceTypeFont               SnapshotNewParamsBodyObjectRejectResourceType = "font"
+	SnapshotNewParamsBodyObjectRejectResourceTypeScript             SnapshotNewParamsBodyObjectRejectResourceType = "script"
+	SnapshotNewParamsBodyObjectRejectResourceTypeTexttrack          SnapshotNewParamsBodyObjectRejectResourceType = "texttrack"
+	SnapshotNewParamsBodyObjectRejectResourceTypeXHR                SnapshotNewParamsBodyObjectRejectResourceType = "xhr"
+	SnapshotNewParamsBodyObjectRejectResourceTypeFetch              SnapshotNewParamsBodyObjectRejectResourceType = "fetch"
+	SnapshotNewParamsBodyObjectRejectResourceTypePrefetch           SnapshotNewParamsBodyObjectRejectResourceType = "prefetch"
+	SnapshotNewParamsBodyObjectRejectResourceTypeEventsource        SnapshotNewParamsBodyObjectRejectResourceType = "eventsource"
+	SnapshotNewParamsBodyObjectRejectResourceTypeWebsocket          SnapshotNewParamsBodyObjectRejectResourceType = "websocket"
+	SnapshotNewParamsBodyObjectRejectResourceTypeManifest           SnapshotNewParamsBodyObjectRejectResourceType = "manifest"
+	SnapshotNewParamsBodyObjectRejectResourceTypeSignedexchange     SnapshotNewParamsBodyObjectRejectResourceType = "signedexchange"
+	SnapshotNewParamsBodyObjectRejectResourceTypePing               SnapshotNewParamsBodyObjectRejectResourceType = "ping"
+	SnapshotNewParamsBodyObjectRejectResourceTypeCspviolationreport SnapshotNewParamsBodyObjectRejectResourceType = "cspviolationreport"
+	SnapshotNewParamsBodyObjectRejectResourceTypePreflight          SnapshotNewParamsBodyObjectRejectResourceType = "preflight"
+	SnapshotNewParamsBodyObjectRejectResourceTypeOther              SnapshotNewParamsBodyObjectRejectResourceType = "other"
 )
 
-func (r SnapshotNewParamsRejectResourceType) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsRejectResourceTypeDocument, SnapshotNewParamsRejectResourceTypeStylesheet, SnapshotNewParamsRejectResourceTypeImage, SnapshotNewParamsRejectResourceTypeMedia, SnapshotNewParamsRejectResourceTypeFont, SnapshotNewParamsRejectResourceTypeScript, SnapshotNewParamsRejectResourceTypeTexttrack, SnapshotNewParamsRejectResourceTypeXHR, SnapshotNewParamsRejectResourceTypeFetch, SnapshotNewParamsRejectResourceTypePrefetch, SnapshotNewParamsRejectResourceTypeEventsource, SnapshotNewParamsRejectResourceTypeWebsocket, SnapshotNewParamsRejectResourceTypeManifest, SnapshotNewParamsRejectResourceTypeSignedexchange, SnapshotNewParamsRejectResourceTypePing, SnapshotNewParamsRejectResourceTypeCspviolationreport, SnapshotNewParamsRejectResourceTypePreflight, SnapshotNewParamsRejectResourceTypeOther:
+	case SnapshotNewParamsBodyObjectRejectResourceTypeDocument, SnapshotNewParamsBodyObjectRejectResourceTypeStylesheet, SnapshotNewParamsBodyObjectRejectResourceTypeImage, SnapshotNewParamsBodyObjectRejectResourceTypeMedia, SnapshotNewParamsBodyObjectRejectResourceTypeFont, SnapshotNewParamsBodyObjectRejectResourceTypeScript, SnapshotNewParamsBodyObjectRejectResourceTypeTexttrack, SnapshotNewParamsBodyObjectRejectResourceTypeXHR, SnapshotNewParamsBodyObjectRejectResourceTypeFetch, SnapshotNewParamsBodyObjectRejectResourceTypePrefetch, SnapshotNewParamsBodyObjectRejectResourceTypeEventsource, SnapshotNewParamsBodyObjectRejectResourceTypeWebsocket, SnapshotNewParamsBodyObjectRejectResourceTypeManifest, SnapshotNewParamsBodyObjectRejectResourceTypeSignedexchange, SnapshotNewParamsBodyObjectRejectResourceTypePing, SnapshotNewParamsBodyObjectRejectResourceTypeCspviolationreport, SnapshotNewParamsBodyObjectRejectResourceTypePreflight, SnapshotNewParamsBodyObjectRejectResourceTypeOther:
 		return true
 	}
 	return false
 }
 
-type SnapshotNewParamsScreenshotOptions struct {
-	CaptureBeyondViewport param.Field[bool]                                   `json:"captureBeyondViewport"`
-	Clip                  param.Field[SnapshotNewParamsScreenshotOptionsClip] `json:"clip"`
-	FromSurface           param.Field[bool]                                   `json:"fromSurface"`
-	FullPage              param.Field[bool]                                   `json:"fullPage"`
-	OmitBackground        param.Field[bool]                                   `json:"omitBackground"`
-	OptimizeForSpeed      param.Field[bool]                                   `json:"optimizeForSpeed"`
-	Quality               param.Field[float64]                                `json:"quality"`
-	Type                  param.Field[SnapshotNewParamsScreenshotOptionsType] `json:"type"`
+type SnapshotNewParamsBodyObjectScreenshotOptions struct {
+	CaptureBeyondViewport param.Field[bool]                                             `json:"captureBeyondViewport"`
+	Clip                  param.Field[SnapshotNewParamsBodyObjectScreenshotOptionsClip] `json:"clip"`
+	FromSurface           param.Field[bool]                                             `json:"fromSurface"`
+	FullPage              param.Field[bool]                                             `json:"fullPage"`
+	OmitBackground        param.Field[bool]                                             `json:"omitBackground"`
+	OptimizeForSpeed      param.Field[bool]                                             `json:"optimizeForSpeed"`
+	Quality               param.Field[float64]                                          `json:"quality"`
+	Type                  param.Field[SnapshotNewParamsBodyObjectScreenshotOptionsType] `json:"type"`
 }
 
-func (r SnapshotNewParamsScreenshotOptions) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectScreenshotOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsScreenshotOptionsClip struct {
+type SnapshotNewParamsBodyObjectScreenshotOptionsClip struct {
 	Height param.Field[float64] `json:"height,required"`
 	Width  param.Field[float64] `json:"width,required"`
 	X      param.Field[float64] `json:"x,required"`
@@ -388,28 +441,28 @@ type SnapshotNewParamsScreenshotOptionsClip struct {
 	Scale  param.Field[float64] `json:"scale"`
 }
 
-func (r SnapshotNewParamsScreenshotOptionsClip) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectScreenshotOptionsClip) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsScreenshotOptionsType string
+type SnapshotNewParamsBodyObjectScreenshotOptionsType string
 
 const (
-	SnapshotNewParamsScreenshotOptionsTypePNG  SnapshotNewParamsScreenshotOptionsType = "png"
-	SnapshotNewParamsScreenshotOptionsTypeJPEG SnapshotNewParamsScreenshotOptionsType = "jpeg"
-	SnapshotNewParamsScreenshotOptionsTypeWebP SnapshotNewParamsScreenshotOptionsType = "webp"
+	SnapshotNewParamsBodyObjectScreenshotOptionsTypePNG  SnapshotNewParamsBodyObjectScreenshotOptionsType = "png"
+	SnapshotNewParamsBodyObjectScreenshotOptionsTypeJPEG SnapshotNewParamsBodyObjectScreenshotOptionsType = "jpeg"
+	SnapshotNewParamsBodyObjectScreenshotOptionsTypeWebP SnapshotNewParamsBodyObjectScreenshotOptionsType = "webp"
 )
 
-func (r SnapshotNewParamsScreenshotOptionsType) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectScreenshotOptionsType) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsScreenshotOptionsTypePNG, SnapshotNewParamsScreenshotOptionsTypeJPEG, SnapshotNewParamsScreenshotOptionsTypeWebP:
+	case SnapshotNewParamsBodyObjectScreenshotOptionsTypePNG, SnapshotNewParamsBodyObjectScreenshotOptionsTypeJPEG, SnapshotNewParamsBodyObjectScreenshotOptionsTypeWebP:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-type SnapshotNewParamsViewport struct {
+type SnapshotNewParamsBodyObjectViewport struct {
 	Height            param.Field[float64] `json:"height,required"`
 	Width             param.Field[float64] `json:"width,required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
@@ -418,46 +471,46 @@ type SnapshotNewParamsViewport struct {
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }
 
-func (r SnapshotNewParamsViewport) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-type SnapshotNewParamsWaitForSelector struct {
-	Selector param.Field[string]                                  `json:"selector,required"`
-	Hidden   param.Field[SnapshotNewParamsWaitForSelectorHidden]  `json:"hidden"`
-	Timeout  param.Field[float64]                                 `json:"timeout"`
-	Visible  param.Field[SnapshotNewParamsWaitForSelectorVisible] `json:"visible"`
+type SnapshotNewParamsBodyObjectWaitForSelector struct {
+	Selector param.Field[string]                                            `json:"selector,required"`
+	Hidden   param.Field[SnapshotNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
+	Timeout  param.Field[float64]                                           `json:"timeout"`
+	Visible  param.Field[SnapshotNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
 }
 
-func (r SnapshotNewParamsWaitForSelector) MarshalJSON() (data []byte, err error) {
+func (r SnapshotNewParamsBodyObjectWaitForSelector) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SnapshotNewParamsWaitForSelectorHidden bool
+type SnapshotNewParamsBodyObjectWaitForSelectorHidden bool
 
 const (
-	SnapshotNewParamsWaitForSelectorHiddenTrue SnapshotNewParamsWaitForSelectorHidden = true
+	SnapshotNewParamsBodyObjectWaitForSelectorHiddenTrue SnapshotNewParamsBodyObjectWaitForSelectorHidden = true
 )
 
-func (r SnapshotNewParamsWaitForSelectorHidden) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectWaitForSelectorHidden) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsWaitForSelectorHiddenTrue:
+	case SnapshotNewParamsBodyObjectWaitForSelectorHiddenTrue:
 		return true
 	}
 	return false
 }
 
-type SnapshotNewParamsWaitForSelectorVisible bool
+type SnapshotNewParamsBodyObjectWaitForSelectorVisible bool
 
 const (
-	SnapshotNewParamsWaitForSelectorVisibleTrue SnapshotNewParamsWaitForSelectorVisible = true
+	SnapshotNewParamsBodyObjectWaitForSelectorVisibleTrue SnapshotNewParamsBodyObjectWaitForSelectorVisible = true
 )
 
-func (r SnapshotNewParamsWaitForSelectorVisible) IsKnown() bool {
+func (r SnapshotNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsWaitForSelectorVisibleTrue:
+	case SnapshotNewParamsBodyObjectWaitForSelectorVisibleTrue:
 		return true
 	}
 	return false
@@ -466,17 +519,17 @@ func (r SnapshotNewParamsWaitForSelectorVisible) IsKnown() bool {
 type SnapshotNewResponseEnvelope struct {
 	Meta SnapshotNewResponseEnvelopeMeta `json:"meta,required"`
 	// Response status
-	Status bool                                `json:"status,required"`
-	Errors []SnapshotNewResponseEnvelopeErrors `json:"errors"`
-	Result SnapshotNewResponse                 `json:"result"`
-	JSON   snapshotNewResponseEnvelopeJSON     `json:"-"`
+	Success bool                                `json:"success,required"`
+	Errors  []SnapshotNewResponseEnvelopeErrors `json:"errors"`
+	Result  SnapshotNewResponse                 `json:"result"`
+	JSON    snapshotNewResponseEnvelopeJSON     `json:"-"`
 }
 
 // snapshotNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SnapshotNewResponseEnvelope]
 type snapshotNewResponseEnvelopeJSON struct {
 	Meta        apijson.Field
-	Status      apijson.Field
+	Success     apijson.Field
 	Errors      apijson.Field
 	Result      apijson.Field
 	raw         string

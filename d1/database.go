@@ -27,7 +27,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDatabaseService] method instead.
 type DatabaseService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	TimeTravel *DatabaseTimeTravelService
 }
 
 // NewDatabaseService generates a new service that applies the given options to
@@ -36,6 +37,7 @@ type DatabaseService struct {
 func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 	r = &DatabaseService{}
 	r.Options = opts
+	r.TimeTravel = NewDatabaseTimeTravelService(opts...)
 	return
 }
 
@@ -319,6 +321,8 @@ type QueryResultMeta struct {
 	RowsRead float64 `json:"rows_read"`
 	// Number of rows written during the SQL query execution, including indices.
 	RowsWritten float64 `json:"rows_written"`
+	// The three letters airport code of the colo that handled the query.
+	ServedByColo string `json:"served_by_colo"`
 	// Denotes if the query has been handled by the database primary instance.
 	ServedByPrimary bool `json:"served_by_primary"`
 	// Region location hint of the database instance that handled the query.
@@ -338,6 +342,7 @@ type queryResultMetaJSON struct {
 	LastRowID       apijson.Field
 	RowsRead        apijson.Field
 	RowsWritten     apijson.Field
+	ServedByColo    apijson.Field
 	ServedByPrimary apijson.Field
 	ServedByRegion  apijson.Field
 	SizeAfter       apijson.Field
@@ -617,6 +622,8 @@ type DatabaseImportResponseResultMeta struct {
 	RowsRead float64 `json:"rows_read"`
 	// Number of rows written during the SQL query execution, including indices.
 	RowsWritten float64 `json:"rows_written"`
+	// The three letters airport code of the colo that handled the query.
+	ServedByColo string `json:"served_by_colo"`
 	// Denotes if the query has been handled by the database primary instance.
 	ServedByPrimary bool `json:"served_by_primary"`
 	// Region location hint of the database instance that handled the query.
@@ -637,6 +644,7 @@ type databaseImportResponseResultMetaJSON struct {
 	LastRowID       apijson.Field
 	RowsRead        apijson.Field
 	RowsWritten     apijson.Field
+	ServedByColo    apijson.Field
 	ServedByPrimary apijson.Field
 	ServedByRegion  apijson.Field
 	SizeAfter       apijson.Field
@@ -768,6 +776,8 @@ type DatabaseRawResponseMeta struct {
 	RowsRead float64 `json:"rows_read"`
 	// Number of rows written during the SQL query execution, including indices.
 	RowsWritten float64 `json:"rows_written"`
+	// The three letters airport code of the colo that handled the query.
+	ServedByColo string `json:"served_by_colo"`
 	// Denotes if the query has been handled by the database primary instance.
 	ServedByPrimary bool `json:"served_by_primary"`
 	// Region location hint of the database instance that handled the query.
@@ -788,6 +798,7 @@ type databaseRawResponseMetaJSON struct {
 	LastRowID       apijson.Field
 	RowsRead        apijson.Field
 	RowsWritten     apijson.Field
+	ServedByColo    apijson.Field
 	ServedByPrimary apijson.Field
 	ServedByRegion  apijson.Field
 	SizeAfter       apijson.Field

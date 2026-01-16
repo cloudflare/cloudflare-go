@@ -58,63 +58,14 @@ type JsonNewResponse map[string]interface{}
 
 type JsonNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      JsonNewParamsBodyUnion `json:"body,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
-	AddScriptTag param.Field[[]JsonNewParamsAddScriptTag] `json:"addScriptTag"`
-	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
-	// `<style type="text/css">` tag with the content.
-	AddStyleTag param.Field[[]JsonNewParamsAddStyleTag] `json:"addStyleTag"`
-	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
-	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
-	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	AllowResourceTypes param.Field[[]JsonNewParamsAllowResourceType] `json:"allowResourceTypes"`
-	// Provide credentials for HTTP authentication.
-	Authenticate param.Field[JsonNewParamsAuthenticate] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool] `json:"bestAttempt"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies param.Field[[]JsonNewParamsCookie] `json:"cookies"`
-	// Optional list of custom AI models to use for the request. The models will be
-	// tried in the order provided, and in case a model returns an error, the next one
-	// will be used as fallback.
-	CustomAI         param.Field[[]JsonNewParamsCustomAI] `json:"custom_ai"`
-	EmulateMediaType param.Field[string]                  `json:"emulateMediaType"`
-	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-	GotoOptions param.Field[JsonNewParamsGotoOptions] `json:"gotoOptions"`
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML   param.Field[string] `json:"html"`
-	Prompt param.Field[string] `json:"prompt"`
-	// Block undesired requests that match the provided regex patterns, eg.
-	// '/^.\*\.(css)'.
-	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
-	// Block undesired requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	RejectResourceTypes  param.Field[[]JsonNewParamsRejectResourceType] `json:"rejectResourceTypes"`
-	ResponseFormat       param.Field[JsonNewParamsResponseFormat]       `json:"response_format"`
-	SetExtraHTTPHeaders  param.Field[map[string]string]                 `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]                              `json:"setJavaScriptEnabled"`
-	// URL to navigate to, eg. `https://example.com`.
-	URL       param.Field[string] `json:"url" format:"uri"`
-	UserAgent param.Field[string] `json:"userAgent"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-	Viewport param.Field[JsonNewParamsViewport] `json:"viewport"`
-	// Wait for the selector to appear in page. Check
-	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-	WaitForSelector param.Field[JsonNewParamsWaitForSelector] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
 }
 
 func (r JsonNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [JsonNewParams]'s query parameters as `url.Values`.
@@ -125,137 +76,240 @@ func (r JsonNewParams) URLQuery() (v url.Values) {
 	})
 }
 
-type JsonNewParamsAddScriptTag struct {
+type JsonNewParamsBody struct {
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout       param.Field[float64]     `json:"actionTimeout"`
+	AddScriptTag        param.Field[interface{}] `json:"addScriptTag"`
+	AddStyleTag         param.Field[interface{}] `json:"addStyleTag"`
+	AllowRequestPattern param.Field[interface{}] `json:"allowRequestPattern"`
+	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
+	Authenticate        param.Field[interface{}] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt      param.Field[bool]        `json:"bestAttempt"`
+	Cookies          param.Field[interface{}] `json:"cookies"`
+	CustomAI         param.Field[interface{}] `json:"custom_ai"`
+	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
+	GotoOptions      param.Field[interface{}] `json:"gotoOptions"`
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML                 param.Field[string]      `json:"html"`
+	Prompt               param.Field[string]      `json:"prompt"`
+	RejectRequestPattern param.Field[interface{}] `json:"rejectRequestPattern"`
+	RejectResourceTypes  param.Field[interface{}] `json:"rejectResourceTypes"`
+	ResponseFormat       param.Field[interface{}] `json:"response_format"`
+	SetExtraHTTPHeaders  param.Field[interface{}] `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]        `json:"setJavaScriptEnabled"`
+	// URL to navigate to, eg. `https://example.com`.
+	URL             param.Field[string]      `json:"url" format:"uri"`
+	UserAgent       param.Field[string]      `json:"userAgent"`
+	Viewport        param.Field[interface{}] `json:"viewport"`
+	WaitForSelector param.Field[interface{}] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r JsonNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r JsonNewParamsBody) implementsJsonNewParamsBodyUnion() {}
+
+// Satisfied by [browser_rendering.JsonNewParamsBodyObject],
+// [browser_rendering.JsonNewParamsBodyObject], [JsonNewParamsBody].
+type JsonNewParamsBodyUnion interface {
+	implementsJsonNewParamsBodyUnion()
+}
+
+type JsonNewParamsBodyObject struct {
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML param.Field[string] `json:"html,required"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
+	// Adds a `<script>` tag into the page with the desired URL or content.
+	AddScriptTag param.Field[[]JsonNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
+	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
+	// `<style type="text/css">` tag with the content.
+	AddStyleTag param.Field[[]JsonNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
+	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
+	// Only allow requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	AllowResourceTypes param.Field[[]JsonNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
+	// Provide credentials for HTTP authentication.
+	Authenticate param.Field[JsonNewParamsBodyObjectAuthenticate] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
+	Cookies param.Field[[]JsonNewParamsBodyObjectCookie] `json:"cookies"`
+	// Optional list of custom AI models to use for the request. The models will be
+	// tried in the order provided, and in case a model returns an error, the next one
+	// will be used as fallback.
+	CustomAI         param.Field[[]JsonNewParamsBodyObjectCustomAI] `json:"custom_ai"`
+	EmulateMediaType param.Field[string]                            `json:"emulateMediaType"`
+	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
+	GotoOptions param.Field[JsonNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
+	Prompt      param.Field[string]                             `json:"prompt"`
+	// Block undesired requests that match the provided regex patterns, eg.
+	// '/^.\*\.(css)'.
+	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
+	// Block undesired requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	RejectResourceTypes  param.Field[[]JsonNewParamsBodyObjectRejectResourceType] `json:"rejectResourceTypes"`
+	ResponseFormat       param.Field[JsonNewParamsBodyObjectResponseFormat]       `json:"response_format"`
+	SetExtraHTTPHeaders  param.Field[map[string]string]                           `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]                                        `json:"setJavaScriptEnabled"`
+	UserAgent            param.Field[string]                                      `json:"userAgent"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
+	Viewport param.Field[JsonNewParamsBodyObjectViewport] `json:"viewport"`
+	// Wait for the selector to appear in page. Check
+	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
+	WaitForSelector param.Field[JsonNewParamsBodyObjectWaitForSelector] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r JsonNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r JsonNewParamsBodyObject) implementsJsonNewParamsBodyUnion() {}
+
+type JsonNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r JsonNewParamsAddScriptTag) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JsonNewParamsAddStyleTag struct {
+type JsonNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
 	URL     param.Field[string] `json:"url"`
 }
 
-func (r JsonNewParamsAddStyleTag) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JsonNewParamsAllowResourceType string
+type JsonNewParamsBodyObjectAllowResourceType string
 
 const (
-	JsonNewParamsAllowResourceTypeDocument           JsonNewParamsAllowResourceType = "document"
-	JsonNewParamsAllowResourceTypeStylesheet         JsonNewParamsAllowResourceType = "stylesheet"
-	JsonNewParamsAllowResourceTypeImage              JsonNewParamsAllowResourceType = "image"
-	JsonNewParamsAllowResourceTypeMedia              JsonNewParamsAllowResourceType = "media"
-	JsonNewParamsAllowResourceTypeFont               JsonNewParamsAllowResourceType = "font"
-	JsonNewParamsAllowResourceTypeScript             JsonNewParamsAllowResourceType = "script"
-	JsonNewParamsAllowResourceTypeTexttrack          JsonNewParamsAllowResourceType = "texttrack"
-	JsonNewParamsAllowResourceTypeXHR                JsonNewParamsAllowResourceType = "xhr"
-	JsonNewParamsAllowResourceTypeFetch              JsonNewParamsAllowResourceType = "fetch"
-	JsonNewParamsAllowResourceTypePrefetch           JsonNewParamsAllowResourceType = "prefetch"
-	JsonNewParamsAllowResourceTypeEventsource        JsonNewParamsAllowResourceType = "eventsource"
-	JsonNewParamsAllowResourceTypeWebsocket          JsonNewParamsAllowResourceType = "websocket"
-	JsonNewParamsAllowResourceTypeManifest           JsonNewParamsAllowResourceType = "manifest"
-	JsonNewParamsAllowResourceTypeSignedexchange     JsonNewParamsAllowResourceType = "signedexchange"
-	JsonNewParamsAllowResourceTypePing               JsonNewParamsAllowResourceType = "ping"
-	JsonNewParamsAllowResourceTypeCspviolationreport JsonNewParamsAllowResourceType = "cspviolationreport"
-	JsonNewParamsAllowResourceTypePreflight          JsonNewParamsAllowResourceType = "preflight"
-	JsonNewParamsAllowResourceTypeOther              JsonNewParamsAllowResourceType = "other"
+	JsonNewParamsBodyObjectAllowResourceTypeDocument           JsonNewParamsBodyObjectAllowResourceType = "document"
+	JsonNewParamsBodyObjectAllowResourceTypeStylesheet         JsonNewParamsBodyObjectAllowResourceType = "stylesheet"
+	JsonNewParamsBodyObjectAllowResourceTypeImage              JsonNewParamsBodyObjectAllowResourceType = "image"
+	JsonNewParamsBodyObjectAllowResourceTypeMedia              JsonNewParamsBodyObjectAllowResourceType = "media"
+	JsonNewParamsBodyObjectAllowResourceTypeFont               JsonNewParamsBodyObjectAllowResourceType = "font"
+	JsonNewParamsBodyObjectAllowResourceTypeScript             JsonNewParamsBodyObjectAllowResourceType = "script"
+	JsonNewParamsBodyObjectAllowResourceTypeTexttrack          JsonNewParamsBodyObjectAllowResourceType = "texttrack"
+	JsonNewParamsBodyObjectAllowResourceTypeXHR                JsonNewParamsBodyObjectAllowResourceType = "xhr"
+	JsonNewParamsBodyObjectAllowResourceTypeFetch              JsonNewParamsBodyObjectAllowResourceType = "fetch"
+	JsonNewParamsBodyObjectAllowResourceTypePrefetch           JsonNewParamsBodyObjectAllowResourceType = "prefetch"
+	JsonNewParamsBodyObjectAllowResourceTypeEventsource        JsonNewParamsBodyObjectAllowResourceType = "eventsource"
+	JsonNewParamsBodyObjectAllowResourceTypeWebsocket          JsonNewParamsBodyObjectAllowResourceType = "websocket"
+	JsonNewParamsBodyObjectAllowResourceTypeManifest           JsonNewParamsBodyObjectAllowResourceType = "manifest"
+	JsonNewParamsBodyObjectAllowResourceTypeSignedexchange     JsonNewParamsBodyObjectAllowResourceType = "signedexchange"
+	JsonNewParamsBodyObjectAllowResourceTypePing               JsonNewParamsBodyObjectAllowResourceType = "ping"
+	JsonNewParamsBodyObjectAllowResourceTypeCspviolationreport JsonNewParamsBodyObjectAllowResourceType = "cspviolationreport"
+	JsonNewParamsBodyObjectAllowResourceTypePreflight          JsonNewParamsBodyObjectAllowResourceType = "preflight"
+	JsonNewParamsBodyObjectAllowResourceTypeOther              JsonNewParamsBodyObjectAllowResourceType = "other"
 )
 
-func (r JsonNewParamsAllowResourceType) IsKnown() bool {
+func (r JsonNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 	switch r {
-	case JsonNewParamsAllowResourceTypeDocument, JsonNewParamsAllowResourceTypeStylesheet, JsonNewParamsAllowResourceTypeImage, JsonNewParamsAllowResourceTypeMedia, JsonNewParamsAllowResourceTypeFont, JsonNewParamsAllowResourceTypeScript, JsonNewParamsAllowResourceTypeTexttrack, JsonNewParamsAllowResourceTypeXHR, JsonNewParamsAllowResourceTypeFetch, JsonNewParamsAllowResourceTypePrefetch, JsonNewParamsAllowResourceTypeEventsource, JsonNewParamsAllowResourceTypeWebsocket, JsonNewParamsAllowResourceTypeManifest, JsonNewParamsAllowResourceTypeSignedexchange, JsonNewParamsAllowResourceTypePing, JsonNewParamsAllowResourceTypeCspviolationreport, JsonNewParamsAllowResourceTypePreflight, JsonNewParamsAllowResourceTypeOther:
+	case JsonNewParamsBodyObjectAllowResourceTypeDocument, JsonNewParamsBodyObjectAllowResourceTypeStylesheet, JsonNewParamsBodyObjectAllowResourceTypeImage, JsonNewParamsBodyObjectAllowResourceTypeMedia, JsonNewParamsBodyObjectAllowResourceTypeFont, JsonNewParamsBodyObjectAllowResourceTypeScript, JsonNewParamsBodyObjectAllowResourceTypeTexttrack, JsonNewParamsBodyObjectAllowResourceTypeXHR, JsonNewParamsBodyObjectAllowResourceTypeFetch, JsonNewParamsBodyObjectAllowResourceTypePrefetch, JsonNewParamsBodyObjectAllowResourceTypeEventsource, JsonNewParamsBodyObjectAllowResourceTypeWebsocket, JsonNewParamsBodyObjectAllowResourceTypeManifest, JsonNewParamsBodyObjectAllowResourceTypeSignedexchange, JsonNewParamsBodyObjectAllowResourceTypePing, JsonNewParamsBodyObjectAllowResourceTypeCspviolationreport, JsonNewParamsBodyObjectAllowResourceTypePreflight, JsonNewParamsBodyObjectAllowResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Provide credentials for HTTP authentication.
-type JsonNewParamsAuthenticate struct {
+type JsonNewParamsBodyObjectAuthenticate struct {
 	Password param.Field[string] `json:"password,required"`
 	Username param.Field[string] `json:"username,required"`
 }
 
-func (r JsonNewParamsAuthenticate) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JsonNewParamsCookie struct {
-	Name         param.Field[string]                           `json:"name,required"`
-	Value        param.Field[string]                           `json:"value,required"`
-	Domain       param.Field[string]                           `json:"domain"`
-	Expires      param.Field[float64]                          `json:"expires"`
-	HTTPOnly     param.Field[bool]                             `json:"httpOnly"`
-	PartitionKey param.Field[string]                           `json:"partitionKey"`
-	Path         param.Field[string]                           `json:"path"`
-	Priority     param.Field[JsonNewParamsCookiesPriority]     `json:"priority"`
-	SameParty    param.Field[bool]                             `json:"sameParty"`
-	SameSite     param.Field[JsonNewParamsCookiesSameSite]     `json:"sameSite"`
-	Secure       param.Field[bool]                             `json:"secure"`
-	SourcePort   param.Field[float64]                          `json:"sourcePort"`
-	SourceScheme param.Field[JsonNewParamsCookiesSourceScheme] `json:"sourceScheme"`
-	URL          param.Field[string]                           `json:"url"`
+type JsonNewParamsBodyObjectCookie struct {
+	Name         param.Field[string]                                     `json:"name,required"`
+	Value        param.Field[string]                                     `json:"value,required"`
+	Domain       param.Field[string]                                     `json:"domain"`
+	Expires      param.Field[float64]                                    `json:"expires"`
+	HTTPOnly     param.Field[bool]                                       `json:"httpOnly"`
+	PartitionKey param.Field[string]                                     `json:"partitionKey"`
+	Path         param.Field[string]                                     `json:"path"`
+	Priority     param.Field[JsonNewParamsBodyObjectCookiesPriority]     `json:"priority"`
+	SameParty    param.Field[bool]                                       `json:"sameParty"`
+	SameSite     param.Field[JsonNewParamsBodyObjectCookiesSameSite]     `json:"sameSite"`
+	Secure       param.Field[bool]                                       `json:"secure"`
+	SourcePort   param.Field[float64]                                    `json:"sourcePort"`
+	SourceScheme param.Field[JsonNewParamsBodyObjectCookiesSourceScheme] `json:"sourceScheme"`
+	URL          param.Field[string]                                     `json:"url"`
 }
 
-func (r JsonNewParamsCookie) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JsonNewParamsCookiesPriority string
+type JsonNewParamsBodyObjectCookiesPriority string
 
 const (
-	JsonNewParamsCookiesPriorityLow    JsonNewParamsCookiesPriority = "Low"
-	JsonNewParamsCookiesPriorityMedium JsonNewParamsCookiesPriority = "Medium"
-	JsonNewParamsCookiesPriorityHigh   JsonNewParamsCookiesPriority = "High"
+	JsonNewParamsBodyObjectCookiesPriorityLow    JsonNewParamsBodyObjectCookiesPriority = "Low"
+	JsonNewParamsBodyObjectCookiesPriorityMedium JsonNewParamsBodyObjectCookiesPriority = "Medium"
+	JsonNewParamsBodyObjectCookiesPriorityHigh   JsonNewParamsBodyObjectCookiesPriority = "High"
 )
 
-func (r JsonNewParamsCookiesPriority) IsKnown() bool {
+func (r JsonNewParamsBodyObjectCookiesPriority) IsKnown() bool {
 	switch r {
-	case JsonNewParamsCookiesPriorityLow, JsonNewParamsCookiesPriorityMedium, JsonNewParamsCookiesPriorityHigh:
+	case JsonNewParamsBodyObjectCookiesPriorityLow, JsonNewParamsBodyObjectCookiesPriorityMedium, JsonNewParamsBodyObjectCookiesPriorityHigh:
 		return true
 	}
 	return false
 }
 
-type JsonNewParamsCookiesSameSite string
+type JsonNewParamsBodyObjectCookiesSameSite string
 
 const (
-	JsonNewParamsCookiesSameSiteStrict JsonNewParamsCookiesSameSite = "Strict"
-	JsonNewParamsCookiesSameSiteLax    JsonNewParamsCookiesSameSite = "Lax"
-	JsonNewParamsCookiesSameSiteNone   JsonNewParamsCookiesSameSite = "None"
+	JsonNewParamsBodyObjectCookiesSameSiteStrict JsonNewParamsBodyObjectCookiesSameSite = "Strict"
+	JsonNewParamsBodyObjectCookiesSameSiteLax    JsonNewParamsBodyObjectCookiesSameSite = "Lax"
+	JsonNewParamsBodyObjectCookiesSameSiteNone   JsonNewParamsBodyObjectCookiesSameSite = "None"
 )
 
-func (r JsonNewParamsCookiesSameSite) IsKnown() bool {
+func (r JsonNewParamsBodyObjectCookiesSameSite) IsKnown() bool {
 	switch r {
-	case JsonNewParamsCookiesSameSiteStrict, JsonNewParamsCookiesSameSiteLax, JsonNewParamsCookiesSameSiteNone:
+	case JsonNewParamsBodyObjectCookiesSameSiteStrict, JsonNewParamsBodyObjectCookiesSameSiteLax, JsonNewParamsBodyObjectCookiesSameSiteNone:
 		return true
 	}
 	return false
 }
 
-type JsonNewParamsCookiesSourceScheme string
+type JsonNewParamsBodyObjectCookiesSourceScheme string
 
 const (
-	JsonNewParamsCookiesSourceSchemeUnset     JsonNewParamsCookiesSourceScheme = "Unset"
-	JsonNewParamsCookiesSourceSchemeNonSecure JsonNewParamsCookiesSourceScheme = "NonSecure"
-	JsonNewParamsCookiesSourceSchemeSecure    JsonNewParamsCookiesSourceScheme = "Secure"
+	JsonNewParamsBodyObjectCookiesSourceSchemeUnset     JsonNewParamsBodyObjectCookiesSourceScheme = "Unset"
+	JsonNewParamsBodyObjectCookiesSourceSchemeNonSecure JsonNewParamsBodyObjectCookiesSourceScheme = "NonSecure"
+	JsonNewParamsBodyObjectCookiesSourceSchemeSecure    JsonNewParamsBodyObjectCookiesSourceScheme = "Secure"
 )
 
-func (r JsonNewParamsCookiesSourceScheme) IsKnown() bool {
+func (r JsonNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
-	case JsonNewParamsCookiesSourceSchemeUnset, JsonNewParamsCookiesSourceSchemeNonSecure, JsonNewParamsCookiesSourceSchemeSecure:
+	case JsonNewParamsBodyObjectCookiesSourceSchemeUnset, JsonNewParamsBodyObjectCookiesSourceSchemeNonSecure, JsonNewParamsBodyObjectCookiesSourceSchemeSecure:
 		return true
 	}
 	return false
 }
 
-type JsonNewParamsCustomAI struct {
+type JsonNewParamsBodyObjectCustomAI struct {
 	// Authorization token for the AI model: `Bearer <token>`.
 	Authorization param.Field[string] `json:"authorization,required"`
 	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
@@ -263,125 +317,128 @@ type JsonNewParamsCustomAI struct {
 	Model param.Field[string] `json:"model,required"`
 }
 
-func (r JsonNewParamsCustomAI) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectCustomAI) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-type JsonNewParamsGotoOptions struct {
-	Referer        param.Field[string]                                 `json:"referer"`
-	ReferrerPolicy param.Field[string]                                 `json:"referrerPolicy"`
-	Timeout        param.Field[float64]                                `json:"timeout"`
-	WaitUntil      param.Field[JsonNewParamsGotoOptionsWaitUntilUnion] `json:"waitUntil"`
+type JsonNewParamsBodyObjectGotoOptions struct {
+	Referer        param.Field[string]                                           `json:"referer"`
+	ReferrerPolicy param.Field[string]                                           `json:"referrerPolicy"`
+	Timeout        param.Field[float64]                                          `json:"timeout"`
+	WaitUntil      param.Field[JsonNewParamsBodyObjectGotoOptionsWaitUntilUnion] `json:"waitUntil"`
 }
 
-func (r JsonNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [browser_rendering.JsonNewParamsGotoOptionsWaitUntilString],
-// [browser_rendering.JsonNewParamsGotoOptionsWaitUntilArray].
-type JsonNewParamsGotoOptionsWaitUntilUnion interface {
-	implementsJsonNewParamsGotoOptionsWaitUntilUnion()
+// Satisfied by
+// [browser_rendering.JsonNewParamsBodyObjectGotoOptionsWaitUntilString],
+// [browser_rendering.JsonNewParamsBodyObjectGotoOptionsWaitUntilArray].
+type JsonNewParamsBodyObjectGotoOptionsWaitUntilUnion interface {
+	implementsJsonNewParamsBodyObjectGotoOptionsWaitUntilUnion()
 }
 
-type JsonNewParamsGotoOptionsWaitUntilString string
+type JsonNewParamsBodyObjectGotoOptionsWaitUntilString string
 
 const (
-	JsonNewParamsGotoOptionsWaitUntilStringLoad             JsonNewParamsGotoOptionsWaitUntilString = "load"
-	JsonNewParamsGotoOptionsWaitUntilStringDomcontentloaded JsonNewParamsGotoOptionsWaitUntilString = "domcontentloaded"
-	JsonNewParamsGotoOptionsWaitUntilStringNetworkidle0     JsonNewParamsGotoOptionsWaitUntilString = "networkidle0"
-	JsonNewParamsGotoOptionsWaitUntilStringNetworkidle2     JsonNewParamsGotoOptionsWaitUntilString = "networkidle2"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilStringLoad             JsonNewParamsBodyObjectGotoOptionsWaitUntilString = "load"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded JsonNewParamsBodyObjectGotoOptionsWaitUntilString = "domcontentloaded"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0     JsonNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle0"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2     JsonNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle2"
 )
 
-func (r JsonNewParamsGotoOptionsWaitUntilString) IsKnown() bool {
+func (r JsonNewParamsBodyObjectGotoOptionsWaitUntilString) IsKnown() bool {
 	switch r {
-	case JsonNewParamsGotoOptionsWaitUntilStringLoad, JsonNewParamsGotoOptionsWaitUntilStringDomcontentloaded, JsonNewParamsGotoOptionsWaitUntilStringNetworkidle0, JsonNewParamsGotoOptionsWaitUntilStringNetworkidle2:
+	case JsonNewParamsBodyObjectGotoOptionsWaitUntilStringLoad, JsonNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded, JsonNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0, JsonNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2:
 		return true
 	}
 	return false
 }
 
-func (r JsonNewParamsGotoOptionsWaitUntilString) implementsJsonNewParamsGotoOptionsWaitUntilUnion() {}
+func (r JsonNewParamsBodyObjectGotoOptionsWaitUntilString) implementsJsonNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
+}
 
-type JsonNewParamsGotoOptionsWaitUntilArray []JsonNewParamsGotoOptionsWaitUntilArrayItem
+type JsonNewParamsBodyObjectGotoOptionsWaitUntilArray []JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem
 
-func (r JsonNewParamsGotoOptionsWaitUntilArray) implementsJsonNewParamsGotoOptionsWaitUntilUnion() {}
+func (r JsonNewParamsBodyObjectGotoOptionsWaitUntilArray) implementsJsonNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
+}
 
-type JsonNewParamsGotoOptionsWaitUntilArrayItem string
+type JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem string
 
 const (
-	JsonNewParamsGotoOptionsWaitUntilArrayItemLoad             JsonNewParamsGotoOptionsWaitUntilArrayItem = "load"
-	JsonNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded JsonNewParamsGotoOptionsWaitUntilArrayItem = "domcontentloaded"
-	JsonNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0     JsonNewParamsGotoOptionsWaitUntilArrayItem = "networkidle0"
-	JsonNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2     JsonNewParamsGotoOptionsWaitUntilArrayItem = "networkidle2"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad             JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "load"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "domcontentloaded"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0     JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle0"
+	JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2     JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle2"
 )
 
-func (r JsonNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
+func (r JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 	switch r {
-	case JsonNewParamsGotoOptionsWaitUntilArrayItemLoad, JsonNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded, JsonNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0, JsonNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2:
+	case JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad, JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded, JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0, JsonNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2:
 		return true
 	}
 	return false
 }
 
-type JsonNewParamsRejectResourceType string
+type JsonNewParamsBodyObjectRejectResourceType string
 
 const (
-	JsonNewParamsRejectResourceTypeDocument           JsonNewParamsRejectResourceType = "document"
-	JsonNewParamsRejectResourceTypeStylesheet         JsonNewParamsRejectResourceType = "stylesheet"
-	JsonNewParamsRejectResourceTypeImage              JsonNewParamsRejectResourceType = "image"
-	JsonNewParamsRejectResourceTypeMedia              JsonNewParamsRejectResourceType = "media"
-	JsonNewParamsRejectResourceTypeFont               JsonNewParamsRejectResourceType = "font"
-	JsonNewParamsRejectResourceTypeScript             JsonNewParamsRejectResourceType = "script"
-	JsonNewParamsRejectResourceTypeTexttrack          JsonNewParamsRejectResourceType = "texttrack"
-	JsonNewParamsRejectResourceTypeXHR                JsonNewParamsRejectResourceType = "xhr"
-	JsonNewParamsRejectResourceTypeFetch              JsonNewParamsRejectResourceType = "fetch"
-	JsonNewParamsRejectResourceTypePrefetch           JsonNewParamsRejectResourceType = "prefetch"
-	JsonNewParamsRejectResourceTypeEventsource        JsonNewParamsRejectResourceType = "eventsource"
-	JsonNewParamsRejectResourceTypeWebsocket          JsonNewParamsRejectResourceType = "websocket"
-	JsonNewParamsRejectResourceTypeManifest           JsonNewParamsRejectResourceType = "manifest"
-	JsonNewParamsRejectResourceTypeSignedexchange     JsonNewParamsRejectResourceType = "signedexchange"
-	JsonNewParamsRejectResourceTypePing               JsonNewParamsRejectResourceType = "ping"
-	JsonNewParamsRejectResourceTypeCspviolationreport JsonNewParamsRejectResourceType = "cspviolationreport"
-	JsonNewParamsRejectResourceTypePreflight          JsonNewParamsRejectResourceType = "preflight"
-	JsonNewParamsRejectResourceTypeOther              JsonNewParamsRejectResourceType = "other"
+	JsonNewParamsBodyObjectRejectResourceTypeDocument           JsonNewParamsBodyObjectRejectResourceType = "document"
+	JsonNewParamsBodyObjectRejectResourceTypeStylesheet         JsonNewParamsBodyObjectRejectResourceType = "stylesheet"
+	JsonNewParamsBodyObjectRejectResourceTypeImage              JsonNewParamsBodyObjectRejectResourceType = "image"
+	JsonNewParamsBodyObjectRejectResourceTypeMedia              JsonNewParamsBodyObjectRejectResourceType = "media"
+	JsonNewParamsBodyObjectRejectResourceTypeFont               JsonNewParamsBodyObjectRejectResourceType = "font"
+	JsonNewParamsBodyObjectRejectResourceTypeScript             JsonNewParamsBodyObjectRejectResourceType = "script"
+	JsonNewParamsBodyObjectRejectResourceTypeTexttrack          JsonNewParamsBodyObjectRejectResourceType = "texttrack"
+	JsonNewParamsBodyObjectRejectResourceTypeXHR                JsonNewParamsBodyObjectRejectResourceType = "xhr"
+	JsonNewParamsBodyObjectRejectResourceTypeFetch              JsonNewParamsBodyObjectRejectResourceType = "fetch"
+	JsonNewParamsBodyObjectRejectResourceTypePrefetch           JsonNewParamsBodyObjectRejectResourceType = "prefetch"
+	JsonNewParamsBodyObjectRejectResourceTypeEventsource        JsonNewParamsBodyObjectRejectResourceType = "eventsource"
+	JsonNewParamsBodyObjectRejectResourceTypeWebsocket          JsonNewParamsBodyObjectRejectResourceType = "websocket"
+	JsonNewParamsBodyObjectRejectResourceTypeManifest           JsonNewParamsBodyObjectRejectResourceType = "manifest"
+	JsonNewParamsBodyObjectRejectResourceTypeSignedexchange     JsonNewParamsBodyObjectRejectResourceType = "signedexchange"
+	JsonNewParamsBodyObjectRejectResourceTypePing               JsonNewParamsBodyObjectRejectResourceType = "ping"
+	JsonNewParamsBodyObjectRejectResourceTypeCspviolationreport JsonNewParamsBodyObjectRejectResourceType = "cspviolationreport"
+	JsonNewParamsBodyObjectRejectResourceTypePreflight          JsonNewParamsBodyObjectRejectResourceType = "preflight"
+	JsonNewParamsBodyObjectRejectResourceTypeOther              JsonNewParamsBodyObjectRejectResourceType = "other"
 )
 
-func (r JsonNewParamsRejectResourceType) IsKnown() bool {
+func (r JsonNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 	switch r {
-	case JsonNewParamsRejectResourceTypeDocument, JsonNewParamsRejectResourceTypeStylesheet, JsonNewParamsRejectResourceTypeImage, JsonNewParamsRejectResourceTypeMedia, JsonNewParamsRejectResourceTypeFont, JsonNewParamsRejectResourceTypeScript, JsonNewParamsRejectResourceTypeTexttrack, JsonNewParamsRejectResourceTypeXHR, JsonNewParamsRejectResourceTypeFetch, JsonNewParamsRejectResourceTypePrefetch, JsonNewParamsRejectResourceTypeEventsource, JsonNewParamsRejectResourceTypeWebsocket, JsonNewParamsRejectResourceTypeManifest, JsonNewParamsRejectResourceTypeSignedexchange, JsonNewParamsRejectResourceTypePing, JsonNewParamsRejectResourceTypeCspviolationreport, JsonNewParamsRejectResourceTypePreflight, JsonNewParamsRejectResourceTypeOther:
+	case JsonNewParamsBodyObjectRejectResourceTypeDocument, JsonNewParamsBodyObjectRejectResourceTypeStylesheet, JsonNewParamsBodyObjectRejectResourceTypeImage, JsonNewParamsBodyObjectRejectResourceTypeMedia, JsonNewParamsBodyObjectRejectResourceTypeFont, JsonNewParamsBodyObjectRejectResourceTypeScript, JsonNewParamsBodyObjectRejectResourceTypeTexttrack, JsonNewParamsBodyObjectRejectResourceTypeXHR, JsonNewParamsBodyObjectRejectResourceTypeFetch, JsonNewParamsBodyObjectRejectResourceTypePrefetch, JsonNewParamsBodyObjectRejectResourceTypeEventsource, JsonNewParamsBodyObjectRejectResourceTypeWebsocket, JsonNewParamsBodyObjectRejectResourceTypeManifest, JsonNewParamsBodyObjectRejectResourceTypeSignedexchange, JsonNewParamsBodyObjectRejectResourceTypePing, JsonNewParamsBodyObjectRejectResourceTypeCspviolationreport, JsonNewParamsBodyObjectRejectResourceTypePreflight, JsonNewParamsBodyObjectRejectResourceTypeOther:
 		return true
 	}
 	return false
 }
 
-type JsonNewParamsResponseFormat struct {
+type JsonNewParamsBodyObjectResponseFormat struct {
 	Type param.Field[string] `json:"type,required"`
 	// Schema for the response format. More information here:
 	// https://developers.cloudflare.com/workers-ai/json-mode/
-	JsonSchema param.Field[map[string]JsonNewParamsResponseFormatJsonSchemaUnion] `json:"json_schema"`
+	JsonSchema param.Field[map[string]JsonNewParamsBodyObjectResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
-func (r JsonNewParamsResponseFormat) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectResponseFormat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
-// [browser_rendering.JsonNewParamsResponseFormatJsonSchemaArray].
+// [browser_rendering.JsonNewParamsBodyObjectResponseFormatJsonSchemaArray].
 //
 // Use [Raw()] to specify an arbitrary value for this param
-type JsonNewParamsResponseFormatJsonSchemaUnion interface {
-	ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()
+type JsonNewParamsBodyObjectResponseFormatJsonSchemaUnion interface {
+	ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()
 }
 
-type JsonNewParamsResponseFormatJsonSchemaArray []string
+type JsonNewParamsBodyObjectResponseFormatJsonSchemaArray []string
 
-func (r JsonNewParamsResponseFormatJsonSchemaArray) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion() {
+func (r JsonNewParamsBodyObjectResponseFormatJsonSchemaArray) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion() {
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-type JsonNewParamsViewport struct {
+type JsonNewParamsBodyObjectViewport struct {
 	Height            param.Field[float64] `json:"height,required"`
 	Width             param.Field[float64] `json:"width,required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
@@ -390,46 +447,46 @@ type JsonNewParamsViewport struct {
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }
 
-func (r JsonNewParamsViewport) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-type JsonNewParamsWaitForSelector struct {
-	Selector param.Field[string]                              `json:"selector,required"`
-	Hidden   param.Field[JsonNewParamsWaitForSelectorHidden]  `json:"hidden"`
-	Timeout  param.Field[float64]                             `json:"timeout"`
-	Visible  param.Field[JsonNewParamsWaitForSelectorVisible] `json:"visible"`
+type JsonNewParamsBodyObjectWaitForSelector struct {
+	Selector param.Field[string]                                        `json:"selector,required"`
+	Hidden   param.Field[JsonNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
+	Timeout  param.Field[float64]                                       `json:"timeout"`
+	Visible  param.Field[JsonNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
 }
 
-func (r JsonNewParamsWaitForSelector) MarshalJSON() (data []byte, err error) {
+func (r JsonNewParamsBodyObjectWaitForSelector) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JsonNewParamsWaitForSelectorHidden bool
+type JsonNewParamsBodyObjectWaitForSelectorHidden bool
 
 const (
-	JsonNewParamsWaitForSelectorHiddenTrue JsonNewParamsWaitForSelectorHidden = true
+	JsonNewParamsBodyObjectWaitForSelectorHiddenTrue JsonNewParamsBodyObjectWaitForSelectorHidden = true
 )
 
-func (r JsonNewParamsWaitForSelectorHidden) IsKnown() bool {
+func (r JsonNewParamsBodyObjectWaitForSelectorHidden) IsKnown() bool {
 	switch r {
-	case JsonNewParamsWaitForSelectorHiddenTrue:
+	case JsonNewParamsBodyObjectWaitForSelectorHiddenTrue:
 		return true
 	}
 	return false
 }
 
-type JsonNewParamsWaitForSelectorVisible bool
+type JsonNewParamsBodyObjectWaitForSelectorVisible bool
 
 const (
-	JsonNewParamsWaitForSelectorVisibleTrue JsonNewParamsWaitForSelectorVisible = true
+	JsonNewParamsBodyObjectWaitForSelectorVisibleTrue JsonNewParamsBodyObjectWaitForSelectorVisible = true
 )
 
-func (r JsonNewParamsWaitForSelectorVisible) IsKnown() bool {
+func (r JsonNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
-	case JsonNewParamsWaitForSelectorVisibleTrue:
+	case JsonNewParamsBodyObjectWaitForSelectorVisibleTrue:
 		return true
 	}
 	return false
@@ -438,16 +495,16 @@ func (r JsonNewParamsWaitForSelectorVisible) IsKnown() bool {
 type JsonNewResponseEnvelope struct {
 	Result JsonNewResponse `json:"result,required"`
 	// Response status
-	Status bool                            `json:"status,required"`
-	Errors []JsonNewResponseEnvelopeErrors `json:"errors"`
-	JSON   jsonNewResponseEnvelopeJSON     `json:"-"`
+	Success bool                            `json:"success,required"`
+	Errors  []JsonNewResponseEnvelopeErrors `json:"errors"`
+	JSON    jsonNewResponseEnvelopeJSON     `json:"-"`
 }
 
 // jsonNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [JsonNewResponseEnvelope]
 type jsonNewResponseEnvelopeJSON struct {
 	Result      apijson.Field
-	Status      apijson.Field
+	Success     apijson.Field
 	Errors      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
