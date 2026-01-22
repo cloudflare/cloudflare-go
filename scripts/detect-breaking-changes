@@ -137,6 +137,7 @@ TEST_PATHS=(
 	logs/received_test.go
 	logs/receivedfield_test.go
 	origin_tls_client_auth/origintlsclientauth_test.go
+	origin_tls_client_auth/zonecertificate_test.go
 	origin_tls_client_auth/hostname_test.go
 	origin_tls_client_auth/hostnamecertificate_test.go
 	origin_tls_client_auth/setting_test.go
