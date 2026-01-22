@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -24,9 +23,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewOriginTLSClientAuthService] method instead.
 type OriginTLSClientAuthService struct {
-	Options   []option.RequestOption
-	Hostnames *HostnameService
-	Settings  *SettingService
+	Options              []option.RequestOption
+	ZoneCertificates     *ZoneCertificateService
+	Hostnames            *HostnameService
+	HostnameCertificates *HostnameCertificateService
+	Settings             *SettingService
 }
 
 // NewOriginTLSClientAuthService generates a new service that applies the given
@@ -35,7 +36,9 @@ type OriginTLSClientAuthService struct {
 func NewOriginTLSClientAuthService(opts ...option.RequestOption) (r *OriginTLSClientAuthService) {
 	r = &OriginTLSClientAuthService{}
 	r.Options = opts
+	r.ZoneCertificates = NewZoneCertificateService(opts...)
 	r.Hostnames = NewHostnameService(opts...)
+	r.HostnameCertificates = NewHostnameCertificateService(opts...)
 	r.Settings = NewSettingService(opts...)
 	return
 }
@@ -45,6 +48,9 @@ func NewOriginTLSClientAuthService(opts ...option.RequestOption) (r *OriginTLSCl
 // important to keep only one certificate active. Also, make sure to enable
 // zone-level authenticated origin pulls by making a PUT call to settings endpoint
 // to see the uploaded certificate in use.
+//
+// Deprecated: Use zone_certificates.create for zone-level certificates. This
+// method will be removed in a future major version.
 func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponse, err error) {
 	var env OriginTLSClientAuthNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -62,6 +68,9 @@ func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSCl
 }
 
 // List Certificates
+//
+// Deprecated: Use zone_certificates.list for zone-level certificates. This method
+// will be removed in a future major version.
 func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginTLSClientAuthListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -84,11 +93,17 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 }
 
 // List Certificates
+//
+// Deprecated: Use zone_certificates.list for zone-level certificates. This method
+// will be removed in a future major version.
 func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OriginTLSClientAuthListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Certificate
+//
+// Deprecated: Use zone_certificates.delete for zone-level certificates. This
+// method will be removed in a future major version.
 func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, body OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponse, err error) {
 	var env OriginTLSClientAuthDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -110,6 +125,9 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 }
 
 // Get Certificate Details
+//
+// Deprecated: Use zone_certificates.get for zone-level certificates. This method
+// will be removed in a future major version.
 func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponse, err error) {
 	var env OriginTLSClientAuthGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -128,67 +146,6 @@ func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID stri
 	}
 	res = &env.Result
 	return
-}
-
-type ZoneAuthenticatedOriginPull struct {
-	// Identifier.
-	ID string `json:"id"`
-	// The zone's leaf certificate.
-	Certificate string `json:"certificate"`
-	// When the certificate from the authority expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// Status of the certificate activation.
-	Status ZoneAuthenticatedOriginPullStatus `json:"status"`
-	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                       `json:"uploaded_on" format:"date-time"`
-	JSON       zoneAuthenticatedOriginPullJSON `json:"-"`
-}
-
-// zoneAuthenticatedOriginPullJSON contains the JSON metadata for the struct
-// [ZoneAuthenticatedOriginPull]
-type zoneAuthenticatedOriginPullJSON struct {
-	ID          apijson.Field
-	Certificate apijson.Field
-	ExpiresOn   apijson.Field
-	Issuer      apijson.Field
-	Signature   apijson.Field
-	Status      apijson.Field
-	UploadedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneAuthenticatedOriginPull) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneAuthenticatedOriginPullJSON) RawJSON() string {
-	return r.raw
-}
-
-// Status of the certificate activation.
-type ZoneAuthenticatedOriginPullStatus string
-
-const (
-	ZoneAuthenticatedOriginPullStatusInitializing       ZoneAuthenticatedOriginPullStatus = "initializing"
-	ZoneAuthenticatedOriginPullStatusPendingDeployment  ZoneAuthenticatedOriginPullStatus = "pending_deployment"
-	ZoneAuthenticatedOriginPullStatusPendingDeletion    ZoneAuthenticatedOriginPullStatus = "pending_deletion"
-	ZoneAuthenticatedOriginPullStatusActive             ZoneAuthenticatedOriginPullStatus = "active"
-	ZoneAuthenticatedOriginPullStatusDeleted            ZoneAuthenticatedOriginPullStatus = "deleted"
-	ZoneAuthenticatedOriginPullStatusDeploymentTimedOut ZoneAuthenticatedOriginPullStatus = "deployment_timed_out"
-	ZoneAuthenticatedOriginPullStatusDeletionTimedOut   ZoneAuthenticatedOriginPullStatus = "deletion_timed_out"
-)
-
-func (r ZoneAuthenticatedOriginPullStatus) IsKnown() bool {
-	switch r {
-	case ZoneAuthenticatedOriginPullStatusInitializing, ZoneAuthenticatedOriginPullStatusPendingDeployment, ZoneAuthenticatedOriginPullStatusPendingDeletion, ZoneAuthenticatedOriginPullStatusActive, ZoneAuthenticatedOriginPullStatusDeleted, ZoneAuthenticatedOriginPullStatusDeploymentTimedOut, ZoneAuthenticatedOriginPullStatusDeletionTimedOut:
-		return true
-	}
-	return false
 }
 
 type OriginTLSClientAuthNewResponse struct {
