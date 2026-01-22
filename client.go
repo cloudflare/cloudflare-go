@@ -46,6 +46,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/email_security"
 	"github.com/cloudflare/cloudflare-go/v6/filters"
 	"github.com/cloudflare/cloudflare-go/v6/firewall"
+	"github.com/cloudflare/cloudflare-go/v6/fraud"
 	"github.com/cloudflare/cloudflare-go/v6/healthchecks"
 	"github.com/cloudflare/cloudflare-go/v6/hostnames"
 	"github.com/cloudflare/cloudflare-go/v6/hyperdrive"
@@ -199,6 +200,7 @@ type Client struct {
 	URLScanner                  *url_scanner.URLScannerService
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
+	Fraud                       *fraud.FraudService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
 	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
@@ -335,6 +337,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.URLScanner = url_scanner.NewURLScannerService(opts...)
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
+	r.Fraud = fraud.NewFraudService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
 	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
