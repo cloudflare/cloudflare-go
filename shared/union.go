@@ -54,6 +54,7 @@ func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                  {}
 func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()           {}
 func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()        {}
+func (UnionString) ImplementsNamespaceValueUpdateParamsValueUnion()                                {}
 func (UnionString) ImplementsOriginPortUnionParam()                                                {}
 func (UnionString) ImplementsOriginPortUnion()                                                     {}
 func (UnionString) ImplementsHealthCheckTargetUnionParam()                                         {}

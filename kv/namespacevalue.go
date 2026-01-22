@@ -165,7 +165,7 @@ type NamespaceValueUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[NamespaceValueUpdateParamsValueUnion] `json:"value,required" format:"binary"`
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration param.Field[float64] `query:"expiration"`
@@ -197,6 +197,13 @@ func (r NamespaceValueUpdateParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// A byte sequence to be stored, up to 25 MiB in length.
+//
+// Satisfied by [shared.UnionString], [shared.UnionString].
+type NamespaceValueUpdateParamsValueUnion interface {
+	ImplementsNamespaceValueUpdateParamsValueUnion()
 }
 
 type NamespaceValueUpdateResponseEnvelope struct {
