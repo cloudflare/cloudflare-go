@@ -79,9 +79,9 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // An array of classification results for the input text
 //
 // Union satisfied by [AIRunResponseTextClassification], [shared.UnionString],
-// [AIRunResponseAudio], [AIRunResponseTextEmbeddings],
+// [AIRunResponseAudio], [shared.UnionString], [AIRunResponseTextEmbeddings],
 // [AIRunResponseAutomaticSpeechRecognition], [AIRunResponseImageClassification],
-// [AIRunResponseObjectDetection], [AIRunResponseObject],
+// [AIRunResponseObjectDetection], [AIRunResponseObject], [shared.UnionString],
 // [AIRunResponseTranslation], [AIRunResponseSummarization],
 // [AIRunResponseImageToText], [AIRunResponseImageTextToText] or
 // [AIRunResponseMultimodalEmbeddings].
@@ -106,6 +106,10 @@ func init() {
 			Type:       reflect.TypeOf(AIRunResponseAudio{}),
 		},
 		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseTextEmbeddings{}),
 		},
@@ -124,6 +128,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
