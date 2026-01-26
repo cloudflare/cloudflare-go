@@ -180,7 +180,6 @@ type InstanceNewResponse struct {
 	InternalID                     string                                  `json:"internal_id,required" format:"uuid"`
 	ModifiedAt                     time.Time                               `json:"modified_at,required" format:"date-time"`
 	Source                         string                                  `json:"source,required"`
-	TokenID                        string                                  `json:"token_id,required" format:"uuid"`
 	Type                           InstanceNewResponseType                 `json:"type,required"`
 	VectorizeName                  string                                  `json:"vectorize_name,required"`
 	AIGatewayID                    string                                  `json:"ai_gateway_id"`
@@ -214,6 +213,7 @@ type InstanceNewResponse struct {
 	SystemPromptAISearch           string                                  `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization string                                  `json:"system_prompt_index_summarization"`
 	SystemPromptRewriteQuery       string                                  `json:"system_prompt_rewrite_query"`
+	TokenID                        string                                  `json:"token_id" format:"uuid"`
 	VectorizeActiveNamespace       string                                  `json:"vectorize_active_namespace"`
 	JSON                           instanceNewResponseJSON                 `json:"-"`
 }
@@ -228,7 +228,6 @@ type instanceNewResponseJSON struct {
 	InternalID                     apijson.Field
 	ModifiedAt                     apijson.Field
 	Source                         apijson.Field
-	TokenID                        apijson.Field
 	Type                           apijson.Field
 	VectorizeName                  apijson.Field
 	AIGatewayID                    apijson.Field
@@ -262,6 +261,7 @@ type instanceNewResponseJSON struct {
 	SystemPromptAISearch           apijson.Field
 	SystemPromptIndexSummarization apijson.Field
 	SystemPromptRewriteQuery       apijson.Field
+	TokenID                        apijson.Field
 	VectorizeActiveNamespace       apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
@@ -349,10 +349,10 @@ func (r InstanceNewResponseCacheThreshold) IsKnown() bool {
 type InstanceNewResponseEmbeddingModel string
 
 const (
+	InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceNewResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceNewResponseEmbeddingModelCfBaaiBgeM3                      InstanceNewResponseEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceNewResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceNewResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceNewResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-large"
@@ -361,7 +361,7 @@ const (
 
 func (r InstanceNewResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
+	case InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -583,11 +583,13 @@ func (r InstanceNewResponseRewriteModel) IsKnown() bool {
 }
 
 type InstanceNewResponseSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems []string `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   []string                                  `json:"include_items"`
 	Prefix         string                                    `json:"prefix"`
 	R2Jurisdiction string                                    `json:"r2_jurisdiction"`
@@ -641,8 +643,11 @@ func (r instanceNewResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 }
 
 type InstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      map[string]string                                         `json:"include_headers"`
-	IncludeImages       bool                                                      `json:"include_images"`
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    []string                                                  `json:"specific_sitemaps" format:"uri"`
 	UseBrowserRendering bool                                                      `json:"use_browser_rendering"`
 	JSON                instanceNewResponseSourceParamsWebCrawlerParseOptionsJSON `json:"-"`
 }
@@ -652,6 +657,7 @@ type InstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
 type instanceNewResponseSourceParamsWebCrawlerParseOptionsJSON struct {
 	IncludeHeaders      apijson.Field
 	IncludeImages       apijson.Field
+	SpecificSitemaps    apijson.Field
 	UseBrowserRendering apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -753,7 +759,6 @@ type InstanceUpdateResponse struct {
 	InternalID                     string                                     `json:"internal_id,required" format:"uuid"`
 	ModifiedAt                     time.Time                                  `json:"modified_at,required" format:"date-time"`
 	Source                         string                                     `json:"source,required"`
-	TokenID                        string                                     `json:"token_id,required" format:"uuid"`
 	Type                           InstanceUpdateResponseType                 `json:"type,required"`
 	VectorizeName                  string                                     `json:"vectorize_name,required"`
 	AIGatewayID                    string                                     `json:"ai_gateway_id"`
@@ -787,6 +792,7 @@ type InstanceUpdateResponse struct {
 	SystemPromptAISearch           string                                     `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization string                                     `json:"system_prompt_index_summarization"`
 	SystemPromptRewriteQuery       string                                     `json:"system_prompt_rewrite_query"`
+	TokenID                        string                                     `json:"token_id" format:"uuid"`
 	VectorizeActiveNamespace       string                                     `json:"vectorize_active_namespace"`
 	JSON                           instanceUpdateResponseJSON                 `json:"-"`
 }
@@ -801,7 +807,6 @@ type instanceUpdateResponseJSON struct {
 	InternalID                     apijson.Field
 	ModifiedAt                     apijson.Field
 	Source                         apijson.Field
-	TokenID                        apijson.Field
 	Type                           apijson.Field
 	VectorizeName                  apijson.Field
 	AIGatewayID                    apijson.Field
@@ -835,6 +840,7 @@ type instanceUpdateResponseJSON struct {
 	SystemPromptAISearch           apijson.Field
 	SystemPromptIndexSummarization apijson.Field
 	SystemPromptRewriteQuery       apijson.Field
+	TokenID                        apijson.Field
 	VectorizeActiveNamespace       apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
@@ -922,10 +928,10 @@ func (r InstanceUpdateResponseCacheThreshold) IsKnown() bool {
 type InstanceUpdateResponseEmbeddingModel string
 
 const (
+	InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceUpdateResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3                      InstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceUpdateResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceUpdateResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-large"
@@ -934,7 +940,7 @@ const (
 
 func (r InstanceUpdateResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
+	case InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -1157,11 +1163,13 @@ func (r InstanceUpdateResponseRewriteModel) IsKnown() bool {
 }
 
 type InstanceUpdateResponseSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems []string `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   []string                                     `json:"include_items"`
 	Prefix         string                                       `json:"prefix"`
 	R2Jurisdiction string                                       `json:"r2_jurisdiction"`
@@ -1215,8 +1223,11 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      map[string]string                                            `json:"include_headers"`
-	IncludeImages       bool                                                         `json:"include_images"`
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    []string                                                     `json:"specific_sitemaps" format:"uri"`
 	UseBrowserRendering bool                                                         `json:"use_browser_rendering"`
 	JSON                instanceUpdateResponseSourceParamsWebCrawlerParseOptionsJSON `json:"-"`
 }
@@ -1227,6 +1238,7 @@ type InstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
 type instanceUpdateResponseSourceParamsWebCrawlerParseOptionsJSON struct {
 	IncludeHeaders      apijson.Field
 	IncludeImages       apijson.Field
+	SpecificSitemaps    apijson.Field
 	UseBrowserRendering apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -1329,7 +1341,6 @@ type InstanceListResponse struct {
 	InternalID                     string                                   `json:"internal_id,required" format:"uuid"`
 	ModifiedAt                     time.Time                                `json:"modified_at,required" format:"date-time"`
 	Source                         string                                   `json:"source,required"`
-	TokenID                        string                                   `json:"token_id,required" format:"uuid"`
 	Type                           InstanceListResponseType                 `json:"type,required"`
 	VectorizeName                  string                                   `json:"vectorize_name,required"`
 	AIGatewayID                    string                                   `json:"ai_gateway_id"`
@@ -1363,6 +1374,7 @@ type InstanceListResponse struct {
 	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization"`
 	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query"`
+	TokenID                        string                                   `json:"token_id" format:"uuid"`
 	VectorizeActiveNamespace       string                                   `json:"vectorize_active_namespace"`
 	JSON                           instanceListResponseJSON                 `json:"-"`
 }
@@ -1377,7 +1389,6 @@ type instanceListResponseJSON struct {
 	InternalID                     apijson.Field
 	ModifiedAt                     apijson.Field
 	Source                         apijson.Field
-	TokenID                        apijson.Field
 	Type                           apijson.Field
 	VectorizeName                  apijson.Field
 	AIGatewayID                    apijson.Field
@@ -1411,6 +1422,7 @@ type instanceListResponseJSON struct {
 	SystemPromptAISearch           apijson.Field
 	SystemPromptIndexSummarization apijson.Field
 	SystemPromptRewriteQuery       apijson.Field
+	TokenID                        apijson.Field
 	VectorizeActiveNamespace       apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
@@ -1498,10 +1510,10 @@ func (r InstanceListResponseCacheThreshold) IsKnown() bool {
 type InstanceListResponseEmbeddingModel string
 
 const (
+	InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceListResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceListResponseEmbeddingModelCfBaaiBgeM3                      InstanceListResponseEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceListResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceListResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceListResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceListResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceListResponseEmbeddingModel = "openai/text-embedding-3-large"
@@ -1510,7 +1522,7 @@ const (
 
 func (r InstanceListResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
+	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -1732,11 +1744,13 @@ func (r InstanceListResponseRewriteModel) IsKnown() bool {
 }
 
 type InstanceListResponseSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems []string `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   []string                                   `json:"include_items"`
 	Prefix         string                                     `json:"prefix"`
 	R2Jurisdiction string                                     `json:"r2_jurisdiction"`
@@ -1790,8 +1804,11 @@ func (r instanceListResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 }
 
 type InstanceListResponseSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      map[string]string                                          `json:"include_headers"`
-	IncludeImages       bool                                                       `json:"include_images"`
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    []string                                                   `json:"specific_sitemaps" format:"uri"`
 	UseBrowserRendering bool                                                       `json:"use_browser_rendering"`
 	JSON                instanceListResponseSourceParamsWebCrawlerParseOptionsJSON `json:"-"`
 }
@@ -1801,6 +1818,7 @@ type InstanceListResponseSourceParamsWebCrawlerParseOptions struct {
 type instanceListResponseSourceParamsWebCrawlerParseOptionsJSON struct {
 	IncludeHeaders      apijson.Field
 	IncludeImages       apijson.Field
+	SpecificSitemaps    apijson.Field
 	UseBrowserRendering apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -1902,7 +1920,6 @@ type InstanceDeleteResponse struct {
 	InternalID                     string                                     `json:"internal_id,required" format:"uuid"`
 	ModifiedAt                     time.Time                                  `json:"modified_at,required" format:"date-time"`
 	Source                         string                                     `json:"source,required"`
-	TokenID                        string                                     `json:"token_id,required" format:"uuid"`
 	Type                           InstanceDeleteResponseType                 `json:"type,required"`
 	VectorizeName                  string                                     `json:"vectorize_name,required"`
 	AIGatewayID                    string                                     `json:"ai_gateway_id"`
@@ -1936,6 +1953,7 @@ type InstanceDeleteResponse struct {
 	SystemPromptAISearch           string                                     `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization string                                     `json:"system_prompt_index_summarization"`
 	SystemPromptRewriteQuery       string                                     `json:"system_prompt_rewrite_query"`
+	TokenID                        string                                     `json:"token_id" format:"uuid"`
 	VectorizeActiveNamespace       string                                     `json:"vectorize_active_namespace"`
 	JSON                           instanceDeleteResponseJSON                 `json:"-"`
 }
@@ -1950,7 +1968,6 @@ type instanceDeleteResponseJSON struct {
 	InternalID                     apijson.Field
 	ModifiedAt                     apijson.Field
 	Source                         apijson.Field
-	TokenID                        apijson.Field
 	Type                           apijson.Field
 	VectorizeName                  apijson.Field
 	AIGatewayID                    apijson.Field
@@ -1984,6 +2001,7 @@ type instanceDeleteResponseJSON struct {
 	SystemPromptAISearch           apijson.Field
 	SystemPromptIndexSummarization apijson.Field
 	SystemPromptRewriteQuery       apijson.Field
+	TokenID                        apijson.Field
 	VectorizeActiveNamespace       apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
@@ -2071,10 +2089,10 @@ func (r InstanceDeleteResponseCacheThreshold) IsKnown() bool {
 type InstanceDeleteResponseEmbeddingModel string
 
 const (
+	InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceDeleteResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3                      InstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceDeleteResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceDeleteResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-large"
@@ -2083,7 +2101,7 @@ const (
 
 func (r InstanceDeleteResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
+	case InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -2306,11 +2324,13 @@ func (r InstanceDeleteResponseRewriteModel) IsKnown() bool {
 }
 
 type InstanceDeleteResponseSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems []string `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   []string                                     `json:"include_items"`
 	Prefix         string                                       `json:"prefix"`
 	R2Jurisdiction string                                       `json:"r2_jurisdiction"`
@@ -2364,8 +2384,11 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      map[string]string                                            `json:"include_headers"`
-	IncludeImages       bool                                                         `json:"include_images"`
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    []string                                                     `json:"specific_sitemaps" format:"uri"`
 	UseBrowserRendering bool                                                         `json:"use_browser_rendering"`
 	JSON                instanceDeleteResponseSourceParamsWebCrawlerParseOptionsJSON `json:"-"`
 }
@@ -2376,6 +2399,7 @@ type InstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
 type instanceDeleteResponseSourceParamsWebCrawlerParseOptionsJSON struct {
 	IncludeHeaders      apijson.Field
 	IncludeImages       apijson.Field
+	SpecificSitemaps    apijson.Field
 	UseBrowserRendering apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -2478,7 +2502,6 @@ type InstanceReadResponse struct {
 	InternalID                     string                                   `json:"internal_id,required" format:"uuid"`
 	ModifiedAt                     time.Time                                `json:"modified_at,required" format:"date-time"`
 	Source                         string                                   `json:"source,required"`
-	TokenID                        string                                   `json:"token_id,required" format:"uuid"`
 	Type                           InstanceReadResponseType                 `json:"type,required"`
 	VectorizeName                  string                                   `json:"vectorize_name,required"`
 	AIGatewayID                    string                                   `json:"ai_gateway_id"`
@@ -2512,6 +2535,7 @@ type InstanceReadResponse struct {
 	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization"`
 	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query"`
+	TokenID                        string                                   `json:"token_id" format:"uuid"`
 	VectorizeActiveNamespace       string                                   `json:"vectorize_active_namespace"`
 	JSON                           instanceReadResponseJSON                 `json:"-"`
 }
@@ -2526,7 +2550,6 @@ type instanceReadResponseJSON struct {
 	InternalID                     apijson.Field
 	ModifiedAt                     apijson.Field
 	Source                         apijson.Field
-	TokenID                        apijson.Field
 	Type                           apijson.Field
 	VectorizeName                  apijson.Field
 	AIGatewayID                    apijson.Field
@@ -2560,6 +2583,7 @@ type instanceReadResponseJSON struct {
 	SystemPromptAISearch           apijson.Field
 	SystemPromptIndexSummarization apijson.Field
 	SystemPromptRewriteQuery       apijson.Field
+	TokenID                        apijson.Field
 	VectorizeActiveNamespace       apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
@@ -2647,10 +2671,10 @@ func (r InstanceReadResponseCacheThreshold) IsKnown() bool {
 type InstanceReadResponseEmbeddingModel string
 
 const (
+	InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceReadResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceReadResponseEmbeddingModelCfBaaiBgeM3                      InstanceReadResponseEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceReadResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceReadResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceReadResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-large"
@@ -2659,7 +2683,7 @@ const (
 
 func (r InstanceReadResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
+	case InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -2881,11 +2905,13 @@ func (r InstanceReadResponseRewriteModel) IsKnown() bool {
 }
 
 type InstanceReadResponseSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems []string `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   []string                                   `json:"include_items"`
 	Prefix         string                                     `json:"prefix"`
 	R2Jurisdiction string                                     `json:"r2_jurisdiction"`
@@ -2939,8 +2965,11 @@ func (r instanceReadResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 }
 
 type InstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      map[string]string                                          `json:"include_headers"`
-	IncludeImages       bool                                                       `json:"include_images"`
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    []string                                                   `json:"specific_sitemaps" format:"uri"`
 	UseBrowserRendering bool                                                       `json:"use_browser_rendering"`
 	JSON                instanceReadResponseSourceParamsWebCrawlerParseOptionsJSON `json:"-"`
 }
@@ -2950,6 +2979,7 @@ type InstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
 type instanceReadResponseSourceParamsWebCrawlerParseOptionsJSON struct {
 	IncludeHeaders      apijson.Field
 	IncludeImages       apijson.Field
+	SpecificSitemaps    apijson.Field
 	UseBrowserRendering apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -3082,7 +3112,6 @@ type InstanceNewParams struct {
 	// Use your AI Search ID.
 	ID                   param.Field[string]                                `json:"id,required"`
 	Source               param.Field[string]                                `json:"source,required"`
-	TokenID              param.Field[string]                                `json:"token_id,required" format:"uuid"`
 	Type                 param.Field[InstanceNewParamsType]                 `json:"type,required"`
 	AIGatewayID          param.Field[string]                                `json:"ai_gateway_id"`
 	AISearchModel        param.Field[InstanceNewParamsAISearchModel]        `json:"ai_search_model"`
@@ -3100,6 +3129,7 @@ type InstanceNewParams struct {
 	RewriteQuery         param.Field[bool]                                  `json:"rewrite_query"`
 	ScoreThreshold       param.Field[float64]                               `json:"score_threshold"`
 	SourceParams         param.Field[InstanceNewParamsSourceParams]         `json:"source_params"`
+	TokenID              param.Field[string]                                `json:"token_id" format:"uuid"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -3163,10 +3193,10 @@ func (r InstanceNewParamsAISearchModel) IsKnown() bool {
 type InstanceNewParamsEmbeddingModel string
 
 const (
+	InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceNewParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceNewParamsEmbeddingModelCfBaaiBgeM3                      InstanceNewParamsEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceNewParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceNewParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceNewParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small        InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large        InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-large"
@@ -3175,7 +3205,7 @@ const (
 
 func (r InstanceNewParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
+	case InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -3310,11 +3340,13 @@ func (r InstanceNewParamsRewriteModel) IsKnown() bool {
 }
 
 type InstanceNewParamsSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   param.Field[[]string]                                `json:"include_items"`
 	Prefix         param.Field[string]                                  `json:"prefix"`
 	R2Jurisdiction param.Field[string]                                  `json:"r2_jurisdiction"`
@@ -3336,9 +3368,12 @@ func (r InstanceNewParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err
 }
 
 type InstanceNewParamsSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      param.Field[map[string]string] `json:"include_headers"`
-	IncludeImages       param.Field[bool]              `json:"include_images"`
-	UseBrowserRendering param.Field[bool]              `json:"use_browser_rendering"`
+	IncludeHeaders param.Field[map[string]string] `json:"include_headers"`
+	IncludeImages  param.Field[bool]              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    param.Field[[]string] `json:"specific_sitemaps" format:"uri"`
+	UseBrowserRendering param.Field[bool]     `json:"use_browser_rendering"`
 }
 
 func (r InstanceNewParamsSourceParamsWebCrawlerParseOptions) MarshalJSON() (data []byte, err error) {
@@ -3485,10 +3520,10 @@ func (r InstanceUpdateParamsCacheThreshold) IsKnown() bool {
 type InstanceUpdateParamsEmbeddingModel string
 
 const (
+	InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceUpdateParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3                      InstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-m3"
 	InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
 	InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceUpdateParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceUpdateParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
 	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small        InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large        InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-large"
@@ -3497,7 +3532,7 @@ const (
 
 func (r InstanceUpdateParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
+	case InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -3632,11 +3667,13 @@ func (r InstanceUpdateParamsRewriteModel) IsKnown() bool {
 }
 
 type InstanceUpdateParamsSourceParams struct {
-	// List of path patterns to exclude. Supports wildcards (e.g., _/admin/_,
-	// /private/\*_, _\private\*)
+	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /admin/** matches
+	// /admin/users and /admin/settings/advanced)
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
-	// List of path patterns to include. Supports wildcards (e.g., _/blog/_.html,
-	// /docs/\*_, _\blog\*.html)
+	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
+	// a path segment, ** matches across path segments (e.g., /blog/** matches
+	// /blog/post and /blog/2024/post)
 	IncludeItems   param.Field[[]string]                                   `json:"include_items"`
 	Prefix         param.Field[string]                                     `json:"prefix"`
 	R2Jurisdiction param.Field[string]                                     `json:"r2_jurisdiction"`
@@ -3658,9 +3695,12 @@ func (r InstanceUpdateParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, 
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawlerParseOptions struct {
-	IncludeHeaders      param.Field[map[string]string] `json:"include_headers"`
-	IncludeImages       param.Field[bool]              `json:"include_images"`
-	UseBrowserRendering param.Field[bool]              `json:"use_browser_rendering"`
+	IncludeHeaders param.Field[map[string]string] `json:"include_headers"`
+	IncludeImages  param.Field[bool]              `json:"include_images"`
+	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
+	// 'sitemap'.
+	SpecificSitemaps    param.Field[[]string] `json:"specific_sitemaps" format:"uri"`
+	UseBrowserRendering param.Field[bool]     `json:"use_browser_rendering"`
 }
 
 func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptions) MarshalJSON() (data []byte, err error) {

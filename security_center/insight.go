@@ -45,7 +45,7 @@ func NewInsightService(opts ...option.RequestOption) (r *InsightService) {
 	return
 }
 
-// Get Security Center Insights
+// Retrieves Security Center Insights
 func (r *InsightService) List(ctx context.Context, params InsightListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[InsightListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -81,12 +81,12 @@ func (r *InsightService) List(ctx context.Context, params InsightListParams, opt
 	return res, nil
 }
 
-// Get Security Center Insights
+// Retrieves Security Center Insights
 func (r *InsightService) ListAutoPaging(ctx context.Context, params InsightListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[InsightListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Archive Security Center Insight
+// Archives Security Center Insight
 func (r *InsightService) Dismiss(ctx context.Context, issueID string, params InsightDismissParams, opts ...option.RequestOption) (res *InsightDismissResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
@@ -117,12 +117,12 @@ func (r *InsightService) Dismiss(ctx context.Context, issueID string, params Ins
 }
 
 type InsightListResponse struct {
-	// Total number of results
+	// Indicates the total number of results.
 	Count  int64                      `json:"count"`
 	Issues []InsightListResponseIssue `json:"issues"`
-	// Current page within paginated list of results
+	// Specifies the current page within paginated list of results.
 	Page int64 `json:"page"`
-	// Number of results per page of results
+	// Sets the number of results per page of results.
 	PerPage int64                   `json:"per_page"`
 	JSON    insightListResponseJSON `json:"-"`
 }
@@ -188,7 +188,7 @@ func (r insightListResponseIssueJSON) RawJSON() string {
 }
 
 type InsightListResponseIssuesPayload struct {
-	// Method used to detect insight
+	// Describes the method used to detect insight.
 	DetectionMethod string                               `json:"detection_method"`
 	ZoneTag         string                               `json:"zone_tag"`
 	JSON            insightListResponseIssuesPayloadJSON `json:"-"`
@@ -374,9 +374,9 @@ type InsightListParams struct {
 	IssueClassNeq param.Field[[]string]          `query:"issue_class~neq"`
 	IssueType     param.Field[[]intel.IssueType] `query:"issue_type"`
 	IssueTypeNeq  param.Field[[]intel.IssueType] `query:"issue_type~neq"`
-	// Current page within paginated list of results
+	// Specifies the current page within paginated list of results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results per page of results
+	// Sets the number of results per page of results.
 	PerPage     param.Field[int64]                      `query:"per_page"`
 	Product     param.Field[[]string]                   `query:"product"`
 	ProductNeq  param.Field[[]string]                   `query:"product~neq"`

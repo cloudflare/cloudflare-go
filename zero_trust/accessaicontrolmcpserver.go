@@ -168,42 +168,44 @@ func (r *AccessAIControlMcpServerService) Sync(ctx context.Context, id string, b
 
 type AccessAIControlMcpServerNewResponse struct {
 	// server id
-	ID          string                                      `json:"id,required"`
-	AuthType    AccessAIControlMcpServerNewResponseAuthType `json:"auth_type,required"`
-	Hostname    string                                      `json:"hostname,required" format:"uri"`
-	Name        string                                      `json:"name,required"`
-	Prompts     []map[string]interface{}                    `json:"prompts,required"`
-	Tools       []map[string]interface{}                    `json:"tools,required"`
-	CreatedAt   time.Time                                   `json:"created_at" format:"date-time"`
-	CreatedBy   string                                      `json:"created_by"`
-	Description string                                      `json:"description,nullable"`
-	Error       string                                      `json:"error"`
-	LastSynced  time.Time                                   `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                   `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                      `json:"modified_by"`
-	Status      string                                      `json:"status"`
-	JSON        accessAIControlMcpServerNewResponseJSON     `json:"-"`
+	ID                 string                                      `json:"id,required"`
+	AuthType           AccessAIControlMcpServerNewResponseAuthType `json:"auth_type,required"`
+	Hostname           string                                      `json:"hostname,required" format:"uri"`
+	Name               string                                      `json:"name,required"`
+	Prompts            []map[string]interface{}                    `json:"prompts,required"`
+	Tools              []map[string]interface{}                    `json:"tools,required"`
+	CreatedAt          time.Time                                   `json:"created_at" format:"date-time"`
+	CreatedBy          string                                      `json:"created_by"`
+	Description        string                                      `json:"description,nullable"`
+	Error              string                                      `json:"error"`
+	LastSuccessfulSync time.Time                                   `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                   `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                   `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                      `json:"modified_by"`
+	Status             string                                      `json:"status"`
+	JSON               accessAIControlMcpServerNewResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerNewResponseJSON contains the JSON metadata for the
 // struct [AccessAIControlMcpServerNewResponse]
 type accessAIControlMcpServerNewResponseJSON struct {
-	ID          apijson.Field
-	AuthType    apijson.Field
-	Hostname    apijson.Field
-	Name        apijson.Field
-	Prompts     apijson.Field
-	Tools       apijson.Field
-	CreatedAt   apijson.Field
-	CreatedBy   apijson.Field
-	Description apijson.Field
-	Error       apijson.Field
-	LastSynced  apijson.Field
-	ModifiedAt  apijson.Field
-	ModifiedBy  apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	AuthType           apijson.Field
+	Hostname           apijson.Field
+	Name               apijson.Field
+	Prompts            apijson.Field
+	Tools              apijson.Field
+	CreatedAt          apijson.Field
+	CreatedBy          apijson.Field
+	Description        apijson.Field
+	Error              apijson.Field
+	LastSuccessfulSync apijson.Field
+	LastSynced         apijson.Field
+	ModifiedAt         apijson.Field
+	ModifiedBy         apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpServerNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -232,42 +234,44 @@ func (r AccessAIControlMcpServerNewResponseAuthType) IsKnown() bool {
 
 type AccessAIControlMcpServerUpdateResponse struct {
 	// server id
-	ID          string                                         `json:"id,required"`
-	AuthType    AccessAIControlMcpServerUpdateResponseAuthType `json:"auth_type,required"`
-	Hostname    string                                         `json:"hostname,required" format:"uri"`
-	Name        string                                         `json:"name,required"`
-	Prompts     []map[string]interface{}                       `json:"prompts,required"`
-	Tools       []map[string]interface{}                       `json:"tools,required"`
-	CreatedAt   time.Time                                      `json:"created_at" format:"date-time"`
-	CreatedBy   string                                         `json:"created_by"`
-	Description string                                         `json:"description,nullable"`
-	Error       string                                         `json:"error"`
-	LastSynced  time.Time                                      `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                      `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                         `json:"modified_by"`
-	Status      string                                         `json:"status"`
-	JSON        accessAIControlMcpServerUpdateResponseJSON     `json:"-"`
+	ID                 string                                         `json:"id,required"`
+	AuthType           AccessAIControlMcpServerUpdateResponseAuthType `json:"auth_type,required"`
+	Hostname           string                                         `json:"hostname,required" format:"uri"`
+	Name               string                                         `json:"name,required"`
+	Prompts            []map[string]interface{}                       `json:"prompts,required"`
+	Tools              []map[string]interface{}                       `json:"tools,required"`
+	CreatedAt          time.Time                                      `json:"created_at" format:"date-time"`
+	CreatedBy          string                                         `json:"created_by"`
+	Description        string                                         `json:"description,nullable"`
+	Error              string                                         `json:"error"`
+	LastSuccessfulSync time.Time                                      `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                      `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                      `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                         `json:"modified_by"`
+	Status             string                                         `json:"status"`
+	JSON               accessAIControlMcpServerUpdateResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerUpdateResponseJSON contains the JSON metadata for the
 // struct [AccessAIControlMcpServerUpdateResponse]
 type accessAIControlMcpServerUpdateResponseJSON struct {
-	ID          apijson.Field
-	AuthType    apijson.Field
-	Hostname    apijson.Field
-	Name        apijson.Field
-	Prompts     apijson.Field
-	Tools       apijson.Field
-	CreatedAt   apijson.Field
-	CreatedBy   apijson.Field
-	Description apijson.Field
-	Error       apijson.Field
-	LastSynced  apijson.Field
-	ModifiedAt  apijson.Field
-	ModifiedBy  apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	AuthType           apijson.Field
+	Hostname           apijson.Field
+	Name               apijson.Field
+	Prompts            apijson.Field
+	Tools              apijson.Field
+	CreatedAt          apijson.Field
+	CreatedBy          apijson.Field
+	Description        apijson.Field
+	Error              apijson.Field
+	LastSuccessfulSync apijson.Field
+	LastSynced         apijson.Field
+	ModifiedAt         apijson.Field
+	ModifiedBy         apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpServerUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -296,42 +300,44 @@ func (r AccessAIControlMcpServerUpdateResponseAuthType) IsKnown() bool {
 
 type AccessAIControlMcpServerListResponse struct {
 	// server id
-	ID          string                                       `json:"id,required"`
-	AuthType    AccessAIControlMcpServerListResponseAuthType `json:"auth_type,required"`
-	Hostname    string                                       `json:"hostname,required" format:"uri"`
-	Name        string                                       `json:"name,required"`
-	Prompts     []map[string]interface{}                     `json:"prompts,required"`
-	Tools       []map[string]interface{}                     `json:"tools,required"`
-	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
-	CreatedBy   string                                       `json:"created_by"`
-	Description string                                       `json:"description,nullable"`
-	Error       string                                       `json:"error"`
-	LastSynced  time.Time                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                       `json:"modified_by"`
-	Status      string                                       `json:"status"`
-	JSON        accessAIControlMcpServerListResponseJSON     `json:"-"`
+	ID                 string                                       `json:"id,required"`
+	AuthType           AccessAIControlMcpServerListResponseAuthType `json:"auth_type,required"`
+	Hostname           string                                       `json:"hostname,required" format:"uri"`
+	Name               string                                       `json:"name,required"`
+	Prompts            []map[string]interface{}                     `json:"prompts,required"`
+	Tools              []map[string]interface{}                     `json:"tools,required"`
+	CreatedAt          time.Time                                    `json:"created_at" format:"date-time"`
+	CreatedBy          string                                       `json:"created_by"`
+	Description        string                                       `json:"description,nullable"`
+	Error              string                                       `json:"error"`
+	LastSuccessfulSync time.Time                                    `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                    `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                    `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                       `json:"modified_by"`
+	Status             string                                       `json:"status"`
+	JSON               accessAIControlMcpServerListResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerListResponseJSON contains the JSON metadata for the
 // struct [AccessAIControlMcpServerListResponse]
 type accessAIControlMcpServerListResponseJSON struct {
-	ID          apijson.Field
-	AuthType    apijson.Field
-	Hostname    apijson.Field
-	Name        apijson.Field
-	Prompts     apijson.Field
-	Tools       apijson.Field
-	CreatedAt   apijson.Field
-	CreatedBy   apijson.Field
-	Description apijson.Field
-	Error       apijson.Field
-	LastSynced  apijson.Field
-	ModifiedAt  apijson.Field
-	ModifiedBy  apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	AuthType           apijson.Field
+	Hostname           apijson.Field
+	Name               apijson.Field
+	Prompts            apijson.Field
+	Tools              apijson.Field
+	CreatedAt          apijson.Field
+	CreatedBy          apijson.Field
+	Description        apijson.Field
+	Error              apijson.Field
+	LastSuccessfulSync apijson.Field
+	LastSynced         apijson.Field
+	ModifiedAt         apijson.Field
+	ModifiedBy         apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpServerListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -360,42 +366,44 @@ func (r AccessAIControlMcpServerListResponseAuthType) IsKnown() bool {
 
 type AccessAIControlMcpServerDeleteResponse struct {
 	// server id
-	ID          string                                         `json:"id,required"`
-	AuthType    AccessAIControlMcpServerDeleteResponseAuthType `json:"auth_type,required"`
-	Hostname    string                                         `json:"hostname,required" format:"uri"`
-	Name        string                                         `json:"name,required"`
-	Prompts     []map[string]interface{}                       `json:"prompts,required"`
-	Tools       []map[string]interface{}                       `json:"tools,required"`
-	CreatedAt   time.Time                                      `json:"created_at" format:"date-time"`
-	CreatedBy   string                                         `json:"created_by"`
-	Description string                                         `json:"description,nullable"`
-	Error       string                                         `json:"error"`
-	LastSynced  time.Time                                      `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                      `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                         `json:"modified_by"`
-	Status      string                                         `json:"status"`
-	JSON        accessAIControlMcpServerDeleteResponseJSON     `json:"-"`
+	ID                 string                                         `json:"id,required"`
+	AuthType           AccessAIControlMcpServerDeleteResponseAuthType `json:"auth_type,required"`
+	Hostname           string                                         `json:"hostname,required" format:"uri"`
+	Name               string                                         `json:"name,required"`
+	Prompts            []map[string]interface{}                       `json:"prompts,required"`
+	Tools              []map[string]interface{}                       `json:"tools,required"`
+	CreatedAt          time.Time                                      `json:"created_at" format:"date-time"`
+	CreatedBy          string                                         `json:"created_by"`
+	Description        string                                         `json:"description,nullable"`
+	Error              string                                         `json:"error"`
+	LastSuccessfulSync time.Time                                      `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                      `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                      `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                         `json:"modified_by"`
+	Status             string                                         `json:"status"`
+	JSON               accessAIControlMcpServerDeleteResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerDeleteResponseJSON contains the JSON metadata for the
 // struct [AccessAIControlMcpServerDeleteResponse]
 type accessAIControlMcpServerDeleteResponseJSON struct {
-	ID          apijson.Field
-	AuthType    apijson.Field
-	Hostname    apijson.Field
-	Name        apijson.Field
-	Prompts     apijson.Field
-	Tools       apijson.Field
-	CreatedAt   apijson.Field
-	CreatedBy   apijson.Field
-	Description apijson.Field
-	Error       apijson.Field
-	LastSynced  apijson.Field
-	ModifiedAt  apijson.Field
-	ModifiedBy  apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	AuthType           apijson.Field
+	Hostname           apijson.Field
+	Name               apijson.Field
+	Prompts            apijson.Field
+	Tools              apijson.Field
+	CreatedAt          apijson.Field
+	CreatedBy          apijson.Field
+	Description        apijson.Field
+	Error              apijson.Field
+	LastSuccessfulSync apijson.Field
+	LastSynced         apijson.Field
+	ModifiedAt         apijson.Field
+	ModifiedBy         apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpServerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
@@ -424,42 +432,44 @@ func (r AccessAIControlMcpServerDeleteResponseAuthType) IsKnown() bool {
 
 type AccessAIControlMcpServerReadResponse struct {
 	// server id
-	ID          string                                       `json:"id,required"`
-	AuthType    AccessAIControlMcpServerReadResponseAuthType `json:"auth_type,required"`
-	Hostname    string                                       `json:"hostname,required" format:"uri"`
-	Name        string                                       `json:"name,required"`
-	Prompts     []map[string]interface{}                     `json:"prompts,required"`
-	Tools       []map[string]interface{}                     `json:"tools,required"`
-	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
-	CreatedBy   string                                       `json:"created_by"`
-	Description string                                       `json:"description,nullable"`
-	Error       string                                       `json:"error"`
-	LastSynced  time.Time                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt  time.Time                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                       `json:"modified_by"`
-	Status      string                                       `json:"status"`
-	JSON        accessAIControlMcpServerReadResponseJSON     `json:"-"`
+	ID                 string                                       `json:"id,required"`
+	AuthType           AccessAIControlMcpServerReadResponseAuthType `json:"auth_type,required"`
+	Hostname           string                                       `json:"hostname,required" format:"uri"`
+	Name               string                                       `json:"name,required"`
+	Prompts            []map[string]interface{}                     `json:"prompts,required"`
+	Tools              []map[string]interface{}                     `json:"tools,required"`
+	CreatedAt          time.Time                                    `json:"created_at" format:"date-time"`
+	CreatedBy          string                                       `json:"created_by"`
+	Description        string                                       `json:"description,nullable"`
+	Error              string                                       `json:"error"`
+	LastSuccessfulSync time.Time                                    `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                    `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                    `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                       `json:"modified_by"`
+	Status             string                                       `json:"status"`
+	JSON               accessAIControlMcpServerReadResponseJSON     `json:"-"`
 }
 
 // accessAIControlMcpServerReadResponseJSON contains the JSON metadata for the
 // struct [AccessAIControlMcpServerReadResponse]
 type accessAIControlMcpServerReadResponseJSON struct {
-	ID          apijson.Field
-	AuthType    apijson.Field
-	Hostname    apijson.Field
-	Name        apijson.Field
-	Prompts     apijson.Field
-	Tools       apijson.Field
-	CreatedAt   apijson.Field
-	CreatedBy   apijson.Field
-	Description apijson.Field
-	Error       apijson.Field
-	LastSynced  apijson.Field
-	ModifiedAt  apijson.Field
-	ModifiedBy  apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	AuthType           apijson.Field
+	Hostname           apijson.Field
+	Name               apijson.Field
+	Prompts            apijson.Field
+	Tools              apijson.Field
+	CreatedAt          apijson.Field
+	CreatedBy          apijson.Field
+	Description        apijson.Field
+	Error              apijson.Field
+	LastSuccessfulSync apijson.Field
+	LastSynced         apijson.Field
+	ModifiedAt         apijson.Field
+	ModifiedBy         apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpServerReadResponse) UnmarshalJSON(data []byte) (err error) {

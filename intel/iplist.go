@@ -3,17 +3,7 @@
 package intel
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"slices"
-
-	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v6/internal/param"
-	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // IPListService contains methods and other services that help with interacting
@@ -33,60 +23,4 @@ func NewIPListService(opts ...option.RequestOption) (r *IPListService) {
 	r = &IPListService{}
 	r.Options = opts
 	return
-}
-
-// Get IP Lists.
-func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[IPList], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/intel/ip-list", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Get IP Lists.
-func (r *IPListService) GetAutoPaging(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IPList] {
-	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
-}
-
-type IPList struct {
-	ID          int64      `json:"id"`
-	Description string     `json:"description"`
-	Name        string     `json:"name"`
-	JSON        ipListJSON `json:"-"`
-}
-
-// ipListJSON contains the JSON metadata for the struct [IPList]
-type ipListJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPListGetParams struct {
-	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -32,14 +32,13 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		AccountID:           cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		ID:                  cloudflare.F("my-ai-search"),
 		Source:              cloudflare.F("source"),
-		TokenID:             cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		Type:                cloudflare.F(ai_search.InstanceNewParamsTypeR2),
 		AIGatewayID:         cloudflare.F("ai_gateway_id"),
 		AISearchModel:       cloudflare.F(ai_search.InstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast),
 		Chunk:               cloudflare.F(true),
 		ChunkOverlap:        cloudflare.F(int64(0)),
 		ChunkSize:           cloudflare.F(int64(64)),
-		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfBaaiBgeM3),
+		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
 		HybridSearchEnabled: cloudflare.F(true),
 		MaxNumResults:       cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
@@ -70,8 +69,8 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		RewriteQuery:   cloudflare.F(true),
 		ScoreThreshold: cloudflare.F(0.000000),
 		SourceParams: cloudflare.F(ai_search.InstanceNewParamsSourceParams{
-			ExcludeItems:   cloudflare.F([]string{"/admin/*", "/private/**", "*\\temp\\*"}),
-			IncludeItems:   cloudflare.F([]string{"/blog/*", "/docs/**/*.html", "*\\blog\\*.html"}),
+			ExcludeItems:   cloudflare.F([]string{"/admin/**", "/private/**", "**\\temp\\**"}),
+			IncludeItems:   cloudflare.F([]string{"/blog/**", "/docs/**/*.html", "**\\blog\\**.html"}),
 			Prefix:         cloudflare.F("prefix"),
 			R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
 			WebCrawler: cloudflare.F(ai_search.InstanceNewParamsSourceParamsWebCrawler{
@@ -80,6 +79,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 						"foo": "string",
 					}),
 					IncludeImages:       cloudflare.F(true),
+					SpecificSitemaps:    cloudflare.F([]string{"https://example.com/sitemap.xml", "https://example.com/blog-sitemap.xml"}),
 					UseBrowserRendering: cloudflare.F(true),
 				}),
 				ParseType: cloudflare.F(ai_search.InstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap),
@@ -90,6 +90,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 				}),
 			}),
 		}),
+		TokenID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -125,7 +126,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			Chunk:               cloudflare.F(true),
 			ChunkOverlap:        cloudflare.F(int64(0)),
 			ChunkSize:           cloudflare.F(int64(64)),
-			EmbeddingModel:      cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3),
+			EmbeddingModel:      cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
 			HybridSearchEnabled: cloudflare.F(true),
 			MaxNumResults:       cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
@@ -157,8 +158,8 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			RewriteQuery:   cloudflare.F(true),
 			ScoreThreshold: cloudflare.F(0.000000),
 			SourceParams: cloudflare.F(ai_search.InstanceUpdateParamsSourceParams{
-				ExcludeItems:   cloudflare.F([]string{"/admin/*", "/private/**", "*\\temp\\*"}),
-				IncludeItems:   cloudflare.F([]string{"/blog/*", "/docs/**/*.html", "*\\blog\\*.html"}),
+				ExcludeItems:   cloudflare.F([]string{"/admin/**", "/private/**", "**\\temp\\**"}),
+				IncludeItems:   cloudflare.F([]string{"/blog/**", "/docs/**/*.html", "**\\blog\\**.html"}),
 				Prefix:         cloudflare.F("prefix"),
 				R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
 				WebCrawler: cloudflare.F(ai_search.InstanceUpdateParamsSourceParamsWebCrawler{
@@ -167,6 +168,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 							"foo": "string",
 						}),
 						IncludeImages:       cloudflare.F(true),
+						SpecificSitemaps:    cloudflare.F([]string{"https://example.com/sitemap.xml", "https://example.com/blog-sitemap.xml"}),
 						UseBrowserRendering: cloudflare.F(true),
 					}),
 					ParseType: cloudflare.F(ai_search.InstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap),

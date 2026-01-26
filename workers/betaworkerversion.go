@@ -185,7 +185,9 @@ type Version struct {
 	// `_headers` and `_redirects` files should be included as modules named `_headers`
 	// and `_redirects` with content type `text/plain`.
 	Modules []VersionModule `json:"modules"`
-	// Placement settings for the version.
+	// Configuration for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 	Placement VersionPlacement `json:"placement"`
 	// The client used to create the version.
 	Source string `json:"source"`
@@ -2386,39 +2388,261 @@ func (r versionModuleJSON) RawJSON() string {
 	return r.raw
 }
 
-// Placement settings for the version.
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 type VersionPlacement struct {
-	// Placement mode for the version.
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode VersionPlacementMode `json:"mode"`
-	JSON versionPlacementJSON `json:"-"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string `json:"region"`
+	// This field can have the runtime type of [[]VersionPlacementObjectTarget].
+	Target interface{}          `json:"target"`
+	JSON   versionPlacementJSON `json:"-"`
+	union  VersionPlacementUnion
 }
 
 // versionPlacementJSON contains the JSON metadata for the struct
 // [VersionPlacement]
 type versionPlacementJSON struct {
+	Host        apijson.Field
+	Hostname    apijson.Field
 	Mode        apijson.Field
+	Region      apijson.Field
+	Target      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionPlacement) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r versionPlacementJSON) RawJSON() string {
 	return r.raw
 }
 
-// Placement mode for the version.
-type VersionPlacementMode string
+func (r *VersionPlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionPlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [VersionPlacementUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [VersionPlacementMode],
+// [VersionPlacementRegion], [VersionPlacementHostname], [VersionPlacementHost],
+// [VersionPlacementObject], [VersionPlacementObject], [VersionPlacementObject],
+// [VersionPlacementObject].
+func (r VersionPlacement) AsUnion() VersionPlacementUnion {
+	return r.union
+}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
+//
+// Union satisfied by [VersionPlacementMode], [VersionPlacementRegion],
+// [VersionPlacementHostname], [VersionPlacementHost], [VersionPlacementObject],
+// [VersionPlacementObject], [VersionPlacementObject] or [VersionPlacementObject].
+type VersionPlacementUnion interface {
+	implementsVersionPlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionPlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementRegion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementHostname{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementHost{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionPlacementObject{}),
+		},
+	)
+}
+
+type VersionPlacementMode struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode VersionPlacementModeMode `json:"mode,required"`
+	JSON versionPlacementModeJSON `json:"-"`
+}
+
+// versionPlacementModeJSON contains the JSON metadata for the struct
+// [VersionPlacementMode]
+type versionPlacementModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionPlacementMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionPlacementModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionPlacementMode) implementsVersionPlacement() {}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type VersionPlacementModeMode string
 
 const (
-	VersionPlacementModeSmart VersionPlacementMode = "smart"
+	VersionPlacementModeModeSmart VersionPlacementModeMode = "smart"
 )
 
-func (r VersionPlacementMode) IsKnown() bool {
+func (r VersionPlacementModeMode) IsKnown() bool {
 	switch r {
-	case VersionPlacementModeSmart:
+	case VersionPlacementModeModeSmart:
+		return true
+	}
+	return false
+}
+
+type VersionPlacementRegion struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                     `json:"region,required"`
+	JSON   versionPlacementRegionJSON `json:"-"`
+}
+
+// versionPlacementRegionJSON contains the JSON metadata for the struct
+// [VersionPlacementRegion]
+type versionPlacementRegionJSON struct {
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionPlacementRegion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionPlacementRegionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionPlacementRegion) implementsVersionPlacement() {}
+
+type VersionPlacementHostname struct {
+	// HTTP hostname for targeted placement.
+	Hostname string                       `json:"hostname,required"`
+	JSON     versionPlacementHostnameJSON `json:"-"`
+}
+
+// versionPlacementHostnameJSON contains the JSON metadata for the struct
+// [VersionPlacementHostname]
+type versionPlacementHostnameJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionPlacementHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionPlacementHostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionPlacementHostname) implementsVersionPlacement() {}
+
+type VersionPlacementHost struct {
+	// TCP host and port for targeted placement.
+	Host string                   `json:"host,required"`
+	JSON versionPlacementHostJSON `json:"-"`
+}
+
+// versionPlacementHostJSON contains the JSON metadata for the struct
+// [VersionPlacementHost]
+type versionPlacementHostJSON struct {
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionPlacementHost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionPlacementHostJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionPlacementHost) implementsVersionPlacement() {}
+
+type VersionPlacementObject struct {
+	// Targeted placement mode.
+	Mode VersionPlacementObjectMode `json:"mode,required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                     `json:"region,required"`
+	JSON   versionPlacementObjectJSON `json:"-"`
+}
+
+// versionPlacementObjectJSON contains the JSON metadata for the struct
+// [VersionPlacementObject]
+type versionPlacementObjectJSON struct {
+	Mode        apijson.Field
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionPlacementObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionPlacementObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionPlacementObject) implementsVersionPlacement() {}
+
+// Targeted placement mode.
+type VersionPlacementObjectMode string
+
+const (
+	VersionPlacementObjectModeTargeted VersionPlacementObjectMode = "targeted"
+)
+
+func (r VersionPlacementObjectMode) IsKnown() bool {
+	switch r {
+	case VersionPlacementObjectModeTargeted:
 		return true
 	}
 	return false
@@ -2482,8 +2706,10 @@ type VersionParam struct {
 	// `_headers` and `_redirects` files should be included as modules named `_headers`
 	// and `_redirects` with content type `text/plain`.
 	Modules param.Field[[]VersionModuleParam] `json:"modules"`
-	// Placement settings for the version.
-	Placement param.Field[VersionPlacementParam] `json:"placement"`
+	// Configuration for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
+	Placement param.Field[VersionPlacementUnionParam] `json:"placement"`
 	// Usage model for the version.
 	//
 	// Deprecated: deprecated
@@ -3240,15 +3466,98 @@ func (r VersionModuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Placement settings for the version.
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 type VersionPlacementParam struct {
-	// Placement mode for the version.
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode param.Field[VersionPlacementMode] `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string]      `json:"region"`
+	Target param.Field[interface{}] `json:"target"`
 }
 
 func (r VersionPlacementParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r VersionPlacementParam) implementsVersionPlacementUnionParam() {}
+
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
+//
+// Satisfied by [workers.VersionPlacementModeParam],
+// [workers.VersionPlacementRegionParam], [workers.VersionPlacementHostnameParam],
+// [workers.VersionPlacementHostParam], [workers.VersionPlacementObjectParam],
+// [workers.VersionPlacementObjectParam], [workers.VersionPlacementObjectParam],
+// [workers.VersionPlacementObjectParam], [VersionPlacementParam].
+type VersionPlacementUnionParam interface {
+	implementsVersionPlacementUnionParam()
+}
+
+type VersionPlacementModeParam struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode param.Field[VersionPlacementModeMode] `json:"mode,required"`
+}
+
+func (r VersionPlacementModeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionPlacementModeParam) implementsVersionPlacementUnionParam() {}
+
+type VersionPlacementRegionParam struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region,required"`
+}
+
+func (r VersionPlacementRegionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionPlacementRegionParam) implementsVersionPlacementUnionParam() {}
+
+type VersionPlacementHostnameParam struct {
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname,required"`
+}
+
+func (r VersionPlacementHostnameParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionPlacementHostnameParam) implementsVersionPlacementUnionParam() {}
+
+type VersionPlacementHostParam struct {
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host,required"`
+}
+
+func (r VersionPlacementHostParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionPlacementHostParam) implementsVersionPlacementUnionParam() {}
+
+type VersionPlacementObjectParam struct {
+	// Targeted placement mode.
+	Mode param.Field[VersionPlacementObjectMode] `json:"mode,required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region,required"`
+}
+
+func (r VersionPlacementObjectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionPlacementObjectParam) implementsVersionPlacementUnionParam() {}
 
 type BetaWorkerVersionDeleteResponse struct {
 	Errors   []BetaWorkerVersionDeleteResponseError   `json:"errors,required"`

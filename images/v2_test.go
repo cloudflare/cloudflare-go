@@ -31,8 +31,11 @@ func TestV2ListWithOptionalParams(t *testing.T) {
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ContinuationToken: cloudflare.F("continuation_token"),
 		Creator:           cloudflare.F("creator"),
-		PerPage:           cloudflare.F(10.000000),
-		SortOrder:         cloudflare.F(images.V2ListParamsSortOrderAsc),
+		Meta: cloudflare.F(images.V2ListParamsMeta{
+			FieldOperator: cloudflare.F("<field>[<operator>]"),
+		}),
+		PerPage:   cloudflare.F(10.000000),
+		SortOrder: cloudflare.F(images.V2ListParamsSortOrderAsc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
