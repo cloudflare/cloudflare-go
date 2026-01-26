@@ -89,6 +89,7 @@ func (UnionString) ImplementsAccessApplicationNewParamsBodyBrowserIsolationPermi
 }
 func (UnionString) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
+func (UnionString) ImplementsAccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion()       {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodyBrowserRdpApplicationPolicyUnion()     {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion()  {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion()        {}
@@ -101,6 +102,7 @@ func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPe
 }
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
+func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion()   {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationPolicyUnion() {}
 func (UnionString) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion()                   {}
 func (UnionString) ImplementsDLPEmailRuleNewResponseConditionsValueUnion()                       {}
