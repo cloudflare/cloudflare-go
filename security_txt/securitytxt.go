@@ -35,7 +35,7 @@ func NewSecurityTXTService(opts ...option.RequestOption) (r *SecurityTXTService)
 	return
 }
 
-// Update security.txt
+// Updates security.txt
 func (r *SecurityTXTService) Update(ctx context.Context, params SecurityTXTUpdateParams, opts ...option.RequestOption) (res *SecurityTXTUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -47,7 +47,7 @@ func (r *SecurityTXTService) Update(ctx context.Context, params SecurityTXTUpdat
 	return
 }
 
-// Delete security.txt
+// Deletes security.txt
 func (r *SecurityTXTService) Delete(ctx context.Context, body SecurityTXTDeleteParams, opts ...option.RequestOption) (res *SecurityTXTDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -59,7 +59,7 @@ func (r *SecurityTXTService) Delete(ctx context.Context, body SecurityTXTDeleteP
 	return
 }
 
-// Get security.txt
+// Retrieves security.txt
 func (r *SecurityTXTService) Get(ctx context.Context, query SecurityTXTGetParams, opts ...option.RequestOption) (res *SecurityTXTGetResponse, err error) {
 	var env SecurityTXTGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -146,6 +146,8 @@ func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()  
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                 {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                    {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
+func (UnionString) ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()             {}
+func (UnionString) ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()                  {}
 func (UnionString) ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()             {}
 func (UnionString) ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()           {}
 func (UnionString) ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()        {}
@@ -305,6 +307,8 @@ func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()   
 func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                     {}
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                        {}
+func (UnionFloat) ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()                 {}
+func (UnionFloat) ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()                      {}
 func (UnionFloat) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                              {}
 func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                           {}
 func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                     {}

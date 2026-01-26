@@ -37,7 +37,7 @@ func NewInsightSeverityService(opts ...option.RequestOption) (r *InsightSeverity
 	return
 }
 
-// Get Security Center Insight Counts by Severity
+// Retrieves Security Center Insight Counts by Severity
 func (r *InsightSeverityService) Get(ctx context.Context, params InsightSeverityGetParams, opts ...option.RequestOption) (res *[]InsightSeverityGetResponse, err error) {
 	var env InsightSeverityGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

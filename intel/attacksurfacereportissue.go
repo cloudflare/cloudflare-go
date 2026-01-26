@@ -38,7 +38,7 @@ func NewAttackSurfaceReportIssueService(opts ...option.RequestOption) (r *Attack
 	return
 }
 
-// Get Security Center Issues
+// Retrieves Security Center Issues
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AttackSurfaceReportIssueListResponse], err error) {
@@ -62,14 +62,14 @@ func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params Attac
 	return res, nil
 }
 
-// Get Security Center Issues
+// Retrieves Security Center Issues
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[AttackSurfaceReportIssueListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Get Security Center Issue Counts by Class
+// Retrieves Security Center Issue Counts by Class
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
@@ -88,7 +88,7 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 	return
 }
 
-// Archive Security Center Insight
+// Archives Security Center Insight
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponse, err error) {
@@ -106,7 +106,7 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 	return
 }
 
-// Get Security Center Issue Counts by Severity
+// Retrieves Security Center Issue Counts by Severity
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
@@ -125,7 +125,7 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 	return
 }
 
-// Get Security Center Issue Counts by Type
+// Retrieves Security Center Issue Counts by Type
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
@@ -180,12 +180,12 @@ func (r SeverityQueryParam) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueListResponse struct {
-	// Total number of results
+	// Indicates the total number of results.
 	Count  int64                                       `json:"count"`
 	Issues []AttackSurfaceReportIssueListResponseIssue `json:"issues"`
-	// Current page within paginated list of results
+	// Specifies the current page within paginated list of results.
 	Page int64 `json:"page"`
-	// Number of results per page of results
+	// Sets the number of results per page of results.
 	PerPage int64                                    `json:"per_page"`
 	JSON    attackSurfaceReportIssueListResponseJSON `json:"-"`
 }
@@ -251,7 +251,7 @@ func (r attackSurfaceReportIssueListResponseIssueJSON) RawJSON() string {
 }
 
 type AttackSurfaceReportIssueListResponseIssuesPayload struct {
-	// Method used to detect insight
+	// Describes the method used to detect insight.
 	DetectionMethod string                                                `json:"detection_method"`
 	ZoneTag         string                                                `json:"zone_tag"`
 	JSON            attackSurfaceReportIssueListResponseIssuesPayloadJSON `json:"-"`
@@ -504,9 +504,9 @@ type AttackSurfaceReportIssueListParams struct {
 	IssueClassNeq param.Field[[]string]    `query:"issue_class~neq"`
 	IssueType     param.Field[[]IssueType] `query:"issue_type"`
 	IssueTypeNeq  param.Field[[]IssueType] `query:"issue_type~neq"`
-	// Current page within paginated list of results
+	// Specifies the current page within paginated list of results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results per page of results
+	// Sets the number of results per page of results.
 	PerPage     param.Field[int64]                `query:"per_page"`
 	Product     param.Field[[]string]             `query:"product"`
 	ProductNeq  param.Field[[]string]             `query:"product~neq"`

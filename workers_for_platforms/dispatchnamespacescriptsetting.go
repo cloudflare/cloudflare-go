@@ -110,8 +110,7 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	Observability DispatchNamespaceScriptSettingEditResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	// Specify either mode for Smart Placement, or one of region/hostname/host for
-	// targeted placement.
+	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 	Placement DispatchNamespaceScriptSettingEditResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
 	Tags []string `json:"tags,nullable"`
@@ -2247,8 +2246,7 @@ func (r dispatchNamespaceScriptSettingEditResponseObservabilityLogsJSON) RawJSON
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Specify either mode for Smart Placement, or one of region/hostname/host for
-// targeted placement.
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 type DispatchNamespaceScriptSettingEditResponsePlacement struct {
 	// TCP host and port for targeted placement.
 	Host string `json:"host"`
@@ -2258,7 +2256,10 @@ type DispatchNamespaceScriptSettingEditResponsePlacement struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode DispatchNamespaceScriptSettingEditResponsePlacementMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                                                  `json:"region"`
+	Region string `json:"region"`
+	// This field can have the runtime type of
+	// [[]DispatchNamespaceScriptSettingEditResponsePlacementObjectTarget].
+	Target interface{}                                             `json:"target"`
 	JSON   dispatchNamespaceScriptSettingEditResponsePlacementJSON `json:"-"`
 	union  DispatchNamespaceScriptSettingEditResponsePlacementUnion
 }
@@ -2270,6 +2271,7 @@ type dispatchNamespaceScriptSettingEditResponsePlacementJSON struct {
 	Hostname    apijson.Field
 	Mode        apijson.Field
 	Region      apijson.Field
+	Target      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2294,20 +2296,27 @@ func (r *DispatchNamespaceScriptSettingEditResponsePlacement) UnmarshalJSON(data
 // [DispatchNamespaceScriptSettingEditResponsePlacementMode],
 // [DispatchNamespaceScriptSettingEditResponsePlacementRegion],
 // [DispatchNamespaceScriptSettingEditResponsePlacementHostname],
-// [DispatchNamespaceScriptSettingEditResponsePlacementHost].
+// [DispatchNamespaceScriptSettingEditResponsePlacementHost],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject].
 func (r DispatchNamespaceScriptSettingEditResponsePlacement) AsUnion() DispatchNamespaceScriptSettingEditResponsePlacementUnion {
 	return r.union
 }
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Specify either mode for Smart Placement, or one of region/hostname/host for
-// targeted placement.
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 //
 // Union satisfied by [DispatchNamespaceScriptSettingEditResponsePlacementMode],
 // [DispatchNamespaceScriptSettingEditResponsePlacementRegion],
-// [DispatchNamespaceScriptSettingEditResponsePlacementHostname] or
-// [DispatchNamespaceScriptSettingEditResponsePlacementHost].
+// [DispatchNamespaceScriptSettingEditResponsePlacementHostname],
+// [DispatchNamespaceScriptSettingEditResponsePlacementHost],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject],
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject] or
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject].
 type DispatchNamespaceScriptSettingEditResponsePlacementUnion interface {
 	implementsDispatchNamespaceScriptSettingEditResponsePlacement()
 }
@@ -2331,6 +2340,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponsePlacementHost{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponsePlacementObject{}),
 		},
 	)
 }
@@ -2456,6 +2481,50 @@ func (r dispatchNamespaceScriptSettingEditResponsePlacementHostJSON) RawJSON() s
 func (r DispatchNamespaceScriptSettingEditResponsePlacementHost) implementsDispatchNamespaceScriptSettingEditResponsePlacement() {
 }
 
+type DispatchNamespaceScriptSettingEditResponsePlacementObject struct {
+	// Targeted placement mode.
+	Mode DispatchNamespaceScriptSettingEditResponsePlacementObjectMode `json:"mode,required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                                        `json:"region,required"`
+	JSON   dispatchNamespaceScriptSettingEditResponsePlacementObjectJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponsePlacementObjectJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponsePlacementObject]
+type dispatchNamespaceScriptSettingEditResponsePlacementObjectJSON struct {
+	Mode        apijson.Field
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponsePlacementObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponsePlacementObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponsePlacementObject) implementsDispatchNamespaceScriptSettingEditResponsePlacement() {
+}
+
+// Targeted placement mode.
+type DispatchNamespaceScriptSettingEditResponsePlacementObjectMode string
+
+const (
+	DispatchNamespaceScriptSettingEditResponsePlacementObjectModeTargeted DispatchNamespaceScriptSettingEditResponsePlacementObjectMode = "targeted"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponsePlacementObjectMode) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponsePlacementObjectModeTargeted:
+		return true
+	}
+	return false
+}
+
 // Usage model for the Worker invocations.
 type DispatchNamespaceScriptSettingEditResponseUsageModel string
 
@@ -2493,8 +2562,7 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	Observability DispatchNamespaceScriptSettingGetResponseObservability `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	// Specify either mode for Smart Placement, or one of region/hostname/host for
-	// targeted placement.
+	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 	Placement DispatchNamespaceScriptSettingGetResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
 	Tags []string `json:"tags,nullable"`
@@ -4628,8 +4696,7 @@ func (r dispatchNamespaceScriptSettingGetResponseObservabilityLogsJSON) RawJSON(
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Specify either mode for Smart Placement, or one of region/hostname/host for
-// targeted placement.
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 type DispatchNamespaceScriptSettingGetResponsePlacement struct {
 	// TCP host and port for targeted placement.
 	Host string `json:"host"`
@@ -4639,7 +4706,10 @@ type DispatchNamespaceScriptSettingGetResponsePlacement struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode DispatchNamespaceScriptSettingGetResponsePlacementMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                                                 `json:"region"`
+	Region string `json:"region"`
+	// This field can have the runtime type of
+	// [[]DispatchNamespaceScriptSettingGetResponsePlacementObjectTarget].
+	Target interface{}                                            `json:"target"`
 	JSON   dispatchNamespaceScriptSettingGetResponsePlacementJSON `json:"-"`
 	union  DispatchNamespaceScriptSettingGetResponsePlacementUnion
 }
@@ -4651,6 +4721,7 @@ type dispatchNamespaceScriptSettingGetResponsePlacementJSON struct {
 	Hostname    apijson.Field
 	Mode        apijson.Field
 	Region      apijson.Field
+	Target      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4675,20 +4746,27 @@ func (r *DispatchNamespaceScriptSettingGetResponsePlacement) UnmarshalJSON(data 
 // [DispatchNamespaceScriptSettingGetResponsePlacementMode],
 // [DispatchNamespaceScriptSettingGetResponsePlacementRegion],
 // [DispatchNamespaceScriptSettingGetResponsePlacementHostname],
-// [DispatchNamespaceScriptSettingGetResponsePlacementHost].
+// [DispatchNamespaceScriptSettingGetResponsePlacementHost],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject].
 func (r DispatchNamespaceScriptSettingGetResponsePlacement) AsUnion() DispatchNamespaceScriptSettingGetResponsePlacementUnion {
 	return r.union
 }
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Specify either mode for Smart Placement, or one of region/hostname/host for
-// targeted placement.
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 //
 // Union satisfied by [DispatchNamespaceScriptSettingGetResponsePlacementMode],
 // [DispatchNamespaceScriptSettingGetResponsePlacementRegion],
-// [DispatchNamespaceScriptSettingGetResponsePlacementHostname] or
-// [DispatchNamespaceScriptSettingGetResponsePlacementHost].
+// [DispatchNamespaceScriptSettingGetResponsePlacementHostname],
+// [DispatchNamespaceScriptSettingGetResponsePlacementHost],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject],
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject] or
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject].
 type DispatchNamespaceScriptSettingGetResponsePlacementUnion interface {
 	implementsDispatchNamespaceScriptSettingGetResponsePlacement()
 }
@@ -4712,6 +4790,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponsePlacementHost{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponsePlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponsePlacementObject{}),
 		},
 	)
 }
@@ -4835,6 +4929,50 @@ func (r dispatchNamespaceScriptSettingGetResponsePlacementHostJSON) RawJSON() st
 func (r DispatchNamespaceScriptSettingGetResponsePlacementHost) implementsDispatchNamespaceScriptSettingGetResponsePlacement() {
 }
 
+type DispatchNamespaceScriptSettingGetResponsePlacementObject struct {
+	// Targeted placement mode.
+	Mode DispatchNamespaceScriptSettingGetResponsePlacementObjectMode `json:"mode,required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                                       `json:"region,required"`
+	JSON   dispatchNamespaceScriptSettingGetResponsePlacementObjectJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponsePlacementObjectJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponsePlacementObject]
+type dispatchNamespaceScriptSettingGetResponsePlacementObjectJSON struct {
+	Mode        apijson.Field
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponsePlacementObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponsePlacementObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponsePlacementObject) implementsDispatchNamespaceScriptSettingGetResponsePlacement() {
+}
+
+// Targeted placement mode.
+type DispatchNamespaceScriptSettingGetResponsePlacementObjectMode string
+
+const (
+	DispatchNamespaceScriptSettingGetResponsePlacementObjectModeTargeted DispatchNamespaceScriptSettingGetResponsePlacementObjectMode = "targeted"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponsePlacementObjectMode) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponsePlacementObjectModeTargeted:
+		return true
+	}
+	return false
+}
+
 // Usage model for the Worker invocations.
 type DispatchNamespaceScriptSettingGetResponseUsageModel string
 
@@ -4895,8 +5033,7 @@ type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	Observability param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservability] `json:"observability"`
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	// Specify either mode for Smart Placement, or one of region/hostname/host for
-	// targeted placement.
+	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 	Placement param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion] `json:"placement"`
 	// Tags associated with the Worker.
 	Tags param.Field[[]string] `json:"tags"`
@@ -6196,8 +6333,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs) Marsh
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Specify either mode for Smart Placement, or one of region/hostname/host for
-// targeted placement.
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacement struct {
 	// TCP host and port for targeted placement.
 	Host param.Field[string] `json:"host"`
@@ -6207,7 +6343,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsPlacement struct {
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementMode] `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region param.Field[string] `json:"region"`
+	Region param.Field[string]      `json:"region"`
+	Target param.Field[interface{}] `json:"target"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacement) MarshalJSON() (data []byte, err error) {
@@ -6219,14 +6356,17 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacement) implementsDis
 
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Specify either mode for Smart Placement, or one of region/hostname/host for
-// targeted placement.
+// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 //
 // Satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementMode],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementRegion],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementHostname],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementHost],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject],
 // [DispatchNamespaceScriptSettingEditParamsSettingsPlacement].
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion interface {
 	implementsDispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion()
@@ -6295,6 +6435,35 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementHost) MarshalJS
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementHost) implementsDispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion() {
+}
+
+type DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject struct {
+	// Targeted placement mode.
+	Mode param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectMode] `json:"mode,required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region,required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject) implementsDispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion() {
+}
+
+// Targeted placement mode.
+type DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectMode string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectModeTargeted DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectMode = "targeted"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectMode) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectModeTargeted:
+		return true
+	}
+	return false
 }
 
 // Usage model for the Worker invocations.

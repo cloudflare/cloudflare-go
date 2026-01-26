@@ -1043,21 +1043,27 @@ type ConnectorSnapshotGetResponseTunnel struct {
 	// Connector identifier
 	ConnectorID string `json:"connector_id"`
 	// MTU as measured between the two ends of the tunnel
-	ProbedMtu float64                                `json:"probed_mtu"`
-	JSON      connectorSnapshotGetResponseTunnelJSON `json:"-"`
+	ProbedMtu float64 `json:"probed_mtu"`
+	// Number of recent healthy pings for this tunnel
+	RecentHealthyPings float64 `json:"recent_healthy_pings"`
+	// Number of recent unhealthy pings for this tunnel
+	RecentUnhealthyPings float64                                `json:"recent_unhealthy_pings"`
+	JSON                 connectorSnapshotGetResponseTunnelJSON `json:"-"`
 }
 
 // connectorSnapshotGetResponseTunnelJSON contains the JSON metadata for the struct
 // [ConnectorSnapshotGetResponseTunnel]
 type connectorSnapshotGetResponseTunnelJSON struct {
-	HealthState   apijson.Field
-	HealthValue   apijson.Field
-	InterfaceName apijson.Field
-	TunnelID      apijson.Field
-	ConnectorID   apijson.Field
-	ProbedMtu     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	HealthState          apijson.Field
+	HealthValue          apijson.Field
+	InterfaceName        apijson.Field
+	TunnelID             apijson.Field
+	ConnectorID          apijson.Field
+	ProbedMtu            apijson.Field
+	RecentHealthyPings   apijson.Field
+	RecentUnhealthyPings apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *ConnectorSnapshotGetResponseTunnel) UnmarshalJSON(data []byte) (err error) {
