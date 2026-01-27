@@ -129,6 +129,22 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 	return
 }
 
+// Chat Completions
+func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/chat/completions", params.AccountID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return
+}
+
 // Read instances.
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
@@ -143,6 +159,27 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Search
+func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
+	var env InstanceSearchResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/search", params.AccountID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -2493,6 +2530,184 @@ func (r InstanceDeleteResponseSummarizationModel) IsKnown() bool {
 	return false
 }
 
+type InstanceChatCompletionsResponse struct {
+	Choices     []InstanceChatCompletionsResponseChoice `json:"choices,required"`
+	Chunks      []InstanceChatCompletionsResponseChunk  `json:"chunks,required"`
+	ID          string                                  `json:"id"`
+	Model       string                                  `json:"model"`
+	Object      string                                  `json:"object"`
+	ExtraFields map[string]interface{}                  `json:"-,extras"`
+	JSON        instanceChatCompletionsResponseJSON     `json:"-"`
+}
+
+// instanceChatCompletionsResponseJSON contains the JSON metadata for the struct
+// [InstanceChatCompletionsResponse]
+type instanceChatCompletionsResponseJSON struct {
+	Choices     apijson.Field
+	Chunks      apijson.Field
+	ID          apijson.Field
+	Model       apijson.Field
+	Object      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceChatCompletionsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceChatCompletionsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceChatCompletionsResponseChoice struct {
+	Message InstanceChatCompletionsResponseChoicesMessage `json:"message,required"`
+	Index   int64                                         `json:"index"`
+	JSON    instanceChatCompletionsResponseChoiceJSON     `json:"-"`
+}
+
+// instanceChatCompletionsResponseChoiceJSON contains the JSON metadata for the
+// struct [InstanceChatCompletionsResponseChoice]
+type instanceChatCompletionsResponseChoiceJSON struct {
+	Message     apijson.Field
+	Index       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceChatCompletionsResponseChoice) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceChatCompletionsResponseChoiceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceChatCompletionsResponseChoicesMessage struct {
+	Content     string                                            `json:"content,required,nullable"`
+	Role        InstanceChatCompletionsResponseChoicesMessageRole `json:"role,required"`
+	ExtraFields map[string]interface{}                            `json:"-,extras"`
+	JSON        instanceChatCompletionsResponseChoicesMessageJSON `json:"-"`
+}
+
+// instanceChatCompletionsResponseChoicesMessageJSON contains the JSON metadata for
+// the struct [InstanceChatCompletionsResponseChoicesMessage]
+type instanceChatCompletionsResponseChoicesMessageJSON struct {
+	Content     apijson.Field
+	Role        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceChatCompletionsResponseChoicesMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceChatCompletionsResponseChoicesMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceChatCompletionsResponseChoicesMessageRole string
+
+const (
+	InstanceChatCompletionsResponseChoicesMessageRoleSystem    InstanceChatCompletionsResponseChoicesMessageRole = "system"
+	InstanceChatCompletionsResponseChoicesMessageRoleDeveloper InstanceChatCompletionsResponseChoicesMessageRole = "developer"
+	InstanceChatCompletionsResponseChoicesMessageRoleUser      InstanceChatCompletionsResponseChoicesMessageRole = "user"
+	InstanceChatCompletionsResponseChoicesMessageRoleAssistant InstanceChatCompletionsResponseChoicesMessageRole = "assistant"
+	InstanceChatCompletionsResponseChoicesMessageRoleTool      InstanceChatCompletionsResponseChoicesMessageRole = "tool"
+)
+
+func (r InstanceChatCompletionsResponseChoicesMessageRole) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsResponseChoicesMessageRoleSystem, InstanceChatCompletionsResponseChoicesMessageRoleDeveloper, InstanceChatCompletionsResponseChoicesMessageRoleUser, InstanceChatCompletionsResponseChoicesMessageRoleAssistant, InstanceChatCompletionsResponseChoicesMessageRoleTool:
+		return true
+	}
+	return false
+}
+
+type InstanceChatCompletionsResponseChunk struct {
+	ID             string                                              `json:"id,required"`
+	Score          float64                                             `json:"score,required"`
+	Text           string                                              `json:"text,required"`
+	Type           string                                              `json:"type,required"`
+	Item           InstanceChatCompletionsResponseChunksItem           `json:"item"`
+	ScoringDetails InstanceChatCompletionsResponseChunksScoringDetails `json:"scoring_details"`
+	JSON           instanceChatCompletionsResponseChunkJSON            `json:"-"`
+}
+
+// instanceChatCompletionsResponseChunkJSON contains the JSON metadata for the
+// struct [InstanceChatCompletionsResponseChunk]
+type instanceChatCompletionsResponseChunkJSON struct {
+	ID             apijson.Field
+	Score          apijson.Field
+	Text           apijson.Field
+	Type           apijson.Field
+	Item           apijson.Field
+	ScoringDetails apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *InstanceChatCompletionsResponseChunk) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceChatCompletionsResponseChunkJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceChatCompletionsResponseChunksItem struct {
+	Key       string                                        `json:"key,required"`
+	Metadata  map[string]interface{}                        `json:"metadata"`
+	Timestamp float64                                       `json:"timestamp"`
+	JSON      instanceChatCompletionsResponseChunksItemJSON `json:"-"`
+}
+
+// instanceChatCompletionsResponseChunksItemJSON contains the JSON metadata for the
+// struct [InstanceChatCompletionsResponseChunksItem]
+type instanceChatCompletionsResponseChunksItemJSON struct {
+	Key         apijson.Field
+	Metadata    apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceChatCompletionsResponseChunksItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceChatCompletionsResponseChunksItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceChatCompletionsResponseChunksScoringDetails struct {
+	KeywordRank  float64                                                 `json:"keyword_rank"`
+	KeywordScore float64                                                 `json:"keyword_score"`
+	VectorRank   float64                                                 `json:"vector_rank"`
+	VectorScore  float64                                                 `json:"vector_score"`
+	JSON         instanceChatCompletionsResponseChunksScoringDetailsJSON `json:"-"`
+}
+
+// instanceChatCompletionsResponseChunksScoringDetailsJSON contains the JSON
+// metadata for the struct [InstanceChatCompletionsResponseChunksScoringDetails]
+type instanceChatCompletionsResponseChunksScoringDetailsJSON struct {
+	KeywordRank  apijson.Field
+	KeywordScore apijson.Field
+	VectorRank   apijson.Field
+	VectorScore  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *InstanceChatCompletionsResponseChunksScoringDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceChatCompletionsResponseChunksScoringDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type InstanceReadResponse struct {
 	// Use your AI Search ID.
 	ID                             string                                   `json:"id,required"`
@@ -3070,6 +3285,112 @@ func (r InstanceReadResponseSummarizationModel) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type InstanceSearchResponse struct {
+	Chunks      []InstanceSearchResponseChunk `json:"chunks,required"`
+	SearchQuery string                        `json:"search_query,required"`
+	JSON        instanceSearchResponseJSON    `json:"-"`
+}
+
+// instanceSearchResponseJSON contains the JSON metadata for the struct
+// [InstanceSearchResponse]
+type instanceSearchResponseJSON struct {
+	Chunks      apijson.Field
+	SearchQuery apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceSearchResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceSearchResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceSearchResponseChunk struct {
+	ID             string                                     `json:"id,required"`
+	Score          float64                                    `json:"score,required"`
+	Text           string                                     `json:"text,required"`
+	Type           string                                     `json:"type,required"`
+	Item           InstanceSearchResponseChunksItem           `json:"item"`
+	ScoringDetails InstanceSearchResponseChunksScoringDetails `json:"scoring_details"`
+	JSON           instanceSearchResponseChunkJSON            `json:"-"`
+}
+
+// instanceSearchResponseChunkJSON contains the JSON metadata for the struct
+// [InstanceSearchResponseChunk]
+type instanceSearchResponseChunkJSON struct {
+	ID             apijson.Field
+	Score          apijson.Field
+	Text           apijson.Field
+	Type           apijson.Field
+	Item           apijson.Field
+	ScoringDetails apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *InstanceSearchResponseChunk) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceSearchResponseChunkJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceSearchResponseChunksItem struct {
+	Key       string                               `json:"key,required"`
+	Metadata  map[string]interface{}               `json:"metadata"`
+	Timestamp float64                              `json:"timestamp"`
+	JSON      instanceSearchResponseChunksItemJSON `json:"-"`
+}
+
+// instanceSearchResponseChunksItemJSON contains the JSON metadata for the struct
+// [InstanceSearchResponseChunksItem]
+type instanceSearchResponseChunksItemJSON struct {
+	Key         apijson.Field
+	Metadata    apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceSearchResponseChunksItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceSearchResponseChunksItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceSearchResponseChunksScoringDetails struct {
+	KeywordRank  float64                                        `json:"keyword_rank"`
+	KeywordScore float64                                        `json:"keyword_score"`
+	VectorRank   float64                                        `json:"vector_rank"`
+	VectorScore  float64                                        `json:"vector_score"`
+	JSON         instanceSearchResponseChunksScoringDetailsJSON `json:"-"`
+}
+
+// instanceSearchResponseChunksScoringDetailsJSON contains the JSON metadata for
+// the struct [InstanceSearchResponseChunksScoringDetails]
+type instanceSearchResponseChunksScoringDetailsJSON struct {
+	KeywordRank  apijson.Field
+	KeywordScore apijson.Field
+	VectorRank   apijson.Field
+	VectorScore  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *InstanceSearchResponseChunksScoringDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceSearchResponseChunksScoringDetailsJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceStatsResponse struct {
@@ -3837,6 +4158,277 @@ func (r instanceDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type InstanceChatCompletionsParams struct {
+	AccountID       param.Field[string]                                       `path:"account_id,required"`
+	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages,required"`
+	AISearchOptions param.Field[InstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
+	Model           param.Field[InstanceChatCompletionsParamsModel]           `json:"model"`
+	Stream          param.Field[bool]                                         `json:"stream"`
+}
+
+func (r InstanceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsMessage struct {
+	Content     param.Field[string]                                    `json:"content,required"`
+	Role        param.Field[InstanceChatCompletionsParamsMessagesRole] `json:"role,required"`
+	ExtraFields map[string]interface{}                                 `json:"-,extras"`
+}
+
+func (r InstanceChatCompletionsParamsMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsMessagesRole string
+
+const (
+	InstanceChatCompletionsParamsMessagesRoleSystem    InstanceChatCompletionsParamsMessagesRole = "system"
+	InstanceChatCompletionsParamsMessagesRoleDeveloper InstanceChatCompletionsParamsMessagesRole = "developer"
+	InstanceChatCompletionsParamsMessagesRoleUser      InstanceChatCompletionsParamsMessagesRole = "user"
+	InstanceChatCompletionsParamsMessagesRoleAssistant InstanceChatCompletionsParamsMessagesRole = "assistant"
+	InstanceChatCompletionsParamsMessagesRoleTool      InstanceChatCompletionsParamsMessagesRole = "tool"
+)
+
+func (r InstanceChatCompletionsParamsMessagesRole) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsMessagesRoleSystem, InstanceChatCompletionsParamsMessagesRoleDeveloper, InstanceChatCompletionsParamsMessagesRoleUser, InstanceChatCompletionsParamsMessagesRoleAssistant, InstanceChatCompletionsParamsMessagesRoleTool:
+		return true
+	}
+	return false
+}
+
+type InstanceChatCompletionsParamsAISearchOptions struct {
+	QueryRewrite param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
+	Reranking    param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]    `json:"reranking"`
+	Retrieval    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
+	Enabled       param.Field[bool]                                                          `json:"enabled"`
+	Model         param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel] `json:"model"`
+	RewritePrompt param.Field[string]                                                        `json:"rewrite_prompt"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsQueryRewrite) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast         InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8          InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct       InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8                 InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku               InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-5-haiku"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct        InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking        InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b                  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-3.3-70b"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct     InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b                    InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/gpt-oss-120b"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash          InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-flash"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro            InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-pro"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4                             InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "grok/grok-4"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile             InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.3-70b-versatile"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant                InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.1-8b-instant"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5                            InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini                        InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-mini"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano                        InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-nano"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty                                 InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = ""
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsReranking struct {
+	Enabled        param.Field[bool]                                                       `json:"enabled"`
+	MatchThreshold param.Field[float64]                                                    `json:"match_threshold"`
+	Model          param.Field[InstanceChatCompletionsParamsAISearchOptionsRerankingModel] `json:"model"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsReranking) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRerankingModel string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase InstanceChatCompletionsParamsAISearchOptionsRerankingModel = "@cf/baai/bge-reranker-base"
+	InstanceChatCompletionsParamsAISearchOptionsRerankingModelEmpty                 InstanceChatCompletionsParamsAISearchOptionsRerankingModel = ""
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase, InstanceChatCompletionsParamsAISearchOptionsRerankingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
+	ContextExpansion param.Field[int64]                                                              `json:"context_expansion"`
+	Filters          param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersUnion]  `json:"filters"`
+	MatchThreshold   param.Field[float64]                                                            `json:"match_threshold"`
+	MaxNumResults    param.Field[int64]                                                              `json:"max_num_results"`
+	RetrievalType    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFilters struct {
+	Type    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType] `json:"type,required"`
+	Filters param.Field[interface{}]                                                      `json:"filters"`
+	Key     param.Field[string]                                                           `json:"key"`
+	Value   param.Field[interface{}]                                                      `json:"value"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFilters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFilters) implementsInstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersUnion() {
+}
+
+// Satisfied by
+// [ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObject],
+// [ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObject],
+// [InstanceChatCompletionsParamsAISearchOptionsRetrievalFilters].
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersUnion interface {
+	implementsInstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersUnion()
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObject struct {
+	Key   param.Field[string]                                                                       `json:"key,required"`
+	Type  param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType]       `json:"type,required"`
+	Value param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectValueUnion] `json:"value,required"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObject) implementsInstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersUnion() {
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeEq  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType = "eq"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeNe  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType = "ne"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeGt  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType = "gt"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeGte InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType = "gte"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeLt  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType = "lt"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeLte InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType = "lte"
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectType) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeEq, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeNe, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeGt, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeGte, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeLt, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeLte:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectValueUnion interface {
+	ImplementsInstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectValueUnion()
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeEq  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "eq"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeNe  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "ne"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeGt  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "gt"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeGte InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "gte"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeLt  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "lt"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeLte InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "lte"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeAnd InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "and"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeOr  InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType = "or"
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersType) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeEq, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeNe, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeGt, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeGte, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeLt, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeLte, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeAnd, InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersTypeOr:
+		return true
+	}
+	return false
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeVector  InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType = "vector"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeKeyword InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType = "keyword"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeHybrid  InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType = "hybrid"
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeVector, InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeKeyword, InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeHybrid:
+		return true
+	}
+	return false
+}
+
+type InstanceChatCompletionsParamsModel string
+
+const (
+	InstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast     InstanceChatCompletionsParamsModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+	InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast         InstanceChatCompletionsParamsModel = "@cf/meta/llama-3.1-8b-instruct-fast"
+	InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8          InstanceChatCompletionsParamsModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
+	InstanceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct       InstanceChatCompletionsParamsModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
+	InstanceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8                 InstanceChatCompletionsParamsModel = "@cf/qwen/qwen3-30b-a3b-fp8"
+	InstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceChatCompletionsParamsModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
+	InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct            InstanceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2-instruct"
+	InstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet              InstanceChatCompletionsParamsModel = "anthropic/claude-3-7-sonnet"
+	InstanceChatCompletionsParamsModelAnthropicClaudeSonnet4                InstanceChatCompletionsParamsModel = "anthropic/claude-sonnet-4"
+	InstanceChatCompletionsParamsModelAnthropicClaudeOpus4                  InstanceChatCompletionsParamsModel = "anthropic/claude-opus-4"
+	InstanceChatCompletionsParamsModelAnthropicClaude3_5Haiku               InstanceChatCompletionsParamsModel = "anthropic/claude-3-5-haiku"
+	InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct        InstanceChatCompletionsParamsModel = "cerebras/qwen-3-235b-a22b-instruct"
+	InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking        InstanceChatCompletionsParamsModel = "cerebras/qwen-3-235b-a22b-thinking"
+	InstanceChatCompletionsParamsModelCerebrasLlama3_3_70b                  InstanceChatCompletionsParamsModel = "cerebras/llama-3.3-70b"
+	InstanceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct InstanceChatCompletionsParamsModel = "cerebras/llama-4-maverick-17b-128e-instruct"
+	InstanceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct     InstanceChatCompletionsParamsModel = "cerebras/llama-4-scout-17b-16e-instruct"
+	InstanceChatCompletionsParamsModelCerebrasGptOSs120b                    InstanceChatCompletionsParamsModel = "cerebras/gpt-oss-120b"
+	InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash          InstanceChatCompletionsParamsModel = "google-ai-studio/gemini-2.5-flash"
+	InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro            InstanceChatCompletionsParamsModel = "google-ai-studio/gemini-2.5-pro"
+	InstanceChatCompletionsParamsModelGrokGrok4                             InstanceChatCompletionsParamsModel = "grok/grok-4"
+	InstanceChatCompletionsParamsModelGroqLlama3_3_70bVersatile             InstanceChatCompletionsParamsModel = "groq/llama-3.3-70b-versatile"
+	InstanceChatCompletionsParamsModelGroqLlama3_1_8bInstant                InstanceChatCompletionsParamsModel = "groq/llama-3.1-8b-instant"
+	InstanceChatCompletionsParamsModelOpenAIGpt5                            InstanceChatCompletionsParamsModel = "openai/gpt-5"
+	InstanceChatCompletionsParamsModelOpenAIGpt5Mini                        InstanceChatCompletionsParamsModel = "openai/gpt-5-mini"
+	InstanceChatCompletionsParamsModelOpenAIGpt5Nano                        InstanceChatCompletionsParamsModel = "openai/gpt-5-nano"
+	InstanceChatCompletionsParamsModelEmpty                                 InstanceChatCompletionsParamsModel = ""
+)
+
+func (r InstanceChatCompletionsParamsModel) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast, InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8, InstanceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8, InstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct, InstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet, InstanceChatCompletionsParamsModelAnthropicClaudeSonnet4, InstanceChatCompletionsParamsModelAnthropicClaudeOpus4, InstanceChatCompletionsParamsModelAnthropicClaude3_5Haiku, InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct, InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking, InstanceChatCompletionsParamsModelCerebrasLlama3_3_70b, InstanceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct, InstanceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsModelCerebrasGptOSs120b, InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash, InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro, InstanceChatCompletionsParamsModelGrokGrok4, InstanceChatCompletionsParamsModelGroqLlama3_3_70bVersatile, InstanceChatCompletionsParamsModelGroqLlama3_1_8bInstant, InstanceChatCompletionsParamsModelOpenAIGpt5, InstanceChatCompletionsParamsModelOpenAIGpt5Mini, InstanceChatCompletionsParamsModelOpenAIGpt5Nano, InstanceChatCompletionsParamsModelEmpty:
+		return true
+	}
+	return false
+}
+
 type InstanceReadParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -3861,6 +4453,259 @@ func (r *InstanceReadResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceReadResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceSearchParams struct {
+	AccountID       param.Field[string]                              `path:"account_id,required"`
+	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages,required"`
+	AISearchOptions param.Field[InstanceSearchParamsAISearchOptions] `json:"ai_search_options"`
+}
+
+func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsMessage struct {
+	Content     param.Field[string]                           `json:"content,required"`
+	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role,required"`
+	ExtraFields map[string]interface{}                        `json:"-,extras"`
+}
+
+func (r InstanceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsMessagesRole string
+
+const (
+	InstanceSearchParamsMessagesRoleSystem    InstanceSearchParamsMessagesRole = "system"
+	InstanceSearchParamsMessagesRoleDeveloper InstanceSearchParamsMessagesRole = "developer"
+	InstanceSearchParamsMessagesRoleUser      InstanceSearchParamsMessagesRole = "user"
+	InstanceSearchParamsMessagesRoleAssistant InstanceSearchParamsMessagesRole = "assistant"
+	InstanceSearchParamsMessagesRoleTool      InstanceSearchParamsMessagesRole = "tool"
+)
+
+func (r InstanceSearchParamsMessagesRole) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsMessagesRoleSystem, InstanceSearchParamsMessagesRoleDeveloper, InstanceSearchParamsMessagesRoleUser, InstanceSearchParamsMessagesRoleAssistant, InstanceSearchParamsMessagesRoleTool:
+		return true
+	}
+	return false
+}
+
+type InstanceSearchParamsAISearchOptions struct {
+	QueryRewrite param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
+	Reranking    param.Field[InstanceSearchParamsAISearchOptionsReranking]    `json:"reranking"`
+	Retrieval    param.Field[InstanceSearchParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+}
+
+func (r InstanceSearchParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsQueryRewrite struct {
+	Enabled       param.Field[bool]                                                 `json:"enabled"`
+	Model         param.Field[InstanceSearchParamsAISearchOptionsQueryRewriteModel] `json:"model"`
+	RewritePrompt param.Field[string]                                               `json:"rewrite_prompt"`
+}
+
+func (r InstanceSearchParamsAISearchOptionsQueryRewrite) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsQueryRewriteModel string
+
+const (
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast         InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8          InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct       InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8                 InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku               InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-5-haiku"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct        InstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking        InstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b                  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-3.3-70b"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct InstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct     InstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b                    InstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/gpt-oss-120b"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash          InstanceSearchParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-flash"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro            InstanceSearchParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-pro"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4                             InstanceSearchParamsAISearchOptionsQueryRewriteModel = "grok/grok-4"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile             InstanceSearchParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.3-70b-versatile"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant                InstanceSearchParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.1-8b-instant"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5                            InstanceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini                        InstanceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-mini"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano                        InstanceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-nano"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelEmpty                                 InstanceSearchParamsAISearchOptionsQueryRewriteModel = ""
+)
+
+func (r InstanceSearchParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, InstanceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4, InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, InstanceSearchParamsAISearchOptionsQueryRewriteModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceSearchParamsAISearchOptionsReranking struct {
+	Enabled        param.Field[bool]                                              `json:"enabled"`
+	MatchThreshold param.Field[float64]                                           `json:"match_threshold"`
+	Model          param.Field[InstanceSearchParamsAISearchOptionsRerankingModel] `json:"model"`
+}
+
+func (r InstanceSearchParamsAISearchOptionsReranking) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsRerankingModel string
+
+const (
+	InstanceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase InstanceSearchParamsAISearchOptionsRerankingModel = "@cf/baai/bge-reranker-base"
+	InstanceSearchParamsAISearchOptionsRerankingModelEmpty                 InstanceSearchParamsAISearchOptionsRerankingModel = ""
+)
+
+func (r InstanceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase, InstanceSearchParamsAISearchOptionsRerankingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceSearchParamsAISearchOptionsRetrieval struct {
+	ContextExpansion param.Field[int64]                                                     `json:"context_expansion"`
+	Filters          param.Field[InstanceSearchParamsAISearchOptionsRetrievalFiltersUnion]  `json:"filters"`
+	MatchThreshold   param.Field[float64]                                                   `json:"match_threshold"`
+	MaxNumResults    param.Field[int64]                                                     `json:"max_num_results"`
+	RetrievalType    param.Field[InstanceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+}
+
+func (r InstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsRetrievalFilters struct {
+	Type    param.Field[InstanceSearchParamsAISearchOptionsRetrievalFiltersType] `json:"type,required"`
+	Filters param.Field[interface{}]                                             `json:"filters"`
+	Key     param.Field[string]                                                  `json:"key"`
+	Value   param.Field[interface{}]                                             `json:"value"`
+}
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFilters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFilters) implementsInstanceSearchParamsAISearchOptionsRetrievalFiltersUnion() {
+}
+
+// Satisfied by
+// [ai_search.InstanceSearchParamsAISearchOptionsRetrievalFiltersObject],
+// [ai_search.InstanceSearchParamsAISearchOptionsRetrievalFiltersObject],
+// [InstanceSearchParamsAISearchOptionsRetrievalFilters].
+type InstanceSearchParamsAISearchOptionsRetrievalFiltersUnion interface {
+	implementsInstanceSearchParamsAISearchOptionsRetrievalFiltersUnion()
+}
+
+type InstanceSearchParamsAISearchOptionsRetrievalFiltersObject struct {
+	Key   param.Field[string]                                                              `json:"key,required"`
+	Type  param.Field[InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType]       `json:"type,required"`
+	Value param.Field[InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectValueUnion] `json:"value,required"`
+}
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFiltersObject) implementsInstanceSearchParamsAISearchOptionsRetrievalFiltersUnion() {
+}
+
+type InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType string
+
+const (
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeEq  InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType = "eq"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeNe  InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType = "ne"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeGt  InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType = "gt"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeGte InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType = "gte"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeLt  InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType = "lt"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeLte InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType = "lte"
+)
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectType) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeEq, InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeNe, InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeGt, InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeGte, InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeLt, InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeLte:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectValueUnion interface {
+	ImplementsInstanceSearchParamsAISearchOptionsRetrievalFiltersObjectValueUnion()
+}
+
+type InstanceSearchParamsAISearchOptionsRetrievalFiltersType string
+
+const (
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeEq  InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "eq"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeNe  InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "ne"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeGt  InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "gt"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeGte InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "gte"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeLt  InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "lt"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeLte InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "lte"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeAnd InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "and"
+	InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeOr  InstanceSearchParamsAISearchOptionsRetrievalFiltersType = "or"
+)
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFiltersType) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeEq, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeNe, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeGt, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeGte, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeLt, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeLte, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeAnd, InstanceSearchParamsAISearchOptionsRetrievalFiltersTypeOr:
+		return true
+	}
+	return false
+}
+
+type InstanceSearchParamsAISearchOptionsRetrievalRetrievalType string
+
+const (
+	InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeVector  InstanceSearchParamsAISearchOptionsRetrievalRetrievalType = "vector"
+	InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeKeyword InstanceSearchParamsAISearchOptionsRetrievalRetrievalType = "keyword"
+	InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeHybrid  InstanceSearchParamsAISearchOptionsRetrievalRetrievalType = "hybrid"
+)
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalRetrievalType) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeVector, InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeKeyword, InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeHybrid:
+		return true
+	}
+	return false
+}
+
+type InstanceSearchResponseEnvelope struct {
+	Result  InstanceSearchResponse             `json:"result,required"`
+	Success bool                               `json:"success,required"`
+	JSON    instanceSearchResponseEnvelopeJSON `json:"-"`
+}
+
+// instanceSearchResponseEnvelopeJSON contains the JSON metadata for the struct
+// [InstanceSearchResponseEnvelope]
+type instanceSearchResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceSearchResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceSearchResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
