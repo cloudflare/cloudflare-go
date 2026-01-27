@@ -627,6 +627,8 @@ TEST_PATHS=(
 	ai_gateway/log_test.go
 	ai_gateway/dataset_test.go
 	ai_gateway/evaluation_test.go
+	ai_gateway/dynamicrouting_test.go
+	ai_gateway/providerconfig_test.go
 	ai_gateway/url_test.go
 	iam/permissiongroup_test.go
 	iam/resourcegroup_test.go

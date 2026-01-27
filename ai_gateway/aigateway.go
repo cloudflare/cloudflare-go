@@ -33,6 +33,8 @@ type AIGatewayService struct {
 	Logs            *LogService
 	Datasets        *DatasetService
 	Evaluations     *EvaluationService
+	DynamicRouting  *DynamicRoutingService
+	ProviderConfigs *ProviderConfigService
 	URLs            *URLService
 }
 
@@ -46,6 +48,8 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r.Logs = NewLogService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.Evaluations = NewEvaluationService(opts...)
+	r.DynamicRouting = NewDynamicRoutingService(opts...)
+	r.ProviderConfigs = NewProviderConfigService(opts...)
 	r.URLs = NewURLService(opts...)
 	return
 }
