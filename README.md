@@ -55,24 +55,23 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/zones"
 )
 
 func main() {
 	client := cloudflare.NewClient(
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"), // defaults to os.LookupEnv("CLOUDFLARE_API_TOKEN")
 	)
-	zone, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
-		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+	zone, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.TypeFull),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
 	})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", zone.ID)
+	fmt.Printf("%+v\n", zone.Errors)
 }
 
 ```
@@ -178,11 +177,11 @@ This library provides some conveniences for working with paginated list endpoint
 You can use `.ListAutoPaging()` methods to iterate through items across all pages:
 
 ```go
-iter := client.Accounts.ListAutoPaging(context.TODO(), accounts.AccountListParams{})
+iter := client.Accounts.ListAutoPaging(context.TODO(), cloudflare.AccountListParams{})
 // Automatically fetches more pages as needed.
 for iter.Next() {
-	account := iter.Current()
-	fmt.Printf("%+v\n", account)
+	accountListResponse := iter.Current()
+	fmt.Printf("%+v\n", accountListResponse)
 }
 if err := iter.Err(); err != nil {
 	panic(err.Error())
@@ -193,7 +192,7 @@ Or you can use simple `.List()` methods to fetch a single page and receive a sta
 with additional helper methods like `.GetNextPage()`, e.g.:
 
 ```go
-page, err := client.Accounts.List(context.TODO(), accounts.AccountListParams{})
+page, err := client.Accounts.List(context.TODO(), cloudflare.AccountListParams{})
 for page != nil {
 	for _, account := range page.Result {
 		fmt.Printf("%+v\n", account)
@@ -215,7 +214,7 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Zones.Get(context.TODO(), zones.ZoneGetParams{
+_, err := client.Zones.Get(context.TODO(), cloudflare.ZoneGetParams{
 	ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 })
 if err != nil {
@@ -244,7 +243,7 @@ ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
 client.Zones.Edit(
 	ctx,
-	zones.ZoneEditParams{
+	cloudflare.ZoneEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	},
 	// This sets the per-retry timeout
@@ -265,27 +264,6 @@ file returned by `os.Open` will be sent with the file name on disk.
 We also provide a helper `cloudflare.FileParam(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
-```go
-// A file from the file system
-file, err := os.Open("/path/to/file")
-kv.NamespaceValueUpdateParams{
-	AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-	Value:     cloudflare.F[io.Reader](file),
-}
-
-// A file from a string
-kv.NamespaceValueUpdateParams{
-	AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-	Value:     cloudflare.F[io.Reader](strings.NewReader("my file contents")),
-}
-
-// With a custom filename and contentType
-kv.NamespaceValueUpdateParams{
-	AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-	Value:     cloudflare.FileParam(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
-}
-```
-
 ### Retries
 
 Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
@@ -303,7 +281,7 @@ client := cloudflare.NewClient(
 // Override per-request:
 client.Zones.Get(
 	context.TODO(),
-	zones.ZoneGetParams{
+	cloudflare.ZoneGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	},
 	option.WithMaxRetries(5),
@@ -320,12 +298,12 @@ you need to examine response headers, status codes, or other details.
 var response *http.Response
 zone, err := client.Zones.New(
 	context.TODO(),
-	zones.ZoneNewParams{
-		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+	cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(zones.TypeFull),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
 	},
 	option.WithResponseInto(&response),
 )
