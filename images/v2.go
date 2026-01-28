@@ -64,19 +64,25 @@ func NewV2Service(opts ...option.RequestOption) (r *V2Service) {
 //
 // ```
 // # List all images
-// /v2/images
+// /images/v2
 //
-// # Filter by metadata
-// /v2/images?meta.status[eq]=active
+// # Filter by metadata [eq]
+// /images/v2?meta.status[eq:string]=active
+//
+// # Filter by metadata [in]
+// /images/v2?meta.status[in]=pending|deleted|flagged
+//
+// # Filter by metadata [in:number]
+// /images/v2?meta.ratings[in:number]=4|5
 //
 // # Filter by nested metadata
-// /v2/images?meta.region.name[eq]=eu-west
+// /images/v2?meta.region.name[eq]=eu-west
 //
 // # Combine metadata filters with creator
-// /v2/images?meta.status[eq]=active&creator=user123
+// /images/v2?meta.status[eq]=active&creator=user123
 //
 // # Multiple metadata filters (AND logic)
-// /v2/images?meta.status[eq]=active&meta.priority[eq:number]=5
+// /images/v2?meta.status[eq]=active&meta.priority[eq:number]=5
 // ```
 func (r *V2Service) List(ctx context.Context, params V2ListParams, opts ...option.RequestOption) (res *V2ListResponse, err error) {
 	var env V2ListResponseEnvelope
