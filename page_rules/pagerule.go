@@ -1145,7 +1145,6 @@ func (r PageRuleActionsDisableAppsID) IsKnown() bool {
 type PageRuleActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
 	ID   PageRuleActionsDisablePerformanceID   `json:"id"`
 	JSON pageRuleActionsDisablePerformanceJSON `json:"-"`
@@ -1171,7 +1170,6 @@ func (r PageRuleActionsDisablePerformance) ImplementsPageRuleAction() {}
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
 type PageRuleActionsDisablePerformanceID string
 
@@ -2323,7 +2321,6 @@ func (r PageRuleNewParamsActionsDisableAppsID) IsKnown() bool {
 type PageRuleNewParamsActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
 	ID param.Field[PageRuleNewParamsActionsDisablePerformanceID] `json:"id"`
 }
@@ -2336,7 +2333,6 @@ func (r PageRuleNewParamsActionsDisablePerformance) ImplementsPageRuleNewParamsA
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
 type PageRuleNewParamsActionsDisablePerformanceID string
 
@@ -3371,7 +3367,6 @@ func (r PageRuleUpdateParamsActionsDisableAppsID) IsKnown() bool {
 type PageRuleUpdateParamsActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
 	ID param.Field[PageRuleUpdateParamsActionsDisablePerformanceID] `json:"id"`
 }
@@ -3384,7 +3379,6 @@ func (r PageRuleUpdateParamsActionsDisablePerformance) ImplementsPageRuleUpdateP
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
 type PageRuleUpdateParamsActionsDisablePerformanceID string
 
@@ -4789,7 +4783,6 @@ func (r PageRuleEditParamsActionsDisableAppsID) IsKnown() bool {
 type PageRuleEditParamsActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
 	ID param.Field[PageRuleEditParamsActionsDisablePerformanceID] `json:"id"`
 }
@@ -4802,7 +4795,6 @@ func (r PageRuleEditParamsActionsDisablePerformance) ImplementsPageRuleEditParam
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
-// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
 type PageRuleEditParamsActionsDisablePerformanceID string
 
