@@ -121,7 +121,7 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 		PageSize:  cloudflare.F(int64(0)),
 		PageToken: cloudflare.F("page_token"),
 		Parent: cloudflare.F(organizations.OrganizationListParamsParent{
-			ID: cloudflare.F(organizations.OrganizationListParamsParentID("a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8")),
+			ID: cloudflare.F(organizations.OrganizationListParamsParentIDNull),
 		}),
 	})
 	if err != nil {
