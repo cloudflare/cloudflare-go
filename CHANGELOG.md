@@ -1,5 +1,27 @@
 # Changelog
 
+## 6.7.0 (2026-01-28)
+
+Full Changelog: [v6.6.0...v6.7.0](https://github.com/cloudflare/cloudflare-go/compare/v6.6.0...v6.7.0)
+
+### Features
+
+* feat(api): add AI Gateway Dynamic Routing endpoints ([60eda80](https://github.com/cloudflare/cloudflare-go/commit/60eda800b9248ea724baee465327c6dfada0873d))
+* feat(fraud): public docs for fraud API ([57093fa](https://github.com/cloudflare/cloudflare-go/commit/57093fa34c2f894447aca0d37556606ff8c7e2b0))
+* refactor(terraform): restructure origin_tls_client_auth to peer subresources ([39948a3](https://github.com/cloudflare/cloudflare-go/commit/39948a3a11e649dc8ec12f0e7975139e232a348d))
+
+
+### Chores
+
+* **api:** update composite API spec ([4763072](https://github.com/cloudflare/cloudflare-go/commit/4763072748a0d2a4ebe29c179d7250f66b8e6611))
+* **api:** update composite API spec ([ce43852](https://github.com/cloudflare/cloudflare-go/commit/ce43852d72a2a0db4920645c10d5a689a5551dce))
+* **api:** update composite API spec ([1a4b2e6](https://github.com/cloudflare/cloudflare-go/commit/1a4b2e63341065f82f466c42bd637ce9b3182b5e))
+* **api:** update composite API spec ([0ec4266](https://github.com/cloudflare/cloudflare-go/commit/0ec42664bf8922b3887ccdfadcb9aede04a502f4))
+* **api:** update composite API spec ([740a2bf](https://github.com/cloudflare/cloudflare-go/commit/740a2bf8d5470e4ab64ead5e01ccad31d73c2b57))
+* **changelog:** update with v6.6.0 release notes ([16ae7fd](https://github.com/cloudflare/cloudflare-go/commit/16ae7fd5a181613e433d3cd61f672f043e3bc42a))
+* **internal:** codegen related update ([74f9173](https://github.com/cloudflare/cloudflare-go/commit/74f917368dd1d9b1a690a5cfd2f44bd7e7fb02f7))
+* **internal:** codegen related update ([8e10a2c](https://github.com/cloudflare/cloudflare-go/commit/8e10a2c5ddc1fcf20d01e6abf55708b5ed881a8f))
+
 ## 6.6.0 (2025-01-15)
 
 Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/compare/v6.5.0...v6.6.0)
