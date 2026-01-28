@@ -33,7 +33,7 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: dns.ARecordParam{
 			Name:    cloudflare.F("example.com"),
-			TTL:     cloudflare.F(dns.TTL(3600)),
+			TTL:     cloudflare.F(dns.TTL1),
 			Type:    cloudflare.F(dns.ARecordTypeA),
 			Comment: cloudflare.F("Domain verification record"),
 			Content: cloudflare.F("198.51.100.4"),
@@ -75,7 +75,7 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: dns.ARecordParam{
 				Name:    cloudflare.F("example.com"),
-				TTL:     cloudflare.F(dns.TTL(3600)),
+				TTL:     cloudflare.F(dns.TTL1),
 				Type:    cloudflare.F(dns.ARecordTypeA),
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
@@ -211,7 +211,7 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		Patches: cloudflare.F([]dns.BatchPatchUnionParam{dns.BatchPatchARecordParam(dns.BatchPatchARecordParam{
 			ARecordParam: dns.ARecordParam{
 				Name:    cloudflare.F("example.com"),
-				TTL:     cloudflare.F(dns.TTL(3600)),
+				TTL:     cloudflare.F(dns.TTL1),
 				Type:    cloudflare.F(dns.ARecordTypeA),
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
@@ -226,7 +226,7 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		})}),
 		Posts: cloudflare.F([]dns.RecordBatchParamsPostUnion{dns.ARecordParam{
 			Name:    cloudflare.F("example.com"),
-			TTL:     cloudflare.F(dns.TTL(3600)),
+			TTL:     cloudflare.F(dns.TTL1),
 			Type:    cloudflare.F(dns.ARecordTypeA),
 			Comment: cloudflare.F("Domain verification record"),
 			Content: cloudflare.F("198.51.100.4"),
@@ -240,7 +240,7 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		Puts: cloudflare.F([]dns.BatchPutUnionParam{dns.BatchPutARecordParam(dns.BatchPutARecordParam{
 			ARecordParam: dns.ARecordParam{
 				Name:    cloudflare.F("example.com"),
-				TTL:     cloudflare.F(dns.TTL(3600)),
+				TTL:     cloudflare.F(dns.TTL1),
 				Type:    cloudflare.F(dns.ARecordTypeA),
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
@@ -284,7 +284,7 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: dns.ARecordParam{
 				Name:    cloudflare.F("example.com"),
-				TTL:     cloudflare.F(dns.TTL(3600)),
+				TTL:     cloudflare.F(dns.TTL1),
 				Type:    cloudflare.F(dns.ARecordTypeA),
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
@@ -457,7 +457,7 @@ func TestRecordScanReviewWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Accepts: cloudflare.F([]dns.RecordScanReviewParamsAcceptUnion{dns.ARecordParam{
 			Name:    cloudflare.F("example.com"),
-			TTL:     cloudflare.F(dns.TTL(3600)),
+			TTL:     cloudflare.F(dns.TTL1),
 			Type:    cloudflare.F(dns.ARecordTypeA),
 			Comment: cloudflare.F("Domain verification record"),
 			Content: cloudflare.F("198.51.100.4"),
