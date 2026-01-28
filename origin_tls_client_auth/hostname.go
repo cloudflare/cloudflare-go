@@ -24,8 +24,7 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewHostnameService] method instead.
 type HostnameService struct {
-	Options      []option.RequestOption
-	Certificates *HostnameCertificateService
+	Options []option.RequestOption
 }
 
 // NewHostnameService generates a new service that applies the given options to
@@ -34,7 +33,6 @@ type HostnameService struct {
 func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 	r = &HostnameService{}
 	r.Options = opts
-	r.Certificates = NewHostnameCertificateService(opts...)
 	return
 }
 

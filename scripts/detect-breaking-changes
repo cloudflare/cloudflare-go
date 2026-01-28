@@ -137,6 +137,7 @@ TEST_PATHS=(
 	logs/received_test.go
 	logs/receivedfield_test.go
 	origin_tls_client_auth/origintlsclientauth_test.go
+	origin_tls_client_auth/zonecertificate_test.go
 	origin_tls_client_auth/hostname_test.go
 	origin_tls_client_auth/hostnamecertificate_test.go
 	origin_tls_client_auth/setting_test.go
@@ -245,7 +246,6 @@ TEST_PATHS=(
 	intel/domainbulk_test.go
 	intel/domainhistory_test.go
 	intel/ip_test.go
-	intel/iplist_test.go
 	intel/miscategorization_test.go
 	intel/whois_test.go
 	intel/indicatorfeed_test.go
@@ -574,6 +574,7 @@ TEST_PATHS=(
 	radar/leakedcredentialsummary_test.go
 	radar/leakedcredentialtimeseriesgroup_test.go
 	bot_management/botmanagement_test.go
+	fraud/fraud_test.go
 	origin_post_quantum_encryption/originpostquantumencryption_test.go
 	zaraz/zaraz_test.go
 	zaraz/config_test.go
@@ -626,6 +627,8 @@ TEST_PATHS=(
 	ai_gateway/log_test.go
 	ai_gateway/dataset_test.go
 	ai_gateway/evaluation_test.go
+	ai_gateway/dynamicrouting_test.go
+	ai_gateway/providerconfig_test.go
 	ai_gateway/url_test.go
 	iam/permissiongroup_test.go
 	iam/resourcegroup_test.go

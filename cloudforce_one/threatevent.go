@@ -165,6 +165,7 @@ type ThreatEventNewResponse struct {
 	Attacker        string                     `json:"attacker,required"`
 	AttackerCountry string                     `json:"attackerCountry,required"`
 	Category        string                     `json:"category,required"`
+	DatasetID       string                     `json:"datasetId,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
 	HasChildren     bool                       `json:"hasChildren,required"`
@@ -196,6 +197,7 @@ type threatEventNewResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
+	DatasetID       apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	HasChildren     apijson.Field
@@ -234,6 +236,7 @@ type ThreatEventListResponse struct {
 	Attacker        string                      `json:"attacker,required"`
 	AttackerCountry string                      `json:"attackerCountry,required"`
 	Category        string                      `json:"category,required"`
+	DatasetID       string                      `json:"datasetId,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
 	HasChildren     bool                        `json:"hasChildren,required"`
@@ -265,6 +268,7 @@ type threatEventListResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
+	DatasetID       apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	HasChildren     apijson.Field
@@ -330,10 +334,11 @@ type ThreatEventBulkNewResponse struct {
 	ErrorCount float64 `json:"errorCount,required"`
 	// Number of indicators queued for async processing
 	QueuedIndicatorsCount float64 `json:"queuedIndicatorsCount,required"`
-	// Number of events skipped due to duplicate UUID (only when preserveUuid=true)
-	SkippedEventsCount float64 `json:"skippedEventsCount,required"`
 	// Correlation ID for async indicator processing
 	CreateBulkEventsRequestID string `json:"createBulkEventsRequestId" format:"uuid"`
+	// Array of created events with UUIDs and shard locations. Only present when
+	// includeCreatedEvents=true
+	CreatedEvents []ThreatEventBulkNewResponseCreatedEvent `json:"createdEvents"`
 	// Array of error details
 	Errors []ThreatEventBulkNewResponseError `json:"errors"`
 	JSON   threatEventBulkNewResponseJSON    `json:"-"`
@@ -346,8 +351,8 @@ type threatEventBulkNewResponseJSON struct {
 	CreatedTagsCount          apijson.Field
 	ErrorCount                apijson.Field
 	QueuedIndicatorsCount     apijson.Field
-	SkippedEventsCount        apijson.Field
 	CreateBulkEventsRequestID apijson.Field
+	CreatedEvents             apijson.Field
 	Errors                    apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -358,6 +363,34 @@ func (r *ThreatEventBulkNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r threatEventBulkNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventBulkNewResponseCreatedEvent struct {
+	// Original index in the input data array
+	EventIndex float64 `json:"eventIndex,required"`
+	// Dataset ID of the shard where the event was created
+	ShardID string `json:"shardId,required"`
+	// UUID of the created event
+	UUID string                                     `json:"uuid,required" format:"uuid"`
+	JSON threatEventBulkNewResponseCreatedEventJSON `json:"-"`
+}
+
+// threatEventBulkNewResponseCreatedEventJSON contains the JSON metadata for the
+// struct [ThreatEventBulkNewResponseCreatedEvent]
+type threatEventBulkNewResponseCreatedEventJSON struct {
+	EventIndex  apijson.Field
+	ShardID     apijson.Field
+	UUID        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventBulkNewResponseCreatedEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventBulkNewResponseCreatedEventJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -390,6 +423,7 @@ type ThreatEventEditResponse struct {
 	Attacker        string                      `json:"attacker,required"`
 	AttackerCountry string                      `json:"attackerCountry,required"`
 	Category        string                      `json:"category,required"`
+	DatasetID       string                      `json:"datasetId,required"`
 	Date            string                      `json:"date,required"`
 	Event           string                      `json:"event,required"`
 	HasChildren     bool                        `json:"hasChildren,required"`
@@ -421,6 +455,7 @@ type threatEventEditResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
+	DatasetID       apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	HasChildren     apijson.Field
@@ -459,6 +494,7 @@ type ThreatEventGetResponse struct {
 	Attacker        string                     `json:"attacker,required"`
 	AttackerCountry string                     `json:"attackerCountry,required"`
 	Category        string                     `json:"category,required"`
+	DatasetID       string                     `json:"datasetId,required"`
 	Date            string                     `json:"date,required"`
 	Event           string                     `json:"event,required"`
 	HasChildren     bool                       `json:"hasChildren,required"`
@@ -490,6 +526,7 @@ type threatEventGetResponseJSON struct {
 	Attacker        apijson.Field
 	AttackerCountry apijson.Field
 	Category        apijson.Field
+	DatasetID       apijson.Field
 	Date            apijson.Field
 	Event           apijson.Field
 	HasChildren     apijson.Field
@@ -545,9 +582,6 @@ type ThreatEventNewParams struct {
 	Tags           param.Field[[]string]                        `json:"tags"`
 	TargetCountry  param.Field[string]                          `json:"targetCountry"`
 	TargetIndustry param.Field[string]                          `json:"targetIndustry"`
-	// Optional UUID for the event. Only used when preserveUuid=true in bulk create.
-	// Must be a valid UUID format.
-	UUID param.Field[string] `json:"uuid"`
 }
 
 func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
@@ -577,15 +611,23 @@ func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventListParams struct {
 	// Account ID.
-	AccountID    param.Field[string]                        `path:"account_id,required"`
-	DatasetID    param.Field[[]string]                      `query:"datasetId"`
-	ForceRefresh param.Field[bool]                          `query:"forceRefresh"`
-	Format       param.Field[ThreatEventListParamsFormat]   `query:"format"`
-	Order        param.Field[ThreatEventListParamsOrder]    `query:"order"`
-	OrderBy      param.Field[string]                        `query:"orderBy"`
-	Page         param.Field[float64]                       `query:"page"`
-	PageSize     param.Field[float64]                       `query:"pageSize"`
-	Search       param.Field[[]ThreatEventListParamsSearch] `query:"search"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Cursor for pagination. When provided, filters are embedded in the cursor so you
+	// only need to pass cursor and pageSize. Returned in the previous response's
+	// result_info.cursor field. Use cursor-based pagination for deep pagination
+	// (beyond 100,000 records) or for optimal performance.
+	Cursor       param.Field[string]                      `query:"cursor"`
+	DatasetID    param.Field[[]string]                    `query:"datasetId"`
+	ForceRefresh param.Field[bool]                        `query:"forceRefresh"`
+	Format       param.Field[ThreatEventListParamsFormat] `query:"format"`
+	Order        param.Field[ThreatEventListParamsOrder]  `query:"order"`
+	OrderBy      param.Field[string]                      `query:"orderBy"`
+	// Page number (1-indexed) for offset-based pagination. Limited to offset of
+	// 100,000 records. For deep pagination, use cursor-based pagination instead.
+	Page param.Field[float64] `query:"page"`
+	// Number of results per page. Maximum 25,000.
+	PageSize param.Field[float64]                       `query:"pageSize"`
+	Search   param.Field[[]ThreatEventListParamsSearch] `query:"search"`
 }
 
 // URLQuery serializes [ThreatEventListParams]'s query parameters as `url.Values`.
@@ -691,10 +733,9 @@ type ThreatEventBulkNewParams struct {
 	AccountID param.Field[string]                         `path:"account_id,required"`
 	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data,required"`
 	DatasetID param.Field[string]                         `json:"datasetId,required"`
-	// When true, use provided UUIDs from event data instead of generating new ones.
-	// Used for migration scenarios where original UUIDs must be preserved. Duplicate
-	// UUIDs will be skipped.
-	PreserveUUID param.Field[bool] `json:"preserveUuid"`
+	// When true, response includes array of created event UUIDs and shard IDs. Useful
+	// for tracking which events were created and where.
+	IncludeCreatedEvents param.Field[bool] `json:"includeCreatedEvents"`
 }
 
 func (r ThreatEventBulkNewParams) MarshalJSON() (data []byte, err error) {
@@ -720,9 +761,6 @@ type ThreatEventBulkNewParamsData struct {
 	Tags           param.Field[[]string]                                `json:"tags"`
 	TargetCountry  param.Field[string]                                  `json:"targetCountry"`
 	TargetIndustry param.Field[string]                                  `json:"targetIndustry"`
-	// Optional UUID for the event. Only used when preserveUuid=true in bulk create.
-	// Must be a valid UUID format.
-	UUID param.Field[string] `json:"uuid"`
 }
 
 func (r ThreatEventBulkNewParamsData) MarshalJSON() (data []byte, err error) {

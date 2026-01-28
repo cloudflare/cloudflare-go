@@ -34,7 +34,7 @@ func NewAttackSurfaceReportIssueTypeService(opts ...option.RequestOption) (r *At
 	return
 }
 
-// Get Security Center Issues Types
+// Retrieves Security Center Issues Types
 func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query Att
 	return res, nil
 }
 
-// Get Security Center Issues Types
+// Retrieves Security Center Issues Types
 func (r *AttackSurfaceReportIssueTypeService) GetAutoPaging(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }

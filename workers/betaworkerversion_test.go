@@ -77,8 +77,8 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 					ContentType:   cloudflare.F("application/javascript+module"),
 					Name:          cloudflare.F("index.js"),
 				}}),
-				Placement: cloudflare.F(workers.VersionPlacementParam{
-					Mode: cloudflare.F(workers.VersionPlacementModeSmart),
+				Placement: cloudflare.F[workers.VersionPlacementUnionParam](workers.VersionPlacementModeParam{
+					Mode: cloudflare.F(workers.VersionPlacementModeModeSmart),
 				}),
 				UsageModel: cloudflare.F(workers.VersionUsageModelStandard),
 			},

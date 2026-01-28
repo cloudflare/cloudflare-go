@@ -37,7 +37,7 @@ func NewInsightTypeService(opts ...option.RequestOption) (r *InsightTypeService)
 	return
 }
 
-// Get Security Center Insight Counts by Type
+// Retrieves Security Center Insight Counts by Type
 func (r *InsightTypeService) Get(ctx context.Context, params InsightTypeGetParams, opts ...option.RequestOption) (res *[]InsightTypeGetResponse, err error) {
 	var env InsightTypeGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

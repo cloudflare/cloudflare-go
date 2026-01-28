@@ -29,12 +29,14 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.New(context.TODO(), zero_trust.OrganizationNewParams{
-		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
-		Name:                     cloudflare.F("Widget Corps Internal Applications"),
-		AccountID:                cloudflare.F("account_id"),
-		AllowAuthenticateViaWARP: cloudflare.F(true),
-		AutoRedirectToIdentity:   cloudflare.F(true),
-		IsUIReadOnly:             cloudflare.F(true),
+		AuthDomain:                             cloudflare.F("test.cloudflareaccess.com"),
+		Name:                                   cloudflare.F("Widget Corps Internal Applications"),
+		AccountID:                              cloudflare.F("account_id"),
+		AllowAuthenticateViaWARP:               cloudflare.F(true),
+		AutoRedirectToIdentity:                 cloudflare.F(true),
+		DenyUnmatchedRequests:                  cloudflare.F(true),
+		DenyUnmatchedRequestsExemptedZoneNames: cloudflare.F([]string{"example.com"}),
+		IsUIReadOnly:                           cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
@@ -79,7 +81,9 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 			Forbidden:      cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			IdentityDenied: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		}),
-		IsUIReadOnly: cloudflare.F(true),
+		DenyUnmatchedRequests:                  cloudflare.F(true),
+		DenyUnmatchedRequestsExemptedZoneNames: cloudflare.F([]string{"example.com"}),
+		IsUIReadOnly:                           cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),

@@ -198,7 +198,10 @@ type InvestigateMoveBulkParams struct {
 	// Account Identifier
 	AccountID   param.Field[string]                               `path:"account_id,required"`
 	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination,required"`
-	PostfixIDs  param.Field[[]string]                             `json:"postfix_ids,required"`
+	// List of message IDs to move.
+	IDs param.Field[[]string] `json:"ids"`
+	// Deprecated: Use `ids` instead. List of message IDs to move.
+	PostfixIDs param.Field[[]string] `json:"postfix_ids"`
 }
 
 func (r InvestigateMoveBulkParams) MarshalJSON() (data []byte, err error) {

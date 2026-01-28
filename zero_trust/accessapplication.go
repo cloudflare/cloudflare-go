@@ -1973,6 +1973,7 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy],
+	// [[]AccessApplicationNewResponseBookmarkApplicationPolicy],
 	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -2016,54 +2017,60 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                  `json:"type"`
-	JSON  accessApplicationNewResponseJSON `json:"-"`
-	union AccessApplicationNewResponseUnion
+	Type ApplicationType `json:"type"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                             `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationNewResponseJSON `json:"-"`
+	union                                AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationNewResponse]
 type accessApplicationNewResponseJSON struct {
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherLogoURL          apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	BgColor                     apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	Domain                      apijson.Field
-	EnableBindingCookie         apijson.Field
-	FooterLinks                 apijson.Field
-	HeaderBgColor               apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LandingPageDesign           apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SaaSApp                     apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipAppLauncherLoginPage    apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherLogoURL                   apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	BgColor                              apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	Domain                               apijson.Field
+	EnableBindingCookie                  apijson.Field
+	FooterLinks                          apijson.Field
+	HeaderBgColor                        apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LandingPageDesign                    apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SaaSApp                              apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipAppLauncherLoginPage             apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r accessApplicationNewResponseJSON) RawJSON() string {
@@ -2252,45 +2259,51 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseSelfHostedApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationNewResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseSelfHostedApplication]
 type accessApplicationNewResponseSelfHostedApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -3664,45 +3677,51 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationNewResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseBrowserSSHApplication]
 type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -4509,45 +4528,51 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationNewResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseBrowserVNCApplication]
 type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -5937,7 +5962,8 @@ type AccessApplicationNewResponseBookmarkApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name string `json:"name"`
+	Name     string                                                  `json:"name"`
+	Policies []AccessApplicationNewResponseBookmarkApplicationPolicy `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -5955,6 +5981,7 @@ type accessApplicationNewResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
+	Policies           apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	raw                string
@@ -5970,6 +5997,78 @@ func (r accessApplicationNewResponseBookmarkApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationNewResponseBookmarkApplication) implementsAccessApplicationNewResponse() {}
+
+type AccessApplicationNewResponseBookmarkApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                                 `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseBookmarkApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBookmarkApplicationPolicyJSON contains the JSON
+// metadata for the struct [AccessApplicationNewResponseBookmarkApplicationPolicy]
+type accessApplicationNewResponseBookmarkApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBookmarkApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBookmarkApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
 
 type AccessApplicationNewResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
@@ -6247,46 +6346,52 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationNewResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationNewResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRdpApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseBrowserRdpApplication]
 type accessApplicationNewResponseBrowserRdpApplicationJSON struct {
-	Domain                      apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -7099,6 +7204,7 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBookmarkApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -7142,54 +7248,60 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                     `json:"type"`
-	JSON  accessApplicationUpdateResponseJSON `json:"-"`
-	union AccessApplicationUpdateResponseUnion
+	Type ApplicationType `json:"type"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationUpdateResponseJSON `json:"-"`
+	union                                AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponse]
 type accessApplicationUpdateResponseJSON struct {
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherLogoURL          apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	BgColor                     apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	Domain                      apijson.Field
-	EnableBindingCookie         apijson.Field
-	FooterLinks                 apijson.Field
-	HeaderBgColor               apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LandingPageDesign           apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SaaSApp                     apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipAppLauncherLoginPage    apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherLogoURL                   apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	BgColor                              apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	Domain                               apijson.Field
+	EnableBindingCookie                  apijson.Field
+	FooterLinks                          apijson.Field
+	HeaderBgColor                        apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LandingPageDesign                    apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SaaSApp                              apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipAppLauncherLoginPage             apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r accessApplicationUpdateResponseJSON) RawJSON() string {
@@ -7378,45 +7490,51 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseSelfHostedApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                     `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationUpdateResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseSelfHostedApplication]
 type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -8792,45 +8910,51 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                     `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationUpdateResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseBrowserSSHApplication]
 type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -9638,45 +9762,51 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                     `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationUpdateResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseBrowserVNCApplication]
 type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -11067,7 +11197,8 @@ type AccessApplicationUpdateResponseBookmarkApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name string `json:"name"`
+	Name     string                                                     `json:"name"`
+	Policies []AccessApplicationUpdateResponseBookmarkApplicationPolicy `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -11085,6 +11216,7 @@ type accessApplicationUpdateResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
+	Policies           apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	raw                string
@@ -11100,6 +11232,79 @@ func (r accessApplicationUpdateResponseBookmarkApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationUpdateResponseBookmarkApplication) implementsAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseBookmarkApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseBookmarkApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBookmarkApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUpdateResponseBookmarkApplicationPolicy]
+type accessApplicationUpdateResponseBookmarkApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBookmarkApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBookmarkApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationUpdateResponseInfrastructureApplication struct {
@@ -11379,46 +11584,52 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                                 `json:"tags"`
-	JSON accessApplicationUpdateResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                     `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationUpdateResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRdpApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseBrowserRdpApplication]
 type accessApplicationUpdateResponseBrowserRdpApplicationJSON struct {
-	Domain                      apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -12232,6 +12443,7 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy],
+	// [[]AccessApplicationListResponseBookmarkApplicationPolicy],
 	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -12275,54 +12487,60 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                   `json:"type"`
-	JSON  accessApplicationListResponseJSON `json:"-"`
-	union AccessApplicationListResponseUnion
+	Type ApplicationType `json:"type"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                              `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationListResponseJSON `json:"-"`
+	union                                AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationListResponse]
 type accessApplicationListResponseJSON struct {
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherLogoURL          apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	BgColor                     apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	Domain                      apijson.Field
-	EnableBindingCookie         apijson.Field
-	FooterLinks                 apijson.Field
-	HeaderBgColor               apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LandingPageDesign           apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SaaSApp                     apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipAppLauncherLoginPage    apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherLogoURL                   apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	BgColor                              apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	Domain                               apijson.Field
+	EnableBindingCookie                  apijson.Field
+	FooterLinks                          apijson.Field
+	HeaderBgColor                        apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LandingPageDesign                    apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SaaSApp                              apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipAppLauncherLoginPage             apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r accessApplicationListResponseJSON) RawJSON() string {
@@ -12511,45 +12729,51 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseSelfHostedApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                   `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationListResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseSelfHostedApplication]
 type accessApplicationListResponseSelfHostedApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -13924,45 +14148,51 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                   `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationListResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseBrowserSSHApplication]
 type accessApplicationListResponseBrowserSSHApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -14770,45 +15000,51 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                   `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationListResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseBrowserVNCApplication]
 type accessApplicationListResponseBrowserVNCApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -16199,7 +16435,8 @@ type AccessApplicationListResponseBookmarkApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name string `json:"name"`
+	Name     string                                                   `json:"name"`
+	Policies []AccessApplicationListResponseBookmarkApplicationPolicy `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -16217,6 +16454,7 @@ type accessApplicationListResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
+	Policies           apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	raw                string
@@ -16232,6 +16470,78 @@ func (r accessApplicationListResponseBookmarkApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationListResponseBookmarkApplication) implementsAccessApplicationListResponse() {}
+
+type AccessApplicationListResponseBookmarkApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                     `json:"session_duration"`
+	UpdatedAt       time.Time                                                  `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseBookmarkApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationListResponseBookmarkApplicationPolicyJSON contains the JSON
+// metadata for the struct [AccessApplicationListResponseBookmarkApplicationPolicy]
+type accessApplicationListResponseBookmarkApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBookmarkApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBookmarkApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
 
 type AccessApplicationListResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
@@ -16509,46 +16819,52 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                               `json:"tags"`
-	JSON accessApplicationListResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                   `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationListResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRdpApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseBrowserRdpApplication]
 type accessApplicationListResponseBrowserRdpApplicationJSON struct {
-	Domain                      apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -17384,6 +17700,7 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy],
+	// [[]AccessApplicationGetResponseBookmarkApplicationPolicy],
 	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
@@ -17427,54 +17744,60 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type  ApplicationType                  `json:"type"`
-	JSON  accessApplicationGetResponseJSON `json:"-"`
-	union AccessApplicationGetResponseUnion
+	Type ApplicationType `json:"type"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                             `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationGetResponseJSON `json:"-"`
+	union                                AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationGetResponse]
 type accessApplicationGetResponseJSON struct {
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherLogoURL          apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	BgColor                     apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	Domain                      apijson.Field
-	EnableBindingCookie         apijson.Field
-	FooterLinks                 apijson.Field
-	HeaderBgColor               apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LandingPageDesign           apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SaaSApp                     apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipAppLauncherLoginPage    apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherLogoURL                   apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	BgColor                              apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	Domain                               apijson.Field
+	EnableBindingCookie                  apijson.Field
+	FooterLinks                          apijson.Field
+	HeaderBgColor                        apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LandingPageDesign                    apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SaaSApp                              apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipAppLauncherLoginPage             apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r accessApplicationGetResponseJSON) RawJSON() string {
@@ -17663,45 +17986,51 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseSelfHostedApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationGetResponseSelfHostedApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseSelfHostedApplication]
 type accessApplicationGetResponseSelfHostedApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -19075,45 +19404,51 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseBrowserSSHApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationGetResponseBrowserSSHApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseBrowserSSHApplication]
 type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -19920,45 +20255,51 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseBrowserVNCApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationGetResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseBrowserVNCApplication]
 type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
-	Domain                      apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -21348,7 +21689,8 @@ type AccessApplicationGetResponseBookmarkApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name string `json:"name"`
+	Name     string                                                  `json:"name"`
+	Policies []AccessApplicationGetResponseBookmarkApplicationPolicy `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
@@ -21366,6 +21708,7 @@ type accessApplicationGetResponseBookmarkApplicationJSON struct {
 	Domain             apijson.Field
 	LogoURL            apijson.Field
 	Name               apijson.Field
+	Policies           apijson.Field
 	Tags               apijson.Field
 	Type               apijson.Field
 	raw                string
@@ -21381,6 +21724,78 @@ func (r accessApplicationGetResponseBookmarkApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationGetResponseBookmarkApplication) implementsAccessApplicationGetResponse() {}
+
+type AccessApplicationGetResponseBookmarkApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                                 `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseBookmarkApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBookmarkApplicationPolicyJSON contains the JSON
+// metadata for the struct [AccessApplicationGetResponseBookmarkApplicationPolicy]
+type accessApplicationGetResponseBookmarkApplicationPolicyJSON struct {
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBookmarkApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBookmarkApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
 
 type AccessApplicationGetResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
@@ -21658,46 +22073,52 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string                                              `json:"tags"`
-	JSON accessApplicationGetResponseBrowserRdpApplicationJSON `json:"-"`
+	Tags []string `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL bool                                                  `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationGetResponseBrowserRdpApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRdpApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseBrowserRdpApplication]
 type accessApplicationGetResponseBrowserRdpApplicationJSON struct {
-	Domain                      apijson.Field
-	TargetCriteria              apijson.Field
-	Type                        apijson.Field
-	ID                          apijson.Field
-	AllowAuthenticateViaWARP    apijson.Field
-	AllowIframe                 apijson.Field
-	AllowedIdPs                 apijson.Field
-	AppLauncherVisible          apijson.Field
-	AUD                         apijson.Field
-	AutoRedirectToIdentity      apijson.Field
-	CORSHeaders                 apijson.Field
-	CustomDenyMessage           apijson.Field
-	CustomDenyURL               apijson.Field
-	CustomNonIdentityDenyURL    apijson.Field
-	CustomPages                 apijson.Field
-	Destinations                apijson.Field
-	EnableBindingCookie         apijson.Field
-	HTTPOnlyCookieAttribute     apijson.Field
-	LogoURL                     apijson.Field
-	Name                        apijson.Field
-	OptionsPreflightBypass      apijson.Field
-	PathCookieAttribute         apijson.Field
-	Policies                    apijson.Field
-	ReadServiceTokensFromHeader apijson.Field
-	SameSiteCookieAttribute     apijson.Field
-	SCIMConfig                  apijson.Field
-	SelfHostedDomains           apijson.Field
-	ServiceAuth401Redirect      apijson.Field
-	SessionDuration             apijson.Field
-	SkipInterstitial            apijson.Field
-	Tags                        apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	Domain                               apijson.Field
+	TargetCriteria                       apijson.Field
+	Type                                 apijson.Field
+	ID                                   apijson.Field
+	AllowAuthenticateViaWARP             apijson.Field
+	AllowIframe                          apijson.Field
+	AllowedIdPs                          apijson.Field
+	AppLauncherVisible                   apijson.Field
+	AUD                                  apijson.Field
+	AutoRedirectToIdentity               apijson.Field
+	CORSHeaders                          apijson.Field
+	CustomDenyMessage                    apijson.Field
+	CustomDenyURL                        apijson.Field
+	CustomNonIdentityDenyURL             apijson.Field
+	CustomPages                          apijson.Field
+	Destinations                         apijson.Field
+	EnableBindingCookie                  apijson.Field
+	HTTPOnlyCookieAttribute              apijson.Field
+	LogoURL                              apijson.Field
+	Name                                 apijson.Field
+	OptionsPreflightBypass               apijson.Field
+	PathCookieAttribute                  apijson.Field
+	Policies                             apijson.Field
+	ReadServiceTokensFromHeader          apijson.Field
+	SameSiteCookieAttribute              apijson.Field
+	SCIMConfig                           apijson.Field
+	SelfHostedDomains                    apijson.Field
+	ServiceAuth401Redirect               apijson.Field
+	SessionDuration                      apijson.Field
+	SkipInterstitial                     apijson.Field
+	Tags                                 apijson.Field
+	UseClientlessIsolationAppLauncherURL apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -22531,6 +22952,11 @@ type AccessApplicationNewParamsBody struct {
 	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -22549,7 +22975,7 @@ func (r AccessApplicationNewParamsBody) implementsAccessApplicationNewParamsBody
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication],
-// [zero_trust.AccessApplicationNewParamsBodyAccessBookmarkProps],
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplication],
 // [zero_trust.AccessApplicationNewParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRdpApplication],
 // [AccessApplicationNewParamsBody].
@@ -22645,6 +23071,11 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplication) MarshalJSON() (data []byte, err error) {
@@ -23687,6 +24118,11 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplication) MarshalJSON() (data []byte, err error) {
@@ -24319,6 +24755,11 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplication) MarshalJSON() (data []byte, err error) {
@@ -25437,7 +25878,7 @@ func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPol
 func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
 
-type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
+type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
@@ -25446,6 +25887,10 @@ type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application, in ascending order of
+	// precedence. Items can reference existing policies or create new policies
+	// exclusive to the application.
+	Policies param.Field[[]AccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion] `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -25453,11 +25898,102 @@ type AccessApplicationNewParamsBodyAccessBookmarkProps struct {
 	Type param.Field[ApplicationType] `json:"type"`
 }
 
-func (r AccessApplicationNewParamsBodyAccessBookmarkProps) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyAccessBookmarkProps) implementsAccessApplicationNewParamsBodyUnion() {
+func (r AccessApplicationNewParamsBodyBookmarkApplication) implementsAccessApplicationNewParamsBodyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationNewParamsBodyBookmarkApplicationPolicy struct {
+	// The UUID of the policy
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationPolicy) ImplementsAccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink],
+// [shared.UnionString],
+// [zero_trust.AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObject],
+// [AccessApplicationNewParamsBodyBookmarkApplicationPolicy].
+type AccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion interface {
+	ImplementsAccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion()
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationNewParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion() {
+}
+
+type AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObject struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObject) ImplementsAccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion() {
 }
 
 type AccessApplicationNewParamsBodyInfrastructureApplication struct {
@@ -25645,6 +26181,11 @@ type AccessApplicationNewParamsBodyBrowserRdpApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRdpApplication) MarshalJSON() (data []byte, err error) {
@@ -26425,6 +26966,11 @@ type AccessApplicationUpdateParamsBody struct {
 	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -26444,7 +26990,7 @@ func (r AccessApplicationUpdateParamsBody) implementsAccessApplicationUpdatePara
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication],
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessBookmarkProps],
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyInfrastructureApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRdpApplication],
 // [AccessApplicationUpdateParamsBody].
@@ -26540,6 +27086,11 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplication) MarshalJSON() (data []byte, err error) {
@@ -27582,6 +28133,11 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) MarshalJSON() (data []byte, err error) {
@@ -28214,6 +28770,11 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) MarshalJSON() (data []byte, err error) {
@@ -29332,7 +29893,7 @@ func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication
 func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
 
-type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
+type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
@@ -29341,6 +29902,10 @@ type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application, in ascending order of
+	// precedence. Items can reference existing policies or create new policies
+	// exclusive to the application.
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion] `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -29348,11 +29913,102 @@ type AccessApplicationUpdateParamsBodyAccessBookmarkProps struct {
 	Type param.Field[ApplicationType] `json:"type"`
 }
 
-func (r AccessApplicationUpdateParamsBodyAccessBookmarkProps) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBookmarkApplication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyAccessBookmarkProps) implementsAccessApplicationUpdateParamsBodyUnion() {
+func (r AccessApplicationUpdateParamsBodyBookmarkApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationPolicy struct {
+	// The UUID of the policy
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPolicy) ImplementsAccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion() {
+}
+
+// A JSON that links a reusable policy to an application.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink],
+// [shared.UnionString],
+// [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObject],
+// [AccessApplicationUpdateParamsBodyBookmarkApplicationPolicy].
+type AccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion interface {
+	ImplementsAccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion()
+}
+
+// A JSON that links a reusable policy to an application.
+type AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObject struct {
+	// The UUID of the policy
+	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObject) ImplementsAccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion() {
 }
 
 type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
@@ -29540,6 +30196,11 @@ type AccessApplicationUpdateParamsBodyBrowserRdpApplication struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// Determines if users can access this application via a clientless browser
+	// isolation URL. This allows users to access private domains without connecting to
+	// Gateway. The option requires Clientless Browser Isolation to be set up with
+	// policies that allow users of this application.
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRdpApplication) MarshalJSON() (data []byte, err error) {

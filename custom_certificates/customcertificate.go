@@ -158,31 +158,15 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 type CustomCertificate struct {
 	// Identifier.
 	ID string `json:"id,required"`
+	// Identifier.
+	ZoneID string `json:"zone_id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod custom_hostnames.BundleMethod `json:"bundle_method,required"`
+	BundleMethod custom_hostnames.BundleMethod `json:"bundle_method"`
 	// When the certificate from the authority expires.
-	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
-	Hosts     []string  `json:"hosts,required"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer,required"`
-	// When the certificate was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The order/priority in which the certificate will be used in a request. The
-	// higher priority will break ties across overlapping 'legacy_custom' certificates,
-	// but 'legacy_custom' certificates will always supercede 'sni_custom'
-	// certificates.
-	Priority float64 `json:"priority,required"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature,required"`
-	// Status of the zone's custom SSL.
-	Status CustomCertificateStatus `json:"status,required"`
-	// When the certificate was uploaded to Cloudflare.
-	UploadedOn time.Time `json:"uploaded_on,required" format:"date-time"`
-	// Identifier.
-	ZoneID string `json:"zone_id,required"`
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -190,8 +174,13 @@ type CustomCertificate struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions GeoRestrictions                         `json:"geo_restrictions"`
-	KeylessServer   keyless_certificates.KeylessCertificate `json:"keyless_server"`
+	GeoRestrictions GeoRestrictions `json:"geo_restrictions"`
+	Hosts           []string        `json:"hosts"`
+	// The certificate authority that issued the certificate.
+	Issuer        string                                  `json:"issuer"`
+	KeylessServer keyless_certificates.KeylessCertificate `json:"keyless_server"`
+	// When the certificate was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -201,27 +190,38 @@ type CustomCertificate struct {
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected.
-	Policy string                `json:"policy"`
-	JSON   customCertificateJSON `json:"-"`
+	Policy string `json:"policy"`
+	// The order/priority in which the certificate will be used in a request. The
+	// higher priority will break ties across overlapping 'legacy_custom' certificates,
+	// but 'legacy_custom' certificates will always supercede 'sni_custom'
+	// certificates.
+	Priority float64 `json:"priority"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the zone's custom SSL.
+	Status CustomCertificateStatus `json:"status"`
+	// When the certificate was uploaded to Cloudflare.
+	UploadedOn time.Time             `json:"uploaded_on" format:"date-time"`
+	JSON       customCertificateJSON `json:"-"`
 }
 
 // customCertificateJSON contains the JSON metadata for the struct
 // [CustomCertificate]
 type customCertificateJSON struct {
 	ID              apijson.Field
+	ZoneID          apijson.Field
 	BundleMethod    apijson.Field
 	ExpiresOn       apijson.Field
+	GeoRestrictions apijson.Field
 	Hosts           apijson.Field
 	Issuer          apijson.Field
+	KeylessServer   apijson.Field
 	ModifiedOn      apijson.Field
+	Policy          apijson.Field
 	Priority        apijson.Field
 	Signature       apijson.Field
 	Status          apijson.Field
 	UploadedOn      apijson.Field
-	ZoneID          apijson.Field
-	GeoRestrictions apijson.Field
-	KeylessServer   apijson.Field
-	Policy          apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -750,7 +750,15 @@ func (r CustomCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomCertificateEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]                  `path:"zone_id,required"`
+	Body   CustomCertificateEditParamsBodyUnion `json:"body,required"`
+}
+
+func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type CustomCertificateEditParamsBody struct {
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -780,9 +788,69 @@ type CustomCertificateEditParams struct {
 	PrivateKey param.Field[string] `json:"private_key"`
 }
 
-func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
+func (r CustomCertificateEditParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r CustomCertificateEditParamsBody) implementsCustomCertificateEditParamsBodyUnion() {}
+
+// Satisfied by [custom_certificates.CustomCertificateEditParamsBodyBundleMethod],
+// [custom_certificates.CustomCertificateEditParamsBodyObject],
+// [CustomCertificateEditParamsBody].
+type CustomCertificateEditParamsBodyUnion interface {
+	implementsCustomCertificateEditParamsBodyUnion()
+}
+
+type CustomCertificateEditParamsBodyBundleMethod struct {
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+}
+
+func (r CustomCertificateEditParamsBodyBundleMethod) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CustomCertificateEditParamsBodyBundleMethod) implementsCustomCertificateEditParamsBodyUnion() {
+}
+
+type CustomCertificateEditParamsBodyObject struct {
+	// The zone's SSL certificate or certificate and the intermediate(s).
+	Certificate param.Field[string] `json:"certificate,required"`
+	// The zone's private key.
+	PrivateKey param.Field[string] `json:"private_key,required"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+	// Specify the region where your private key can be held locally for optimal TLS
+	// performance. HTTPS connections to any excluded data center will still be fully
+	// encrypted, but will incur some latency while Keyless SSL is used to complete the
+	// handshake with the nearest allowed data center. Options allow distribution to
+	// only to U.S. data centers, only to E.U. data centers, or only to highest
+	// security data centers. Default distribution is to all Cloudflare datacenters,
+	// for optimal performance.
+	GeoRestrictions param.Field[GeoRestrictionsParam] `json:"geo_restrictions"`
+	// Specify the policy that determines the region where your private key will be
+	// held locally. HTTPS connections to any excluded data center will still be fully
+	// encrypted, but will incur some latency while Keyless SSL is used to complete the
+	// handshake with the nearest allowed data center. Any combination of countries,
+	// specified by their two letter country code
+	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
+	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
+	// the EU region. If there are too few data centers satisfying the policy, it will
+	// be rejected.
+	Policy param.Field[string] `json:"policy"`
+}
+
+func (r CustomCertificateEditParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CustomCertificateEditParamsBodyObject) implementsCustomCertificateEditParamsBodyUnion() {}
 
 type CustomCertificateEditResponseEnvelope struct {
 	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors,required"`

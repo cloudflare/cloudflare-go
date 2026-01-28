@@ -69,7 +69,7 @@ func (r *InstanceItemService) ListAutoPaging(ctx context.Context, id string, par
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
 }
 
-// Get Items.
+// Get Item.
 func (r *InstanceItemService) Get(ctx context.Context, id string, itemID string, query InstanceItemGetParams, opts ...option.RequestOption) (res *InstanceItemGetResponse, err error) {
 	var env InstanceItemGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

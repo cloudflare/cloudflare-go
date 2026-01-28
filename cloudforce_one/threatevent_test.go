@@ -57,7 +57,6 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		Tags:           cloudflare.F([]string{"malware"}),
 		TargetCountry:  cloudflare.F("US"),
 		TargetIndustry: cloudflare.F("Agriculture"),
-		UUID:           cloudflare.F("12345678-1234-1234-1234-1234567890ab"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -84,6 +83,7 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.List(context.TODO(), cloudforce_one.ThreatEventListParams{
 		AccountID:    cloudflare.F("account_id"),
+		Cursor:       cloudflare.F("eyJ2ZXJzaW9uIjoxLCJwb3NpdGlvbiI6eyJkYXRlIjoiMjAyNC0wMS0xMlQxMDowMDowMFoiLCJ1dWlkIjoiYWJjMTIzIn19"),
 		DatasetID:    cloudflare.F([]string{"string"}),
 		ForceRefresh: cloudflare.F(true),
 		Format:       cloudflare.F(cloudforce_one.ThreatEventListParamsFormatJson),
@@ -178,10 +178,9 @@ func TestThreatEventBulkNewWithOptionalParams(t *testing.T) {
 			Tags:           cloudflare.F([]string{"malware"}),
 			TargetCountry:  cloudflare.F("US"),
 			TargetIndustry: cloudflare.F("Agriculture"),
-			UUID:           cloudflare.F("12345678-1234-1234-1234-1234567890ab"),
 		}}),
-		DatasetID:    cloudflare.F("durableObjectName"),
-		PreserveUUID: cloudflare.F(true),
+		DatasetID:            cloudflare.F("durableObjectName"),
+		IncludeCreatedEvents: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

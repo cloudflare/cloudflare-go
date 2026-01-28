@@ -63,6 +63,7 @@ func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params I
 }
 
 type InvestigateReleaseBulkResponse struct {
+	ID string `json:"id,required"`
 	// The identifier of the message.
 	PostfixID   string                             `json:"postfix_id,required"`
 	Delivered   []string                           `json:"delivered,nullable"`
@@ -74,6 +75,7 @@ type InvestigateReleaseBulkResponse struct {
 // investigateReleaseBulkResponseJSON contains the JSON metadata for the struct
 // [InvestigateReleaseBulkResponse]
 type investigateReleaseBulkResponseJSON struct {
+	ID          apijson.Field
 	PostfixID   apijson.Field
 	Delivered   apijson.Field
 	Failed      apijson.Field

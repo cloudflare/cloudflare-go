@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package email_security_test
+package fraud_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/email_security"
+	"github.com/cloudflare/cloudflare-go/v6/fraud"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestInvestigateMoveNew(t *testing.T) {
+func TestFraudUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,14 +27,13 @@ func TestInvestigateMoveNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailSecurity.Investigate.Move.New(
-		context.TODO(),
-		"4Njp3P0STMz2c02Q",
-		email_security.InvestigateMoveNewParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Destination: cloudflare.F(email_security.InvestigateMoveNewParamsDestinationInbox),
+	_, err := client.Fraud.Update(context.TODO(), fraud.FraudUpdateParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		FraudSettings: fraud.FraudSettingsParam{
+			UserProfiles:        cloudflare.F(fraud.FraudSettingsUserProfilesDisabled),
+			UsernameExpressions: cloudflare.F([]string{"string"}),
 		},
-	)
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -44,7 +43,7 @@ func TestInvestigateMoveNew(t *testing.T) {
 	}
 }
 
-func TestInvestigateMoveBulkWithOptionalParams(t *testing.T) {
+func TestFraudGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,11 +56,8 @@ func TestInvestigateMoveBulkWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailSecurity.Investigate.Move.Bulk(context.TODO(), email_security.InvestigateMoveBulkParams{
-		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Destination: cloudflare.F(email_security.InvestigateMoveBulkParamsDestinationInbox),
-		IDs:         cloudflare.F([]string{"string"}),
-		PostfixIDs:  cloudflare.F([]string{"4Njp3P0STMz2c02Q"}),
+	_, err := client.Fraud.Get(context.TODO(), fraud.FraudGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -280,7 +280,8 @@ func (r DHCPServerParam) MarshalJSON() (data []byte, err error) {
 
 type LAN struct {
 	// Identifier
-	ID string `json:"id"`
+	ID     string `json:"id"`
+	BondID int64  `json:"bond_id"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        bool           `json:"ha_link"`
@@ -302,6 +303,7 @@ type LAN struct {
 // lanJSON contains the JSON metadata for the struct [LAN]
 type lanJSON struct {
 	ID               apijson.Field
+	BondID           apijson.Field
 	HaLink           apijson.Field
 	Name             apijson.Field
 	Nat              apijson.Field
@@ -446,12 +448,13 @@ func (r RoutedSubnetParam) MarshalJSON() (data []byte, err error) {
 type SiteLANNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Physport  param.Field[int64]  `json:"physport,required"`
+	BondID    param.Field[int64]  `json:"bond_id"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        param.Field[bool]                `json:"ha_link"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
+	Physport      param.Field[int64]               `json:"physport"`
 	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
@@ -468,6 +471,7 @@ func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
 type SiteLANUpdateParams struct {
 	// Identifier
 	AccountID     param.Field[string]              `path:"account_id,required"`
+	BondID        param.Field[int64]               `json:"bond_id"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
 	Physport      param.Field[int64]               `json:"physport"`
@@ -583,6 +587,7 @@ func (r SiteLANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type SiteLANEditParams struct {
 	// Identifier
 	AccountID     param.Field[string]              `path:"account_id,required"`
+	BondID        param.Field[int64]               `json:"bond_id"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
 	Physport      param.Field[int64]               `json:"physport"`

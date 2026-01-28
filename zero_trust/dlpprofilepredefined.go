@@ -106,10 +106,14 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 
 type DLPProfilePredefinedUpdateResponse struct {
 	// The id of the predefined profile (uuid).
-	ID                  string   `json:"id,required" format:"uuid"`
-	AllowedMatchCount   int64    `json:"allowed_match_count,required"`
-	ConfidenceThreshold string   `json:"confidence_threshold,required,nullable"`
-	EnabledEntries      []string `json:"enabled_entries,required" format:"uuid"`
+	ID                  string `json:"id,required" format:"uuid"`
+	AllowedMatchCount   int64  `json:"allowed_match_count,required"`
+	ConfidenceThreshold string `json:"confidence_threshold,required,nullable"`
+	// Entries to enable for this predefined profile. Any entries not provided will be
+	// disabled.
+	EnabledEntries []string `json:"enabled_entries,required" format:"uuid"`
+	// This field has been deprecated for `enabled_entries`.
+	//
 	// Deprecated: deprecated
 	Entries []DLPProfilePredefinedUpdateResponseEntry `json:"entries,required"`
 	// The name of the predefined profile.
@@ -673,10 +677,14 @@ type DLPProfilePredefinedDeleteResponse = interface{}
 
 type DLPProfilePredefinedGetResponse struct {
 	// The id of the predefined profile (uuid).
-	ID                  string   `json:"id,required" format:"uuid"`
-	AllowedMatchCount   int64    `json:"allowed_match_count,required"`
-	ConfidenceThreshold string   `json:"confidence_threshold,required,nullable"`
-	EnabledEntries      []string `json:"enabled_entries,required" format:"uuid"`
+	ID                  string `json:"id,required" format:"uuid"`
+	AllowedMatchCount   int64  `json:"allowed_match_count,required"`
+	ConfidenceThreshold string `json:"confidence_threshold,required,nullable"`
+	// Entries to enable for this predefined profile. Any entries not provided will be
+	// disabled.
+	EnabledEntries []string `json:"enabled_entries,required" format:"uuid"`
+	// This field has been deprecated for `enabled_entries`.
+	//
 	// Deprecated: deprecated
 	Entries []DLPProfilePredefinedGetResponseEntry `json:"entries,required"`
 	// The name of the predefined profile.
