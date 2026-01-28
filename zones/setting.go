@@ -1883,6 +1883,9 @@ func (r MinTLSVersionEditable) IsKnown() bool {
 	return false
 }
 
+// Deprecated: Mirage is deprecated. This functionality is no longer supported. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-11-03
+// for further details.
 type Mirage struct {
 	// Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
 	// accelerate loading of image-heavy websites on very slow mobile connections and
@@ -1944,6 +1947,9 @@ func (r MirageValue) IsKnown() bool {
 	return false
 }
 
+// Deprecated: Mirage is deprecated. This functionality is no longer supported. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-11-03
+// for further details.
 type MirageParam struct {
 	// Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
 	// accelerate loading of image-heavy websites on very slow mobile connections and
