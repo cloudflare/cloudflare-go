@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/accounts"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
@@ -25,7 +26,7 @@ func TestManualPagination(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	page, err := client.Accounts.List(context.TODO(), cloudflare.AccountListParams{})
+	page, err := client.Accounts.List(context.TODO(), accounts.AccountListParams{})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
