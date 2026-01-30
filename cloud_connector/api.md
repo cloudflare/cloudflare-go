@@ -1,0 +1,13 @@
+# CloudConnector
+
+## Rules
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector">cloud_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleUpdateResponse">RuleUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector">cloud_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleListResponse">RuleListResponse</a>
+
+Methods:
+
+- <code title="put /zones/{zone_id}/cloud_connector/rules">client.CloudConnector.Rules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector">cloud_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleUpdateParams">RuleUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector">cloud_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleUpdateResponse">RuleUpdateResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/cloud_connector/rules">client.CloudConnector.Rules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector">cloud_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleListParams">RuleListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector">cloud_connector</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/cloud_connector#RuleListResponse">RuleListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

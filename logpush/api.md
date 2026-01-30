@@ -1,0 +1,76 @@
+# Logpush
+
+## Datasets
+
+### Fields
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetFieldGetResponse">DatasetFieldGetResponse</a>
+
+Methods:
+
+- <code title="get /{accounts_or_zones}/{account_or_zone_id}/logpush/datasets/{dataset_id}/fields">client.Logpush.Datasets.Fields.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetFieldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, datasetID <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetFieldGetParamsDatasetID">DatasetFieldGetParamsDatasetID</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetFieldGetParams">DatasetFieldGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetFieldGetResponse">DatasetFieldGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Jobs
+
+Methods:
+
+- <code title="get /{accounts_or_zones}/{account_or_zone_id}/logpush/datasets/{dataset_id}/jobs">client.Logpush.Datasets.Jobs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetJobService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, datasetID <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetJobGetParamsDatasetID">DatasetJobGetParamsDatasetID</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#DatasetJobGetParams">DatasetJobGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#LogpushJob">LogpushJob</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Edge
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#InstantLogpushJob">InstantLogpushJob</a>
+
+Methods:
+
+- <code title="post /zones/{zone_id}/logpush/edge/jobs">client.Logpush.Edge.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#EdgeService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#EdgeNewParams">EdgeNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#InstantLogpushJob">InstantLogpushJob</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/logpush/edge/jobs">client.Logpush.Edge.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#EdgeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#EdgeGetParams">EdgeGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#InstantLogpushJob">InstantLogpushJob</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Jobs
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OutputOptionsParam">OutputOptionsParam</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#LogpushJob">LogpushJob</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OutputOptions">OutputOptions</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobDeleteResponse">JobDeleteResponse</a>
+
+Methods:
+
+- <code title="post /{accounts_or_zones}/{account_or_zone_id}/logpush/jobs">client.Logpush.Jobs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobNewParams">JobNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#LogpushJob">LogpushJob</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /{accounts_or_zones}/{account_or_zone_id}/logpush/jobs/{job_id}">client.Logpush.Jobs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, jobID <a href="https://pkg.go.dev/builtin#int64">int64</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobUpdateParams">JobUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#LogpushJob">LogpushJob</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /{accounts_or_zones}/{account_or_zone_id}/logpush/jobs">client.Logpush.Jobs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobListParams">JobListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#LogpushJob">LogpushJob</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /{accounts_or_zones}/{account_or_zone_id}/logpush/jobs/{job_id}">client.Logpush.Jobs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, jobID <a href="https://pkg.go.dev/builtin#int64">int64</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobDeleteParams">JobDeleteParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobDeleteResponse">JobDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /{accounts_or_zones}/{account_or_zone_id}/logpush/jobs/{job_id}">client.Logpush.Jobs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, jobID <a href="https://pkg.go.dev/builtin#int64">int64</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#JobGetParams">JobGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#LogpushJob">LogpushJob</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Ownership
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipValidation">OwnershipValidation</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipNewResponse">OwnershipNewResponse</a>
+
+Methods:
+
+- <code title="post /{accounts_or_zones}/{account_or_zone_id}/logpush/ownership">client.Logpush.Ownership.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipNewParams">OwnershipNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipNewResponse">OwnershipNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /{accounts_or_zones}/{account_or_zone_id}/logpush/ownership/validate">client.Logpush.Ownership.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipService.Validate">Validate</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipValidateParams">OwnershipValidateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#OwnershipValidation">OwnershipValidation</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Validate
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateDestinationResponse">ValidateDestinationResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateDestinationExistsResponse">ValidateDestinationExistsResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateOriginResponse">ValidateOriginResponse</a>
+
+Methods:
+
+- <code title="post /{accounts_or_zones}/{account_or_zone_id}/logpush/validate/destination">client.Logpush.Validate.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateService.Destination">Destination</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateDestinationParams">ValidateDestinationParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateDestinationResponse">ValidateDestinationResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /{accounts_or_zones}/{account_or_zone_id}/logpush/validate/destination/exists">client.Logpush.Validate.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateService.DestinationExists">DestinationExists</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateDestinationExistsParams">ValidateDestinationExistsParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateDestinationExistsResponse">ValidateDestinationExistsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /{accounts_or_zones}/{account_or_zone_id}/logpush/validate/origin">client.Logpush.Validate.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateService.Origin">Origin</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateOriginParams">ValidateOriginParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush">logpush</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/logpush#ValidateOriginResponse">ValidateOriginResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
