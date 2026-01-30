@@ -830,7 +830,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// Name of the secret in the store.
 	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
-	Service param.Field[string] `json:"service"`
+	Service param.Field[string]      `json:"service"`
+	Simple  param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
@@ -871,6 +872,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmail],
@@ -1449,6 +1451,51 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQue
 	return false
 }
 
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Identifier of the rate limit namespace to bind to.
+	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	// The rate limit configuration.
+	Simple param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple] `json:"simple,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType] `json:"type,required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The rate limit configuration.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple struct {
+	// The limit (requests per period).
+	Limit param.Field[float64] `json:"limit,required"`
+	// The period in seconds.
+	Period param.Field[int64] `json:"period,required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitTypeRatelimit DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType = "ratelimit"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitTypeRatelimit:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name,required"`
@@ -1904,6 +1951,7 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "plain_text"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "pipelines"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "queue"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "ratelimit"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "r2_bucket"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secret_text"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "send_email"
@@ -1919,7 +1967,7 @@ const (
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule:
 		return true
 	}
 	return false

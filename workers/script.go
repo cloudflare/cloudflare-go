@@ -1882,7 +1882,8 @@ type ScriptUpdateParamsMetadataBinding struct {
 	// Name of the secret in the store.
 	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
-	Service param.Field[string] `json:"service"`
+	Service param.Field[string]      `json:"service"`
+	Simple  param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
@@ -1921,6 +1922,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmail],
@@ -2499,6 +2501,51 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown()
 	return false
 }
 
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Identifier of the rate limit namespace to bind to.
+	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	// The rate limit configuration.
+	Simple param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple] `json:"simple,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit) implementsScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The rate limit configuration.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple struct {
+	// The limit (requests per period).
+	Limit param.Field[float64] `json:"limit,required"`
+	// The period in seconds.
+	Period param.Field[int64] `json:"period,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitTypeRatelimit ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType = "ratelimit"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitTypeRatelimit:
+		return true
+	}
+	return false
+}
+
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name,required"`
@@ -2954,6 +3001,7 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypePlainText              ScriptUpdateParamsMetadataBindingsType = "plain_text"
 	ScriptUpdateParamsMetadataBindingsTypePipelines              ScriptUpdateParamsMetadataBindingsType = "pipelines"
 	ScriptUpdateParamsMetadataBindingsTypeQueue                  ScriptUpdateParamsMetadataBindingsType = "queue"
+	ScriptUpdateParamsMetadataBindingsTypeRatelimit              ScriptUpdateParamsMetadataBindingsType = "ratelimit"
 	ScriptUpdateParamsMetadataBindingsTypeR2Bucket               ScriptUpdateParamsMetadataBindingsType = "r2_bucket"
 	ScriptUpdateParamsMetadataBindingsTypeSecretText             ScriptUpdateParamsMetadataBindingsType = "secret_text"
 	ScriptUpdateParamsMetadataBindingsTypeSendEmail              ScriptUpdateParamsMetadataBindingsType = "send_email"
@@ -2969,7 +3017,7 @@ const (
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule:
 		return true
 	}
 	return false

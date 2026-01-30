@@ -138,6 +138,9 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// This field can have the runtime type of
+	// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple].
+	Simple interface{} `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id"`
 	// The text value to use.
@@ -185,6 +188,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
+	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
 	Usages                      apijson.Field
@@ -228,6 +232,7 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmail],
@@ -263,6 +268,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmail],
@@ -366,6 +372,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
 			DiscriminatorValue: "queue",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit{}),
+			DiscriminatorValue: "ratelimit",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1290,6 +1301,83 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType) Is
 	return false
 }
 
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Identifier of the rate limit namespace to bind to.
+	NamespaceID string `json:"namespace_id,required"`
+	// The rate limit configuration.
+	Simple DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple `json:"simple,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType `json:"type,required"`
+	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Simple      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The rate limit configuration.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple struct {
+	// The limit (requests per period).
+	Limit float64 `json:"limit,required"`
+	// The period in seconds.
+	Period int64                                                                          `json:"period,required"`
+	JSON   dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimpleJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimpleJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimpleJSON struct {
+	Limit       apijson.Field
+	Period      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimpleJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitTypeRatelimit DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType = "ratelimit"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitTypeRatelimit:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name,required"`
@@ -1920,6 +2008,7 @@ const (
 	DispatchNamespaceScriptBindingGetResponseTypePlainText              DispatchNamespaceScriptBindingGetResponseType = "plain_text"
 	DispatchNamespaceScriptBindingGetResponseTypePipelines              DispatchNamespaceScriptBindingGetResponseType = "pipelines"
 	DispatchNamespaceScriptBindingGetResponseTypeQueue                  DispatchNamespaceScriptBindingGetResponseType = "queue"
+	DispatchNamespaceScriptBindingGetResponseTypeRatelimit              DispatchNamespaceScriptBindingGetResponseType = "ratelimit"
 	DispatchNamespaceScriptBindingGetResponseTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseType = "r2_bucket"
 	DispatchNamespaceScriptBindingGetResponseTypeSecretText             DispatchNamespaceScriptBindingGetResponseType = "secret_text"
 	DispatchNamespaceScriptBindingGetResponseTypeSendEmail              DispatchNamespaceScriptBindingGetResponseType = "send_email"
@@ -1935,7 +2024,7 @@ const (
 
 func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDataBlob, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeInherit, DispatchNamespaceScriptBindingGetResponseTypeImages, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeSendEmail, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTextBlob, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow, DispatchNamespaceScriptBindingGetResponseTypeWasmModule:
+	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDataBlob, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeInherit, DispatchNamespaceScriptBindingGetResponseTypeImages, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeRatelimit, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeSendEmail, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTextBlob, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow, DispatchNamespaceScriptBindingGetResponseTypeWasmModule:
 		return true
 	}
 	return false

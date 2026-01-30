@@ -458,6 +458,9 @@ type VersionBinding struct {
 	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// This field can have the runtime type of
+	// [VersionBindingsWorkersBindingKindRatelimitSimple].
+	Simple interface{} `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id"`
 	// The text value to use.
@@ -504,6 +507,7 @@ type versionBindingJSON struct {
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
+	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
 	Usages                      apijson.Field
@@ -546,6 +550,7 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindPlainText],
 // [VersionBindingsWorkersBindingKindPipelines],
 // [VersionBindingsWorkersBindingKindQueue],
+// [VersionBindingsWorkersBindingKindRatelimit],
 // [VersionBindingsWorkersBindingKindR2Bucket],
 // [VersionBindingsWorkersBindingKindSecretText],
 // [VersionBindingsWorkersBindingKindSendEmail],
@@ -580,6 +585,7 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindPlainText],
 // [VersionBindingsWorkersBindingKindPipelines],
 // [VersionBindingsWorkersBindingKindQueue],
+// [VersionBindingsWorkersBindingKindRatelimit],
 // [VersionBindingsWorkersBindingKindR2Bucket],
 // [VersionBindingsWorkersBindingKindSecretText],
 // [VersionBindingsWorkersBindingKindSendEmail],
@@ -683,6 +689,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindQueue{}),
 			DiscriminatorValue: "queue",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindRatelimit{}),
+			DiscriminatorValue: "ratelimit",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1574,6 +1585,80 @@ func (r VersionBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindRatelimit struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Identifier of the rate limit namespace to bind to.
+	NamespaceID string `json:"namespace_id,required"`
+	// The rate limit configuration.
+	Simple VersionBindingsWorkersBindingKindRatelimitSimple `json:"simple,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindRatelimitType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindRatelimitJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindRatelimitJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindRatelimit]
+type versionBindingsWorkersBindingKindRatelimitJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Simple      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindRatelimit) implementsVersionBinding() {}
+
+// The rate limit configuration.
+type VersionBindingsWorkersBindingKindRatelimitSimple struct {
+	// The limit (requests per period).
+	Limit float64 `json:"limit,required"`
+	// The period in seconds.
+	Period int64                                                `json:"period,required"`
+	JSON   versionBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindRatelimitSimpleJSON contains the JSON metadata
+// for the struct [VersionBindingsWorkersBindingKindRatelimitSimple]
+type versionBindingsWorkersBindingKindRatelimitSimpleJSON struct {
+	Limit       apijson.Field
+	Period      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindRatelimitSimple) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindRatelimitSimpleJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindRatelimitType string
+
+const (
+	VersionBindingsWorkersBindingKindRatelimitTypeRatelimit VersionBindingsWorkersBindingKindRatelimitType = "ratelimit"
+)
+
+func (r VersionBindingsWorkersBindingKindRatelimitType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindRatelimitTypeRatelimit:
+		return true
+	}
+	return false
+}
+
 type VersionBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name,required"`
@@ -2182,6 +2267,7 @@ const (
 	VersionBindingsTypePlainText              VersionBindingsType = "plain_text"
 	VersionBindingsTypePipelines              VersionBindingsType = "pipelines"
 	VersionBindingsTypeQueue                  VersionBindingsType = "queue"
+	VersionBindingsTypeRatelimit              VersionBindingsType = "ratelimit"
 	VersionBindingsTypeR2Bucket               VersionBindingsType = "r2_bucket"
 	VersionBindingsTypeSecretText             VersionBindingsType = "secret_text"
 	VersionBindingsTypeSendEmail              VersionBindingsType = "send_email"
@@ -2197,7 +2283,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule:
+	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule:
 		return true
 	}
 	return false
@@ -2843,7 +2929,8 @@ type VersionBindingParam struct {
 	// Name of the secret in the store.
 	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
-	Service param.Field[string] `json:"service"`
+	Service param.Field[string]      `json:"service"`
+	Simple  param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
@@ -2882,6 +2969,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindPlainTextParam],
 // [workers.VersionBindingsWorkersBindingKindPipelinesParam],
 // [workers.VersionBindingsWorkersBindingKindQueueParam],
+// [workers.VersionBindingsWorkersBindingKindRatelimitParam],
 // [workers.VersionBindingsWorkersBindingKindR2BucketParam],
 // [workers.VersionBindingsWorkersBindingKindSecretTextParam],
 // [workers.VersionBindingsWorkersBindingKindSendEmailParam],
@@ -3191,6 +3279,35 @@ func (r VersionBindingsWorkersBindingKindQueueParam) MarshalJSON() (data []byte,
 }
 
 func (r VersionBindingsWorkersBindingKindQueueParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindRatelimitParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Identifier of the rate limit namespace to bind to.
+	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	// The rate limit configuration.
+	Simple param.Field[VersionBindingsWorkersBindingKindRatelimitSimpleParam] `json:"simple,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindRatelimitType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindRatelimitParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindRatelimitParam) implementsVersionBindingsUnionParam() {}
+
+// The rate limit configuration.
+type VersionBindingsWorkersBindingKindRatelimitSimpleParam struct {
+	// The limit (requests per period).
+	Limit param.Field[float64] `json:"limit,required"`
+	// The period in seconds.
+	Period param.Field[int64] `json:"period,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindRatelimitSimpleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type VersionBindingsWorkersBindingKindR2BucketParam struct {
 	// R2 bucket to bind to.
