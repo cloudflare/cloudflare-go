@@ -715,6 +715,8 @@ type DEXTestListParams struct {
 	// Optionally filter result stats to a specific device(s). Cannot be used in
 	// combination with colo param.
 	DeviceID param.Field[[]string] `query:"deviceId"`
+	// Filter by test type
+	Kind param.Field[DEXTestListParamsKind] `query:"kind"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page
@@ -729,4 +731,20 @@ func (r DEXTestListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filter by test type
+type DEXTestListParamsKind string
+
+const (
+	DEXTestListParamsKindHTTP       DEXTestListParamsKind = "http"
+	DEXTestListParamsKindTraceroute DEXTestListParamsKind = "traceroute"
+)
+
+func (r DEXTestListParamsKind) IsKnown() bool {
+	switch r {
+	case DEXTestListParamsKindHTTP, DEXTestListParamsKindTraceroute:
+		return true
+	}
+	return false
 }

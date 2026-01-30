@@ -53,7 +53,7 @@ func TestDEXFleetStatusOverTimeWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.ZeroTrust.DEX.FleetStatus.OverTime(context.TODO(), zero_trust.DEXFleetStatusOverTimeParams{
+	_, err := client.ZeroTrust.DEX.FleetStatus.OverTime(context.TODO(), zero_trust.DEXFleetStatusOverTimeParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		From:      cloudflare.F("2023-10-11T00:00:00Z"),
 		To:        cloudflare.F("2023-10-11T00:00:00Z"),

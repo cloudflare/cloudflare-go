@@ -31,15 +31,15 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Data: cloudflare.F(zero_trust.DeviceDEXTestNewParamsData{
 			Host:   cloudflare.F("https://dash.cloudflare.com"),
-			Kind:   cloudflare.F("http"),
-			Method: cloudflare.F("GET"),
+			Kind:   cloudflare.F(zero_trust.DeviceDEXTestNewParamsDataKindHTTP),
+			Method: cloudflare.F(zero_trust.DeviceDEXTestNewParamsDataMethodGet),
 		}),
 		Enabled:     cloudflare.F(true),
 		Interval:    cloudflare.F("30m"),
 		Name:        cloudflare.F("HTTP dash health check"),
 		Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 		TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestNewParamsTargetPolicy{{
-			ID:      cloudflare.F("id"),
+			ID:      cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			Default: cloudflare.F(true),
 			Name:    cloudflare.F("name"),
 		}}),
@@ -74,15 +74,15 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			Data: cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsData{
 				Host:   cloudflare.F("https://dash.cloudflare.com"),
-				Kind:   cloudflare.F("http"),
-				Method: cloudflare.F("GET"),
+				Kind:   cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsDataKindHTTP),
+				Method: cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsDataMethodGet),
 			}),
 			Enabled:     cloudflare.F(true),
 			Interval:    cloudflare.F("30m"),
 			Name:        cloudflare.F("HTTP dash health check"),
 			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 			TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestUpdateParamsTargetPolicy{{
-				ID:      cloudflare.F("id"),
+				ID:      cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Default: cloudflare.F(true),
 				Name:    cloudflare.F("name"),
 			}}),
@@ -98,7 +98,7 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDeviceDEXTestList(t *testing.T) {
+func TestDeviceDEXTestListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,6 +113,10 @@ func TestDeviceDEXTestList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.DEXTests.List(context.TODO(), zero_trust.DeviceDEXTestListParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		Kind:      cloudflare.F(zero_trust.DeviceDEXTestListParamsKindHTTP),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(1.000000),
+		TestName:  cloudflare.F("testName"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

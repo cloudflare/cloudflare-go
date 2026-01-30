@@ -31,6 +31,7 @@ func TestDEXTestListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Colo:      cloudflare.F("colo"),
 		DeviceID:  cloudflare.F([]string{"string"}),
+		Kind:      cloudflare.F(zero_trust.DEXTestListParamsKindHTTP),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(1.000000),
 		TestName:  cloudflare.F("testName"),

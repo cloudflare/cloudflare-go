@@ -56,15 +56,19 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 }
 
 // List details for devices using WARP, up to 7 days
-func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (err error) {
+func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (res *DEXFleetStatusOverTimeResponse, err error) {
+	var env DEXFleetStatusOverTimeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -141,6 +145,107 @@ func (r *DEXFleetStatusLiveResponseDeviceStats) UnmarshalJSON(data []byte) (err 
 }
 
 func (r dexFleetStatusLiveResponseDeviceStatsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponse struct {
+	DeviceStats DEXFleetStatusOverTimeResponseDeviceStats `json:"deviceStats"`
+	JSON        dexFleetStatusOverTimeResponseJSON        `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseJSON contains the JSON metadata for the struct
+// [DEXFleetStatusOverTimeResponse]
+type dexFleetStatusOverTimeResponseJSON struct {
+	DeviceStats apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseDeviceStats struct {
+	ByMode   []DEXFleetStatusOverTimeResponseDeviceStatsByMode   `json:"byMode"`
+	ByStatus []DEXFleetStatusOverTimeResponseDeviceStatsByStatus `json:"byStatus"`
+	// Number of unique devices
+	UniqueDevicesTotal float64                                       `json:"uniqueDevicesTotal"`
+	JSON               dexFleetStatusOverTimeResponseDeviceStatsJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseDeviceStatsJSON contains the JSON metadata for the
+// struct [DEXFleetStatusOverTimeResponseDeviceStats]
+type dexFleetStatusOverTimeResponseDeviceStatsJSON struct {
+	ByMode             apijson.Field
+	ByStatus           apijson.Field
+	UniqueDevicesTotal apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseDeviceStats) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseDeviceStatsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseDeviceStatsByMode struct {
+	// Timestamp in ISO format
+	Timestamp string `json:"timestamp"`
+	// Number of unique devices
+	UniqueDevicesTotal float64                                             `json:"uniqueDevicesTotal"`
+	Value              string                                              `json:"value"`
+	JSON               dexFleetStatusOverTimeResponseDeviceStatsByModeJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseDeviceStatsByModeJSON contains the JSON metadata
+// for the struct [DEXFleetStatusOverTimeResponseDeviceStatsByMode]
+type dexFleetStatusOverTimeResponseDeviceStatsByModeJSON struct {
+	Timestamp          apijson.Field
+	UniqueDevicesTotal apijson.Field
+	Value              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseDeviceStatsByMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseDeviceStatsByModeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseDeviceStatsByStatus struct {
+	// Timestamp in ISO format
+	Timestamp string `json:"timestamp"`
+	// Number of unique devices
+	UniqueDevicesTotal float64                                               `json:"uniqueDevicesTotal"`
+	Value              string                                                `json:"value"`
+	JSON               dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON contains the JSON metadata
+// for the struct [DEXFleetStatusOverTimeResponseDeviceStatsByStatus]
+type dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON struct {
+	Timestamp          apijson.Field
+	UniqueDevicesTotal apijson.Field
+	Value              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseDeviceStatsByStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -317,4 +422,176 @@ func (r DEXFleetStatusOverTimeParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type DEXFleetStatusOverTimeResponseEnvelope struct {
+	Errors   []DEXFleetStatusOverTimeResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXFleetStatusOverTimeResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success    DEXFleetStatusOverTimeResponseEnvelopeSuccess    `json:"success,required"`
+	Result     DEXFleetStatusOverTimeResponse                   `json:"result"`
+	ResultInfo DEXFleetStatusOverTimeResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dexFleetStatusOverTimeResponseEnvelopeJSON       `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DEXFleetStatusOverTimeResponseEnvelope]
+type dexFleetStatusOverTimeResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           DEXFleetStatusOverTimeResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dexFleetStatusOverTimeResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DEXFleetStatusOverTimeResponseEnvelopeErrors]
+type dexFleetStatusOverTimeResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    dexFleetStatusOverTimeResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DEXFleetStatusOverTimeResponseEnvelopeErrorsSource]
+type dexFleetStatusOverTimeResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           DEXFleetStatusOverTimeResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dexFleetStatusOverTimeResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DEXFleetStatusOverTimeResponseEnvelopeMessages]
+type dexFleetStatusOverTimeResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXFleetStatusOverTimeResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    dexFleetStatusOverTimeResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [DEXFleetStatusOverTimeResponseEnvelopeMessagesSource]
+type dexFleetStatusOverTimeResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DEXFleetStatusOverTimeResponseEnvelopeSuccess bool
+
+const (
+	DEXFleetStatusOverTimeResponseEnvelopeSuccessTrue DEXFleetStatusOverTimeResponseEnvelopeSuccess = true
+)
+
+func (r DEXFleetStatusOverTimeResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXFleetStatusOverTimeResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DEXFleetStatusOverTimeResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service.
+	Count float64 `json:"count"`
+	// Current page within paginated list of results.
+	Page float64 `json:"page"`
+	// Number of results per page of results.
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters.
+	TotalCount float64                                              `json:"total_count"`
+	JSON       dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [DEXFleetStatusOverTimeResponseEnvelopeResultInfo]
+type dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
