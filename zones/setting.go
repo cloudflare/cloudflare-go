@@ -3967,7 +3967,8 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
 	// [int64], [SettingEditResponseZonesSchemasBrowserCheckValue],
 	// [SettingEditResponseZonesSchemasCacheLevelValue], [ChallengeTTLValue],
-	// [SettingEditResponseZonesChinaNetworkEnabledValue], [[]string],
+	// [SettingEditResponseZonesChinaNetworkEnabledValue],
+	// [SettingEditResponseZonesContentConverterValue], [[]string],
 	// [SettingEditResponseZonesCNAMEFlatteningValue], [DevelopmentModeValue],
 	// [EarlyHintsValue], [SettingEditResponseZonesSchemasEdgeCacheTTLValue],
 	// [SettingEditResponseZonesSchemasEmailObfuscationValue], [H2PrioritizationValue],
@@ -4034,7 +4035,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingEditResponseZonesSchemasBrowserCacheTTL],
 // [SettingEditResponseZonesSchemasBrowserCheck],
 // [SettingEditResponseZonesSchemasCacheLevel], [ChallengeTTL],
-// [SettingEditResponseZonesChinaNetworkEnabled], [Ciphers],
+// [SettingEditResponseZonesChinaNetworkEnabled],
+// [SettingEditResponseZonesContentConverter], [Ciphers],
 // [SettingEditResponseZonesCNAMEFlattening], [DevelopmentMode], [EarlyHints],
 // [SettingEditResponseZonesSchemasEdgeCacheTTL],
 // [SettingEditResponseZonesSchemasEmailObfuscation], [H2Prioritization],
@@ -4074,7 +4076,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [SettingEditResponseZonesSchemasBrowserCacheTTL],
 // [SettingEditResponseZonesSchemasBrowserCheck],
 // [SettingEditResponseZonesSchemasCacheLevel], [ChallengeTTL],
-// [SettingEditResponseZonesChinaNetworkEnabled], [Ciphers],
+// [SettingEditResponseZonesChinaNetworkEnabled],
+// [SettingEditResponseZonesContentConverter], [Ciphers],
 // [SettingEditResponseZonesCNAMEFlattening], [DevelopmentMode], [EarlyHints],
 // [SettingEditResponseZonesSchemasEdgeCacheTTL],
 // [SettingEditResponseZonesSchemasEmailObfuscation], [H2Prioritization],
@@ -4156,6 +4159,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingEditResponseZonesChinaNetworkEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesContentConverter{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -4919,6 +4926,93 @@ const (
 func (r SettingEditResponseZonesChinaNetworkEnabledEditable) IsKnown() bool {
 	switch r {
 	case SettingEditResponseZonesChinaNetworkEnabledEditableTrue, SettingEditResponseZonesChinaNetworkEnabledEditableFalse:
+		return true
+	}
+	return false
+}
+
+// When enabled and the client sends an Accept header requesting text/markdown,
+// Cloudflare will convert HTML responses to Markdown format using the toMarkdown()
+// service. Refer to the
+// [developer documentation](https://developers.cloudflare.com/workers-ai/features/markdown-conversion/)
+// for more information.
+type SettingEditResponseZonesContentConverter struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesContentConverterID `json:"id,required"`
+	// Current value of the zone setting.
+	Value SettingEditResponseZonesContentConverterValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseZonesContentConverterEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingEditResponseZonesContentConverterJSON `json:"-"`
+}
+
+// settingEditResponseZonesContentConverterJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesContentConverter]
+type settingEditResponseZonesContentConverterJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesContentConverter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesContentConverterJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesContentConverter) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesContentConverterID string
+
+const (
+	SettingEditResponseZonesContentConverterIDContentConverter SettingEditResponseZonesContentConverterID = "content_converter"
+)
+
+func (r SettingEditResponseZonesContentConverterID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesContentConverterIDContentConverter:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingEditResponseZonesContentConverterValue string
+
+const (
+	SettingEditResponseZonesContentConverterValueOff SettingEditResponseZonesContentConverterValue = "off"
+	SettingEditResponseZonesContentConverterValueOn  SettingEditResponseZonesContentConverterValue = "on"
+)
+
+func (r SettingEditResponseZonesContentConverterValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesContentConverterValueOff, SettingEditResponseZonesContentConverterValueOn:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseZonesContentConverterEditable bool
+
+const (
+	SettingEditResponseZonesContentConverterEditableTrue  SettingEditResponseZonesContentConverterEditable = true
+	SettingEditResponseZonesContentConverterEditableFalse SettingEditResponseZonesContentConverterEditable = false
+)
+
+func (r SettingEditResponseZonesContentConverterEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesContentConverterEditableTrue, SettingEditResponseZonesContentConverterEditableFalse:
 		return true
 	}
 	return false
@@ -7082,6 +7176,7 @@ const (
 	SettingEditResponseIDCacheLevel                    SettingEditResponseID = "cache_level"
 	SettingEditResponseIDChallengeTTL                  SettingEditResponseID = "challenge_ttl"
 	SettingEditResponseIDChinaNetworkEnabled           SettingEditResponseID = "china_network_enabled"
+	SettingEditResponseIDContentConverter              SettingEditResponseID = "content_converter"
 	SettingEditResponseIDCiphers                       SettingEditResponseID = "ciphers"
 	SettingEditResponseIDCNAMEFlattening               SettingEditResponseID = "cname_flattening"
 	SettingEditResponseIDDevelopmentMode               SettingEditResponseID = "development_mode"
@@ -7134,7 +7229,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7178,7 +7273,8 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
 	// [int64], [SettingGetResponseZonesSchemasBrowserCheckValue],
 	// [SettingGetResponseZonesSchemasCacheLevelValue], [ChallengeTTLValue],
-	// [SettingGetResponseZonesChinaNetworkEnabledValue], [[]string],
+	// [SettingGetResponseZonesChinaNetworkEnabledValue],
+	// [SettingGetResponseZonesContentConverterValue], [[]string],
 	// [SettingGetResponseZonesCNAMEFlatteningValue], [DevelopmentModeValue],
 	// [EarlyHintsValue], [SettingGetResponseZonesSchemasEdgeCacheTTLValue],
 	// [SettingGetResponseZonesSchemasEmailObfuscationValue], [H2PrioritizationValue],
@@ -7245,7 +7341,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingGetResponseZonesSchemasBrowserCacheTTL],
 // [SettingGetResponseZonesSchemasBrowserCheck],
 // [SettingGetResponseZonesSchemasCacheLevel], [ChallengeTTL],
-// [SettingGetResponseZonesChinaNetworkEnabled], [Ciphers],
+// [SettingGetResponseZonesChinaNetworkEnabled],
+// [SettingGetResponseZonesContentConverter], [Ciphers],
 // [SettingGetResponseZonesCNAMEFlattening], [DevelopmentMode], [EarlyHints],
 // [SettingGetResponseZonesSchemasEdgeCacheTTL],
 // [SettingGetResponseZonesSchemasEmailObfuscation], [H2Prioritization],
@@ -7285,7 +7382,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [SettingGetResponseZonesSchemasBrowserCacheTTL],
 // [SettingGetResponseZonesSchemasBrowserCheck],
 // [SettingGetResponseZonesSchemasCacheLevel], [ChallengeTTL],
-// [SettingGetResponseZonesChinaNetworkEnabled], [Ciphers],
+// [SettingGetResponseZonesChinaNetworkEnabled],
+// [SettingGetResponseZonesContentConverter], [Ciphers],
 // [SettingGetResponseZonesCNAMEFlattening], [DevelopmentMode], [EarlyHints],
 // [SettingGetResponseZonesSchemasEdgeCacheTTL],
 // [SettingGetResponseZonesSchemasEmailObfuscation], [H2Prioritization],
@@ -7367,6 +7465,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingGetResponseZonesChinaNetworkEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesContentConverter{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8130,6 +8232,93 @@ const (
 func (r SettingGetResponseZonesChinaNetworkEnabledEditable) IsKnown() bool {
 	switch r {
 	case SettingGetResponseZonesChinaNetworkEnabledEditableTrue, SettingGetResponseZonesChinaNetworkEnabledEditableFalse:
+		return true
+	}
+	return false
+}
+
+// When enabled and the client sends an Accept header requesting text/markdown,
+// Cloudflare will convert HTML responses to Markdown format using the toMarkdown()
+// service. Refer to the
+// [developer documentation](https://developers.cloudflare.com/workers-ai/features/markdown-conversion/)
+// for more information.
+type SettingGetResponseZonesContentConverter struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesContentConverterID `json:"id,required"`
+	// Current value of the zone setting.
+	Value SettingGetResponseZonesContentConverterValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseZonesContentConverterEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingGetResponseZonesContentConverterJSON `json:"-"`
+}
+
+// settingGetResponseZonesContentConverterJSON contains the JSON metadata for the
+// struct [SettingGetResponseZonesContentConverter]
+type settingGetResponseZonesContentConverterJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesContentConverter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesContentConverterJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesContentConverter) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesContentConverterID string
+
+const (
+	SettingGetResponseZonesContentConverterIDContentConverter SettingGetResponseZonesContentConverterID = "content_converter"
+)
+
+func (r SettingGetResponseZonesContentConverterID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesContentConverterIDContentConverter:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingGetResponseZonesContentConverterValue string
+
+const (
+	SettingGetResponseZonesContentConverterValueOff SettingGetResponseZonesContentConverterValue = "off"
+	SettingGetResponseZonesContentConverterValueOn  SettingGetResponseZonesContentConverterValue = "on"
+)
+
+func (r SettingGetResponseZonesContentConverterValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesContentConverterValueOff, SettingGetResponseZonesContentConverterValueOn:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseZonesContentConverterEditable bool
+
+const (
+	SettingGetResponseZonesContentConverterEditableTrue  SettingGetResponseZonesContentConverterEditable = true
+	SettingGetResponseZonesContentConverterEditableFalse SettingGetResponseZonesContentConverterEditable = false
+)
+
+func (r SettingGetResponseZonesContentConverterEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesContentConverterEditableTrue, SettingGetResponseZonesContentConverterEditableFalse:
 		return true
 	}
 	return false
@@ -10292,6 +10481,7 @@ const (
 	SettingGetResponseIDCacheLevel                    SettingGetResponseID = "cache_level"
 	SettingGetResponseIDChallengeTTL                  SettingGetResponseID = "challenge_ttl"
 	SettingGetResponseIDChinaNetworkEnabled           SettingGetResponseID = "china_network_enabled"
+	SettingGetResponseIDContentConverter              SettingGetResponseID = "content_converter"
 	SettingGetResponseIDCiphers                       SettingGetResponseID = "ciphers"
 	SettingGetResponseIDCNAMEFlattening               SettingGetResponseID = "cname_flattening"
 	SettingGetResponseIDDevelopmentMode               SettingGetResponseID = "development_mode"
@@ -10344,7 +10534,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false
