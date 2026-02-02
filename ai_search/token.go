@@ -375,7 +375,6 @@ type TokenNewParams struct {
 	CfAPIID   param.Field[string] `json:"cf_api_id,required"`
 	CfAPIKey  param.Field[string] `json:"cf_api_key,required"`
 	Name      param.Field[string] `json:"name,required"`
-	Legacy    param.Field[bool]   `json:"legacy"`
 }
 
 func (r TokenNewParams) MarshalJSON() (data []byte, err error) {

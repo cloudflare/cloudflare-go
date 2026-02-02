@@ -33,6 +33,7 @@ func TestWidgetNewWithOptionalParams(t *testing.T) {
 		Mode:           cloudflare.F(turnstile.WidgetNewParamsModeInvisible),
 		Name:           cloudflare.F("blog.cloudflare.com login form"),
 		Direction:      cloudflare.F(turnstile.WidgetNewParamsDirectionAsc),
+		Filter:         cloudflare.F("name:my-widget"),
 		Order:          cloudflare.F(turnstile.WidgetNewParamsOrderID),
 		Page:           cloudflare.F(1.000000),
 		PerPage:        cloudflare.F(5.000000),
@@ -104,6 +105,7 @@ func TestWidgetListWithOptionalParams(t *testing.T) {
 	_, err := client.Turnstile.Widgets.List(context.TODO(), turnstile.WidgetListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction: cloudflare.F(turnstile.WidgetListParamsDirectionAsc),
+		Filter:    cloudflare.F("name:my-widget"),
 		Order:     cloudflare.F(turnstile.WidgetListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),

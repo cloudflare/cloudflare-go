@@ -404,6 +404,17 @@ type WidgetNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// Direction to order widgets.
 	Direction param.Field[WidgetNewParamsDirection] `query:"direction"`
+	// Filter widgets by field using case-insensitive substring matching. Format:
+	// `field:value`
+	//
+	// Supported fields:
+	//
+	// - `name` - Filter by widget name (e.g., `filter=name:login-form`)
+	// - `sitekey` - Filter by sitekey (e.g., `filter=sitekey:0x4AAA`)
+	//
+	// Returns 400 Bad Request if the field is unsupported or format is invalid. An
+	// empty filter value returns all results.
+	Filter param.Field[string] `query:"filter"`
 	// Field to order widgets by.
 	Order param.Field[WidgetNewParamsOrder] `query:"order"`
 	// Page number of paginated results.
@@ -699,6 +710,17 @@ type WidgetListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Direction to order widgets.
 	Direction param.Field[WidgetListParamsDirection] `query:"direction"`
+	// Filter widgets by field using case-insensitive substring matching. Format:
+	// `field:value`
+	//
+	// Supported fields:
+	//
+	// - `name` - Filter by widget name (e.g., `filter=name:login-form`)
+	// - `sitekey` - Filter by sitekey (e.g., `filter=sitekey:0x4AAA`)
+	//
+	// Returns 400 Bad Request if the field is unsupported or format is invalid. An
+	// empty filter value returns all results.
+	Filter param.Field[string] `query:"filter"`
 	// Field to order widgets by.
 	Order param.Field[WidgetListParamsOrder] `query:"order"`
 	// Page number of paginated results.

@@ -227,6 +227,7 @@ type InstanceNewResponse struct {
 	ChunkOverlap                   int64                                   `json:"chunk_overlap"`
 	ChunkSize                      int64                                   `json:"chunk_size"`
 	CreatedBy                      string                                  `json:"created_by"`
+	CustomMetadata                 []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel                 InstanceNewResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                    `json:"enable"`
 	EngineVersion                  float64                                 `json:"engine_version"`
@@ -275,6 +276,7 @@ type instanceNewResponseJSON struct {
 	ChunkOverlap                   apijson.Field
 	ChunkSize                      apijson.Field
 	CreatedBy                      apijson.Field
+	CustomMetadata                 apijson.Field
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
@@ -378,6 +380,45 @@ const (
 func (r InstanceNewResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceNewResponseCacheThresholdSuperStrictMatch, InstanceNewResponseCacheThresholdCloseEnough, InstanceNewResponseCacheThresholdFlexibleFriend, InstanceNewResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+type InstanceNewResponseCustomMetadata struct {
+	DataType  InstanceNewResponseCustomMetadataDataType `json:"data_type,required"`
+	FieldName string                                    `json:"field_name,required"`
+	JSON      instanceNewResponseCustomMetadataJSON     `json:"-"`
+}
+
+// instanceNewResponseCustomMetadataJSON contains the JSON metadata for the struct
+// [InstanceNewResponseCustomMetadata]
+type instanceNewResponseCustomMetadataJSON struct {
+	DataType    apijson.Field
+	FieldName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponseCustomMetadataDataType string
+
+const (
+	InstanceNewResponseCustomMetadataDataTypeText    InstanceNewResponseCustomMetadataDataType = "text"
+	InstanceNewResponseCustomMetadataDataTypeNumber  InstanceNewResponseCustomMetadataDataType = "number"
+	InstanceNewResponseCustomMetadataDataTypeBoolean InstanceNewResponseCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceNewResponseCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseCustomMetadataDataTypeText, InstanceNewResponseCustomMetadataDataTypeNumber, InstanceNewResponseCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
@@ -806,6 +847,7 @@ type InstanceUpdateResponse struct {
 	ChunkOverlap                   int64                                      `json:"chunk_overlap"`
 	ChunkSize                      int64                                      `json:"chunk_size"`
 	CreatedBy                      string                                     `json:"created_by"`
+	CustomMetadata                 []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel                 InstanceUpdateResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                       `json:"enable"`
 	EngineVersion                  float64                                    `json:"engine_version"`
@@ -854,6 +896,7 @@ type instanceUpdateResponseJSON struct {
 	ChunkOverlap                   apijson.Field
 	ChunkSize                      apijson.Field
 	CreatedBy                      apijson.Field
+	CustomMetadata                 apijson.Field
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
@@ -957,6 +1000,45 @@ const (
 func (r InstanceUpdateResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceUpdateResponseCacheThresholdSuperStrictMatch, InstanceUpdateResponseCacheThresholdCloseEnough, InstanceUpdateResponseCacheThresholdFlexibleFriend, InstanceUpdateResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateResponseCustomMetadata struct {
+	DataType  InstanceUpdateResponseCustomMetadataDataType `json:"data_type,required"`
+	FieldName string                                       `json:"field_name,required"`
+	JSON      instanceUpdateResponseCustomMetadataJSON     `json:"-"`
+}
+
+// instanceUpdateResponseCustomMetadataJSON contains the JSON metadata for the
+// struct [InstanceUpdateResponseCustomMetadata]
+type instanceUpdateResponseCustomMetadataJSON struct {
+	DataType    apijson.Field
+	FieldName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponseCustomMetadataDataType string
+
+const (
+	InstanceUpdateResponseCustomMetadataDataTypeText    InstanceUpdateResponseCustomMetadataDataType = "text"
+	InstanceUpdateResponseCustomMetadataDataTypeNumber  InstanceUpdateResponseCustomMetadataDataType = "number"
+	InstanceUpdateResponseCustomMetadataDataTypeBoolean InstanceUpdateResponseCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceUpdateResponseCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseCustomMetadataDataTypeText, InstanceUpdateResponseCustomMetadataDataTypeNumber, InstanceUpdateResponseCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
@@ -1388,6 +1470,7 @@ type InstanceListResponse struct {
 	ChunkOverlap                   int64                                    `json:"chunk_overlap"`
 	ChunkSize                      int64                                    `json:"chunk_size"`
 	CreatedBy                      string                                   `json:"created_by"`
+	CustomMetadata                 []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel                 InstanceListResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                     `json:"enable"`
 	EngineVersion                  float64                                  `json:"engine_version"`
@@ -1436,6 +1519,7 @@ type instanceListResponseJSON struct {
 	ChunkOverlap                   apijson.Field
 	ChunkSize                      apijson.Field
 	CreatedBy                      apijson.Field
+	CustomMetadata                 apijson.Field
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
@@ -1539,6 +1623,45 @@ const (
 func (r InstanceListResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceListResponseCacheThresholdSuperStrictMatch, InstanceListResponseCacheThresholdCloseEnough, InstanceListResponseCacheThresholdFlexibleFriend, InstanceListResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+type InstanceListResponseCustomMetadata struct {
+	DataType  InstanceListResponseCustomMetadataDataType `json:"data_type,required"`
+	FieldName string                                     `json:"field_name,required"`
+	JSON      instanceListResponseCustomMetadataJSON     `json:"-"`
+}
+
+// instanceListResponseCustomMetadataJSON contains the JSON metadata for the struct
+// [InstanceListResponseCustomMetadata]
+type instanceListResponseCustomMetadataJSON struct {
+	DataType    apijson.Field
+	FieldName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponseCustomMetadataDataType string
+
+const (
+	InstanceListResponseCustomMetadataDataTypeText    InstanceListResponseCustomMetadataDataType = "text"
+	InstanceListResponseCustomMetadataDataTypeNumber  InstanceListResponseCustomMetadataDataType = "number"
+	InstanceListResponseCustomMetadataDataTypeBoolean InstanceListResponseCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceListResponseCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceListResponseCustomMetadataDataTypeText, InstanceListResponseCustomMetadataDataTypeNumber, InstanceListResponseCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
@@ -1967,6 +2090,7 @@ type InstanceDeleteResponse struct {
 	ChunkOverlap                   int64                                      `json:"chunk_overlap"`
 	ChunkSize                      int64                                      `json:"chunk_size"`
 	CreatedBy                      string                                     `json:"created_by"`
+	CustomMetadata                 []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel                 InstanceDeleteResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                       `json:"enable"`
 	EngineVersion                  float64                                    `json:"engine_version"`
@@ -2015,6 +2139,7 @@ type instanceDeleteResponseJSON struct {
 	ChunkOverlap                   apijson.Field
 	ChunkSize                      apijson.Field
 	CreatedBy                      apijson.Field
+	CustomMetadata                 apijson.Field
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
@@ -2118,6 +2243,45 @@ const (
 func (r InstanceDeleteResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceDeleteResponseCacheThresholdSuperStrictMatch, InstanceDeleteResponseCacheThresholdCloseEnough, InstanceDeleteResponseCacheThresholdFlexibleFriend, InstanceDeleteResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+type InstanceDeleteResponseCustomMetadata struct {
+	DataType  InstanceDeleteResponseCustomMetadataDataType `json:"data_type,required"`
+	FieldName string                                       `json:"field_name,required"`
+	JSON      instanceDeleteResponseCustomMetadataJSON     `json:"-"`
+}
+
+// instanceDeleteResponseCustomMetadataJSON contains the JSON metadata for the
+// struct [InstanceDeleteResponseCustomMetadata]
+type instanceDeleteResponseCustomMetadataJSON struct {
+	DataType    apijson.Field
+	FieldName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponseCustomMetadataDataType string
+
+const (
+	InstanceDeleteResponseCustomMetadataDataTypeText    InstanceDeleteResponseCustomMetadataDataType = "text"
+	InstanceDeleteResponseCustomMetadataDataTypeNumber  InstanceDeleteResponseCustomMetadataDataType = "number"
+	InstanceDeleteResponseCustomMetadataDataTypeBoolean InstanceDeleteResponseCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceDeleteResponseCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseCustomMetadataDataTypeText, InstanceDeleteResponseCustomMetadataDataTypeNumber, InstanceDeleteResponseCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
@@ -2727,6 +2891,7 @@ type InstanceReadResponse struct {
 	ChunkOverlap                   int64                                    `json:"chunk_overlap"`
 	ChunkSize                      int64                                    `json:"chunk_size"`
 	CreatedBy                      string                                   `json:"created_by"`
+	CustomMetadata                 []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel                 InstanceReadResponseEmbeddingModel       `json:"embedding_model"`
 	Enable                         bool                                     `json:"enable"`
 	EngineVersion                  float64                                  `json:"engine_version"`
@@ -2775,6 +2940,7 @@ type instanceReadResponseJSON struct {
 	ChunkOverlap                   apijson.Field
 	ChunkSize                      apijson.Field
 	CreatedBy                      apijson.Field
+	CustomMetadata                 apijson.Field
 	EmbeddingModel                 apijson.Field
 	Enable                         apijson.Field
 	EngineVersion                  apijson.Field
@@ -2878,6 +3044,45 @@ const (
 func (r InstanceReadResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceReadResponseCacheThresholdSuperStrictMatch, InstanceReadResponseCacheThresholdCloseEnough, InstanceReadResponseCacheThresholdFlexibleFriend, InstanceReadResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+type InstanceReadResponseCustomMetadata struct {
+	DataType  InstanceReadResponseCustomMetadataDataType `json:"data_type,required"`
+	FieldName string                                     `json:"field_name,required"`
+	JSON      instanceReadResponseCustomMetadataJSON     `json:"-"`
+}
+
+// instanceReadResponseCustomMetadataJSON contains the JSON metadata for the struct
+// [InstanceReadResponseCustomMetadata]
+type instanceReadResponseCustomMetadataJSON struct {
+	DataType    apijson.Field
+	FieldName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseCustomMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponseCustomMetadataDataType string
+
+const (
+	InstanceReadResponseCustomMetadataDataTypeText    InstanceReadResponseCustomMetadataDataType = "text"
+	InstanceReadResponseCustomMetadataDataTypeNumber  InstanceReadResponseCustomMetadataDataType = "number"
+	InstanceReadResponseCustomMetadataDataTypeBoolean InstanceReadResponseCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceReadResponseCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseCustomMetadataDataTypeText, InstanceReadResponseCustomMetadataDataTypeNumber, InstanceReadResponseCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
@@ -3439,6 +3644,7 @@ type InstanceNewParams struct {
 	Chunk                param.Field[bool]                                  `json:"chunk"`
 	ChunkOverlap         param.Field[int64]                                 `json:"chunk_overlap"`
 	ChunkSize            param.Field[int64]                                 `json:"chunk_size"`
+	CustomMetadata       param.Field[[]InstanceNewParamsCustomMetadata]     `json:"custom_metadata"`
 	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
 	HybridSearchEnabled  param.Field[bool]                                  `json:"hybrid_search_enabled"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
@@ -3506,6 +3712,31 @@ const (
 func (r InstanceNewParamsAISearchModel) IsKnown() bool {
 	switch r {
 	case InstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceNewParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceNewParamsAISearchModelCfQwenQwen3_30bA3bFp8, InstanceNewParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewParamsAISearchModelCfMoonshotaiKimiK2Instruct, InstanceNewParamsAISearchModelAnthropicClaude3_7Sonnet, InstanceNewParamsAISearchModelAnthropicClaudeSonnet4, InstanceNewParamsAISearchModelAnthropicClaudeOpus4, InstanceNewParamsAISearchModelAnthropicClaude3_5Haiku, InstanceNewParamsAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceNewParamsAISearchModelCerebrasQwen3_235bA22bThinking, InstanceNewParamsAISearchModelCerebrasLlama3_3_70b, InstanceNewParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceNewParamsAISearchModelCerebrasGptOSs120b, InstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Flash, InstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Pro, InstanceNewParamsAISearchModelGrokGrok4, InstanceNewParamsAISearchModelGroqLlama3_3_70bVersatile, InstanceNewParamsAISearchModelGroqLlama3_1_8bInstant, InstanceNewParamsAISearchModelOpenAIGpt5, InstanceNewParamsAISearchModelOpenAIGpt5Mini, InstanceNewParamsAISearchModelOpenAIGpt5Nano, InstanceNewParamsAISearchModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceNewParamsCustomMetadata struct {
+	DataType  param.Field[InstanceNewParamsCustomMetadataDataType] `json:"data_type,required"`
+	FieldName param.Field[string]                                  `json:"field_name,required"`
+}
+
+func (r InstanceNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsCustomMetadataDataType string
+
+const (
+	InstanceNewParamsCustomMetadataDataTypeText    InstanceNewParamsCustomMetadataDataType = "text"
+	InstanceNewParamsCustomMetadataDataTypeNumber  InstanceNewParamsCustomMetadataDataType = "number"
+	InstanceNewParamsCustomMetadataDataTypeBoolean InstanceNewParamsCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceNewParamsCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsCustomMetadataDataTypeText, InstanceNewParamsCustomMetadataDataTypeNumber, InstanceNewParamsCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
@@ -3758,6 +3989,7 @@ type InstanceUpdateParams struct {
 	Chunk                          param.Field[bool]                                     `json:"chunk"`
 	ChunkOverlap                   param.Field[int64]                                    `json:"chunk_overlap"`
 	ChunkSize                      param.Field[int64]                                    `json:"chunk_size"`
+	CustomMetadata                 param.Field[[]InstanceUpdateParamsCustomMetadata]     `json:"custom_metadata"`
 	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
 	HybridSearchEnabled            param.Field[bool]                                     `json:"hybrid_search_enabled"`
 	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
@@ -3833,6 +4065,31 @@ const (
 func (r InstanceUpdateParamsCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceUpdateParamsCacheThresholdSuperStrictMatch, InstanceUpdateParamsCacheThresholdCloseEnough, InstanceUpdateParamsCacheThresholdFlexibleFriend, InstanceUpdateParamsCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateParamsCustomMetadata struct {
+	DataType  param.Field[InstanceUpdateParamsCustomMetadataDataType] `json:"data_type,required"`
+	FieldName param.Field[string]                                     `json:"field_name,required"`
+}
+
+func (r InstanceUpdateParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsCustomMetadataDataType string
+
+const (
+	InstanceUpdateParamsCustomMetadataDataTypeText    InstanceUpdateParamsCustomMetadataDataType = "text"
+	InstanceUpdateParamsCustomMetadataDataTypeNumber  InstanceUpdateParamsCustomMetadataDataType = "number"
+	InstanceUpdateParamsCustomMetadataDataTypeBoolean InstanceUpdateParamsCustomMetadataDataType = "boolean"
+)
+
+func (r InstanceUpdateParamsCustomMetadataDataType) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsCustomMetadataDataTypeText, InstanceUpdateParamsCustomMetadataDataTypeNumber, InstanceUpdateParamsCustomMetadataDataTypeBoolean:
 		return true
 	}
 	return false
