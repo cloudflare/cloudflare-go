@@ -41,7 +41,7 @@ func NewNamespaceKeyService(opts ...option.RequestOption) (r *NamespaceKeyServic
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[Key], err error) {
+func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[Key], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,8 +67,8 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[Key] {
-	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, namespaceID, params, opts...))
+func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[Key] {
+	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, namespaceID, params, opts...))
 }
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
