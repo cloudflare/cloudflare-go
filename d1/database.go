@@ -1588,7 +1588,7 @@ func (r DatabaseQueryParamsBodyD1SingleQuery) MarshalJSON() (data []byte, err er
 func (r DatabaseQueryParamsBodyD1SingleQuery) implementsDatabaseQueryParamsBodyUnion() {}
 
 type DatabaseQueryParamsBodyMultipleQueries struct {
-	Batch param.Field[[]DatabaseQueryParamsBodyMultipleQueriesBatch] `json:"batch"`
+	Batch param.Field[[]DatabaseQueryParamsBodyMultipleQueriesBatch] `json:"batch,required"`
 }
 
 func (r DatabaseQueryParamsBodyMultipleQueries) MarshalJSON() (data []byte, err error) {
@@ -1658,7 +1658,7 @@ func (r DatabaseRawParamsBodyD1SingleQuery) MarshalJSON() (data []byte, err erro
 func (r DatabaseRawParamsBodyD1SingleQuery) implementsDatabaseRawParamsBodyUnion() {}
 
 type DatabaseRawParamsBodyMultipleQueries struct {
-	Batch param.Field[[]DatabaseRawParamsBodyMultipleQueriesBatch] `json:"batch"`
+	Batch param.Field[[]DatabaseRawParamsBodyMultipleQueriesBatch] `json:"batch,required"`
 }
 
 func (r DatabaseRawParamsBodyMultipleQueries) MarshalJSON() (data []byte, err error) {
