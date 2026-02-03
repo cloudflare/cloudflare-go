@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestEmailSecurityTopTldGetWithOptionalParams(t *testing.T) {
+func TestEmailSecurityTopTLDGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,19 +28,19 @@ func TestEmailSecurityTopTldGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Email.Security.Top.Tlds.Get(context.TODO(), radar.EmailSecurityTopTldGetParams{
-		ARC:         cloudflare.F([]radar.EmailSecurityTopTldGetParamsARC{radar.EmailSecurityTopTldGetParamsARCPass}),
+	_, err := client.Radar.Email.Security.Top.TLDs.Get(context.TODO(), radar.EmailSecurityTopTLDGetParams{
+		ARC:         cloudflare.F([]radar.EmailSecurityTopTLDGetParamsARC{radar.EmailSecurityTopTLDGetParamsARCPass}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		DKIM:        cloudflare.F([]radar.EmailSecurityTopTldGetParamsDKIM{radar.EmailSecurityTopTldGetParamsDKIMPass}),
-		DMARC:       cloudflare.F([]radar.EmailSecurityTopTldGetParamsDMARC{radar.EmailSecurityTopTldGetParamsDMARCPass}),
-		Format:      cloudflare.F(radar.EmailSecurityTopTldGetParamsFormatJson),
+		DKIM:        cloudflare.F([]radar.EmailSecurityTopTLDGetParamsDKIM{radar.EmailSecurityTopTLDGetParamsDKIMPass}),
+		DMARC:       cloudflare.F([]radar.EmailSecurityTopTLDGetParamsDMARC{radar.EmailSecurityTopTLDGetParamsDMARCPass}),
+		Format:      cloudflare.F(radar.EmailSecurityTopTLDGetParamsFormatJson),
 		Limit:       cloudflare.F(int64(1)),
 		Name:        cloudflare.F([]string{"main_series"}),
-		SPF:         cloudflare.F([]radar.EmailSecurityTopTldGetParamsSPF{radar.EmailSecurityTopTldGetParamsSPFPass}),
-		TldCategory: cloudflare.F(radar.EmailSecurityTopTldGetParamsTldCategoryClassic),
-		TLSVersion:  cloudflare.F([]radar.EmailSecurityTopTldGetParamsTLSVersion{radar.EmailSecurityTopTldGetParamsTLSVersionTlSv1_0}),
+		SPF:         cloudflare.F([]radar.EmailSecurityTopTLDGetParamsSPF{radar.EmailSecurityTopTLDGetParamsSPFPass}),
+		TLDCategory: cloudflare.F(radar.EmailSecurityTopTLDGetParamsTLDCategoryClassic),
+		TLSVersion:  cloudflare.F([]radar.EmailSecurityTopTLDGetParamsTLSVersion{radar.EmailSecurityTopTLDGetParamsTLSVersionTlSv1_0}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

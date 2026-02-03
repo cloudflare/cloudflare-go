@@ -14,7 +14,7 @@ import (
 // the [NewEmailSecurityTopService] method instead.
 type EmailSecurityTopService struct {
 	Options []option.RequestOption
-	Tlds    *EmailSecurityTopTldService
+	TLDs    *EmailSecurityTopTLDService
 }
 
 // NewEmailSecurityTopService generates a new service that applies the given
@@ -23,6 +23,6 @@ type EmailSecurityTopService struct {
 func NewEmailSecurityTopService(opts ...option.RequestOption) (r *EmailSecurityTopService) {
 	r = &EmailSecurityTopService{}
 	r.Options = opts
-	r.Tlds = NewEmailSecurityTopTldService(opts...)
+	r.TLDs = NewEmailSecurityTopTLDService(opts...)
 	return
 }

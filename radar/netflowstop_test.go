@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestNetflowTopAsesWithOptionalParams(t *testing.T) {
+func TestNetFlowsTopAsesWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,13 +28,13 @@ func TestNetflowTopAsesWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Netflows.Top.Ases(context.TODO(), radar.NetflowTopAsesParams{
+	_, err := client.Radar.NetFlows.Top.Ases(context.TODO(), radar.NetFlowsTopAsesParams{
 		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.NetflowTopAsesParamsFormatJson),
+		Format:    cloudflare.F(radar.NetFlowsTopAsesParamsFormatJson),
 		GeoID:     cloudflare.F([]string{"string"}),
 		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F([]string{"string"}),
@@ -49,7 +49,7 @@ func TestNetflowTopAsesWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestNetflowTopLocationsWithOptionalParams(t *testing.T) {
+func TestNetFlowsTopLocationsWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -62,13 +62,13 @@ func TestNetflowTopLocationsWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Netflows.Top.Locations(context.TODO(), radar.NetflowTopLocationsParams{
+	_, err := client.Radar.NetFlows.Top.Locations(context.TODO(), radar.NetFlowsTopLocationsParams{
 		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.NetflowTopLocationsParamsFormatJson),
+		Format:    cloudflare.F(radar.NetFlowsTopLocationsParamsFormatJson),
 		GeoID:     cloudflare.F([]string{"string"}),
 		Limit:     cloudflare.F(int64(1)),
 		Location:  cloudflare.F([]string{"string"}),

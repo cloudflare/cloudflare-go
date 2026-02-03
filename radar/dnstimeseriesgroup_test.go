@@ -42,7 +42,7 @@ func TestDNSTimeseriesGroupCacheHitWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupCacheHitParamsProtocol{radar.DNSTimeseriesGroupCacheHitParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupCacheHitParamsQueryType{radar.DNSTimeseriesGroupCacheHitParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupCacheHitParamsResponseCode{radar.DNSTimeseriesGroupCacheHitParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -80,7 +80,7 @@ func TestDNSTimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupDNSSECParamsProtocol{radar.DNSTimeseriesGroupDNSSECParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupDNSSECParamsQueryType{radar.DNSTimeseriesGroupDNSSECParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupDNSSECParamsResponseCode{radar.DNSTimeseriesGroupDNSSECParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -118,7 +118,7 @@ func TestDNSTimeseriesGroupDNSSECAwareWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupDNSSECAwareParamsProtocol{radar.DNSTimeseriesGroupDNSSECAwareParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupDNSSECAwareParamsQueryType{radar.DNSTimeseriesGroupDNSSECAwareParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupDNSSECAwareParamsResponseCode{radar.DNSTimeseriesGroupDNSSECAwareParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -156,7 +156,7 @@ func TestDNSTimeseriesGroupDNSSECE2EWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupDnssece2EParamsProtocol{radar.DNSTimeseriesGroupDnssece2EParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupDnssece2EParamsQueryType{radar.DNSTimeseriesGroupDnssece2EParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupDnssece2EParamsResponseCode{radar.DNSTimeseriesGroupDnssece2EParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -194,7 +194,7 @@ func TestDNSTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupIPVersionParamsProtocol{radar.DNSTimeseriesGroupIPVersionParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupIPVersionParamsQueryType{radar.DNSTimeseriesGroupIPVersionParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupIPVersionParamsResponseCode{radar.DNSTimeseriesGroupIPVersionParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -232,7 +232,7 @@ func TestDNSTimeseriesGroupMatchingAnswerWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupMatchingAnswerParamsProtocol{radar.DNSTimeseriesGroupMatchingAnswerParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupMatchingAnswerParamsQueryType{radar.DNSTimeseriesGroupMatchingAnswerParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupMatchingAnswerParamsResponseCode{radar.DNSTimeseriesGroupMatchingAnswerParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -269,7 +269,7 @@ func TestDNSTimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		Nodata:       cloudflare.F([]bool{true}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupProtocolParamsQueryType{radar.DNSTimeseriesGroupProtocolParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupProtocolParamsResponseCode{radar.DNSTimeseriesGroupProtocolParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -307,7 +307,7 @@ func TestDNSTimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		Nodata:        cloudflare.F([]bool{true}),
 		Protocol:      cloudflare.F([]radar.DNSTimeseriesGroupQueryTypeParamsProtocol{radar.DNSTimeseriesGroupQueryTypeParamsProtocolUdp}),
 		ResponseCode:  cloudflare.F([]radar.DNSTimeseriesGroupQueryTypeParamsResponseCode{radar.DNSTimeseriesGroupQueryTypeParamsResponseCodeNoerror}),
-		Tld:           cloudflare.F([]string{"com"}),
+		TLD:           cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -345,7 +345,7 @@ func TestDNSTimeseriesGroupResponseCodeWithOptionalParams(t *testing.T) {
 		Nodata:        cloudflare.F([]bool{true}),
 		Protocol:      cloudflare.F([]radar.DNSTimeseriesGroupResponseCodeParamsProtocol{radar.DNSTimeseriesGroupResponseCodeParamsProtocolUdp}),
 		QueryType:     cloudflare.F([]radar.DNSTimeseriesGroupResponseCodeParamsQueryType{radar.DNSTimeseriesGroupResponseCodeParamsQueryTypeA}),
-		Tld:           cloudflare.F([]string{"com"}),
+		TLD:           cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -383,7 +383,7 @@ func TestDNSTimeseriesGroupResponseTTLWithOptionalParams(t *testing.T) {
 		Protocol:     cloudflare.F([]radar.DNSTimeseriesGroupResponseTTLParamsProtocol{radar.DNSTimeseriesGroupResponseTTLParamsProtocolUdp}),
 		QueryType:    cloudflare.F([]radar.DNSTimeseriesGroupResponseTTLParamsQueryType{radar.DNSTimeseriesGroupResponseTTLParamsQueryTypeA}),
 		ResponseCode: cloudflare.F([]radar.DNSTimeseriesGroupResponseTTLParamsResponseCode{radar.DNSTimeseriesGroupResponseTTLParamsResponseCodeNoerror}),
-		Tld:          cloudflare.F([]string{"com"}),
+		TLD:          cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestCtLogListWithOptionalParams(t *testing.T) {
+func TestCTLogListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,8 +27,8 @@ func TestCtLogListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.Logs.List(context.TODO(), radar.CtLogListParams{
-		Format: cloudflare.F(radar.CtLogListParamsFormatJson),
+	_, err := client.Radar.CT.Logs.List(context.TODO(), radar.CTLogListParams{
+		Format: cloudflare.F(radar.CTLogListParamsFormatJson),
 		Limit:  cloudflare.F(int64(1)),
 		Offset: cloudflare.F(int64(0)),
 	})
@@ -41,7 +41,7 @@ func TestCtLogListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCtLogGetWithOptionalParams(t *testing.T) {
+func TestCTLogGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,11 +54,11 @@ func TestCtLogGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.Logs.Get(
+	_, err := client.Radar.CT.Logs.Get(
 		context.TODO(),
 		"argon2024",
-		radar.CtLogGetParams{
-			Format: cloudflare.F(radar.CtLogGetParamsFormatJson),
+		radar.CTLogGetParams{
+			Format: cloudflare.F(radar.CTLogGetParamsFormatJson),
 		},
 	)
 	if err != nil {

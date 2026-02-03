@@ -130,13 +130,13 @@ const (
 	SearchGlobalParamsExcludeIndustries             SearchGlobalParamsExclude = "INDUSTRIES"
 	SearchGlobalParamsExcludeLocations              SearchGlobalParamsExclude = "LOCATIONS"
 	SearchGlobalParamsExcludeNotebooks              SearchGlobalParamsExclude = "NOTEBOOKS"
-	SearchGlobalParamsExcludeTlds                   SearchGlobalParamsExclude = "TLDS"
+	SearchGlobalParamsExcludeTLDs                   SearchGlobalParamsExclude = "TLDS"
 	SearchGlobalParamsExcludeVerticals              SearchGlobalParamsExclude = "VERTICALS"
 )
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeOrigins, SearchGlobalParamsExcludeOriginRegions, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTlds, SearchGlobalParamsExcludeVerticals:
+	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeOrigins, SearchGlobalParamsExcludeOriginRegions, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTLDs, SearchGlobalParamsExcludeVerticals:
 		return true
 	}
 	return false
@@ -171,13 +171,13 @@ const (
 	SearchGlobalParamsIncludeIndustries             SearchGlobalParamsInclude = "INDUSTRIES"
 	SearchGlobalParamsIncludeLocations              SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeNotebooks              SearchGlobalParamsInclude = "NOTEBOOKS"
-	SearchGlobalParamsIncludeTlds                   SearchGlobalParamsInclude = "TLDS"
+	SearchGlobalParamsIncludeTLDs                   SearchGlobalParamsInclude = "TLDS"
 	SearchGlobalParamsIncludeVerticals              SearchGlobalParamsInclude = "VERTICALS"
 )
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeOrigins, SearchGlobalParamsIncludeOriginRegions, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTlds, SearchGlobalParamsIncludeVerticals:
+	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeOrigins, SearchGlobalParamsIncludeOriginRegions, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTLDs, SearchGlobalParamsIncludeVerticals:
 		return true
 	}
 	return false

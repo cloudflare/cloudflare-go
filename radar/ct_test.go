@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestCtSummaryWithOptionalParams(t *testing.T) {
+func TestCTSummaryWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,32 +28,32 @@ func TestCtSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.Summary(
+	_, err := client.Radar.CT.Summary(
 		context.TODO(),
-		radar.CtSummaryParamsDimensionCA,
-		radar.CtSummaryParams{
+		radar.CTSummaryParamsDimensionCA,
+		radar.CTSummaryParams{
 			CA:                 cloudflare.F([]string{"string"}),
 			CAOwner:            cloudflare.F([]string{"string"}),
 			DateEnd:            cloudflare.F([]time.Time{time.Now()}),
 			DateRange:          cloudflare.F([]string{"7d"}),
 			DateStart:          cloudflare.F([]time.Time{time.Now()}),
-			Duration:           cloudflare.F([]radar.CtSummaryParamsDuration{radar.CtSummaryParamsDurationLte3D}),
-			EntryType:          cloudflare.F([]radar.CtSummaryParamsEntryType{radar.CtSummaryParamsEntryTypePrecertificate}),
-			ExpirationStatus:   cloudflare.F([]radar.CtSummaryParamsExpirationStatus{radar.CtSummaryParamsExpirationStatusExpired}),
-			Format:             cloudflare.F(radar.CtSummaryParamsFormatJson),
+			Duration:           cloudflare.F([]radar.CTSummaryParamsDuration{radar.CTSummaryParamsDurationLte3D}),
+			EntryType:          cloudflare.F([]radar.CTSummaryParamsEntryType{radar.CTSummaryParamsEntryTypePrecertificate}),
+			ExpirationStatus:   cloudflare.F([]radar.CTSummaryParamsExpirationStatus{radar.CTSummaryParamsExpirationStatusExpired}),
+			Format:             cloudflare.F(radar.CTSummaryParamsFormatJson),
 			HasIPs:             cloudflare.F([]bool{true}),
 			HasWildcards:       cloudflare.F([]bool{true}),
 			LimitPerGroup:      cloudflare.F(int64(10)),
 			Log:                cloudflare.F([]string{"string"}),
-			LogAPI:             cloudflare.F([]radar.CtSummaryParamsLogAPI{radar.CtSummaryParamsLogAPIRfc6962}),
+			LogAPI:             cloudflare.F([]radar.CTSummaryParamsLogAPI{radar.CTSummaryParamsLogAPIRfc6962}),
 			LogOperator:        cloudflare.F([]string{"string"}),
 			Name:               cloudflare.F([]string{"main_series"}),
-			Normalization:      cloudflare.F(radar.CtSummaryParamsNormalizationRawValues),
-			PublicKeyAlgorithm: cloudflare.F([]radar.CtSummaryParamsPublicKeyAlgorithm{radar.CtSummaryParamsPublicKeyAlgorithmDsa}),
-			SignatureAlgorithm: cloudflare.F([]radar.CtSummaryParamsSignatureAlgorithm{radar.CtSummaryParamsSignatureAlgorithmDsaSha1}),
-			Tld:                cloudflare.F([]string{"com"}),
-			UniqueEntries:      cloudflare.F([]radar.CtSummaryParamsUniqueEntry{radar.CtSummaryParamsUniqueEntryTrue}),
-			ValidationLevel:    cloudflare.F([]radar.CtSummaryParamsValidationLevel{radar.CtSummaryParamsValidationLevelDomain}),
+			Normalization:      cloudflare.F(radar.CTSummaryParamsNormalizationRawValues),
+			PublicKeyAlgorithm: cloudflare.F([]radar.CTSummaryParamsPublicKeyAlgorithm{radar.CTSummaryParamsPublicKeyAlgorithmDsa}),
+			SignatureAlgorithm: cloudflare.F([]radar.CTSummaryParamsSignatureAlgorithm{radar.CTSummaryParamsSignatureAlgorithmDsaSha1}),
+			TLD:                cloudflare.F([]string{"com"}),
+			UniqueEntries:      cloudflare.F([]radar.CTSummaryParamsUniqueEntry{radar.CTSummaryParamsUniqueEntryTrue}),
+			ValidationLevel:    cloudflare.F([]radar.CTSummaryParamsValidationLevel{radar.CTSummaryParamsValidationLevelDomain}),
 		},
 	)
 	if err != nil {
@@ -65,7 +65,7 @@ func TestCtSummaryWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCtTimeseriesWithOptionalParams(t *testing.T) {
+func TestCTTimeseriesWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -78,28 +78,28 @@ func TestCtTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.Timeseries(context.TODO(), radar.CtTimeseriesParams{
-		AggInterval:        cloudflare.F(radar.CtTimeseriesParamsAggInterval1h),
+	_, err := client.Radar.CT.Timeseries(context.TODO(), radar.CTTimeseriesParams{
+		AggInterval:        cloudflare.F(radar.CTTimeseriesParamsAggInterval1h),
 		CA:                 cloudflare.F([]string{"string"}),
 		CAOwner:            cloudflare.F([]string{"string"}),
 		DateEnd:            cloudflare.F([]time.Time{time.Now()}),
 		DateRange:          cloudflare.F([]string{"7d"}),
 		DateStart:          cloudflare.F([]time.Time{time.Now()}),
-		Duration:           cloudflare.F([]radar.CtTimeseriesParamsDuration{radar.CtTimeseriesParamsDurationLte3D}),
-		EntryType:          cloudflare.F([]radar.CtTimeseriesParamsEntryType{radar.CtTimeseriesParamsEntryTypePrecertificate}),
-		ExpirationStatus:   cloudflare.F([]radar.CtTimeseriesParamsExpirationStatus{radar.CtTimeseriesParamsExpirationStatusExpired}),
-		Format:             cloudflare.F(radar.CtTimeseriesParamsFormatJson),
+		Duration:           cloudflare.F([]radar.CTTimeseriesParamsDuration{radar.CTTimeseriesParamsDurationLte3D}),
+		EntryType:          cloudflare.F([]radar.CTTimeseriesParamsEntryType{radar.CTTimeseriesParamsEntryTypePrecertificate}),
+		ExpirationStatus:   cloudflare.F([]radar.CTTimeseriesParamsExpirationStatus{radar.CTTimeseriesParamsExpirationStatusExpired}),
+		Format:             cloudflare.F(radar.CTTimeseriesParamsFormatJson),
 		HasIPs:             cloudflare.F([]bool{true}),
 		HasWildcards:       cloudflare.F([]bool{true}),
 		Log:                cloudflare.F([]string{"string"}),
-		LogAPI:             cloudflare.F([]radar.CtTimeseriesParamsLogAPI{radar.CtTimeseriesParamsLogAPIRfc6962}),
+		LogAPI:             cloudflare.F([]radar.CTTimeseriesParamsLogAPI{radar.CTTimeseriesParamsLogAPIRfc6962}),
 		LogOperator:        cloudflare.F([]string{"string"}),
 		Name:               cloudflare.F([]string{"main_series"}),
-		PublicKeyAlgorithm: cloudflare.F([]radar.CtTimeseriesParamsPublicKeyAlgorithm{radar.CtTimeseriesParamsPublicKeyAlgorithmDsa}),
-		SignatureAlgorithm: cloudflare.F([]radar.CtTimeseriesParamsSignatureAlgorithm{radar.CtTimeseriesParamsSignatureAlgorithmDsaSha1}),
-		Tld:                cloudflare.F([]string{"com"}),
-		UniqueEntries:      cloudflare.F([]radar.CtTimeseriesParamsUniqueEntry{radar.CtTimeseriesParamsUniqueEntryTrue}),
-		ValidationLevel:    cloudflare.F([]radar.CtTimeseriesParamsValidationLevel{radar.CtTimeseriesParamsValidationLevelDomain}),
+		PublicKeyAlgorithm: cloudflare.F([]radar.CTTimeseriesParamsPublicKeyAlgorithm{radar.CTTimeseriesParamsPublicKeyAlgorithmDsa}),
+		SignatureAlgorithm: cloudflare.F([]radar.CTTimeseriesParamsSignatureAlgorithm{radar.CTTimeseriesParamsSignatureAlgorithmDsaSha1}),
+		TLD:                cloudflare.F([]string{"com"}),
+		UniqueEntries:      cloudflare.F([]radar.CTTimeseriesParamsUniqueEntry{radar.CTTimeseriesParamsUniqueEntryTrue}),
+		ValidationLevel:    cloudflare.F([]radar.CTTimeseriesParamsValidationLevel{radar.CTTimeseriesParamsValidationLevelDomain}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -110,7 +110,7 @@ func TestCtTimeseriesWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCtTimeseriesGroupsWithOptionalParams(t *testing.T) {
+func TestCTTimeseriesGroupsWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -123,33 +123,33 @@ func TestCtTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.TimeseriesGroups(
+	_, err := client.Radar.CT.TimeseriesGroups(
 		context.TODO(),
-		radar.CtTimeseriesGroupsParamsDimensionCA,
-		radar.CtTimeseriesGroupsParams{
-			AggInterval:        cloudflare.F(radar.CtTimeseriesGroupsParamsAggInterval1h),
+		radar.CTTimeseriesGroupsParamsDimensionCA,
+		radar.CTTimeseriesGroupsParams{
+			AggInterval:        cloudflare.F(radar.CTTimeseriesGroupsParamsAggInterval1h),
 			CA:                 cloudflare.F([]string{"string"}),
 			CAOwner:            cloudflare.F([]string{"string"}),
 			DateEnd:            cloudflare.F([]time.Time{time.Now()}),
 			DateRange:          cloudflare.F([]string{"7d"}),
 			DateStart:          cloudflare.F([]time.Time{time.Now()}),
-			Duration:           cloudflare.F([]radar.CtTimeseriesGroupsParamsDuration{radar.CtTimeseriesGroupsParamsDurationLte3D}),
-			EntryType:          cloudflare.F([]radar.CtTimeseriesGroupsParamsEntryType{radar.CtTimeseriesGroupsParamsEntryTypePrecertificate}),
-			ExpirationStatus:   cloudflare.F([]radar.CtTimeseriesGroupsParamsExpirationStatus{radar.CtTimeseriesGroupsParamsExpirationStatusExpired}),
-			Format:             cloudflare.F(radar.CtTimeseriesGroupsParamsFormatJson),
+			Duration:           cloudflare.F([]radar.CTTimeseriesGroupsParamsDuration{radar.CTTimeseriesGroupsParamsDurationLte3D}),
+			EntryType:          cloudflare.F([]radar.CTTimeseriesGroupsParamsEntryType{radar.CTTimeseriesGroupsParamsEntryTypePrecertificate}),
+			ExpirationStatus:   cloudflare.F([]radar.CTTimeseriesGroupsParamsExpirationStatus{radar.CTTimeseriesGroupsParamsExpirationStatusExpired}),
+			Format:             cloudflare.F(radar.CTTimeseriesGroupsParamsFormatJson),
 			HasIPs:             cloudflare.F([]bool{true}),
 			HasWildcards:       cloudflare.F([]bool{true}),
 			LimitPerGroup:      cloudflare.F(int64(10)),
 			Log:                cloudflare.F([]string{"string"}),
-			LogAPI:             cloudflare.F([]radar.CtTimeseriesGroupsParamsLogAPI{radar.CtTimeseriesGroupsParamsLogAPIRfc6962}),
+			LogAPI:             cloudflare.F([]radar.CTTimeseriesGroupsParamsLogAPI{radar.CTTimeseriesGroupsParamsLogAPIRfc6962}),
 			LogOperator:        cloudflare.F([]string{"string"}),
 			Name:               cloudflare.F([]string{"main_series"}),
-			Normalization:      cloudflare.F(radar.CtTimeseriesGroupsParamsNormalizationRawValues),
-			PublicKeyAlgorithm: cloudflare.F([]radar.CtTimeseriesGroupsParamsPublicKeyAlgorithm{radar.CtTimeseriesGroupsParamsPublicKeyAlgorithmDsa}),
-			SignatureAlgorithm: cloudflare.F([]radar.CtTimeseriesGroupsParamsSignatureAlgorithm{radar.CtTimeseriesGroupsParamsSignatureAlgorithmDsaSha1}),
-			Tld:                cloudflare.F([]string{"com"}),
-			UniqueEntries:      cloudflare.F([]radar.CtTimeseriesGroupsParamsUniqueEntry{radar.CtTimeseriesGroupsParamsUniqueEntryTrue}),
-			ValidationLevel:    cloudflare.F([]radar.CtTimeseriesGroupsParamsValidationLevel{radar.CtTimeseriesGroupsParamsValidationLevelDomain}),
+			Normalization:      cloudflare.F(radar.CTTimeseriesGroupsParamsNormalizationRawValues),
+			PublicKeyAlgorithm: cloudflare.F([]radar.CTTimeseriesGroupsParamsPublicKeyAlgorithm{radar.CTTimeseriesGroupsParamsPublicKeyAlgorithmDsa}),
+			SignatureAlgorithm: cloudflare.F([]radar.CTTimeseriesGroupsParamsSignatureAlgorithm{radar.CTTimeseriesGroupsParamsSignatureAlgorithmDsaSha1}),
+			TLD:                cloudflare.F([]string{"com"}),
+			UniqueEntries:      cloudflare.F([]radar.CTTimeseriesGroupsParamsUniqueEntry{radar.CTTimeseriesGroupsParamsUniqueEntryTrue}),
+			ValidationLevel:    cloudflare.F([]radar.CTTimeseriesGroupsParamsValidationLevel{radar.CTTimeseriesGroupsParamsValidationLevelDomain}),
 		},
 	)
 	if err != nil {

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestCtAuthorityListWithOptionalParams(t *testing.T) {
+func TestCTAuthorityListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,8 +27,8 @@ func TestCtAuthorityListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.Authorities.List(context.TODO(), radar.CtAuthorityListParams{
-		Format: cloudflare.F(radar.CtAuthorityListParamsFormatJson),
+	_, err := client.Radar.CT.Authorities.List(context.TODO(), radar.CTAuthorityListParams{
+		Format: cloudflare.F(radar.CTAuthorityListParamsFormatJson),
 		Limit:  cloudflare.F(int64(1)),
 		Offset: cloudflare.F(int64(0)),
 	})
@@ -41,7 +41,7 @@ func TestCtAuthorityListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCtAuthorityGetWithOptionalParams(t *testing.T) {
+func TestCTAuthorityGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,11 +54,11 @@ func TestCtAuthorityGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Ct.Authorities.Get(
+	_, err := client.Radar.CT.Authorities.Get(
 		context.TODO(),
 		"24EDD4E503A8D3FDB5FFB4AF66C887359901CBE687A5A0760D10A08EED99A7C3",
-		radar.CtAuthorityGetParams{
-			Format: cloudflare.F(radar.CtAuthorityGetParamsFormatJson),
+		radar.CTAuthorityGetParams{
+			Format: cloudflare.F(radar.CTAuthorityGetParamsFormatJson),
 		},
 	)
 	if err != nil {

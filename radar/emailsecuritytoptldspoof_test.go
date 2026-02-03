@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestEmailSecurityTopTldSpoofGetWithOptionalParams(t *testing.T) {
+func TestEmailSecurityTopTLDSpoofGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,22 +28,22 @@ func TestEmailSecurityTopTldSpoofGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Email.Security.Top.Tlds.Spoof.Get(
+	_, err := client.Radar.Email.Security.Top.TLDs.Spoof.Get(
 		context.TODO(),
-		radar.EmailSecurityTopTldSpoofGetParamsSpoofSpoof,
-		radar.EmailSecurityTopTldSpoofGetParams{
-			ARC:         cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsARC{radar.EmailSecurityTopTldSpoofGetParamsARCPass}),
+		radar.EmailSecurityTopTLDSpoofGetParamsSpoofSpoof,
+		radar.EmailSecurityTopTLDSpoofGetParams{
+			ARC:         cloudflare.F([]radar.EmailSecurityTopTLDSpoofGetParamsARC{radar.EmailSecurityTopTLDSpoofGetParamsARCPass}),
 			DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 			DateRange:   cloudflare.F([]string{"7d"}),
 			DateStart:   cloudflare.F([]time.Time{time.Now()}),
-			DKIM:        cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDKIM{radar.EmailSecurityTopTldSpoofGetParamsDKIMPass}),
-			DMARC:       cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDMARC{radar.EmailSecurityTopTldSpoofGetParamsDMARCPass}),
-			Format:      cloudflare.F(radar.EmailSecurityTopTldSpoofGetParamsFormatJson),
+			DKIM:        cloudflare.F([]radar.EmailSecurityTopTLDSpoofGetParamsDKIM{radar.EmailSecurityTopTLDSpoofGetParamsDKIMPass}),
+			DMARC:       cloudflare.F([]radar.EmailSecurityTopTLDSpoofGetParamsDMARC{radar.EmailSecurityTopTLDSpoofGetParamsDMARCPass}),
+			Format:      cloudflare.F(radar.EmailSecurityTopTLDSpoofGetParamsFormatJson),
 			Limit:       cloudflare.F(int64(1)),
 			Name:        cloudflare.F([]string{"main_series"}),
-			SPF:         cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsSPF{radar.EmailSecurityTopTldSpoofGetParamsSPFPass}),
-			TldCategory: cloudflare.F(radar.EmailSecurityTopTldSpoofGetParamsTldCategoryClassic),
-			TLSVersion:  cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsTLSVersion{radar.EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_0}),
+			SPF:         cloudflare.F([]radar.EmailSecurityTopTLDSpoofGetParamsSPF{radar.EmailSecurityTopTLDSpoofGetParamsSPFPass}),
+			TLDCategory: cloudflare.F(radar.EmailSecurityTopTLDSpoofGetParamsTLDCategoryClassic),
+			TLSVersion:  cloudflare.F([]radar.EmailSecurityTopTLDSpoofGetParamsTLSVersion{radar.EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_0}),
 		},
 	)
 	if err != nil {

@@ -17,28 +17,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-// CtAuthorityService contains methods and other services that help with
+// CTAuthorityService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewCtAuthorityService] method instead.
-type CtAuthorityService struct {
+// the [NewCTAuthorityService] method instead.
+type CTAuthorityService struct {
 	Options []option.RequestOption
 }
 
-// NewCtAuthorityService generates a new service that applies the given options to
+// NewCTAuthorityService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewCtAuthorityService(opts ...option.RequestOption) (r *CtAuthorityService) {
-	r = &CtAuthorityService{}
+func NewCTAuthorityService(opts ...option.RequestOption) (r *CTAuthorityService) {
+	r = &CTAuthorityService{}
 	r.Options = opts
 	return
 }
 
 // Retrieves a list of certificate authorities.
-func (r *CtAuthorityService) List(ctx context.Context, query CtAuthorityListParams, opts ...option.RequestOption) (res *CtAuthorityListResponse, err error) {
-	var env CtAuthorityListResponseEnvelope
+func (r *CTAuthorityService) List(ctx context.Context, query CTAuthorityListParams, opts ...option.RequestOption) (res *CTAuthorityListResponse, err error) {
+	var env CTAuthorityListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := "radar/ct/authorities"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -50,8 +50,8 @@ func (r *CtAuthorityService) List(ctx context.Context, query CtAuthorityListPara
 }
 
 // Retrieves the requested CA information.
-func (r *CtAuthorityService) Get(ctx context.Context, caSlug string, query CtAuthorityGetParams, opts ...option.RequestOption) (res *CtAuthorityGetResponse, err error) {
-	var env CtAuthorityGetResponseEnvelope
+func (r *CTAuthorityService) Get(ctx context.Context, caSlug string, query CTAuthorityGetParams, opts ...option.RequestOption) (res *CTAuthorityGetResponse, err error) {
+	var env CTAuthorityGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if caSlug == "" {
 		err = errors.New("missing required ca_slug parameter")
@@ -66,20 +66,20 @@ func (r *CtAuthorityService) Get(ctx context.Context, caSlug string, query CtAut
 	return
 }
 
-type CtAuthorityListResponse struct {
-	CertificateAuthorities []CtAuthorityListResponseCertificateAuthority `json:"certificateAuthorities,required"`
+type CTAuthorityListResponse struct {
+	CertificateAuthorities []CTAuthorityListResponseCertificateAuthority `json:"certificateAuthorities,required"`
 	JSON                   ctAuthorityListResponseJSON                   `json:"-"`
 }
 
 // ctAuthorityListResponseJSON contains the JSON metadata for the struct
-// [CtAuthorityListResponse]
+// [CTAuthorityListResponse]
 type ctAuthorityListResponseJSON struct {
 	CertificateAuthorities apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *CtAuthorityListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -87,9 +87,9 @@ func (r ctAuthorityListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtAuthorityListResponseCertificateAuthority struct {
+type CTAuthorityListResponseCertificateAuthority struct {
 	// Specifies the type of certificate in the trust chain.
-	CertificateRecordType CtAuthorityListResponseCertificateAuthoritiesCertificateRecordType `json:"certificateRecordType,required"`
+	CertificateRecordType CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType `json:"certificateRecordType,required"`
 	// The two-letter ISO country code where the CA organization is based.
 	Country string `json:"country,required"`
 	// The full country name corresponding to the country code.
@@ -104,14 +104,14 @@ type CtAuthorityListResponseCertificateAuthority struct {
 	// The SHA-256 fingerprint of the parent certificate.
 	ParentSha256Fingerprint string `json:"parentSha256Fingerprint,required"`
 	// The current revocation status of a Certificate Authority (CA) certificate.
-	RevocationStatus CtAuthorityListResponseCertificateAuthoritiesRevocationStatus `json:"revocationStatus,required"`
+	RevocationStatus CTAuthorityListResponseCertificateAuthoritiesRevocationStatus `json:"revocationStatus,required"`
 	// The SHA-256 fingerprint of the intermediate certificate.
 	Sha256Fingerprint string                                          `json:"sha256Fingerprint,required"`
 	JSON              ctAuthorityListResponseCertificateAuthorityJSON `json:"-"`
 }
 
 // ctAuthorityListResponseCertificateAuthorityJSON contains the JSON metadata for
-// the struct [CtAuthorityListResponseCertificateAuthority]
+// the struct [CTAuthorityListResponseCertificateAuthority]
 type ctAuthorityListResponseCertificateAuthorityJSON struct {
 	CertificateRecordType   apijson.Field
 	Country                 apijson.Field
@@ -126,7 +126,7 @@ type ctAuthorityListResponseCertificateAuthorityJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *CtAuthorityListResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityListResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -135,52 +135,52 @@ func (r ctAuthorityListResponseCertificateAuthorityJSON) RawJSON() string {
 }
 
 // Specifies the type of certificate in the trust chain.
-type CtAuthorityListResponseCertificateAuthoritiesCertificateRecordType string
+type CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType string
 
 const (
-	CtAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeRootCertificate         CtAuthorityListResponseCertificateAuthoritiesCertificateRecordType = "ROOT_CERTIFICATE"
-	CtAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeIntermediateCertificate CtAuthorityListResponseCertificateAuthoritiesCertificateRecordType = "INTERMEDIATE_CERTIFICATE"
+	CTAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeRootCertificate         CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType = "ROOT_CERTIFICATE"
+	CTAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeIntermediateCertificate CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType = "INTERMEDIATE_CERTIFICATE"
 )
 
-func (r CtAuthorityListResponseCertificateAuthoritiesCertificateRecordType) IsKnown() bool {
+func (r CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType) IsKnown() bool {
 	switch r {
-	case CtAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeRootCertificate, CtAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeIntermediateCertificate:
+	case CTAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeRootCertificate, CTAuthorityListResponseCertificateAuthoritiesCertificateRecordTypeIntermediateCertificate:
 		return true
 	}
 	return false
 }
 
 // The current revocation status of a Certificate Authority (CA) certificate.
-type CtAuthorityListResponseCertificateAuthoritiesRevocationStatus string
+type CTAuthorityListResponseCertificateAuthoritiesRevocationStatus string
 
 const (
-	CtAuthorityListResponseCertificateAuthoritiesRevocationStatusNotRevoked        CtAuthorityListResponseCertificateAuthoritiesRevocationStatus = "NOT_REVOKED"
-	CtAuthorityListResponseCertificateAuthoritiesRevocationStatusRevoked           CtAuthorityListResponseCertificateAuthoritiesRevocationStatus = "REVOKED"
-	CtAuthorityListResponseCertificateAuthoritiesRevocationStatusParentCERTRevoked CtAuthorityListResponseCertificateAuthoritiesRevocationStatus = "PARENT_CERT_REVOKED"
+	CTAuthorityListResponseCertificateAuthoritiesRevocationStatusNotRevoked        CTAuthorityListResponseCertificateAuthoritiesRevocationStatus = "NOT_REVOKED"
+	CTAuthorityListResponseCertificateAuthoritiesRevocationStatusRevoked           CTAuthorityListResponseCertificateAuthoritiesRevocationStatus = "REVOKED"
+	CTAuthorityListResponseCertificateAuthoritiesRevocationStatusParentCERTRevoked CTAuthorityListResponseCertificateAuthoritiesRevocationStatus = "PARENT_CERT_REVOKED"
 )
 
-func (r CtAuthorityListResponseCertificateAuthoritiesRevocationStatus) IsKnown() bool {
+func (r CTAuthorityListResponseCertificateAuthoritiesRevocationStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityListResponseCertificateAuthoritiesRevocationStatusNotRevoked, CtAuthorityListResponseCertificateAuthoritiesRevocationStatusRevoked, CtAuthorityListResponseCertificateAuthoritiesRevocationStatusParentCERTRevoked:
+	case CTAuthorityListResponseCertificateAuthoritiesRevocationStatusNotRevoked, CTAuthorityListResponseCertificateAuthoritiesRevocationStatusRevoked, CTAuthorityListResponseCertificateAuthoritiesRevocationStatusParentCERTRevoked:
 		return true
 	}
 	return false
 }
 
-type CtAuthorityGetResponse struct {
-	CertificateAuthority CtAuthorityGetResponseCertificateAuthority `json:"certificateAuthority,required"`
+type CTAuthorityGetResponse struct {
+	CertificateAuthority CTAuthorityGetResponseCertificateAuthority `json:"certificateAuthority,required"`
 	JSON                 ctAuthorityGetResponseJSON                 `json:"-"`
 }
 
 // ctAuthorityGetResponseJSON contains the JSON metadata for the struct
-// [CtAuthorityGetResponse]
+// [CTAuthorityGetResponse]
 type ctAuthorityGetResponseJSON struct {
 	CertificateAuthority apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *CtAuthorityGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -188,23 +188,23 @@ func (r ctAuthorityGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtAuthorityGetResponseCertificateAuthority struct {
+type CTAuthorityGetResponseCertificateAuthority struct {
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	AppleStatus CtAuthorityGetResponseCertificateAuthorityAppleStatus `json:"appleStatus,required"`
+	AppleStatus CTAuthorityGetResponseCertificateAuthorityAppleStatus `json:"appleStatus,required"`
 	// The authorityKeyIdentifier value extracted from the certificate PEM.
 	AuthorityKeyIdentifier string `json:"authorityKeyIdentifier,required"`
 	// Specifies the type of certificate in the trust chain.
-	CertificateRecordType CtAuthorityGetResponseCertificateAuthorityCertificateRecordType `json:"certificateRecordType,required"`
+	CertificateRecordType CTAuthorityGetResponseCertificateAuthorityCertificateRecordType `json:"certificateRecordType,required"`
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	ChromeStatus CtAuthorityGetResponseCertificateAuthorityChromeStatus `json:"chromeStatus,required"`
+	ChromeStatus CTAuthorityGetResponseCertificateAuthorityChromeStatus `json:"chromeStatus,required"`
 	// The two-letter ISO country code where the CA organization is based.
 	Country string `json:"country,required"`
 	// The full country name corresponding to the country code.
 	CountryName string `json:"countryName,required"`
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	MicrosoftStatus CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus `json:"microsoftStatus,required"`
+	MicrosoftStatus CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus `json:"microsoftStatus,required"`
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	MozillaStatus CtAuthorityGetResponseCertificateAuthorityMozillaStatus `json:"mozillaStatus,required"`
+	MozillaStatus CTAuthorityGetResponseCertificateAuthorityMozillaStatus `json:"mozillaStatus,required"`
 	// The full name of the certificate authority (CA).
 	Name string `json:"name,required"`
 	// The organization that owns and operates the CA.
@@ -215,9 +215,9 @@ type CtAuthorityGetResponseCertificateAuthority struct {
 	// The SHA-256 fingerprint of the parent certificate.
 	ParentSha256Fingerprint string `json:"parentSha256Fingerprint,required"`
 	// CAs from the same owner.
-	Related []CtAuthorityGetResponseCertificateAuthorityRelated `json:"related,required"`
+	Related []CTAuthorityGetResponseCertificateAuthorityRelated `json:"related,required"`
 	// The current revocation status of a Certificate Authority (CA) certificate.
-	RevocationStatus CtAuthorityGetResponseCertificateAuthorityRevocationStatus `json:"revocationStatus,required"`
+	RevocationStatus CTAuthorityGetResponseCertificateAuthorityRevocationStatus `json:"revocationStatus,required"`
 	// The SHA-256 fingerprint of the intermediate certificate.
 	Sha256Fingerprint string `json:"sha256Fingerprint,required"`
 	// The subjectKeyIdentifier value extracted from the certificate PEM.
@@ -230,7 +230,7 @@ type CtAuthorityGetResponseCertificateAuthority struct {
 }
 
 // ctAuthorityGetResponseCertificateAuthorityJSON contains the JSON metadata for
-// the struct [CtAuthorityGetResponseCertificateAuthority]
+// the struct [CTAuthorityGetResponseCertificateAuthority]
 type ctAuthorityGetResponseCertificateAuthorityJSON struct {
 	AppleStatus             apijson.Field
 	AuthorityKeyIdentifier  apijson.Field
@@ -254,7 +254,7 @@ type ctAuthorityGetResponseCertificateAuthorityJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *CtAuthorityGetResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityGetResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -263,119 +263,119 @@ func (r ctAuthorityGetResponseCertificateAuthorityJSON) RawJSON() string {
 }
 
 // The inclusion status of a Certificate Authority (CA) in the trust store.
-type CtAuthorityGetResponseCertificateAuthorityAppleStatus string
+type CTAuthorityGetResponseCertificateAuthorityAppleStatus string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusIncluded       CtAuthorityGetResponseCertificateAuthorityAppleStatus = "INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusNotYetIncluded CtAuthorityGetResponseCertificateAuthorityAppleStatus = "NOT_YET_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusNotIncluded    CtAuthorityGetResponseCertificateAuthorityAppleStatus = "NOT_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusNotBefore      CtAuthorityGetResponseCertificateAuthorityAppleStatus = "NOT_BEFORE"
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusRemoved        CtAuthorityGetResponseCertificateAuthorityAppleStatus = "REMOVED"
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusDisabled       CtAuthorityGetResponseCertificateAuthorityAppleStatus = "DISABLED"
-	CtAuthorityGetResponseCertificateAuthorityAppleStatusBlocked        CtAuthorityGetResponseCertificateAuthorityAppleStatus = "BLOCKED"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusIncluded       CTAuthorityGetResponseCertificateAuthorityAppleStatus = "INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusNotYetIncluded CTAuthorityGetResponseCertificateAuthorityAppleStatus = "NOT_YET_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusNotIncluded    CTAuthorityGetResponseCertificateAuthorityAppleStatus = "NOT_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusNotBefore      CTAuthorityGetResponseCertificateAuthorityAppleStatus = "NOT_BEFORE"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusRemoved        CTAuthorityGetResponseCertificateAuthorityAppleStatus = "REMOVED"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusDisabled       CTAuthorityGetResponseCertificateAuthorityAppleStatus = "DISABLED"
+	CTAuthorityGetResponseCertificateAuthorityAppleStatusBlocked        CTAuthorityGetResponseCertificateAuthorityAppleStatus = "BLOCKED"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityAppleStatus) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityAppleStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityAppleStatusIncluded, CtAuthorityGetResponseCertificateAuthorityAppleStatusNotYetIncluded, CtAuthorityGetResponseCertificateAuthorityAppleStatusNotIncluded, CtAuthorityGetResponseCertificateAuthorityAppleStatusNotBefore, CtAuthorityGetResponseCertificateAuthorityAppleStatusRemoved, CtAuthorityGetResponseCertificateAuthorityAppleStatusDisabled, CtAuthorityGetResponseCertificateAuthorityAppleStatusBlocked:
+	case CTAuthorityGetResponseCertificateAuthorityAppleStatusIncluded, CTAuthorityGetResponseCertificateAuthorityAppleStatusNotYetIncluded, CTAuthorityGetResponseCertificateAuthorityAppleStatusNotIncluded, CTAuthorityGetResponseCertificateAuthorityAppleStatusNotBefore, CTAuthorityGetResponseCertificateAuthorityAppleStatusRemoved, CTAuthorityGetResponseCertificateAuthorityAppleStatusDisabled, CTAuthorityGetResponseCertificateAuthorityAppleStatusBlocked:
 		return true
 	}
 	return false
 }
 
 // Specifies the type of certificate in the trust chain.
-type CtAuthorityGetResponseCertificateAuthorityCertificateRecordType string
+type CTAuthorityGetResponseCertificateAuthorityCertificateRecordType string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityCertificateRecordTypeRootCertificate         CtAuthorityGetResponseCertificateAuthorityCertificateRecordType = "ROOT_CERTIFICATE"
-	CtAuthorityGetResponseCertificateAuthorityCertificateRecordTypeIntermediateCertificate CtAuthorityGetResponseCertificateAuthorityCertificateRecordType = "INTERMEDIATE_CERTIFICATE"
+	CTAuthorityGetResponseCertificateAuthorityCertificateRecordTypeRootCertificate         CTAuthorityGetResponseCertificateAuthorityCertificateRecordType = "ROOT_CERTIFICATE"
+	CTAuthorityGetResponseCertificateAuthorityCertificateRecordTypeIntermediateCertificate CTAuthorityGetResponseCertificateAuthorityCertificateRecordType = "INTERMEDIATE_CERTIFICATE"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityCertificateRecordType) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityCertificateRecordType) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityCertificateRecordTypeRootCertificate, CtAuthorityGetResponseCertificateAuthorityCertificateRecordTypeIntermediateCertificate:
+	case CTAuthorityGetResponseCertificateAuthorityCertificateRecordTypeRootCertificate, CTAuthorityGetResponseCertificateAuthorityCertificateRecordTypeIntermediateCertificate:
 		return true
 	}
 	return false
 }
 
 // The inclusion status of a Certificate Authority (CA) in the trust store.
-type CtAuthorityGetResponseCertificateAuthorityChromeStatus string
+type CTAuthorityGetResponseCertificateAuthorityChromeStatus string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusIncluded       CtAuthorityGetResponseCertificateAuthorityChromeStatus = "INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusNotYetIncluded CtAuthorityGetResponseCertificateAuthorityChromeStatus = "NOT_YET_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusNotIncluded    CtAuthorityGetResponseCertificateAuthorityChromeStatus = "NOT_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusNotBefore      CtAuthorityGetResponseCertificateAuthorityChromeStatus = "NOT_BEFORE"
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusRemoved        CtAuthorityGetResponseCertificateAuthorityChromeStatus = "REMOVED"
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusDisabled       CtAuthorityGetResponseCertificateAuthorityChromeStatus = "DISABLED"
-	CtAuthorityGetResponseCertificateAuthorityChromeStatusBlocked        CtAuthorityGetResponseCertificateAuthorityChromeStatus = "BLOCKED"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusIncluded       CTAuthorityGetResponseCertificateAuthorityChromeStatus = "INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusNotYetIncluded CTAuthorityGetResponseCertificateAuthorityChromeStatus = "NOT_YET_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusNotIncluded    CTAuthorityGetResponseCertificateAuthorityChromeStatus = "NOT_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusNotBefore      CTAuthorityGetResponseCertificateAuthorityChromeStatus = "NOT_BEFORE"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusRemoved        CTAuthorityGetResponseCertificateAuthorityChromeStatus = "REMOVED"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusDisabled       CTAuthorityGetResponseCertificateAuthorityChromeStatus = "DISABLED"
+	CTAuthorityGetResponseCertificateAuthorityChromeStatusBlocked        CTAuthorityGetResponseCertificateAuthorityChromeStatus = "BLOCKED"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityChromeStatus) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityChromeStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityChromeStatusIncluded, CtAuthorityGetResponseCertificateAuthorityChromeStatusNotYetIncluded, CtAuthorityGetResponseCertificateAuthorityChromeStatusNotIncluded, CtAuthorityGetResponseCertificateAuthorityChromeStatusNotBefore, CtAuthorityGetResponseCertificateAuthorityChromeStatusRemoved, CtAuthorityGetResponseCertificateAuthorityChromeStatusDisabled, CtAuthorityGetResponseCertificateAuthorityChromeStatusBlocked:
+	case CTAuthorityGetResponseCertificateAuthorityChromeStatusIncluded, CTAuthorityGetResponseCertificateAuthorityChromeStatusNotYetIncluded, CTAuthorityGetResponseCertificateAuthorityChromeStatusNotIncluded, CTAuthorityGetResponseCertificateAuthorityChromeStatusNotBefore, CTAuthorityGetResponseCertificateAuthorityChromeStatusRemoved, CTAuthorityGetResponseCertificateAuthorityChromeStatusDisabled, CTAuthorityGetResponseCertificateAuthorityChromeStatusBlocked:
 		return true
 	}
 	return false
 }
 
 // The inclusion status of a Certificate Authority (CA) in the trust store.
-type CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus string
+type CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusIncluded       CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotYetIncluded CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "NOT_YET_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotIncluded    CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "NOT_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotBefore      CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "NOT_BEFORE"
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusRemoved        CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "REMOVED"
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusDisabled       CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "DISABLED"
-	CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusBlocked        CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "BLOCKED"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusIncluded       CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotYetIncluded CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "NOT_YET_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotIncluded    CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "NOT_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotBefore      CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "NOT_BEFORE"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusRemoved        CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "REMOVED"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusDisabled       CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "DISABLED"
+	CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusBlocked        CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus = "BLOCKED"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityMicrosoftStatus) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusIncluded, CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotYetIncluded, CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotIncluded, CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotBefore, CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusRemoved, CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusDisabled, CtAuthorityGetResponseCertificateAuthorityMicrosoftStatusBlocked:
+	case CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusIncluded, CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotYetIncluded, CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotIncluded, CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusNotBefore, CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusRemoved, CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusDisabled, CTAuthorityGetResponseCertificateAuthorityMicrosoftStatusBlocked:
 		return true
 	}
 	return false
 }
 
 // The inclusion status of a Certificate Authority (CA) in the trust store.
-type CtAuthorityGetResponseCertificateAuthorityMozillaStatus string
+type CTAuthorityGetResponseCertificateAuthorityMozillaStatus string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusIncluded       CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusNotYetIncluded CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "NOT_YET_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusNotIncluded    CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "NOT_INCLUDED"
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusNotBefore      CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "NOT_BEFORE"
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusRemoved        CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "REMOVED"
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusDisabled       CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "DISABLED"
-	CtAuthorityGetResponseCertificateAuthorityMozillaStatusBlocked        CtAuthorityGetResponseCertificateAuthorityMozillaStatus = "BLOCKED"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusIncluded       CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusNotYetIncluded CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "NOT_YET_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusNotIncluded    CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "NOT_INCLUDED"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusNotBefore      CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "NOT_BEFORE"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusRemoved        CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "REMOVED"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusDisabled       CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "DISABLED"
+	CTAuthorityGetResponseCertificateAuthorityMozillaStatusBlocked        CTAuthorityGetResponseCertificateAuthorityMozillaStatus = "BLOCKED"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityMozillaStatus) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityMozillaStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityMozillaStatusIncluded, CtAuthorityGetResponseCertificateAuthorityMozillaStatusNotYetIncluded, CtAuthorityGetResponseCertificateAuthorityMozillaStatusNotIncluded, CtAuthorityGetResponseCertificateAuthorityMozillaStatusNotBefore, CtAuthorityGetResponseCertificateAuthorityMozillaStatusRemoved, CtAuthorityGetResponseCertificateAuthorityMozillaStatusDisabled, CtAuthorityGetResponseCertificateAuthorityMozillaStatusBlocked:
+	case CTAuthorityGetResponseCertificateAuthorityMozillaStatusIncluded, CTAuthorityGetResponseCertificateAuthorityMozillaStatusNotYetIncluded, CTAuthorityGetResponseCertificateAuthorityMozillaStatusNotIncluded, CTAuthorityGetResponseCertificateAuthorityMozillaStatusNotBefore, CTAuthorityGetResponseCertificateAuthorityMozillaStatusRemoved, CTAuthorityGetResponseCertificateAuthorityMozillaStatusDisabled, CTAuthorityGetResponseCertificateAuthorityMozillaStatusBlocked:
 		return true
 	}
 	return false
 }
 
-type CtAuthorityGetResponseCertificateAuthorityRelated struct {
+type CTAuthorityGetResponseCertificateAuthorityRelated struct {
 	// Specifies the type of certificate in the trust chain.
-	CertificateRecordType CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType `json:"certificateRecordType,required"`
+	CertificateRecordType CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType `json:"certificateRecordType,required"`
 	// The full name of the certificate authority (CA).
 	Name string `json:"name,required"`
 	// The current revocation status of a Certificate Authority (CA) certificate.
-	RevocationStatus CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus `json:"revocationStatus,required"`
+	RevocationStatus CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus `json:"revocationStatus,required"`
 	// The SHA-256 fingerprint of the intermediate certificate.
 	Sha256Fingerprint string                                                `json:"sha256Fingerprint,required"`
 	JSON              ctAuthorityGetResponseCertificateAuthorityRelatedJSON `json:"-"`
 }
 
 // ctAuthorityGetResponseCertificateAuthorityRelatedJSON contains the JSON metadata
-// for the struct [CtAuthorityGetResponseCertificateAuthorityRelated]
+// for the struct [CTAuthorityGetResponseCertificateAuthorityRelated]
 type ctAuthorityGetResponseCertificateAuthorityRelatedJSON struct {
 	CertificateRecordType apijson.Field
 	Name                  apijson.Field
@@ -385,7 +385,7 @@ type ctAuthorityGetResponseCertificateAuthorityRelatedJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *CtAuthorityGetResponseCertificateAuthorityRelated) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityGetResponseCertificateAuthorityRelated) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -394,66 +394,66 @@ func (r ctAuthorityGetResponseCertificateAuthorityRelatedJSON) RawJSON() string 
 }
 
 // Specifies the type of certificate in the trust chain.
-type CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType string
+type CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeRootCertificate         CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType = "ROOT_CERTIFICATE"
-	CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeIntermediateCertificate CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType = "INTERMEDIATE_CERTIFICATE"
+	CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeRootCertificate         CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType = "ROOT_CERTIFICATE"
+	CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeIntermediateCertificate CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType = "INTERMEDIATE_CERTIFICATE"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeRootCertificate, CtAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeIntermediateCertificate:
+	case CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeRootCertificate, CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordTypeIntermediateCertificate:
 		return true
 	}
 	return false
 }
 
 // The current revocation status of a Certificate Authority (CA) certificate.
-type CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus string
+type CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusNotRevoked        CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus = "NOT_REVOKED"
-	CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusRevoked           CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus = "REVOKED"
-	CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusParentCERTRevoked CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus = "PARENT_CERT_REVOKED"
+	CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusNotRevoked        CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus = "NOT_REVOKED"
+	CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusRevoked           CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus = "REVOKED"
+	CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusParentCERTRevoked CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus = "PARENT_CERT_REVOKED"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusNotRevoked, CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusRevoked, CtAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusParentCERTRevoked:
+	case CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusNotRevoked, CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusRevoked, CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatusParentCERTRevoked:
 		return true
 	}
 	return false
 }
 
 // The current revocation status of a Certificate Authority (CA) certificate.
-type CtAuthorityGetResponseCertificateAuthorityRevocationStatus string
+type CTAuthorityGetResponseCertificateAuthorityRevocationStatus string
 
 const (
-	CtAuthorityGetResponseCertificateAuthorityRevocationStatusNotRevoked        CtAuthorityGetResponseCertificateAuthorityRevocationStatus = "NOT_REVOKED"
-	CtAuthorityGetResponseCertificateAuthorityRevocationStatusRevoked           CtAuthorityGetResponseCertificateAuthorityRevocationStatus = "REVOKED"
-	CtAuthorityGetResponseCertificateAuthorityRevocationStatusParentCERTRevoked CtAuthorityGetResponseCertificateAuthorityRevocationStatus = "PARENT_CERT_REVOKED"
+	CTAuthorityGetResponseCertificateAuthorityRevocationStatusNotRevoked        CTAuthorityGetResponseCertificateAuthorityRevocationStatus = "NOT_REVOKED"
+	CTAuthorityGetResponseCertificateAuthorityRevocationStatusRevoked           CTAuthorityGetResponseCertificateAuthorityRevocationStatus = "REVOKED"
+	CTAuthorityGetResponseCertificateAuthorityRevocationStatusParentCERTRevoked CTAuthorityGetResponseCertificateAuthorityRevocationStatus = "PARENT_CERT_REVOKED"
 )
 
-func (r CtAuthorityGetResponseCertificateAuthorityRevocationStatus) IsKnown() bool {
+func (r CTAuthorityGetResponseCertificateAuthorityRevocationStatus) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetResponseCertificateAuthorityRevocationStatusNotRevoked, CtAuthorityGetResponseCertificateAuthorityRevocationStatusRevoked, CtAuthorityGetResponseCertificateAuthorityRevocationStatusParentCERTRevoked:
+	case CTAuthorityGetResponseCertificateAuthorityRevocationStatusNotRevoked, CTAuthorityGetResponseCertificateAuthorityRevocationStatusRevoked, CTAuthorityGetResponseCertificateAuthorityRevocationStatusParentCERTRevoked:
 		return true
 	}
 	return false
 }
 
-type CtAuthorityListParams struct {
+type CTAuthorityListParams struct {
 	// Format in which results will be returned.
-	Format param.Field[CtAuthorityListParamsFormat] `query:"format"`
+	Format param.Field[CTAuthorityListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
 }
 
-// URLQuery serializes [CtAuthorityListParams]'s query parameters as `url.Values`.
-func (r CtAuthorityListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CTAuthorityListParams]'s query parameters as `url.Values`.
+func (r CTAuthorityListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -461,29 +461,29 @@ func (r CtAuthorityListParams) URLQuery() (v url.Values) {
 }
 
 // Format in which results will be returned.
-type CtAuthorityListParamsFormat string
+type CTAuthorityListParamsFormat string
 
 const (
-	CtAuthorityListParamsFormatJson CtAuthorityListParamsFormat = "JSON"
-	CtAuthorityListParamsFormatCsv  CtAuthorityListParamsFormat = "CSV"
+	CTAuthorityListParamsFormatJson CTAuthorityListParamsFormat = "JSON"
+	CTAuthorityListParamsFormatCsv  CTAuthorityListParamsFormat = "CSV"
 )
 
-func (r CtAuthorityListParamsFormat) IsKnown() bool {
+func (r CTAuthorityListParamsFormat) IsKnown() bool {
 	switch r {
-	case CtAuthorityListParamsFormatJson, CtAuthorityListParamsFormatCsv:
+	case CTAuthorityListParamsFormatJson, CTAuthorityListParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtAuthorityListResponseEnvelope struct {
-	Result  CtAuthorityListResponse             `json:"result,required"`
+type CTAuthorityListResponseEnvelope struct {
+	Result  CTAuthorityListResponse             `json:"result,required"`
 	Success bool                                `json:"success,required"`
 	JSON    ctAuthorityListResponseEnvelopeJSON `json:"-"`
 }
 
 // ctAuthorityListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtAuthorityListResponseEnvelope]
+// [CTAuthorityListResponseEnvelope]
 type ctAuthorityListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -491,7 +491,7 @@ type ctAuthorityListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtAuthorityListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -499,13 +499,13 @@ func (r ctAuthorityListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtAuthorityGetParams struct {
+type CTAuthorityGetParams struct {
 	// Format in which results will be returned.
-	Format param.Field[CtAuthorityGetParamsFormat] `query:"format"`
+	Format param.Field[CTAuthorityGetParamsFormat] `query:"format"`
 }
 
-// URLQuery serializes [CtAuthorityGetParams]'s query parameters as `url.Values`.
-func (r CtAuthorityGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CTAuthorityGetParams]'s query parameters as `url.Values`.
+func (r CTAuthorityGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -513,29 +513,29 @@ func (r CtAuthorityGetParams) URLQuery() (v url.Values) {
 }
 
 // Format in which results will be returned.
-type CtAuthorityGetParamsFormat string
+type CTAuthorityGetParamsFormat string
 
 const (
-	CtAuthorityGetParamsFormatJson CtAuthorityGetParamsFormat = "JSON"
-	CtAuthorityGetParamsFormatCsv  CtAuthorityGetParamsFormat = "CSV"
+	CTAuthorityGetParamsFormatJson CTAuthorityGetParamsFormat = "JSON"
+	CTAuthorityGetParamsFormatCsv  CTAuthorityGetParamsFormat = "CSV"
 )
 
-func (r CtAuthorityGetParamsFormat) IsKnown() bool {
+func (r CTAuthorityGetParamsFormat) IsKnown() bool {
 	switch r {
-	case CtAuthorityGetParamsFormatJson, CtAuthorityGetParamsFormatCsv:
+	case CTAuthorityGetParamsFormatJson, CTAuthorityGetParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtAuthorityGetResponseEnvelope struct {
-	Result  CtAuthorityGetResponse             `json:"result,required"`
+type CTAuthorityGetResponseEnvelope struct {
+	Result  CTAuthorityGetResponse             `json:"result,required"`
 	Success bool                               `json:"success,required"`
 	JSON    ctAuthorityGetResponseEnvelopeJSON `json:"-"`
 }
 
 // ctAuthorityGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtAuthorityGetResponseEnvelope]
+// [CTAuthorityGetResponseEnvelope]
 type ctAuthorityGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -543,7 +543,7 @@ type ctAuthorityGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtAuthorityGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAuthorityGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

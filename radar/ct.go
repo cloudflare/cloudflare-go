@@ -19,33 +19,33 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// CtService contains methods and other services that help with interacting with
+// CTService contains methods and other services that help with interacting with
 // the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewCtService] method instead.
-type CtService struct {
+// the [NewCTService] method instead.
+type CTService struct {
 	Options     []option.RequestOption
-	Authorities *CtAuthorityService
-	Logs        *CtLogService
+	Authorities *CTAuthorityService
+	Logs        *CTLogService
 }
 
-// NewCtService generates a new service that applies the given options to each
+// NewCTService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewCtService(opts ...option.RequestOption) (r *CtService) {
-	r = &CtService{}
+func NewCTService(opts ...option.RequestOption) (r *CTService) {
+	r = &CTService{}
 	r.Options = opts
-	r.Authorities = NewCtAuthorityService(opts...)
-	r.Logs = NewCtLogService(opts...)
+	r.Authorities = NewCTAuthorityService(opts...)
+	r.Logs = NewCTLogService(opts...)
 	return
 }
 
 // Retrieves an aggregated summary of certificates grouped by the specified
 // dimension.
-func (r *CtService) Summary(ctx context.Context, dimension CtSummaryParamsDimension, query CtSummaryParams, opts ...option.RequestOption) (res *CtSummaryResponse, err error) {
-	var env CtSummaryResponseEnvelope
+func (r *CTService) Summary(ctx context.Context, dimension CTSummaryParamsDimension, query CTSummaryParams, opts ...option.RequestOption) (res *CTSummaryResponse, err error) {
+	var env CTSummaryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/ct/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -57,8 +57,8 @@ func (r *CtService) Summary(ctx context.Context, dimension CtSummaryParamsDimens
 }
 
 // Retrieves certificate volume over time.
-func (r *CtService) Timeseries(ctx context.Context, query CtTimeseriesParams, opts ...option.RequestOption) (res *CtTimeseriesResponse, err error) {
-	var env CtTimeseriesResponseEnvelope
+func (r *CTService) Timeseries(ctx context.Context, query CTTimeseriesParams, opts ...option.RequestOption) (res *CTTimeseriesResponse, err error) {
+	var env CTTimeseriesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := "radar/ct/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -71,8 +71,8 @@ func (r *CtService) Timeseries(ctx context.Context, query CtTimeseriesParams, op
 
 // Retrieves the distribution of certificates grouped by chosen the specified
 // dimension over time.
-func (r *CtService) TimeseriesGroups(ctx context.Context, dimension CtTimeseriesGroupsParamsDimension, query CtTimeseriesGroupsParams, opts ...option.RequestOption) (res *CtTimeseriesGroupsResponse, err error) {
-	var env CtTimeseriesGroupsResponseEnvelope
+func (r *CTService) TimeseriesGroups(ctx context.Context, dimension CTTimeseriesGroupsParamsDimension, query CTTimeseriesGroupsParams, opts ...option.RequestOption) (res *CTTimeseriesGroupsResponse, err error) {
+	var env CTTimeseriesGroupsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/ct/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -83,15 +83,15 @@ func (r *CtService) TimeseriesGroups(ctx context.Context, dimension CtTimeseries
 	return
 }
 
-type CtSummaryResponse struct {
+type CTSummaryResponse struct {
 	// Metadata for the results.
-	Meta     CtSummaryResponseMeta          `json:"meta,required"`
-	Summary0 CtSummaryResponseSummary0Union `json:"summary_0,required"`
+	Meta     CTSummaryResponseMeta          `json:"meta,required"`
+	Summary0 CTSummaryResponseSummary0Union `json:"summary_0,required"`
 	JSON     ctSummaryResponseJSON          `json:"-"`
 }
 
 // ctSummaryResponseJSON contains the JSON metadata for the struct
-// [CtSummaryResponse]
+// [CTSummaryResponse]
 type ctSummaryResponseJSON struct {
 	Meta        apijson.Field
 	Summary0    apijson.Field
@@ -99,7 +99,7 @@ type ctSummaryResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtSummaryResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -108,21 +108,21 @@ func (r ctSummaryResponseJSON) RawJSON() string {
 }
 
 // Metadata for the results.
-type CtSummaryResponseMeta struct {
-	ConfidenceInfo CtSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []CtSummaryResponseMetaDateRange    `json:"dateRange,required"`
+type CTSummaryResponseMeta struct {
+	ConfidenceInfo CTSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []CTSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization CtSummaryResponseMetaNormalization `json:"normalization,required"`
+	Normalization CTSummaryResponseMetaNormalization `json:"normalization,required"`
 	// Measurement units for the results.
-	Units []CtSummaryResponseMetaUnit `json:"units,required"`
+	Units []CTSummaryResponseMetaUnit `json:"units,required"`
 	JSON  ctSummaryResponseMetaJSON   `json:"-"`
 }
 
 // ctSummaryResponseMetaJSON contains the JSON metadata for the struct
-// [CtSummaryResponseMeta]
+// [CTSummaryResponseMeta]
 type ctSummaryResponseMetaJSON struct {
 	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
@@ -133,7 +133,7 @@ type ctSummaryResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -141,15 +141,15 @@ func (r ctSummaryResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtSummaryResponseMetaConfidenceInfo struct {
-	Annotations []CtSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+type CTSummaryResponseMetaConfidenceInfo struct {
+	Annotations []CTSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
 	Level int64                                   `json:"level,required"`
 	JSON  ctSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // ctSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [CtSummaryResponseMetaConfidenceInfo]
+// struct [CTSummaryResponseMetaConfidenceInfo]
 type ctSummaryResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
@@ -157,7 +157,7 @@ type ctSummaryResponseMetaConfidenceInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -166,13 +166,13 @@ func (r ctSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 // Annotation associated with the result (e.g. outage or other type of event).
-type CtSummaryResponseMetaConfidenceInfoAnnotation struct {
+type CTSummaryResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	DataSource  CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
 	Description string                                                   `json:"description,required"`
 	EndDate     time.Time                                                `json:"endDate,required" format:"date-time"`
 	// Event type for annotations.
-	EventType CtSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType CTSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                              `json:"isInstantaneous,required"`
 	LinkedURL       string                                            `json:"linkedUrl,required" format:"uri"`
@@ -181,7 +181,7 @@ type CtSummaryResponseMetaConfidenceInfoAnnotation struct {
 }
 
 // ctSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata for
-// the struct [CtSummaryResponseMetaConfidenceInfoAnnotation]
+// the struct [CTSummaryResponseMetaConfidenceInfoAnnotation]
 type ctSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
@@ -194,7 +194,7 @@ type ctSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -203,65 +203,65 @@ func (r ctSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 }
 
 // Data source for annotations.
-type CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource string
+type CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource string
 
 const (
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt                 CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll                CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots               CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCT                 CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos                CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet                CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
 )
 
-func (r CtSummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+func (r CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
 	switch r {
-	case CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCt, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CtSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+	case CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAll, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceBots, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceCT, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceDos, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFw, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceNet, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CTSummaryResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
 		return true
 	}
 	return false
 }
 
 // Event type for annotations.
-type CtSummaryResponseMetaConfidenceInfoAnnotationsEventType string
+type CTSummaryResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
-	CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CtSummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CTSummaryResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CTSummaryResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CTSummaryResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CTSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CTSummaryResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CTSummaryResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
 )
 
-func (r CtSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+func (r CTSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CtSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CTSummaryResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false
 }
 
-type CtSummaryResponseMetaDateRange struct {
+type CTSummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
@@ -270,7 +270,7 @@ type CtSummaryResponseMetaDateRange struct {
 }
 
 // ctSummaryResponseMetaDateRangeJSON contains the JSON metadata for the struct
-// [CtSummaryResponseMetaDateRange]
+// [CTSummaryResponseMetaDateRange]
 type ctSummaryResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
@@ -278,7 +278,7 @@ type ctSummaryResponseMetaDateRangeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -288,35 +288,35 @@ func (r ctSummaryResponseMetaDateRangeJSON) RawJSON() string {
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type CtSummaryResponseMetaNormalization string
+type CTSummaryResponseMetaNormalization string
 
 const (
-	CtSummaryResponseMetaNormalizationPercentage           CtSummaryResponseMetaNormalization = "PERCENTAGE"
-	CtSummaryResponseMetaNormalizationMin0Max              CtSummaryResponseMetaNormalization = "MIN0_MAX"
-	CtSummaryResponseMetaNormalizationMinMax               CtSummaryResponseMetaNormalization = "MIN_MAX"
-	CtSummaryResponseMetaNormalizationRawValues            CtSummaryResponseMetaNormalization = "RAW_VALUES"
-	CtSummaryResponseMetaNormalizationPercentageChange     CtSummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
-	CtSummaryResponseMetaNormalizationRollingAverage       CtSummaryResponseMetaNormalization = "ROLLING_AVERAGE"
-	CtSummaryResponseMetaNormalizationOverlappedPercentage CtSummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
-	CtSummaryResponseMetaNormalizationRatio                CtSummaryResponseMetaNormalization = "RATIO"
+	CTSummaryResponseMetaNormalizationPercentage           CTSummaryResponseMetaNormalization = "PERCENTAGE"
+	CTSummaryResponseMetaNormalizationMin0Max              CTSummaryResponseMetaNormalization = "MIN0_MAX"
+	CTSummaryResponseMetaNormalizationMinMax               CTSummaryResponseMetaNormalization = "MIN_MAX"
+	CTSummaryResponseMetaNormalizationRawValues            CTSummaryResponseMetaNormalization = "RAW_VALUES"
+	CTSummaryResponseMetaNormalizationPercentageChange     CTSummaryResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	CTSummaryResponseMetaNormalizationRollingAverage       CTSummaryResponseMetaNormalization = "ROLLING_AVERAGE"
+	CTSummaryResponseMetaNormalizationOverlappedPercentage CTSummaryResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	CTSummaryResponseMetaNormalizationRatio                CTSummaryResponseMetaNormalization = "RATIO"
 )
 
-func (r CtSummaryResponseMetaNormalization) IsKnown() bool {
+func (r CTSummaryResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case CtSummaryResponseMetaNormalizationPercentage, CtSummaryResponseMetaNormalizationMin0Max, CtSummaryResponseMetaNormalizationMinMax, CtSummaryResponseMetaNormalizationRawValues, CtSummaryResponseMetaNormalizationPercentageChange, CtSummaryResponseMetaNormalizationRollingAverage, CtSummaryResponseMetaNormalizationOverlappedPercentage, CtSummaryResponseMetaNormalizationRatio:
+	case CTSummaryResponseMetaNormalizationPercentage, CTSummaryResponseMetaNormalizationMin0Max, CTSummaryResponseMetaNormalizationMinMax, CTSummaryResponseMetaNormalizationRawValues, CTSummaryResponseMetaNormalizationPercentageChange, CTSummaryResponseMetaNormalizationRollingAverage, CTSummaryResponseMetaNormalizationOverlappedPercentage, CTSummaryResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
 }
 
-type CtSummaryResponseMetaUnit struct {
+type CTSummaryResponseMetaUnit struct {
 	Name  string                        `json:"name,required"`
 	Value string                        `json:"value,required"`
 	JSON  ctSummaryResponseMetaUnitJSON `json:"-"`
 }
 
 // ctSummaryResponseMetaUnitJSON contains the JSON metadata for the struct
-// [CtSummaryResponseMetaUnit]
+// [CTSummaryResponseMetaUnit]
 type ctSummaryResponseMetaUnitJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
@@ -324,7 +324,7 @@ type ctSummaryResponseMetaUnitJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -332,66 +332,66 @@ func (r ctSummaryResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [CtSummaryResponseSummary0Map],
-// [CtSummaryResponseSummary0Object], [CtSummaryResponseSummary0Object],
-// [CtSummaryResponseSummary0Object], [CtSummaryResponseSummary0Object],
-// [CtSummaryResponseSummary0Object], [CtSummaryResponseSummary0Object] or
-// [CtSummaryResponseSummary0Object].
-type CtSummaryResponseSummary0Union interface {
-	implementsCtSummaryResponseSummary0Union()
+// Union satisfied by [CTSummaryResponseSummary0Map],
+// [CTSummaryResponseSummary0Object], [CTSummaryResponseSummary0Object],
+// [CTSummaryResponseSummary0Object], [CTSummaryResponseSummary0Object],
+// [CTSummaryResponseSummary0Object], [CTSummaryResponseSummary0Object] or
+// [CTSummaryResponseSummary0Object].
+type CTSummaryResponseSummary0Union interface {
+	implementsCTSummaryResponseSummary0Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CtSummaryResponseSummary0Union)(nil)).Elem(),
+		reflect.TypeOf((*CTSummaryResponseSummary0Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Map{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Map{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtSummaryResponseSummary0Object{}),
+			Type:       reflect.TypeOf(CTSummaryResponseSummary0Object{}),
 		},
 	)
 }
 
-type CtSummaryResponseSummary0Map map[string]string
+type CTSummaryResponseSummary0Map map[string]string
 
-func (r CtSummaryResponseSummary0Map) implementsCtSummaryResponseSummary0Union() {}
+func (r CTSummaryResponseSummary0Map) implementsCTSummaryResponseSummary0Union() {}
 
-type CtSummaryResponseSummary0Object struct {
+type CTSummaryResponseSummary0Object struct {
 	Rfc6962 string                              `json:"rfc6962,required"`
 	Static  string                              `json:"static,required"`
 	JSON    ctSummaryResponseSummary0ObjectJSON `json:"-"`
 }
 
 // ctSummaryResponseSummary0ObjectJSON contains the JSON metadata for the struct
-// [CtSummaryResponseSummary0Object]
+// [CTSummaryResponseSummary0Object]
 type ctSummaryResponseSummary0ObjectJSON struct {
 	Rfc6962     apijson.Field
 	Static      apijson.Field
@@ -399,7 +399,7 @@ type ctSummaryResponseSummary0ObjectJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseSummary0Object) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseSummary0Object) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -407,24 +407,24 @@ func (r ctSummaryResponseSummary0ObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CtSummaryResponseSummary0Object) implementsCtSummaryResponseSummary0Union() {}
+func (r CTSummaryResponseSummary0Object) implementsCTSummaryResponseSummary0Union() {}
 
-type CtTimeseriesResponse struct {
+type CTTimeseriesResponse struct {
 	// Metadata for the results.
-	Meta        CtTimeseriesResponseMeta        `json:"meta,required"`
-	ExtraFields map[string]CtTimeseriesResponse `json:"-,extras"`
+	Meta        CTTimeseriesResponseMeta        `json:"meta,required"`
+	ExtraFields map[string]CTTimeseriesResponse `json:"-,extras"`
 	JSON        ctTimeseriesResponseJSON        `json:"-"`
 }
 
 // ctTimeseriesResponseJSON contains the JSON metadata for the struct
-// [CtTimeseriesResponse]
+// [CTTimeseriesResponse]
 type ctTimeseriesResponseJSON struct {
 	Meta        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -433,25 +433,25 @@ func (r ctTimeseriesResponseJSON) RawJSON() string {
 }
 
 // Metadata for the results.
-type CtTimeseriesResponseMeta struct {
+type CTTimeseriesResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    CtTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo CtTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []CtTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    CTTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo CTTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []CTTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization CtTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization CTTimeseriesResponseMetaNormalization `json:"normalization,required"`
 	// Measurement units for the results.
-	Units []CtTimeseriesResponseMetaUnit `json:"units,required"`
+	Units []CTTimeseriesResponseMetaUnit `json:"units,required"`
 	JSON  ctTimeseriesResponseMetaJSON   `json:"-"`
 }
 
 // ctTimeseriesResponseMetaJSON contains the JSON metadata for the struct
-// [CtTimeseriesResponseMeta]
+// [CTTimeseriesResponseMeta]
 type ctTimeseriesResponseMetaJSON struct {
 	AggInterval    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -463,7 +463,7 @@ type ctTimeseriesResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -474,33 +474,33 @@ func (r ctTimeseriesResponseMetaJSON) RawJSON() string {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type CtTimeseriesResponseMetaAggInterval string
+type CTTimeseriesResponseMetaAggInterval string
 
 const (
-	CtTimeseriesResponseMetaAggIntervalFifteenMinutes CtTimeseriesResponseMetaAggInterval = "FIFTEEN_MINUTES"
-	CtTimeseriesResponseMetaAggIntervalOneHour        CtTimeseriesResponseMetaAggInterval = "ONE_HOUR"
-	CtTimeseriesResponseMetaAggIntervalOneDay         CtTimeseriesResponseMetaAggInterval = "ONE_DAY"
-	CtTimeseriesResponseMetaAggIntervalOneWeek        CtTimeseriesResponseMetaAggInterval = "ONE_WEEK"
-	CtTimeseriesResponseMetaAggIntervalOneMonth       CtTimeseriesResponseMetaAggInterval = "ONE_MONTH"
+	CTTimeseriesResponseMetaAggIntervalFifteenMinutes CTTimeseriesResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	CTTimeseriesResponseMetaAggIntervalOneHour        CTTimeseriesResponseMetaAggInterval = "ONE_HOUR"
+	CTTimeseriesResponseMetaAggIntervalOneDay         CTTimeseriesResponseMetaAggInterval = "ONE_DAY"
+	CTTimeseriesResponseMetaAggIntervalOneWeek        CTTimeseriesResponseMetaAggInterval = "ONE_WEEK"
+	CTTimeseriesResponseMetaAggIntervalOneMonth       CTTimeseriesResponseMetaAggInterval = "ONE_MONTH"
 )
 
-func (r CtTimeseriesResponseMetaAggInterval) IsKnown() bool {
+func (r CTTimeseriesResponseMetaAggInterval) IsKnown() bool {
 	switch r {
-	case CtTimeseriesResponseMetaAggIntervalFifteenMinutes, CtTimeseriesResponseMetaAggIntervalOneHour, CtTimeseriesResponseMetaAggIntervalOneDay, CtTimeseriesResponseMetaAggIntervalOneWeek, CtTimeseriesResponseMetaAggIntervalOneMonth:
+	case CTTimeseriesResponseMetaAggIntervalFifteenMinutes, CTTimeseriesResponseMetaAggIntervalOneHour, CTTimeseriesResponseMetaAggIntervalOneDay, CTTimeseriesResponseMetaAggIntervalOneWeek, CTTimeseriesResponseMetaAggIntervalOneMonth:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []CtTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+type CTTimeseriesResponseMetaConfidenceInfo struct {
+	Annotations []CTTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
 	Level int64                                      `json:"level,required"`
 	JSON  ctTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // ctTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
-// struct [CtTimeseriesResponseMetaConfidenceInfo]
+// struct [CTTimeseriesResponseMetaConfidenceInfo]
 type ctTimeseriesResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
@@ -508,7 +508,7 @@ type ctTimeseriesResponseMetaConfidenceInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -517,13 +517,13 @@ func (r ctTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 // Annotation associated with the result (e.g. outage or other type of event).
-type CtTimeseriesResponseMetaConfidenceInfoAnnotation struct {
+type CTTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	DataSource  CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
 	Description string                                                      `json:"description,required"`
 	EndDate     time.Time                                                   `json:"endDate,required" format:"date-time"`
 	// Event type for annotations.
-	EventType CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
 	LinkedURL       string                                               `json:"linkedUrl,required" format:"uri"`
@@ -532,7 +532,7 @@ type CtTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 }
 
 // ctTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [CtTimeseriesResponseMetaConfidenceInfoAnnotation]
+// for the struct [CTTimeseriesResponseMetaConfidenceInfoAnnotation]
 type ctTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
@@ -545,7 +545,7 @@ type ctTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -554,65 +554,65 @@ func (r ctTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 }
 
 // Data source for annotations.
-type CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource string
+type CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource string
 
 const (
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt                 CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll                CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots               CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCT                 CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos                CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet                CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
 )
 
-func (r CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+func (r CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
 	switch r {
-	case CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCt, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CtTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+	case CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAll, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceBots, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceCT, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceDos, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFw, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceNet, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
 		return true
 	}
 	return false
 }
 
 // Event type for annotations.
-type CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType string
+type CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
-	CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
 )
 
-func (r CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+func (r CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CtTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesResponseMetaDateRange struct {
+type CTTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
@@ -621,7 +621,7 @@ type CtTimeseriesResponseMetaDateRange struct {
 }
 
 // ctTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the struct
-// [CtTimeseriesResponseMetaDateRange]
+// [CTTimeseriesResponseMetaDateRange]
 type ctTimeseriesResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
@@ -629,7 +629,7 @@ type ctTimeseriesResponseMetaDateRangeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -639,35 +639,35 @@ func (r ctTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type CtTimeseriesResponseMetaNormalization string
+type CTTimeseriesResponseMetaNormalization string
 
 const (
-	CtTimeseriesResponseMetaNormalizationPercentage           CtTimeseriesResponseMetaNormalization = "PERCENTAGE"
-	CtTimeseriesResponseMetaNormalizationMin0Max              CtTimeseriesResponseMetaNormalization = "MIN0_MAX"
-	CtTimeseriesResponseMetaNormalizationMinMax               CtTimeseriesResponseMetaNormalization = "MIN_MAX"
-	CtTimeseriesResponseMetaNormalizationRawValues            CtTimeseriesResponseMetaNormalization = "RAW_VALUES"
-	CtTimeseriesResponseMetaNormalizationPercentageChange     CtTimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
-	CtTimeseriesResponseMetaNormalizationRollingAverage       CtTimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
-	CtTimeseriesResponseMetaNormalizationOverlappedPercentage CtTimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
-	CtTimeseriesResponseMetaNormalizationRatio                CtTimeseriesResponseMetaNormalization = "RATIO"
+	CTTimeseriesResponseMetaNormalizationPercentage           CTTimeseriesResponseMetaNormalization = "PERCENTAGE"
+	CTTimeseriesResponseMetaNormalizationMin0Max              CTTimeseriesResponseMetaNormalization = "MIN0_MAX"
+	CTTimeseriesResponseMetaNormalizationMinMax               CTTimeseriesResponseMetaNormalization = "MIN_MAX"
+	CTTimeseriesResponseMetaNormalizationRawValues            CTTimeseriesResponseMetaNormalization = "RAW_VALUES"
+	CTTimeseriesResponseMetaNormalizationPercentageChange     CTTimeseriesResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	CTTimeseriesResponseMetaNormalizationRollingAverage       CTTimeseriesResponseMetaNormalization = "ROLLING_AVERAGE"
+	CTTimeseriesResponseMetaNormalizationOverlappedPercentage CTTimeseriesResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	CTTimeseriesResponseMetaNormalizationRatio                CTTimeseriesResponseMetaNormalization = "RATIO"
 )
 
-func (r CtTimeseriesResponseMetaNormalization) IsKnown() bool {
+func (r CTTimeseriesResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case CtTimeseriesResponseMetaNormalizationPercentage, CtTimeseriesResponseMetaNormalizationMin0Max, CtTimeseriesResponseMetaNormalizationMinMax, CtTimeseriesResponseMetaNormalizationRawValues, CtTimeseriesResponseMetaNormalizationPercentageChange, CtTimeseriesResponseMetaNormalizationRollingAverage, CtTimeseriesResponseMetaNormalizationOverlappedPercentage, CtTimeseriesResponseMetaNormalizationRatio:
+	case CTTimeseriesResponseMetaNormalizationPercentage, CTTimeseriesResponseMetaNormalizationMin0Max, CTTimeseriesResponseMetaNormalizationMinMax, CTTimeseriesResponseMetaNormalizationRawValues, CTTimeseriesResponseMetaNormalizationPercentageChange, CTTimeseriesResponseMetaNormalizationRollingAverage, CTTimeseriesResponseMetaNormalizationOverlappedPercentage, CTTimeseriesResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesResponseMetaUnit struct {
+type CTTimeseriesResponseMetaUnit struct {
 	Name  string                           `json:"name,required"`
 	Value string                           `json:"value,required"`
 	JSON  ctTimeseriesResponseMetaUnitJSON `json:"-"`
 }
 
 // ctTimeseriesResponseMetaUnitJSON contains the JSON metadata for the struct
-// [CtTimeseriesResponseMetaUnit]
+// [CTTimeseriesResponseMetaUnit]
 type ctTimeseriesResponseMetaUnitJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
@@ -675,7 +675,7 @@ type ctTimeseriesResponseMetaUnitJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -683,15 +683,15 @@ func (r ctTimeseriesResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtTimeseriesGroupsResponse struct {
+type CTTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   CtTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 CtTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   CTTimeseriesGroupsResponseMeta   `json:"meta,required"`
+	Serie0 CTTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
 	JSON   ctTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
 // ctTimeseriesGroupsResponseJSON contains the JSON metadata for the struct
-// [CtTimeseriesGroupsResponse]
+// [CTTimeseriesGroupsResponse]
 type ctTimeseriesGroupsResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
@@ -699,7 +699,7 @@ type ctTimeseriesGroupsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -708,25 +708,25 @@ func (r ctTimeseriesGroupsResponseJSON) RawJSON() string {
 }
 
 // Metadata for the results.
-type CtTimeseriesGroupsResponseMeta struct {
+type CTTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    CtTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo CtTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []CtTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    CTTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
+	ConfidenceInfo CTTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
+	DateRange      []CTTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization CtTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization CTTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
 	// Measurement units for the results.
-	Units []CtTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []CTTimeseriesGroupsResponseMetaUnit `json:"units,required"`
 	JSON  ctTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
 // ctTimeseriesGroupsResponseMetaJSON contains the JSON metadata for the struct
-// [CtTimeseriesGroupsResponseMeta]
+// [CTTimeseriesGroupsResponseMeta]
 type ctTimeseriesGroupsResponseMetaJSON struct {
 	AggInterval    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -738,7 +738,7 @@ type ctTimeseriesGroupsResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -749,33 +749,33 @@ func (r ctTimeseriesGroupsResponseMetaJSON) RawJSON() string {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type CtTimeseriesGroupsResponseMetaAggInterval string
+type CTTimeseriesGroupsResponseMetaAggInterval string
 
 const (
-	CtTimeseriesGroupsResponseMetaAggIntervalFifteenMinutes CtTimeseriesGroupsResponseMetaAggInterval = "FIFTEEN_MINUTES"
-	CtTimeseriesGroupsResponseMetaAggIntervalOneHour        CtTimeseriesGroupsResponseMetaAggInterval = "ONE_HOUR"
-	CtTimeseriesGroupsResponseMetaAggIntervalOneDay         CtTimeseriesGroupsResponseMetaAggInterval = "ONE_DAY"
-	CtTimeseriesGroupsResponseMetaAggIntervalOneWeek        CtTimeseriesGroupsResponseMetaAggInterval = "ONE_WEEK"
-	CtTimeseriesGroupsResponseMetaAggIntervalOneMonth       CtTimeseriesGroupsResponseMetaAggInterval = "ONE_MONTH"
+	CTTimeseriesGroupsResponseMetaAggIntervalFifteenMinutes CTTimeseriesGroupsResponseMetaAggInterval = "FIFTEEN_MINUTES"
+	CTTimeseriesGroupsResponseMetaAggIntervalOneHour        CTTimeseriesGroupsResponseMetaAggInterval = "ONE_HOUR"
+	CTTimeseriesGroupsResponseMetaAggIntervalOneDay         CTTimeseriesGroupsResponseMetaAggInterval = "ONE_DAY"
+	CTTimeseriesGroupsResponseMetaAggIntervalOneWeek        CTTimeseriesGroupsResponseMetaAggInterval = "ONE_WEEK"
+	CTTimeseriesGroupsResponseMetaAggIntervalOneMonth       CTTimeseriesGroupsResponseMetaAggInterval = "ONE_MONTH"
 )
 
-func (r CtTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
+func (r CTTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsResponseMetaAggIntervalFifteenMinutes, CtTimeseriesGroupsResponseMetaAggIntervalOneHour, CtTimeseriesGroupsResponseMetaAggIntervalOneDay, CtTimeseriesGroupsResponseMetaAggIntervalOneWeek, CtTimeseriesGroupsResponseMetaAggIntervalOneMonth:
+	case CTTimeseriesGroupsResponseMetaAggIntervalFifteenMinutes, CTTimeseriesGroupsResponseMetaAggIntervalOneHour, CTTimeseriesGroupsResponseMetaAggIntervalOneDay, CTTimeseriesGroupsResponseMetaAggIntervalOneWeek, CTTimeseriesGroupsResponseMetaAggIntervalOneMonth:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+type CTTimeseriesGroupsResponseMetaConfidenceInfo struct {
+	Annotations []CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
 	Level int64                                            `json:"level,required"`
 	JSON  ctTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // ctTimeseriesGroupsResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [CtTimeseriesGroupsResponseMetaConfidenceInfo]
+// the struct [CTTimeseriesGroupsResponseMetaConfidenceInfo]
 type ctTimeseriesGroupsResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
@@ -783,7 +783,7 @@ type ctTimeseriesGroupsResponseMetaConfidenceInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -792,13 +792,13 @@ func (r ctTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 // Annotation associated with the result (e.g. outage or other type of event).
-type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
+type CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
+	DataSource  CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
 	Description string                                                            `json:"description,required"`
 	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
 	// Event type for annotations.
-	EventType CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
@@ -807,7 +807,7 @@ type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 }
 
 // ctTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
+// metadata for the struct [CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
 type ctTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
@@ -820,7 +820,7 @@ type ctTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -829,65 +829,65 @@ func (r ctTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() st
 }
 
 // Data source for annotations.
-type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource string
+type CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource string
 
 const (
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots               CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt                 CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet                CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll                CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP                CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots               CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCT                 CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS                CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos                CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw                 CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI                CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet                CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
 )
 
-func (r CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+func (r CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCt, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+	case CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAll, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBGP, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceBots, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceCT, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNS, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceDos, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFw, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceIQI, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceNet, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
 		return true
 	}
 	return false
 }
 
 // Event type for annotations.
-type CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType string
+type CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
-	CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline          CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
 )
 
-func (r CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+func (r CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CtTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsResponseMetaDateRange struct {
+type CTTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
@@ -896,7 +896,7 @@ type CtTimeseriesGroupsResponseMetaDateRange struct {
 }
 
 // ctTimeseriesGroupsResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [CtTimeseriesGroupsResponseMetaDateRange]
+// struct [CTTimeseriesGroupsResponseMetaDateRange]
 type ctTimeseriesGroupsResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
@@ -904,7 +904,7 @@ type ctTimeseriesGroupsResponseMetaDateRangeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -914,35 +914,35 @@ func (r ctTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type CtTimeseriesGroupsResponseMetaNormalization string
+type CTTimeseriesGroupsResponseMetaNormalization string
 
 const (
-	CtTimeseriesGroupsResponseMetaNormalizationPercentage           CtTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE"
-	CtTimeseriesGroupsResponseMetaNormalizationMin0Max              CtTimeseriesGroupsResponseMetaNormalization = "MIN0_MAX"
-	CtTimeseriesGroupsResponseMetaNormalizationMinMax               CtTimeseriesGroupsResponseMetaNormalization = "MIN_MAX"
-	CtTimeseriesGroupsResponseMetaNormalizationRawValues            CtTimeseriesGroupsResponseMetaNormalization = "RAW_VALUES"
-	CtTimeseriesGroupsResponseMetaNormalizationPercentageChange     CtTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
-	CtTimeseriesGroupsResponseMetaNormalizationRollingAverage       CtTimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
-	CtTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage CtTimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
-	CtTimeseriesGroupsResponseMetaNormalizationRatio                CtTimeseriesGroupsResponseMetaNormalization = "RATIO"
+	CTTimeseriesGroupsResponseMetaNormalizationPercentage           CTTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE"
+	CTTimeseriesGroupsResponseMetaNormalizationMin0Max              CTTimeseriesGroupsResponseMetaNormalization = "MIN0_MAX"
+	CTTimeseriesGroupsResponseMetaNormalizationMinMax               CTTimeseriesGroupsResponseMetaNormalization = "MIN_MAX"
+	CTTimeseriesGroupsResponseMetaNormalizationRawValues            CTTimeseriesGroupsResponseMetaNormalization = "RAW_VALUES"
+	CTTimeseriesGroupsResponseMetaNormalizationPercentageChange     CTTimeseriesGroupsResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	CTTimeseriesGroupsResponseMetaNormalizationRollingAverage       CTTimeseriesGroupsResponseMetaNormalization = "ROLLING_AVERAGE"
+	CTTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage CTTimeseriesGroupsResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	CTTimeseriesGroupsResponseMetaNormalizationRatio                CTTimeseriesGroupsResponseMetaNormalization = "RATIO"
 )
 
-func (r CtTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
+func (r CTTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsResponseMetaNormalizationPercentage, CtTimeseriesGroupsResponseMetaNormalizationMin0Max, CtTimeseriesGroupsResponseMetaNormalizationMinMax, CtTimeseriesGroupsResponseMetaNormalizationRawValues, CtTimeseriesGroupsResponseMetaNormalizationPercentageChange, CtTimeseriesGroupsResponseMetaNormalizationRollingAverage, CtTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage, CtTimeseriesGroupsResponseMetaNormalizationRatio:
+	case CTTimeseriesGroupsResponseMetaNormalizationPercentage, CTTimeseriesGroupsResponseMetaNormalizationMin0Max, CTTimeseriesGroupsResponseMetaNormalizationMinMax, CTTimeseriesGroupsResponseMetaNormalizationRawValues, CTTimeseriesGroupsResponseMetaNormalizationPercentageChange, CTTimeseriesGroupsResponseMetaNormalizationRollingAverage, CTTimeseriesGroupsResponseMetaNormalizationOverlappedPercentage, CTTimeseriesGroupsResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsResponseMetaUnit struct {
+type CTTimeseriesGroupsResponseMetaUnit struct {
 	Name  string                                 `json:"name,required"`
 	Value string                                 `json:"value,required"`
 	JSON  ctTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
 // ctTimeseriesGroupsResponseMetaUnitJSON contains the JSON metadata for the struct
-// [CtTimeseriesGroupsResponseMetaUnit]
+// [CTTimeseriesGroupsResponseMetaUnit]
 type ctTimeseriesGroupsResponseMetaUnitJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
@@ -950,7 +950,7 @@ type ctTimeseriesGroupsResponseMetaUnitJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -958,7 +958,7 @@ func (r ctTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtTimeseriesGroupsResponseSerie0 struct {
+type CTTimeseriesGroupsResponseSerie0 struct {
 	// This field can have the runtime type of [[]string].
 	Certificate interface{} `json:"CERTIFICATE"`
 	// This field can have the runtime type of [[]string].
@@ -1004,11 +1004,11 @@ type CtTimeseriesGroupsResponseSerie0 struct {
 	// This field can have the runtime type of [[]string].
 	Valid interface{}                          `json:"VALID"`
 	JSON  ctTimeseriesGroupsResponseSerie0JSON `json:"-"`
-	union CtTimeseriesGroupsResponseSerie0Union
+	union CTTimeseriesGroupsResponseSerie0Union
 }
 
 // ctTimeseriesGroupsResponseSerie0JSON contains the JSON metadata for the struct
-// [CtTimeseriesGroupsResponseSerie0]
+// [CTTimeseriesGroupsResponseSerie0]
 type ctTimeseriesGroupsResponseSerie0JSON struct {
 	Certificate    apijson.Field
 	Domain         apijson.Field
@@ -1040,8 +1040,8 @@ func (r ctTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *CtTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	*r = CtTimeseriesGroupsResponseSerie0{}
+func (r *CTTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	*r = CTTimeseriesGroupsResponseSerie0{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1049,75 +1049,75 @@ func (r *CtTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [CtTimeseriesGroupsResponseSerie0Union] interface which you
+// AsUnion returns a [CTTimeseriesGroupsResponseSerie0Union] interface which you
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object].
-func (r CtTimeseriesGroupsResponseSerie0) AsUnion() CtTimeseriesGroupsResponseSerie0Union {
+// [CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object].
+func (r CTTimeseriesGroupsResponseSerie0) AsUnion() CTTimeseriesGroupsResponseSerie0Union {
 	return r.union
 }
 
 // Union satisfied by
-// [CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object],
-// [CtTimeseriesGroupsResponseSerie0Object] or
-// [CtTimeseriesGroupsResponseSerie0Object].
-type CtTimeseriesGroupsResponseSerie0Union interface {
-	implementsCtTimeseriesGroupsResponseSerie0()
+// [CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object],
+// [CTTimeseriesGroupsResponseSerie0Object] or
+// [CTTimeseriesGroupsResponseSerie0Object].
+type CTTimeseriesGroupsResponseSerie0Union interface {
+	implementsCTTimeseriesGroupsResponseSerie0()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CtTimeseriesGroupsResponseSerie0Union)(nil)).Elem(),
+		reflect.TypeOf((*CTTimeseriesGroupsResponseSerie0Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CtTimeseriesGroupsResponseSerie0Object{}),
+			Type:       reflect.TypeOf(CTTimeseriesGroupsResponseSerie0Object{}),
 		},
 	)
 }
 
-type CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 struct {
+type CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 struct {
 	Timestamps  []time.Time                                                                          `json:"timestamps,required" format:"date-time"`
 	ExtraFields map[string][]string                                                                  `json:"-,extras"`
 	JSON        ctTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON `json:"-"`
@@ -1125,14 +1125,14 @@ type CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed
 
 // ctTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON
 // contains the JSON metadata for the struct
-// [CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55]
+// [CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55]
 type ctTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1140,17 +1140,17 @@ func (r ctTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d
 	return r.raw
 }
 
-func (r CtTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55) implementsCtTimeseriesGroupsResponseSerie0() {
+func (r CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55) implementsCTTimeseriesGroupsResponseSerie0() {
 }
 
-type CtTimeseriesGroupsResponseSerie0Object struct {
+type CTTimeseriesGroupsResponseSerie0Object struct {
 	Rfc6962 []string                                   `json:"rfc6962,required"`
 	Static  []string                                   `json:"static,required"`
 	JSON    ctTimeseriesGroupsResponseSerie0ObjectJSON `json:"-"`
 }
 
 // ctTimeseriesGroupsResponseSerie0ObjectJSON contains the JSON metadata for the
-// struct [CtTimeseriesGroupsResponseSerie0Object]
+// struct [CTTimeseriesGroupsResponseSerie0Object]
 type ctTimeseriesGroupsResponseSerie0ObjectJSON struct {
 	Rfc6962     apijson.Field
 	Static      apijson.Field
@@ -1158,7 +1158,7 @@ type ctTimeseriesGroupsResponseSerie0ObjectJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseSerie0Object) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseSerie0Object) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1166,9 +1166,9 @@ func (r ctTimeseriesGroupsResponseSerie0ObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CtTimeseriesGroupsResponseSerie0Object) implementsCtTimeseriesGroupsResponseSerie0() {}
+func (r CTTimeseriesGroupsResponseSerie0Object) implementsCTTimeseriesGroupsResponseSerie0() {}
 
-type CtSummaryParams struct {
+type CTSummaryParams struct {
 	// Filters results by certificate authority.
 	CA param.Field[[]string] `query:"ca"`
 	// Filters results by certificate authority owner.
@@ -1182,13 +1182,13 @@ type CtSummaryParams struct {
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by certificate duration.
-	Duration param.Field[[]CtSummaryParamsDuration] `query:"duration"`
+	Duration param.Field[[]CTSummaryParamsDuration] `query:"duration"`
 	// Filters results by entry type (certificate vs. pre-certificate).
-	EntryType param.Field[[]CtSummaryParamsEntryType] `query:"entryType"`
+	EntryType param.Field[[]CTSummaryParamsEntryType] `query:"entryType"`
 	// Filters results by expiration status (expired vs. valid).
-	ExpirationStatus param.Field[[]CtSummaryParamsExpirationStatus] `query:"expirationStatus"`
+	ExpirationStatus param.Field[[]CTSummaryParamsExpirationStatus] `query:"expirationStatus"`
 	// Format in which results will be returned.
-	Format param.Field[CtSummaryParamsFormat] `query:"format"`
+	Format param.Field[CTSummaryParamsFormat] `query:"format"`
 	// Filters results based on whether the certificates are bound to specific IP
 	// addresses.
 	HasIPs param.Field[[]bool] `query:"hasIps"`
@@ -1201,29 +1201,29 @@ type CtSummaryParams struct {
 	// Filters results by certificate log.
 	Log param.Field[[]string] `query:"log"`
 	// Filters results by certificate log API (RFC6962 vs. static).
-	LogAPI param.Field[[]CtSummaryParamsLogAPI] `query:"logApi"`
+	LogAPI param.Field[[]CTSummaryParamsLogAPI] `query:"logApi"`
 	// Filters results by certificate log operator.
 	LogOperator param.Field[[]string] `query:"logOperator"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization param.Field[CtSummaryParamsNormalization] `query:"normalization"`
+	Normalization param.Field[CTSummaryParamsNormalization] `query:"normalization"`
 	// Filters results by public key algorithm.
-	PublicKeyAlgorithm param.Field[[]CtSummaryParamsPublicKeyAlgorithm] `query:"publicKeyAlgorithm"`
+	PublicKeyAlgorithm param.Field[[]CTSummaryParamsPublicKeyAlgorithm] `query:"publicKeyAlgorithm"`
 	// Filters results by signature algorithm.
-	SignatureAlgorithm param.Field[[]CtSummaryParamsSignatureAlgorithm] `query:"signatureAlgorithm"`
+	SignatureAlgorithm param.Field[[]CTSummaryParamsSignatureAlgorithm] `query:"signatureAlgorithm"`
 	// Filters results by top-level domain.
-	Tld param.Field[[]string] `query:"tld"`
+	TLD param.Field[[]string] `query:"tld"`
 	// Specifies whether to filter out duplicate certificates and pre-certificates. Set
 	// to true for unique entries only.
-	UniqueEntries param.Field[[]CtSummaryParamsUniqueEntry] `query:"uniqueEntries"`
+	UniqueEntries param.Field[[]CTSummaryParamsUniqueEntry] `query:"uniqueEntries"`
 	// Filters results by validation level.
-	ValidationLevel param.Field[[]CtSummaryParamsValidationLevel] `query:"validationLevel"`
+	ValidationLevel param.Field[[]CTSummaryParamsValidationLevel] `query:"validationLevel"`
 }
 
-// URLQuery serializes [CtSummaryParams]'s query parameters as `url.Values`.
-func (r CtSummaryParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CTSummaryParams]'s query parameters as `url.Values`.
+func (r CTSummaryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -1231,109 +1231,109 @@ func (r CtSummaryParams) URLQuery() (v url.Values) {
 }
 
 // Specifies the certificate attribute by which to group the results.
-type CtSummaryParamsDimension string
+type CTSummaryParamsDimension string
 
 const (
-	CtSummaryParamsDimensionCA                 CtSummaryParamsDimension = "CA"
-	CtSummaryParamsDimensionCAOwner            CtSummaryParamsDimension = "CA_OWNER"
-	CtSummaryParamsDimensionDuration           CtSummaryParamsDimension = "DURATION"
-	CtSummaryParamsDimensionEntryType          CtSummaryParamsDimension = "ENTRY_TYPE"
-	CtSummaryParamsDimensionExpirationStatus   CtSummaryParamsDimension = "EXPIRATION_STATUS"
-	CtSummaryParamsDimensionHasIPs             CtSummaryParamsDimension = "HAS_IPS"
-	CtSummaryParamsDimensionHasWildcards       CtSummaryParamsDimension = "HAS_WILDCARDS"
-	CtSummaryParamsDimensionLog                CtSummaryParamsDimension = "LOG"
-	CtSummaryParamsDimensionLogAPI             CtSummaryParamsDimension = "LOG_API"
-	CtSummaryParamsDimensionLogOperator        CtSummaryParamsDimension = "LOG_OPERATOR"
-	CtSummaryParamsDimensionPublicKeyAlgorithm CtSummaryParamsDimension = "PUBLIC_KEY_ALGORITHM"
-	CtSummaryParamsDimensionSignatureAlgorithm CtSummaryParamsDimension = "SIGNATURE_ALGORITHM"
-	CtSummaryParamsDimensionTld                CtSummaryParamsDimension = "TLD"
-	CtSummaryParamsDimensionValidationLevel    CtSummaryParamsDimension = "VALIDATION_LEVEL"
+	CTSummaryParamsDimensionCA                 CTSummaryParamsDimension = "CA"
+	CTSummaryParamsDimensionCAOwner            CTSummaryParamsDimension = "CA_OWNER"
+	CTSummaryParamsDimensionDuration           CTSummaryParamsDimension = "DURATION"
+	CTSummaryParamsDimensionEntryType          CTSummaryParamsDimension = "ENTRY_TYPE"
+	CTSummaryParamsDimensionExpirationStatus   CTSummaryParamsDimension = "EXPIRATION_STATUS"
+	CTSummaryParamsDimensionHasIPs             CTSummaryParamsDimension = "HAS_IPS"
+	CTSummaryParamsDimensionHasWildcards       CTSummaryParamsDimension = "HAS_WILDCARDS"
+	CTSummaryParamsDimensionLog                CTSummaryParamsDimension = "LOG"
+	CTSummaryParamsDimensionLogAPI             CTSummaryParamsDimension = "LOG_API"
+	CTSummaryParamsDimensionLogOperator        CTSummaryParamsDimension = "LOG_OPERATOR"
+	CTSummaryParamsDimensionPublicKeyAlgorithm CTSummaryParamsDimension = "PUBLIC_KEY_ALGORITHM"
+	CTSummaryParamsDimensionSignatureAlgorithm CTSummaryParamsDimension = "SIGNATURE_ALGORITHM"
+	CTSummaryParamsDimensionTLD                CTSummaryParamsDimension = "TLD"
+	CTSummaryParamsDimensionValidationLevel    CTSummaryParamsDimension = "VALIDATION_LEVEL"
 )
 
-func (r CtSummaryParamsDimension) IsKnown() bool {
+func (r CTSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsDimensionCA, CtSummaryParamsDimensionCAOwner, CtSummaryParamsDimensionDuration, CtSummaryParamsDimensionEntryType, CtSummaryParamsDimensionExpirationStatus, CtSummaryParamsDimensionHasIPs, CtSummaryParamsDimensionHasWildcards, CtSummaryParamsDimensionLog, CtSummaryParamsDimensionLogAPI, CtSummaryParamsDimensionLogOperator, CtSummaryParamsDimensionPublicKeyAlgorithm, CtSummaryParamsDimensionSignatureAlgorithm, CtSummaryParamsDimensionTld, CtSummaryParamsDimensionValidationLevel:
+	case CTSummaryParamsDimensionCA, CTSummaryParamsDimensionCAOwner, CTSummaryParamsDimensionDuration, CTSummaryParamsDimensionEntryType, CTSummaryParamsDimensionExpirationStatus, CTSummaryParamsDimensionHasIPs, CTSummaryParamsDimensionHasWildcards, CTSummaryParamsDimensionLog, CTSummaryParamsDimensionLogAPI, CTSummaryParamsDimensionLogOperator, CTSummaryParamsDimensionPublicKeyAlgorithm, CTSummaryParamsDimensionSignatureAlgorithm, CTSummaryParamsDimensionTLD, CTSummaryParamsDimensionValidationLevel:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsDuration string
+type CTSummaryParamsDuration string
 
 const (
-	CtSummaryParamsDurationLte3D         CtSummaryParamsDuration = "LTE_3D"
-	CtSummaryParamsDurationGt3DLte7D     CtSummaryParamsDuration = "GT_3D_LTE_7D"
-	CtSummaryParamsDurationGt7DLte10D    CtSummaryParamsDuration = "GT_7D_LTE_10D"
-	CtSummaryParamsDurationGt10DLte47D   CtSummaryParamsDuration = "GT_10D_LTE_47D"
-	CtSummaryParamsDurationGt47DLte100D  CtSummaryParamsDuration = "GT_47D_LTE_100D"
-	CtSummaryParamsDurationGt100DLte200D CtSummaryParamsDuration = "GT_100D_LTE_200D"
-	CtSummaryParamsDurationGt200D        CtSummaryParamsDuration = "GT_200D"
+	CTSummaryParamsDurationLte3D         CTSummaryParamsDuration = "LTE_3D"
+	CTSummaryParamsDurationGt3DLte7D     CTSummaryParamsDuration = "GT_3D_LTE_7D"
+	CTSummaryParamsDurationGt7DLte10D    CTSummaryParamsDuration = "GT_7D_LTE_10D"
+	CTSummaryParamsDurationGt10DLte47D   CTSummaryParamsDuration = "GT_10D_LTE_47D"
+	CTSummaryParamsDurationGt47DLte100D  CTSummaryParamsDuration = "GT_47D_LTE_100D"
+	CTSummaryParamsDurationGt100DLte200D CTSummaryParamsDuration = "GT_100D_LTE_200D"
+	CTSummaryParamsDurationGt200D        CTSummaryParamsDuration = "GT_200D"
 )
 
-func (r CtSummaryParamsDuration) IsKnown() bool {
+func (r CTSummaryParamsDuration) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsDurationLte3D, CtSummaryParamsDurationGt3DLte7D, CtSummaryParamsDurationGt7DLte10D, CtSummaryParamsDurationGt10DLte47D, CtSummaryParamsDurationGt47DLte100D, CtSummaryParamsDurationGt100DLte200D, CtSummaryParamsDurationGt200D:
+	case CTSummaryParamsDurationLte3D, CTSummaryParamsDurationGt3DLte7D, CTSummaryParamsDurationGt7DLte10D, CTSummaryParamsDurationGt10DLte47D, CTSummaryParamsDurationGt47DLte100D, CTSummaryParamsDurationGt100DLte200D, CTSummaryParamsDurationGt200D:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsEntryType string
+type CTSummaryParamsEntryType string
 
 const (
-	CtSummaryParamsEntryTypePrecertificate CtSummaryParamsEntryType = "PRECERTIFICATE"
-	CtSummaryParamsEntryTypeCertificate    CtSummaryParamsEntryType = "CERTIFICATE"
+	CTSummaryParamsEntryTypePrecertificate CTSummaryParamsEntryType = "PRECERTIFICATE"
+	CTSummaryParamsEntryTypeCertificate    CTSummaryParamsEntryType = "CERTIFICATE"
 )
 
-func (r CtSummaryParamsEntryType) IsKnown() bool {
+func (r CTSummaryParamsEntryType) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsEntryTypePrecertificate, CtSummaryParamsEntryTypeCertificate:
+	case CTSummaryParamsEntryTypePrecertificate, CTSummaryParamsEntryTypeCertificate:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsExpirationStatus string
+type CTSummaryParamsExpirationStatus string
 
 const (
-	CtSummaryParamsExpirationStatusExpired CtSummaryParamsExpirationStatus = "EXPIRED"
-	CtSummaryParamsExpirationStatusValid   CtSummaryParamsExpirationStatus = "VALID"
+	CTSummaryParamsExpirationStatusExpired CTSummaryParamsExpirationStatus = "EXPIRED"
+	CTSummaryParamsExpirationStatusValid   CTSummaryParamsExpirationStatus = "VALID"
 )
 
-func (r CtSummaryParamsExpirationStatus) IsKnown() bool {
+func (r CTSummaryParamsExpirationStatus) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsExpirationStatusExpired, CtSummaryParamsExpirationStatusValid:
+	case CTSummaryParamsExpirationStatusExpired, CTSummaryParamsExpirationStatusValid:
 		return true
 	}
 	return false
 }
 
 // Format in which results will be returned.
-type CtSummaryParamsFormat string
+type CTSummaryParamsFormat string
 
 const (
-	CtSummaryParamsFormatJson CtSummaryParamsFormat = "JSON"
-	CtSummaryParamsFormatCsv  CtSummaryParamsFormat = "CSV"
+	CTSummaryParamsFormatJson CTSummaryParamsFormat = "JSON"
+	CTSummaryParamsFormatCsv  CTSummaryParamsFormat = "CSV"
 )
 
-func (r CtSummaryParamsFormat) IsKnown() bool {
+func (r CTSummaryParamsFormat) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsFormatJson, CtSummaryParamsFormatCsv:
+	case CTSummaryParamsFormatJson, CTSummaryParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsLogAPI string
+type CTSummaryParamsLogAPI string
 
 const (
-	CtSummaryParamsLogAPIRfc6962 CtSummaryParamsLogAPI = "RFC6962"
-	CtSummaryParamsLogAPIStatic  CtSummaryParamsLogAPI = "STATIC"
+	CTSummaryParamsLogAPIRfc6962 CTSummaryParamsLogAPI = "RFC6962"
+	CTSummaryParamsLogAPIStatic  CTSummaryParamsLogAPI = "STATIC"
 )
 
-func (r CtSummaryParamsLogAPI) IsKnown() bool {
+func (r CTSummaryParamsLogAPI) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsLogAPIRfc6962, CtSummaryParamsLogAPIStatic:
+	case CTSummaryParamsLogAPIRfc6962, CTSummaryParamsLogAPIStatic:
 		return true
 	}
 	return false
@@ -1341,104 +1341,104 @@ func (r CtSummaryParamsLogAPI) IsKnown() bool {
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type CtSummaryParamsNormalization string
+type CTSummaryParamsNormalization string
 
 const (
-	CtSummaryParamsNormalizationRawValues  CtSummaryParamsNormalization = "RAW_VALUES"
-	CtSummaryParamsNormalizationPercentage CtSummaryParamsNormalization = "PERCENTAGE"
+	CTSummaryParamsNormalizationRawValues  CTSummaryParamsNormalization = "RAW_VALUES"
+	CTSummaryParamsNormalizationPercentage CTSummaryParamsNormalization = "PERCENTAGE"
 )
 
-func (r CtSummaryParamsNormalization) IsKnown() bool {
+func (r CTSummaryParamsNormalization) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsNormalizationRawValues, CtSummaryParamsNormalizationPercentage:
+	case CTSummaryParamsNormalizationRawValues, CTSummaryParamsNormalizationPercentage:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsPublicKeyAlgorithm string
+type CTSummaryParamsPublicKeyAlgorithm string
 
 const (
-	CtSummaryParamsPublicKeyAlgorithmDsa   CtSummaryParamsPublicKeyAlgorithm = "DSA"
-	CtSummaryParamsPublicKeyAlgorithmEcdsa CtSummaryParamsPublicKeyAlgorithm = "ECDSA"
-	CtSummaryParamsPublicKeyAlgorithmRSA   CtSummaryParamsPublicKeyAlgorithm = "RSA"
+	CTSummaryParamsPublicKeyAlgorithmDsa   CTSummaryParamsPublicKeyAlgorithm = "DSA"
+	CTSummaryParamsPublicKeyAlgorithmEcdsa CTSummaryParamsPublicKeyAlgorithm = "ECDSA"
+	CTSummaryParamsPublicKeyAlgorithmRSA   CTSummaryParamsPublicKeyAlgorithm = "RSA"
 )
 
-func (r CtSummaryParamsPublicKeyAlgorithm) IsKnown() bool {
+func (r CTSummaryParamsPublicKeyAlgorithm) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsPublicKeyAlgorithmDsa, CtSummaryParamsPublicKeyAlgorithmEcdsa, CtSummaryParamsPublicKeyAlgorithmRSA:
+	case CTSummaryParamsPublicKeyAlgorithmDsa, CTSummaryParamsPublicKeyAlgorithmEcdsa, CTSummaryParamsPublicKeyAlgorithmRSA:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsSignatureAlgorithm string
+type CTSummaryParamsSignatureAlgorithm string
 
 const (
-	CtSummaryParamsSignatureAlgorithmDsaSha1     CtSummaryParamsSignatureAlgorithm = "DSA_SHA_1"
-	CtSummaryParamsSignatureAlgorithmDsaSha256   CtSummaryParamsSignatureAlgorithm = "DSA_SHA_256"
-	CtSummaryParamsSignatureAlgorithmEcdsaSha1   CtSummaryParamsSignatureAlgorithm = "ECDSA_SHA_1"
-	CtSummaryParamsSignatureAlgorithmEcdsaSha256 CtSummaryParamsSignatureAlgorithm = "ECDSA_SHA_256"
-	CtSummaryParamsSignatureAlgorithmEcdsaSha384 CtSummaryParamsSignatureAlgorithm = "ECDSA_SHA_384"
-	CtSummaryParamsSignatureAlgorithmEcdsaSha512 CtSummaryParamsSignatureAlgorithm = "ECDSA_SHA_512"
-	CtSummaryParamsSignatureAlgorithmPssSha256   CtSummaryParamsSignatureAlgorithm = "PSS_SHA_256"
-	CtSummaryParamsSignatureAlgorithmPssSha384   CtSummaryParamsSignatureAlgorithm = "PSS_SHA_384"
-	CtSummaryParamsSignatureAlgorithmPssSha512   CtSummaryParamsSignatureAlgorithm = "PSS_SHA_512"
-	CtSummaryParamsSignatureAlgorithmRSAMd2      CtSummaryParamsSignatureAlgorithm = "RSA_MD2"
-	CtSummaryParamsSignatureAlgorithmRSAMd5      CtSummaryParamsSignatureAlgorithm = "RSA_MD5"
-	CtSummaryParamsSignatureAlgorithmRSASha1     CtSummaryParamsSignatureAlgorithm = "RSA_SHA_1"
-	CtSummaryParamsSignatureAlgorithmRSASha256   CtSummaryParamsSignatureAlgorithm = "RSA_SHA_256"
-	CtSummaryParamsSignatureAlgorithmRSASha384   CtSummaryParamsSignatureAlgorithm = "RSA_SHA_384"
-	CtSummaryParamsSignatureAlgorithmRSASha512   CtSummaryParamsSignatureAlgorithm = "RSA_SHA_512"
+	CTSummaryParamsSignatureAlgorithmDsaSha1     CTSummaryParamsSignatureAlgorithm = "DSA_SHA_1"
+	CTSummaryParamsSignatureAlgorithmDsaSha256   CTSummaryParamsSignatureAlgorithm = "DSA_SHA_256"
+	CTSummaryParamsSignatureAlgorithmEcdsaSha1   CTSummaryParamsSignatureAlgorithm = "ECDSA_SHA_1"
+	CTSummaryParamsSignatureAlgorithmEcdsaSha256 CTSummaryParamsSignatureAlgorithm = "ECDSA_SHA_256"
+	CTSummaryParamsSignatureAlgorithmEcdsaSha384 CTSummaryParamsSignatureAlgorithm = "ECDSA_SHA_384"
+	CTSummaryParamsSignatureAlgorithmEcdsaSha512 CTSummaryParamsSignatureAlgorithm = "ECDSA_SHA_512"
+	CTSummaryParamsSignatureAlgorithmPssSha256   CTSummaryParamsSignatureAlgorithm = "PSS_SHA_256"
+	CTSummaryParamsSignatureAlgorithmPssSha384   CTSummaryParamsSignatureAlgorithm = "PSS_SHA_384"
+	CTSummaryParamsSignatureAlgorithmPssSha512   CTSummaryParamsSignatureAlgorithm = "PSS_SHA_512"
+	CTSummaryParamsSignatureAlgorithmRSAMd2      CTSummaryParamsSignatureAlgorithm = "RSA_MD2"
+	CTSummaryParamsSignatureAlgorithmRSAMd5      CTSummaryParamsSignatureAlgorithm = "RSA_MD5"
+	CTSummaryParamsSignatureAlgorithmRSASha1     CTSummaryParamsSignatureAlgorithm = "RSA_SHA_1"
+	CTSummaryParamsSignatureAlgorithmRSASha256   CTSummaryParamsSignatureAlgorithm = "RSA_SHA_256"
+	CTSummaryParamsSignatureAlgorithmRSASha384   CTSummaryParamsSignatureAlgorithm = "RSA_SHA_384"
+	CTSummaryParamsSignatureAlgorithmRSASha512   CTSummaryParamsSignatureAlgorithm = "RSA_SHA_512"
 )
 
-func (r CtSummaryParamsSignatureAlgorithm) IsKnown() bool {
+func (r CTSummaryParamsSignatureAlgorithm) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsSignatureAlgorithmDsaSha1, CtSummaryParamsSignatureAlgorithmDsaSha256, CtSummaryParamsSignatureAlgorithmEcdsaSha1, CtSummaryParamsSignatureAlgorithmEcdsaSha256, CtSummaryParamsSignatureAlgorithmEcdsaSha384, CtSummaryParamsSignatureAlgorithmEcdsaSha512, CtSummaryParamsSignatureAlgorithmPssSha256, CtSummaryParamsSignatureAlgorithmPssSha384, CtSummaryParamsSignatureAlgorithmPssSha512, CtSummaryParamsSignatureAlgorithmRSAMd2, CtSummaryParamsSignatureAlgorithmRSAMd5, CtSummaryParamsSignatureAlgorithmRSASha1, CtSummaryParamsSignatureAlgorithmRSASha256, CtSummaryParamsSignatureAlgorithmRSASha384, CtSummaryParamsSignatureAlgorithmRSASha512:
+	case CTSummaryParamsSignatureAlgorithmDsaSha1, CTSummaryParamsSignatureAlgorithmDsaSha256, CTSummaryParamsSignatureAlgorithmEcdsaSha1, CTSummaryParamsSignatureAlgorithmEcdsaSha256, CTSummaryParamsSignatureAlgorithmEcdsaSha384, CTSummaryParamsSignatureAlgorithmEcdsaSha512, CTSummaryParamsSignatureAlgorithmPssSha256, CTSummaryParamsSignatureAlgorithmPssSha384, CTSummaryParamsSignatureAlgorithmPssSha512, CTSummaryParamsSignatureAlgorithmRSAMd2, CTSummaryParamsSignatureAlgorithmRSAMd5, CTSummaryParamsSignatureAlgorithmRSASha1, CTSummaryParamsSignatureAlgorithmRSASha256, CTSummaryParamsSignatureAlgorithmRSASha384, CTSummaryParamsSignatureAlgorithmRSASha512:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsUniqueEntry string
+type CTSummaryParamsUniqueEntry string
 
 const (
-	CtSummaryParamsUniqueEntryTrue  CtSummaryParamsUniqueEntry = "true"
-	CtSummaryParamsUniqueEntryFalse CtSummaryParamsUniqueEntry = "false"
+	CTSummaryParamsUniqueEntryTrue  CTSummaryParamsUniqueEntry = "true"
+	CTSummaryParamsUniqueEntryFalse CTSummaryParamsUniqueEntry = "false"
 )
 
-func (r CtSummaryParamsUniqueEntry) IsKnown() bool {
+func (r CTSummaryParamsUniqueEntry) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsUniqueEntryTrue, CtSummaryParamsUniqueEntryFalse:
+	case CTSummaryParamsUniqueEntryTrue, CTSummaryParamsUniqueEntryFalse:
 		return true
 	}
 	return false
 }
 
-type CtSummaryParamsValidationLevel string
+type CTSummaryParamsValidationLevel string
 
 const (
-	CtSummaryParamsValidationLevelDomain       CtSummaryParamsValidationLevel = "DOMAIN"
-	CtSummaryParamsValidationLevelOrganization CtSummaryParamsValidationLevel = "ORGANIZATION"
-	CtSummaryParamsValidationLevelExtended     CtSummaryParamsValidationLevel = "EXTENDED"
+	CTSummaryParamsValidationLevelDomain       CTSummaryParamsValidationLevel = "DOMAIN"
+	CTSummaryParamsValidationLevelOrganization CTSummaryParamsValidationLevel = "ORGANIZATION"
+	CTSummaryParamsValidationLevelExtended     CTSummaryParamsValidationLevel = "EXTENDED"
 )
 
-func (r CtSummaryParamsValidationLevel) IsKnown() bool {
+func (r CTSummaryParamsValidationLevel) IsKnown() bool {
 	switch r {
-	case CtSummaryParamsValidationLevelDomain, CtSummaryParamsValidationLevelOrganization, CtSummaryParamsValidationLevelExtended:
+	case CTSummaryParamsValidationLevelDomain, CTSummaryParamsValidationLevelOrganization, CTSummaryParamsValidationLevelExtended:
 		return true
 	}
 	return false
 }
 
-type CtSummaryResponseEnvelope struct {
-	Result  CtSummaryResponse             `json:"result,required"`
+type CTSummaryResponseEnvelope struct {
+	Result  CTSummaryResponse             `json:"result,required"`
 	Success bool                          `json:"success,required"`
 	JSON    ctSummaryResponseEnvelopeJSON `json:"-"`
 }
 
 // ctSummaryResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtSummaryResponseEnvelope]
+// [CTSummaryResponseEnvelope]
 type ctSummaryResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -1446,7 +1446,7 @@ type ctSummaryResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtSummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTSummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1454,11 +1454,11 @@ func (r ctSummaryResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtTimeseriesParams struct {
+type CTTimeseriesParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[CtTimeseriesParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[CTTimeseriesParamsAggInterval] `query:"aggInterval"`
 	// Filters results by certificate authority.
 	CA param.Field[[]string] `query:"ca"`
 	// Filters results by certificate authority owner.
@@ -1472,13 +1472,13 @@ type CtTimeseriesParams struct {
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by certificate duration.
-	Duration param.Field[[]CtTimeseriesParamsDuration] `query:"duration"`
+	Duration param.Field[[]CTTimeseriesParamsDuration] `query:"duration"`
 	// Filters results by entry type (certificate vs. pre-certificate).
-	EntryType param.Field[[]CtTimeseriesParamsEntryType] `query:"entryType"`
+	EntryType param.Field[[]CTTimeseriesParamsEntryType] `query:"entryType"`
 	// Filters results by expiration status (expired vs. valid).
-	ExpirationStatus param.Field[[]CtTimeseriesParamsExpirationStatus] `query:"expirationStatus"`
+	ExpirationStatus param.Field[[]CTTimeseriesParamsExpirationStatus] `query:"expirationStatus"`
 	// Format in which results will be returned.
-	Format param.Field[CtTimeseriesParamsFormat] `query:"format"`
+	Format param.Field[CTTimeseriesParamsFormat] `query:"format"`
 	// Filters results based on whether the certificates are bound to specific IP
 	// addresses.
 	HasIPs param.Field[[]bool] `query:"hasIps"`
@@ -1487,26 +1487,26 @@ type CtTimeseriesParams struct {
 	// Filters results by certificate log.
 	Log param.Field[[]string] `query:"log"`
 	// Filters results by certificate log API (RFC6962 vs. static).
-	LogAPI param.Field[[]CtTimeseriesParamsLogAPI] `query:"logApi"`
+	LogAPI param.Field[[]CTTimeseriesParamsLogAPI] `query:"logApi"`
 	// Filters results by certificate log operator.
 	LogOperator param.Field[[]string] `query:"logOperator"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by public key algorithm.
-	PublicKeyAlgorithm param.Field[[]CtTimeseriesParamsPublicKeyAlgorithm] `query:"publicKeyAlgorithm"`
+	PublicKeyAlgorithm param.Field[[]CTTimeseriesParamsPublicKeyAlgorithm] `query:"publicKeyAlgorithm"`
 	// Filters results by signature algorithm.
-	SignatureAlgorithm param.Field[[]CtTimeseriesParamsSignatureAlgorithm] `query:"signatureAlgorithm"`
+	SignatureAlgorithm param.Field[[]CTTimeseriesParamsSignatureAlgorithm] `query:"signatureAlgorithm"`
 	// Filters results by top-level domain.
-	Tld param.Field[[]string] `query:"tld"`
+	TLD param.Field[[]string] `query:"tld"`
 	// Specifies whether to filter out duplicate certificates and pre-certificates. Set
 	// to true for unique entries only.
-	UniqueEntries param.Field[[]CtTimeseriesParamsUniqueEntry] `query:"uniqueEntries"`
+	UniqueEntries param.Field[[]CTTimeseriesParamsUniqueEntry] `query:"uniqueEntries"`
 	// Filters results by validation level.
-	ValidationLevel param.Field[[]CtTimeseriesParamsValidationLevel] `query:"validationLevel"`
+	ValidationLevel param.Field[[]CTTimeseriesParamsValidationLevel] `query:"validationLevel"`
 }
 
-// URLQuery serializes [CtTimeseriesParams]'s query parameters as `url.Values`.
-func (r CtTimeseriesParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CTTimeseriesParams]'s query parameters as `url.Values`.
+func (r CTTimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -1516,187 +1516,187 @@ func (r CtTimeseriesParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type CtTimeseriesParamsAggInterval string
+type CTTimeseriesParamsAggInterval string
 
 const (
-	CtTimeseriesParamsAggInterval15m CtTimeseriesParamsAggInterval = "15m"
-	CtTimeseriesParamsAggInterval1h  CtTimeseriesParamsAggInterval = "1h"
-	CtTimeseriesParamsAggInterval1d  CtTimeseriesParamsAggInterval = "1d"
-	CtTimeseriesParamsAggInterval1w  CtTimeseriesParamsAggInterval = "1w"
+	CTTimeseriesParamsAggInterval15m CTTimeseriesParamsAggInterval = "15m"
+	CTTimeseriesParamsAggInterval1h  CTTimeseriesParamsAggInterval = "1h"
+	CTTimeseriesParamsAggInterval1d  CTTimeseriesParamsAggInterval = "1d"
+	CTTimeseriesParamsAggInterval1w  CTTimeseriesParamsAggInterval = "1w"
 )
 
-func (r CtTimeseriesParamsAggInterval) IsKnown() bool {
+func (r CTTimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsAggInterval15m, CtTimeseriesParamsAggInterval1h, CtTimeseriesParamsAggInterval1d, CtTimeseriesParamsAggInterval1w:
+	case CTTimeseriesParamsAggInterval15m, CTTimeseriesParamsAggInterval1h, CTTimeseriesParamsAggInterval1d, CTTimeseriesParamsAggInterval1w:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsDuration string
+type CTTimeseriesParamsDuration string
 
 const (
-	CtTimeseriesParamsDurationLte3D         CtTimeseriesParamsDuration = "LTE_3D"
-	CtTimeseriesParamsDurationGt3DLte7D     CtTimeseriesParamsDuration = "GT_3D_LTE_7D"
-	CtTimeseriesParamsDurationGt7DLte10D    CtTimeseriesParamsDuration = "GT_7D_LTE_10D"
-	CtTimeseriesParamsDurationGt10DLte47D   CtTimeseriesParamsDuration = "GT_10D_LTE_47D"
-	CtTimeseriesParamsDurationGt47DLte100D  CtTimeseriesParamsDuration = "GT_47D_LTE_100D"
-	CtTimeseriesParamsDurationGt100DLte200D CtTimeseriesParamsDuration = "GT_100D_LTE_200D"
-	CtTimeseriesParamsDurationGt200D        CtTimeseriesParamsDuration = "GT_200D"
+	CTTimeseriesParamsDurationLte3D         CTTimeseriesParamsDuration = "LTE_3D"
+	CTTimeseriesParamsDurationGt3DLte7D     CTTimeseriesParamsDuration = "GT_3D_LTE_7D"
+	CTTimeseriesParamsDurationGt7DLte10D    CTTimeseriesParamsDuration = "GT_7D_LTE_10D"
+	CTTimeseriesParamsDurationGt10DLte47D   CTTimeseriesParamsDuration = "GT_10D_LTE_47D"
+	CTTimeseriesParamsDurationGt47DLte100D  CTTimeseriesParamsDuration = "GT_47D_LTE_100D"
+	CTTimeseriesParamsDurationGt100DLte200D CTTimeseriesParamsDuration = "GT_100D_LTE_200D"
+	CTTimeseriesParamsDurationGt200D        CTTimeseriesParamsDuration = "GT_200D"
 )
 
-func (r CtTimeseriesParamsDuration) IsKnown() bool {
+func (r CTTimeseriesParamsDuration) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsDurationLte3D, CtTimeseriesParamsDurationGt3DLte7D, CtTimeseriesParamsDurationGt7DLte10D, CtTimeseriesParamsDurationGt10DLte47D, CtTimeseriesParamsDurationGt47DLte100D, CtTimeseriesParamsDurationGt100DLte200D, CtTimeseriesParamsDurationGt200D:
+	case CTTimeseriesParamsDurationLte3D, CTTimeseriesParamsDurationGt3DLte7D, CTTimeseriesParamsDurationGt7DLte10D, CTTimeseriesParamsDurationGt10DLte47D, CTTimeseriesParamsDurationGt47DLte100D, CTTimeseriesParamsDurationGt100DLte200D, CTTimeseriesParamsDurationGt200D:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsEntryType string
+type CTTimeseriesParamsEntryType string
 
 const (
-	CtTimeseriesParamsEntryTypePrecertificate CtTimeseriesParamsEntryType = "PRECERTIFICATE"
-	CtTimeseriesParamsEntryTypeCertificate    CtTimeseriesParamsEntryType = "CERTIFICATE"
+	CTTimeseriesParamsEntryTypePrecertificate CTTimeseriesParamsEntryType = "PRECERTIFICATE"
+	CTTimeseriesParamsEntryTypeCertificate    CTTimeseriesParamsEntryType = "CERTIFICATE"
 )
 
-func (r CtTimeseriesParamsEntryType) IsKnown() bool {
+func (r CTTimeseriesParamsEntryType) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsEntryTypePrecertificate, CtTimeseriesParamsEntryTypeCertificate:
+	case CTTimeseriesParamsEntryTypePrecertificate, CTTimeseriesParamsEntryTypeCertificate:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsExpirationStatus string
+type CTTimeseriesParamsExpirationStatus string
 
 const (
-	CtTimeseriesParamsExpirationStatusExpired CtTimeseriesParamsExpirationStatus = "EXPIRED"
-	CtTimeseriesParamsExpirationStatusValid   CtTimeseriesParamsExpirationStatus = "VALID"
+	CTTimeseriesParamsExpirationStatusExpired CTTimeseriesParamsExpirationStatus = "EXPIRED"
+	CTTimeseriesParamsExpirationStatusValid   CTTimeseriesParamsExpirationStatus = "VALID"
 )
 
-func (r CtTimeseriesParamsExpirationStatus) IsKnown() bool {
+func (r CTTimeseriesParamsExpirationStatus) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsExpirationStatusExpired, CtTimeseriesParamsExpirationStatusValid:
+	case CTTimeseriesParamsExpirationStatusExpired, CTTimeseriesParamsExpirationStatusValid:
 		return true
 	}
 	return false
 }
 
 // Format in which results will be returned.
-type CtTimeseriesParamsFormat string
+type CTTimeseriesParamsFormat string
 
 const (
-	CtTimeseriesParamsFormatJson CtTimeseriesParamsFormat = "JSON"
-	CtTimeseriesParamsFormatCsv  CtTimeseriesParamsFormat = "CSV"
+	CTTimeseriesParamsFormatJson CTTimeseriesParamsFormat = "JSON"
+	CTTimeseriesParamsFormatCsv  CTTimeseriesParamsFormat = "CSV"
 )
 
-func (r CtTimeseriesParamsFormat) IsKnown() bool {
+func (r CTTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsFormatJson, CtTimeseriesParamsFormatCsv:
+	case CTTimeseriesParamsFormatJson, CTTimeseriesParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsLogAPI string
+type CTTimeseriesParamsLogAPI string
 
 const (
-	CtTimeseriesParamsLogAPIRfc6962 CtTimeseriesParamsLogAPI = "RFC6962"
-	CtTimeseriesParamsLogAPIStatic  CtTimeseriesParamsLogAPI = "STATIC"
+	CTTimeseriesParamsLogAPIRfc6962 CTTimeseriesParamsLogAPI = "RFC6962"
+	CTTimeseriesParamsLogAPIStatic  CTTimeseriesParamsLogAPI = "STATIC"
 )
 
-func (r CtTimeseriesParamsLogAPI) IsKnown() bool {
+func (r CTTimeseriesParamsLogAPI) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsLogAPIRfc6962, CtTimeseriesParamsLogAPIStatic:
+	case CTTimeseriesParamsLogAPIRfc6962, CTTimeseriesParamsLogAPIStatic:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsPublicKeyAlgorithm string
+type CTTimeseriesParamsPublicKeyAlgorithm string
 
 const (
-	CtTimeseriesParamsPublicKeyAlgorithmDsa   CtTimeseriesParamsPublicKeyAlgorithm = "DSA"
-	CtTimeseriesParamsPublicKeyAlgorithmEcdsa CtTimeseriesParamsPublicKeyAlgorithm = "ECDSA"
-	CtTimeseriesParamsPublicKeyAlgorithmRSA   CtTimeseriesParamsPublicKeyAlgorithm = "RSA"
+	CTTimeseriesParamsPublicKeyAlgorithmDsa   CTTimeseriesParamsPublicKeyAlgorithm = "DSA"
+	CTTimeseriesParamsPublicKeyAlgorithmEcdsa CTTimeseriesParamsPublicKeyAlgorithm = "ECDSA"
+	CTTimeseriesParamsPublicKeyAlgorithmRSA   CTTimeseriesParamsPublicKeyAlgorithm = "RSA"
 )
 
-func (r CtTimeseriesParamsPublicKeyAlgorithm) IsKnown() bool {
+func (r CTTimeseriesParamsPublicKeyAlgorithm) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsPublicKeyAlgorithmDsa, CtTimeseriesParamsPublicKeyAlgorithmEcdsa, CtTimeseriesParamsPublicKeyAlgorithmRSA:
+	case CTTimeseriesParamsPublicKeyAlgorithmDsa, CTTimeseriesParamsPublicKeyAlgorithmEcdsa, CTTimeseriesParamsPublicKeyAlgorithmRSA:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsSignatureAlgorithm string
+type CTTimeseriesParamsSignatureAlgorithm string
 
 const (
-	CtTimeseriesParamsSignatureAlgorithmDsaSha1     CtTimeseriesParamsSignatureAlgorithm = "DSA_SHA_1"
-	CtTimeseriesParamsSignatureAlgorithmDsaSha256   CtTimeseriesParamsSignatureAlgorithm = "DSA_SHA_256"
-	CtTimeseriesParamsSignatureAlgorithmEcdsaSha1   CtTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_1"
-	CtTimeseriesParamsSignatureAlgorithmEcdsaSha256 CtTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_256"
-	CtTimeseriesParamsSignatureAlgorithmEcdsaSha384 CtTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_384"
-	CtTimeseriesParamsSignatureAlgorithmEcdsaSha512 CtTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_512"
-	CtTimeseriesParamsSignatureAlgorithmPssSha256   CtTimeseriesParamsSignatureAlgorithm = "PSS_SHA_256"
-	CtTimeseriesParamsSignatureAlgorithmPssSha384   CtTimeseriesParamsSignatureAlgorithm = "PSS_SHA_384"
-	CtTimeseriesParamsSignatureAlgorithmPssSha512   CtTimeseriesParamsSignatureAlgorithm = "PSS_SHA_512"
-	CtTimeseriesParamsSignatureAlgorithmRSAMd2      CtTimeseriesParamsSignatureAlgorithm = "RSA_MD2"
-	CtTimeseriesParamsSignatureAlgorithmRSAMd5      CtTimeseriesParamsSignatureAlgorithm = "RSA_MD5"
-	CtTimeseriesParamsSignatureAlgorithmRSASha1     CtTimeseriesParamsSignatureAlgorithm = "RSA_SHA_1"
-	CtTimeseriesParamsSignatureAlgorithmRSASha256   CtTimeseriesParamsSignatureAlgorithm = "RSA_SHA_256"
-	CtTimeseriesParamsSignatureAlgorithmRSASha384   CtTimeseriesParamsSignatureAlgorithm = "RSA_SHA_384"
-	CtTimeseriesParamsSignatureAlgorithmRSASha512   CtTimeseriesParamsSignatureAlgorithm = "RSA_SHA_512"
+	CTTimeseriesParamsSignatureAlgorithmDsaSha1     CTTimeseriesParamsSignatureAlgorithm = "DSA_SHA_1"
+	CTTimeseriesParamsSignatureAlgorithmDsaSha256   CTTimeseriesParamsSignatureAlgorithm = "DSA_SHA_256"
+	CTTimeseriesParamsSignatureAlgorithmEcdsaSha1   CTTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_1"
+	CTTimeseriesParamsSignatureAlgorithmEcdsaSha256 CTTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_256"
+	CTTimeseriesParamsSignatureAlgorithmEcdsaSha384 CTTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_384"
+	CTTimeseriesParamsSignatureAlgorithmEcdsaSha512 CTTimeseriesParamsSignatureAlgorithm = "ECDSA_SHA_512"
+	CTTimeseriesParamsSignatureAlgorithmPssSha256   CTTimeseriesParamsSignatureAlgorithm = "PSS_SHA_256"
+	CTTimeseriesParamsSignatureAlgorithmPssSha384   CTTimeseriesParamsSignatureAlgorithm = "PSS_SHA_384"
+	CTTimeseriesParamsSignatureAlgorithmPssSha512   CTTimeseriesParamsSignatureAlgorithm = "PSS_SHA_512"
+	CTTimeseriesParamsSignatureAlgorithmRSAMd2      CTTimeseriesParamsSignatureAlgorithm = "RSA_MD2"
+	CTTimeseriesParamsSignatureAlgorithmRSAMd5      CTTimeseriesParamsSignatureAlgorithm = "RSA_MD5"
+	CTTimeseriesParamsSignatureAlgorithmRSASha1     CTTimeseriesParamsSignatureAlgorithm = "RSA_SHA_1"
+	CTTimeseriesParamsSignatureAlgorithmRSASha256   CTTimeseriesParamsSignatureAlgorithm = "RSA_SHA_256"
+	CTTimeseriesParamsSignatureAlgorithmRSASha384   CTTimeseriesParamsSignatureAlgorithm = "RSA_SHA_384"
+	CTTimeseriesParamsSignatureAlgorithmRSASha512   CTTimeseriesParamsSignatureAlgorithm = "RSA_SHA_512"
 )
 
-func (r CtTimeseriesParamsSignatureAlgorithm) IsKnown() bool {
+func (r CTTimeseriesParamsSignatureAlgorithm) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsSignatureAlgorithmDsaSha1, CtTimeseriesParamsSignatureAlgorithmDsaSha256, CtTimeseriesParamsSignatureAlgorithmEcdsaSha1, CtTimeseriesParamsSignatureAlgorithmEcdsaSha256, CtTimeseriesParamsSignatureAlgorithmEcdsaSha384, CtTimeseriesParamsSignatureAlgorithmEcdsaSha512, CtTimeseriesParamsSignatureAlgorithmPssSha256, CtTimeseriesParamsSignatureAlgorithmPssSha384, CtTimeseriesParamsSignatureAlgorithmPssSha512, CtTimeseriesParamsSignatureAlgorithmRSAMd2, CtTimeseriesParamsSignatureAlgorithmRSAMd5, CtTimeseriesParamsSignatureAlgorithmRSASha1, CtTimeseriesParamsSignatureAlgorithmRSASha256, CtTimeseriesParamsSignatureAlgorithmRSASha384, CtTimeseriesParamsSignatureAlgorithmRSASha512:
+	case CTTimeseriesParamsSignatureAlgorithmDsaSha1, CTTimeseriesParamsSignatureAlgorithmDsaSha256, CTTimeseriesParamsSignatureAlgorithmEcdsaSha1, CTTimeseriesParamsSignatureAlgorithmEcdsaSha256, CTTimeseriesParamsSignatureAlgorithmEcdsaSha384, CTTimeseriesParamsSignatureAlgorithmEcdsaSha512, CTTimeseriesParamsSignatureAlgorithmPssSha256, CTTimeseriesParamsSignatureAlgorithmPssSha384, CTTimeseriesParamsSignatureAlgorithmPssSha512, CTTimeseriesParamsSignatureAlgorithmRSAMd2, CTTimeseriesParamsSignatureAlgorithmRSAMd5, CTTimeseriesParamsSignatureAlgorithmRSASha1, CTTimeseriesParamsSignatureAlgorithmRSASha256, CTTimeseriesParamsSignatureAlgorithmRSASha384, CTTimeseriesParamsSignatureAlgorithmRSASha512:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsUniqueEntry string
+type CTTimeseriesParamsUniqueEntry string
 
 const (
-	CtTimeseriesParamsUniqueEntryTrue  CtTimeseriesParamsUniqueEntry = "true"
-	CtTimeseriesParamsUniqueEntryFalse CtTimeseriesParamsUniqueEntry = "false"
+	CTTimeseriesParamsUniqueEntryTrue  CTTimeseriesParamsUniqueEntry = "true"
+	CTTimeseriesParamsUniqueEntryFalse CTTimeseriesParamsUniqueEntry = "false"
 )
 
-func (r CtTimeseriesParamsUniqueEntry) IsKnown() bool {
+func (r CTTimeseriesParamsUniqueEntry) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsUniqueEntryTrue, CtTimeseriesParamsUniqueEntryFalse:
+	case CTTimeseriesParamsUniqueEntryTrue, CTTimeseriesParamsUniqueEntryFalse:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesParamsValidationLevel string
+type CTTimeseriesParamsValidationLevel string
 
 const (
-	CtTimeseriesParamsValidationLevelDomain       CtTimeseriesParamsValidationLevel = "DOMAIN"
-	CtTimeseriesParamsValidationLevelOrganization CtTimeseriesParamsValidationLevel = "ORGANIZATION"
-	CtTimeseriesParamsValidationLevelExtended     CtTimeseriesParamsValidationLevel = "EXTENDED"
+	CTTimeseriesParamsValidationLevelDomain       CTTimeseriesParamsValidationLevel = "DOMAIN"
+	CTTimeseriesParamsValidationLevelOrganization CTTimeseriesParamsValidationLevel = "ORGANIZATION"
+	CTTimeseriesParamsValidationLevelExtended     CTTimeseriesParamsValidationLevel = "EXTENDED"
 )
 
-func (r CtTimeseriesParamsValidationLevel) IsKnown() bool {
+func (r CTTimeseriesParamsValidationLevel) IsKnown() bool {
 	switch r {
-	case CtTimeseriesParamsValidationLevelDomain, CtTimeseriesParamsValidationLevelOrganization, CtTimeseriesParamsValidationLevelExtended:
+	case CTTimeseriesParamsValidationLevelDomain, CTTimeseriesParamsValidationLevelOrganization, CTTimeseriesParamsValidationLevelExtended:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesResponseEnvelope struct {
-	Result  CtTimeseriesResponse             `json:"result,required"`
+type CTTimeseriesResponseEnvelope struct {
+	Result  CTTimeseriesResponse             `json:"result,required"`
 	Success bool                             `json:"success,required"`
 	JSON    ctTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 
 // ctTimeseriesResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtTimeseriesResponseEnvelope]
+// [CTTimeseriesResponseEnvelope]
 type ctTimeseriesResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -1704,7 +1704,7 @@ type ctTimeseriesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1712,11 +1712,11 @@ func (r ctTimeseriesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtTimeseriesGroupsParams struct {
+type CTTimeseriesGroupsParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[CtTimeseriesGroupsParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[CTTimeseriesGroupsParamsAggInterval] `query:"aggInterval"`
 	// Filters results by certificate authority.
 	CA param.Field[[]string] `query:"ca"`
 	// Filters results by certificate authority owner.
@@ -1730,13 +1730,13 @@ type CtTimeseriesGroupsParams struct {
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by certificate duration.
-	Duration param.Field[[]CtTimeseriesGroupsParamsDuration] `query:"duration"`
+	Duration param.Field[[]CTTimeseriesGroupsParamsDuration] `query:"duration"`
 	// Filters results by entry type (certificate vs. pre-certificate).
-	EntryType param.Field[[]CtTimeseriesGroupsParamsEntryType] `query:"entryType"`
+	EntryType param.Field[[]CTTimeseriesGroupsParamsEntryType] `query:"entryType"`
 	// Filters results by expiration status (expired vs. valid).
-	ExpirationStatus param.Field[[]CtTimeseriesGroupsParamsExpirationStatus] `query:"expirationStatus"`
+	ExpirationStatus param.Field[[]CTTimeseriesGroupsParamsExpirationStatus] `query:"expirationStatus"`
 	// Format in which results will be returned.
-	Format param.Field[CtTimeseriesGroupsParamsFormat] `query:"format"`
+	Format param.Field[CTTimeseriesGroupsParamsFormat] `query:"format"`
 	// Filters results based on whether the certificates are bound to specific IP
 	// addresses.
 	HasIPs param.Field[[]bool] `query:"hasIps"`
@@ -1749,30 +1749,30 @@ type CtTimeseriesGroupsParams struct {
 	// Filters results by certificate log.
 	Log param.Field[[]string] `query:"log"`
 	// Filters results by certificate log API (RFC6962 vs. static).
-	LogAPI param.Field[[]CtTimeseriesGroupsParamsLogAPI] `query:"logApi"`
+	LogAPI param.Field[[]CTTimeseriesGroupsParamsLogAPI] `query:"logApi"`
 	// Filters results by certificate log operator.
 	LogOperator param.Field[[]string] `query:"logOperator"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization param.Field[CtTimeseriesGroupsParamsNormalization] `query:"normalization"`
+	Normalization param.Field[CTTimeseriesGroupsParamsNormalization] `query:"normalization"`
 	// Filters results by public key algorithm.
-	PublicKeyAlgorithm param.Field[[]CtTimeseriesGroupsParamsPublicKeyAlgorithm] `query:"publicKeyAlgorithm"`
+	PublicKeyAlgorithm param.Field[[]CTTimeseriesGroupsParamsPublicKeyAlgorithm] `query:"publicKeyAlgorithm"`
 	// Filters results by signature algorithm.
-	SignatureAlgorithm param.Field[[]CtTimeseriesGroupsParamsSignatureAlgorithm] `query:"signatureAlgorithm"`
+	SignatureAlgorithm param.Field[[]CTTimeseriesGroupsParamsSignatureAlgorithm] `query:"signatureAlgorithm"`
 	// Filters results by top-level domain.
-	Tld param.Field[[]string] `query:"tld"`
+	TLD param.Field[[]string] `query:"tld"`
 	// Specifies whether to filter out duplicate certificates and pre-certificates. Set
 	// to true for unique entries only.
-	UniqueEntries param.Field[[]CtTimeseriesGroupsParamsUniqueEntry] `query:"uniqueEntries"`
+	UniqueEntries param.Field[[]CTTimeseriesGroupsParamsUniqueEntry] `query:"uniqueEntries"`
 	// Filters results by validation level.
-	ValidationLevel param.Field[[]CtTimeseriesGroupsParamsValidationLevel] `query:"validationLevel"`
+	ValidationLevel param.Field[[]CTTimeseriesGroupsParamsValidationLevel] `query:"validationLevel"`
 }
 
-// URLQuery serializes [CtTimeseriesGroupsParams]'s query parameters as
+// URLQuery serializes [CTTimeseriesGroupsParams]'s query parameters as
 // `url.Values`.
-func (r CtTimeseriesGroupsParams) URLQuery() (v url.Values) {
+func (r CTTimeseriesGroupsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -1780,28 +1780,28 @@ func (r CtTimeseriesGroupsParams) URLQuery() (v url.Values) {
 }
 
 // Specifies the certificate attribute by which to group the results.
-type CtTimeseriesGroupsParamsDimension string
+type CTTimeseriesGroupsParamsDimension string
 
 const (
-	CtTimeseriesGroupsParamsDimensionCA                 CtTimeseriesGroupsParamsDimension = "CA"
-	CtTimeseriesGroupsParamsDimensionCAOwner            CtTimeseriesGroupsParamsDimension = "CA_OWNER"
-	CtTimeseriesGroupsParamsDimensionDuration           CtTimeseriesGroupsParamsDimension = "DURATION"
-	CtTimeseriesGroupsParamsDimensionEntryType          CtTimeseriesGroupsParamsDimension = "ENTRY_TYPE"
-	CtTimeseriesGroupsParamsDimensionExpirationStatus   CtTimeseriesGroupsParamsDimension = "EXPIRATION_STATUS"
-	CtTimeseriesGroupsParamsDimensionHasIPs             CtTimeseriesGroupsParamsDimension = "HAS_IPS"
-	CtTimeseriesGroupsParamsDimensionHasWildcards       CtTimeseriesGroupsParamsDimension = "HAS_WILDCARDS"
-	CtTimeseriesGroupsParamsDimensionLog                CtTimeseriesGroupsParamsDimension = "LOG"
-	CtTimeseriesGroupsParamsDimensionLogAPI             CtTimeseriesGroupsParamsDimension = "LOG_API"
-	CtTimeseriesGroupsParamsDimensionLogOperator        CtTimeseriesGroupsParamsDimension = "LOG_OPERATOR"
-	CtTimeseriesGroupsParamsDimensionPublicKeyAlgorithm CtTimeseriesGroupsParamsDimension = "PUBLIC_KEY_ALGORITHM"
-	CtTimeseriesGroupsParamsDimensionSignatureAlgorithm CtTimeseriesGroupsParamsDimension = "SIGNATURE_ALGORITHM"
-	CtTimeseriesGroupsParamsDimensionTld                CtTimeseriesGroupsParamsDimension = "TLD"
-	CtTimeseriesGroupsParamsDimensionValidationLevel    CtTimeseriesGroupsParamsDimension = "VALIDATION_LEVEL"
+	CTTimeseriesGroupsParamsDimensionCA                 CTTimeseriesGroupsParamsDimension = "CA"
+	CTTimeseriesGroupsParamsDimensionCAOwner            CTTimeseriesGroupsParamsDimension = "CA_OWNER"
+	CTTimeseriesGroupsParamsDimensionDuration           CTTimeseriesGroupsParamsDimension = "DURATION"
+	CTTimeseriesGroupsParamsDimensionEntryType          CTTimeseriesGroupsParamsDimension = "ENTRY_TYPE"
+	CTTimeseriesGroupsParamsDimensionExpirationStatus   CTTimeseriesGroupsParamsDimension = "EXPIRATION_STATUS"
+	CTTimeseriesGroupsParamsDimensionHasIPs             CTTimeseriesGroupsParamsDimension = "HAS_IPS"
+	CTTimeseriesGroupsParamsDimensionHasWildcards       CTTimeseriesGroupsParamsDimension = "HAS_WILDCARDS"
+	CTTimeseriesGroupsParamsDimensionLog                CTTimeseriesGroupsParamsDimension = "LOG"
+	CTTimeseriesGroupsParamsDimensionLogAPI             CTTimeseriesGroupsParamsDimension = "LOG_API"
+	CTTimeseriesGroupsParamsDimensionLogOperator        CTTimeseriesGroupsParamsDimension = "LOG_OPERATOR"
+	CTTimeseriesGroupsParamsDimensionPublicKeyAlgorithm CTTimeseriesGroupsParamsDimension = "PUBLIC_KEY_ALGORITHM"
+	CTTimeseriesGroupsParamsDimensionSignatureAlgorithm CTTimeseriesGroupsParamsDimension = "SIGNATURE_ALGORITHM"
+	CTTimeseriesGroupsParamsDimensionTLD                CTTimeseriesGroupsParamsDimension = "TLD"
+	CTTimeseriesGroupsParamsDimensionValidationLevel    CTTimeseriesGroupsParamsDimension = "VALIDATION_LEVEL"
 )
 
-func (r CtTimeseriesGroupsParamsDimension) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsDimensionCA, CtTimeseriesGroupsParamsDimensionCAOwner, CtTimeseriesGroupsParamsDimensionDuration, CtTimeseriesGroupsParamsDimensionEntryType, CtTimeseriesGroupsParamsDimensionExpirationStatus, CtTimeseriesGroupsParamsDimensionHasIPs, CtTimeseriesGroupsParamsDimensionHasWildcards, CtTimeseriesGroupsParamsDimensionLog, CtTimeseriesGroupsParamsDimensionLogAPI, CtTimeseriesGroupsParamsDimensionLogOperator, CtTimeseriesGroupsParamsDimensionPublicKeyAlgorithm, CtTimeseriesGroupsParamsDimensionSignatureAlgorithm, CtTimeseriesGroupsParamsDimensionTld, CtTimeseriesGroupsParamsDimensionValidationLevel:
+	case CTTimeseriesGroupsParamsDimensionCA, CTTimeseriesGroupsParamsDimensionCAOwner, CTTimeseriesGroupsParamsDimensionDuration, CTTimeseriesGroupsParamsDimensionEntryType, CTTimeseriesGroupsParamsDimensionExpirationStatus, CTTimeseriesGroupsParamsDimensionHasIPs, CTTimeseriesGroupsParamsDimensionHasWildcards, CTTimeseriesGroupsParamsDimensionLog, CTTimeseriesGroupsParamsDimensionLogAPI, CTTimeseriesGroupsParamsDimensionLogOperator, CTTimeseriesGroupsParamsDimensionPublicKeyAlgorithm, CTTimeseriesGroupsParamsDimensionSignatureAlgorithm, CTTimeseriesGroupsParamsDimensionTLD, CTTimeseriesGroupsParamsDimensionValidationLevel:
 		return true
 	}
 	return false
@@ -1810,99 +1810,99 @@ func (r CtTimeseriesGroupsParamsDimension) IsKnown() bool {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type CtTimeseriesGroupsParamsAggInterval string
+type CTTimeseriesGroupsParamsAggInterval string
 
 const (
-	CtTimeseriesGroupsParamsAggInterval15m CtTimeseriesGroupsParamsAggInterval = "15m"
-	CtTimeseriesGroupsParamsAggInterval1h  CtTimeseriesGroupsParamsAggInterval = "1h"
-	CtTimeseriesGroupsParamsAggInterval1d  CtTimeseriesGroupsParamsAggInterval = "1d"
-	CtTimeseriesGroupsParamsAggInterval1w  CtTimeseriesGroupsParamsAggInterval = "1w"
+	CTTimeseriesGroupsParamsAggInterval15m CTTimeseriesGroupsParamsAggInterval = "15m"
+	CTTimeseriesGroupsParamsAggInterval1h  CTTimeseriesGroupsParamsAggInterval = "1h"
+	CTTimeseriesGroupsParamsAggInterval1d  CTTimeseriesGroupsParamsAggInterval = "1d"
+	CTTimeseriesGroupsParamsAggInterval1w  CTTimeseriesGroupsParamsAggInterval = "1w"
 )
 
-func (r CtTimeseriesGroupsParamsAggInterval) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsAggInterval15m, CtTimeseriesGroupsParamsAggInterval1h, CtTimeseriesGroupsParamsAggInterval1d, CtTimeseriesGroupsParamsAggInterval1w:
+	case CTTimeseriesGroupsParamsAggInterval15m, CTTimeseriesGroupsParamsAggInterval1h, CTTimeseriesGroupsParamsAggInterval1d, CTTimeseriesGroupsParamsAggInterval1w:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsDuration string
+type CTTimeseriesGroupsParamsDuration string
 
 const (
-	CtTimeseriesGroupsParamsDurationLte3D         CtTimeseriesGroupsParamsDuration = "LTE_3D"
-	CtTimeseriesGroupsParamsDurationGt3DLte7D     CtTimeseriesGroupsParamsDuration = "GT_3D_LTE_7D"
-	CtTimeseriesGroupsParamsDurationGt7DLte10D    CtTimeseriesGroupsParamsDuration = "GT_7D_LTE_10D"
-	CtTimeseriesGroupsParamsDurationGt10DLte47D   CtTimeseriesGroupsParamsDuration = "GT_10D_LTE_47D"
-	CtTimeseriesGroupsParamsDurationGt47DLte100D  CtTimeseriesGroupsParamsDuration = "GT_47D_LTE_100D"
-	CtTimeseriesGroupsParamsDurationGt100DLte200D CtTimeseriesGroupsParamsDuration = "GT_100D_LTE_200D"
-	CtTimeseriesGroupsParamsDurationGt200D        CtTimeseriesGroupsParamsDuration = "GT_200D"
+	CTTimeseriesGroupsParamsDurationLte3D         CTTimeseriesGroupsParamsDuration = "LTE_3D"
+	CTTimeseriesGroupsParamsDurationGt3DLte7D     CTTimeseriesGroupsParamsDuration = "GT_3D_LTE_7D"
+	CTTimeseriesGroupsParamsDurationGt7DLte10D    CTTimeseriesGroupsParamsDuration = "GT_7D_LTE_10D"
+	CTTimeseriesGroupsParamsDurationGt10DLte47D   CTTimeseriesGroupsParamsDuration = "GT_10D_LTE_47D"
+	CTTimeseriesGroupsParamsDurationGt47DLte100D  CTTimeseriesGroupsParamsDuration = "GT_47D_LTE_100D"
+	CTTimeseriesGroupsParamsDurationGt100DLte200D CTTimeseriesGroupsParamsDuration = "GT_100D_LTE_200D"
+	CTTimeseriesGroupsParamsDurationGt200D        CTTimeseriesGroupsParamsDuration = "GT_200D"
 )
 
-func (r CtTimeseriesGroupsParamsDuration) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsDuration) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsDurationLte3D, CtTimeseriesGroupsParamsDurationGt3DLte7D, CtTimeseriesGroupsParamsDurationGt7DLte10D, CtTimeseriesGroupsParamsDurationGt10DLte47D, CtTimeseriesGroupsParamsDurationGt47DLte100D, CtTimeseriesGroupsParamsDurationGt100DLte200D, CtTimeseriesGroupsParamsDurationGt200D:
+	case CTTimeseriesGroupsParamsDurationLte3D, CTTimeseriesGroupsParamsDurationGt3DLte7D, CTTimeseriesGroupsParamsDurationGt7DLte10D, CTTimeseriesGroupsParamsDurationGt10DLte47D, CTTimeseriesGroupsParamsDurationGt47DLte100D, CTTimeseriesGroupsParamsDurationGt100DLte200D, CTTimeseriesGroupsParamsDurationGt200D:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsEntryType string
+type CTTimeseriesGroupsParamsEntryType string
 
 const (
-	CtTimeseriesGroupsParamsEntryTypePrecertificate CtTimeseriesGroupsParamsEntryType = "PRECERTIFICATE"
-	CtTimeseriesGroupsParamsEntryTypeCertificate    CtTimeseriesGroupsParamsEntryType = "CERTIFICATE"
+	CTTimeseriesGroupsParamsEntryTypePrecertificate CTTimeseriesGroupsParamsEntryType = "PRECERTIFICATE"
+	CTTimeseriesGroupsParamsEntryTypeCertificate    CTTimeseriesGroupsParamsEntryType = "CERTIFICATE"
 )
 
-func (r CtTimeseriesGroupsParamsEntryType) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsEntryType) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsEntryTypePrecertificate, CtTimeseriesGroupsParamsEntryTypeCertificate:
+	case CTTimeseriesGroupsParamsEntryTypePrecertificate, CTTimeseriesGroupsParamsEntryTypeCertificate:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsExpirationStatus string
+type CTTimeseriesGroupsParamsExpirationStatus string
 
 const (
-	CtTimeseriesGroupsParamsExpirationStatusExpired CtTimeseriesGroupsParamsExpirationStatus = "EXPIRED"
-	CtTimeseriesGroupsParamsExpirationStatusValid   CtTimeseriesGroupsParamsExpirationStatus = "VALID"
+	CTTimeseriesGroupsParamsExpirationStatusExpired CTTimeseriesGroupsParamsExpirationStatus = "EXPIRED"
+	CTTimeseriesGroupsParamsExpirationStatusValid   CTTimeseriesGroupsParamsExpirationStatus = "VALID"
 )
 
-func (r CtTimeseriesGroupsParamsExpirationStatus) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsExpirationStatus) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsExpirationStatusExpired, CtTimeseriesGroupsParamsExpirationStatusValid:
+	case CTTimeseriesGroupsParamsExpirationStatusExpired, CTTimeseriesGroupsParamsExpirationStatusValid:
 		return true
 	}
 	return false
 }
 
 // Format in which results will be returned.
-type CtTimeseriesGroupsParamsFormat string
+type CTTimeseriesGroupsParamsFormat string
 
 const (
-	CtTimeseriesGroupsParamsFormatJson CtTimeseriesGroupsParamsFormat = "JSON"
-	CtTimeseriesGroupsParamsFormatCsv  CtTimeseriesGroupsParamsFormat = "CSV"
+	CTTimeseriesGroupsParamsFormatJson CTTimeseriesGroupsParamsFormat = "JSON"
+	CTTimeseriesGroupsParamsFormatCsv  CTTimeseriesGroupsParamsFormat = "CSV"
 )
 
-func (r CtTimeseriesGroupsParamsFormat) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsFormat) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsFormatJson, CtTimeseriesGroupsParamsFormatCsv:
+	case CTTimeseriesGroupsParamsFormatJson, CTTimeseriesGroupsParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsLogAPI string
+type CTTimeseriesGroupsParamsLogAPI string
 
 const (
-	CtTimeseriesGroupsParamsLogAPIRfc6962 CtTimeseriesGroupsParamsLogAPI = "RFC6962"
-	CtTimeseriesGroupsParamsLogAPIStatic  CtTimeseriesGroupsParamsLogAPI = "STATIC"
+	CTTimeseriesGroupsParamsLogAPIRfc6962 CTTimeseriesGroupsParamsLogAPI = "RFC6962"
+	CTTimeseriesGroupsParamsLogAPIStatic  CTTimeseriesGroupsParamsLogAPI = "STATIC"
 )
 
-func (r CtTimeseriesGroupsParamsLogAPI) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsLogAPI) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsLogAPIRfc6962, CtTimeseriesGroupsParamsLogAPIStatic:
+	case CTTimeseriesGroupsParamsLogAPIRfc6962, CTTimeseriesGroupsParamsLogAPIStatic:
 		return true
 	}
 	return false
@@ -1910,104 +1910,104 @@ func (r CtTimeseriesGroupsParamsLogAPI) IsKnown() bool {
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type CtTimeseriesGroupsParamsNormalization string
+type CTTimeseriesGroupsParamsNormalization string
 
 const (
-	CtTimeseriesGroupsParamsNormalizationRawValues  CtTimeseriesGroupsParamsNormalization = "RAW_VALUES"
-	CtTimeseriesGroupsParamsNormalizationPercentage CtTimeseriesGroupsParamsNormalization = "PERCENTAGE"
+	CTTimeseriesGroupsParamsNormalizationRawValues  CTTimeseriesGroupsParamsNormalization = "RAW_VALUES"
+	CTTimeseriesGroupsParamsNormalizationPercentage CTTimeseriesGroupsParamsNormalization = "PERCENTAGE"
 )
 
-func (r CtTimeseriesGroupsParamsNormalization) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsNormalization) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsNormalizationRawValues, CtTimeseriesGroupsParamsNormalizationPercentage:
+	case CTTimeseriesGroupsParamsNormalizationRawValues, CTTimeseriesGroupsParamsNormalizationPercentage:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsPublicKeyAlgorithm string
+type CTTimeseriesGroupsParamsPublicKeyAlgorithm string
 
 const (
-	CtTimeseriesGroupsParamsPublicKeyAlgorithmDsa   CtTimeseriesGroupsParamsPublicKeyAlgorithm = "DSA"
-	CtTimeseriesGroupsParamsPublicKeyAlgorithmEcdsa CtTimeseriesGroupsParamsPublicKeyAlgorithm = "ECDSA"
-	CtTimeseriesGroupsParamsPublicKeyAlgorithmRSA   CtTimeseriesGroupsParamsPublicKeyAlgorithm = "RSA"
+	CTTimeseriesGroupsParamsPublicKeyAlgorithmDsa   CTTimeseriesGroupsParamsPublicKeyAlgorithm = "DSA"
+	CTTimeseriesGroupsParamsPublicKeyAlgorithmEcdsa CTTimeseriesGroupsParamsPublicKeyAlgorithm = "ECDSA"
+	CTTimeseriesGroupsParamsPublicKeyAlgorithmRSA   CTTimeseriesGroupsParamsPublicKeyAlgorithm = "RSA"
 )
 
-func (r CtTimeseriesGroupsParamsPublicKeyAlgorithm) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsPublicKeyAlgorithm) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsPublicKeyAlgorithmDsa, CtTimeseriesGroupsParamsPublicKeyAlgorithmEcdsa, CtTimeseriesGroupsParamsPublicKeyAlgorithmRSA:
+	case CTTimeseriesGroupsParamsPublicKeyAlgorithmDsa, CTTimeseriesGroupsParamsPublicKeyAlgorithmEcdsa, CTTimeseriesGroupsParamsPublicKeyAlgorithmRSA:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsSignatureAlgorithm string
+type CTTimeseriesGroupsParamsSignatureAlgorithm string
 
 const (
-	CtTimeseriesGroupsParamsSignatureAlgorithmDsaSha1     CtTimeseriesGroupsParamsSignatureAlgorithm = "DSA_SHA_1"
-	CtTimeseriesGroupsParamsSignatureAlgorithmDsaSha256   CtTimeseriesGroupsParamsSignatureAlgorithm = "DSA_SHA_256"
-	CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha1   CtTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_1"
-	CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha256 CtTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_256"
-	CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha384 CtTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_384"
-	CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha512 CtTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_512"
-	CtTimeseriesGroupsParamsSignatureAlgorithmPssSha256   CtTimeseriesGroupsParamsSignatureAlgorithm = "PSS_SHA_256"
-	CtTimeseriesGroupsParamsSignatureAlgorithmPssSha384   CtTimeseriesGroupsParamsSignatureAlgorithm = "PSS_SHA_384"
-	CtTimeseriesGroupsParamsSignatureAlgorithmPssSha512   CtTimeseriesGroupsParamsSignatureAlgorithm = "PSS_SHA_512"
-	CtTimeseriesGroupsParamsSignatureAlgorithmRSAMd2      CtTimeseriesGroupsParamsSignatureAlgorithm = "RSA_MD2"
-	CtTimeseriesGroupsParamsSignatureAlgorithmRSAMd5      CtTimeseriesGroupsParamsSignatureAlgorithm = "RSA_MD5"
-	CtTimeseriesGroupsParamsSignatureAlgorithmRSASha1     CtTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_1"
-	CtTimeseriesGroupsParamsSignatureAlgorithmRSASha256   CtTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_256"
-	CtTimeseriesGroupsParamsSignatureAlgorithmRSASha384   CtTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_384"
-	CtTimeseriesGroupsParamsSignatureAlgorithmRSASha512   CtTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_512"
+	CTTimeseriesGroupsParamsSignatureAlgorithmDsaSha1     CTTimeseriesGroupsParamsSignatureAlgorithm = "DSA_SHA_1"
+	CTTimeseriesGroupsParamsSignatureAlgorithmDsaSha256   CTTimeseriesGroupsParamsSignatureAlgorithm = "DSA_SHA_256"
+	CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha1   CTTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_1"
+	CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha256 CTTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_256"
+	CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha384 CTTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_384"
+	CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha512 CTTimeseriesGroupsParamsSignatureAlgorithm = "ECDSA_SHA_512"
+	CTTimeseriesGroupsParamsSignatureAlgorithmPssSha256   CTTimeseriesGroupsParamsSignatureAlgorithm = "PSS_SHA_256"
+	CTTimeseriesGroupsParamsSignatureAlgorithmPssSha384   CTTimeseriesGroupsParamsSignatureAlgorithm = "PSS_SHA_384"
+	CTTimeseriesGroupsParamsSignatureAlgorithmPssSha512   CTTimeseriesGroupsParamsSignatureAlgorithm = "PSS_SHA_512"
+	CTTimeseriesGroupsParamsSignatureAlgorithmRSAMd2      CTTimeseriesGroupsParamsSignatureAlgorithm = "RSA_MD2"
+	CTTimeseriesGroupsParamsSignatureAlgorithmRSAMd5      CTTimeseriesGroupsParamsSignatureAlgorithm = "RSA_MD5"
+	CTTimeseriesGroupsParamsSignatureAlgorithmRSASha1     CTTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_1"
+	CTTimeseriesGroupsParamsSignatureAlgorithmRSASha256   CTTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_256"
+	CTTimeseriesGroupsParamsSignatureAlgorithmRSASha384   CTTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_384"
+	CTTimeseriesGroupsParamsSignatureAlgorithmRSASha512   CTTimeseriesGroupsParamsSignatureAlgorithm = "RSA_SHA_512"
 )
 
-func (r CtTimeseriesGroupsParamsSignatureAlgorithm) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsSignatureAlgorithm) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsSignatureAlgorithmDsaSha1, CtTimeseriesGroupsParamsSignatureAlgorithmDsaSha256, CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha1, CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha256, CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha384, CtTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha512, CtTimeseriesGroupsParamsSignatureAlgorithmPssSha256, CtTimeseriesGroupsParamsSignatureAlgorithmPssSha384, CtTimeseriesGroupsParamsSignatureAlgorithmPssSha512, CtTimeseriesGroupsParamsSignatureAlgorithmRSAMd2, CtTimeseriesGroupsParamsSignatureAlgorithmRSAMd5, CtTimeseriesGroupsParamsSignatureAlgorithmRSASha1, CtTimeseriesGroupsParamsSignatureAlgorithmRSASha256, CtTimeseriesGroupsParamsSignatureAlgorithmRSASha384, CtTimeseriesGroupsParamsSignatureAlgorithmRSASha512:
+	case CTTimeseriesGroupsParamsSignatureAlgorithmDsaSha1, CTTimeseriesGroupsParamsSignatureAlgorithmDsaSha256, CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha1, CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha256, CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha384, CTTimeseriesGroupsParamsSignatureAlgorithmEcdsaSha512, CTTimeseriesGroupsParamsSignatureAlgorithmPssSha256, CTTimeseriesGroupsParamsSignatureAlgorithmPssSha384, CTTimeseriesGroupsParamsSignatureAlgorithmPssSha512, CTTimeseriesGroupsParamsSignatureAlgorithmRSAMd2, CTTimeseriesGroupsParamsSignatureAlgorithmRSAMd5, CTTimeseriesGroupsParamsSignatureAlgorithmRSASha1, CTTimeseriesGroupsParamsSignatureAlgorithmRSASha256, CTTimeseriesGroupsParamsSignatureAlgorithmRSASha384, CTTimeseriesGroupsParamsSignatureAlgorithmRSASha512:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsUniqueEntry string
+type CTTimeseriesGroupsParamsUniqueEntry string
 
 const (
-	CtTimeseriesGroupsParamsUniqueEntryTrue  CtTimeseriesGroupsParamsUniqueEntry = "true"
-	CtTimeseriesGroupsParamsUniqueEntryFalse CtTimeseriesGroupsParamsUniqueEntry = "false"
+	CTTimeseriesGroupsParamsUniqueEntryTrue  CTTimeseriesGroupsParamsUniqueEntry = "true"
+	CTTimeseriesGroupsParamsUniqueEntryFalse CTTimeseriesGroupsParamsUniqueEntry = "false"
 )
 
-func (r CtTimeseriesGroupsParamsUniqueEntry) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsUniqueEntry) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsUniqueEntryTrue, CtTimeseriesGroupsParamsUniqueEntryFalse:
+	case CTTimeseriesGroupsParamsUniqueEntryTrue, CTTimeseriesGroupsParamsUniqueEntryFalse:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsParamsValidationLevel string
+type CTTimeseriesGroupsParamsValidationLevel string
 
 const (
-	CtTimeseriesGroupsParamsValidationLevelDomain       CtTimeseriesGroupsParamsValidationLevel = "DOMAIN"
-	CtTimeseriesGroupsParamsValidationLevelOrganization CtTimeseriesGroupsParamsValidationLevel = "ORGANIZATION"
-	CtTimeseriesGroupsParamsValidationLevelExtended     CtTimeseriesGroupsParamsValidationLevel = "EXTENDED"
+	CTTimeseriesGroupsParamsValidationLevelDomain       CTTimeseriesGroupsParamsValidationLevel = "DOMAIN"
+	CTTimeseriesGroupsParamsValidationLevelOrganization CTTimeseriesGroupsParamsValidationLevel = "ORGANIZATION"
+	CTTimeseriesGroupsParamsValidationLevelExtended     CTTimeseriesGroupsParamsValidationLevel = "EXTENDED"
 )
 
-func (r CtTimeseriesGroupsParamsValidationLevel) IsKnown() bool {
+func (r CTTimeseriesGroupsParamsValidationLevel) IsKnown() bool {
 	switch r {
-	case CtTimeseriesGroupsParamsValidationLevelDomain, CtTimeseriesGroupsParamsValidationLevelOrganization, CtTimeseriesGroupsParamsValidationLevelExtended:
+	case CTTimeseriesGroupsParamsValidationLevelDomain, CTTimeseriesGroupsParamsValidationLevelOrganization, CTTimeseriesGroupsParamsValidationLevelExtended:
 		return true
 	}
 	return false
 }
 
-type CtTimeseriesGroupsResponseEnvelope struct {
-	Result  CtTimeseriesGroupsResponse             `json:"result,required"`
+type CTTimeseriesGroupsResponseEnvelope struct {
+	Result  CTTimeseriesGroupsResponse             `json:"result,required"`
 	Success bool                                   `json:"success,required"`
 	JSON    ctTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 
 // ctTimeseriesGroupsResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtTimeseriesGroupsResponseEnvelope]
+// [CTTimeseriesGroupsResponseEnvelope]
 type ctTimeseriesGroupsResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -2015,7 +2015,7 @@ type ctTimeseriesGroupsResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtTimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTTimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

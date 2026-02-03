@@ -281,7 +281,7 @@ const (
 	AnnotationListParamsDataSourceBGP                AnnotationListParamsDataSource = "BGP"
 	AnnotationListParamsDataSourceBots               AnnotationListParamsDataSource = "BOTS"
 	AnnotationListParamsDataSourceConnectionAnomaly  AnnotationListParamsDataSource = "CONNECTION_ANOMALY"
-	AnnotationListParamsDataSourceCt                 AnnotationListParamsDataSource = "CT"
+	AnnotationListParamsDataSourceCT                 AnnotationListParamsDataSource = "CT"
 	AnnotationListParamsDataSourceDNS                AnnotationListParamsDataSource = "DNS"
 	AnnotationListParamsDataSourceDNSMagnitude       AnnotationListParamsDataSource = "DNS_MAGNITUDE"
 	AnnotationListParamsDataSourceDNSAS112           AnnotationListParamsDataSource = "DNS_AS112"
@@ -304,7 +304,7 @@ const (
 
 func (r AnnotationListParamsDataSource) IsKnown() bool {
 	switch r {
-	case AnnotationListParamsDataSourceAll, AnnotationListParamsDataSourceAIBots, AnnotationListParamsDataSourceAIGateway, AnnotationListParamsDataSourceBGP, AnnotationListParamsDataSourceBots, AnnotationListParamsDataSourceConnectionAnomaly, AnnotationListParamsDataSourceCt, AnnotationListParamsDataSourceDNS, AnnotationListParamsDataSourceDNSMagnitude, AnnotationListParamsDataSourceDNSAS112, AnnotationListParamsDataSourceDos, AnnotationListParamsDataSourceEmailRouting, AnnotationListParamsDataSourceEmailSecurity, AnnotationListParamsDataSourceFw, AnnotationListParamsDataSourceFwPg, AnnotationListParamsDataSourceHTTP, AnnotationListParamsDataSourceHTTPControl, AnnotationListParamsDataSourceHTTPCrawlerReferer, AnnotationListParamsDataSourceHTTPOrigins, AnnotationListParamsDataSourceIQI, AnnotationListParamsDataSourceLeakedCredentials, AnnotationListParamsDataSourceNet, AnnotationListParamsDataSourceRobotsTXT, AnnotationListParamsDataSourceSpeed, AnnotationListParamsDataSourceWorkersAI:
+	case AnnotationListParamsDataSourceAll, AnnotationListParamsDataSourceAIBots, AnnotationListParamsDataSourceAIGateway, AnnotationListParamsDataSourceBGP, AnnotationListParamsDataSourceBots, AnnotationListParamsDataSourceConnectionAnomaly, AnnotationListParamsDataSourceCT, AnnotationListParamsDataSourceDNS, AnnotationListParamsDataSourceDNSMagnitude, AnnotationListParamsDataSourceDNSAS112, AnnotationListParamsDataSourceDos, AnnotationListParamsDataSourceEmailRouting, AnnotationListParamsDataSourceEmailSecurity, AnnotationListParamsDataSourceFw, AnnotationListParamsDataSourceFwPg, AnnotationListParamsDataSourceHTTP, AnnotationListParamsDataSourceHTTPControl, AnnotationListParamsDataSourceHTTPCrawlerReferer, AnnotationListParamsDataSourceHTTPOrigins, AnnotationListParamsDataSourceIQI, AnnotationListParamsDataSourceLeakedCredentials, AnnotationListParamsDataSourceNet, AnnotationListParamsDataSourceRobotsTXT, AnnotationListParamsDataSourceSpeed, AnnotationListParamsDataSourceWorkersAI:
 		return true
 	}
 	return false

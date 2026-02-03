@@ -18,28 +18,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-// CtLogService contains methods and other services that help with interacting with
+// CTLogService contains methods and other services that help with interacting with
 // the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewCtLogService] method instead.
-type CtLogService struct {
+// the [NewCTLogService] method instead.
+type CTLogService struct {
 	Options []option.RequestOption
 }
 
-// NewCtLogService generates a new service that applies the given options to each
+// NewCTLogService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewCtLogService(opts ...option.RequestOption) (r *CtLogService) {
-	r = &CtLogService{}
+func NewCTLogService(opts ...option.RequestOption) (r *CTLogService) {
+	r = &CTLogService{}
 	r.Options = opts
 	return
 }
 
 // Retrieves a list of certificate logs.
-func (r *CtLogService) List(ctx context.Context, query CtLogListParams, opts ...option.RequestOption) (res *CtLogListResponse, err error) {
-	var env CtLogListResponseEnvelope
+func (r *CTLogService) List(ctx context.Context, query CTLogListParams, opts ...option.RequestOption) (res *CTLogListResponse, err error) {
+	var env CTLogListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := "radar/ct/logs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -51,8 +51,8 @@ func (r *CtLogService) List(ctx context.Context, query CtLogListParams, opts ...
 }
 
 // Retrieves the requested certificate log information.
-func (r *CtLogService) Get(ctx context.Context, logSlug string, query CtLogGetParams, opts ...option.RequestOption) (res *CtLogGetResponse, err error) {
-	var env CtLogGetResponseEnvelope
+func (r *CTLogService) Get(ctx context.Context, logSlug string, query CTLogGetParams, opts ...option.RequestOption) (res *CTLogGetResponse, err error) {
+	var env CTLogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if logSlug == "" {
 		err = errors.New("missing required log_slug parameter")
@@ -67,20 +67,20 @@ func (r *CtLogService) Get(ctx context.Context, logSlug string, query CtLogGetPa
 	return
 }
 
-type CtLogListResponse struct {
-	CertificateLogs []CtLogListResponseCertificateLog `json:"certificateLogs,required"`
+type CTLogListResponse struct {
+	CertificateLogs []CTLogListResponseCertificateLog `json:"certificateLogs,required"`
 	JSON            ctLogListResponseJSON             `json:"-"`
 }
 
 // ctLogListResponseJSON contains the JSON metadata for the struct
-// [CtLogListResponse]
+// [CTLogListResponse]
 type ctLogListResponseJSON struct {
 	CertificateLogs apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CtLogListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -88,9 +88,9 @@ func (r ctLogListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtLogListResponseCertificateLog struct {
+type CTLogListResponseCertificateLog struct {
 	// The API standard that the certificate log follows.
-	API CtLogListResponseCertificateLogsAPI `json:"api,required"`
+	API CTLogListResponseCertificateLogsAPI `json:"api,required"`
 	// A brief description of the certificate log.
 	Description string `json:"description,required"`
 	// The end date and time for when the log will stop accepting certificates.
@@ -104,7 +104,7 @@ type CtLogListResponseCertificateLog struct {
 	// The current state of the certificate log. More details about log states can be
 	// found here:
 	// https://googlechrome.github.io/CertificateTransparency/log_states.html
-	State CtLogListResponseCertificateLogsState `json:"state,required"`
+	State CTLogListResponseCertificateLogsState `json:"state,required"`
 	// Timestamp of when the log state was last updated.
 	StateTimestamp time.Time `json:"stateTimestamp,required" format:"date-time"`
 	// The URL for the certificate log.
@@ -113,7 +113,7 @@ type CtLogListResponseCertificateLog struct {
 }
 
 // ctLogListResponseCertificateLogJSON contains the JSON metadata for the struct
-// [CtLogListResponseCertificateLog]
+// [CTLogListResponseCertificateLog]
 type ctLogListResponseCertificateLogJSON struct {
 	API            apijson.Field
 	Description    apijson.Field
@@ -128,7 +128,7 @@ type ctLogListResponseCertificateLogJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *CtLogListResponseCertificateLog) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogListResponseCertificateLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -137,16 +137,16 @@ func (r ctLogListResponseCertificateLogJSON) RawJSON() string {
 }
 
 // The API standard that the certificate log follows.
-type CtLogListResponseCertificateLogsAPI string
+type CTLogListResponseCertificateLogsAPI string
 
 const (
-	CtLogListResponseCertificateLogsAPIRfc6962 CtLogListResponseCertificateLogsAPI = "RFC6962"
-	CtLogListResponseCertificateLogsAPIStatic  CtLogListResponseCertificateLogsAPI = "STATIC"
+	CTLogListResponseCertificateLogsAPIRfc6962 CTLogListResponseCertificateLogsAPI = "RFC6962"
+	CTLogListResponseCertificateLogsAPIStatic  CTLogListResponseCertificateLogsAPI = "STATIC"
 )
 
-func (r CtLogListResponseCertificateLogsAPI) IsKnown() bool {
+func (r CTLogListResponseCertificateLogsAPI) IsKnown() bool {
 	switch r {
-	case CtLogListResponseCertificateLogsAPIRfc6962, CtLogListResponseCertificateLogsAPIStatic:
+	case CTLogListResponseCertificateLogsAPIRfc6962, CTLogListResponseCertificateLogsAPIStatic:
 		return true
 	}
 	return false
@@ -155,39 +155,39 @@ func (r CtLogListResponseCertificateLogsAPI) IsKnown() bool {
 // The current state of the certificate log. More details about log states can be
 // found here:
 // https://googlechrome.github.io/CertificateTransparency/log_states.html
-type CtLogListResponseCertificateLogsState string
+type CTLogListResponseCertificateLogsState string
 
 const (
-	CtLogListResponseCertificateLogsStateUsable    CtLogListResponseCertificateLogsState = "USABLE"
-	CtLogListResponseCertificateLogsStatePending   CtLogListResponseCertificateLogsState = "PENDING"
-	CtLogListResponseCertificateLogsStateQualified CtLogListResponseCertificateLogsState = "QUALIFIED"
-	CtLogListResponseCertificateLogsStateReadOnly  CtLogListResponseCertificateLogsState = "READ_ONLY"
-	CtLogListResponseCertificateLogsStateRetired   CtLogListResponseCertificateLogsState = "RETIRED"
-	CtLogListResponseCertificateLogsStateRejected  CtLogListResponseCertificateLogsState = "REJECTED"
+	CTLogListResponseCertificateLogsStateUsable    CTLogListResponseCertificateLogsState = "USABLE"
+	CTLogListResponseCertificateLogsStatePending   CTLogListResponseCertificateLogsState = "PENDING"
+	CTLogListResponseCertificateLogsStateQualified CTLogListResponseCertificateLogsState = "QUALIFIED"
+	CTLogListResponseCertificateLogsStateReadOnly  CTLogListResponseCertificateLogsState = "READ_ONLY"
+	CTLogListResponseCertificateLogsStateRetired   CTLogListResponseCertificateLogsState = "RETIRED"
+	CTLogListResponseCertificateLogsStateRejected  CTLogListResponseCertificateLogsState = "REJECTED"
 )
 
-func (r CtLogListResponseCertificateLogsState) IsKnown() bool {
+func (r CTLogListResponseCertificateLogsState) IsKnown() bool {
 	switch r {
-	case CtLogListResponseCertificateLogsStateUsable, CtLogListResponseCertificateLogsStatePending, CtLogListResponseCertificateLogsStateQualified, CtLogListResponseCertificateLogsStateReadOnly, CtLogListResponseCertificateLogsStateRetired, CtLogListResponseCertificateLogsStateRejected:
+	case CTLogListResponseCertificateLogsStateUsable, CTLogListResponseCertificateLogsStatePending, CTLogListResponseCertificateLogsStateQualified, CTLogListResponseCertificateLogsStateReadOnly, CTLogListResponseCertificateLogsStateRetired, CTLogListResponseCertificateLogsStateRejected:
 		return true
 	}
 	return false
 }
 
-type CtLogGetResponse struct {
-	CertificateLog CtLogGetResponseCertificateLog `json:"certificateLog,required"`
+type CTLogGetResponse struct {
+	CertificateLog CTLogGetResponseCertificateLog `json:"certificateLog,required"`
 	JSON           ctLogGetResponseJSON           `json:"-"`
 }
 
 // ctLogGetResponseJSON contains the JSON metadata for the struct
-// [CtLogGetResponse]
+// [CTLogGetResponse]
 type ctLogGetResponseJSON struct {
 	CertificateLog apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *CtLogGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -195,9 +195,9 @@ func (r ctLogGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtLogGetResponseCertificateLog struct {
+type CTLogGetResponseCertificateLog struct {
 	// The API standard that the certificate log follows.
-	API CtLogGetResponseCertificateLogAPI `json:"api,required"`
+	API CTLogGetResponseCertificateLogAPI `json:"api,required"`
 	// The average throughput of the CT log, measured in certificates per hour
 	// (certs/hour).
 	AvgThroughput float64 `json:"avgThroughput,required"`
@@ -210,9 +210,9 @@ type CtLogGetResponseCertificateLog struct {
 	// The organization responsible for operating the certificate log.
 	Operator string `json:"operator,required"`
 	// Log performance metrics, including averages and per-endpoint details.
-	Performance CtLogGetResponseCertificateLogPerformance `json:"performance,required,nullable"`
+	Performance CTLogGetResponseCertificateLogPerformance `json:"performance,required,nullable"`
 	// Logs from the same operator.
-	Related []CtLogGetResponseCertificateLogRelated `json:"related,required"`
+	Related []CTLogGetResponseCertificateLogRelated `json:"related,required"`
 	// A URL-friendly, kebab-case identifier for the certificate log.
 	Slug string `json:"slug,required"`
 	// The start date and time for when the log starts accepting certificates.
@@ -220,7 +220,7 @@ type CtLogGetResponseCertificateLog struct {
 	// The current state of the certificate log. More details about log states can be
 	// found here:
 	// https://googlechrome.github.io/CertificateTransparency/log_states.html
-	State CtLogGetResponseCertificateLogState `json:"state,required"`
+	State CTLogGetResponseCertificateLogState `json:"state,required"`
 	// Timestamp of when the log state was last updated.
 	StateTimestamp time.Time `json:"stateTimestamp,required" format:"date-time"`
 	// Number of certificates that are eligible for inclusion to this log but have not
@@ -235,7 +235,7 @@ type CtLogGetResponseCertificateLog struct {
 }
 
 // ctLogGetResponseCertificateLogJSON contains the JSON metadata for the struct
-// [CtLogGetResponseCertificateLog]
+// [CTLogGetResponseCertificateLog]
 type ctLogGetResponseCertificateLogJSON struct {
 	API                  apijson.Field
 	AvgThroughput        apijson.Field
@@ -256,7 +256,7 @@ type ctLogGetResponseCertificateLogJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *CtLogGetResponseCertificateLog) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogGetResponseCertificateLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -265,31 +265,31 @@ func (r ctLogGetResponseCertificateLogJSON) RawJSON() string {
 }
 
 // The API standard that the certificate log follows.
-type CtLogGetResponseCertificateLogAPI string
+type CTLogGetResponseCertificateLogAPI string
 
 const (
-	CtLogGetResponseCertificateLogAPIRfc6962 CtLogGetResponseCertificateLogAPI = "RFC6962"
-	CtLogGetResponseCertificateLogAPIStatic  CtLogGetResponseCertificateLogAPI = "STATIC"
+	CTLogGetResponseCertificateLogAPIRfc6962 CTLogGetResponseCertificateLogAPI = "RFC6962"
+	CTLogGetResponseCertificateLogAPIStatic  CTLogGetResponseCertificateLogAPI = "STATIC"
 )
 
-func (r CtLogGetResponseCertificateLogAPI) IsKnown() bool {
+func (r CTLogGetResponseCertificateLogAPI) IsKnown() bool {
 	switch r {
-	case CtLogGetResponseCertificateLogAPIRfc6962, CtLogGetResponseCertificateLogAPIStatic:
+	case CTLogGetResponseCertificateLogAPIRfc6962, CTLogGetResponseCertificateLogAPIStatic:
 		return true
 	}
 	return false
 }
 
 // Log performance metrics, including averages and per-endpoint details.
-type CtLogGetResponseCertificateLogPerformance struct {
-	Endpoints    []CtLogGetResponseCertificateLogPerformanceEndpoint `json:"endpoints,required"`
+type CTLogGetResponseCertificateLogPerformance struct {
+	Endpoints    []CTLogGetResponseCertificateLogPerformanceEndpoint `json:"endpoints,required"`
 	ResponseTime float64                                             `json:"responseTime,required"`
 	Uptime       float64                                             `json:"uptime,required"`
 	JSON         ctLogGetResponseCertificateLogPerformanceJSON       `json:"-"`
 }
 
 // ctLogGetResponseCertificateLogPerformanceJSON contains the JSON metadata for the
-// struct [CtLogGetResponseCertificateLogPerformance]
+// struct [CTLogGetResponseCertificateLogPerformance]
 type ctLogGetResponseCertificateLogPerformanceJSON struct {
 	Endpoints    apijson.Field
 	ResponseTime apijson.Field
@@ -298,7 +298,7 @@ type ctLogGetResponseCertificateLogPerformanceJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *CtLogGetResponseCertificateLogPerformance) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogGetResponseCertificateLogPerformance) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -306,16 +306,16 @@ func (r ctLogGetResponseCertificateLogPerformanceJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtLogGetResponseCertificateLogPerformanceEndpoint struct {
+type CTLogGetResponseCertificateLogPerformanceEndpoint struct {
 	// The certificate log endpoint names used in performance metrics.
-	Endpoint     CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint `json:"endpoint,required"`
+	Endpoint     CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint `json:"endpoint,required"`
 	ResponseTime float64                                                    `json:"responseTime,required"`
 	Uptime       float64                                                    `json:"uptime,required"`
 	JSON         ctLogGetResponseCertificateLogPerformanceEndpointJSON      `json:"-"`
 }
 
 // ctLogGetResponseCertificateLogPerformanceEndpointJSON contains the JSON metadata
-// for the struct [CtLogGetResponseCertificateLogPerformanceEndpoint]
+// for the struct [CTLogGetResponseCertificateLogPerformanceEndpoint]
 type ctLogGetResponseCertificateLogPerformanceEndpointJSON struct {
 	Endpoint     apijson.Field
 	ResponseTime apijson.Field
@@ -324,7 +324,7 @@ type ctLogGetResponseCertificateLogPerformanceEndpointJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *CtLogGetResponseCertificateLogPerformanceEndpoint) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogGetResponseCertificateLogPerformanceEndpoint) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -333,27 +333,27 @@ func (r ctLogGetResponseCertificateLogPerformanceEndpointJSON) RawJSON() string 
 }
 
 // The certificate log endpoint names used in performance metrics.
-type CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint string
+type CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint string
 
 const (
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainNew    CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-chain (new)"
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainOld    CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-chain (old)"
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainNew CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-pre-chain (new)"
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainOld CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-pre-chain (old)"
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointGetEntries     CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "get-entries"
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointGetRoots       CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "get-roots"
-	CtLogGetResponseCertificateLogPerformanceEndpointsEndpointGetSth         CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "get-sth"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainNew    CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-chain (new)"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainOld    CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-chain (old)"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainNew CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-pre-chain (new)"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainOld CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "add-pre-chain (old)"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointGetEntries     CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "get-entries"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointGetRoots       CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "get-roots"
+	CTLogGetResponseCertificateLogPerformanceEndpointsEndpointGetSth         CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint = "get-sth"
 )
 
-func (r CtLogGetResponseCertificateLogPerformanceEndpointsEndpoint) IsKnown() bool {
+func (r CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint) IsKnown() bool {
 	switch r {
-	case CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainNew, CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainOld, CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainNew, CtLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainOld, CtLogGetResponseCertificateLogPerformanceEndpointsEndpointGetEntries, CtLogGetResponseCertificateLogPerformanceEndpointsEndpointGetRoots, CtLogGetResponseCertificateLogPerformanceEndpointsEndpointGetSth:
+	case CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainNew, CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddChainOld, CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainNew, CTLogGetResponseCertificateLogPerformanceEndpointsEndpointAddPreChainOld, CTLogGetResponseCertificateLogPerformanceEndpointsEndpointGetEntries, CTLogGetResponseCertificateLogPerformanceEndpointsEndpointGetRoots, CTLogGetResponseCertificateLogPerformanceEndpointsEndpointGetSth:
 		return true
 	}
 	return false
 }
 
-type CtLogGetResponseCertificateLogRelated struct {
+type CTLogGetResponseCertificateLogRelated struct {
 	// A brief description of the certificate log.
 	Description string `json:"description,required"`
 	// The end date and time for when the log will stop accepting certificates.
@@ -365,12 +365,12 @@ type CtLogGetResponseCertificateLogRelated struct {
 	// The current state of the certificate log. More details about log states can be
 	// found here:
 	// https://googlechrome.github.io/CertificateTransparency/log_states.html
-	State CtLogGetResponseCertificateLogRelatedState `json:"state,required"`
+	State CTLogGetResponseCertificateLogRelatedState `json:"state,required"`
 	JSON  ctLogGetResponseCertificateLogRelatedJSON  `json:"-"`
 }
 
 // ctLogGetResponseCertificateLogRelatedJSON contains the JSON metadata for the
-// struct [CtLogGetResponseCertificateLogRelated]
+// struct [CTLogGetResponseCertificateLogRelated]
 type ctLogGetResponseCertificateLogRelatedJSON struct {
 	Description    apijson.Field
 	EndExclusive   apijson.Field
@@ -381,7 +381,7 @@ type ctLogGetResponseCertificateLogRelatedJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *CtLogGetResponseCertificateLogRelated) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogGetResponseCertificateLogRelated) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -392,20 +392,20 @@ func (r ctLogGetResponseCertificateLogRelatedJSON) RawJSON() string {
 // The current state of the certificate log. More details about log states can be
 // found here:
 // https://googlechrome.github.io/CertificateTransparency/log_states.html
-type CtLogGetResponseCertificateLogRelatedState string
+type CTLogGetResponseCertificateLogRelatedState string
 
 const (
-	CtLogGetResponseCertificateLogRelatedStateUsable    CtLogGetResponseCertificateLogRelatedState = "USABLE"
-	CtLogGetResponseCertificateLogRelatedStatePending   CtLogGetResponseCertificateLogRelatedState = "PENDING"
-	CtLogGetResponseCertificateLogRelatedStateQualified CtLogGetResponseCertificateLogRelatedState = "QUALIFIED"
-	CtLogGetResponseCertificateLogRelatedStateReadOnly  CtLogGetResponseCertificateLogRelatedState = "READ_ONLY"
-	CtLogGetResponseCertificateLogRelatedStateRetired   CtLogGetResponseCertificateLogRelatedState = "RETIRED"
-	CtLogGetResponseCertificateLogRelatedStateRejected  CtLogGetResponseCertificateLogRelatedState = "REJECTED"
+	CTLogGetResponseCertificateLogRelatedStateUsable    CTLogGetResponseCertificateLogRelatedState = "USABLE"
+	CTLogGetResponseCertificateLogRelatedStatePending   CTLogGetResponseCertificateLogRelatedState = "PENDING"
+	CTLogGetResponseCertificateLogRelatedStateQualified CTLogGetResponseCertificateLogRelatedState = "QUALIFIED"
+	CTLogGetResponseCertificateLogRelatedStateReadOnly  CTLogGetResponseCertificateLogRelatedState = "READ_ONLY"
+	CTLogGetResponseCertificateLogRelatedStateRetired   CTLogGetResponseCertificateLogRelatedState = "RETIRED"
+	CTLogGetResponseCertificateLogRelatedStateRejected  CTLogGetResponseCertificateLogRelatedState = "REJECTED"
 )
 
-func (r CtLogGetResponseCertificateLogRelatedState) IsKnown() bool {
+func (r CTLogGetResponseCertificateLogRelatedState) IsKnown() bool {
 	switch r {
-	case CtLogGetResponseCertificateLogRelatedStateUsable, CtLogGetResponseCertificateLogRelatedStatePending, CtLogGetResponseCertificateLogRelatedStateQualified, CtLogGetResponseCertificateLogRelatedStateReadOnly, CtLogGetResponseCertificateLogRelatedStateRetired, CtLogGetResponseCertificateLogRelatedStateRejected:
+	case CTLogGetResponseCertificateLogRelatedStateUsable, CTLogGetResponseCertificateLogRelatedStatePending, CTLogGetResponseCertificateLogRelatedStateQualified, CTLogGetResponseCertificateLogRelatedStateReadOnly, CTLogGetResponseCertificateLogRelatedStateRetired, CTLogGetResponseCertificateLogRelatedStateRejected:
 		return true
 	}
 	return false
@@ -414,36 +414,36 @@ func (r CtLogGetResponseCertificateLogRelatedState) IsKnown() bool {
 // The current state of the certificate log. More details about log states can be
 // found here:
 // https://googlechrome.github.io/CertificateTransparency/log_states.html
-type CtLogGetResponseCertificateLogState string
+type CTLogGetResponseCertificateLogState string
 
 const (
-	CtLogGetResponseCertificateLogStateUsable    CtLogGetResponseCertificateLogState = "USABLE"
-	CtLogGetResponseCertificateLogStatePending   CtLogGetResponseCertificateLogState = "PENDING"
-	CtLogGetResponseCertificateLogStateQualified CtLogGetResponseCertificateLogState = "QUALIFIED"
-	CtLogGetResponseCertificateLogStateReadOnly  CtLogGetResponseCertificateLogState = "READ_ONLY"
-	CtLogGetResponseCertificateLogStateRetired   CtLogGetResponseCertificateLogState = "RETIRED"
-	CtLogGetResponseCertificateLogStateRejected  CtLogGetResponseCertificateLogState = "REJECTED"
+	CTLogGetResponseCertificateLogStateUsable    CTLogGetResponseCertificateLogState = "USABLE"
+	CTLogGetResponseCertificateLogStatePending   CTLogGetResponseCertificateLogState = "PENDING"
+	CTLogGetResponseCertificateLogStateQualified CTLogGetResponseCertificateLogState = "QUALIFIED"
+	CTLogGetResponseCertificateLogStateReadOnly  CTLogGetResponseCertificateLogState = "READ_ONLY"
+	CTLogGetResponseCertificateLogStateRetired   CTLogGetResponseCertificateLogState = "RETIRED"
+	CTLogGetResponseCertificateLogStateRejected  CTLogGetResponseCertificateLogState = "REJECTED"
 )
 
-func (r CtLogGetResponseCertificateLogState) IsKnown() bool {
+func (r CTLogGetResponseCertificateLogState) IsKnown() bool {
 	switch r {
-	case CtLogGetResponseCertificateLogStateUsable, CtLogGetResponseCertificateLogStatePending, CtLogGetResponseCertificateLogStateQualified, CtLogGetResponseCertificateLogStateReadOnly, CtLogGetResponseCertificateLogStateRetired, CtLogGetResponseCertificateLogStateRejected:
+	case CTLogGetResponseCertificateLogStateUsable, CTLogGetResponseCertificateLogStatePending, CTLogGetResponseCertificateLogStateQualified, CTLogGetResponseCertificateLogStateReadOnly, CTLogGetResponseCertificateLogStateRetired, CTLogGetResponseCertificateLogStateRejected:
 		return true
 	}
 	return false
 }
 
-type CtLogListParams struct {
+type CTLogListParams struct {
 	// Format in which results will be returned.
-	Format param.Field[CtLogListParamsFormat] `query:"format"`
+	Format param.Field[CTLogListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
 }
 
-// URLQuery serializes [CtLogListParams]'s query parameters as `url.Values`.
-func (r CtLogListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CTLogListParams]'s query parameters as `url.Values`.
+func (r CTLogListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -451,29 +451,29 @@ func (r CtLogListParams) URLQuery() (v url.Values) {
 }
 
 // Format in which results will be returned.
-type CtLogListParamsFormat string
+type CTLogListParamsFormat string
 
 const (
-	CtLogListParamsFormatJson CtLogListParamsFormat = "JSON"
-	CtLogListParamsFormatCsv  CtLogListParamsFormat = "CSV"
+	CTLogListParamsFormatJson CTLogListParamsFormat = "JSON"
+	CTLogListParamsFormatCsv  CTLogListParamsFormat = "CSV"
 )
 
-func (r CtLogListParamsFormat) IsKnown() bool {
+func (r CTLogListParamsFormat) IsKnown() bool {
 	switch r {
-	case CtLogListParamsFormatJson, CtLogListParamsFormatCsv:
+	case CTLogListParamsFormatJson, CTLogListParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtLogListResponseEnvelope struct {
-	Result  CtLogListResponse             `json:"result,required"`
+type CTLogListResponseEnvelope struct {
+	Result  CTLogListResponse             `json:"result,required"`
 	Success bool                          `json:"success,required"`
 	JSON    ctLogListResponseEnvelopeJSON `json:"-"`
 }
 
 // ctLogListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtLogListResponseEnvelope]
+// [CTLogListResponseEnvelope]
 type ctLogListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -481,7 +481,7 @@ type ctLogListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtLogListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -489,13 +489,13 @@ func (r ctLogListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CtLogGetParams struct {
+type CTLogGetParams struct {
 	// Format in which results will be returned.
-	Format param.Field[CtLogGetParamsFormat] `query:"format"`
+	Format param.Field[CTLogGetParamsFormat] `query:"format"`
 }
 
-// URLQuery serializes [CtLogGetParams]'s query parameters as `url.Values`.
-func (r CtLogGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CTLogGetParams]'s query parameters as `url.Values`.
+func (r CTLogGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -503,29 +503,29 @@ func (r CtLogGetParams) URLQuery() (v url.Values) {
 }
 
 // Format in which results will be returned.
-type CtLogGetParamsFormat string
+type CTLogGetParamsFormat string
 
 const (
-	CtLogGetParamsFormatJson CtLogGetParamsFormat = "JSON"
-	CtLogGetParamsFormatCsv  CtLogGetParamsFormat = "CSV"
+	CTLogGetParamsFormatJson CTLogGetParamsFormat = "JSON"
+	CTLogGetParamsFormatCsv  CTLogGetParamsFormat = "CSV"
 )
 
-func (r CtLogGetParamsFormat) IsKnown() bool {
+func (r CTLogGetParamsFormat) IsKnown() bool {
 	switch r {
-	case CtLogGetParamsFormatJson, CtLogGetParamsFormatCsv:
+	case CTLogGetParamsFormatJson, CTLogGetParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type CtLogGetResponseEnvelope struct {
-	Result  CtLogGetResponse             `json:"result,required"`
+type CTLogGetResponseEnvelope struct {
+	Result  CTLogGetResponse             `json:"result,required"`
 	Success bool                         `json:"success,required"`
 	JSON    ctLogGetResponseEnvelopeJSON `json:"-"`
 }
 
 // ctLogGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CtLogGetResponseEnvelope]
+// [CTLogGetResponseEnvelope]
 type ctLogGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
@@ -533,7 +533,7 @@ type ctLogGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CtLogGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CTLogGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

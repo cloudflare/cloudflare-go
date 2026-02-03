@@ -130,7 +130,7 @@ type Domain struct {
 	// Whether a particular TLD is currently supported by Cloudflare Registrar. Refer
 	// to [TLD Policies](https://www.cloudflare.com/tld-policies/) for a list of
 	// supported TLDs.
-	SupportedTld bool `json:"supported_tld"`
+	SupportedTLD bool `json:"supported_tld"`
 	// Statuses for domain transfers into Cloudflare Registrar.
 	TransferIn DomainTransferIn `json:"transfer_in"`
 	// Last updated.
@@ -149,7 +149,7 @@ type domainJSON struct {
 	Locked            apijson.Field
 	RegistrantContact apijson.Field
 	RegistryStatuses  apijson.Field
-	SupportedTld      apijson.Field
+	SupportedTLD      apijson.Field
 	TransferIn        apijson.Field
 	UpdatedAt         apijson.Field
 	raw               string

@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 )
 
-func TestNetflowSummaryWithOptionalParams(t *testing.T) {
+func TestNetFlowsSummaryWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,13 +28,13 @@ func TestNetflowSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Netflows.Summary(context.TODO(), radar.NetflowSummaryParams{
+	_, err := client.Radar.NetFlows.Summary(context.TODO(), radar.NetFlowsSummaryParams{
 		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.NetflowSummaryParamsFormatJson),
+		Format:    cloudflare.F(radar.NetFlowsSummaryParamsFormatJson),
 		GeoID:     cloudflare.F([]string{"string"}),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"main_series"}),
@@ -48,7 +48,7 @@ func TestNetflowSummaryWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestNetflowSummaryV2WithOptionalParams(t *testing.T) {
+func TestNetFlowsSummaryV2WithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -61,21 +61,21 @@ func TestNetflowSummaryV2WithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Netflows.SummaryV2(
+	_, err := client.Radar.NetFlows.SummaryV2(
 		context.TODO(),
-		radar.NetflowSummaryV2ParamsDimensionAdm1,
-		radar.NetflowSummaryV2Params{
+		radar.NetFlowsSummaryV2ParamsDimensionAdm1,
+		radar.NetFlowsSummaryV2Params{
 			ASN:           cloudflare.F([]string{"string"}),
 			Continent:     cloudflare.F([]string{"string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
-			Format:        cloudflare.F(radar.NetflowSummaryV2ParamsFormatJson),
+			Format:        cloudflare.F(radar.NetFlowsSummaryV2ParamsFormatJson),
 			GeoID:         cloudflare.F([]string{"string"}),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Product:       cloudflare.F([]radar.NetflowSummaryV2ParamsProduct{radar.NetflowSummaryV2ParamsProductHTTP}),
+			Product:       cloudflare.F([]radar.NetFlowsSummaryV2ParamsProduct{radar.NetFlowsSummaryV2ParamsProductHTTP}),
 		},
 	)
 	if err != nil {
@@ -87,7 +87,7 @@ func TestNetflowSummaryV2WithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
+func TestNetFlowsTimeseriesWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -100,19 +100,19 @@ func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Netflows.Timeseries(context.TODO(), radar.NetflowTimeseriesParams{
-		AggInterval:   cloudflare.F(radar.NetflowTimeseriesParamsAggInterval1h),
+	_, err := client.Radar.NetFlows.Timeseries(context.TODO(), radar.NetFlowsTimeseriesParams{
+		AggInterval:   cloudflare.F(radar.NetFlowsTimeseriesParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.NetflowTimeseriesParamsFormatJson),
+		Format:        cloudflare.F(radar.NetFlowsTimeseriesParamsFormatJson),
 		GeoID:         cloudflare.F([]string{"string"}),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Normalization: cloudflare.F(radar.NetflowTimeseriesParamsNormalizationMin0Max),
-		Product:       cloudflare.F([]radar.NetflowTimeseriesParamsProduct{radar.NetflowTimeseriesParamsProductHTTP}),
+		Normalization: cloudflare.F(radar.NetFlowsTimeseriesParamsNormalizationMin0Max),
+		Product:       cloudflare.F([]radar.NetFlowsTimeseriesParamsProduct{radar.NetFlowsTimeseriesParamsProductHTTP}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -123,7 +123,7 @@ func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestNetflowTimeseriesGroupsWithOptionalParams(t *testing.T) {
+func TestNetFlowsTimeseriesGroupsWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -136,23 +136,23 @@ func TestNetflowTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.Netflows.TimeseriesGroups(
+	_, err := client.Radar.NetFlows.TimeseriesGroups(
 		context.TODO(),
-		radar.NetflowTimeseriesGroupsParamsDimensionAdm1,
-		radar.NetflowTimeseriesGroupsParams{
-			AggInterval:   cloudflare.F(radar.NetflowTimeseriesGroupsParamsAggInterval1h),
+		radar.NetFlowsTimeseriesGroupsParamsDimensionAdm1,
+		radar.NetFlowsTimeseriesGroupsParams{
+			AggInterval:   cloudflare.F(radar.NetFlowsTimeseriesGroupsParamsAggInterval1h),
 			ASN:           cloudflare.F([]string{"string"}),
 			Continent:     cloudflare.F([]string{"string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
-			Format:        cloudflare.F(radar.NetflowTimeseriesGroupsParamsFormatJson),
+			Format:        cloudflare.F(radar.NetFlowsTimeseriesGroupsParamsFormatJson),
 			GeoID:         cloudflare.F([]string{"string"}),
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Normalization: cloudflare.F(radar.NetflowTimeseriesGroupsParamsNormalizationPercentage),
-			Product:       cloudflare.F([]radar.NetflowTimeseriesGroupsParamsProduct{radar.NetflowTimeseriesGroupsParamsProductHTTP}),
+			Normalization: cloudflare.F(radar.NetFlowsTimeseriesGroupsParamsNormalizationPercentage),
+			Product:       cloudflare.F([]radar.NetFlowsTimeseriesGroupsParamsProduct{radar.NetFlowsTimeseriesGroupsParamsProductHTTP}),
 		},
 	)
 	if err != nil {
