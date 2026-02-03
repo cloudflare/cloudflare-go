@@ -67,16 +67,16 @@ func (r *ToMarkdownService) SupportedAutoPaging(ctx context.Context, query ToMar
 }
 
 // Convert Files into Markdown
-func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, params ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
+func (r *ToMarkdownService) Transform(ctx context.Context, params ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", file), option.WithResponseInto(&raw)}, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/ai/tomarkdown", params.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,8 +89,8 @@ func (r *ToMarkdownService) Transform(ctx context.Context, file io.Reader, param
 }
 
 // Convert Files into Markdown
-func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, file io.Reader, params ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
-	return pagination.NewSinglePageAutoPager(r.Transform(ctx, file, params, opts...))
+func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, params ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
+	return pagination.NewSinglePageAutoPager(r.Transform(ctx, params, opts...))
 }
 
 type ToMarkdownSupportedResponse struct {
@@ -150,13 +150,14 @@ type ToMarkdownSupportedParams struct {
 }
 
 type ToMarkdownTransformParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]           `path:"account_id,required"`
+	File      ToMarkdownTransformParamsFile `json:"file,required"`
 }
 
 func (r ToMarkdownTransformParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRoot(r.File, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
@@ -166,4 +167,12 @@ func (r ToMarkdownTransformParams) MarshalMultipart() (data []byte, contentType 
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+type ToMarkdownTransformParamsFile struct {
+	Files param.Field[[]io.Reader] `json:"files,required" format:"binary"`
+}
+
+func (r ToMarkdownTransformParamsFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

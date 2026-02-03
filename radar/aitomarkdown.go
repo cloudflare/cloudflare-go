@@ -44,16 +44,16 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 // Deprecated: Use
 // [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
 // instead.
-func (r *AIToMarkdownService) New(ctx context.Context, body io.Reader, params AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
+func (r *AIToMarkdownService) New(ctx context.Context, params AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", body), option.WithResponseInto(&raw)}, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/ai/tomarkdown", params.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -70,8 +70,8 @@ func (r *AIToMarkdownService) New(ctx context.Context, body io.Reader, params AI
 // Deprecated: Use
 // [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
 // instead.
-func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, body io.Reader, params AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
-	return pagination.NewSinglePageAutoPager(r.New(ctx, body, params, opts...))
+func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, params AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
 type AIToMarkdownNewResponse struct {
@@ -104,7 +104,8 @@ func (r aiToMarkdownNewResponseJSON) RawJSON() string {
 }
 
 type AIToMarkdownNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Files     param.Field[[]io.Reader] `json:"files,required" format:"binary"`
 }
 
 func (r AIToMarkdownNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
