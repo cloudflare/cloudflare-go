@@ -55,11 +55,11 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 	return
 }
 
-// Delete tokens.
-func (r *TokenService) Update(ctx context.Context, id string, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
+// Update tokens.
+func (r *TokenService) Update(ctx context.Context, id string, params TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
 	var env TokenUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -67,8 +67,8 @@ func (r *TokenService) Update(ctx context.Context, id string, body TokenUpdatePa
 		err = errors.New("missing required id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", body.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", params.AccountID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -124,11 +124,11 @@ func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeletePa
 	return
 }
 
-// Delete tokens.
-func (r *TokenService) Read(ctx context.Context, id string, body TokenReadParams, opts ...option.RequestOption) (res *TokenReadResponse, err error) {
+// Read tokens.
+func (r *TokenService) Read(ctx context.Context, id string, query TokenReadParams, opts ...option.RequestOption) (res *TokenReadResponse, err error) {
 	var env TokenReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -136,8 +136,8 @@ func (r *TokenService) Read(ctx context.Context, id string, body TokenReadParams
 		err = errors.New("missing required id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", body.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", query.AccountID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -406,6 +406,13 @@ func (r tokenNewResponseEnvelopeJSON) RawJSON() string {
 
 type TokenUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	CfAPIID   param.Field[string] `json:"cf_api_id,required"`
+	CfAPIKey  param.Field[string] `json:"cf_api_key,required"`
+	Name      param.Field[string] `json:"name,required"`
+}
+
+func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type TokenUpdateResponseEnvelope struct {
