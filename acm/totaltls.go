@@ -35,8 +35,25 @@ func NewTotalTLSService(opts ...option.RequestOption) (r *TotalTLSService) {
 }
 
 // Set Total TLS Settings or disable the feature for a Zone.
-func (r *TotalTLSService) New(ctx context.Context, params TotalTLSNewParams, opts ...option.RequestOption) (res *TotalTLSNewResponse, err error) {
-	var env TotalTLSNewResponseEnvelope
+func (r *TotalTLSService) Update(ctx context.Context, params TotalTLSUpdateParams, opts ...option.RequestOption) (res *TotalTLSUpdateResponse, err error) {
+	var env TotalTLSUpdateResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/acm/total_tls", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Set Total TLS Settings or disable the feature for a Zone.
+func (r *TotalTLSService) Edit(ctx context.Context, params TotalTLSEditParams, opts ...option.RequestOption) (res *TotalTLSEditResponse, err error) {
+	var env TotalTLSEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -85,20 +102,20 @@ func (r CertificateAuthority) IsKnown() bool {
 	return false
 }
 
-type TotalTLSNewResponse struct {
+type TotalTLSUpdateResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
 	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
 	// The validity period in days for the certificates ordered via Total TLS.
-	ValidityPeriod TotalTLSNewResponseValidityPeriod `json:"validity_period"`
-	JSON           totalTLSNewResponseJSON           `json:"-"`
+	ValidityPeriod TotalTLSUpdateResponseValidityPeriod `json:"validity_period"`
+	JSON           totalTLSUpdateResponseJSON           `json:"-"`
 }
 
-// totalTLSNewResponseJSON contains the JSON metadata for the struct
-// [TotalTLSNewResponse]
-type totalTLSNewResponseJSON struct {
+// totalTLSUpdateResponseJSON contains the JSON metadata for the struct
+// [TotalTLSUpdateResponse]
+type totalTLSUpdateResponseJSON struct {
 	CertificateAuthority apijson.Field
 	Enabled              apijson.Field
 	ValidityPeriod       apijson.Field
@@ -106,24 +123,68 @@ type totalTLSNewResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *TotalTLSNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TotalTLSUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r totalTLSNewResponseJSON) RawJSON() string {
+func (r totalTLSUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The validity period in days for the certificates ordered via Total TLS.
-type TotalTLSNewResponseValidityPeriod int64
+type TotalTLSUpdateResponseValidityPeriod int64
 
 const (
-	TotalTLSNewResponseValidityPeriod90 TotalTLSNewResponseValidityPeriod = 90
+	TotalTLSUpdateResponseValidityPeriod90 TotalTLSUpdateResponseValidityPeriod = 90
 )
 
-func (r TotalTLSNewResponseValidityPeriod) IsKnown() bool {
+func (r TotalTLSUpdateResponseValidityPeriod) IsKnown() bool {
 	switch r {
-	case TotalTLSNewResponseValidityPeriod90:
+	case TotalTLSUpdateResponseValidityPeriod90:
+		return true
+	}
+	return false
+}
+
+type TotalTLSEditResponse struct {
+	// The Certificate Authority that Total TLS certificates will be issued through.
+	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
+	// If enabled, Total TLS will order a hostname specific TLS certificate for any
+	// proxied A, AAAA, or CNAME record in your zone.
+	Enabled bool `json:"enabled"`
+	// The validity period in days for the certificates ordered via Total TLS.
+	ValidityPeriod TotalTLSEditResponseValidityPeriod `json:"validity_period"`
+	JSON           totalTLSEditResponseJSON           `json:"-"`
+}
+
+// totalTLSEditResponseJSON contains the JSON metadata for the struct
+// [TotalTLSEditResponse]
+type totalTLSEditResponseJSON struct {
+	CertificateAuthority apijson.Field
+	Enabled              apijson.Field
+	ValidityPeriod       apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *TotalTLSEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The validity period in days for the certificates ordered via Total TLS.
+type TotalTLSEditResponseValidityPeriod int64
+
+const (
+	TotalTLSEditResponseValidityPeriod90 TotalTLSEditResponseValidityPeriod = 90
+)
+
+func (r TotalTLSEditResponseValidityPeriod) IsKnown() bool {
+	switch r {
+	case TotalTLSEditResponseValidityPeriod90:
 		return true
 	}
 	return false
@@ -173,7 +234,7 @@ func (r TotalTLSGetResponseValidityPeriod) IsKnown() bool {
 	return false
 }
 
-type TotalTLSNewParams struct {
+type TotalTLSUpdateParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
@@ -183,22 +244,22 @@ type TotalTLSNewParams struct {
 	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
 
-func (r TotalTLSNewParams) MarshalJSON() (data []byte, err error) {
+func (r TotalTLSUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TotalTLSNewResponseEnvelope struct {
-	Errors   []TotalTLSNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TotalTLSNewResponseEnvelopeMessages `json:"messages,required"`
+type TotalTLSUpdateResponseEnvelope struct {
+	Errors   []TotalTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TotalTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
-	Success TotalTLSNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  TotalTLSNewResponse                `json:"result"`
-	JSON    totalTLSNewResponseEnvelopeJSON    `json:"-"`
+	Success TotalTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  TotalTLSUpdateResponse                `json:"result"`
+	JSON    totalTLSUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// totalTLSNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TotalTLSNewResponseEnvelope]
-type totalTLSNewResponseEnvelopeJSON struct {
+// totalTLSUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [TotalTLSUpdateResponseEnvelope]
+type totalTLSUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -207,25 +268,25 @@ type totalTLSNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TotalTLSNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TotalTLSUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r totalTLSNewResponseEnvelopeJSON) RawJSON() string {
+func (r totalTLSUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TotalTLSNewResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
-	DocumentationURL string                                  `json:"documentation_url"`
-	Source           TotalTLSNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             totalTLSNewResponseEnvelopeErrorsJSON   `json:"-"`
+type TotalTLSUpdateResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           TotalTLSUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             totalTLSUpdateResponseEnvelopeErrorsJSON   `json:"-"`
 }
 
-// totalTLSNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TotalTLSNewResponseEnvelopeErrors]
-type totalTLSNewResponseEnvelopeErrorsJSON struct {
+// totalTLSUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [TotalTLSUpdateResponseEnvelopeErrors]
+type totalTLSUpdateResponseEnvelopeErrorsJSON struct {
 	Code             apijson.Field
 	Message          apijson.Field
 	DocumentationURL apijson.Field
@@ -234,46 +295,46 @@ type totalTLSNewResponseEnvelopeErrorsJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TotalTLSNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *TotalTLSUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r totalTLSNewResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r totalTLSUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type TotalTLSNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                      `json:"pointer"`
-	JSON    totalTLSNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+type TotalTLSUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    totalTLSUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
-// totalTLSNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [TotalTLSNewResponseEnvelopeErrorsSource]
-type totalTLSNewResponseEnvelopeErrorsSourceJSON struct {
+// totalTLSUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [TotalTLSUpdateResponseEnvelopeErrorsSource]
+type totalTLSUpdateResponseEnvelopeErrorsSourceJSON struct {
 	Pointer     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TotalTLSNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+func (r *TotalTLSUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r totalTLSNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+func (r totalTLSUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type TotalTLSNewResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
-	DocumentationURL string                                    `json:"documentation_url"`
-	Source           TotalTLSNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             totalTLSNewResponseEnvelopeMessagesJSON   `json:"-"`
+type TotalTLSUpdateResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           TotalTLSUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             totalTLSUpdateResponseEnvelopeMessagesJSON   `json:"-"`
 }
 
-// totalTLSNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TotalTLSNewResponseEnvelopeMessages]
-type totalTLSNewResponseEnvelopeMessagesJSON struct {
+// totalTLSUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [TotalTLSUpdateResponseEnvelopeMessages]
+type totalTLSUpdateResponseEnvelopeMessagesJSON struct {
 	Code             apijson.Field
 	Message          apijson.Field
 	DocumentationURL apijson.Field
@@ -282,45 +343,198 @@ type totalTLSNewResponseEnvelopeMessagesJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TotalTLSNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *TotalTLSUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r totalTLSNewResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r totalTLSUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-type TotalTLSNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                        `json:"pointer"`
-	JSON    totalTLSNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+type TotalTLSUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    totalTLSUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 
-// totalTLSNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [TotalTLSNewResponseEnvelopeMessagesSource]
-type totalTLSNewResponseEnvelopeMessagesSourceJSON struct {
+// totalTLSUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [TotalTLSUpdateResponseEnvelopeMessagesSource]
+type totalTLSUpdateResponseEnvelopeMessagesSourceJSON struct {
 	Pointer     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TotalTLSNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+func (r *TotalTLSUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r totalTLSNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+func (r totalTLSUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful.
-type TotalTLSNewResponseEnvelopeSuccess bool
+type TotalTLSUpdateResponseEnvelopeSuccess bool
 
 const (
-	TotalTLSNewResponseEnvelopeSuccessTrue TotalTLSNewResponseEnvelopeSuccess = true
+	TotalTLSUpdateResponseEnvelopeSuccessTrue TotalTLSUpdateResponseEnvelopeSuccess = true
 )
 
-func (r TotalTLSNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r TotalTLSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TotalTLSNewResponseEnvelopeSuccessTrue:
+	case TotalTLSUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type TotalTLSEditParams struct {
+	// Identifier.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// If enabled, Total TLS will order a hostname specific TLS certificate for any
+	// proxied A, AAAA, or CNAME record in your zone.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The Certificate Authority that Total TLS certificates will be issued through.
+	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
+}
+
+func (r TotalTLSEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type TotalTLSEditResponseEnvelope struct {
+	Errors   []TotalTLSEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TotalTLSEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success TotalTLSEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  TotalTLSEditResponse                `json:"result"`
+	JSON    totalTLSEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// totalTLSEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [TotalTLSEditResponseEnvelope]
+type totalTLSEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSEditResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           TotalTLSEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             totalTLSEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// totalTLSEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [TotalTLSEditResponseEnvelopeErrors]
+type totalTLSEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TotalTLSEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    totalTLSEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// totalTLSEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [TotalTLSEditResponseEnvelopeErrorsSource]
+type totalTLSEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSEditResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           TotalTLSEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             totalTLSEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// totalTLSEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [TotalTLSEditResponseEnvelopeMessages]
+type totalTLSEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TotalTLSEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    totalTLSEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// totalTLSEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [TotalTLSEditResponseEnvelopeMessagesSource]
+type totalTLSEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type TotalTLSEditResponseEnvelopeSuccess bool
+
+const (
+	TotalTLSEditResponseEnvelopeSuccessTrue TotalTLSEditResponseEnvelopeSuccess = true
+)
+
+func (r TotalTLSEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TotalTLSEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
