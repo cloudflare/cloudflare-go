@@ -138,6 +138,8 @@ type HostnameCertificateNewResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateNewResponseStatus `json:"status"`
+	// The time when the certificate was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateNewResponseJSON `json:"-"`
@@ -153,6 +155,7 @@ type hostnameCertificateNewResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
+	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -190,33 +193,39 @@ func (r HostnameCertificateNewResponseStatus) IsKnown() bool {
 type HostnameCertificateListResponse struct {
 	// Identifier.
 	ID string `json:"id"`
-	// Identifier.
-	CERTID string `json:"cert_id"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`
-	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
-	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
-	// The hostname on the origin for which the client certificate uploaded will be
-	// used.
-	Hostname string `json:"hostname"`
-	// The hostname certificate's private key.
-	PrivateKey string                              `json:"private_key"`
+	// The date when the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// The serial number on the uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the certificate or the association.
+	Status HostnameCertificateListResponseStatus `json:"status"`
+	// The time when the certificate was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The time when the certificate was uploaded.
+	UploadedOn time.Time                           `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateListResponseJSON `json:"-"`
-	AuthenticatedOriginPull
 }
 
 // hostnameCertificateListResponseJSON contains the JSON metadata for the struct
 // [HostnameCertificateListResponse]
 type hostnameCertificateListResponseJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Certificate apijson.Field
-	Enabled     apijson.Field
-	Hostname    apijson.Field
-	PrivateKey  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	Certificate  apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Status       apijson.Field
+	UpdatedAt    apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *HostnameCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -225,6 +234,27 @@ func (r *HostnameCertificateListResponse) UnmarshalJSON(data []byte) (err error)
 
 func (r hostnameCertificateListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Status of the certificate or the association.
+type HostnameCertificateListResponseStatus string
+
+const (
+	HostnameCertificateListResponseStatusInitializing       HostnameCertificateListResponseStatus = "initializing"
+	HostnameCertificateListResponseStatusPendingDeployment  HostnameCertificateListResponseStatus = "pending_deployment"
+	HostnameCertificateListResponseStatusPendingDeletion    HostnameCertificateListResponseStatus = "pending_deletion"
+	HostnameCertificateListResponseStatusActive             HostnameCertificateListResponseStatus = "active"
+	HostnameCertificateListResponseStatusDeleted            HostnameCertificateListResponseStatus = "deleted"
+	HostnameCertificateListResponseStatusDeploymentTimedOut HostnameCertificateListResponseStatus = "deployment_timed_out"
+	HostnameCertificateListResponseStatusDeletionTimedOut   HostnameCertificateListResponseStatus = "deletion_timed_out"
+)
+
+func (r HostnameCertificateListResponseStatus) IsKnown() bool {
+	switch r {
+	case HostnameCertificateListResponseStatusInitializing, HostnameCertificateListResponseStatusPendingDeployment, HostnameCertificateListResponseStatusPendingDeletion, HostnameCertificateListResponseStatusActive, HostnameCertificateListResponseStatusDeleted, HostnameCertificateListResponseStatusDeploymentTimedOut, HostnameCertificateListResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
 }
 
 type HostnameCertificateDeleteResponse struct {
@@ -242,6 +272,8 @@ type HostnameCertificateDeleteResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateDeleteResponseStatus `json:"status"`
+	// The time when the certificate was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                             `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateDeleteResponseJSON `json:"-"`
@@ -257,6 +289,7 @@ type hostnameCertificateDeleteResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
+	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -306,6 +339,8 @@ type HostnameCertificateGetResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateGetResponseStatus `json:"status"`
+	// The time when the certificate was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateGetResponseJSON `json:"-"`
@@ -321,6 +356,7 @@ type hostnameCertificateGetResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
+	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
