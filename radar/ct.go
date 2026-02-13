@@ -69,8 +69,8 @@ func (r *CTService) Timeseries(ctx context.Context, query CTTimeseriesParams, op
 	return
 }
 
-// Retrieves the distribution of certificates grouped by chosen the specified
-// dimension over time.
+// Retrieves the distribution of certificates grouped by the specified dimension
+// over time.
 func (r *CTService) TimeseriesGroups(ctx context.Context, dimension CTTimeseriesGroupsParamsDimension, query CTTimeseriesGroupsParams, opts ...option.RequestOption) (res *CTTimeseriesGroupsResponse, err error) {
 	var env CTTimeseriesGroupsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

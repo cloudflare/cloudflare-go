@@ -83,7 +83,7 @@ func (r *NetFlowsService) Timeseries(ctx context.Context, query NetFlowsTimeseri
 	return
 }
 
-// Retrieves the distribution of NetFlows traffic, grouped by chosen the specified
+// Retrieves the distribution of NetFlows traffic, grouped by the specified
 // dimension over time.
 func (r *NetFlowsService) TimeseriesGroups(ctx context.Context, dimension NetFlowsTimeseriesGroupsParamsDimension, query NetFlowsTimeseriesGroupsParams, opts ...option.RequestOption) (res *NetFlowsTimeseriesGroupsResponse, err error) {
 	var env NetFlowsTimeseriesGroupsResponseEnvelope

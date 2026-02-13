@@ -94,7 +94,7 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, params SnippetListP
 }
 
 // Deletes a snippet belonging to the zone.
-func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *SnippetDeleteResponse, err error) {
 	var env SnippetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -135,13 +135,13 @@ func (r *SnippetService) Get(ctx context.Context, snippetName string, query Snip
 	return
 }
 
-// A result.
+// Contain the response result.
 type SnippetUpdateResponse struct {
-	// The timestamp of when the snippet was created.
+	// Indicates when the snippet was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The identifying name of the snippet.
+	// Identify the snippet.
 	SnippetName string `json:"snippet_name,required"`
-	// The timestamp of when the snippet was last modified.
+	// Indicates when the snippet was last modified.
 	ModifiedOn time.Time                 `json:"modified_on" format:"date-time"`
 	JSON       snippetUpdateResponseJSON `json:"-"`
 }
@@ -164,13 +164,13 @@ func (r snippetUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A snippet object.
+// Define a snippet.
 type SnippetListResponse struct {
-	// The timestamp of when the snippet was created.
+	// Indicates when the snippet was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The identifying name of the snippet.
+	// Identify the snippet.
 	SnippetName string `json:"snippet_name,required"`
-	// The timestamp of when the snippet was last modified.
+	// Indicates when the snippet was last modified.
 	ModifiedOn time.Time               `json:"modified_on" format:"date-time"`
 	JSON       snippetListResponseJSON `json:"-"`
 }
@@ -193,13 +193,15 @@ func (r snippetListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A result.
+type SnippetDeleteResponse = interface{}
+
+// Contain the response result.
 type SnippetGetResponse struct {
-	// The timestamp of when the snippet was created.
+	// Indicates when the snippet was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The identifying name of the snippet.
+	// Identify the snippet.
 	SnippetName string `json:"snippet_name,required"`
-	// The timestamp of when the snippet was last modified.
+	// Indicates when the snippet was last modified.
 	ModifiedOn time.Time              `json:"modified_on" format:"date-time"`
 	JSON       snippetGetResponseJSON `json:"-"`
 }
@@ -223,9 +225,9 @@ func (r snippetGetResponseJSON) RawJSON() string {
 }
 
 type SnippetUpdateParams struct {
-	// The unique ID of the zone.
+	// Use this field to specify the unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Metadata about the snippet.
+	// Provide metadata about the snippet.
 	Metadata param.Field[SnippetUpdateParamsMetadata] `json:"metadata,required"`
 }
 
@@ -244,9 +246,9 @@ func (r SnippetUpdateParams) MarshalMultipart() (data []byte, contentType string
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// Metadata about the snippet.
+// Provide metadata about the snippet.
 type SnippetUpdateParamsMetadata struct {
-	// Name of the file that contains the main module of the snippet.
+	// Specify the name of the file that contains the main module of the snippet.
 	MainModule param.Field[string] `json:"main_module,required"`
 }
 
@@ -254,15 +256,15 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A response object.
+// Return all API responses using this object.
 type SnippetUpdateResponseEnvelope struct {
-	// A list of error messages.
+	// Lists error messages.
 	Errors []SnippetUpdateResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
+	// Contain warning messages.
 	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
+	// Contain the response result.
 	Result SnippetUpdateResponse `json:"result,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success SnippetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -286,11 +288,11 @@ func (r snippetUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message.
+// Describes an API message.
 type SnippetUpdateResponseEnvelopeErrors struct {
-	// A text description of this message.
+	// Describes the message text.
 	Message string `json:"message,required"`
-	// A unique code for this message.
+	// Identify the message code.
 	Code int64                                   `json:"code"`
 	JSON snippetUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -312,11 +314,11 @@ func (r snippetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message.
+// Describes an API message.
 type SnippetUpdateResponseEnvelopeMessages struct {
-	// A text description of this message.
+	// Describes the message text.
 	Message string `json:"message,required"`
-	// A unique code for this message.
+	// Identify the message code.
 	Code int64                                     `json:"code"`
 	JSON snippetUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -338,7 +340,7 @@ func (r snippetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type SnippetUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -354,11 +356,11 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetListParams struct {
-	// The unique ID of the zone.
+	// Use this field to specify the unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The current page number.
+	// Specifies the current page number.
 	Page param.Field[int64] `query:"page"`
-	// The number of results to return per page.
+	// Specifies how many results to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 
@@ -371,19 +373,19 @@ func (r SnippetListParams) URLQuery() (v url.Values) {
 }
 
 type SnippetDeleteParams struct {
-	// The unique ID of the zone.
+	// Use this field to specify the unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-// A response object.
+// Return all API responses using this object.
 type SnippetDeleteResponseEnvelope struct {
-	// A list of error messages.
+	// Lists error messages.
 	Errors []SnippetDeleteResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
+	// Contain warning messages.
 	Messages []SnippetDeleteResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result string `json:"result,required,nullable"`
-	// Whether the API call was successful.
+	// Contain the response result.
+	Result SnippetDeleteResponse `json:"result,required,nullable"`
+	// Indicate whether the API call was successful.
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -407,11 +409,11 @@ func (r snippetDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message.
+// Describes an API message.
 type SnippetDeleteResponseEnvelopeErrors struct {
-	// A text description of this message.
+	// Describes the message text.
 	Message string `json:"message,required"`
-	// A unique code for this message.
+	// Identify the message code.
 	Code int64                                   `json:"code"`
 	JSON snippetDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -433,11 +435,11 @@ func (r snippetDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message.
+// Describes an API message.
 type SnippetDeleteResponseEnvelopeMessages struct {
-	// A text description of this message.
+	// Describes the message text.
 	Message string `json:"message,required"`
-	// A unique code for this message.
+	// Identify the message code.
 	Code int64                                     `json:"code"`
 	JSON snippetDeleteResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -459,7 +461,7 @@ func (r snippetDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type SnippetDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -475,19 +477,19 @@ func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetGetParams struct {
-	// The unique ID of the zone.
+	// Use this field to specify the unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-// A response object.
+// Return all API responses using this object.
 type SnippetGetResponseEnvelope struct {
-	// A list of error messages.
+	// Lists error messages.
 	Errors []SnippetGetResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
+	// Contain warning messages.
 	Messages []SnippetGetResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
+	// Contain the response result.
 	Result SnippetGetResponse `json:"result,required"`
-	// Whether the API call was successful.
+	// Indicate whether the API call was successful.
 	Success SnippetGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -511,11 +513,11 @@ func (r snippetGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message.
+// Describes an API message.
 type SnippetGetResponseEnvelopeErrors struct {
-	// A text description of this message.
+	// Describes the message text.
 	Message string `json:"message,required"`
-	// A unique code for this message.
+	// Identify the message code.
 	Code int64                                `json:"code"`
 	JSON snippetGetResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -537,11 +539,11 @@ func (r snippetGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message.
+// Describes an API message.
 type SnippetGetResponseEnvelopeMessages struct {
-	// A text description of this message.
+	// Describes the message text.
 	Message string `json:"message,required"`
-	// A unique code for this message.
+	// Identify the message code.
 	Code int64                                  `json:"code"`
 	JSON snippetGetResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -563,7 +565,7 @@ func (r snippetGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicate whether the API call was successful.
 type SnippetGetResponseEnvelopeSuccess bool
 
 const (

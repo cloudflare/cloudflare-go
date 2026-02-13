@@ -50,7 +50,7 @@ func (r *BotWebCrawlerService) Summary(ctx context.Context, dimension BotWebCraw
 	return
 }
 
-// Retrieves the distribution of HTTP requests from crawlers, grouped by chosen the
+// Retrieves the distribution of HTTP requests from crawlers, grouped by the
 // specified dimension over time.
 func (r *BotWebCrawlerService) TimeseriesGroups(ctx context.Context, dimension BotWebCrawlerTimeseriesGroupsParamsDimension, query BotWebCrawlerTimeseriesGroupsParams, opts ...option.RequestOption) (res *BotWebCrawlerTimeseriesGroupsResponse, err error) {
 	var env BotWebCrawlerTimeseriesGroupsResponseEnvelope

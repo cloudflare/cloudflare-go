@@ -98,6 +98,7 @@ type VersionListResponse struct {
 	ID         string                  `json:"id,required" format:"uuid"`
 	ClassName  string                  `json:"class_name,required"`
 	CreatedOn  time.Time               `json:"created_on,required" format:"date-time"`
+	HasDag     bool                    `json:"has_dag,required"`
 	ModifiedOn time.Time               `json:"modified_on,required" format:"date-time"`
 	WorkflowID string                  `json:"workflow_id,required" format:"uuid"`
 	JSON       versionListResponseJSON `json:"-"`
@@ -109,6 +110,7 @@ type versionListResponseJSON struct {
 	ID          apijson.Field
 	ClassName   apijson.Field
 	CreatedOn   apijson.Field
+	HasDag      apijson.Field
 	ModifiedOn  apijson.Field
 	WorkflowID  apijson.Field
 	raw         string
@@ -127,6 +129,7 @@ type VersionGetResponse struct {
 	ID         string                 `json:"id,required" format:"uuid"`
 	ClassName  string                 `json:"class_name,required"`
 	CreatedOn  time.Time              `json:"created_on,required" format:"date-time"`
+	HasDag     bool                   `json:"has_dag,required"`
 	ModifiedOn time.Time              `json:"modified_on,required" format:"date-time"`
 	WorkflowID string                 `json:"workflow_id,required" format:"uuid"`
 	JSON       versionGetResponseJSON `json:"-"`
@@ -138,6 +141,7 @@ type versionGetResponseJSON struct {
 	ID          apijson.Field
 	ClassName   apijson.Field
 	CreatedOn   apijson.Field
+	HasDag      apijson.Field
 	ModifiedOn  apijson.Field
 	WorkflowID  apijson.Field
 	raw         string

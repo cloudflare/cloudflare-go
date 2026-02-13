@@ -96,8 +96,8 @@ func (r *BotService) Timeseries(ctx context.Context, query BotTimeseriesParams, 
 	return
 }
 
-// Retrieves the distribution of HTTP requests from bots, grouped by chosen the
-// specified dimension over time.
+// Retrieves the distribution of HTTP requests from bots, grouped by the specified
+// dimension over time.
 func (r *BotService) TimeseriesGroups(ctx context.Context, dimension BotTimeseriesGroupsParamsDimension, query BotTimeseriesGroupsParams, opts ...option.RequestOption) (res *BotTimeseriesGroupsResponse, err error) {
 	var env BotTimeseriesGroupsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

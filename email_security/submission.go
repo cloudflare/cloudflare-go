@@ -178,7 +178,7 @@ func (r SubmissionListResponseRequestedDisposition) IsKnown() bool {
 type SubmissionListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The end of the search date range. Defaults to `now`.
+	// The end of the search date range. Defaults to `now` if not provided.
 	End                 param.Field[time.Time]                               `query:"end" format:"date-time"`
 	OriginalDisposition param.Field[SubmissionListParamsOriginalDisposition] `query:"original_disposition"`
 	OutcomeDisposition  param.Field[SubmissionListParamsOutcomeDisposition]  `query:"outcome_disposition"`
@@ -188,7 +188,8 @@ type SubmissionListParams struct {
 	PerPage              param.Field[int64]                                    `query:"per_page"`
 	Query                param.Field[string]                                   `query:"query"`
 	RequestedDisposition param.Field[SubmissionListParamsRequestedDisposition] `query:"requested_disposition"`
-	// The beginning of the search date range. Defaults to `now - 30 days`.
+	// The beginning of the search date range. Defaults to `now - 30 days` if not
+	// provided.
 	Start        param.Field[time.Time]                `query:"start" format:"date-time"`
 	Status       param.Field[string]                   `query:"status"`
 	SubmissionID param.Field[string]                   `query:"submission_id"`

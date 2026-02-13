@@ -972,6 +972,7 @@ type SuperSlurperJobNewParamsSource struct {
 	Vendor       param.Field[SuperSlurperJobNewParamsSourceVendor]       `json:"vendor,required"`
 	Endpoint     param.Field[string]                                     `json:"endpoint"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceJurisdiction] `json:"jurisdiction"`
+	Keys         param.Field[interface{}]                                `json:"keys"`
 	PathPrefix   param.Field[string]                                     `json:"pathPrefix"`
 	Region       param.Field[string]                                     `json:"region"`
 }
@@ -995,6 +996,7 @@ type SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema struct {
 	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret,required"`
 	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor,required"`
 	Endpoint   param.Field[string]                                                      `json:"endpoint"`
+	Keys       param.Field[[]string]                                                    `json:"keys"`
 	PathPrefix param.Field[string]                                                      `json:"pathPrefix"`
 	Region     param.Field[string]                                                      `json:"region"`
 }
@@ -1033,6 +1035,7 @@ type SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchema struct {
 	Bucket     param.Field[string]                                                       `json:"bucket,required"`
 	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret] `json:"secret,required"`
 	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor] `json:"vendor,required"`
+	Keys       param.Field[[]string]                                                     `json:"keys"`
 	PathPrefix param.Field[string]                                                       `json:"pathPrefix"`
 }
 
@@ -1071,6 +1074,7 @@ type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema struct {
 	Secret       param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret]       `json:"secret,required"`
 	Vendor       param.Field[Provider]                                                          `json:"vendor,required"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdiction] `json:"jurisdiction"`
+	Keys         param.Field[[]string]                                                          `json:"keys"`
 	PathPrefix   param.Field[string]                                                            `json:"pathPrefix"`
 }
 

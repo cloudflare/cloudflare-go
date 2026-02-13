@@ -152,9 +152,10 @@ type DLPEntryPredefinedNewResponse struct {
 	Confidence DLPEntryPredefinedNewResponseConfidence `json:"confidence,required"`
 	Enabled    bool                                    `json:"enabled,required"`
 	Name       string                                  `json:"name,required"`
-	ProfileID  string                                  `json:"profile_id,nullable" format:"uuid"`
-	Variant    DLPEntryPredefinedNewResponseVariant    `json:"variant"`
-	JSON       dlpEntryPredefinedNewResponseJSON       `json:"-"`
+	// Deprecated: deprecated
+	ProfileID string                               `json:"profile_id,nullable" format:"uuid"`
+	Variant   DLPEntryPredefinedNewResponseVariant `json:"variant"`
+	JSON      dlpEntryPredefinedNewResponseJSON    `json:"-"`
 }
 
 // dlpEntryPredefinedNewResponseJSON contains the JSON metadata for the struct
@@ -263,9 +264,10 @@ type DLPEntryPredefinedUpdateResponse struct {
 	Confidence DLPEntryPredefinedUpdateResponseConfidence `json:"confidence,required"`
 	Enabled    bool                                       `json:"enabled,required"`
 	Name       string                                     `json:"name,required"`
-	ProfileID  string                                     `json:"profile_id,nullable" format:"uuid"`
-	Variant    DLPEntryPredefinedUpdateResponseVariant    `json:"variant"`
-	JSON       dlpEntryPredefinedUpdateResponseJSON       `json:"-"`
+	// Deprecated: deprecated
+	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
+	Variant   DLPEntryPredefinedUpdateResponseVariant `json:"variant"`
+	JSON      dlpEntryPredefinedUpdateResponseJSON    `json:"-"`
 }
 
 // dlpEntryPredefinedUpdateResponseJSON contains the JSON metadata for the struct
@@ -370,7 +372,8 @@ func (r DLPEntryPredefinedUpdateResponseVariantType) IsKnown() bool {
 }
 
 type DLPEntryPredefinedListResponse struct {
-	ID      string                             `json:"id,required" format:"uuid"`
+	ID string `json:"id,required" format:"uuid"`
+	// Deprecated: deprecated
 	Enabled bool                               `json:"enabled,required"`
 	Name    string                             `json:"name,required"`
 	Type    DLPEntryPredefinedListResponseType `json:"type,required"`
@@ -379,9 +382,11 @@ type DLPEntryPredefinedListResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryPredefinedListResponsePredefinedEntryConfidence].
-	Confidence   interface{}                                `json:"confidence"`
-	CreatedAt    time.Time                                  `json:"created_at" format:"date-time"`
-	Pattern      Pattern                                    `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description,nullable"`
+	Pattern     Pattern     `json:"pattern"`
+	// Deprecated: deprecated
 	ProfileID    string                                     `json:"profile_id,nullable" format:"uuid"`
 	Secret       bool                                       `json:"secret"`
 	UpdatedAt    time.Time                                  `json:"updated_at" format:"date-time"`
@@ -405,6 +410,7 @@ type dlpEntryPredefinedListResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
 	Secret        apijson.Field
@@ -485,13 +491,16 @@ func init() {
 }
 
 type DLPEntryPredefinedListResponseCustomEntry struct {
-	ID           string                                                `json:"id,required" format:"uuid"`
-	CreatedAt    time.Time                                             `json:"created_at,required" format:"date-time"`
-	Enabled      bool                                                  `json:"enabled,required"`
-	Name         string                                                `json:"name,required"`
-	Pattern      Pattern                                               `json:"pattern,required"`
-	Type         DLPEntryPredefinedListResponseCustomEntryType         `json:"type,required"`
-	UpdatedAt    time.Time                                             `json:"updated_at,required" format:"date-time"`
+	ID        string    `json:"id,required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled     bool                                          `json:"enabled,required"`
+	Name        string                                        `json:"name,required"`
+	Pattern     Pattern                                       `json:"pattern,required"`
+	Type        DLPEntryPredefinedListResponseCustomEntryType `json:"type,required"`
+	UpdatedAt   time.Time                                     `json:"updated_at,required" format:"date-time"`
+	Description string                                        `json:"description,nullable"`
+	// Deprecated: deprecated
 	ProfileID    string                                                `json:"profile_id,nullable" format:"uuid"`
 	UploadStatus DLPEntryPredefinedListResponseCustomEntryUploadStatus `json:"upload_status"`
 	JSON         dlpEntryPredefinedListResponseCustomEntryJSON         `json:"-"`
@@ -507,6 +516,7 @@ type dlpEntryPredefinedListResponseCustomEntryJSON struct {
 	Pattern      apijson.Field
 	Type         apijson.Field
 	UpdatedAt    apijson.Field
+	Description  apijson.Field
 	ProfileID    apijson.Field
 	UploadStatus apijson.Field
 	raw          string
@@ -557,11 +567,12 @@ func (r DLPEntryPredefinedListResponseCustomEntryUploadStatus) IsKnown() bool {
 }
 
 type DLPEntryPredefinedListResponsePredefinedEntry struct {
-	ID           string                                                    `json:"id,required" format:"uuid"`
-	Confidence   DLPEntryPredefinedListResponsePredefinedEntryConfidence   `json:"confidence,required"`
-	Enabled      bool                                                      `json:"enabled,required"`
-	Name         string                                                    `json:"name,required"`
-	Type         DLPEntryPredefinedListResponsePredefinedEntryType         `json:"type,required"`
+	ID         string                                                  `json:"id,required" format:"uuid"`
+	Confidence DLPEntryPredefinedListResponsePredefinedEntryConfidence `json:"confidence,required"`
+	Enabled    bool                                                    `json:"enabled,required"`
+	Name       string                                                  `json:"name,required"`
+	Type       DLPEntryPredefinedListResponsePredefinedEntryType       `json:"type,required"`
+	// Deprecated: deprecated
 	ProfileID    string                                                    `json:"profile_id,nullable" format:"uuid"`
 	UploadStatus DLPEntryPredefinedListResponsePredefinedEntryUploadStatus `json:"upload_status"`
 	Variant      DLPEntryPredefinedListResponsePredefinedEntryVariant      `json:"variant"`
@@ -1033,7 +1044,8 @@ func (r DLPEntryPredefinedListResponseUploadStatus) IsKnown() bool {
 type DLPEntryPredefinedDeleteResponse = interface{}
 
 type DLPEntryPredefinedGetResponse struct {
-	ID      string                            `json:"id,required" format:"uuid"`
+	ID string `json:"id,required" format:"uuid"`
+	// Deprecated: deprecated
 	Enabled bool                              `json:"enabled,required"`
 	Name    string                            `json:"name,required"`
 	Type    DLPEntryPredefinedGetResponseType `json:"type,required"`
@@ -1042,10 +1054,12 @@ type DLPEntryPredefinedGetResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryPredefinedGetResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	Pattern    Pattern     `json:"pattern"`
-	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description,nullable"`
+	Pattern     Pattern     `json:"pattern"`
+	// Deprecated: deprecated
+	ProfileID string `json:"profile_id,nullable" format:"uuid"`
 	// This field can have the runtime type of
 	// [[]DLPEntryPredefinedGetResponseObjectProfile].
 	Profiles     interface{}                               `json:"profiles"`
@@ -1071,6 +1085,7 @@ type dlpEntryPredefinedGetResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
 	Profiles      apijson.Field
@@ -1147,13 +1162,16 @@ func init() {
 }
 
 type DLPEntryPredefinedGetResponseObject struct {
-	ID           string                                          `json:"id,required" format:"uuid"`
-	CreatedAt    time.Time                                       `json:"created_at,required" format:"date-time"`
-	Enabled      bool                                            `json:"enabled,required"`
-	Name         string                                          `json:"name,required"`
-	Pattern      Pattern                                         `json:"pattern,required"`
-	Type         DLPEntryPredefinedGetResponseObjectType         `json:"type,required"`
-	UpdatedAt    time.Time                                       `json:"updated_at,required" format:"date-time"`
+	ID        string    `json:"id,required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled     bool                                    `json:"enabled,required"`
+	Name        string                                  `json:"name,required"`
+	Pattern     Pattern                                 `json:"pattern,required"`
+	Type        DLPEntryPredefinedGetResponseObjectType `json:"type,required"`
+	UpdatedAt   time.Time                               `json:"updated_at,required" format:"date-time"`
+	Description string                                  `json:"description,nullable"`
+	// Deprecated: deprecated
 	ProfileID    string                                          `json:"profile_id,nullable" format:"uuid"`
 	Profiles     []DLPEntryPredefinedGetResponseObjectProfile    `json:"profiles"`
 	UploadStatus DLPEntryPredefinedGetResponseObjectUploadStatus `json:"upload_status"`
@@ -1170,6 +1188,7 @@ type dlpEntryPredefinedGetResponseObjectJSON struct {
 	Pattern      apijson.Field
 	Type         apijson.Field
 	UpdatedAt    apijson.Field
+	Description  apijson.Field
 	ProfileID    apijson.Field
 	Profiles     apijson.Field
 	UploadStatus apijson.Field

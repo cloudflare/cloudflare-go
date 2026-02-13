@@ -246,6 +246,8 @@ type CertificatePackNewResponse struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
+	// DCV Delegation records for domain validation.
+	DCVDelegationRecords []CertificatePackNewResponseDCVDelegationRecord `json:"dcv_delegation_records"`
 	// Identifier of the primary certificate in a pack.
 	PrimaryCertificate string `json:"primary_certificate"`
 	// Domain validation errors that have been received by the certificate authority
@@ -270,6 +272,7 @@ type certificatePackNewResponseJSON struct {
 	Type                 apijson.Field
 	CertificateAuthority apijson.Field
 	CloudflareBranding   apijson.Field
+	DCVDelegationRecords apijson.Field
 	PrimaryCertificate   apijson.Field
 	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
@@ -422,6 +425,54 @@ func (r CertificatePackNewResponseCertificateAuthority) IsKnown() bool {
 	return false
 }
 
+// Certificate's required validation record.
+type CertificatePackNewResponseDCVDelegationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                            `json:"txt_value"`
+	JSON     certificatePackNewResponseDCVDelegationRecordJSON `json:"-"`
+}
+
+// certificatePackNewResponseDCVDelegationRecordJSON contains the JSON metadata for
+// the struct [CertificatePackNewResponseDCVDelegationRecord]
+type certificatePackNewResponseDCVDelegationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	Status      apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponseDCVDelegationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseDCVDelegationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificatePackNewResponseValidationError struct {
 	// A domain validation error.
 	Message string                                        `json:"message"`
@@ -463,6 +514,10 @@ func (r CertificatePackNewResponseValidationMethod) IsKnown() bool {
 
 // Certificate's required validation record.
 type CertificatePackNewResponseValidationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
 	Emails []string `json:"emails"`
@@ -471,6 +526,8 @@ type CertificatePackNewResponseValidationRecord struct {
 	HTTPBody string `json:"http_body"`
 	// The url that will be checked during domain validation.
 	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
 	TXTName string `json:"txt_name"`
@@ -483,9 +540,12 @@ type CertificatePackNewResponseValidationRecord struct {
 // certificatePackNewResponseValidationRecordJSON contains the JSON metadata for
 // the struct [CertificatePackNewResponseValidationRecord]
 type certificatePackNewResponseValidationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
+	Status      apijson.Field
 	TXTName     apijson.Field
 	TXTValue    apijson.Field
 	raw         string
@@ -538,6 +598,8 @@ type CertificatePackListResponse struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
+	// DCV Delegation records for domain validation.
+	DCVDelegationRecords []CertificatePackListResponseDCVDelegationRecord `json:"dcv_delegation_records"`
 	// Identifier of the primary certificate in a pack.
 	PrimaryCertificate string `json:"primary_certificate"`
 	// Domain validation errors that have been received by the certificate authority
@@ -562,6 +624,7 @@ type certificatePackListResponseJSON struct {
 	Type                 apijson.Field
 	CertificateAuthority apijson.Field
 	CloudflareBranding   apijson.Field
+	DCVDelegationRecords apijson.Field
 	PrimaryCertificate   apijson.Field
 	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
@@ -714,6 +777,54 @@ func (r CertificatePackListResponseCertificateAuthority) IsKnown() bool {
 	return false
 }
 
+// Certificate's required validation record.
+type CertificatePackListResponseDCVDelegationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                             `json:"txt_value"`
+	JSON     certificatePackListResponseDCVDelegationRecordJSON `json:"-"`
+}
+
+// certificatePackListResponseDCVDelegationRecordJSON contains the JSON metadata
+// for the struct [CertificatePackListResponseDCVDelegationRecord]
+type certificatePackListResponseDCVDelegationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	Status      apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackListResponseDCVDelegationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackListResponseDCVDelegationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificatePackListResponseValidationError struct {
 	// A domain validation error.
 	Message string                                         `json:"message"`
@@ -755,6 +866,10 @@ func (r CertificatePackListResponseValidationMethod) IsKnown() bool {
 
 // Certificate's required validation record.
 type CertificatePackListResponseValidationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
 	Emails []string `json:"emails"`
@@ -763,6 +878,8 @@ type CertificatePackListResponseValidationRecord struct {
 	HTTPBody string `json:"http_body"`
 	// The url that will be checked during domain validation.
 	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
 	TXTName string `json:"txt_name"`
@@ -775,9 +892,12 @@ type CertificatePackListResponseValidationRecord struct {
 // certificatePackListResponseValidationRecordJSON contains the JSON metadata for
 // the struct [CertificatePackListResponseValidationRecord]
 type certificatePackListResponseValidationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
+	Status      apijson.Field
 	TXTName     apijson.Field
 	TXTValue    apijson.Field
 	raw         string
@@ -852,6 +972,8 @@ type CertificatePackEditResponse struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
+	// DCV Delegation records for domain validation.
+	DCVDelegationRecords []CertificatePackEditResponseDCVDelegationRecord `json:"dcv_delegation_records"`
 	// Identifier of the primary certificate in a pack.
 	PrimaryCertificate string `json:"primary_certificate"`
 	// Domain validation errors that have been received by the certificate authority
@@ -876,6 +998,7 @@ type certificatePackEditResponseJSON struct {
 	Type                 apijson.Field
 	CertificateAuthority apijson.Field
 	CloudflareBranding   apijson.Field
+	DCVDelegationRecords apijson.Field
 	PrimaryCertificate   apijson.Field
 	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
@@ -1028,6 +1151,54 @@ func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
 	return false
 }
 
+// Certificate's required validation record.
+type CertificatePackEditResponseDCVDelegationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                             `json:"txt_value"`
+	JSON     certificatePackEditResponseDCVDelegationRecordJSON `json:"-"`
+}
+
+// certificatePackEditResponseDCVDelegationRecordJSON contains the JSON metadata
+// for the struct [CertificatePackEditResponseDCVDelegationRecord]
+type certificatePackEditResponseDCVDelegationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	Status      apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackEditResponseDCVDelegationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackEditResponseDCVDelegationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificatePackEditResponseValidationError struct {
 	// A domain validation error.
 	Message string                                         `json:"message"`
@@ -1069,6 +1240,10 @@ func (r CertificatePackEditResponseValidationMethod) IsKnown() bool {
 
 // Certificate's required validation record.
 type CertificatePackEditResponseValidationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
 	Emails []string `json:"emails"`
@@ -1077,6 +1252,8 @@ type CertificatePackEditResponseValidationRecord struct {
 	HTTPBody string `json:"http_body"`
 	// The url that will be checked during domain validation.
 	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
 	TXTName string `json:"txt_name"`
@@ -1089,9 +1266,12 @@ type CertificatePackEditResponseValidationRecord struct {
 // certificatePackEditResponseValidationRecordJSON contains the JSON metadata for
 // the struct [CertificatePackEditResponseValidationRecord]
 type certificatePackEditResponseValidationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
+	Status      apijson.Field
 	TXTName     apijson.Field
 	TXTValue    apijson.Field
 	raw         string
@@ -1144,6 +1324,8 @@ type CertificatePackGetResponse struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
+	// DCV Delegation records for domain validation.
+	DCVDelegationRecords []CertificatePackGetResponseDCVDelegationRecord `json:"dcv_delegation_records"`
 	// Identifier of the primary certificate in a pack.
 	PrimaryCertificate string `json:"primary_certificate"`
 	// Domain validation errors that have been received by the certificate authority
@@ -1168,6 +1350,7 @@ type certificatePackGetResponseJSON struct {
 	Type                 apijson.Field
 	CertificateAuthority apijson.Field
 	CloudflareBranding   apijson.Field
+	DCVDelegationRecords apijson.Field
 	PrimaryCertificate   apijson.Field
 	ValidationErrors     apijson.Field
 	ValidationMethod     apijson.Field
@@ -1320,6 +1503,54 @@ func (r CertificatePackGetResponseCertificateAuthority) IsKnown() bool {
 	return false
 }
 
+// Certificate's required validation record.
+type CertificatePackGetResponseDCVDelegationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                            `json:"txt_value"`
+	JSON     certificatePackGetResponseDCVDelegationRecordJSON `json:"-"`
+}
+
+// certificatePackGetResponseDCVDelegationRecordJSON contains the JSON metadata for
+// the struct [CertificatePackGetResponseDCVDelegationRecord]
+type certificatePackGetResponseDCVDelegationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	Status      apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackGetResponseDCVDelegationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackGetResponseDCVDelegationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificatePackGetResponseValidationError struct {
 	// A domain validation error.
 	Message string                                        `json:"message"`
@@ -1361,6 +1592,10 @@ func (r CertificatePackGetResponseValidationMethod) IsKnown() bool {
 
 // Certificate's required validation record.
 type CertificatePackGetResponseValidationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
 	Emails []string `json:"emails"`
@@ -1369,6 +1604,8 @@ type CertificatePackGetResponseValidationRecord struct {
 	HTTPBody string `json:"http_body"`
 	// The url that will be checked during domain validation.
 	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
 	TXTName string `json:"txt_name"`
@@ -1381,9 +1618,12 @@ type CertificatePackGetResponseValidationRecord struct {
 // certificatePackGetResponseValidationRecordJSON contains the JSON metadata for
 // the struct [CertificatePackGetResponseValidationRecord]
 type certificatePackGetResponseValidationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
+	Status      apijson.Field
 	TXTName     apijson.Field
 	TXTValue    apijson.Field
 	raw         string

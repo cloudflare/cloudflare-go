@@ -71,7 +71,7 @@ func (r *AITimeseriesGroupService) Timeseries(ctx context.Context, query AITimes
 	return
 }
 
-// Retrieves the distribution of HTTP requests from AI bots, grouped by chosen the
+// Retrieves the distribution of HTTP requests from AI bots, grouped by the
 // specified dimension over time.
 //
 // Deprecated: Use
@@ -1234,6 +1234,8 @@ type AITimeseriesGroupSummaryParams struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by content type category.
+	ContentType param.Field[[]AITimeseriesGroupSummaryParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1262,6 +1264,8 @@ type AITimeseriesGroupSummaryParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by user agent.
+	UserAgent param.Field[[]string] `query:"userAgent"`
 	// Filters results by vertical.
 	Vertical param.Field[[]string] `query:"vertical"`
 }
@@ -1283,11 +1287,41 @@ const (
 	AITimeseriesGroupSummaryParamsDimensionCrawlPurpose AITimeseriesGroupSummaryParamsDimension = "CRAWL_PURPOSE"
 	AITimeseriesGroupSummaryParamsDimensionIndustry     AITimeseriesGroupSummaryParamsDimension = "INDUSTRY"
 	AITimeseriesGroupSummaryParamsDimensionVertical     AITimeseriesGroupSummaryParamsDimension = "VERTICAL"
+	AITimeseriesGroupSummaryParamsDimensionContentType  AITimeseriesGroupSummaryParamsDimension = "CONTENT_TYPE"
 )
 
 func (r AITimeseriesGroupSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case AITimeseriesGroupSummaryParamsDimensionUserAgent, AITimeseriesGroupSummaryParamsDimensionCrawlPurpose, AITimeseriesGroupSummaryParamsDimensionIndustry, AITimeseriesGroupSummaryParamsDimensionVertical:
+	case AITimeseriesGroupSummaryParamsDimensionUserAgent, AITimeseriesGroupSummaryParamsDimensionCrawlPurpose, AITimeseriesGroupSummaryParamsDimensionIndustry, AITimeseriesGroupSummaryParamsDimensionVertical, AITimeseriesGroupSummaryParamsDimensionContentType:
+		return true
+	}
+	return false
+}
+
+type AITimeseriesGroupSummaryParamsContentType string
+
+const (
+	AITimeseriesGroupSummaryParamsContentTypeHTML          AITimeseriesGroupSummaryParamsContentType = "HTML"
+	AITimeseriesGroupSummaryParamsContentTypeImages        AITimeseriesGroupSummaryParamsContentType = "IMAGES"
+	AITimeseriesGroupSummaryParamsContentTypeJson          AITimeseriesGroupSummaryParamsContentType = "JSON"
+	AITimeseriesGroupSummaryParamsContentTypeJavascript    AITimeseriesGroupSummaryParamsContentType = "JAVASCRIPT"
+	AITimeseriesGroupSummaryParamsContentTypeCSS           AITimeseriesGroupSummaryParamsContentType = "CSS"
+	AITimeseriesGroupSummaryParamsContentTypePlainText     AITimeseriesGroupSummaryParamsContentType = "PLAIN_TEXT"
+	AITimeseriesGroupSummaryParamsContentTypeFonts         AITimeseriesGroupSummaryParamsContentType = "FONTS"
+	AITimeseriesGroupSummaryParamsContentTypeXml           AITimeseriesGroupSummaryParamsContentType = "XML"
+	AITimeseriesGroupSummaryParamsContentTypeYaml          AITimeseriesGroupSummaryParamsContentType = "YAML"
+	AITimeseriesGroupSummaryParamsContentTypeVideo         AITimeseriesGroupSummaryParamsContentType = "VIDEO"
+	AITimeseriesGroupSummaryParamsContentTypeAudio         AITimeseriesGroupSummaryParamsContentType = "AUDIO"
+	AITimeseriesGroupSummaryParamsContentTypeMarkdown      AITimeseriesGroupSummaryParamsContentType = "MARKDOWN"
+	AITimeseriesGroupSummaryParamsContentTypeDocuments     AITimeseriesGroupSummaryParamsContentType = "DOCUMENTS"
+	AITimeseriesGroupSummaryParamsContentTypeBinary        AITimeseriesGroupSummaryParamsContentType = "BINARY"
+	AITimeseriesGroupSummaryParamsContentTypeSerialization AITimeseriesGroupSummaryParamsContentType = "SERIALIZATION"
+	AITimeseriesGroupSummaryParamsContentTypeOther         AITimeseriesGroupSummaryParamsContentType = "OTHER"
+)
+
+func (r AITimeseriesGroupSummaryParamsContentType) IsKnown() bool {
+	switch r {
+	case AITimeseriesGroupSummaryParamsContentTypeHTML, AITimeseriesGroupSummaryParamsContentTypeImages, AITimeseriesGroupSummaryParamsContentTypeJson, AITimeseriesGroupSummaryParamsContentTypeJavascript, AITimeseriesGroupSummaryParamsContentTypeCSS, AITimeseriesGroupSummaryParamsContentTypePlainText, AITimeseriesGroupSummaryParamsContentTypeFonts, AITimeseriesGroupSummaryParamsContentTypeXml, AITimeseriesGroupSummaryParamsContentTypeYaml, AITimeseriesGroupSummaryParamsContentTypeVideo, AITimeseriesGroupSummaryParamsContentTypeAudio, AITimeseriesGroupSummaryParamsContentTypeMarkdown, AITimeseriesGroupSummaryParamsContentTypeDocuments, AITimeseriesGroupSummaryParamsContentTypeBinary, AITimeseriesGroupSummaryParamsContentTypeSerialization, AITimeseriesGroupSummaryParamsContentTypeOther:
 		return true
 	}
 	return false
@@ -1342,6 +1376,8 @@ type AITimeseriesGroupTimeseriesParams struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by content type category.
+	ContentType param.Field[[]AITimeseriesGroupTimeseriesParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1405,6 +1441,35 @@ func (r AITimeseriesGroupTimeseriesParamsAggInterval) IsKnown() bool {
 	return false
 }
 
+type AITimeseriesGroupTimeseriesParamsContentType string
+
+const (
+	AITimeseriesGroupTimeseriesParamsContentTypeHTML          AITimeseriesGroupTimeseriesParamsContentType = "HTML"
+	AITimeseriesGroupTimeseriesParamsContentTypeImages        AITimeseriesGroupTimeseriesParamsContentType = "IMAGES"
+	AITimeseriesGroupTimeseriesParamsContentTypeJson          AITimeseriesGroupTimeseriesParamsContentType = "JSON"
+	AITimeseriesGroupTimeseriesParamsContentTypeJavascript    AITimeseriesGroupTimeseriesParamsContentType = "JAVASCRIPT"
+	AITimeseriesGroupTimeseriesParamsContentTypeCSS           AITimeseriesGroupTimeseriesParamsContentType = "CSS"
+	AITimeseriesGroupTimeseriesParamsContentTypePlainText     AITimeseriesGroupTimeseriesParamsContentType = "PLAIN_TEXT"
+	AITimeseriesGroupTimeseriesParamsContentTypeFonts         AITimeseriesGroupTimeseriesParamsContentType = "FONTS"
+	AITimeseriesGroupTimeseriesParamsContentTypeXml           AITimeseriesGroupTimeseriesParamsContentType = "XML"
+	AITimeseriesGroupTimeseriesParamsContentTypeYaml          AITimeseriesGroupTimeseriesParamsContentType = "YAML"
+	AITimeseriesGroupTimeseriesParamsContentTypeVideo         AITimeseriesGroupTimeseriesParamsContentType = "VIDEO"
+	AITimeseriesGroupTimeseriesParamsContentTypeAudio         AITimeseriesGroupTimeseriesParamsContentType = "AUDIO"
+	AITimeseriesGroupTimeseriesParamsContentTypeMarkdown      AITimeseriesGroupTimeseriesParamsContentType = "MARKDOWN"
+	AITimeseriesGroupTimeseriesParamsContentTypeDocuments     AITimeseriesGroupTimeseriesParamsContentType = "DOCUMENTS"
+	AITimeseriesGroupTimeseriesParamsContentTypeBinary        AITimeseriesGroupTimeseriesParamsContentType = "BINARY"
+	AITimeseriesGroupTimeseriesParamsContentTypeSerialization AITimeseriesGroupTimeseriesParamsContentType = "SERIALIZATION"
+	AITimeseriesGroupTimeseriesParamsContentTypeOther         AITimeseriesGroupTimeseriesParamsContentType = "OTHER"
+)
+
+func (r AITimeseriesGroupTimeseriesParamsContentType) IsKnown() bool {
+	switch r {
+	case AITimeseriesGroupTimeseriesParamsContentTypeHTML, AITimeseriesGroupTimeseriesParamsContentTypeImages, AITimeseriesGroupTimeseriesParamsContentTypeJson, AITimeseriesGroupTimeseriesParamsContentTypeJavascript, AITimeseriesGroupTimeseriesParamsContentTypeCSS, AITimeseriesGroupTimeseriesParamsContentTypePlainText, AITimeseriesGroupTimeseriesParamsContentTypeFonts, AITimeseriesGroupTimeseriesParamsContentTypeXml, AITimeseriesGroupTimeseriesParamsContentTypeYaml, AITimeseriesGroupTimeseriesParamsContentTypeVideo, AITimeseriesGroupTimeseriesParamsContentTypeAudio, AITimeseriesGroupTimeseriesParamsContentTypeMarkdown, AITimeseriesGroupTimeseriesParamsContentTypeDocuments, AITimeseriesGroupTimeseriesParamsContentTypeBinary, AITimeseriesGroupTimeseriesParamsContentTypeSerialization, AITimeseriesGroupTimeseriesParamsContentTypeOther:
+		return true
+	}
+	return false
+}
+
 // Format in which results will be returned.
 type AITimeseriesGroupTimeseriesParamsFormat string
 
@@ -1454,6 +1519,8 @@ type AITimeseriesGroupTimeseriesGroupsParams struct {
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
 	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by content type category.
+	ContentType param.Field[[]AITimeseriesGroupTimeseriesGroupsParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1485,6 +1552,8 @@ type AITimeseriesGroupTimeseriesGroupsParams struct {
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization param.Field[AITimeseriesGroupTimeseriesGroupsParamsNormalization] `query:"normalization"`
+	// Filters results by user agent.
+	UserAgent param.Field[[]string] `query:"userAgent"`
 	// Filters results by vertical.
 	Vertical param.Field[[]string] `query:"vertical"`
 }
@@ -1506,11 +1575,12 @@ const (
 	AITimeseriesGroupTimeseriesGroupsParamsDimensionCrawlPurpose AITimeseriesGroupTimeseriesGroupsParamsDimension = "CRAWL_PURPOSE"
 	AITimeseriesGroupTimeseriesGroupsParamsDimensionIndustry     AITimeseriesGroupTimeseriesGroupsParamsDimension = "INDUSTRY"
 	AITimeseriesGroupTimeseriesGroupsParamsDimensionVertical     AITimeseriesGroupTimeseriesGroupsParamsDimension = "VERTICAL"
+	AITimeseriesGroupTimeseriesGroupsParamsDimensionContentType  AITimeseriesGroupTimeseriesGroupsParamsDimension = "CONTENT_TYPE"
 )
 
 func (r AITimeseriesGroupTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case AITimeseriesGroupTimeseriesGroupsParamsDimensionUserAgent, AITimeseriesGroupTimeseriesGroupsParamsDimensionCrawlPurpose, AITimeseriesGroupTimeseriesGroupsParamsDimensionIndustry, AITimeseriesGroupTimeseriesGroupsParamsDimensionVertical:
+	case AITimeseriesGroupTimeseriesGroupsParamsDimensionUserAgent, AITimeseriesGroupTimeseriesGroupsParamsDimensionCrawlPurpose, AITimeseriesGroupTimeseriesGroupsParamsDimensionIndustry, AITimeseriesGroupTimeseriesGroupsParamsDimensionVertical, AITimeseriesGroupTimeseriesGroupsParamsDimensionContentType:
 		return true
 	}
 	return false
@@ -1531,6 +1601,35 @@ const (
 func (r AITimeseriesGroupTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AITimeseriesGroupTimeseriesGroupsParamsAggInterval15m, AITimeseriesGroupTimeseriesGroupsParamsAggInterval1h, AITimeseriesGroupTimeseriesGroupsParamsAggInterval1d, AITimeseriesGroupTimeseriesGroupsParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
+type AITimeseriesGroupTimeseriesGroupsParamsContentType string
+
+const (
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeHTML          AITimeseriesGroupTimeseriesGroupsParamsContentType = "HTML"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeImages        AITimeseriesGroupTimeseriesGroupsParamsContentType = "IMAGES"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeJson          AITimeseriesGroupTimeseriesGroupsParamsContentType = "JSON"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeJavascript    AITimeseriesGroupTimeseriesGroupsParamsContentType = "JAVASCRIPT"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeCSS           AITimeseriesGroupTimeseriesGroupsParamsContentType = "CSS"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypePlainText     AITimeseriesGroupTimeseriesGroupsParamsContentType = "PLAIN_TEXT"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeFonts         AITimeseriesGroupTimeseriesGroupsParamsContentType = "FONTS"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeXml           AITimeseriesGroupTimeseriesGroupsParamsContentType = "XML"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeYaml          AITimeseriesGroupTimeseriesGroupsParamsContentType = "YAML"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeVideo         AITimeseriesGroupTimeseriesGroupsParamsContentType = "VIDEO"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeAudio         AITimeseriesGroupTimeseriesGroupsParamsContentType = "AUDIO"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeMarkdown      AITimeseriesGroupTimeseriesGroupsParamsContentType = "MARKDOWN"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeDocuments     AITimeseriesGroupTimeseriesGroupsParamsContentType = "DOCUMENTS"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeBinary        AITimeseriesGroupTimeseriesGroupsParamsContentType = "BINARY"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeSerialization AITimeseriesGroupTimeseriesGroupsParamsContentType = "SERIALIZATION"
+	AITimeseriesGroupTimeseriesGroupsParamsContentTypeOther         AITimeseriesGroupTimeseriesGroupsParamsContentType = "OTHER"
+)
+
+func (r AITimeseriesGroupTimeseriesGroupsParamsContentType) IsKnown() bool {
+	switch r {
+	case AITimeseriesGroupTimeseriesGroupsParamsContentTypeHTML, AITimeseriesGroupTimeseriesGroupsParamsContentTypeImages, AITimeseriesGroupTimeseriesGroupsParamsContentTypeJson, AITimeseriesGroupTimeseriesGroupsParamsContentTypeJavascript, AITimeseriesGroupTimeseriesGroupsParamsContentTypeCSS, AITimeseriesGroupTimeseriesGroupsParamsContentTypePlainText, AITimeseriesGroupTimeseriesGroupsParamsContentTypeFonts, AITimeseriesGroupTimeseriesGroupsParamsContentTypeXml, AITimeseriesGroupTimeseriesGroupsParamsContentTypeYaml, AITimeseriesGroupTimeseriesGroupsParamsContentTypeVideo, AITimeseriesGroupTimeseriesGroupsParamsContentTypeAudio, AITimeseriesGroupTimeseriesGroupsParamsContentTypeMarkdown, AITimeseriesGroupTimeseriesGroupsParamsContentTypeDocuments, AITimeseriesGroupTimeseriesGroupsParamsContentTypeBinary, AITimeseriesGroupTimeseriesGroupsParamsContentTypeSerialization, AITimeseriesGroupTimeseriesGroupsParamsContentTypeOther:
 		return true
 	}
 	return false
@@ -1557,13 +1656,13 @@ func (r AITimeseriesGroupTimeseriesGroupsParamsFormat) IsKnown() bool {
 type AITimeseriesGroupTimeseriesGroupsParamsNormalization string
 
 const (
-	AITimeseriesGroupTimeseriesGroupsParamsNormalizationPercentageChange AITimeseriesGroupTimeseriesGroupsParamsNormalization = "PERCENTAGE_CHANGE"
-	AITimeseriesGroupTimeseriesGroupsParamsNormalizationMin0Max          AITimeseriesGroupTimeseriesGroupsParamsNormalization = "MIN0_MAX"
+	AITimeseriesGroupTimeseriesGroupsParamsNormalizationPercentage AITimeseriesGroupTimeseriesGroupsParamsNormalization = "PERCENTAGE"
+	AITimeseriesGroupTimeseriesGroupsParamsNormalizationMin0Max    AITimeseriesGroupTimeseriesGroupsParamsNormalization = "MIN0_MAX"
 )
 
 func (r AITimeseriesGroupTimeseriesGroupsParamsNormalization) IsKnown() bool {
 	switch r {
-	case AITimeseriesGroupTimeseriesGroupsParamsNormalizationPercentageChange, AITimeseriesGroupTimeseriesGroupsParamsNormalizationMin0Max:
+	case AITimeseriesGroupTimeseriesGroupsParamsNormalizationPercentage, AITimeseriesGroupTimeseriesGroupsParamsNormalizationMin0Max:
 		return true
 	}
 	return false

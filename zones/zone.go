@@ -179,7 +179,10 @@ type Zone struct {
 	Meta ZoneMeta `json:"meta,required"`
 	// When the zone was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The domain name.
+	// The domain name. Per
+	// [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the
+	// overall zone name can be up to 253 characters, with each segment ("label") not
+	// exceeding 63 characters.
 	Name string `json:"name,required"`
 	// The name servers Cloudflare assigns to a zone.
 	NameServers []string `json:"name_servers,required" format:"hostname"`
@@ -500,7 +503,10 @@ func (r zoneDeleteResponseJSON) RawJSON() string {
 
 type ZoneNewParams struct {
 	Account param.Field[ZoneNewParamsAccount] `json:"account,required"`
-	// The domain name.
+	// The domain name. Per
+	// [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the
+	// overall zone name can be up to 253 characters, with each segment ("label") not
+	// exceeding 63 characters.
 	Name param.Field[string] `json:"name,required"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup.

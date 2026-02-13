@@ -53,7 +53,78 @@ func (r *ModelSchemaService) Get(ctx context.Context, params ModelSchemaGetParam
 	return
 }
 
-type ModelSchemaGetResponse = interface{}
+type ModelSchemaGetResponse struct {
+	Input  ModelSchemaGetResponseInput  `json:"input,required"`
+	Output ModelSchemaGetResponseOutput `json:"output,required"`
+	JSON   modelSchemaGetResponseJSON   `json:"-"`
+}
+
+// modelSchemaGetResponseJSON contains the JSON metadata for the struct
+// [ModelSchemaGetResponse]
+type modelSchemaGetResponseJSON struct {
+	Input       apijson.Field
+	Output      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ModelSchemaGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r modelSchemaGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ModelSchemaGetResponseInput struct {
+	AdditionalProperties bool                            `json:"additionalProperties,required"`
+	Description          string                          `json:"description,required"`
+	Type                 string                          `json:"type,required"`
+	JSON                 modelSchemaGetResponseInputJSON `json:"-"`
+}
+
+// modelSchemaGetResponseInputJSON contains the JSON metadata for the struct
+// [ModelSchemaGetResponseInput]
+type modelSchemaGetResponseInputJSON struct {
+	AdditionalProperties apijson.Field
+	Description          apijson.Field
+	Type                 apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ModelSchemaGetResponseInput) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r modelSchemaGetResponseInputJSON) RawJSON() string {
+	return r.raw
+}
+
+type ModelSchemaGetResponseOutput struct {
+	AdditionalProperties bool                             `json:"additionalProperties,required"`
+	Description          string                           `json:"description,required"`
+	Type                 string                           `json:"type,required"`
+	JSON                 modelSchemaGetResponseOutputJSON `json:"-"`
+}
+
+// modelSchemaGetResponseOutputJSON contains the JSON metadata for the struct
+// [ModelSchemaGetResponseOutput]
+type modelSchemaGetResponseOutputJSON struct {
+	AdditionalProperties apijson.Field
+	Description          apijson.Field
+	Type                 apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ModelSchemaGetResponseOutput) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r modelSchemaGetResponseOutputJSON) RawJSON() string {
+	return r.raw
+}
 
 type ModelSchemaGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`

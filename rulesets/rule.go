@@ -6473,6 +6473,8 @@ type SetConfigRuleActionParameters struct {
 	Autominify SetConfigRuleActionParametersAutominify `json:"autominify"`
 	// Whether to enable Browser Integrity Check (BIC).
 	BIC bool `json:"bic"`
+	// Whether to enable content conversion (e.g., HTML to Markdown).
+	ContentConverter bool `json:"content_converter"`
 	// Whether to disable Cloudflare Apps.
 	//
 	// Deprecated: Cloudflare Apps are deprected.
@@ -6521,6 +6523,7 @@ type setConfigRuleActionParametersJSON struct {
 	AutomaticHTTPSRewrites  apijson.Field
 	Autominify              apijson.Field
 	BIC                     apijson.Field
+	ContentConverter        apijson.Field
 	DisableApps             apijson.Field
 	DisablePayPerCrawl      apijson.Field
 	DisableRUM              apijson.Field
@@ -6846,6 +6849,8 @@ type SetConfigRuleActionParametersParam struct {
 	Autominify param.Field[SetConfigRuleActionParametersAutominifyParam] `json:"autominify"`
 	// Whether to enable Browser Integrity Check (BIC).
 	BIC param.Field[bool] `json:"bic"`
+	// Whether to enable content conversion (e.g., HTML to Markdown).
+	ContentConverter param.Field[bool] `json:"content_converter"`
 	// Whether to disable Cloudflare Apps.
 	//
 	// Deprecated: Cloudflare Apps are deprected.

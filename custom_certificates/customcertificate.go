@@ -181,16 +181,14 @@ type CustomCertificate struct {
 	KeylessServer keyless_certificates.KeylessCertificate `json:"keyless_server"`
 	// When the certificate was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Specify the policy that determines the region where your private key will be
-	// held locally. HTTPS connections to any excluded data center will still be fully
-	// encrypted, but will incur some latency while Keyless SSL is used to complete the
-	// handshake with the nearest allowed data center. Any combination of countries,
-	// specified by their two letter country code
-	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
-	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
-	// the EU region. If there are too few data centers satisfying the policy, it will
-	// be rejected.
-	Policy string `json:"policy"`
+	// The policy restrictions returned by the API. This field is returned in responses
+	// when a policy has been set. The API accepts the "policy" field in requests but
+	// returns this field as "policy_restrictions" in responses.
+	//
+	// Specifies the region(s) where your private key can be held locally for optimal
+	// TLS performance. Format is a boolean expression, for example: "(country: US) or
+	// (region: EU)"
+	PolicyRestrictions string `json:"policy_restrictions"`
 	// The order/priority in which the certificate will be used in a request. The
 	// higher priority will break ties across overlapping 'legacy_custom' certificates,
 	// but 'legacy_custom' certificates will always supercede 'sni_custom'
@@ -208,22 +206,22 @@ type CustomCertificate struct {
 // customCertificateJSON contains the JSON metadata for the struct
 // [CustomCertificate]
 type customCertificateJSON struct {
-	ID              apijson.Field
-	ZoneID          apijson.Field
-	BundleMethod    apijson.Field
-	ExpiresOn       apijson.Field
-	GeoRestrictions apijson.Field
-	Hosts           apijson.Field
-	Issuer          apijson.Field
-	KeylessServer   apijson.Field
-	ModifiedOn      apijson.Field
-	Policy          apijson.Field
-	Priority        apijson.Field
-	Signature       apijson.Field
-	Status          apijson.Field
-	UploadedOn      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                 apijson.Field
+	ZoneID             apijson.Field
+	BundleMethod       apijson.Field
+	ExpiresOn          apijson.Field
+	GeoRestrictions    apijson.Field
+	Hosts              apijson.Field
+	Issuer             apijson.Field
+	KeylessServer      apijson.Field
+	ModifiedOn         apijson.Field
+	PolicyRestrictions apijson.Field
+	Priority           apijson.Field
+	Signature          apijson.Field
+	Status             apijson.Field
+	UploadedOn         apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *CustomCertificate) UnmarshalJSON(data []byte) (err error) {
@@ -364,6 +362,8 @@ type CustomCertificateNewParams struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+	// The environment to deploy the certificate to, defaults to production
+	Deploy param.Field[CustomCertificateNewParamsDeploy] `json:"deploy"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -380,7 +380,9 @@ type CustomCertificateNewParams struct {
 	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
-	// be rejected.
+	// be rejected. Note: The API accepts this field as either "policy" or
+	// "policy_restrictions" in requests. Responses return this field as
+	// "policy_restrictions". example: "(country: US) or (region: EU)"
 	Policy param.Field[string] `json:"policy"`
 	// The type 'legacy_custom' enables support for legacy clients which do not include
 	// SNI in the TLS handshake.
@@ -389,6 +391,22 @@ type CustomCertificateNewParams struct {
 
 func (r CustomCertificateNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The environment to deploy the certificate to, defaults to production
+type CustomCertificateNewParamsDeploy string
+
+const (
+	CustomCertificateNewParamsDeployStaging    CustomCertificateNewParamsDeploy = "staging"
+	CustomCertificateNewParamsDeployProduction CustomCertificateNewParamsDeploy = "production"
+)
+
+func (r CustomCertificateNewParamsDeploy) IsKnown() bool {
+	switch r {
+	case CustomCertificateNewParamsDeployStaging, CustomCertificateNewParamsDeployProduction:
+		return true
+	}
+	return false
 }
 
 // The type 'legacy_custom' enables support for legacy clients which do not include
@@ -750,15 +768,7 @@ func (r CustomCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomCertificateEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                  `path:"zone_id,required"`
-	Body   CustomCertificateEditParamsBodyUnion `json:"body,required"`
-}
-
-func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type CustomCertificateEditParamsBody struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -766,6 +776,8 @@ type CustomCertificateEditParamsBody struct {
 	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
+	// The environment to deploy the certificate to, defaults to production
+	Deploy param.Field[CustomCertificateEditParamsDeploy] `json:"deploy"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -782,75 +794,33 @@ type CustomCertificateEditParamsBody struct {
 	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
-	// be rejected.
+	// be rejected. Note: The API accepts this field as either "policy" or
+	// "policy_restrictions" in requests. Responses return this field as
+	// "policy_restrictions". example: "(country: US) or (region: EU)"
 	Policy param.Field[string] `json:"policy"`
 	// The zone's private key.
 	PrivateKey param.Field[string] `json:"private_key"`
 }
 
-func (r CustomCertificateEditParamsBody) MarshalJSON() (data []byte, err error) {
+func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CustomCertificateEditParamsBody) implementsCustomCertificateEditParamsBodyUnion() {}
+// The environment to deploy the certificate to, defaults to production
+type CustomCertificateEditParamsDeploy string
 
-// Satisfied by [custom_certificates.CustomCertificateEditParamsBodyBundleMethod],
-// [custom_certificates.CustomCertificateEditParamsBodyObject],
-// [CustomCertificateEditParamsBody].
-type CustomCertificateEditParamsBodyUnion interface {
-	implementsCustomCertificateEditParamsBodyUnion()
+const (
+	CustomCertificateEditParamsDeployStaging    CustomCertificateEditParamsDeploy = "staging"
+	CustomCertificateEditParamsDeployProduction CustomCertificateEditParamsDeploy = "production"
+)
+
+func (r CustomCertificateEditParamsDeploy) IsKnown() bool {
+	switch r {
+	case CustomCertificateEditParamsDeployStaging, CustomCertificateEditParamsDeployProduction:
+		return true
+	}
+	return false
 }
-
-type CustomCertificateEditParamsBodyBundleMethod struct {
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
-}
-
-func (r CustomCertificateEditParamsBodyBundleMethod) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CustomCertificateEditParamsBodyBundleMethod) implementsCustomCertificateEditParamsBodyUnion() {
-}
-
-type CustomCertificateEditParamsBodyObject struct {
-	// The zone's SSL certificate or certificate and the intermediate(s).
-	Certificate param.Field[string] `json:"certificate,required"`
-	// The zone's private key.
-	PrivateKey param.Field[string] `json:"private_key,required"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
-	// Specify the region where your private key can be held locally for optimal TLS
-	// performance. HTTPS connections to any excluded data center will still be fully
-	// encrypted, but will incur some latency while Keyless SSL is used to complete the
-	// handshake with the nearest allowed data center. Options allow distribution to
-	// only to U.S. data centers, only to E.U. data centers, or only to highest
-	// security data centers. Default distribution is to all Cloudflare datacenters,
-	// for optimal performance.
-	GeoRestrictions param.Field[GeoRestrictionsParam] `json:"geo_restrictions"`
-	// Specify the policy that determines the region where your private key will be
-	// held locally. HTTPS connections to any excluded data center will still be fully
-	// encrypted, but will incur some latency while Keyless SSL is used to complete the
-	// handshake with the nearest allowed data center. Any combination of countries,
-	// specified by their two letter country code
-	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
-	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
-	// the EU region. If there are too few data centers satisfying the policy, it will
-	// be rejected.
-	Policy param.Field[string] `json:"policy"`
-}
-
-func (r CustomCertificateEditParamsBodyObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CustomCertificateEditParamsBodyObject) implementsCustomCertificateEditParamsBodyUnion() {}
 
 type CustomCertificateEditResponseEnvelope struct {
 	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors,required"`

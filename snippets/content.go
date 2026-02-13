@@ -51,6 +51,6 @@ func (r *ContentService) Get(ctx context.Context, snippetName string, query Cont
 }
 
 type ContentGetParams struct {
-	// The unique ID of the zone.
+	// Use this field to specify the unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

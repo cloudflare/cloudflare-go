@@ -156,6 +156,7 @@ type SuperSlurperConnectivityPrecheckSourceParamsBody struct {
 	Vendor       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyVendor]       `json:"vendor,required"`
 	Endpoint     param.Field[string]                                                       `json:"endpoint"`
 	Jurisdiction param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdiction] `json:"jurisdiction"`
+	Keys         param.Field[interface{}]                                                  `json:"keys"`
 	PathPrefix   param.Field[string]                                                       `json:"pathPrefix"`
 	Region       param.Field[string]                                                       `json:"region"`
 }
@@ -181,6 +182,7 @@ type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema str
 	Secret     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret] `json:"secret,required"`
 	Vendor     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendor] `json:"vendor,required"`
 	Endpoint   param.Field[string]                                                                        `json:"endpoint"`
+	Keys       param.Field[[]string]                                                                      `json:"keys"`
 	PathPrefix param.Field[string]                                                                        `json:"pathPrefix"`
 	Region     param.Field[string]                                                                        `json:"region"`
 }
@@ -219,6 +221,7 @@ type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchema st
 	Bucket     param.Field[string]                                                                         `json:"bucket,required"`
 	Secret     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaSecret] `json:"secret,required"`
 	Vendor     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperGcsSourceSchemaVendor] `json:"vendor,required"`
+	Keys       param.Field[[]string]                                                                       `json:"keys"`
 	PathPrefix param.Field[string]                                                                         `json:"pathPrefix"`
 }
 
@@ -257,6 +260,7 @@ type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchema str
 	Secret       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaSecret]       `json:"secret,required"`
 	Vendor       param.Field[Provider]                                                                            `json:"vendor,required"`
 	Jurisdiction param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperR2SourceSchemaJurisdiction] `json:"jurisdiction"`
+	Keys         param.Field[[]string]                                                                            `json:"keys"`
 	PathPrefix   param.Field[string]                                                                              `json:"pathPrefix"`
 }
 

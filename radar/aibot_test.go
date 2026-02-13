@@ -33,6 +33,7 @@ func TestAIBotSummaryV2WithOptionalParams(t *testing.T) {
 		radar.AIBotSummaryV2ParamsDimensionUserAgent,
 		radar.AIBotSummaryV2Params{
 			ASN:           cloudflare.F([]string{"string"}),
+			ContentType:   cloudflare.F([]radar.AIBotSummaryV2ParamsContentType{radar.AIBotSummaryV2ParamsContentTypeHTML}),
 			Continent:     cloudflare.F([]string{"string"}),
 			CrawlPurpose:  cloudflare.F([]string{"string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -43,6 +44,7 @@ func TestAIBotSummaryV2WithOptionalParams(t *testing.T) {
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
+			UserAgent:     cloudflare.F([]string{"string"}),
 			Vertical:      cloudflare.F([]string{"string"}),
 		},
 	)
@@ -71,6 +73,7 @@ func TestAIBotTimeseriesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.AI.Bots.Timeseries(context.TODO(), radar.AIBotTimeseriesParams{
 		AggInterval:   cloudflare.F(radar.AIBotTimeseriesParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
+		ContentType:   cloudflare.F([]radar.AIBotTimeseriesParamsContentType{radar.AIBotTimeseriesParamsContentTypeHTML}),
 		Continent:     cloudflare.F([]string{"string"}),
 		CrawlPurpose:  cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -112,6 +115,7 @@ func TestAIBotTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		radar.AIBotTimeseriesGroupsParams{
 			AggInterval:   cloudflare.F(radar.AIBotTimeseriesGroupsParamsAggInterval1h),
 			ASN:           cloudflare.F([]string{"string"}),
+			ContentType:   cloudflare.F([]radar.AIBotTimeseriesGroupsParamsContentType{radar.AIBotTimeseriesGroupsParamsContentTypeHTML}),
 			Continent:     cloudflare.F([]string{"string"}),
 			CrawlPurpose:  cloudflare.F([]string{"string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -122,7 +126,8 @@ func TestAIBotTimeseriesGroupsWithOptionalParams(t *testing.T) {
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Normalization: cloudflare.F(radar.AIBotTimeseriesGroupsParamsNormalizationMin0Max),
+			Normalization: cloudflare.F(radar.AIBotTimeseriesGroupsParamsNormalizationPercentage),
+			UserAgent:     cloudflare.F([]string{"string"}),
 			Vertical:      cloudflare.F([]string{"string"}),
 		},
 	)

@@ -920,12 +920,36 @@ func (r AIRunParamsBodyTextGeneration) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextGenerationMessage struct {
 	// The content of the message as a string.
-	Content param.Field[string] `json:"content,required"`
+	Content param.Field[AIRunParamsBodyTextGenerationMessagesContentUnion] `json:"content,required"`
 	// The role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').
 	Role param.Field[string] `json:"role,required"`
 }
 
 func (r AIRunParamsBodyTextGenerationMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The content of the message as a string.
+//
+// Satisfied by [shared.UnionString],
+// [ai.AIRunParamsBodyTextGenerationMessagesContentArray].
+type AIRunParamsBodyTextGenerationMessagesContentUnion interface {
+	ImplementsAIRunParamsBodyTextGenerationMessagesContentUnion()
+}
+
+type AIRunParamsBodyTextGenerationMessagesContentArray []AIRunParamsBodyTextGenerationMessagesContentArrayItem
+
+func (r AIRunParamsBodyTextGenerationMessagesContentArray) ImplementsAIRunParamsBodyTextGenerationMessagesContentUnion() {
+}
+
+type AIRunParamsBodyTextGenerationMessagesContentArrayItem struct {
+	// Text content
+	Text param.Field[string] `json:"text"`
+	// Type of the content (text)
+	Type param.Field[string] `json:"type"`
+}
+
+func (r AIRunParamsBodyTextGenerationMessagesContentArrayItem) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

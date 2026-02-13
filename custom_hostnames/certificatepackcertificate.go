@@ -99,8 +99,7 @@ type CertificatePackCertificateUpdateResponse struct {
 	// Identifier.
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string                                      `json:"hostname,required"`
-	SSL      CertificatePackCertificateUpdateResponseSSL `json:"ssl,required"`
+	Hostname string `json:"hostname,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -120,6 +119,7 @@ type CertificatePackCertificateUpdateResponse struct {
 	// This presents the token to be served by the given http url to activate a
 	// hostname.
 	OwnershipVerificationHTTP CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	SSL                       CertificatePackCertificateUpdateResponseSSL                       `json:"ssl"`
 	// Status of the hostname's activation.
 	Status CertificatePackCertificateUpdateResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
@@ -132,13 +132,13 @@ type CertificatePackCertificateUpdateResponse struct {
 type certificatePackCertificateUpdateResponseJSON struct {
 	ID                        apijson.Field
 	Hostname                  apijson.Field
-	SSL                       apijson.Field
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
 	CustomOriginServer        apijson.Field
 	CustomOriginSNI           apijson.Field
 	OwnershipVerification     apijson.Field
 	OwnershipVerificationHTTP apijson.Field
+	SSL                       apijson.Field
 	Status                    apijson.Field
 	VerificationErrors        apijson.Field
 	raw                       string
@@ -150,6 +150,80 @@ func (r *CertificatePackCertificateUpdateResponse) UnmarshalJSON(data []byte) (e
 }
 
 func (r certificatePackCertificateUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// This is a record which can be placed to activate a hostname.
+type CertificatePackCertificateUpdateResponseOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type CertificatePackCertificateUpdateResponseOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                                            `json:"value"`
+	JSON  certificatePackCertificateUpdateResponseOwnershipVerificationJSON `json:"-"`
+}
+
+// certificatePackCertificateUpdateResponseOwnershipVerificationJSON contains the
+// JSON metadata for the struct
+// [CertificatePackCertificateUpdateResponseOwnershipVerification]
+type certificatePackCertificateUpdateResponseOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackCertificateUpdateResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackCertificateUpdateResponseOwnershipVerificationJSON) RawJSON() string {
+	return r.raw
+}
+
+// DNS Record type.
+type CertificatePackCertificateUpdateResponseOwnershipVerificationType string
+
+const (
+	CertificatePackCertificateUpdateResponseOwnershipVerificationTypeTXT CertificatePackCertificateUpdateResponseOwnershipVerificationType = "txt"
+)
+
+func (r CertificatePackCertificateUpdateResponseOwnershipVerificationType) IsKnown() bool {
+	switch r {
+	case CertificatePackCertificateUpdateResponseOwnershipVerificationTypeTXT:
+		return true
+	}
+	return false
+}
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                                `json:"http_url"`
+	JSON    certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON contains
+// the JSON metadata for the struct
+// [CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP]
+type certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -169,6 +243,8 @@ type CertificatePackCertificateUpdateResponseSSL struct {
 	CustomCsrID string `json:"custom_csr_id"`
 	// The key for a custom uploaded certificate.
 	CustomKey string `json:"custom_key"`
+	// DCV Delegation records for domain validation.
+	DCVDelegationRecords []CertificatePackCertificateUpdateResponseSsldcvDelegationRecord `json:"dcv_delegation_records"`
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
@@ -207,6 +283,7 @@ type certificatePackCertificateUpdateResponseSSLJSON struct {
 	CustomCertificate    apijson.Field
 	CustomCsrID          apijson.Field
 	CustomKey            apijson.Field
+	DCVDelegationRecords apijson.Field
 	ExpiresOn            apijson.Field
 	Hosts                apijson.Field
 	Issuer               apijson.Field
@@ -229,6 +306,54 @@ func (r *CertificatePackCertificateUpdateResponseSSL) UnmarshalJSON(data []byte)
 }
 
 func (r certificatePackCertificateUpdateResponseSSLJSON) RawJSON() string {
+	return r.raw
+}
+
+type CertificatePackCertificateUpdateResponseSsldcvDelegationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []string `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                                                             `json:"txt_value"`
+	JSON     certificatePackCertificateUpdateResponseSsldcvDelegationRecordJSON `json:"-"`
+}
+
+// certificatePackCertificateUpdateResponseSsldcvDelegationRecordJSON contains the
+// JSON metadata for the struct
+// [CertificatePackCertificateUpdateResponseSsldcvDelegationRecord]
+type certificatePackCertificateUpdateResponseSsldcvDelegationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	Status      apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackCertificateUpdateResponseSsldcvDelegationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackCertificateUpdateResponseSsldcvDelegationRecordJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -392,6 +517,10 @@ func (r certificatePackCertificateUpdateResponseSSLValidationErrorJSON) RawJSON(
 }
 
 type CertificatePackCertificateUpdateResponseSSLValidationRecord struct {
+	// The CNAME record hostname for DCV delegation.
+	CNAME string `json:"cname"`
+	// The CNAME record target value for DCV delegation.
+	CNAMETarget string `json:"cname_target"`
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
 	Emails []string `json:"emails"`
@@ -400,6 +529,8 @@ type CertificatePackCertificateUpdateResponseSSLValidationRecord struct {
 	HTTPBody string `json:"http_body"`
 	// The url that will be checked during domain validation.
 	HTTPURL string `json:"http_url"`
+	// Status of the validation record.
+	Status string `json:"status"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
 	TXTName string `json:"txt_name"`
@@ -413,9 +544,12 @@ type CertificatePackCertificateUpdateResponseSSLValidationRecord struct {
 // JSON metadata for the struct
 // [CertificatePackCertificateUpdateResponseSSLValidationRecord]
 type certificatePackCertificateUpdateResponseSSLValidationRecordJSON struct {
+	CNAME       apijson.Field
+	CNAMETarget apijson.Field
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
+	Status      apijson.Field
 	TXTName     apijson.Field
 	TXTValue    apijson.Field
 	raw         string
@@ -427,80 +561,6 @@ func (r *CertificatePackCertificateUpdateResponseSSLValidationRecord) UnmarshalJ
 }
 
 func (r certificatePackCertificateUpdateResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-// This is a record which can be placed to activate a hostname.
-type CertificatePackCertificateUpdateResponseOwnershipVerification struct {
-	// DNS Name for record.
-	Name string `json:"name"`
-	// DNS Record type.
-	Type CertificatePackCertificateUpdateResponseOwnershipVerificationType `json:"type"`
-	// Content for the record.
-	Value string                                                            `json:"value"`
-	JSON  certificatePackCertificateUpdateResponseOwnershipVerificationJSON `json:"-"`
-}
-
-// certificatePackCertificateUpdateResponseOwnershipVerificationJSON contains the
-// JSON metadata for the struct
-// [CertificatePackCertificateUpdateResponseOwnershipVerification]
-type certificatePackCertificateUpdateResponseOwnershipVerificationJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackCertificateUpdateResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackCertificateUpdateResponseOwnershipVerificationJSON) RawJSON() string {
-	return r.raw
-}
-
-// DNS Record type.
-type CertificatePackCertificateUpdateResponseOwnershipVerificationType string
-
-const (
-	CertificatePackCertificateUpdateResponseOwnershipVerificationTypeTXT CertificatePackCertificateUpdateResponseOwnershipVerificationType = "txt"
-)
-
-func (r CertificatePackCertificateUpdateResponseOwnershipVerificationType) IsKnown() bool {
-	switch r {
-	case CertificatePackCertificateUpdateResponseOwnershipVerificationTypeTXT:
-		return true
-	}
-	return false
-}
-
-// This presents the token to be served by the given http url to activate a
-// hostname.
-type CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP struct {
-	// Token to be served.
-	HTTPBody string `json:"http_body"`
-	// The HTTP URL that will be checked during custom hostname verification and where
-	// the customer should host the token.
-	HTTPURL string                                                                `json:"http_url"`
-	JSON    certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON `json:"-"`
-}
-
-// certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON contains
-// the JSON metadata for the struct
-// [CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP]
-type certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON struct {
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackCertificateUpdateResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackCertificateUpdateResponseOwnershipVerificationHTTPJSON) RawJSON() string {
 	return r.raw
 }
 

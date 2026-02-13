@@ -32,17 +32,17 @@ func TestConsumerNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.ConsumerNewParamsBodyMqWorkerConsumer{
-				DeadLetterQueue: cloudflare.F("example-queue"),
+			Body: queues.ConsumerNewParamsBodyMqWorkerConsumerRequest{
 				ScriptName:      cloudflare.F("my-consumer-worker"),
-				Settings: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerSettings{
+				Type:            cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerRequestTypeWorker),
+				DeadLetterQueue: cloudflare.F("example-queue"),
+				Settings: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerRequestSettings{
 					BatchSize:      cloudflare.F(50.000000),
 					MaxConcurrency: cloudflare.F(10.000000),
 					MaxRetries:     cloudflare.F(3.000000),
 					MaxWaitTimeMs:  cloudflare.F(5000.000000),
 					RetryDelay:     cloudflare.F(10.000000),
 				}),
-				Type: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerTypeWorker),
 			},
 		},
 	)
@@ -74,17 +74,17 @@ func TestConsumerUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.ConsumerUpdateParamsBodyMqWorkerConsumer{
-				DeadLetterQueue: cloudflare.F("example-queue"),
+			Body: queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequest{
 				ScriptName:      cloudflare.F("my-consumer-worker"),
-				Settings: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerSettings{
+				Type:            cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequestTypeWorker),
+				DeadLetterQueue: cloudflare.F("example-queue"),
+				Settings: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequestSettings{
 					BatchSize:      cloudflare.F(50.000000),
 					MaxConcurrency: cloudflare.F(10.000000),
 					MaxRetries:     cloudflare.F(3.000000),
 					MaxWaitTimeMs:  cloudflare.F(5000.000000),
 					RetryDelay:     cloudflare.F(10.000000),
 				}),
-				Type: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerTypeWorker),
 			},
 		},
 	)

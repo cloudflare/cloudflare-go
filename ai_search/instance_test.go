@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/r2"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 func TestInstanceNewWithOptionalParams(t *testing.T) {
@@ -57,7 +56,8 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			}),
 			Enabled: cloudflare.F(true),
 			Mcp: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsMcp{
-				Disabled: cloudflare.F(true),
+				Description: cloudflare.F("description"),
+				Disabled:    cloudflare.F(true),
 			}),
 			RateLimit: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParamsRateLimit{
 				PeriodMs:  cloudflare.F(int64(60000)),
@@ -150,7 +150,8 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Enabled: cloudflare.F(true),
 				Mcp: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsMcp{
-					Disabled: cloudflare.F(true),
+					Description: cloudflare.F("description"),
+					Disabled:    cloudflare.F(true),
 				}),
 				RateLimit: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParamsRateLimit{
 					PeriodMs:  cloudflare.F(int64(60000)),
@@ -297,14 +298,13 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 				}),
 				Retrieval: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrieval{
 					ContextExpansion: cloudflare.F(int64(0)),
-					Filters: cloudflare.F[ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersUnion](ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObject{
-						Key:   cloudflare.F("key"),
-						Type:  cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectTypeEq),
-						Value: cloudflare.F[ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFiltersObjectValueUnion](shared.UnionString("string")),
+					Filters: cloudflare.F(map[string]interface{}{
+						"foo": "bar",
 					}),
-					MatchThreshold: cloudflare.F(0.000000),
-					MaxNumResults:  cloudflare.F(int64(1)),
-					RetrievalType:  cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeVector),
+					MatchThreshold:  cloudflare.F(0.000000),
+					MaxNumResults:   cloudflare.F(int64(1)),
+					RetrievalType:   cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeVector),
+					ReturnOnFailure: cloudflare.F(true),
 				}),
 			}),
 			Model:  cloudflare.F(ai_search.InstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast),
@@ -384,14 +384,13 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 				}),
 				Retrieval: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrieval{
 					ContextExpansion: cloudflare.F(int64(0)),
-					Filters: cloudflare.F[ai_search.InstanceSearchParamsAISearchOptionsRetrievalFiltersUnion](ai_search.InstanceSearchParamsAISearchOptionsRetrievalFiltersObject{
-						Key:   cloudflare.F("key"),
-						Type:  cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectTypeEq),
-						Value: cloudflare.F[ai_search.InstanceSearchParamsAISearchOptionsRetrievalFiltersObjectValueUnion](shared.UnionString("string")),
+					Filters: cloudflare.F(map[string]interface{}{
+						"foo": "bar",
 					}),
-					MatchThreshold: cloudflare.F(0.000000),
-					MaxNumResults:  cloudflare.F(int64(1)),
-					RetrievalType:  cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeVector),
+					MatchThreshold:  cloudflare.F(0.000000),
+					MaxNumResults:   cloudflare.F(int64(1)),
+					RetrievalType:   cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeVector),
+					ReturnOnFailure: cloudflare.F(true),
 				}),
 			}),
 		},

@@ -35,7 +35,8 @@ func TestDLPEntryNewWithOptionalParams(t *testing.T) {
 			Regex:      cloudflare.F("regex"),
 			Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 		}),
-		ProfileID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+		Description: cloudflare.F("description"),
+		ProfileID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -71,8 +72,9 @@ func TestDLPEntryUpdateWithOptionalParams(t *testing.T) {
 					Regex:      cloudflare.F("regex"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
-				Type:    cloudflare.F(zero_trust.DLPEntryUpdateParamsBodyCustomTypeCustom),
-				Enabled: cloudflare.F(true),
+				Type:        cloudflare.F(zero_trust.DLPEntryUpdateParamsBodyCustomTypeCustom),
+				Description: cloudflare.F("description"),
+				Enabled:     cloudflare.F(true),
 			},
 		},
 	)

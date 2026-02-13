@@ -195,10 +195,13 @@ func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
 
 type MemberNewParamsBody struct {
 	// The contact email address of the user.
-	Email    param.Field[string]                    `json:"email,required"`
-	Policies param.Field[interface{}]               `json:"policies"`
-	Roles    param.Field[interface{}]               `json:"roles"`
-	Status   param.Field[MemberNewParamsBodyStatus] `json:"status"`
+	Email    param.Field[string]      `json:"email,required"`
+	Policies param.Field[interface{}] `json:"policies"`
+	Roles    param.Field[interface{}] `json:"roles"`
+	// Status of the member invitation. If not provided during creation, defaults to
+	// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
+	// of the member resource in Terraform.
+	Status param.Field[MemberNewParamsBodyStatus] `json:"status"`
 }
 
 func (r MemberNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -218,7 +221,10 @@ type MemberNewParamsBodyIAMCreateMemberWithRoles struct {
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
 	// Array of roles associated with this member.
-	Roles  param.Field[[]string]                                          `json:"roles,required"`
+	Roles param.Field[[]string] `json:"roles,required"`
+	// Status of the member invitation. If not provided during creation, defaults to
+	// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
+	// of the member resource in Terraform.
 	Status param.Field[MemberNewParamsBodyIAMCreateMemberWithRolesStatus] `json:"status"`
 }
 
@@ -228,6 +234,9 @@ func (r MemberNewParamsBodyIAMCreateMemberWithRoles) MarshalJSON() (data []byte,
 
 func (r MemberNewParamsBodyIAMCreateMemberWithRoles) implementsMemberNewParamsBodyUnion() {}
 
+// Status of the member invitation. If not provided during creation, defaults to
+// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
+// of the member resource in Terraform.
 type MemberNewParamsBodyIAMCreateMemberWithRolesStatus string
 
 const (
@@ -248,7 +257,10 @@ type MemberNewParamsBodyIAMCreateMemberWithPolicies struct {
 	Email param.Field[string] `json:"email,required"`
 	// Array of policies associated with this member.
 	Policies param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPolicy] `json:"policies,required"`
-	Status   param.Field[MemberNewParamsBodyIAMCreateMemberWithPoliciesStatus]   `json:"status"`
+	// Status of the member invitation. If not provided during creation, defaults to
+	// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
+	// of the member resource in Terraform.
+	Status param.Field[MemberNewParamsBodyIAMCreateMemberWithPoliciesStatus] `json:"status"`
 }
 
 func (r MemberNewParamsBodyIAMCreateMemberWithPolicies) MarshalJSON() (data []byte, err error) {
@@ -306,6 +318,9 @@ func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesResourceGroup) Mar
 	return apijson.MarshalRoot(r)
 }
 
+// Status of the member invitation. If not provided during creation, defaults to
+// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
+// of the member resource in Terraform.
 type MemberNewParamsBodyIAMCreateMemberWithPoliciesStatus string
 
 const (
@@ -321,6 +336,9 @@ func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesStatus) IsKnown() bool {
 	return false
 }
 
+// Status of the member invitation. If not provided during creation, defaults to
+// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
+// of the member resource in Terraform.
 type MemberNewParamsBodyStatus string
 
 const (

@@ -67,7 +67,7 @@ func (r *InvestigateMoveService) NewAutoPaging(ctx context.Context, postfixID st
 	return pagination.NewSinglePageAutoPager(r.New(ctx, postfixID, params, opts...))
 }
 
-// Maximum batch size: 100 messages per request
+// Maximum batch size: 1000 messages per request
 func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -89,7 +89,7 @@ func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMov
 	return res, nil
 }
 
-// Maximum batch size: 100 messages per request
+// Maximum batch size: 1000 messages per request
 func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }

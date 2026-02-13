@@ -786,7 +786,7 @@ type InvestigateListParams struct {
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
 	// The sender domains the search filters by.
 	Domain param.Field[string] `query:"domain"`
-	// The end of the search date range. Defaults to `now`.
+	// The end of the search date range. Defaults to `now` if not provided.
 	End param.Field[time.Time] `query:"end" format:"date-time"`
 	// The dispositions the search filters by.
 	FinalDisposition param.Field[InvestigateListParamsFinalDisposition] `query:"final_disposition"`
@@ -825,7 +825,8 @@ type InvestigateListParams struct {
 	Query     param.Field[string] `query:"query"`
 	Recipient param.Field[string] `query:"recipient"`
 	Sender    param.Field[string] `query:"sender"`
-	// The beginning of the search date range. Defaults to `now - 30 days`.
+	// The beginning of the search date range. Defaults to `now - 30 days` if not
+	// provided.
 	Start   param.Field[time.Time] `query:"start" format:"date-time"`
 	Subject param.Field[string]    `query:"subject"`
 }

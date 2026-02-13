@@ -47,6 +47,7 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 				Regex:      cloudflare.F("regex"),
 				Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 			}),
+			Description: cloudflare.F("description"),
 		}}),
 		OCREnabled: cloudflare.F(true),
 		SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsSharedEntry{{
@@ -100,6 +101,7 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Regex:      cloudflare.F("regex"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
+				Description: cloudflare.F("description"),
 			}}),
 			OCREnabled: cloudflare.F(true),
 			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntry{{

@@ -96,25 +96,6 @@ func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListPar
 // IDs) in your account, use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint.
-func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body ThreatEventDeleteParams, opts ...option.RequestOption) (res *ThreatEventDeleteResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if eventID == "" {
-		err = errors.New("missing required event_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", body.AccountID, eventID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
-}
-
-// The `datasetId` parameter must be defined. To list existing datasets (and their
-// IDs) in your account, use the
-// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
-// endpoint.
 func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *ThreatEventBulkNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -300,27 +281,6 @@ func (r *ThreatEventListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r threatEventListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventDeleteResponse struct {
-	UUID string                        `json:"uuid,required"`
-	JSON threatEventDeleteResponseJSON `json:"-"`
-}
-
-// threatEventDeleteResponseJSON contains the JSON metadata for the struct
-// [ThreatEventDeleteResponse]
-type threatEventDeleteResponseJSON struct {
-	UUID        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -721,11 +681,6 @@ func (r ThreatEventListParamsSearchValueArray) ImplementsThreatEventListParamsSe
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
 type ThreatEventListParamsSearchValueArrayItemUnion interface {
 	ImplementsThreatEventListParamsSearchValueArrayItemUnion()
-}
-
-type ThreatEventDeleteParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ThreatEventBulkNewParams struct {

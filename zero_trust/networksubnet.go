@@ -117,11 +117,12 @@ type NetworkSubnetListResponseSubnetType string
 
 const (
 	NetworkSubnetListResponseSubnetTypeCloudflareSource NetworkSubnetListResponseSubnetType = "cloudflare_source"
+	NetworkSubnetListResponseSubnetTypeWARP             NetworkSubnetListResponseSubnetType = "warp"
 )
 
 func (r NetworkSubnetListResponseSubnetType) IsKnown() bool {
 	switch r {
-	case NetworkSubnetListResponseSubnetTypeCloudflareSource:
+	case NetworkSubnetListResponseSubnetTypeCloudflareSource, NetworkSubnetListResponseSubnetTypeWARP:
 		return true
 	}
 	return false
