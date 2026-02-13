@@ -58,7 +58,7 @@ func (r *CertificatePackService) New(ctx context.Context, params CertificatePack
 }
 
 // For a given zone, list all active certificate packs.
-func (r *CertificatePackService) List(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CertificatePackListResponse], err error) {
+func (r *CertificatePackService) List(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CertificatePackListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +80,8 @@ func (r *CertificatePackService) List(ctx context.Context, params CertificatePac
 }
 
 // For a given zone, list all active certificate packs.
-func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CertificatePackListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CertificatePackListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // For a given zone, delete an advanced certificate pack.
@@ -1893,6 +1893,12 @@ func (r CertificatePackNewResponseEnvelopeSuccess) IsKnown() bool {
 type CertificatePackListParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Specify the deployment environment for the certificate packs.
+	Deploy param.Field[CertificatePackListParamsDeploy] `query:"deploy"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// Number of certificate packs per page.
+	PerPage param.Field[float64] `query:"per_page"`
 	// Include Certificate Packs of all statuses, not just active ones.
 	Status param.Field[CertificatePackListParamsStatus] `query:"status"`
 }
@@ -1904,6 +1910,22 @@ func (r CertificatePackListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Specify the deployment environment for the certificate packs.
+type CertificatePackListParamsDeploy string
+
+const (
+	CertificatePackListParamsDeployStaging    CertificatePackListParamsDeploy = "staging"
+	CertificatePackListParamsDeployProduction CertificatePackListParamsDeploy = "production"
+)
+
+func (r CertificatePackListParamsDeploy) IsKnown() bool {
+	switch r {
+	case CertificatePackListParamsDeployStaging, CertificatePackListParamsDeployProduction:
+		return true
+	}
+	return false
 }
 
 // Include Certificate Packs of all statuses, not just active ones.

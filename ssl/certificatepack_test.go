@@ -59,8 +59,11 @@ func TestCertificatePackListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SSL.CertificatePacks.List(context.TODO(), ssl.CertificatePackListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Status: cloudflare.F(ssl.CertificatePackListParamsStatusAll),
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Deploy:  cloudflare.F(ssl.CertificatePackListParamsDeployStaging),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
+		Status:  cloudflare.F(ssl.CertificatePackListParamsStatusAll),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
