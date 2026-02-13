@@ -38,7 +38,10 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 	return
 }
 
-// Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
+// Upload a certificate that you want to use with mTLS-enabled Cloudflare services,
+// such as Bring Your Own CA (BYO-CA) for mTLS. To create certificates issued by
+// the Cloudflare managed CA, use the
+// [Create Client Certificate endpoint](/api/resources/client_certificates/methods/create/).
 func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	var env MTLSCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +58,10 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 	return
 }
 
-// Lists all mTLS certificates.
+// Lists all mTLS certificates uploaded to your account, such as Bring Your Own CA
+// (BYO-CA) for mTLS. To list certificates issued by the Cloudflare managed CA, use
+// the
+// [List Client Certificates endpoint](/api/resources/client_certificates/methods/list/).
 func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificate], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -77,7 +83,10 @@ func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificate
 	return res, nil
 }
 
-// Lists all mTLS certificates.
+// Lists all mTLS certificates uploaded to your account, such as Bring Your Own CA
+// (BYO-CA) for mTLS. To list certificates issued by the Cloudflare managed CA, use
+// the
+// [List Client Certificates endpoint](/api/resources/client_certificates/methods/list/).
 func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MTLSCertificate] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
@@ -104,7 +113,9 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 	return
 }
 
-// Fetches a single mTLS certificate.
+// Fetches a single mTLS certificate uploaded to your account. To get a certificate
+// issued by the Cloudflare managed CA, use the
+// [Client Certificate Details endpoint](/api/resources/client_certificates/methods/get/).
 func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	var env MTLSCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
