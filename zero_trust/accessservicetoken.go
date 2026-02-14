@@ -270,6 +270,8 @@ type ServiceToken struct {
 	// default is 1 year in hours (8760h).
 	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
+	// The date and time the service token was last used.
+	LastSeenAt time.Time `json:"last_seen_at" format:"date-time"`
 	// The name of the service token.
 	Name string           `json:"name"`
 	JSON serviceTokenJSON `json:"-"`
@@ -281,6 +283,7 @@ type serviceTokenJSON struct {
 	ClientID    apijson.Field
 	Duration    apijson.Field
 	ExpiresAt   apijson.Field
+	LastSeenAt  apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
