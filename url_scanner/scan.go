@@ -1185,6 +1185,7 @@ type ScanGetResponseMetaProcessors struct {
 	Phishing         ScanGetResponseMetaProcessorsPhishing         `json:"phishing,required"`
 	RadarRank        ScanGetResponseMetaProcessorsRadarRank        `json:"radarRank,required"`
 	Wappa            ScanGetResponseMetaProcessorsWappa            `json:"wappa,required"`
+	RobotsTXT        ScanGetResponseMetaProcessorsRobotsTXT        `json:"robotsTxt"`
 	URLCategories    ScanGetResponseMetaProcessorsURLCategories    `json:"urlCategories"`
 	JSON             scanGetResponseMetaProcessorsJSON             `json:"-"`
 }
@@ -1199,6 +1200,7 @@ type scanGetResponseMetaProcessorsJSON struct {
 	Phishing         apijson.Field
 	RadarRank        apijson.Field
 	Wappa            apijson.Field
+	RobotsTXT        apijson.Field
 	URLCategories    apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -1595,6 +1597,73 @@ func (r *ScanGetResponseMetaProcessorsWappaDataConfidence) UnmarshalJSON(data []
 }
 
 func (r scanGetResponseMetaProcessorsWappaDataConfidenceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsRobotsTXT struct {
+	Data []ScanGetResponseMetaProcessorsRobotsTXTData `json:"data,required"`
+	JSON scanGetResponseMetaProcessorsRobotsTXTJSON   `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsRobotsTXTJSON contains the JSON metadata for the
+// struct [ScanGetResponseMetaProcessorsRobotsTXT]
+type scanGetResponseMetaProcessorsRobotsTXTJSON struct {
+	Data        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsRobotsTXT) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsRobotsTXTJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsRobotsTXTData struct {
+	Rules    ScanGetResponseMetaProcessorsRobotsTXTDataRules `json:"rules,required"`
+	Sitemaps []string                                        `json:"sitemaps,required"`
+	Hash     string                                          `json:"hash"`
+	JSON     scanGetResponseMetaProcessorsRobotsTXTDataJSON  `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsRobotsTXTDataJSON contains the JSON metadata for
+// the struct [ScanGetResponseMetaProcessorsRobotsTXTData]
+type scanGetResponseMetaProcessorsRobotsTXTDataJSON struct {
+	Rules       apijson.Field
+	Sitemaps    apijson.Field
+	Hash        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsRobotsTXTData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsRobotsTXTDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsRobotsTXTDataRules struct {
+	Star ScanGetResponseMetaProcessorsRobotsTXTDataRules     `json:"*,required"`
+	JSON scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON contains the JSON metadata
+// for the struct [ScanGetResponseMetaProcessorsRobotsTXTDataRules]
+type scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON struct {
+	Star        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsRobotsTXTDataRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON) RawJSON() string {
 	return r.raw
 }
 
