@@ -29,7 +29,7 @@ func TestClientCertificateNew(t *testing.T) {
 	)
 	_, err := client.ClientCertificates.New(context.TODO(), client_certificates.ClientCertificateNewParams{
 		ZoneID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Csr:          cloudflare.F("-----BEGIN CERTIFICATE REQUEST-----\\nMIICY....\\n-----END CERTIFICATE REQUEST-----\\n"),
+		Csr:          cloudflare.F("-----BEGIN CERTIFICATE REQUEST-----\nMIICY....\n-----END CERTIFICATE REQUEST-----"),
 		ValidityDays: cloudflare.F(int64(3650)),
 	})
 	if err != nil {

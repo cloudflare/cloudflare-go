@@ -171,7 +171,6 @@ TEST_PATHS=(
 	workers/accountsetting_test.go
 	workers/domain_test.go
 	workers/subdomain_test.go
-	workers/observabilitytelemetry_test.go
 	kv/namespace_test.go
 	kv/namespacekey_test.go
 	kv/namespacemetadata_test.go
