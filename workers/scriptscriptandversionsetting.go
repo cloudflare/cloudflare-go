@@ -168,8 +168,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Format ScriptScriptAndVersionSettingEditResponseBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
-	// JSON data to use.
-	Json string `json:"json"`
+	// This field can have the runtime type of [interface{}].
+	Json interface{} `json:"json"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -829,7 +829,7 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispa
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters.
-	Params []string `json:"params"`
+	Params []ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam `json:"params"`
 	// Outbound worker.
 	Worker ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorker `json:"worker"`
 	JSON   scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundJSON   `json:"-"`
@@ -853,8 +853,33 @@ func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispa
 	return r.raw
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
+	// Name of the parameter.
+	Name string                                                                                                `json:"name,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON) RawJSON() string {
+	return r.raw
+}
+
 // Outbound worker.
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+	// Entrypoint to invoke on the outbound worker.
+	Entrypoint string `json:"entrypoint"`
 	// Environment of the outbound worker.
 	Environment string `json:"environment"`
 	// Name of the outbound worker.
@@ -866,6 +891,7 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatch
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorker]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON struct {
+	Entrypoint  apijson.Field
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
@@ -1084,7 +1110,7 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindImage
 
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json string `json:"json,required"`
+	Json interface{} `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
@@ -2703,8 +2729,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Format ScriptScriptAndVersionSettingGetResponseBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
-	// JSON data to use.
-	Json string `json:"json"`
+	// This field can have the runtime type of [interface{}].
+	Json interface{} `json:"json"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -3364,7 +3390,7 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispat
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters.
-	Params []string `json:"params"`
+	Params []ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam `json:"params"`
 	// Outbound worker.
 	Worker ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorker `json:"worker"`
 	JSON   scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundJSON   `json:"-"`
@@ -3388,8 +3414,33 @@ func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispat
 	return r.raw
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
+	// Name of the parameter.
+	Name string                                                                                               `json:"name,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON) RawJSON() string {
+	return r.raw
+}
+
 // Outbound worker.
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+	// Entrypoint to invoke on the outbound worker.
+	Entrypoint string `json:"entrypoint"`
 	// Environment of the outbound worker.
 	Environment string `json:"environment"`
 	// Name of the outbound worker.
@@ -3401,6 +3452,7 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchN
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorker]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON struct {
+	Entrypoint  apijson.Field
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
@@ -3619,7 +3671,7 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindImages
 
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json string `json:"json,required"`
+	Json interface{} `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
@@ -5235,9 +5287,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
-	IndexName param.Field[string] `json:"index_name"`
-	// JSON data to use.
-	Json param.Field[string] `json:"json"`
+	IndexName param.Field[string]      `json:"index_name"`
+	Json      param.Field[interface{}] `json:"json"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -5546,7 +5597,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters.
-	Params param.Field[[]string] `json:"params"`
+	Params param.Field[[]ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundParam] `json:"params"`
 	// Outbound worker.
 	Worker param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundWorker] `json:"worker"`
 }
@@ -5555,8 +5606,19 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return apijson.MarshalRoot(r)
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
+	// Name of the parameter.
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Outbound worker.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+	// Entrypoint to invoke on the outbound worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Environment of the outbound worker.
 	Environment param.Field[string] `json:"environment"`
 	// Name of the outbound worker.
@@ -5704,7 +5766,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json param.Field[string] `json:"json,required"`
+	Json param.Field[interface{}] `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
