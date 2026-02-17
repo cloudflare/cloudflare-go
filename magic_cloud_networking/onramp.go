@@ -20478,8 +20478,8 @@ func (r onRampPlanResponseMessagesSourceJSON) RawJSON() string {
 type OnRampNewParams struct {
 	AccountID param.Field[string]                   `path:"account_id,required"`
 	CloudType param.Field[OnRampNewParamsCloudType] `json:"cloud_type,required"`
-	// if set to true, install_routes_in_cloud and install_routes_in_magic_wan should
-	// be set to false
+	// Enables BGP routing. When enabling this feature, set both
+	// install_routes_in_cloud and install_routes_in_magic_wan to false.
 	DynamicRouting          param.Field[bool]                `json:"dynamic_routing,required"`
 	InstallRoutesInCloud    param.Field[bool]                `json:"install_routes_in_cloud,required"`
 	InstallRoutesInMagicWAN param.Field[bool]                `json:"install_routes_in_magic_wan,required"`
@@ -20488,8 +20488,7 @@ type OnRampNewParams struct {
 	AdoptedHubID            param.Field[string]              `json:"adopted_hub_id" format:"uuid"`
 	AttachedHubs            param.Field[[]string]            `json:"attached_hubs" format:"uuid"`
 	AttachedVPCs            param.Field[[]string]            `json:"attached_vpcs" format:"uuid"`
-	// the ASN to use on the cloud side. If unset or zero, the cloud's default will be
-	// used.
+	// Sets the cloud-side ASN. If unset or zero, the cloud's default ASN takes effect.
 	CloudASN                  param.Field[int64]  `json:"cloud_asn"`
 	Description               param.Field[string] `json:"description"`
 	HubProviderID             param.Field[string] `json:"hub_provider_id" format:"uuid"`

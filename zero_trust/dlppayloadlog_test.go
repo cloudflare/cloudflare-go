@@ -28,8 +28,9 @@ func TestDLPPayloadLogUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.PayloadLogs.Update(context.TODO(), zero_trust.DLPPayloadLogUpdateParams{
-		AccountID: cloudflare.F("account_id"),
-		PublicKey: cloudflare.F("public_key"),
+		AccountID:    cloudflare.F("account_id"),
+		MaskingLevel: cloudflare.F(zero_trust.DLPPayloadLogUpdateParamsMaskingLevelFull),
+		PublicKey:    cloudflare.F("public_key"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

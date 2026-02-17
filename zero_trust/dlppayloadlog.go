@@ -70,7 +70,16 @@ func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetPa
 }
 
 type DLPPayloadLogUpdateResponse struct {
-	UpdatedAt time.Time                       `json:"updated_at,required" format:"date-time"`
+	// Masking level for payload logs.
+	//
+	// - `full`: The entire payload is masked.
+	// - `partial`: Only partial payload content is masked.
+	// - `clear`: No masking is applied to the payload content.
+	// - `default`: DLP uses its default masking behavior.
+	MaskingLevel DLPPayloadLogUpdateResponseMaskingLevel `json:"masking_level,required"`
+	UpdatedAt    time.Time                               `json:"updated_at,required" format:"date-time"`
+	// Base64-encoded public key for encrypting payload logs. Null when payload logging
+	// is disabled.
 	PublicKey string                          `json:"public_key,nullable"`
 	JSON      dlpPayloadLogUpdateResponseJSON `json:"-"`
 }
@@ -78,10 +87,11 @@ type DLPPayloadLogUpdateResponse struct {
 // dlpPayloadLogUpdateResponseJSON contains the JSON metadata for the struct
 // [DLPPayloadLogUpdateResponse]
 type dlpPayloadLogUpdateResponseJSON struct {
-	UpdatedAt   apijson.Field
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	MaskingLevel apijson.Field
+	UpdatedAt    apijson.Field
+	PublicKey    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *DLPPayloadLogUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -92,8 +102,40 @@ func (r dlpPayloadLogUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Masking level for payload logs.
+//
+// - `full`: The entire payload is masked.
+// - `partial`: Only partial payload content is masked.
+// - `clear`: No masking is applied to the payload content.
+// - `default`: DLP uses its default masking behavior.
+type DLPPayloadLogUpdateResponseMaskingLevel string
+
+const (
+	DLPPayloadLogUpdateResponseMaskingLevelFull    DLPPayloadLogUpdateResponseMaskingLevel = "full"
+	DLPPayloadLogUpdateResponseMaskingLevelPartial DLPPayloadLogUpdateResponseMaskingLevel = "partial"
+	DLPPayloadLogUpdateResponseMaskingLevelClear   DLPPayloadLogUpdateResponseMaskingLevel = "clear"
+	DLPPayloadLogUpdateResponseMaskingLevelDefault DLPPayloadLogUpdateResponseMaskingLevel = "default"
+)
+
+func (r DLPPayloadLogUpdateResponseMaskingLevel) IsKnown() bool {
+	switch r {
+	case DLPPayloadLogUpdateResponseMaskingLevelFull, DLPPayloadLogUpdateResponseMaskingLevelPartial, DLPPayloadLogUpdateResponseMaskingLevelClear, DLPPayloadLogUpdateResponseMaskingLevelDefault:
+		return true
+	}
+	return false
+}
+
 type DLPPayloadLogGetResponse struct {
-	UpdatedAt time.Time                    `json:"updated_at,required" format:"date-time"`
+	// Masking level for payload logs.
+	//
+	// - `full`: The entire payload is masked.
+	// - `partial`: Only partial payload content is masked.
+	// - `clear`: No masking is applied to the payload content.
+	// - `default`: DLP uses its default masking behavior.
+	MaskingLevel DLPPayloadLogGetResponseMaskingLevel `json:"masking_level,required"`
+	UpdatedAt    time.Time                            `json:"updated_at,required" format:"date-time"`
+	// Base64-encoded public key for encrypting payload logs. Null when payload logging
+	// is disabled.
 	PublicKey string                       `json:"public_key,nullable"`
 	JSON      dlpPayloadLogGetResponseJSON `json:"-"`
 }
@@ -101,10 +143,11 @@ type DLPPayloadLogGetResponse struct {
 // dlpPayloadLogGetResponseJSON contains the JSON metadata for the struct
 // [DLPPayloadLogGetResponse]
 type dlpPayloadLogGetResponseJSON struct {
-	UpdatedAt   apijson.Field
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	MaskingLevel apijson.Field
+	UpdatedAt    apijson.Field
+	PublicKey    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *DLPPayloadLogGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -115,13 +158,79 @@ func (r dlpPayloadLogGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Masking level for payload logs.
+//
+// - `full`: The entire payload is masked.
+// - `partial`: Only partial payload content is masked.
+// - `clear`: No masking is applied to the payload content.
+// - `default`: DLP uses its default masking behavior.
+type DLPPayloadLogGetResponseMaskingLevel string
+
+const (
+	DLPPayloadLogGetResponseMaskingLevelFull    DLPPayloadLogGetResponseMaskingLevel = "full"
+	DLPPayloadLogGetResponseMaskingLevelPartial DLPPayloadLogGetResponseMaskingLevel = "partial"
+	DLPPayloadLogGetResponseMaskingLevelClear   DLPPayloadLogGetResponseMaskingLevel = "clear"
+	DLPPayloadLogGetResponseMaskingLevelDefault DLPPayloadLogGetResponseMaskingLevel = "default"
+)
+
+func (r DLPPayloadLogGetResponseMaskingLevel) IsKnown() bool {
+	switch r {
+	case DLPPayloadLogGetResponseMaskingLevelFull, DLPPayloadLogGetResponseMaskingLevelPartial, DLPPayloadLogGetResponseMaskingLevelClear, DLPPayloadLogGetResponseMaskingLevelDefault:
+		return true
+	}
+	return false
+}
+
 type DLPPayloadLogUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Masking level for payload logs.
+	//
+	// - `full`: The entire payload is masked.
+	// - `partial`: Only partial payload content is masked.
+	// - `clear`: No masking is applied to the payload content.
+	// - `default`: DLP uses its default masking behavior.
+	MaskingLevel param.Field[DLPPayloadLogUpdateParamsMaskingLevel] `json:"masking_level"`
+	// Base64-encoded public key for encrypting payload logs.
+	//
+	// - Set to null or empty string to disable payload logging.
+	// - Set to a non-empty base64 string to enable payload logging with the given key.
+	//
+	// For customers with configurable payload masking feature rolled out:
+	//
+	//   - If the field is missing, the existing setting will be kept. Note that this is
+	//     different from setting to null or empty string.
+	//
+	// For all other customers:
+	//
+	// - If the field is missing, the existing setting will be cleared.
 	PublicKey param.Field[string] `json:"public_key"`
 }
 
 func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Masking level for payload logs.
+//
+// - `full`: The entire payload is masked.
+// - `partial`: Only partial payload content is masked.
+// - `clear`: No masking is applied to the payload content.
+// - `default`: DLP uses its default masking behavior.
+type DLPPayloadLogUpdateParamsMaskingLevel string
+
+const (
+	DLPPayloadLogUpdateParamsMaskingLevelFull    DLPPayloadLogUpdateParamsMaskingLevel = "full"
+	DLPPayloadLogUpdateParamsMaskingLevelPartial DLPPayloadLogUpdateParamsMaskingLevel = "partial"
+	DLPPayloadLogUpdateParamsMaskingLevelClear   DLPPayloadLogUpdateParamsMaskingLevel = "clear"
+	DLPPayloadLogUpdateParamsMaskingLevelDefault DLPPayloadLogUpdateParamsMaskingLevel = "default"
+)
+
+func (r DLPPayloadLogUpdateParamsMaskingLevel) IsKnown() bool {
+	switch r {
+	case DLPPayloadLogUpdateParamsMaskingLevelFull, DLPPayloadLogUpdateParamsMaskingLevelPartial, DLPPayloadLogUpdateParamsMaskingLevelClear, DLPPayloadLogUpdateParamsMaskingLevelDefault:
+		return true
+	}
+	return false
 }
 
 type DLPPayloadLogUpdateResponseEnvelope struct {
