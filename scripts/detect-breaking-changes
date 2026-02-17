@@ -417,6 +417,7 @@ TEST_PATHS=(
 	zero_trust/dextestuniquedevice_test.go
 	zero_trust/dextraceroutetestresultnetworkpath_test.go
 	zero_trust/dextraceroutetest_test.go
+	zero_trust/dexrule_test.go
 	zero_trust/tunnel_test.go
 	zero_trust/tunnelcloudflared_test.go
 	zero_trust/tunnelcloudflaredconfiguration_test.go
