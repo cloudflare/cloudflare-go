@@ -123,8 +123,6 @@ func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefault
 func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()         {}
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                   {}
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                        {}
-func (UnionString) ImplementsSettingValueUnionParam()                                            {}
-func (UnionString) ImplementsSettingValueUnion()                                                 {}
 func (UnionString) ImplementsPresetNewResponseDataPermissionsPluginsConfigUnion()                {}
 func (UnionString) ImplementsPresetUpdateResponseDataPermissionsPluginsConfigUnion()             {}
 func (UnionString) ImplementsPresetDeleteResponseDataPermissionsPluginsConfigUnion()             {}
@@ -291,8 +289,6 @@ func (UnionFloat) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedPr
 func (UnionFloat) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion()          {}
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                            {}
 func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()             {}
-func (UnionFloat) ImplementsSettingValueUnionParam()                                                {}
-func (UnionFloat) ImplementsSettingValueUnion()                                                     {}
 func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()                                 {}
 func (UnionFloat) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                        {}
 func (UnionFloat) ImplementsLogListParamsFiltersValueUnion()                                        {}

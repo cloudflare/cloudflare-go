@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -117,7 +116,15 @@ type Setting struct {
 	Status string `json:"status"`
 	// This is the time the tls setting was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// The tls setting value.
+	// The TLS setting value. The type depends on the `setting_id` used in the request
+	// path:
+	//
+	//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+	//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+	//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
+	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+	//     (e.g., `"on"`)
 	Value SettingValueUnion `json:"value"`
 	JSON  settingJSON       `json:"-"`
 }
@@ -141,12 +148,19 @@ func (r settingJSON) RawJSON() string {
 	return r.raw
 }
 
-// The tls setting value.
+// The TLS setting value. The type depends on the `setting_id` used in the request
+// path:
 //
-// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
-// [SettingValueArray].
+//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
+//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+//     (e.g., `"on"`)
+//
+// Union satisfied by [SettingValueString] or [SettingValueArray].
 type SettingValueUnion interface {
-	ImplementsSettingValueUnion()
+	implementsSettingValueUnion()
 }
 
 func init() {
@@ -154,12 +168,8 @@ func init() {
 		reflect.TypeOf((*SettingValueUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
 			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
+			Type:       reflect.TypeOf(SettingValueString("")),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -168,21 +178,51 @@ func init() {
 	)
 }
 
+type SettingValueString string
+
+const (
+	SettingValueString1_0 SettingValueString = "1.0"
+	SettingValueString1_1 SettingValueString = "1.1"
+	SettingValueString1_2 SettingValueString = "1.2"
+	SettingValueString1_3 SettingValueString = "1.3"
+	SettingValueStringOn  SettingValueString = "on"
+	SettingValueStringOff SettingValueString = "off"
+)
+
+func (r SettingValueString) IsKnown() bool {
+	switch r {
+	case SettingValueString1_0, SettingValueString1_1, SettingValueString1_2, SettingValueString1_3, SettingValueStringOn, SettingValueStringOff:
+		return true
+	}
+	return false
+}
+
+func (r SettingValueString) implementsSettingValueUnion() {}
+
+func (r SettingValueString) implementsSettingValueUnionParam() {}
+
 type SettingValueArray []string
 
-func (r SettingValueArray) ImplementsSettingValueUnion() {}
+func (r SettingValueArray) implementsSettingValueUnion() {}
 
-// The tls setting value.
+// The TLS setting value. The type depends on the `setting_id` used in the request
+// path:
 //
-// Satisfied by [shared.UnionFloat], [shared.UnionString],
-// [hostnames.SettingValueArrayParam].
+//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
+//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+//     (e.g., `"on"`)
+//
+// Satisfied by [hostnames.SettingValueString], [hostnames.SettingValueArrayParam].
 type SettingValueUnionParam interface {
-	ImplementsSettingValueUnionParam()
+	implementsSettingValueUnionParam()
 }
 
 type SettingValueArrayParam []string
 
-func (r SettingValueArrayParam) ImplementsSettingValueUnionParam() {}
+func (r SettingValueArrayParam) implementsSettingValueUnionParam() {}
 
 type SettingTLSDeleteResponse struct {
 	// This is the time the tls setting was originally created for this hostname.
@@ -193,7 +233,15 @@ type SettingTLSDeleteResponse struct {
 	Status string `json:"status"`
 	// This is the time the tls setting was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// The tls setting value.
+	// The TLS setting value. The type depends on the `setting_id` used in the request
+	// path:
+	//
+	//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+	//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+	//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
+	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+	//     (e.g., `"on"`)
 	Value SettingValueUnion            `json:"value"`
 	JSON  settingTLSDeleteResponseJSON `json:"-"`
 }
@@ -227,7 +275,15 @@ type SettingTLSGetResponse struct {
 	Status string `json:"status"`
 	// This is the time the tls setting was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// The tls setting value.
+	// The TLS setting value. The type depends on the `setting_id` used in the request
+	// path:
+	//
+	//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+	//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+	//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
+	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+	//     (e.g., `"on"`)
 	Value SettingValueUnion         `json:"value"`
 	JSON  settingTLSGetResponseJSON `json:"-"`
 }
@@ -255,7 +311,15 @@ func (r settingTLSGetResponseJSON) RawJSON() string {
 type SettingTLSUpdateParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The tls setting value.
+	// The TLS setting value. The type depends on the `setting_id` used in the request
+	// path:
+	//
+	//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+	//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+	//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
+	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+	//     (e.g., `"on"`)
 	Value param.Field[SettingValueUnionParam] `json:"value,required"`
 }
 
@@ -263,7 +327,13 @@ func (r SettingTLSUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The TLS Setting name.
+// The TLS Setting name. The value type depends on the setting:
+//
+//   - `ciphers`: value is an array of cipher suite strings (e.g.,
+//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+//   - `min_tls_version`: value is a TLS version string (`"1.0"`, `"1.1"`, `"1.2"`,
+//     or `"1.3"`)
+//   - `http2`: value is `"on"` or `"off"`
 type SettingTLSUpdateParamsSettingID string
 
 const (
@@ -424,7 +494,13 @@ type SettingTLSDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-// The TLS Setting name.
+// The TLS Setting name. The value type depends on the setting:
+//
+//   - `ciphers`: value is an array of cipher suite strings (e.g.,
+//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+//   - `min_tls_version`: value is a TLS version string (`"1.0"`, `"1.1"`, `"1.2"`,
+//     or `"1.3"`)
+//   - `http2`: value is `"on"` or `"off"`
 type SettingTLSDeleteParamsSettingID string
 
 const (
@@ -585,7 +661,13 @@ type SettingTLSGetParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-// The TLS Setting name.
+// The TLS Setting name. The value type depends on the setting:
+//
+//   - `ciphers`: value is an array of cipher suite strings (e.g.,
+//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`)
+//   - `min_tls_version`: value is a TLS version string (`"1.0"`, `"1.1"`, `"1.2"`,
+//     or `"1.3"`)
+//   - `http2`: value is `"on"` or `"off"`
 type SettingTLSGetParamsSettingID string
 
 const (
