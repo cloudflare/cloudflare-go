@@ -269,7 +269,7 @@ type DefaultPoolsParam = string
 // reset.
 type FilterOptions struct {
 	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable bool `json:"disable"`
+	Disable bool `json:"disable,nullable"`
 	// If present, send notifications only for this health status (e.g. false for only
 	// DOWN events). Use null to reset (all events).
 	Healthy bool              `json:"healthy,nullable"`
