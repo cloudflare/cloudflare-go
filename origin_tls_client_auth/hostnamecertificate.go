@@ -138,8 +138,6 @@ type HostnameCertificateNewResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateNewResponseStatus `json:"status"`
-	// The time when the certificate was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateNewResponseJSON `json:"-"`
@@ -155,7 +153,6 @@ type hostnameCertificateNewResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
-	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -205,8 +202,6 @@ type HostnameCertificateListResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateListResponseStatus `json:"status"`
-	// The time when the certificate was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                           `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateListResponseJSON `json:"-"`
@@ -222,7 +217,6 @@ type hostnameCertificateListResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
-	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -272,8 +266,6 @@ type HostnameCertificateDeleteResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateDeleteResponseStatus `json:"status"`
-	// The time when the certificate was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                             `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateDeleteResponseJSON `json:"-"`
@@ -289,7 +281,6 @@ type hostnameCertificateDeleteResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
-	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -339,8 +330,6 @@ type HostnameCertificateGetResponse struct {
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
 	Status HostnameCertificateGetResponseStatus `json:"status"`
-	// The time when the certificate was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
 	UploadedOn time.Time                          `json:"uploaded_on" format:"date-time"`
 	JSON       hostnameCertificateGetResponseJSON `json:"-"`
@@ -356,7 +345,6 @@ type hostnameCertificateGetResponseJSON struct {
 	SerialNumber apijson.Field
 	Signature    apijson.Field
 	Status       apijson.Field
-	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
