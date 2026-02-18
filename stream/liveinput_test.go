@@ -31,6 +31,7 @@ func TestLiveInputNewWithOptionalParams(t *testing.T) {
 		AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		DefaultCreator:           cloudflare.F("defaultCreator"),
 		DeleteRecordingAfterDays: cloudflare.F(45.000000),
+		Enabled:                  cloudflare.F(true),
 		Meta: cloudflare.F[any](map[string]interface{}{
 			"name": "test stream 1",
 		}),
@@ -71,6 +72,7 @@ func TestLiveInputUpdateWithOptionalParams(t *testing.T) {
 			AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DefaultCreator:           cloudflare.F("defaultCreator"),
 			DeleteRecordingAfterDays: cloudflare.F(45.000000),
+			Enabled:                  cloudflare.F(true),
 			Meta: cloudflare.F[any](map[string]interface{}{
 				"name": "test stream 1",
 			}),

@@ -145,6 +145,8 @@ type LiveInput struct {
 	// indicate no change, or include with a `null` value to remove an existing
 	// scheduled deletion.
 	DeleteRecordingAfterDays float64 `json:"deleteRecordingAfterDays"`
+	// Indicates whether the live input is enabled and can accept streams.
+	Enabled bool `json:"enabled"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta interface{} `json:"meta"`
@@ -177,6 +179,7 @@ type LiveInput struct {
 type liveInputJSON struct {
 	Created                  apijson.Field
 	DeleteRecordingAfterDays apijson.Field
+	Enabled                  apijson.Field
 	Meta                     apijson.Field
 	Modified                 apijson.Field
 	Recording                apijson.Field
@@ -475,6 +478,8 @@ type LiveInputListResponseLiveInput struct {
 	// indicate no change, or include with a `null` value to remove an existing
 	// scheduled deletion.
 	DeleteRecordingAfterDays float64 `json:"deleteRecordingAfterDays"`
+	// Indicates whether the live input is enabled and can accept streams.
+	Enabled bool `json:"enabled"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta interface{} `json:"meta"`
@@ -490,6 +495,7 @@ type LiveInputListResponseLiveInput struct {
 type liveInputListResponseLiveInputJSON struct {
 	Created                  apijson.Field
 	DeleteRecordingAfterDays apijson.Field
+	Enabled                  apijson.Field
 	Meta                     apijson.Field
 	Modified                 apijson.Field
 	UID                      apijson.Field
@@ -516,6 +522,8 @@ type LiveInputNewParams struct {
 	// indicate no change, or include with a `null` value to remove an existing
 	// scheduled deletion.
 	DeleteRecordingAfterDays param.Field[float64] `json:"deleteRecordingAfterDays"`
+	// Indicates whether the live input is enabled and can accept streams.
+	Enabled param.Field[bool] `json:"enabled"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta param.Field[interface{}] `json:"meta"`
@@ -727,6 +735,8 @@ type LiveInputUpdateParams struct {
 	// indicate no change, or include with a `null` value to remove an existing
 	// scheduled deletion.
 	DeleteRecordingAfterDays param.Field[float64] `json:"deleteRecordingAfterDays"`
+	// Indicates whether the live input is enabled and can accept streams.
+	Enabled param.Field[bool] `json:"enabled"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta param.Field[interface{}] `json:"meta"`
