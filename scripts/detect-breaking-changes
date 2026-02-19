@@ -457,6 +457,7 @@ TEST_PATHS=(
 	zero_trust/gatewayproxyendpoint_test.go
 	zero_trust/gatewayrule_test.go
 	zero_trust/gatewaycertificate_test.go
+	zero_trust/gatewaypacfile_test.go
 	zero_trust/networkroute_test.go
 	zero_trust/networkrouteip_test.go
 	zero_trust/networkroutenetwork_test.go

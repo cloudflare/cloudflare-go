@@ -34,6 +34,7 @@ type GatewayService struct {
 	ProxyEndpoints   *GatewayProxyEndpointService
 	Rules            *GatewayRuleService
 	Certificates     *GatewayCertificateService
+	Pacfiles         *GatewayPacfileService
 }
 
 // NewGatewayService generates a new service that applies the given options to each
@@ -52,6 +53,7 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 	r.ProxyEndpoints = NewGatewayProxyEndpointService(opts...)
 	r.Rules = NewGatewayRuleService(opts...)
 	r.Certificates = NewGatewayCertificateService(opts...)
+	r.Pacfiles = NewGatewayPacfileService(opts...)
 	return
 }
 
