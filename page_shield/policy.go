@@ -161,13 +161,14 @@ func (r PolicyParam) MarshalJSON() (data []byte, err error) {
 type PolicyAction string
 
 const (
-	PolicyActionAllow PolicyAction = "allow"
-	PolicyActionLog   PolicyAction = "log"
+	PolicyActionAllow                  PolicyAction = "allow"
+	PolicyActionLog                    PolicyAction = "log"
+	PolicyActionAddReportingDirectives PolicyAction = "add_reporting_directives"
 )
 
 func (r PolicyAction) IsKnown() bool {
 	switch r {
-	case PolicyActionAllow, PolicyActionLog:
+	case PolicyActionAllow, PolicyActionLog, PolicyActionAddReportingDirectives:
 		return true
 	}
 	return false
@@ -215,13 +216,14 @@ func (r policyNewResponseJSON) RawJSON() string {
 type PolicyNewResponseAction string
 
 const (
-	PolicyNewResponseActionAllow PolicyNewResponseAction = "allow"
-	PolicyNewResponseActionLog   PolicyNewResponseAction = "log"
+	PolicyNewResponseActionAllow                  PolicyNewResponseAction = "allow"
+	PolicyNewResponseActionLog                    PolicyNewResponseAction = "log"
+	PolicyNewResponseActionAddReportingDirectives PolicyNewResponseAction = "add_reporting_directives"
 )
 
 func (r PolicyNewResponseAction) IsKnown() bool {
 	switch r {
-	case PolicyNewResponseActionAllow, PolicyNewResponseActionLog:
+	case PolicyNewResponseActionAllow, PolicyNewResponseActionLog, PolicyNewResponseActionAddReportingDirectives:
 		return true
 	}
 	return false
@@ -269,13 +271,14 @@ func (r policyUpdateResponseJSON) RawJSON() string {
 type PolicyUpdateResponseAction string
 
 const (
-	PolicyUpdateResponseActionAllow PolicyUpdateResponseAction = "allow"
-	PolicyUpdateResponseActionLog   PolicyUpdateResponseAction = "log"
+	PolicyUpdateResponseActionAllow                  PolicyUpdateResponseAction = "allow"
+	PolicyUpdateResponseActionLog                    PolicyUpdateResponseAction = "log"
+	PolicyUpdateResponseActionAddReportingDirectives PolicyUpdateResponseAction = "add_reporting_directives"
 )
 
 func (r PolicyUpdateResponseAction) IsKnown() bool {
 	switch r {
-	case PolicyUpdateResponseActionAllow, PolicyUpdateResponseActionLog:
+	case PolicyUpdateResponseActionAllow, PolicyUpdateResponseActionLog, PolicyUpdateResponseActionAddReportingDirectives:
 		return true
 	}
 	return false
@@ -323,13 +326,14 @@ func (r policyListResponseJSON) RawJSON() string {
 type PolicyListResponseAction string
 
 const (
-	PolicyListResponseActionAllow PolicyListResponseAction = "allow"
-	PolicyListResponseActionLog   PolicyListResponseAction = "log"
+	PolicyListResponseActionAllow                  PolicyListResponseAction = "allow"
+	PolicyListResponseActionLog                    PolicyListResponseAction = "log"
+	PolicyListResponseActionAddReportingDirectives PolicyListResponseAction = "add_reporting_directives"
 )
 
 func (r PolicyListResponseAction) IsKnown() bool {
 	switch r {
-	case PolicyListResponseActionAllow, PolicyListResponseActionLog:
+	case PolicyListResponseActionAllow, PolicyListResponseActionLog, PolicyListResponseActionAddReportingDirectives:
 		return true
 	}
 	return false
@@ -377,13 +381,14 @@ func (r policyGetResponseJSON) RawJSON() string {
 type PolicyGetResponseAction string
 
 const (
-	PolicyGetResponseActionAllow PolicyGetResponseAction = "allow"
-	PolicyGetResponseActionLog   PolicyGetResponseAction = "log"
+	PolicyGetResponseActionAllow                  PolicyGetResponseAction = "allow"
+	PolicyGetResponseActionLog                    PolicyGetResponseAction = "log"
+	PolicyGetResponseActionAddReportingDirectives PolicyGetResponseAction = "add_reporting_directives"
 )
 
 func (r PolicyGetResponseAction) IsKnown() bool {
 	switch r {
-	case PolicyGetResponseActionAllow, PolicyGetResponseActionLog:
+	case PolicyGetResponseActionAllow, PolicyGetResponseActionLog, PolicyGetResponseActionAddReportingDirectives:
 		return true
 	}
 	return false
@@ -466,13 +471,14 @@ func (r PolicyUpdateParams) MarshalJSON() (data []byte, err error) {
 type PolicyUpdateParamsAction string
 
 const (
-	PolicyUpdateParamsActionAllow PolicyUpdateParamsAction = "allow"
-	PolicyUpdateParamsActionLog   PolicyUpdateParamsAction = "log"
+	PolicyUpdateParamsActionAllow                  PolicyUpdateParamsAction = "allow"
+	PolicyUpdateParamsActionLog                    PolicyUpdateParamsAction = "log"
+	PolicyUpdateParamsActionAddReportingDirectives PolicyUpdateParamsAction = "add_reporting_directives"
 )
 
 func (r PolicyUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case PolicyUpdateParamsActionAllow, PolicyUpdateParamsActionLog:
+	case PolicyUpdateParamsActionAllow, PolicyUpdateParamsActionLog, PolicyUpdateParamsActionAddReportingDirectives:
 		return true
 	}
 	return false

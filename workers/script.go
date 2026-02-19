@@ -1680,6 +1680,8 @@ func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string,
 
 // JSON-encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsMetadata struct {
+	// Annotations for the version created by this upload.
+	Annotations param.Field[ScriptUpdateParamsMetadataAnnotations] `json:"annotations"`
 	// Configuration for assets within a Worker.
 	Assets param.Field[ScriptUpdateParamsMetadataAssets] `json:"assets"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
@@ -1725,6 +1727,18 @@ type ScriptUpdateParamsMetadata struct {
 }
 
 func (r ScriptUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Annotations for the version created by this upload.
+type ScriptUpdateParamsMetadataAnnotations struct {
+	// Human-readable message about the version.
+	WorkersMessage param.Field[string] `json:"workers/message"`
+	// User-provided identifier for the version.
+	WorkersTag param.Field[string] `json:"workers/tag"`
+}
+
+func (r ScriptUpdateParamsMetadataAnnotations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

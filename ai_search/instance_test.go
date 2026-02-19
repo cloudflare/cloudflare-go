@@ -43,6 +43,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			FieldName: cloudflare.F("x"),
 		}}),
 		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+		FusionMethod:        cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
 		HybridSearchEnabled: cloudflare.F(true),
 		MaxNumResults:       cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
@@ -136,6 +137,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				FieldName: cloudflare.F("x"),
 			}}),
 			EmbeddingModel:      cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+			FusionMethod:        cloudflare.F(ai_search.InstanceUpdateParamsFusionMethodMax),
 			HybridSearchEnabled: cloudflare.F(true),
 			MaxNumResults:       cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
@@ -301,6 +303,7 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 					Filters: cloudflare.F(map[string]interface{}{
 						"foo": "bar",
 					}),
+					FusionMethod:    cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodMax),
 					MatchThreshold:  cloudflare.F(0.000000),
 					MaxNumResults:   cloudflare.F(int64(1)),
 					RetrievalType:   cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalTypeVector),
@@ -387,6 +390,7 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 					Filters: cloudflare.F(map[string]interface{}{
 						"foo": "bar",
 					}),
+					FusionMethod:    cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrievalFusionMethodMax),
 					MatchThreshold:  cloudflare.F(0.000000),
 					MaxNumResults:   cloudflare.F(int64(1)),
 					RetrievalType:   cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeVector),

@@ -226,6 +226,7 @@ type InstanceNewResponse struct {
 	CustomMetadata       []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model"`
 	Enable               bool                                    `json:"enable"`
+	FusionMethod         InstanceNewResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                    `json:"hybrid_search_enabled"`
 	LastActivity         time.Time                               `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                   `json:"max_num_results"`
@@ -239,7 +240,7 @@ type InstanceNewResponse struct {
 	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                    `json:"rewrite_query"`
 	ScoreThreshold       float64                                 `json:"score_threshold"`
-	SourceParams         InstanceNewResponseSourceParams         `json:"source_params"`
+	SourceParams         InstanceNewResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                  `json:"status"`
 	TokenID              string                                  `json:"token_id" format:"uuid"`
 	JSON                 instanceNewResponseJSON                 `json:"-"`
@@ -264,6 +265,7 @@ type instanceNewResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -420,6 +422,21 @@ const (
 func (r InstanceNewResponseEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceNewResponseFusionMethod string
+
+const (
+	InstanceNewResponseFusionMethodMax InstanceNewResponseFusionMethod = "max"
+	InstanceNewResponseFusionMethodRrf InstanceNewResponseFusionMethod = "rrf"
+)
+
+func (r InstanceNewResponseFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseFusionMethodMax, InstanceNewResponseFusionMethodRrf:
 		return true
 	}
 	return false
@@ -791,6 +808,7 @@ type InstanceUpdateResponse struct {
 	CustomMetadata       []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model"`
 	Enable               bool                                       `json:"enable"`
+	FusionMethod         InstanceUpdateResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
 	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
@@ -804,7 +822,7 @@ type InstanceUpdateResponse struct {
 	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params"`
+	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
 	JSON                 instanceUpdateResponseJSON                 `json:"-"`
@@ -829,6 +847,7 @@ type instanceUpdateResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -985,6 +1004,21 @@ const (
 func (r InstanceUpdateResponseEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateResponseFusionMethod string
+
+const (
+	InstanceUpdateResponseFusionMethodMax InstanceUpdateResponseFusionMethod = "max"
+	InstanceUpdateResponseFusionMethodRrf InstanceUpdateResponseFusionMethod = "rrf"
+)
+
+func (r InstanceUpdateResponseFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseFusionMethodMax, InstanceUpdateResponseFusionMethodRrf:
 		return true
 	}
 	return false
@@ -1359,6 +1393,7 @@ type InstanceListResponse struct {
 	CustomMetadata       []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model"`
 	Enable               bool                                     `json:"enable"`
+	FusionMethod         InstanceListResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
 	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
@@ -1372,7 +1407,7 @@ type InstanceListResponse struct {
 	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	SourceParams         InstanceListResponseSourceParams         `json:"source_params"`
+	SourceParams         InstanceListResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
 	JSON                 instanceListResponseJSON                 `json:"-"`
@@ -1397,6 +1432,7 @@ type instanceListResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -1553,6 +1589,21 @@ const (
 func (r InstanceListResponseEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceListResponseFusionMethod string
+
+const (
+	InstanceListResponseFusionMethodMax InstanceListResponseFusionMethod = "max"
+	InstanceListResponseFusionMethodRrf InstanceListResponseFusionMethod = "rrf"
+)
+
+func (r InstanceListResponseFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceListResponseFusionMethodMax, InstanceListResponseFusionMethodRrf:
 		return true
 	}
 	return false
@@ -1924,6 +1975,7 @@ type InstanceDeleteResponse struct {
 	CustomMetadata       []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model"`
 	Enable               bool                                       `json:"enable"`
+	FusionMethod         InstanceDeleteResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
 	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
@@ -1937,7 +1989,7 @@ type InstanceDeleteResponse struct {
 	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params"`
+	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
 	JSON                 instanceDeleteResponseJSON                 `json:"-"`
@@ -1962,6 +2014,7 @@ type instanceDeleteResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -2118,6 +2171,21 @@ const (
 func (r InstanceDeleteResponseEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceDeleteResponseFusionMethod string
+
+const (
+	InstanceDeleteResponseFusionMethodMax InstanceDeleteResponseFusionMethod = "max"
+	InstanceDeleteResponseFusionMethodRrf InstanceDeleteResponseFusionMethod = "rrf"
+)
+
+func (r InstanceDeleteResponseFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseFusionMethodMax, InstanceDeleteResponseFusionMethodRrf:
 		return true
 	}
 	return false
@@ -2626,22 +2694,24 @@ func (r instanceChatCompletionsResponseChunksItemJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChunksScoringDetails struct {
-	KeywordRank  float64                                                 `json:"keyword_rank"`
-	KeywordScore float64                                                 `json:"keyword_score"`
-	VectorRank   float64                                                 `json:"vector_rank"`
-	VectorScore  float64                                                 `json:"vector_score"`
-	JSON         instanceChatCompletionsResponseChunksScoringDetailsJSON `json:"-"`
+	KeywordRank    float64                                                 `json:"keyword_rank"`
+	KeywordScore   float64                                                 `json:"keyword_score"`
+	RerankingScore float64                                                 `json:"reranking_score"`
+	VectorRank     float64                                                 `json:"vector_rank"`
+	VectorScore    float64                                                 `json:"vector_score"`
+	JSON           instanceChatCompletionsResponseChunksScoringDetailsJSON `json:"-"`
 }
 
 // instanceChatCompletionsResponseChunksScoringDetailsJSON contains the JSON
 // metadata for the struct [InstanceChatCompletionsResponseChunksScoringDetails]
 type instanceChatCompletionsResponseChunksScoringDetailsJSON struct {
-	KeywordRank  apijson.Field
-	KeywordScore apijson.Field
-	VectorRank   apijson.Field
-	VectorScore  apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	KeywordRank    apijson.Field
+	KeywordScore   apijson.Field
+	RerankingScore apijson.Field
+	VectorRank     apijson.Field
+	VectorScore    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *InstanceChatCompletionsResponseChunksScoringDetails) UnmarshalJSON(data []byte) (err error) {
@@ -2670,6 +2740,7 @@ type InstanceReadResponse struct {
 	CustomMetadata       []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model"`
 	Enable               bool                                     `json:"enable"`
+	FusionMethod         InstanceReadResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
 	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
@@ -2683,7 +2754,7 @@ type InstanceReadResponse struct {
 	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	SourceParams         InstanceReadResponseSourceParams         `json:"source_params"`
+	SourceParams         InstanceReadResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
 	JSON                 instanceReadResponseJSON                 `json:"-"`
@@ -2708,6 +2779,7 @@ type instanceReadResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -2864,6 +2936,21 @@ const (
 func (r InstanceReadResponseEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceReadResponseFusionMethod string
+
+const (
+	InstanceReadResponseFusionMethodMax InstanceReadResponseFusionMethod = "max"
+	InstanceReadResponseFusionMethodRrf InstanceReadResponseFusionMethod = "rrf"
+)
+
+func (r InstanceReadResponseFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseFusionMethodMax, InstanceReadResponseFusionMethodRrf:
 		return true
 	}
 	return false
@@ -3297,22 +3384,24 @@ func (r instanceSearchResponseChunksItemJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunksScoringDetails struct {
-	KeywordRank  float64                                        `json:"keyword_rank"`
-	KeywordScore float64                                        `json:"keyword_score"`
-	VectorRank   float64                                        `json:"vector_rank"`
-	VectorScore  float64                                        `json:"vector_score"`
-	JSON         instanceSearchResponseChunksScoringDetailsJSON `json:"-"`
+	KeywordRank    float64                                        `json:"keyword_rank"`
+	KeywordScore   float64                                        `json:"keyword_score"`
+	RerankingScore float64                                        `json:"reranking_score"`
+	VectorRank     float64                                        `json:"vector_rank"`
+	VectorScore    float64                                        `json:"vector_score"`
+	JSON           instanceSearchResponseChunksScoringDetailsJSON `json:"-"`
 }
 
 // instanceSearchResponseChunksScoringDetailsJSON contains the JSON metadata for
 // the struct [InstanceSearchResponseChunksScoringDetails]
 type instanceSearchResponseChunksScoringDetailsJSON struct {
-	KeywordRank  apijson.Field
-	KeywordScore apijson.Field
-	VectorRank   apijson.Field
-	VectorScore  apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	KeywordRank    apijson.Field
+	KeywordScore   apijson.Field
+	RerankingScore apijson.Field
+	VectorRank     apijson.Field
+	VectorScore    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *InstanceSearchResponseChunksScoringDetails) UnmarshalJSON(data []byte) (err error) {
@@ -3371,6 +3460,7 @@ type InstanceNewParams struct {
 	ChunkSize            param.Field[int64]                                 `json:"chunk_size"`
 	CustomMetadata       param.Field[[]InstanceNewParamsCustomMetadata]     `json:"custom_metadata"`
 	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
+	FusionMethod         param.Field[InstanceNewParamsFusionMethod]         `json:"fusion_method"`
 	HybridSearchEnabled  param.Field[bool]                                  `json:"hybrid_search_enabled"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
 	Metadata             param.Field[InstanceNewParamsMetadata]             `json:"metadata"`
@@ -3485,6 +3575,21 @@ const (
 func (r InstanceNewParamsEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceNewParamsFusionMethod string
+
+const (
+	InstanceNewParamsFusionMethodMax InstanceNewParamsFusionMethod = "max"
+	InstanceNewParamsFusionMethodRrf InstanceNewParamsFusionMethod = "rrf"
+)
+
+func (r InstanceNewParamsFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsFusionMethodMax, InstanceNewParamsFusionMethodRrf:
 		return true
 	}
 	return false
@@ -3721,6 +3826,7 @@ type InstanceUpdateParams struct {
 	ChunkSize                      param.Field[int64]                                    `json:"chunk_size"`
 	CustomMetadata                 param.Field[[]InstanceUpdateParamsCustomMetadata]     `json:"custom_metadata"`
 	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
+	FusionMethod                   param.Field[InstanceUpdateParamsFusionMethod]         `json:"fusion_method"`
 	HybridSearchEnabled            param.Field[bool]                                     `json:"hybrid_search_enabled"`
 	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
 	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
@@ -3843,6 +3949,21 @@ const (
 func (r InstanceUpdateParamsEmbeddingModel) IsKnown() bool {
 	switch r {
 	case InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateParamsFusionMethod string
+
+const (
+	InstanceUpdateParamsFusionMethodMax InstanceUpdateParamsFusionMethod = "max"
+	InstanceUpdateParamsFusionMethodRrf InstanceUpdateParamsFusionMethod = "rrf"
+)
+
+func (r InstanceUpdateParamsFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsFusionMethodMax, InstanceUpdateParamsFusionMethodRrf:
 		return true
 	}
 	return false
@@ -4281,6 +4402,7 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bo
 type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                              `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                             `json:"filters"`
+	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod]  `json:"fusion_method"`
 	MatchThreshold   param.Field[float64]                                                            `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                              `json:"max_num_results"`
 	RetrievalType    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
@@ -4289,6 +4411,21 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 
 func (r InstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodMax InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod = "max"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodRrf InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod = "rrf"
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodMax, InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodRrf:
+		return true
+	}
+	return false
 }
 
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType string
@@ -4502,6 +4639,7 @@ func (r InstanceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
 type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                     `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                    `json:"filters"`
+	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod]  `json:"fusion_method"`
 	MatchThreshold   param.Field[float64]                                                   `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                     `json:"max_num_results"`
 	RetrievalType    param.Field[InstanceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
@@ -4510,6 +4648,21 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 
 func (r InstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsRetrievalFusionMethod string
+
+const (
+	InstanceSearchParamsAISearchOptionsRetrievalFusionMethodMax InstanceSearchParamsAISearchOptionsRetrievalFusionMethod = "max"
+	InstanceSearchParamsAISearchOptionsRetrievalFusionMethodRrf InstanceSearchParamsAISearchOptionsRetrievalFusionMethod = "rrf"
+)
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsRetrievalFusionMethodMax, InstanceSearchParamsAISearchOptionsRetrievalFusionMethodRrf:
+		return true
+	}
+	return false
 }
 
 type InstanceSearchParamsAISearchOptionsRetrievalRetrievalType string
