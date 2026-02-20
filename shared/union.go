@@ -119,6 +119,7 @@ func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()         
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
 func (UnionString) ImplementsAIRunParamsBodyTextGenerationMessagesContentUnion()                 {}
+func (UnionString) ImplementsAIRunParamsBodyImageTextToTextMessagesContentUnion()                {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                       {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                 {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                   {}
