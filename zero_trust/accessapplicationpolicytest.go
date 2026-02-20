@@ -220,6 +220,8 @@ type AccessApplicationPolicyTestNewParamsPoliciesObject struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig] `json:"mfa_config"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
@@ -238,6 +240,38 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObject) MarshalJSON() (data 
 }
 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion() {
+}
+
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelope struct {

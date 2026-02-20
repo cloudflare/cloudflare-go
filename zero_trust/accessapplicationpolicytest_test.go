@@ -52,7 +52,12 @@ func TestAccessApplicationPolicyTestNewWithOptionalParams(t *testing.T) {
 					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
 				}),
 			}}),
-			IsolationRequired:            cloudflare.F(false),
+			IsolationRequired: cloudflare.F(false),
+			MfaConfig: cloudflare.F(zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig{
+				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticatorSecurityKey}),
+				MfaBypass:             cloudflare.F(false),
+				SessionDuration:       cloudflare.F("24h"),
+			}),
 			PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
 			PurposeJustificationRequired: cloudflare.F(true),
 			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{

@@ -237,6 +237,15 @@ type Organization struct {
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly bool        `json:"is_ui_read_only"`
 	LoginDesign  LoginDesign `json:"login_design"`
+	// Configures multi-factor authentication (MFA) settings for an organization.
+	MfaConfig OrganizationMfaConfig `json:"mfa_config"`
+	// Indicates if this organization can enforce multi-factor authentication (MFA)
+	// requirements at the application and policy level.
+	MfaConfigurationAllowed bool `json:"mfa_configuration_allowed"`
+	// Determines whether global MFA settings apply to applications by default. The
+	// organization must have MFA enabled with at least one authentication method and a
+	// session duration configured.
+	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -267,6 +276,9 @@ type organizationJSON struct {
 	DenyUnmatchedRequestsExemptedZoneNames apijson.Field
 	IsUIReadOnly                           apijson.Field
 	LoginDesign                            apijson.Field
+	MfaConfig                              apijson.Field
+	MfaConfigurationAllowed                apijson.Field
+	MfaRequiredForAllApps                  apijson.Field
 	Name                                   apijson.Field
 	SessionDuration                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
@@ -308,6 +320,49 @@ func (r *OrganizationCustomPages) UnmarshalJSON(data []byte) (err error) {
 
 func (r organizationCustomPagesJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for an organization.
+type OrganizationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators []OrganizationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration string                    `json:"session_duration"`
+	JSON            organizationMfaConfigJSON `json:"-"`
+}
+
+// organizationMfaConfigJSON contains the JSON metadata for the struct
+// [OrganizationMfaConfig]
+type organizationMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *OrganizationMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type OrganizationMfaConfigAllowedAuthenticator string
+
+const (
+	OrganizationMfaConfigAllowedAuthenticatorTotp        OrganizationMfaConfigAllowedAuthenticator = "totp"
+	OrganizationMfaConfigAllowedAuthenticatorBiometrics  OrganizationMfaConfigAllowedAuthenticator = "biometrics"
+	OrganizationMfaConfigAllowedAuthenticatorSecurityKey OrganizationMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r OrganizationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type OrganizationRevokeUsersResponse bool
@@ -355,6 +410,15 @@ type OrganizationNewParams struct {
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
+	// Configures multi-factor authentication (MFA) settings for an organization.
+	MfaConfig param.Field[OrganizationNewParamsMfaConfig] `json:"mfa_config"`
+	// Indicates if this organization can enforce multi-factor authentication (MFA)
+	// requirements at the application and policy level.
+	MfaConfigurationAllowed param.Field[bool] `json:"mfa_configuration_allowed"`
+	// Determines whether global MFA settings apply to applications by default. The
+	// organization must have MFA enabled with at least one authentication method and a
+	// session duration configured.
+	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -374,6 +438,35 @@ type OrganizationNewParams struct {
 
 func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings for an organization.
+type OrganizationNewParamsMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators param.Field[[]OrganizationNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r OrganizationNewParamsMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type OrganizationNewParamsMfaConfigAllowedAuthenticator string
+
+const (
+	OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp        OrganizationNewParamsMfaConfigAllowedAuthenticator = "totp"
+	OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationNewParamsMfaConfigAllowedAuthenticator = "biometrics"
+	OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationNewParamsMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r OrganizationNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type OrganizationNewResponseEnvelope struct {
@@ -544,6 +637,15 @@ type OrganizationUpdateParams struct {
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
+	// Configures multi-factor authentication (MFA) settings for an organization.
+	MfaConfig param.Field[OrganizationUpdateParamsMfaConfig] `json:"mfa_config"`
+	// Indicates if this organization can enforce multi-factor authentication (MFA)
+	// requirements at the application and policy level.
+	MfaConfigurationAllowed param.Field[bool] `json:"mfa_configuration_allowed"`
+	// Determines whether global MFA settings apply to applications by default. The
+	// organization must have MFA enabled with at least one authentication method and a
+	// session duration configured.
+	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -577,6 +679,35 @@ type OrganizationUpdateParamsCustomPages struct {
 
 func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings for an organization.
+type OrganizationUpdateParamsMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators param.Field[[]OrganizationUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r OrganizationUpdateParamsMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type OrganizationUpdateParamsMfaConfigAllowedAuthenticator string
+
+const (
+	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp        OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "totp"
+	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "biometrics"
+	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r OrganizationUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type OrganizationUpdateResponseEnvelope struct {

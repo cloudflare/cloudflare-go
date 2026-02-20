@@ -85,9 +85,27 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			EnableBindingCookie:     cloudflare.F(true),
 			HTTPOnlyCookieAttribute: cloudflare.F(true),
 			LogoURL:                 cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-			Name:                    cloudflare.F("Admin Site"),
-			OptionsPreflightBypass:  cloudflare.F(true),
-			PathCookieAttribute:     cloudflare.F(true),
+			MfaConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfig{
+				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorSecurityKey}),
+				MfaBypass:             cloudflare.F(false),
+				SessionDuration:       cloudflare.F("24h"),
+			}),
+			Name: cloudflare.F("Admin Site"),
+			OAuthConfiguration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfiguration{
+				DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
+					AllowAnyOnLocalhost: cloudflare.F(true),
+					AllowAnyOnLoopback:  cloudflare.F(true),
+					AllowedURIs:         cloudflare.F([]string{"https://example.com/callback"}),
+					Enabled:             cloudflare.F(true),
+				}),
+				Enabled: cloudflare.F(true),
+				Grant: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationGrant{
+					AccessTokenLifetime: cloudflare.F("5m"),
+					SessionDuration:     cloudflare.F("24h"),
+				}),
+			}),
+			OptionsPreflightBypass: cloudflare.F(true),
+			PathCookieAttribute:    cloudflare.F(true),
 			Policies: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
 				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
@@ -209,9 +227,27 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				EnableBindingCookie:     cloudflare.F(true),
 				HTTPOnlyCookieAttribute: cloudflare.F(true),
 				LogoURL:                 cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-				Name:                    cloudflare.F("Admin Site"),
-				OptionsPreflightBypass:  cloudflare.F(true),
-				PathCookieAttribute:     cloudflare.F(true),
+				MfaConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfig{
+					AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorSecurityKey}),
+					MfaBypass:             cloudflare.F(false),
+					SessionDuration:       cloudflare.F("24h"),
+				}),
+				Name: cloudflare.F("Admin Site"),
+				OAuthConfiguration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfiguration{
+					DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
+						AllowAnyOnLocalhost: cloudflare.F(true),
+						AllowAnyOnLoopback:  cloudflare.F(true),
+						AllowedURIs:         cloudflare.F([]string{"https://example.com/callback"}),
+						Enabled:             cloudflare.F(true),
+					}),
+					Enabled: cloudflare.F(true),
+					Grant: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationGrant{
+						AccessTokenLifetime: cloudflare.F("5m"),
+						SessionDuration:     cloudflare.F("24h"),
+					}),
+				}),
+				OptionsPreflightBypass: cloudflare.F(true),
+				PathCookieAttribute:    cloudflare.F(true),
 				Policies: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
 					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),

@@ -2187,6 +2187,8 @@ type AccessApplicationPolicyNewResponse struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig AccessApplicationPolicyNewResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -2218,6 +2220,7 @@ type accessApplicationPolicyNewResponseJSON struct {
 	Exclude                      apijson.Field
 	Include                      apijson.Field
 	IsolationRequired            apijson.Field
+	MfaConfig                    apijson.Field
 	Name                         apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
@@ -2235,6 +2238,53 @@ func (r *AccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte) (err err
 
 func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyNewResponseMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators []AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass bool `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration string                                          `json:"session_duration"`
+	JSON            accessApplicationPolicyNewResponseMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationPolicyNewResponseMfaConfigJSON contains the JSON metadata for
+// the struct [AccessApplicationPolicyNewResponseMfaConfig]
+type accessApplicationPolicyNewResponseMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaBypass             apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyNewResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyNewResponseMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationPolicyUpdateResponse struct {
@@ -2259,6 +2309,8 @@ type AccessApplicationPolicyUpdateResponse struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig AccessApplicationPolicyUpdateResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -2290,6 +2342,7 @@ type accessApplicationPolicyUpdateResponseJSON struct {
 	Exclude                      apijson.Field
 	Include                      apijson.Field
 	IsolationRequired            apijson.Field
+	MfaConfig                    apijson.Field
 	Name                         apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
@@ -2307,6 +2360,53 @@ func (r *AccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []byte) (err 
 
 func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyUpdateResponseMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators []AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass bool `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration string                                             `json:"session_duration"`
+	JSON            accessApplicationPolicyUpdateResponseMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationPolicyUpdateResponseMfaConfigJSON contains the JSON metadata
+// for the struct [AccessApplicationPolicyUpdateResponseMfaConfig]
+type accessApplicationPolicyUpdateResponseMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaBypass             apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyUpdateResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyUpdateResponseMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationPolicyListResponse struct {
@@ -2331,6 +2431,8 @@ type AccessApplicationPolicyListResponse struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig AccessApplicationPolicyListResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -2362,6 +2464,7 @@ type accessApplicationPolicyListResponseJSON struct {
 	Exclude                      apijson.Field
 	Include                      apijson.Field
 	IsolationRequired            apijson.Field
+	MfaConfig                    apijson.Field
 	Name                         apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
@@ -2379,6 +2482,53 @@ func (r *AccessApplicationPolicyListResponse) UnmarshalJSON(data []byte) (err er
 
 func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyListResponseMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators []AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass bool `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration string                                           `json:"session_duration"`
+	JSON            accessApplicationPolicyListResponseMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationPolicyListResponseMfaConfigJSON contains the JSON metadata for
+// the struct [AccessApplicationPolicyListResponseMfaConfig]
+type accessApplicationPolicyListResponseMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaBypass             apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyListResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyListResponseMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationPolicyDeleteResponse struct {
@@ -2425,6 +2575,8 @@ type AccessApplicationPolicyGetResponse struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig AccessApplicationPolicyGetResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -2456,6 +2608,7 @@ type accessApplicationPolicyGetResponseJSON struct {
 	Exclude                      apijson.Field
 	Include                      apijson.Field
 	IsolationRequired            apijson.Field
+	MfaConfig                    apijson.Field
 	Name                         apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
@@ -2475,6 +2628,53 @@ func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyGetResponseMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators []AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass bool `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration string                                          `json:"session_duration"`
+	JSON            accessApplicationPolicyGetResponseMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationPolicyGetResponseMfaConfigJSON contains the JSON metadata for
+// the struct [AccessApplicationPolicyGetResponseMfaConfig]
+type accessApplicationPolicyGetResponseMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaBypass             apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyGetResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyGetResponseMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationPolicyNewParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -2489,6 +2689,8 @@ type AccessApplicationPolicyNewParams struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig param.Field[AccessApplicationPolicyNewParamsMfaConfig] `json:"mfa_config"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -2504,6 +2706,38 @@ type AccessApplicationPolicyNewParams struct {
 
 func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyNewParamsMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators param.Field[[]AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationPolicyNewParamsMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
@@ -2660,6 +2894,8 @@ type AccessApplicationPolicyUpdateParams struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
+	// Configures multi-factor authentication (MFA) settings.
+	MfaConfig param.Field[AccessApplicationPolicyUpdateParamsMfaConfig] `json:"mfa_config"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -2675,6 +2911,38 @@ type AccessApplicationPolicyUpdateParams struct {
 
 func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyUpdateParamsMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with.
+	AllowedAuthenticators param.Field[[]AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to bypass MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationPolicyUpdateParamsMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator = "security_key"
+)
+
+func (r AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
