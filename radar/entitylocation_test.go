@@ -28,10 +28,13 @@ func TestEntityLocationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Entities.Locations.List(context.TODO(), radar.EntityLocationListParams{
-		Format:   cloudflare.F(radar.EntityLocationListParamsFormatJson),
-		Limit:    cloudflare.F(int64(1)),
-		Location: cloudflare.F("US,CA"),
-		Offset:   cloudflare.F(int64(0)),
+		Continent: cloudflare.F(radar.EntityLocationListParamsContinentEu),
+		Format:    cloudflare.F(radar.EntityLocationListParamsFormatJson),
+		Limit:     cloudflare.F(int64(1)),
+		Location:  cloudflare.F("US,CA"),
+		Offset:    cloudflare.F(int64(0)),
+		Region:    cloudflare.F("Middle East"),
+		Subregion: cloudflare.F("Southern Europe"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

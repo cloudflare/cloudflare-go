@@ -90,12 +90,15 @@ func (r entityLocationListResponseJSON) RawJSON() string {
 }
 
 type EntityLocationListResponseLocation struct {
-	Alpha2 string `json:"alpha2,required"`
+	Alpha2    string `json:"alpha2,required"`
+	Continent string `json:"continent,required"`
 	// A numeric string.
 	Latitude string `json:"latitude,required"`
 	// A numeric string.
 	Longitude string                                 `json:"longitude,required"`
 	Name      string                                 `json:"name,required"`
+	Region    string                                 `json:"region,required"`
+	Subregion string                                 `json:"subregion,required"`
 	JSON      entityLocationListResponseLocationJSON `json:"-"`
 }
 
@@ -103,9 +106,12 @@ type EntityLocationListResponseLocation struct {
 // [EntityLocationListResponseLocation]
 type entityLocationListResponseLocationJSON struct {
 	Alpha2      apijson.Field
+	Continent   apijson.Field
 	Latitude    apijson.Field
 	Longitude   apijson.Field
 	Name        apijson.Field
+	Region      apijson.Field
+	Subregion   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -142,6 +148,7 @@ func (r entityLocationGetResponseJSON) RawJSON() string {
 type EntityLocationGetResponseLocation struct {
 	Alpha2          string `json:"alpha2,required"`
 	ConfidenceLevel int64  `json:"confidenceLevel,required"`
+	Continent       string `json:"continent,required"`
 	// A numeric string.
 	Latitude string `json:"latitude,required"`
 	// A numeric string.
@@ -157,6 +164,7 @@ type EntityLocationGetResponseLocation struct {
 type entityLocationGetResponseLocationJSON struct {
 	Alpha2          apijson.Field
 	ConfidenceLevel apijson.Field
+	Continent       apijson.Field
 	Latitude        apijson.Field
 	Longitude       apijson.Field
 	Name            apijson.Field
@@ -175,6 +183,8 @@ func (r entityLocationGetResponseLocationJSON) RawJSON() string {
 }
 
 type EntityLocationListParams struct {
+	// Filters results by continent code.
+	Continent param.Field[EntityLocationListParamsContinent] `query:"continent"`
 	// Format in which results will be returned.
 	Format param.Field[EntityLocationListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
@@ -184,6 +194,10 @@ type EntityLocationListParams struct {
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
+	// Filters results by region.
+	Region param.Field[string] `query:"region"`
+	// Filters results by subregion.
+	Subregion param.Field[string] `query:"subregion"`
 }
 
 // URLQuery serializes [EntityLocationListParams]'s query parameters as
@@ -193,6 +207,26 @@ func (r EntityLocationListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filters results by continent code.
+type EntityLocationListParamsContinent string
+
+const (
+	EntityLocationListParamsContinentAf EntityLocationListParamsContinent = "AF"
+	EntityLocationListParamsContinentAs EntityLocationListParamsContinent = "AS"
+	EntityLocationListParamsContinentEu EntityLocationListParamsContinent = "EU"
+	EntityLocationListParamsContinentNa EntityLocationListParamsContinent = "NA"
+	EntityLocationListParamsContinentOc EntityLocationListParamsContinent = "OC"
+	EntityLocationListParamsContinentSa EntityLocationListParamsContinent = "SA"
+)
+
+func (r EntityLocationListParamsContinent) IsKnown() bool {
+	switch r {
+	case EntityLocationListParamsContinentAf, EntityLocationListParamsContinentAs, EntityLocationListParamsContinentEu, EntityLocationListParamsContinentNa, EntityLocationListParamsContinentOc, EntityLocationListParamsContinentSa:
+		return true
+	}
+	return false
 }
 
 // Format in which results will be returned.
