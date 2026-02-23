@@ -510,6 +510,8 @@ TEST_PATHS=(
 	radar/dnstimeseriesgroup_test.go
 	radar/netflows_test.go
 	radar/netflowstop_test.go
+	radar/postquantumorigin_test.go
+	radar/postquantumtls_test.go
 	radar/search_test.go
 	radar/verifiedbottop_test.go
 	radar/as112_test.go

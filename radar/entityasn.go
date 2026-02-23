@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -53,6 +54,21 @@ func (r *EntityASNService) AsSet(ctx context.Context, asn int64, query EntityASN
 	var env EntityASNAsSetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/entities/asns/%v/as_set", asn)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Retrieves a ranked list of Autonomous Systems based on their presence in the
+// Cloudflare Botnet Threat Feed. Rankings can be sorted by offense count or number
+// of bad IPs. Optionally compare to a previous date to see rank changes.
+func (r *EntityASNService) BotnetThreatFeed(ctx context.Context, query EntityASNBotnetThreatFeedParams, opts ...option.RequestOption) (res *EntityASNBotnetThreatFeedResponse, err error) {
+	var env EntityASNBotnetThreatFeedResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	path := "radar/entities/asns/botnet_threat_feed"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -225,6 +241,83 @@ func (r *EntityASNAsSetResponseAsSet) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r entityASNAsSetResponseAsSetJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNBotnetThreatFeedResponse struct {
+	Ases []EntityASNBotnetThreatFeedResponseAse `json:"ases,required"`
+	Meta EntityASNBotnetThreatFeedResponseMeta  `json:"meta,required"`
+	JSON entityASNBotnetThreatFeedResponseJSON  `json:"-"`
+}
+
+// entityASNBotnetThreatFeedResponseJSON contains the JSON metadata for the struct
+// [EntityASNBotnetThreatFeedResponse]
+type entityASNBotnetThreatFeedResponseJSON struct {
+	Ases        apijson.Field
+	Meta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNBotnetThreatFeedResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNBotnetThreatFeedResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNBotnetThreatFeedResponseAse struct {
+	ASN        int64                                    `json:"asn,required"`
+	Country    string                                   `json:"country,required"`
+	Name       string                                   `json:"name,required"`
+	Rank       int64                                    `json:"rank,required"`
+	RankChange int64                                    `json:"rankChange"`
+	JSON       entityASNBotnetThreatFeedResponseAseJSON `json:"-"`
+}
+
+// entityASNBotnetThreatFeedResponseAseJSON contains the JSON metadata for the
+// struct [EntityASNBotnetThreatFeedResponseAse]
+type entityASNBotnetThreatFeedResponseAseJSON struct {
+	ASN         apijson.Field
+	Country     apijson.Field
+	Name        apijson.Field
+	Rank        apijson.Field
+	RankChange  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNBotnetThreatFeedResponseAse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNBotnetThreatFeedResponseAseJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNBotnetThreatFeedResponseMeta struct {
+	Date        string                                    `json:"date,required"`
+	Total       int64                                     `json:"total,required"`
+	CompareDate string                                    `json:"compareDate"`
+	JSON        entityASNBotnetThreatFeedResponseMetaJSON `json:"-"`
+}
+
+// entityASNBotnetThreatFeedResponseMetaJSON contains the JSON metadata for the
+// struct [EntityASNBotnetThreatFeedResponseMeta]
+type entityASNBotnetThreatFeedResponseMetaJSON struct {
+	Date        apijson.Field
+	Total       apijson.Field
+	CompareDate apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNBotnetThreatFeedResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNBotnetThreatFeedResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -717,6 +810,113 @@ func (r *EntityASNAsSetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r entityASNAsSetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNBotnetThreatFeedParams struct {
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Relative date range for rank change comparison (e.g., "1d", "7d", "30d").
+	CompareDateRange param.Field[string] `query:"compareDateRange"`
+	// The date to retrieve (YYYY-MM-DD format). If not specified, returns the most
+	// recent available data. Note: This is the date the report was generated. The
+	// report is generated from information collected from the previous day (e.g., the
+	// 2026-02-23 entry contains data from 2026-02-22).
+	Date param.Field[time.Time] `query:"date" format:"date"`
+	// Format in which results will be returned.
+	Format param.Field[EntityASNBotnetThreatFeedParamsFormat] `query:"format"`
+	// Limits the number of objects returned in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Filters results by location. Specify an alpha-2 location code.
+	Location param.Field[string] `query:"location"`
+	// Metric to rank ASNs by.
+	Metric param.Field[EntityASNBotnetThreatFeedParamsMetric] `query:"metric"`
+	// Skips the specified number of objects before fetching the results.
+	Offset param.Field[int64] `query:"offset"`
+	// Sort order.
+	SortOrder param.Field[EntityASNBotnetThreatFeedParamsSortOrder] `query:"sortOrder"`
+}
+
+// URLQuery serializes [EntityASNBotnetThreatFeedParams]'s query parameters as
+// `url.Values`.
+func (r EntityASNBotnetThreatFeedParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Format in which results will be returned.
+type EntityASNBotnetThreatFeedParamsFormat string
+
+const (
+	EntityASNBotnetThreatFeedParamsFormatJson EntityASNBotnetThreatFeedParamsFormat = "JSON"
+	EntityASNBotnetThreatFeedParamsFormatCsv  EntityASNBotnetThreatFeedParamsFormat = "CSV"
+)
+
+func (r EntityASNBotnetThreatFeedParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityASNBotnetThreatFeedParamsFormatJson, EntityASNBotnetThreatFeedParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Metric to rank ASNs by.
+type EntityASNBotnetThreatFeedParamsMetric string
+
+const (
+	EntityASNBotnetThreatFeedParamsMetricOffenseCount         EntityASNBotnetThreatFeedParamsMetric = "OFFENSE_COUNT"
+	EntityASNBotnetThreatFeedParamsMetricNumberOfOffendingIPs EntityASNBotnetThreatFeedParamsMetric = "NUMBER_OF_OFFENDING_IPS"
+)
+
+func (r EntityASNBotnetThreatFeedParamsMetric) IsKnown() bool {
+	switch r {
+	case EntityASNBotnetThreatFeedParamsMetricOffenseCount, EntityASNBotnetThreatFeedParamsMetricNumberOfOffendingIPs:
+		return true
+	}
+	return false
+}
+
+// Sort order.
+type EntityASNBotnetThreatFeedParamsSortOrder string
+
+const (
+	EntityASNBotnetThreatFeedParamsSortOrderAsc  EntityASNBotnetThreatFeedParamsSortOrder = "ASC"
+	EntityASNBotnetThreatFeedParamsSortOrderDesc EntityASNBotnetThreatFeedParamsSortOrder = "DESC"
+)
+
+func (r EntityASNBotnetThreatFeedParamsSortOrder) IsKnown() bool {
+	switch r {
+	case EntityASNBotnetThreatFeedParamsSortOrderAsc, EntityASNBotnetThreatFeedParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
+
+type EntityASNBotnetThreatFeedResponseEnvelope struct {
+	Result  EntityASNBotnetThreatFeedResponse             `json:"result,required"`
+	Success bool                                          `json:"success,required"`
+	JSON    entityASNBotnetThreatFeedResponseEnvelopeJSON `json:"-"`
+}
+
+// entityASNBotnetThreatFeedResponseEnvelopeJSON contains the JSON metadata for the
+// struct [EntityASNBotnetThreatFeedResponseEnvelope]
+type entityASNBotnetThreatFeedResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityASNBotnetThreatFeedResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNBotnetThreatFeedResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
